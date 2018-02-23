@@ -1,0 +1,6 @@
+.idea/
+.gradle/
+build/
+out/
+vue-components.js.map
+src/main/resources/public/
