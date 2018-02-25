@@ -31,3 +31,7 @@ app and then copies it to output folder so the Kotlin app is build with complete
 - sentryURL - URL for sentry (saas for reporting client-side errors)
 
 3. Running "build" project should already depend on vueProd task.
+
+#Attribution
+
+Favicon: Double Burger by stolkramaker from the Noun Project
