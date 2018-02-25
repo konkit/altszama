@@ -1,4 +1,4 @@
-package altszama.restaurant.data
+package altszama.restaurant.dto
 
 data class EditResponse(
     val id: String,

@@ -4,8 +4,8 @@ import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import altszama.notification.NotificationService
 import altszama.auth.AuthService
-import altszama.order.data.OrderSaveRequest
-import altszama.order.data.OrderUpdateRequest
+import altszama.order.dto.OrderSaveRequest
+import altszama.order.dto.OrderUpdateRequest
 import altszama.orderEntry.*
 import altszama.restaurant.RestaurantRepository
 import altszama.validation.ValidationFailedException

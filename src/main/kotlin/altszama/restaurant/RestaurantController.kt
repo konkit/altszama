@@ -2,9 +2,9 @@ package altszama.restaurant
 
 import altszama.dish.Dish;
 import altszama.dish.DishService
-import altszama.restaurant.data.EditResponse
-import altszama.restaurant.data.IndexResponse
-import altszama.restaurant.data.ShowResponse
+import altszama.restaurant.dto.EditResponse
+import altszama.restaurant.dto.IndexResponse
+import altszama.restaurant.dto.ShowResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

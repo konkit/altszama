@@ -1,4 +1,6 @@
-## How to run dev environment ?
+# AltSzama - keep ordering food in order
+
+### How to run dev environment ?
 
 1. For dev environment:
     - the backend part is run as Kotlin App 
@@ -15,7 +17,7 @@
 3. Run the project from IDE - backend part as Kotlin App, part by "runVueDevServer" Gradle task 
 
 
-## How to run production environment ?
+### How to run production environment ?
 
 1. For production  environment, the gradle task "vueProd" first builds the frontend 
 app and then copies it to output folder so the Kotlin app is build with complete resources

@@ -197,7 +197,7 @@ import BackButton from '../commons/backButton.vue'
 import Price from '../commons/priceElement.vue'
 import Spinner from '../commons/spinner.vue'
 
-import OrderStateButtons from './buttons/orderStateButtons.vue'
+import OrderStateButtons from './OrderStateButtons.vue'
 
 import ApiConnector from '../../ApiConnector.js'
 

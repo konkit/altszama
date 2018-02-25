@@ -1,4 +1,4 @@
-package altszama.restaurant.data
+package altszama.restaurant.dto
 
 import altszama.dish.Dish
 import altszama.restaurant.Restaurant

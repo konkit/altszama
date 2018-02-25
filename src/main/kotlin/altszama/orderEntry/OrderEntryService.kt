@@ -4,8 +4,8 @@ import altszama.auth.AuthService
 import altszama.dish.DishRepository
 import altszama.dish.SideDish
 import altszama.order.OrderRepository
-import altszama.orderEntry.data.OrderEntrySaveRequest
-import altszama.orderEntry.data.OrderEntryUpdateRequest
+import altszama.orderEntry.dto.OrderEntrySaveRequest
+import altszama.orderEntry.dto.OrderEntryUpdateRequest
 import altszama.restaurant.Restaurant
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired

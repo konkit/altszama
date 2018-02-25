@@ -1,6 +1,8 @@
-package altszama.order.data
+package altszama.order.dto
 
 import altszama.validation.BankTransferNumberPresent
+import altszama.validation.IsOrderOwner
+import altszama.validation.OrderExists
 import altszama.validation.RestaurantExists
 import org.jetbrains.annotations.NotNull
 import org.springframework.format.annotation.DateTimeFormat
@@ -11,7 +13,11 @@ import java.time.LocalTime
 @BankTransferNumberPresent(
     paymentByBankTransfer = "paymentByBankTransfer",
     bankTransferNumber = "bankTransferNumber")
-data class OrderSaveRequest(
+data class OrderUpdateRequest(
+    @OrderExists
+    @IsOrderOwner
+    val orderId: String?,
+
     @RestaurantExists
     val restaurantId: String?,
 
@@ -27,5 +33,5 @@ data class OrderSaveRequest(
     val deliveryCostPerDish: Int = 0,
     val paymentByCash: Boolean = false,
     val paymentByBankTransfer: Boolean = false,
-    val bankTransferNumber: String = ""
+    val bankTransferNumber: String
 )

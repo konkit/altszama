@@ -1,4 +1,4 @@
-package altszama.order.data
+package altszama.order.dto
 
 import altszama.auth.User
 import altszama.dish.Dish

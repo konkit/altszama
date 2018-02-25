@@ -2,10 +2,10 @@ package altszama.orderEntry
 
 import altszama.dish.DishService
 import altszama.order.OrderRepository
-import altszama.orderEntry.data.OrderEntrySaveRequest
-import altszama.orderEntry.data.OrderEntryUpdateRequest
-import altszama.orderEntry.data.OrderEntryCreateResponse
-import altszama.orderEntry.data.OrderEntryEditResponse
+import altszama.orderEntry.dto.OrderEntrySaveRequest
+import altszama.orderEntry.dto.OrderEntryUpdateRequest
+import altszama.orderEntry.dto.OrderEntryCreateResponse
+import altszama.orderEntry.dto.OrderEntryEditResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

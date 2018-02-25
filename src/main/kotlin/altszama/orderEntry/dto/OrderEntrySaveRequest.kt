@@ -1,4 +1,4 @@
-package altszama.orderEntry.data
+package altszama.orderEntry.dto
 
 import altszama.validation.DishExists
 import altszama.validation.OrderExists

@@ -1,10 +1,9 @@
 package altszama.order
 
 import altszama.auth.AuthService
-import altszama.order.data.*
+import altszama.order.dto.*
 import altszama.orderEntry.OrderEntryRepository
 import altszama.restaurant.RestaurantRepository
-import altszama.validation.IsOrderOwner
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

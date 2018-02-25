@@ -12,7 +12,7 @@ import java.util.*
 open class Application {
 
   @EventListener(ApplicationReadyEvent::class)
-  fun doSomethingAfterStartup() {
+  fun afterStartup() {
     Locale.setDefault(Locale.forLanguageTag("pl_PL"))
   }
 
