@@ -43,7 +43,7 @@
 
 <script>
 import Vue from 'vue'
-import ApiConnector from '../../ApiConnector'
+import ApiConnector from '../../../ApiConnector'
 
 export default {
   name: 'order-state-buttons',

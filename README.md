@@ -1,4 +1,6 @@
-# AltSzama - keep ordering food in order
+# AltSzama - when Google Sheet is not enough
+
+App written in Spring Boot + Vue 2 + MongoDB + Google Login. Its purpose is to help during ordering food for bigger group of people.
 
 ### How to run dev environment ?
 

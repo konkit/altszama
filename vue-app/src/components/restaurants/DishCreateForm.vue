@@ -61,7 +61,7 @@ import BackButton from '../commons/backButton.vue'
 import ErrorsComponent from '../commons/errors.vue'
 import Price from '../commons/priceElement.vue'
 import Spinner from '../commons/spinner'
-import SideDishes from './SideDishes.vue'
+import SideDishes from './components/SideDishes.vue'
 
 import ApiConnector from '../../ApiConnector.js'
 
