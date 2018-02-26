@@ -14,93 +14,35 @@
 
         <div class="row justify-content-center">
           <div class="col">
-            <h1>Edit entry for {{order.restaurant.name}} ({{order.orderDate}})</h1>
+            <h1>Edit entry for {{this.order.restaurant.name}} ({{this.order.orderDate}})</h1>
           </div>
         </div>
       </div>
 
       <errors-component ref="errorsComponent" />
 
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-8">
-            <form id="order-entry-edit-form">
-              <input type="hidden" name="orderId" v-bind:value="order.id" />
-              <input type="hidden" name="id" v-bind:value="orderEntry.id" />
-              <input type="hidden" name="userId" v-bind:value="orderEntry.user.id" />
+      <div v-if="this.allDishesInRestaurant.length > 0">
 
-              <div class="form-group">
-                <h4>Dish</h4>
+        <order-entry-form 
+          :order-entry="orderEntry"
+          :orderId="order.id"
+          :restaurantId="order.restaurant.id"
+          :allDishesInRestaurant="allDishesInRestaurant" 
+          :allDishesByCategory="allDishesByCategory" 
+          :dishIdToSideDishesMap="dishIdToSideDishesMap"
+          />
 
-                <select class="form-control" name="dishId" required="" id="dish" v-model="dishId" @change="clearSideDishes">
-                  <optgroup v-for='(dishEntry, i) in this.allDishesByCategory' :key='i' :label="dishEntry.category">
-                    <option v-for='(dish, i) in dishEntry.dishes' :key='i' :value="dish.id">
-                      {{dish.name}}&nbsp;( <price :data-price="dish.price" /> )
-                    </option>
-                  </optgroup>
-                </select>
-              </div>
 
-            </form>
-
-            <div>
-              <h4>Side dishes</h4>
-
-              <div v-if="this.chosenSideDishes.length > 0">
-                <p v-for="sideDish in this.chosenSideDishes" v-bind:key="sideDish.id">
-                  {{ sideDish.name }}&nbsp;( <price v-bind:data-price="sideDish.price" /> )
-
-                  <span class="fa fa-remove" v-on:click="removeSideDish(sideDish.id)"></span>
-                </p>
-              </div>
-              <div v-else>
-                <p>No side dishes selected</p>
-              </div>
-
-              <div v-if="this.sideDishFormVisible === false">
-                <button class="btn btn-success" v-on:click="setSideDishFormVisible(true)">
-                  Add side dish &nbsp; <i class="fa fa-plus" />
-                </button>
-              </div>
-
-              <div class="input-group" v-if="this.sideDishFormVisible === true">
-                <select class="form-control" name="sideDishId" required="" v-model="sideDishIdToAdd">
-                  <option v-for="sideDish in this.dishIdToSideDishesMap[this.dishId]" v-bind:key="sideDish.id" v-bind:value="sideDish.id">
-                    {{sideDish.name}}&nbsp;( <price v-bind:data-price="sideDish.price" /> )
-                  </option>
-                </select>
-
-                <button class="btn btn-success" v-on:click="addSideDish">
-                  Add &nbsp; <i class="fa fa-plus" />
-                </button>
-
-                <button class="btn btn-secondary" v-on:click="setSideDishFormVisible(false)">
-                  Cancel
-                </button>
-              </div>
-
-            </div>
-
-            <div class="form-group">
-              <h4>Additional Comments</h4>
-              <input class="form-control" name="additionalComments" id="additionalComments" v-model="additionalComments" />
-            </div>
-
-            <button class="btn btn-block btn-success" v-on:click="submitForm">
-              Update order
-            </button>
-          </div>
-
-          <div class="col-4">
-            <h4>Dish you wanted isn't there ?</h4>
-            
-            <p>
-              <button class="btn btn-success" v-on:click="this.goToCreateDish">
-                Add one now &nbsp; <i class="fa fa-plus" />
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col">
+              <button class="btn btn-block btn-success" @click="submitForm">
+                Update order
               </button>
-            </p>
+            </div>
           </div>
         </div>
+      
       </div>
     </div>
   </div>
@@ -112,7 +54,7 @@ import BackButton from '../commons/backButton.vue'
 import ErrorsComponent from '../commons/errors.vue'
 import Spinner from '../commons/spinner.vue'
 import Price from '../commons/priceElement.vue'
-
+import OrderEntryForm from './components/OrderEntryForm.vue'
 import ApiConnector from '../../ApiConnector.js'
 
 export default {
@@ -120,21 +62,13 @@ export default {
   data () {
     return {
       orderEntryId: this.$route.params.entryId,
-
-      orderEntry: {},
+      
       order: {},
-
       allDishesInRestaurant: [],
       allDishesByCategory: [],
       dishIdToSideDishesMap: {},
-      chosenSideDishes: [],
 
-      orderId: '',
-      dishId: '',
-      additionalComments: '',
-
-      sideDishIdToAdd: '',
-      sideDishFormVisible: false
+      orderEntry: {}
     }
   },
   created() {
@@ -144,19 +78,17 @@ export default {
     ApiConnector.makeGet("/order_entries/" + this.orderEntryId + "/edit_entry.json")
       .then(response => {
         this.order = response.data.order;
-        this.orderEntry = response.data.orderEntry;
-        
-        this.orderId = this.order.id;
-        this.dishId = this.orderEntry.dish.id;
-        this.additionalComments = this.orderEntry.additionalComments;
 
         this.allDishesInRestaurant = response.data.allDishesInRestaurant;
         this.allDishesByCategory = convertToMapEntries(response.data.allDishesByCategory);
         this.dishIdToSideDishesMap = response.data.dishIdToSideDishesMap;
-
-        console.log("sideDishes: ", this.orderEntry.chosenSideDishes)
-
-        this.chosenSideDishes = this.orderEntry.chosenSideDishes || [];
+        
+        this.orderEntry = {
+          orderId: this.order.id,
+          dishId: response.data.orderEntry.dish.id,
+          additionalComments: response.data.orderEntry.additionalComments,
+          chosenSideDishes: response.data.orderEntry.chosenSideDishes || []
+        }
 
         this.$store.commit('setLoadingFalse')
       })
@@ -172,11 +104,11 @@ export default {
       let errorsComponent = this.$refs.errorsComponent;
 
       let formData = {
-        id: this.orderEntry.id,
+        id: this.orderEntryId,
         orderId: this.order.id,
-        dishId: this.dishId,
-        additionalComments: this.additionalComments,
-        sideDishesIds: this.chosenSideDishes.map(sd => sd.id)
+        dishId: this.orderEntry.dishId,
+        additionalComments: this.orderEntry.additionalComments,
+        sideDishesIds: this.orderEntry.chosenSideDishes.map(sd => sd.id)
       };
 
       ApiConnector.makePost(action, formData)
@@ -191,29 +123,11 @@ export default {
 
       return false;
     },
-    isSelected: function(currentDishId) {
-      return currentDishId === this.orderEntry.dish.id;
-    },
     goToCreateDish: function(restaurantId) {
-      window.location = "#/restaurants/" + this.order.restaurant.id + "/dishes/create"
+      window.location = "#/restaurants/" + restaurantId + "/dishes/create"
     },
     goToCreateSideDish: function(restaurantId) {
-      window.location = "#/restaurants/" + this.order.restaurant.id + "/side_dishes/create"
-    },
-    clearSideDishes: function() {
-      this.chosenSideDishes = []
-    },
-    addSideDish: function() {
-      var sideDishToAdd = this.dishIdToSideDishesMap[this.dishId].find(sd => sd.id == this.sideDishIdToAdd)
-
-      this.chosenSideDishes.push(sideDishToAdd)
-      this.setSideDishFormVisible(false)
-    },
-    removeSideDish: function(sideDishId) {
-      this.chosenSideDishes = this.chosenSideDishes.filter(sd => sd.id !== sideDishId)
-    },
-    setSideDishFormVisible: function(isVisible) {
-      this.sideDishFormVisible = isVisible;
+      window.location = "#/restaurants/" + restaurantId + "/side_dishes/create"
     }
   },
   computed: {
@@ -225,7 +139,8 @@ export default {
     BackButton,
     ErrorsComponent,
     Price,
-    Spinner
+    Spinner,
+    OrderEntryForm
   }
 }
 

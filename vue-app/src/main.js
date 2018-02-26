@@ -23,17 +23,22 @@ import './assets/main-styles.css'
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 
-Raven
+if (typeof process.env.sentryURL !== "undefined") {
+  Raven
     .config(process.env.sentryURL)
     .addPlugin(RavenVue, Vue)
     .install();
 
+}
 
 Vue.config.productionTip = false
 
 Vue.config.errorHandler = function (err, vm, info) {
-    console.log("err", err)
+  console.log("err", err)
+
+  if (typeof process.env.sentryURL !== "undefined") {
     Raven.captureException(err)
+  }
 }
 
 /* eslint-disable no-new */

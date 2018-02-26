@@ -14,7 +14,6 @@ App written in Spring Boot + Vue 2 + MongoDB + Google Login. Its purpose is to h
     - googleClientId - Google's ClientID value
     - googleClientSecret - Google's Client Secret value
     - BACKEND_URL - Backend (so Kotlin app) URL. Default http://localhost:8080
-    - sentryURL - URL for sentry (saas for reporting client-side errors)
 
 3. Run the project from IDE - backend part as Kotlin App, part by "runVueDevServer" Gradle task 
 
