@@ -48,16 +48,17 @@ class OrderEntryController {
     return ResponseEntity(HttpStatus.OK)
   }
 
-  @RequestMapping(value = "/order_entries/{orderEntryId}/edit_entry.json")
-  fun edit(@PathVariable orderEntryId: String): OrderEntryEditResponse {
+  @RequestMapping(value = "/order_entries/{orderEntryId}/dish_entry/{dishEntryId}/edit_entry.json")
+  fun edit(@PathVariable orderEntryId: String, @PathVariable dishEntryId: String): OrderEntryEditResponse {
     val orderEntry = orderEntryRepository.findOne(orderEntryId)
+    val dishEntry = orderEntry.dishEntries.find { dishEntry -> dishEntry.id == dishEntryId }
     val order = orderEntry.order
 
     val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
     val allDishesInRestaurantByCategory = allDishesInRestaurant.groupBy { dish -> dish.category }
     val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
 
-    return OrderEntryEditResponse(order, allDishesInRestaurant, allDishesInRestaurantByCategory, orderEntry, dishIdToSideDishesMap)
+    return OrderEntryEditResponse(order, allDishesInRestaurant, allDishesInRestaurantByCategory, orderEntry, dishEntry!!, dishIdToSideDishesMap)
   }
 
   @RequestMapping(value = "/order_entries/update")
@@ -66,9 +67,9 @@ class OrderEntryController {
     return ResponseEntity(HttpStatus.OK)
   }
 
-  @RequestMapping(value = "/order_entries/{orderEntryId}/delete")
-  fun delete(@PathVariable orderEntryId: String): ResponseEntity<String> {
-    orderEntryService.deleteOrderEntry(orderEntryId)
+  @RequestMapping(value = "/order_entries/{orderEntryId}/dish_entry/{dishEntryId}/delete")
+  fun delete(@PathVariable orderEntryId: String, @PathVariable dishEntryId: String): ResponseEntity<String> {
+    orderEntryService.deleteOrderEntry(orderEntryId, dishEntryId)
     return ResponseEntity(HttpStatus.OK)
   }
 

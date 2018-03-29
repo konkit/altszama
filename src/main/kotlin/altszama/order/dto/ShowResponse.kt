@@ -19,12 +19,17 @@ data class ShowResponse(
     data class ParticipantsOrderEntry(
         val id: String,
         val user: User,
+        val dishEntries: List<ParticipantsDishEntry>,
+        val finalPrice: Int,
+        val paymentStatus: OrderEntryPaymentStatus
+    )
+
+    data class ParticipantsDishEntry(
+        val id: String,
         val dish: Dish,
         val sideDishes: List<SideDish>,
-        val basePrice: Int,
-        val finalPrice: Int,
-        val comments: String,
-        val paymentStatus: OrderEntryPaymentStatus
+        val price: Int,
+        val comments: String
     )
 
     fun create(order: Order, entries: List<OrderEntry>, currentUserId: String): ShowResponse {
@@ -37,7 +42,7 @@ data class ShowResponse(
           .map { orderEntry ->
             val numberOfDishesForUser = entriesByUser.get(orderEntry.user)!!.size
 
-            val basePrice = orderEntry.priceWithSidedishes()
+            val basePrice = orderEntry.dishEntries.sumBy { dishEntry -> dishEntry.priceWithSidedishes() }
 
             val decreaseAmount = ( basePrice * (order.decreaseInPercent / 100.0) ).toInt()
             val deliveryCostPerOrder = (order.deliveryCostPerEverybody / usersCount) / numberOfDishesForUser
@@ -45,23 +50,20 @@ data class ShowResponse(
 
             val finalPrice = basePrice - decreaseAmount + deliveryCostPerOrder + deliveryCostPerEntry
 
-            createParticipantEntry(orderEntry, finalPrice)
+            val dishEntries: List<ParticipantsDishEntry> = orderEntry.dishEntries.map { dishEntry ->
+              ParticipantsDishEntry(dishEntry.id, dishEntry.dish, dishEntry.chosenSideDishes, dishEntry.priceWithSidedishes(), dishEntry.additionalComments)
+            }
+
+            ParticipantsOrderEntry(
+                id = orderEntry.id,
+                user = orderEntry.user,
+                dishEntries = dishEntries,
+                finalPrice = finalPrice,
+                paymentStatus = orderEntry.paymentStatus
+            )
           }
 
       return ShowResponse(order, participantsUserEntries, currentUserId)
-    }
-
-    private fun createParticipantEntry(orderEntry: OrderEntry, finalPrice: Int): ParticipantsOrderEntry {
-      return ParticipantsOrderEntry(
-          id = orderEntry.id,
-          user = orderEntry.user,
-          dish = orderEntry.dish,
-          sideDishes = orderEntry.chosenSideDishes,
-          basePrice = orderEntry.dish.price,
-          finalPrice = finalPrice,
-          comments = orderEntry.additionalComments,
-          paymentStatus = orderEntry.paymentStatus
-      )
     }
   }
 

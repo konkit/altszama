@@ -3,6 +3,7 @@ package altszama.orderEntry.dto
 import altszama.dish.Dish
 import altszama.dish.SideDish
 import altszama.order.Order
+import altszama.orderEntry.DishEntry
 import altszama.orderEntry.OrderEntry
 
 data class OrderEntryEditResponse(
@@ -10,5 +11,6 @@ data class OrderEntryEditResponse(
     var allDishesInRestaurant: List<Dish>,
     var allDishesByCategory: Map<String, List<Dish>>,
     var orderEntry: OrderEntry,
+    var dishEntry: DishEntry,
     var dishIdToSideDishesMap: Map<String, List<SideDish>>
 )

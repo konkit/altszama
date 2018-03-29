@@ -8,6 +8,8 @@ data class OrderEntryUpdateRequest(
     @IsOrderEntryOwner
     var id: String?,
 
+    var dishEntryId: String?,
+
     @OrderExists
     @OrderNotOrderedYet
     var orderId: String?,

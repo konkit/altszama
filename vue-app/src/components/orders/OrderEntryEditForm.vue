@@ -8,7 +8,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col">
-            <back-button v-bind:href="'#/orders/show/' + this.order.id"></back-button>
+            <back-button :href="'#/orders/show/' + this.order.id"></back-button>
           </div>
         </div>
 
@@ -62,6 +62,7 @@ export default {
   data () {
     return {
       orderEntryId: this.$route.params.entryId,
+      dishEntryId: this.$route.params.dishEntryId,
       
       order: {},
       allDishesInRestaurant: [],
@@ -75,7 +76,7 @@ export default {
     this.$store.commit('setLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/order_entries/" + this.orderEntryId + "/edit_entry.json")
+    ApiConnector.makeGet("/order_entries/" + this.orderEntryId + "/dish_entry/" + this.dishEntryId + "/edit_entry.json")
       .then(response => {
         this.order = response.data.order;
 
@@ -85,9 +86,9 @@ export default {
         
         this.orderEntry = {
           orderId: this.order.id,
-          dishId: response.data.orderEntry.dish.id,
-          additionalComments: response.data.orderEntry.additionalComments,
-          chosenSideDishes: response.data.orderEntry.chosenSideDishes || []
+          dishId: response.data.dishEntry.dish.id,
+          additionalComments: response.data.dishEntry.additionalComments,
+          chosenSideDishes: response.data.dishEntry.chosenSideDishes || []
         }
 
         this.$store.commit('setLoadingFalse')
@@ -106,6 +107,7 @@ export default {
       let formData = {
         id: this.orderEntryId,
         orderId: this.order.id,
+        dishEntryId: this.dishEntryId,
         dishId: this.orderEntry.dishId,
         additionalComments: this.orderEntry.additionalComments,
         sideDishesIds: this.orderEntry.chosenSideDishes.map(sd => sd.id)

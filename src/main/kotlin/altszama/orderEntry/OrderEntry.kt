@@ -1,7 +1,5 @@
 package altszama.orderEntry
 
-import altszama.dish.Dish
-import altszama.dish.SideDish
 import altszama.order.Order
 import altszama.auth.User
 import org.bson.types.ObjectId
@@ -19,19 +17,9 @@ data class OrderEntry(
     @DBRef
     var user: User,
 
-    var dish: Dish,
-
-    var additionalComments: String = "",
-
-    var chosenSideDishes: List<SideDish> = emptyList(),
+    var dishEntries: List<DishEntry> = emptyList(),
 
     var paymentStatus: OrderEntryPaymentStatus = OrderEntryPaymentStatus.UNPAID,
 
     var created: LocalDate = LocalDate.now()
-) {
-
-  fun priceWithSidedishes(): Int {
-    return dish.price + chosenSideDishes.map(SideDish::price).sum()
-  }
-
-}
+)

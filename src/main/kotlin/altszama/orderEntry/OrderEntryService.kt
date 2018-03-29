@@ -30,6 +30,7 @@ class OrderEntryService {
 
   fun saveEntry(orderEntrySaveRequest: OrderEntrySaveRequest) {
     val order = orderRepository.findOne(orderEntrySaveRequest.orderId)
+    val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, authService.currentUser())
 
     val dish = dishRepository.findOne(orderEntrySaveRequest.dishId)
 
@@ -39,16 +40,21 @@ class OrderEntryService {
       }
     }
 
-    val newEntry = OrderEntry(
-        id = ObjectId().toHexString(),
-        order = order,
-        user = authService.currentUser(),
-        dish = dish,
-        additionalComments = orderEntrySaveRequest.additionalComments,
-        chosenSideDishes = sideDishes
-    )
+    val dishEntries = listOf(DishEntry(dish, sideDishes, orderEntrySaveRequest.additionalComments))
 
-    orderEntryRepository.save(newEntry)
+    val savedEntry = if (orderEntry != null) {
+      orderEntry.dishEntries = orderEntry.dishEntries + dishEntries
+      orderEntry
+    } else {
+      OrderEntry(
+          id = ObjectId().toHexString(),
+          order = order,
+          user = authService.currentUser(),
+          dishEntries = dishEntries
+      )
+    }
+
+    orderEntryRepository.save(savedEntry)
   }
 
   fun updateEntry(orderEntryUpdateRequest: OrderEntryUpdateRequest) {
@@ -62,17 +68,25 @@ class OrderEntryService {
       }
     }
 
-    val updatedEntry = orderEntry.copy(
-        dish = dish,
-        additionalComments = orderEntryUpdateRequest.additionalComments,
-        chosenSideDishes = sideDishes
-    )
+    val updatedDishEntry = DishEntry(dish, sideDishes, orderEntryUpdateRequest.additionalComments, orderEntryUpdateRequest.dishEntryId!!)
+    val dishEntries = orderEntry.dishEntries.filter { entry -> entry.id != orderEntryUpdateRequest.dishEntryId!! } + updatedDishEntry
+
+    val updatedEntry = orderEntry.copy(dishEntries = dishEntries)
 
     orderEntryRepository.save(updatedEntry)
   }
 
-  fun deleteOrderEntry(orderEntryId: String) {
-    orderEntryRepository.delete(orderEntryId)
+  fun deleteOrderEntry(orderEntryId: String, dishEntryId: String) {
+    val orderEntry = orderEntryRepository.findOne(orderEntryId)
+
+    val updatedDishEntries = orderEntry.dishEntries.filter { entry -> entry.id != dishEntryId }
+
+    if (updatedDishEntries.isEmpty()) {
+      orderEntryRepository.delete(orderEntryId)
+    } else {
+      val updatedOrderEntry = orderEntry.copy(dishEntries = updatedDishEntries)
+      orderEntryRepository.save(updatedOrderEntry)
+    }
   }
 
   fun getDishToSideDishesMap(restaurant: Restaurant): Map<String, List<SideDish>> {

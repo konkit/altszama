@@ -118,59 +118,76 @@
               <tr>
                 <th>Eating person</th>
                 <th>Dish</th>
-                <th>Base Price</th>
-                <th>Final Price</th>
+                <th>Price</th>
                 <th>Additional comments</th>
                 <th>Actions</th>
               </tr>
-              <tr v-for="orderEntry in this.orderEntries" v-bind:key="orderEntry.id" >
-                <td> {{orderEntry.user.username}} </td>
-                <td> 
-                  <p>{{orderEntry.dish.name}}</p>
-                  <p v-for="sideDish in orderEntry.sideDishes" :key="sideDish.id">
-                    + {{sideDish.name}}
-                  </p> 
-                </td>
-                <td>
-                  <p><price v-bind:data-price="orderEntry.basePrice"/></p>
-                  <p v-for="sideDish in orderEntry.sideDishes" :key="sideDish.id">
-                    + <price :data-price="sideDish.price" />
-                  </p>
-                </td>
-                <td><price v-bind:data-price="orderEntry.finalPrice"/></td>
-                <td>{{orderEntry.comments}}</td>
-                <td>
-                  <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
 
-                    <div v-if="order.orderState === 'CREATED'">
-                      <button type="button" class="btn btn-light" @click="editEntry(orderEntry.id)">
-                        <i class="fa fa-pencil" aria-hidden="true" />
-                      </button>
+              <template v-for="orderEntry in this.orderEntries">
+                <tr v-for="(dishEntry, i) in orderEntry.dishEntries" :key="i">
 
-                      <button type="button" class="btn btn-danger" @click="deleteEntry(orderEntry.id)">
-                        <i class="fa fa-times" aria-hidden="true" />
-                      </button>
+                  <td v-if="i == 0" :rowspan="orderEntry.dishEntries.length + 1">
+                    {{orderEntry.user.username}}
+                  </td>
+
+                  <td>
+                    <p>{{dishEntry.dish.name}}</p>
+                    <p v-for="sideDish in dishEntry.sideDishes" :key="sideDish.id">
+                      + {{sideDish.name}}
+                    </p> 
+                  </td>
+
+                  <td>
+                    <p><price :data-price="dishEntry.price"/></p>
+                    <p v-for="sideDish in dishEntry.sideDishes" :key="sideDish.id">
+                      + <price :data-price="sideDish.price" />
+                    </p>
+                  </td>
+
+                  <td>{{orderEntry.comments}}</td>
+
+                  <td>
+                    <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
+
+                      <div v-if="order.orderState === 'CREATED'">
+                        <button type="button" class="btn btn-light" @click="editEntry(orderEntry.id, dishEntry.id)">
+                          <i class="fa fa-pencil" aria-hidden="true" />
+                        </button>
+
+                        <button type="button" class="btn btn-danger" @click="deleteEntry(orderEntry.id, dishEntry.id)">
+                          <i class="fa fa-times" aria-hidden="true" />
+                        </button>
+                      </div>
+
+                      <div v-if="order.orderState === 'ORDERED' || order.orderState === 'DELIVERED'" >
+                        {{paymentStatus(orderEntry)}}
+                      </div>
+
+                      <div v-if="shouldShowMarkAsPaidButton(orderEntry)">
+                        <button type="button" class="btn btn-success" @click="markAsPaid(orderEntry.id)">
+                          Mark as paid
+                        </button>
+                      </div>
+
+                      <div v-if="shouldShowConfirmAsPaidButton(orderEntry)">
+                        <button type="button" class="btn btn-success" @click="confirmAsPaid(orderEntry.id)">
+                          Confirm as paid
+                        </button>
+                      </div>
+
                     </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    <p>Final price:</p>
+                    <p><price :data-price="orderEntry.finalPrice" /></p> 
+                  </td>
+                </tr>
 
-                    <div v-if="order.orderState === 'ORDERED' || order.orderState === 'DELIVERED'" >
-                      {{paymentStatus(orderEntry)}}
-                    </div>
+              </template>
 
-                    <div v-if="shouldShowMarkAsPaidButton(orderEntry)">
-                      <button type="button" class="btn btn-success" @click="markAsPaid(orderEntry.id)">
-                        Mark as paid
-                      </button>
-                    </div>
-
-                    <div v-if="shouldShowConfirmAsPaidButton(orderEntry)">
-                      <button type="button" class="btn btn-success" @click="confirmAsPaid(orderEntry.id)">
-                        Confirm as paid
-                      </button>
-                    </div>
-
-                  </div>
-                </td>
-              </tr>
             </table>
           </div>
         </div>
@@ -209,6 +226,7 @@ export default {
       results: {},
       order: '',
       orderEntries: [],
+      dishEntries: [],
       currentUserId: '',
     }
   },
@@ -221,6 +239,7 @@ export default {
         this.results = response.data;
         this.order = response.data.order;
         this.orderEntries = response.data.orderEntries;
+        this.dishEntries = response.data.dishEntries;
         this.currentUserId = response.data.currentUserId;
 
         this.$store.commit('setLoadingFalse')
@@ -283,11 +302,11 @@ export default {
         .then(successResponse => window.location.reload())
         .catch(errResponse => console.log(errResponse) );
     },
-    editEntry: function(orderEntryId) {
-      window.location = '#/order_entries/' + orderEntryId + '/edit'
+    editEntry: function(orderEntryId, dishEntryId) {
+      window.location = '#/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/edit'
     },
-    deleteEntry: function(orderEntryId) {
-      ApiConnector.makeGet('/order_entries/' + orderEntryId + '/delete')
+    deleteEntry: function(orderEntryId, dishEntryId) {
+      ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
         .then(successResponse => window.location.reload())
         .catch(errResponse => console.log(errResponse) );
     }

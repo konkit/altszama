@@ -58,7 +58,7 @@ export default new Router({
       component: OrderEntryCreateForm
     },
     {
-      path: '/order_entries/:entryId/edit',
+      path: '/order_entries/:entryId/dish_entry/:dishEntryId/edit',
       name: 'OrderEntryEditForm',
       component: OrderEntryEditForm
     },
