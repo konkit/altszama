@@ -1,6 +1,7 @@
 package altszama.orderEntry
 
 import altszama.auth.User
+import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.mongodb.repository.Query
 
@@ -14,6 +15,6 @@ interface OrderEntryRepository : MongoRepository<OrderEntry, String> {
 
   fun deleteByOrderId(orderId: String)
 
-  @Query(value = "{'dishEntries' : ?0}")
-  fun findByDishId(dishId: String): List<OrderEntry>
+  @Query(value = "{'dishEntries.dish._id' : ?0}")
+  fun findByDishIdQuery(dishId: ObjectId): List<OrderEntry>
 }

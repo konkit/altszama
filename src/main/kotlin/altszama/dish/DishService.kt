@@ -1,6 +1,7 @@
 package altszama.dish
 
 import altszama.orderEntry.OrderEntryRepository
+import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -36,7 +37,7 @@ class DishService {
   }
 
   fun deleteDish(dishId: String) {
-    if (orderEntryRepository.findByDishId(dishId).isNotEmpty()) {
+    if (orderEntryRepository.findByDishIdQuery(ObjectId(dishId)).isNotEmpty()) {
       throw Exception("There are order entries using this dish!")
     }
 

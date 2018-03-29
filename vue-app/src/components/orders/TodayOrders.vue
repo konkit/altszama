@@ -14,9 +14,11 @@
               <div v-if="this.results.currentOrderEntries.length > 0">
                 <ol>
                   <li v-for="orderEntry in this.results.currentOrderEntries" v-bind:key="orderEntry.id">
-                    <p class="pointer" @click="goToOrder(orderEntry.order.id)">
-                      <b>{{orderEntry.dish.name}}</b> from <b>{{orderEntry.dish.restaurant.name}}</b> (STATUS: {{orderEntry.order.orderState}})
-                    </p>
+                    <template v-for="dishEntry in orderEntry.dishEntries">
+                      <p class="pointer" @click="goToOrder(orderEntry.order.id)" :key="dishEntry.id">
+                        <b>{{dishEntry.dish.name}}</b> from <b>{{dishEntry.dish.restaurant.name}}</b> (STATUS: {{orderEntry.order.orderState}})
+                      </p>
+                    </template>
                   </li>
                 </ol>
               </div>
