@@ -181,8 +181,7 @@
                 <tr>
                   <td></td>
                   <td>
-                    <p>Final price:</p>
-                    <p><price :data-price="orderEntry.finalPrice" /></p> 
+                    <b><price :data-price="orderEntry.finalPrice" /></b> 
                   </td>
                 </tr>
 

@@ -33,14 +33,14 @@ data class ShowResponse(
     )
 
     fun create(order: Order, entries: List<OrderEntry>, currentUserId: String): ShowResponse {
-      val entriesByUser = entries.groupBy { e -> e.user }
+      val orderEntriesByUser: Map<User, List<OrderEntry>> = entries.groupBy { e -> e.user }
 
-      val usersCount = entriesByUser.keys.size
+      val usersCount = orderEntriesByUser.keys.size
 
-      val participantsUserEntries = entriesByUser
+      val participantsUserEntries = orderEntriesByUser
           .flatMap { userToEntries -> userToEntries.value }
           .map { orderEntry ->
-            val numberOfDishesForUser = entriesByUser.get(orderEntry.user)!!.size
+            val numberOfDishesForUser = orderEntriesByUser.get(orderEntry.user)!!.sumBy { orderEntries -> orderEntries.dishEntries.size }
 
             val basePrice = orderEntry.dishEntries.sumBy { dishEntry -> dishEntry.priceWithSidedishes() }
 
@@ -51,7 +51,7 @@ data class ShowResponse(
             val finalPrice = basePrice - decreaseAmount + deliveryCostPerOrder + deliveryCostPerEntry
 
             val dishEntries: List<ParticipantsDishEntry> = orderEntry.dishEntries.map { dishEntry ->
-              ParticipantsDishEntry(dishEntry.id, dishEntry.dish, dishEntry.chosenSideDishes, dishEntry.priceWithSidedishes(), dishEntry.additionalComments)
+              ParticipantsDishEntry(dishEntry.id, dishEntry.dish, dishEntry.chosenSideDishes, dishEntry.dish.price, dishEntry.additionalComments)
             }
 
             ParticipantsOrderEntry(
