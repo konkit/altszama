@@ -56,33 +56,31 @@
           <div class="col-4">
             <h3>Payment</h3>
             
-            <dt>Payment by cash</dt>
-            <dd v-if="this.order.paymentByCash == true">
+            <p v-if="this.order.paymentByCash == true">
               <b class="allowed">
-                Allowed!
+                Payment by cash
                 <span class="fa fa-check"></span>
               </b>
-            </dd>
-            <dd v-if="this.order.paymentByCash == false">
+            </p>
+            <p v-if="this.order.paymentByCash == false">
               <b class="not-allowed">
-                Not allowed!
+                Payment by cash
                 <span class="fa fa-times"></span>
               </b>
-            </dd>
+            </p>
 
-            <dt>Payment by bank transfer</dt>
-            <dd v-if="this.order.paymentByBankTransfer == true">
+            <p v-if="this.order.paymentByBankTransfer == true">
               <b class="allowed">
-                Allowed!
+                Payment by bank transfer
                 <span class="fa fa-check"></span>
               </b>
-            </dd>
-            <dd v-if="this.order.paymentByBankTransfer == false">
+            </p>
+            <p v-if="this.order.paymentByBankTransfer == false">
               <b class="not-allowed">
-                Not allowed!
+                Payment by bank transfer
                 <span class="fa fa-times"></span>
               </b>
-            </dd>
+            </p>
 
             <dt v-if="this.order.paymentByBankTransfer">Bank transfer number</dt>
             <dd v-if="this.order.paymentByBankTransfer">{{ this.order.bankTransferNumber }}</dd>

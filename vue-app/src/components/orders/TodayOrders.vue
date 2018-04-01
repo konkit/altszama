@@ -12,15 +12,13 @@
               <h2>So today you ordered ...</h2>
 
               <div v-if="this.results.currentOrderEntries.length > 0">
-                <ol>
-                  <li v-for="orderEntry in this.results.currentOrderEntries" v-bind:key="orderEntry.id">
-                    <template v-for="dishEntry in orderEntry.dishEntries">
-                      <p class="pointer" @click="goToOrder(orderEntry.order.id)" :key="dishEntry.id">
-                        <b>{{dishEntry.dish.name}}</b> from <b>{{dishEntry.dish.restaurant.name}}</b> (STATUS: {{orderEntry.order.orderState}})
-                      </p>
-                    </template>
-                  </li>
-                </ol>
+                <p v-for="orderEntry in this.results.currentOrderEntries" v-bind:key="orderEntry.id">
+                  <template v-for="dishEntry in orderEntry.dishEntries">
+                    <p class="pointer" @click="goToOrder(orderEntry.order.id)" :key="dishEntry.id">
+                      <b>{{dishEntry.dish.name}}</b> from <b>{{dishEntry.dish.restaurant.name}}</b> (STATUS: {{orderEntry.order.orderState}})
+                    </p>
+                  </template>
+                </p>
               </div>
               <div v-else>
                 <div>
