@@ -7,34 +7,64 @@
     <div v-if="loadedAndStateIsOrdering()">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-xl-9">
+          <div class="col">
             <back-button v-bind:href="'#/orders/show/' + order.id"></back-button>
           </div>
         </div>
         
         <div class="row justify-content-center">
-          <div class="col-xl-9">
+          <div class="col">
             <h1>Ordering from {{order.restaurant.name}}</h1>
 
-            <h3>tel. {{order.restaurant.telephone}}</h3>
+            <div class="alert alert-warning">
+              <p>Order is now locked, so no one should order anything else now.</p>
 
-            <errors-component ref="errorsComponent" />
+              <!-- <h4>Below there are all entries you have to order.</h4> -->
+            </div>
+
+            <h4>Now please call:</h4>
+            <h4>tel. {{order.restaurant.telephone}}</h4>
+            <h4>make an order and then enter approximate delivery time and click "Order placed"</h4>
             
-            <h4>Order is now locked, so no one should order anything else now.</h4>
-
-            <h4>Below there are all entries you have to order.</h4>
           </div>
         </div>
-
+      </div>
+      
+      <div class="container">
         <div class="row justify-content-center">
-          <div class="col-xl-9">
+          <div class="col">
+
+            <form id="place-order-form">
+              <div class="form-group">
+                <masked-input class="form-control" type="text" v-model="approxTimeOfDelivery" :mask="[/\d/,/\d/,':',/\d/,/\d/]" :keepCharPositions="true" />
+              </div>
+            </form>
+
+            <button class="btn btn-block btn-success" v-on:click="submitForm">
+              Order placed!
+              &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"/>
+            </button>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <errors-component ref="errorsComponent" />
+      </div>
+
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col">
+
+            <h4>Dishes:</h4> 
 
             <table class="table">
               <thead>
                 <tr>
                   <th>Dish</th>
                   <th>Eaters (and their comments)</th>
-                  <th>Price</th>
+                  <th class="price-column">Price</th>
                 </tr>
               </thead>
               <tbody>
@@ -43,15 +73,16 @@
                   
                   <td>
                     <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
-                      <p>
-                        {{ eatingPersonEntry.user.username }}<br/>
-                        <span v-for="(sd, i) in eatingPersonEntry.sideDishes" :key="i">
-                          + {{sd.name}} (<price :data-price="sd.price" />)<br/>
-                        </span>
+                      <p class="dish-name">
+                        {{ eatingPersonEntry.user.username }}
+                      </p>
 
-                        <span v-if="eatingPersonEntry.comments.length > 0">
-                          Comments: {{ eatingPersonEntry.comments }}
-                        </span>
+                      <p class="side-dish-name" v-for="(sd, i) in eatingPersonEntry.sideDishes" :key="i">
+                        + {{sd.name}} (<price :data-price="sd.price" />)
+                      </p>
+
+                      <p class="dish-comments" v-if="eatingPersonEntry.comments.length > 0">
+                        Additional comments: {{ eatingPersonEntry.comments }}
                       </p>
                     </div>
                   </td>
@@ -66,7 +97,10 @@
 
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-xl-9">
+          <div class="col">
+
+            <h4>Price summary</h4>
+            
             <dt v-if="order.decreaseInPercent != 0 || order.deliveryCostPerEverybody != 0">
               Base price :
             </dt>
@@ -100,27 +134,6 @@
           </div>
         </div>
       </div>
-
-      <div class="container">
-        <hr />
-
-        <div class="row justify-content-center">
-          <div class="col-xl-9">
-            <h4>After you place your order, please enter approximate delivery time and click "Order placed"</h4>
-            
-            <form id="place-order-form">
-              <div class="form-group">
-                <masked-input class="form-control" type="text" v-model="approxTimeOfDelivery" :mask="[/\d/,/\d/,':',/\d/,/\d/]" :keepCharPositions="true" />
-              </div>
-            </form>
-
-            <button class="btn btn-block btn-success" v-on:click="submitForm">
-                Order placed!
-                &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"/>
-              </button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div v-if="loadedAndStateIsNotOrdering()">
@@ -130,7 +143,7 @@
         <back-button v-bind:href="'#/orders/show/' + order.id"></back-button>
 
         <div class="row justify-content-center">
-          <div class="col-xl-9">
+          <div class="col">
             <h1>Ordering from {{order.restaurant.name}}</h1>
           </div>
         </div>
@@ -138,7 +151,7 @@
 
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-xl-9">
+          <div class="col">
             <h4>Sorry, the order is empty</h4>
             <p><back-button v-bind:href="'#/orders/show/' + order.id"></back-button></p>
           </div>
@@ -245,9 +258,29 @@ export default {
 <style scoped>
   .container {
     max-width: 1000px;
+    margin-bottom: 2rem;
   }
 
-  .row {
-    margin-top: 2rem;
+  .price-column {
+    min-width: 100px;
+  }
+
+  p.dish-name {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  p.side-dish-name {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 10pt;
+    color: #555555;
+  }
+
+  p.dish-comments {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 10pt;
+    color: #444444;
   }
 </style>

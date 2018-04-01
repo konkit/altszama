@@ -11,6 +11,10 @@
             <back-button href="#/orders" />
 
             <h1>[{{ this.order.orderState }}] Order from {{this.order.restaurant.name}} ({{this.order.orderDate}})</h1>
+          
+            <template v-if="isOrderOwner()">
+              <order-state-buttons v-bind:order-id="this.order.id" v-bind:order-state="this.order.orderState"></order-state-buttons>
+            </template>
 
             <div v-if="this.isOrdering() && this.isOrderOwner()" class="alert alert-warning">
               <p><strong>The order is locked!</strong></p>
@@ -88,61 +92,45 @@
 
         </div>
       </div>
-      
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col">
-            <p><b>Link to menu:</b> <a target="_blank" :href="order.restaurant.url">{{this.order.restaurant.url}}</a></p>
-          </div>
-        </div>
-      </div>
 
-      <div class="container" v-if="isNotOrderedYet()">
-        <div class="row justify-content-center">
+      <div class="container">
+        <div class="row justify-content-center" v-if="isNotOrderedYet()">
           <div class="col">
-            <a  class="btn btn-success" v-bind:href="createEntryLink(order.id)">
+            <p class="pull-right">
+              <b>Link to menu:</b>
+              <a target="_blank" :href="order.restaurant.url">{{this.order.restaurant.url}}</a>
+            </p>
+
+            <a class="btn btn-success" v-bind:href="createEntryLink(order.id)">
               I'm hungry too - add my order &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
             </a>
           </div>
         </div>
-      </div>
 
-      <div class="container">
         <div class="row justify-content-center">
           <div class="col">
-            <h2>Participants:</h2>
-
             <table class="table">
               <tr>
                 <th>Eating person</th>
                 <th>Dish</th>
-                <th>Price</th>
-                <th>Additional comments</th>
-                <th>Actions</th>
+                <th class="actions-column">Actions</th>
               </tr>
 
               <template v-for="orderEntry in this.orderEntries">
-                <tr v-for="(dishEntry, i) in orderEntry.dishEntries" :key="i">
-
+                <tr v-for="(dishEntry, i) in orderEntry.dishEntries">
                   <td v-if="i == 0" :rowspan="orderEntry.dishEntries.length + 1">
                     {{orderEntry.user.username}}
                   </td>
 
                   <td>
-                    <p>{{dishEntry.dish.name}}</p>
-                    <p v-for="sideDish in dishEntry.sideDishes" :key="sideDish.id">
-                      + {{sideDish.name}}
-                    </p> 
-                  </td>
-
-                  <td>
-                    <p><price :data-price="dishEntry.price"/></p>
-                    <p v-for="sideDish in dishEntry.sideDishes" :key="sideDish.id">
-                      + <price :data-price="sideDish.price" />
+                    <p class="dish-name">
+                      {{dishEntry.dish.name}} (<price :data-price="dishEntry.price"/>)
                     </p>
+                    <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
+                      + {{sideDish.name}} (<price :data-price="sideDish.price" />)
+                    </p>
+                    <p v-if="dishEntry.comments.length > 0" class="dish-comments">Additional comments: {{dishEntry.comments}}</p>
                   </td>
-
-                  <td>{{orderEntry.comments}}</td>
 
                   <td>
                     <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
@@ -177,9 +165,8 @@
                   </td>
                 </tr>
                 <tr>
-                  <td></td>
                   <td>
-                    <b><price :data-price="orderEntry.finalPrice" /></b> 
+                    <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b> 
                   </td>
                 </tr>
 
@@ -188,16 +175,6 @@
             </table>
           </div>
         </div>
-      </div>
-
-      <div class="container" v-if="isOrderOwner()">
-        <div class="row justify-content-center">
-          <div class="col">
-            <h3> Manage order </h3>
-            <order-state-buttons v-bind:order-id="this.order.id" v-bind:order-state="this.order.orderState"></order-state-buttons>
-          </div>
-        </div>
-
       </div>
 
     </div>
@@ -337,5 +314,32 @@ export default {
 
   .not-allowed {
     color: red;
+  }
+
+  .price-column {
+    min-width: 94px;
+  }
+
+  .actions-column {
+    min-width: 108px;
+  }
+
+  p.dish-name {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  p.side-dish-name {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 10pt;
+    color: #555555;
+  }
+
+  p.dish-comments {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 10pt;
+    color: #444444;
   }
 </style>
