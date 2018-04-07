@@ -27,8 +27,8 @@
         <div class="form-group">
           <h4>Dish</h4>
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="orderEntry.newDishName" />
-            <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="price" v-bind:precision="2" class="form-control" required="" id="price"></vue-numeric>
+            <input type="text" class="form-control" placeholder="New dish name" id="newSideDishName" v-model="orderEntry.newSideDishName" />
+            <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="orderEntry.newSideDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
           </div>
         </div>
       </div>
@@ -47,17 +47,39 @@
             <h4>Side dishes</h4>
 
             <div v-if="orderEntry.chosenSideDishes.length > 0">
-              <div v-for="(sideDish, i) in orderEntry.chosenSideDishes" :key="i">
+              <div v-for="(sideDish, sdIndex) in orderEntry.chosenSideDishes" :key="sdIndex">
                 
-                <div class="input-group">
-                  <select class="form-control" name="sideDishId" required="" v-model="orderEntry.chosenSideDishes[i]">
-                    <option v-for="sideDish in dishIdToSideDishesMap[orderEntry.dishId]" :key="sideDish.id" :value="sideDish">
+                <div class="input-group" v-if="sideDish.isNew === true">
+                  <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
+                  <vue-numeric 
+                    currency="zł" 
+                    separator="." 
+                    currency-symbol-position="suffix" 
+                    v-model="sideDish.newSideDishPrice" 
+                    :precision="2" 
+                    class="form-control" 
+                    required="">
+                  </vue-numeric>
+                  
+                  <button @click="setAsExistingSideDish(sdIndex)"><span class="fa fa-undo" /></button>
+
+                  <button @click="removeSideDish(orderEntry.chosenSideDishes[sdIndex])"><span class="fa fa-remove" /></button>
+                </div>
+
+                <div class="input-group" v-else>
+                  <select class="form-control" name="sideDishId" required="" v-model="orderEntry.chosenSideDishes[sdIndex]">
+                    <option v-for="sideDish in dishIdToSideDishesMap[orderEntry.dishId]"  :value="sideDish">
                       {{sideDish.name}}&nbsp;( <price :data-price="sideDish.price" /> )
                     </option>
                   </select>
-                  
-                  <button @click="removeSideDish(sideDish.id)"><span class="fa fa-remove" /></button>
+
+                  <button @click="setAsNewSideDish(sdIndex)"><span class="fa fa-undo" /></button>
+
+                  <button @click="removeSideDish(orderEntry.chosenSideDishes[sdIndex])"><span class="fa fa-remove" /></button>
                 </div>
+
+                
+
 
               </div>
             </div>
@@ -156,11 +178,38 @@ export default {
       this.newDish = newDishValue;
     },
     addSideDishEntry: function() {
-      var currentDishId = this.orderEntry.dishId
-      var sideDishToAdd = this.dishIdToSideDishesMap[currentDishId][0]
-      var chosenSideDishes = this.orderEntry.chosenSideDishes
+      var sideDishToAdd = this.dishIdToSideDishesMap[this.orderEntry.dishId][0]
+      sideDishToAdd.isNew = false
+      sideDishToAdd.newSideDishName = ""
+      sideDishToAdd.newSideDishPrice = 0
 
-      chosenSideDishes.push(sideDishToAdd);  
+      this.orderEntry.chosenSideDishes.push(sideDishToAdd) // = this.orderEntry.chosenSideDishes + sideDishToAdd
+    },
+    setAsNewSideDish: function(sideDishIndex) {
+      this.orderEntry.chosenSideDishes = this.orderEntry.chosenSideDishes.map((sd, i) => {
+        var newSd = {}
+        if (i === sideDishIndex) {
+          sd.isNew = true
+          newSd = sd
+        } else {
+          newSd = sd
+        }
+
+        return newSd
+      })
+    },
+    setAsExistingSideDish: function(sideDishIndex) {
+      this.orderEntry.chosenSideDishes = this.orderEntry.chosenSideDishes.map((sd, i) => {
+        var newSd = {}
+        if (i === sideDishIndex) {
+          sd.isNew = false
+          newSd = sd
+        } else {
+          newSd = sd
+        }
+
+        return newSd
+      })
     }
   },
   components: {

@@ -1,11 +1,13 @@
 package altszama.orderEntry
 
 import altszama.auth.AuthService
+import altszama.dish.Dish
 import altszama.dish.DishRepository
 import altszama.dish.SideDish
 import altszama.order.OrderRepository
 import altszama.orderEntry.dto.OrderEntrySaveRequest
 import altszama.orderEntry.dto.OrderEntryUpdateRequest
+import altszama.orderEntry.dto.SideDishData
 import altszama.restaurant.Restaurant
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,9 +36,11 @@ class OrderEntryService {
 
     val dish = dishRepository.findOne(orderEntrySaveRequest.dishId)
 
-    val sideDishes = orderEntrySaveRequest.sideDishesIds.mapNotNull { sideDishId ->
-      dish.sideDishes.find { sideDish ->
-        sideDish.id == sideDishId
+    val sideDishes: List<SideDish> = orderEntrySaveRequest.sideDishes.mapNotNull { sideDishData ->
+      if (sideDishData.isNew == true) {
+        addSideDish(sideDishData, dish)
+      } else {
+        dish.sideDishes.find { existingSideDish -> sideDishData.id == existingSideDish.id }
       }
     }
 
@@ -57,14 +61,29 @@ class OrderEntryService {
     orderEntryRepository.save(savedEntry)
   }
 
+  private fun addSideDish(sideDishEntry: SideDishData, dish: Dish): SideDish {
+    val sideDish = SideDish(
+        ObjectId().toHexString(),
+        sideDishEntry.newSideDishName ?: "",
+        sideDishEntry.newSideDishPrice ?: 0
+    )
+
+    dish.sideDishes = dish.sideDishes + sideDish
+    dishRepository.save(dish)
+
+    return sideDish
+  }
+
   fun updateEntry(orderEntryUpdateRequest: OrderEntryUpdateRequest) {
     val orderEntry = orderEntryRepository.findOne(orderEntryUpdateRequest.id)
 
     val dish = dishRepository.findOne(orderEntryUpdateRequest.dishId)
 
-    val sideDishes = orderEntryUpdateRequest.sideDishesIds.mapNotNull { sideDishId ->
-      dish.sideDishes.find { sideDish ->
-        sideDish.id == sideDishId
+    val sideDishes = orderEntryUpdateRequest.sideDishes.mapNotNull { sideDishData ->
+      if (sideDishData.isNew == true) {
+        addSideDish(sideDishData, dish)
+      } else {
+        dish.sideDishes.find { existingSideDish -> sideDishData.id == existingSideDish.id }
       }
     }
 

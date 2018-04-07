@@ -129,13 +129,13 @@ export default {
 
       let errorsComponent = this.$refs.errorsComponent;
 
-      console.log(this.chosenSideDishes)
+      // console.log(this.chosenSideDishes)
 
       let formData = {
         orderId: this.orderId,
         dishId: this.orderEntry.dishId,
         additionalComments: this.orderEntry.additionalComments,
-        sideDishesIds: this.orderEntry.chosenSideDishes.map(sd => sd.id)
+        sideDishes: this.orderEntry.chosenSideDishes //.map(sd => sd.id)
       };
 
       ApiConnector.makePost(action, formData)

@@ -6,14 +6,14 @@ import altszama.validation.OrderNotOrderedYet
 
 
 data class OrderEntrySaveRequest(
-    @OrderExists
-    @OrderNotOrderedYet
-    var orderId: String,
+  @OrderExists
+  @OrderNotOrderedYet
+  var orderId: String,
 
-    @DishExists
-    var dishId: String,
+  @DishExists
+  var dishId: String,
 
-    var additionalComments: String = "",
+  var additionalComments: String = "",
 
-    var sideDishesIds: List<String> = emptyList()
+  var sideDishes: List<SideDishData> = emptyList()
 )

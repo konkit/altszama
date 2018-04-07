@@ -110,7 +110,7 @@ export default {
         dishEntryId: this.dishEntryId,
         dishId: this.orderEntry.dishId,
         additionalComments: this.orderEntry.additionalComments,
-        sideDishesIds: this.orderEntry.chosenSideDishes.map(sd => sd.id)
+        sideDishes: this.orderEntry.chosenSideDishes //.map(sd => sd.id)
       };
 
       ApiConnector.makePost(action, formData)
