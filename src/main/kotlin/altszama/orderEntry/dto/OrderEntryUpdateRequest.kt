@@ -19,5 +19,10 @@ data class OrderEntryUpdateRequest(
 
   var additionalComments: String = "",
 
+  var newDish: Boolean?,
+
+  var newDishName: String?,
+  var newDishPrice: Int?,
+
   var sideDishes: List<SideDishData> = emptyList()
 )

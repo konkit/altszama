@@ -88,6 +88,9 @@ export default {
           orderId: this.order.id,
           dishId: response.data.dishEntry.dish.id,
           additionalComments: response.data.dishEntry.additionalComments,
+          newDish: false,
+          newDishName: "",
+          newDishPrice: "",
           chosenSideDishes: response.data.dishEntry.chosenSideDishes || []
         }
 
@@ -109,9 +112,14 @@ export default {
         orderId: this.order.id,
         dishEntryId: this.dishEntryId,
         dishId: this.orderEntry.dishId,
+        newDish: this.orderEntry.newDish,
+        newDishName: this.orderEntry.newDishName,
+        newDishPrice: Math.round(this.orderEntry.newDishPrice * 100),
         additionalComments: this.orderEntry.additionalComments,
-        sideDishes: this.orderEntry.chosenSideDishes //.map(sd => sd.id)
+        sideDishes: this.orderEntry.chosenSideDishes.map(sd => Object.assign(sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
       };
+
+      console.log(JSON.stringify(formData.sideDishes))
 
       ApiConnector.makePost(action, formData)
         .then(function (response) {

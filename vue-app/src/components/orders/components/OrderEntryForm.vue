@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-    <div class="row justify-content-center" v-if="!this.newDish">
+    <div class="row justify-content-center" v-if="!orderEntry.newDish">
       <div class="col-8">
         <div class="form-group">
           <h4>Dish</h4>
@@ -9,7 +9,7 @@
           <select class="form-control" required="" id="dish" v-model="orderEntry.dishId" @change="clearSideDishes">
             <optgroup v-for='(dishEntry, i) in this.allDishesByCategory' :key='i' :label="dishEntry.category">
               <option v-for='(dish, i) in dishEntry.dishes' :key='i' :value="dish.id">
-                {{dish.name}}&nbsp;( <price :data-price="dish.price" /> )
+                {{ dish.name }}&nbsp;( <price :data-price="dish.price" /> )
               </option>
             </optgroup>
           </select>
@@ -18,24 +18,24 @@
 
       <div class="col-4">
         <h3>&nbsp;</h3>
-        <p><button class="btn btn-link" v-on:click="setNewDishFlag(true)">Add new dish! &nbsp;</button></p>
+        <p><button class="btn btn-link" @click="setNewDishFlag(true)">Add new dish! &nbsp;</button></p>
       </div>
     </div>
 
-    <div class="row justify-content-center" v-if="this.newDish">
+    <div class="row justify-content-center" v-if="orderEntry.newDish">
       <div class="col-8">
         <div class="form-group">
           <h4>Dish</h4>
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="New dish name" id="newSideDishName" v-model="orderEntry.newSideDishName" />
-            <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="orderEntry.newSideDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
+            <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="orderEntry.newDishName" />
+            <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="orderEntry.newDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
           </div>
         </div>
       </div>
 
       <div class="col-4">
         <h3>&nbsp;</h3>
-        <p><button class="btn btn-link" v-on:click="setNewDishFlag(false)">Back to dish list &nbsp;</button></p>
+        <p><button class="btn btn-link" @click="setNewDishFlag(false)">Back to dish list &nbsp;</button></p>
       </div>
     </div>
 
@@ -145,7 +145,7 @@ export default {
       sideDishIdToAdd: '',
       sideDishFormVisible: false,
 
-      newDish: false
+      // newDish: false
     }
   },
   methods: {
@@ -155,15 +155,15 @@ export default {
     clearSideDishes: function() {
       this.orderEntry.chosenSideDishes = []
     },
-    addSideDish: function() {
-      let sideDishToAdd = this.dishIdToSideDishesMap[this.orderEntry.dishId].find(sd => sd.id === this.sideDishIdToAdd);
+    // addSideDish: function() {
+    //   let sideDishToAdd = this.dishIdToSideDishesMap[this.orderEntry.dishId].find(sd => sd.id === this.sideDishIdToAdd);
 
-      if (sideDishToAdd) {
-        this.orderEntry.chosenSideDishes.push(sideDishToAdd);  
-      }
+    //   if (sideDishToAdd) {
+    //     this.orderEntry.chosenSideDishes.push(sideDishToAdd);  
+    //   }
       
-      this.setSideDishFormVisible(false);
-    },
+    //   this.setSideDishFormVisible(false);
+    // },
     removeSideDish: function(sideDishId) {
       this.orderEntry.chosenSideDishes = this.orderEntry.chosenSideDishes.filter(sd => sd.id !== sideDishId)
       this.$forceUpdate();
@@ -175,11 +175,20 @@ export default {
       return currentDishId === this.orderEntry.dish.id;
     },
     setNewDishFlag: function(newDishValue) {
-      this.newDish = newDishValue;
+      this.orderEntry.newDish = newDishValue;
     },
     addSideDishEntry: function() {
-      var sideDishToAdd = this.dishIdToSideDishesMap[this.orderEntry.dishId][0]
-      sideDishToAdd.isNew = false
+      var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.orderEntry.dishId];
+      var sideDishToAdd;
+
+      if (sideDishesForGivenDish.size > 0) {
+        sideDishToAdd = sideDishesForGivenDish[0]
+        sideDishToAdd.isNew = false
+      } else {
+        sideDishToAdd = {}
+        sideDishToAdd.isNew = true
+      }
+      
       sideDishToAdd.newSideDishName = ""
       sideDishToAdd.newSideDishPrice = 0
 

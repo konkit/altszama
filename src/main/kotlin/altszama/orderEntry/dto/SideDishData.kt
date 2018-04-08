@@ -1,3 +1,10 @@
 package altszama.orderEntry.dto
 
-data class SideDishData(val id: String, val isNew: Boolean?, val newSideDishName: String?, val newSideDishPrice: Int?)
+import org.bson.types.ObjectId
+
+data class SideDishData(
+    val isNew: Boolean?,
+    val newSideDishName: String?,
+    val newSideDishPrice: Int?,
+    val id: String = ObjectId.get().toHexString()
+)
