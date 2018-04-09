@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <div class="row justify-content-center" v-if="!orderEntry.newDish">
       <div class="col-8">
         <div class="form-group">
@@ -39,7 +38,6 @@
       </div>
     </div>
 
-
     <div class="row justify-content-center">
       <div class="col-8">
         <div class="form-group">
@@ -48,7 +46,6 @@
 
             <div v-if="orderEntry.chosenSideDishes.length > 0">
               <div v-for="(sideDish, sdIndex) in orderEntry.chosenSideDishes" :key="sdIndex">
-                
                 <div class="input-group" v-if="sideDish.isNew === true">
                   <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
                   <vue-numeric 
@@ -77,10 +74,6 @@
 
                   <button @click="removeSideDish(orderEntry.chosenSideDishes[sdIndex])"><span class="fa fa-remove" /></button>
                 </div>
-
-                
-
-
               </div>
             </div>
             <div v-else>
@@ -95,11 +88,6 @@
       </div>
 
       <div class="col-4">
-        <!-- <h3>&nbsp;</h3>
-        <p>
-          Can't find your favourite sidedish ? 
-          <button class="btn btn-link" @click="this.goToCreateDish">Add one now! &nbsp;</button>
-        </p> -->
       </div>
     </div>
 
@@ -144,35 +132,15 @@ export default {
     return {
       sideDishIdToAdd: '',
       sideDishFormVisible: false,
-
-      // newDish: false
     }
   },
   methods: {
-    goToCreateDish: function(restaurantId) {
-      window.location = "#/restaurants/" + this.restaurantId + "/dishes/create?addingToOrderId=" + this.orderId
-    },
     clearSideDishes: function() {
       this.orderEntry.chosenSideDishes = []
     },
-    // addSideDish: function() {
-    //   let sideDishToAdd = this.dishIdToSideDishesMap[this.orderEntry.dishId].find(sd => sd.id === this.sideDishIdToAdd);
-
-    //   if (sideDishToAdd) {
-    //     this.orderEntry.chosenSideDishes.push(sideDishToAdd);  
-    //   }
-      
-    //   this.setSideDishFormVisible(false);
-    // },
     removeSideDish: function(sideDishId) {
       this.orderEntry.chosenSideDishes = this.orderEntry.chosenSideDishes.filter(sd => sd.id !== sideDishId)
       this.$forceUpdate();
-    },
-    setSideDishFormVisible: function(isVisible) {
-      this.sideDishFormVisible = isVisible;
-    },
-    isSelected: function(currentDishId) {
-      return currentDishId === this.orderEntry.dish.id;
     },
     setNewDishFlag: function(newDishValue) {
       this.orderEntry.newDish = newDishValue;

@@ -43,21 +43,6 @@
           </div>
         </div>
       </div>
-      <div v-else>
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col">
-              <h4>Sorry, there are no dishes in {{this.order.restaurant.name}}</h4>
-              
-              <div>
-                <button class="btn btn-success" @click="this.goToCreateDish">
-                  Add first dish now &nbsp; <i class="fa fa-plus" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -153,9 +138,6 @@ export default {
         });
 
       return false;
-    },
-    goToCreateDish: function(restaurantId) {
-      window.location = "#/restaurants/" + this.order.restaurant.id + "/dishes/create?addingToOrderId=" + this.orderId
     }
   },
   computed: {

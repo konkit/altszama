@@ -119,8 +119,6 @@ export default {
         sideDishes: this.orderEntry.chosenSideDishes.map(sd => Object.assign(sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
       };
 
-      console.log(JSON.stringify(formData.sideDishes))
-
       ApiConnector.makePost(action, formData)
         .then(function (response) {
             window.location.href = dataSuccessUrl;
@@ -132,12 +130,6 @@ export default {
         });
 
       return false;
-    },
-    goToCreateDish: function(restaurantId) {
-      window.location = "#/restaurants/" + restaurantId + "/dishes/create"
-    },
-    goToCreateSideDish: function(restaurantId) {
-      window.location = "#/restaurants/" + restaurantId + "/side_dishes/create"
     }
   },
   computed: {
