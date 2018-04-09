@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loading: false,
+    loadingEntry: false,
     username: localStorage.getItem("username"),
     token: localStorage.getItem("token")
   },
@@ -15,6 +16,12 @@ export default new Vuex.Store({
     },
     setLoadingFalse (state) {
       state.loading = false;
+    },
+    setEntryLoadingTrue (state) {
+      state.loadingEntry = true;
+    },
+    setEntryLoadingFalse (state) {
+      state.loadingEntry = false;
     },
     loginUser (state, payload) {
       state.username = payload.username;

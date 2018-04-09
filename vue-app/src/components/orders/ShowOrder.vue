@@ -111,59 +111,74 @@
           <div class="col">
             <table class="table">
               <tr>
-                <th>Eating person</th>
+                <th class="names-person">Eating person</th>
                 <th>Dish</th>
                 <th class="actions-column">Actions</th>
               </tr>
 
               <template v-for="orderEntry in this.orderEntries">
-                <tr v-for="(dishEntry, i) in orderEntry.dishEntries">
-                  <td v-if="i == 0" :rowspan="orderEntry.dishEntries.length + 1">
-                    {{orderEntry.user.username}}
-                  </td>
+                <template v-for="(dishEntry, i) in orderEntry.dishEntries">
+                  <template v-if="isEntryEdited">
+                    <order-entry-edit-entry 
+                      :orderEntryId="orderEntry.id" 
+                      :dishEntryId="dishEntry.id" 
+                      :entriesIndex="i" 
+                      :usersDishEntriesCount="orderEntry.dishEntries.length"
+                      :username="orderEntry.user.username" 
+                      :orderEntry="orderEntry" 
+                      :dishEntry="dishEntry"
+                      @cancelEdit="cancelEdit" />
+                  </template>
+                  <template v-else>
+                    <tr>
+                      <td v-if="i == 0" :rowspan="orderEntry.dishEntries.length + 1">
+                        {{orderEntry.user.username}}
+                      </td>
 
-                  <td>
-                    <p class="dish-name">
-                      {{dishEntry.dish.name}} (<price :data-price="dishEntry.price"/>)
-                    </p>
-                    <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
-                      + {{sideDish.name}} (<price :data-price="sideDish.price" />)
-                    </p>
-                    <p v-if="dishEntry.comments.length > 0" class="dish-comments">Additional comments: {{dishEntry.comments}}</p>
-                  </td>
+                      <td>
+                        <p class="dish-name">
+                          {{dishEntry.dish.name}} (<price :data-price="dishEntry.price"/>)
+                        </p>
+                        <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
+                          + {{sideDish.name}} (<price :data-price="sideDish.price" />)
+                        </p>
+                        <p v-if="dishEntry.comments.length > 0" class="dish-comments">Additional comments: {{dishEntry.comments}}</p>
+                      </td>
 
-                  <td>
-                    <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
+                      <td>
+                        <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
 
-                      <div v-if="order.orderState === 'CREATED'">
-                        <button type="button" class="btn btn-light" @click="editEntry(orderEntry.id, dishEntry.id)">
-                          <i class="fa fa-pencil" aria-hidden="true" />
-                        </button>
+                          <div v-if="order.orderState === 'CREATED'">
+                            <button type="button" class="btn btn-light" @click="editEntry(orderEntry.id, dishEntry.id)">
+                              <i class="fa fa-pencil" aria-hidden="true" />
+                            </button>
 
-                        <button type="button" class="btn btn-danger" @click="deleteEntry(orderEntry.id, dishEntry.id)">
-                          <i class="fa fa-times" aria-hidden="true" />
-                        </button>
-                      </div>
+                            <button type="button" class="btn btn-danger" @click="deleteEntry(orderEntry.id, dishEntry.id)">
+                              <i class="fa fa-times" aria-hidden="true" />
+                            </button>
+                          </div>
 
-                      <div v-if="order.orderState === 'ORDERED' || order.orderState === 'DELIVERED'" >
-                        {{paymentStatus(orderEntry)}}
-                      </div>
+                          <div v-if="order.orderState === 'ORDERED' || order.orderState === 'DELIVERED'" >
+                            {{paymentStatus(orderEntry)}}
+                          </div>
 
-                      <div v-if="shouldShowMarkAsPaidButton(orderEntry)">
-                        <button type="button" class="btn btn-success" @click="markAsPaid(orderEntry.id)">
-                          Mark as paid
-                        </button>
-                      </div>
+                          <div v-if="shouldShowMarkAsPaidButton(orderEntry)">
+                            <button type="button" class="btn btn-success" @click="markAsPaid(orderEntry.id)">
+                              Mark as paid
+                            </button>
+                          </div>
 
-                      <div v-if="shouldShowConfirmAsPaidButton(orderEntry)">
-                        <button type="button" class="btn btn-success" @click="confirmAsPaid(orderEntry.id)">
-                          Confirm as paid
-                        </button>
-                      </div>
+                          <div v-if="shouldShowConfirmAsPaidButton(orderEntry)">
+                            <button type="button" class="btn btn-success" @click="confirmAsPaid(orderEntry.id)">
+                              Confirm as paid
+                            </button>
+                          </div>
 
-                    </div>
-                  </td>
-                </tr>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                </template>
                 <tr>
                   <td>
                     <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b> 
@@ -189,6 +204,7 @@ import Price from '../commons/priceElement.vue'
 import Spinner from '../commons/spinner.vue'
 
 import OrderStateButtons from './components/OrderStateButtons.vue'
+import OrderEntryEditEntry from './components/OrderEntryEditEntry.vue'
 
 import ApiConnector from '../../ApiConnector.js'
 
@@ -202,6 +218,10 @@ export default {
       orderEntries: [],
       dishEntries: [],
       currentUserId: '',
+
+      isEntryEdited: false,
+      orderEntryId: "",
+      dishEntryId: "",
     }
   },
   created() {
@@ -277,12 +297,19 @@ export default {
         .catch(errResponse => console.log(errResponse) );
     },
     editEntry: function(orderEntryId, dishEntryId) {
-      window.location = '#/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/edit'
+      this.isEntryEdited = true;
+      this.orderEntryId = orderEntryId;
+      this.dishEntryId = dishEntryId;
     },
     deleteEntry: function(orderEntryId, dishEntryId) {
       ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
         .then(successResponse => window.location.reload())
         .catch(errResponse => console.log(errResponse) );
+    },
+    cancelEdit: function() {
+      this.isEntryEdited = false;
+      this.orderEntryId = "";
+      this.dishEntryId = "";
     }
   },
   computed: {
@@ -294,7 +321,8 @@ export default {
     BackButton,
     Price,
     Spinner,
-    OrderStateButtons
+    OrderStateButtons,
+    OrderEntryEditEntry
   }
 }
 </script>
@@ -320,8 +348,12 @@ export default {
     min-width: 94px;
   }
 
+  .names-person {
+    width: 250px;
+  }
+
   .actions-column {
-    min-width: 108px;
+    width: 108px;
   }
 
   p.dish-name {
