@@ -6,7 +6,6 @@ import TodayOrders from '@/components/orders/TodayOrders'
 import ShowOrder from '@/components/orders/ShowOrder'
 import OrderCreateForm from '@/components/orders/OrderCreateForm'
 import OrderEditForm from '@/components/orders/OrderEditForm'
-import OrderEntryCreateForm from '@/components/orders/OrderEntryCreateForm'
 import OrderView from '@/components/orders/OrderView'
 
 import AllOrders from '@/components/orders/AllOrders'
@@ -50,11 +49,6 @@ export default new Router({
       path: '/orders/:id/edit',
       name: 'OrderEditForm',
       component: OrderEditForm
-    },
-    {
-      path: '/orders/:id/create_entry',
-      name: 'OrderEntryCreateForm',
-      component: OrderEntryCreateForm
     },
     {
       path: '/orders/:id/order_view',

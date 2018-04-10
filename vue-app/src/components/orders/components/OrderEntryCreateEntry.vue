@@ -3,18 +3,18 @@
     <template v-if="this.loadingEntry === false">
     <errors-component ref="errorsComponent" />
 
-    <td v-if="entriesIndex == 0" :rowspan="orderEntry.dishEntries.length + 1">
-      {{orderEntry.user.username}}
+    <td v-if="entriesIndex == 0" :rowspan="rowspan">
+      {{username}}
     </td>
 
     <td>
-      <div v-if="!editedOrderEntry.newDish">
+      <div v-if="!createdOrderEntry.newDish">
         <h4>Dish</h4>
         <div class="input-group">
-          <select class="form-control existing-dish-dropdown" required="" id="dish" v-model="editedOrderEntry.dishId" @change="clearSideDishes">
+          <select class="form-control existing-dish-dropdown" required="" id="dish" v-model="createdOrderEntry.dishId" @change="clearSideDishes">
             <optgroup v-for='(dishEntry, i) in this.allDishesByCategory' :key='i' :label="dishEntry.category">
               <option v-for='(dish, i) in dishEntry.dishes' :key='i' :value="dish.id">
-                {{ dish.name }} &nbsp; ( <price :data-price="dish.price" /> )
+                {{ dish.name }}&nbsp;( <price :data-price="dish.price" /> )
               </option>
             </optgroup>
           </select>
@@ -23,12 +23,12 @@
         </div>
       </div>
 
-      <div v-if="editedOrderEntry.newDish">
+      <div v-if="createdOrderEntry.newDish">
         <h4>Dish</h4>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="editedOrderEntry.newDishName" />
+          <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="createdOrderEntry.newDishName" />
           
-          <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="editedOrderEntry.newDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
+          <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="createdOrderEntry.newDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
 
           <button class="btn btn-link" @click="setNewDishFlag(false)">Select dish from list &nbsp;</button>
         </div>
@@ -38,8 +38,8 @@
         <div>
           <h4>Side dishes</h4>
 
-          <div v-if="editedOrderEntry.chosenSideDishes.length > 0">
-            <div v-for="(sideDish, sdIndex) in editedOrderEntry.chosenSideDishes" :key="sdIndex">
+          <div v-if="createdOrderEntry.chosenSideDishes.length > 0">
+            <div v-for="(sideDish, sdIndex) in createdOrderEntry.chosenSideDishes" :key="sdIndex">
 
               <div class="input-group" v-if="sideDish.isNew == true">
                 <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
@@ -53,19 +53,19 @@
                   required="">
                 </vue-numeric>
                 
-                <button class="btn btn-danger" @click="removeSideDish(editedOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
+                <button class="btn btn-danger" @click="removeSideDish(createdOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
 
                 <button class="btn btn-link" @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</button>
               </div>
 
-              <div class="input-group" v-else>
-                <select class="form-control" name="sideDishId" required="" v-model="editedOrderEntry.chosenSideDishes[sdIndex]">
-                  <option v-for="sideDish in dishIdToSideDishesMap[editedOrderEntry.dishId]" :value="sideDish">
+              <div class="input-group" v-if="sideDish.isNew == false || sideDish.isNew == null">
+                <select class="form-control" name="sideDishId" required="" v-model="createdOrderEntry.chosenSideDishes[sdIndex]">
+                  <option v-for="sideDish in dishIdToSideDishesMap[createdOrderEntry.dishId]" :value="sideDish">
                     {{sideDish.name}} &nbsp; ( <price :data-price="sideDish.price" /> )
                   </option>
                 </select>
 
-                <button class="btn btn-danger" @click="removeSideDish(editedOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
+                <button class="btn btn-danger" @click="removeSideDish(createdOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
 
                 <button class="btn btn-link" @click="setAsNewSideDish(sdIndex)">Type your own side dish</button>
               </div>
@@ -83,11 +83,11 @@
       
       <div class="form-group">
         <h4>Additional Comments</h4>
-        <textarea class="form-control" name="additionalComments" value="" id="additionalComments" v-model="editedOrderEntry.additionalComments" />
+        <textarea class="form-control" name="additionalComments" value="" id="additionalComments" v-model="createdOrderEntry.additionalComments" />
       </div>
 
       <button class="btn btn-block btn-success" @click="submitForm">
-        Update order
+        Save order
       </button>
     </td>
 
@@ -111,31 +111,35 @@
 
 <script>
 import Vue from 'vue'
+
 import BackButton from '../../commons/backButton.vue'
 import ErrorsComponent from '../../commons/errors.vue'
 import Spinner from '../../commons/spinner.vue'
 import Price from '../../commons/priceElement.vue'
+
 import OrderEntryForm from '../components/OrderEntryForm.vue'
+
 import ApiConnector from '../../../ApiConnector.js'
 
+
 export default {
-  name: 'order-entry-edit-entry',
-  props: ['entriesIndex', 'usersDishEntriesCount', 'username', 'orderEntry', 'dishEntry'],
+  name: 'order-entry-create-entry',
+  props: ['orderId', 'username', 'entriesIndex', 'rowspan'],
   data () {
     return {
-      order: {},
       allDishesInRestaurant: [],
       allDishesByCategory: [],
       dishIdToSideDishesMap: {},
+      order: {},
 
-      editedOrderEntry: {}
+      createdOrderEntry: {},
     }
   },
   created() {
     this.$store.commit('setEntryLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/order_entries/" + this.orderEntry.id + "/dish_entry/" + this.dishEntry.id + "/edit_entry.json")
+    ApiConnector.makeGet("/orders/" + this.orderId + "/create_entry.json")
       .then(response => {
         this.order = response.data.order;
 
@@ -143,15 +147,23 @@ export default {
         this.allDishesByCategory = convertToMapEntries(response.data.allDishesByCategory);
         this.dishIdToSideDishesMap = response.data.dishIdToSideDishesMap;
 
-        this.editedOrderEntry = {
-          id: response.data.dishEntry.id,
-          orderId: this.order.id,
-          dishId: response.data.dishEntry.dish.id,
-          additionalComments: response.data.dishEntry.additionalComments,
+        console.log(this.allDishesByCategory);
+
+        var dishId;
+        if (this.allDishesInRestaurant.length > 0) {
+          dishId = this.allDishesInRestaurant[0].id;
+        } else {
+          dishId = null
+        }
+
+        this.createdOrderEntry = {
+          orderId: response.data.order.id,
+          dishId: dishId,
+          additionalComments: '',
           newDish: false,
           newDishName: "",
           newDishPrice: "",
-          chosenSideDishes: response.data.dishEntry.chosenSideDishes || []
+          chosenSideDishes: []
         }
 
         this.$store.commit('setEntryLoadingFalse')
@@ -161,35 +173,31 @@ export default {
   methods: {
     submitForm: function(e) {
       e.preventDefault();
-      
-      const action = "/order_entries/update";
+
+      const action = "/order_entries/save";
       const dataSuccessUrl = "#/orders/show/" + this.order.id;
 
       let errorsComponent = this.$refs.errorsComponent;
 
       let formData = {
-        id: this.orderEntry.id,
-        orderId: this.order.id,
-        dishEntryId: this.editedOrderEntry.id,
-        dishId: this.editedOrderEntry.dishId,
-        newDish: this.editedOrderEntry.newDish,
-        newDishName: this.editedOrderEntry.newDishName,
-        newDishPrice: Math.round(this.editedOrderEntry.newDishPrice * 100),
-        additionalComments: this.editedOrderEntry.additionalComments,
-        sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
+        orderId: this.orderId,
+        dishId: this.createdOrderEntry.dishId,
+        newDish: this.createdOrderEntry.newDish,
+        newDishName: this.createdOrderEntry.newDishName,
+        newDishPrice: Math.round(this.createdOrderEntry.newDishPrice * 100),
+        additionalComments: this.createdOrderEntry.additionalComments,
+        sideDishes: this.createdOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
       };
-
-      console.log("Starting submit");
 
       ApiConnector.makePost(action, formData)
         .then(function (response) {
           console.log("Submit sucessful, redirect to " + dataSuccessUrl)
-          // window.location.href = dataSuccessUrl;
           window.location.reload();
         })
         .catch(function(error) {
-          console.log("Submit error")
-          error.body.messages.forEach(msg => errorsComponent.addError(msg));
+            console.log("orderEntryCreateForm Error:");
+            console.log(error);
+            error.body.messages.forEach(msg => errorsComponent.addError(msg));
         });
 
       return false;
@@ -199,26 +207,26 @@ export default {
     },
 
     clearSideDishes: function() {
-      this.editedOrderEntry.chosenSideDishes = []
+      this.createdOrderEntry.chosenSideDishes = []
     },
     removeSideDish: function(sideDishId) {
-      console.log("Removing side dishes, id: " + sideDishId + " before: " + this.editedOrderEntry.chosenSideDishes)
+      console.log("Removing side dishes, id: " + sideDishId + " before: " + this.createdOrderEntry.chosenSideDishes)
 
-      this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.filter(sd => sd.id !== sideDishId)
+      this.createdOrderEntry.chosenSideDishes = this.createdOrderEntry.chosenSideDishes.filter(sd => sd.id !== sideDishId)
       this.$forceUpdate();
       
-      console.log("After sidedishes: " + this.editedOrderEntry.chosenSideDishes)
+      console.log("After sidedishes: " + this.createdOrderEntry.chosenSideDishes)
     },
     setNewDishFlag: function(newDishValue) {
-      this.editedOrderEntry.newDish = newDishValue;
+      this.createdOrderEntry.newDish = newDishValue;
     },
     addSideDishEntry: function() {
-      var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
+      var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.createdOrderEntry.dishId];
       var sideDishToAdd;
 
-      if (sideDishesForGivenDish.size > 0) {
-        sideDishToAdd = sideDishesForGivenDish[0]
-        sideDishToAdd.isNew = false
+      if (sideDishesForGivenDish.length > 0) {
+        var firstSD = sideDishesForGivenDish[0]
+        sideDishToAdd = { isNew: false, id: firstSD.id, name: firstSD.name, price: firstSD.price }
       } else {
         sideDishToAdd = {}
         sideDishToAdd.isNew = true
@@ -227,10 +235,10 @@ export default {
       sideDishToAdd.newSideDishName = ""
       sideDishToAdd.newSideDishPrice = 0
 
-      this.editedOrderEntry.chosenSideDishes.push(sideDishToAdd) // = this.orderEntry.chosenSideDishes + sideDishToAdd
+      this.createdOrderEntry.chosenSideDishes.push(sideDishToAdd) // = this.orderEntry.chosenSideDishes + sideDishToAdd
     },
     setAsNewSideDish: function(sideDishIndex) {
-      this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
+      this.createdOrderEntry.chosenSideDishes = this.createdOrderEntry.chosenSideDishes.map((sd, i) => {
         var newSd = {}
         if (i === sideDishIndex) {
           sd.isNew = true
@@ -243,7 +251,7 @@ export default {
       })
     },
     setAsExistingSideDish: function(sideDishIndex) {
-      this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
+      this.createdOrderEntry.chosenSideDishes = this.createdOrderEntry.chosenSideDishes.map((sd, i) => {
         var newSd = {}
         if (i === sideDishIndex) {
           sd.isNew = false

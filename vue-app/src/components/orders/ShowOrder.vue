@@ -29,84 +29,9 @@
         </div>
       </div>
 
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-4">
-            <h3>Order data</h3>
-
-            <dt>Who will order?</dt>
-            <dd>{{ this.order.orderCreator.username }}</dd>
-
-            <dt>When?</dt>
-            <dd>{{ this.order.timeOfOrder }}</dd>
-
-            <dt>When it'll arrive?</dt>
-            <dd>{{ this.timeOfDeliveryOrNA() }}</dd>
-          </div>
-
-          <div class="col-4">
-            <h3>Price modifiers</h3>
-
-            <dt>Price decrease</dt>
-            <dd>{{ this.order.decreaseInPercent }} %</dd>
-
-            <dt>Delivery cost (total)</dt>
-            <dd><price v-bind:data-price="this.order.deliveryCostPerEverybody" /></dd>
-
-            <dt>Delivery cost (per dish)</dt>
-            <dd><price v-bind:data-price="this.order.deliveryCostPerDish" /></dd>
-          </div>
-
-          <div class="col-4">
-            <h3>Payment</h3>
-            
-            <p v-if="this.order.paymentByCash == true">
-              <b class="allowed">
-                Payment by cash
-                <span class="fa fa-check"></span>
-              </b>
-            </p>
-            <p v-if="this.order.paymentByCash == false">
-              <b class="not-allowed">
-                Payment by cash
-                <span class="fa fa-times"></span>
-              </b>
-            </p>
-
-            <p v-if="this.order.paymentByBankTransfer == true">
-              <b class="allowed">
-                Payment by bank transfer
-                <span class="fa fa-check"></span>
-              </b>
-            </p>
-            <p v-if="this.order.paymentByBankTransfer == false">
-              <b class="not-allowed">
-                Payment by bank transfer
-                <span class="fa fa-times"></span>
-              </b>
-            </p>
-
-            <dt v-if="this.order.paymentByBankTransfer">Bank transfer number</dt>
-            <dd v-if="this.order.paymentByBankTransfer">{{ this.order.bankTransferNumber }}</dd>
-          </div>
-
-        </div>
-      </div>
+      <order-stats :order="order"></order-stats>
 
       <div class="container">
-        <div class="row justify-content-center" v-if="isNotOrderedYet()">
-          <div class="col">
-            <p class="pull-right">
-              <b>Link to menu:</b>
-              <a target="_blank" :href="order.restaurant.url">{{this.order.restaurant.url}}</a>
-            </p>
-
-            <a v-if="numberOfCurrentUserEntries == 0" class="btn btn-success" :href="createEntryLink(order.id)">
-              I'm hungry too - add my order &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-            </a>
-          </div>
-        </div>
-
         <div class="row justify-content-center">
           <div class="col">
             <table class="table">
@@ -116,20 +41,44 @@
                 <th class="actions-column">Actions</th>
               </tr>
 
+              <template v-if="numberOfCurrentUserEntries == 0">
+                <template v-if="isEntryEdited == false && numberOfCurrentUserEntries == 0">
+                  <template v-if="isEntryCreating == false">
+                    <tr>
+                      <td>{{username}}</td>
+                      <td>
+                        <button class="btn btn-success" @click="createEntry()">
+                          Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </template>
+
+                  <template v-if="isEntryCreating == true">
+                    <order-entry-create-entry 
+                    :order-id="order.id" 
+                    :username="username" 
+                    :entries-index="0"
+                    @cancelEdit="cancelEdit" 
+                    :rowspan="1" />
+                  </template>
+                </template>
+              </template>
+
               <template v-for="orderEntry in this.orderEntries">
                 <template v-for="(dishEntry, i) in orderEntry.dishEntries">
                   <template v-if="isEntryEdited == true && dishEntryId == dishEntry.id">
                     <order-entry-edit-entry 
                       :entriesIndex="i" 
                       :usersDishEntriesCount="orderEntry.dishEntries.length"
-                      :username="orderEntry.user.username" 
+                      :username="username" 
                       :orderEntry="orderEntry" 
                       :dishEntry="dishEntry"
                       @cancelEdit="cancelEdit" />
                   </template>
                   <template v-else>
                     <tr>
-                      <td v-if="i == 0" :rowspan="orderEntry.dishEntries.length + 1">
+                      <td v-if="i == 0" :rowspan="userColumnRowSpan(order, orderEntry)">
                         {{orderEntry.user.username}}
                       </td>
 
@@ -177,13 +126,23 @@
                     </tr>
                   </template>
                 </template>
-                <tr>
-                  <td>
-                    <a v-if="isEntryEdited == false" class="btn btn-success" v-bind:href="createEntryLink(order.id)">
-                      Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                    </a>
-                  </td>
-                </tr>
+                <template v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && isEntryEdited == false">
+                  <tr v-if="isEntryCreating == false">
+                    <td>
+                      <button class="btn btn-success" @click="createEntry()">
+                        Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr v-if="isEntryCreating == true">
+                    <order-entry-create-entry 
+                      :order-id="order.id" 
+                      :username="orderEntry.user.username" 
+                      :entries-index="1"
+                      @cancelEdit="cancelEdit" 
+                      :rowspan="orderEntry.dishEntries.length + 1" />
+                  </tr>
+                </template>
                 <tr>
                   <td>
                     <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b> 
@@ -209,9 +168,12 @@ import Price from '../commons/priceElement.vue'
 import Spinner from '../commons/spinner.vue'
 
 import OrderStateButtons from './components/OrderStateButtons.vue'
+import OrderEntryCreateEntry from './components/OrderEntryCreateEntry.vue'
 import OrderEntryEditEntry from './components/OrderEntryEditEntry.vue'
+import OrderStats from './components/OrderStats.vue'
 
 import ApiConnector from '../../ApiConnector.js'
+
 
 export default {
   data () {
@@ -223,6 +185,7 @@ export default {
       orderEntries: [],
       currentUserId: '',
 
+      isEntryCreating: false,
       isEntryEdited: false,
       orderEntryId: "",
       dishEntryId: "",
@@ -244,13 +207,6 @@ export default {
       .catch(errResponse => ApiConnector.handleError(errResponse))
   },
   methods: {
-    timeOfDeliveryOrNA: function() {
-      if (this.order.timeOfDelivery != null) {
-        return this.order.timeOfDelivery
-      } else {
-        return "As ASAP as possible"
-      }
-    },
     createEntryLink: function(orderId) {
       return '#/orders/' + orderId + '/create_entry'
     },
@@ -299,20 +255,33 @@ export default {
         .then(successResponse => window.location.reload())
         .catch(errResponse => console.log(errResponse) );
     },
-    editEntry: function(orderEntryId, dishEntryId) {
-      this.isEntryEdited = true;
-      this.orderEntryId = orderEntryId;
-      this.dishEntryId = dishEntryId;
-    },
     deleteEntry: function(orderEntryId, dishEntryId) {
       ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
         .then(successResponse => window.location.reload())
         .catch(errResponse => console.log(errResponse) );
     },
+    createEntry: function() {
+      this.isEntryCreating = true;
+      this.orderEntryId = "";
+      this.dishEntryId = "";
+    },
+    editEntry: function(orderEntryId, dishEntryId) {
+      this.isEntryEdited = true;
+      this.orderEntryId = orderEntryId;
+      this.dishEntryId = dishEntryId;
+    },
     cancelEdit: function() {
+      this.isEntryCreating = false;
       this.isEntryEdited = false;
       this.orderEntryId = "";
       this.dishEntryId = "";
+    },
+    userColumnRowSpan: function(order, orderEntry) {
+      if ((this.isOrderEntryOwner(orderEntry) || this.isOrderOwner(order)) && this.isEntryEdited == false) {
+        return orderEntry.dishEntries.length + 2;
+      } else {
+        return orderEntry.dishEntries.length + 1;
+      }
     }
   },
   computed: {
@@ -321,6 +290,9 @@ export default {
     },
     numberOfCurrentUserEntries () {
       return this.orderEntries.filter(e => e.user.id == this.currentUserId).length;
+    },
+    username: function() {
+      return this.$store.state.username;
     }
   },
   components: {
@@ -328,7 +300,9 @@ export default {
     Price,
     Spinner,
     OrderStateButtons,
-    OrderEntryEditEntry
+    OrderEntryCreateEntry,
+    OrderEntryEditEntry,
+    OrderStats
   }
 }
 </script>
