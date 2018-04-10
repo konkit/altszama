@@ -9,6 +9,7 @@
 
     <td>
       <div v-if="!editedOrderEntry.newDish">
+        <h4>Dish</h4>
         <div class="input-group">
           <select class="form-control existing-dish-dropdown" required="" id="dish" v-model="editedOrderEntry.dishId" @change="clearSideDishes">
             <optgroup v-for='(dishEntry, i) in this.allDishesByCategory' :key='i' :label="dishEntry.category">
@@ -18,17 +19,18 @@
             </optgroup>
           </select>
 
-          <button class="btn btn-link" @click="setNewDishFlag(true)">New dish! &nbsp;</button>
+          <button class="btn btn-link" @click="setNewDishFlag(true)">Type your own dish! &nbsp;</button>
         </div>
       </div>
 
       <div v-if="editedOrderEntry.newDish">
+        <h4>Dish</h4>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="editedOrderEntry.newDishName" />
           
           <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="editedOrderEntry.newDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
 
-          <button class="btn btn-link" @click="setNewDishFlag(false)">Dish from list &nbsp;</button>
+          <button class="btn btn-link" @click="setNewDishFlag(false)">Select dish from list &nbsp;</button>
         </div>
       </div>
 
@@ -53,7 +55,7 @@
                 
                 <button class="btn btn-danger" @click="removeSideDish(editedOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
 
-                <button class="btn btn-link" @click="setAsExistingSideDish(sdIndex)">Side dish from list</button>
+                <button class="btn btn-link" @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</button>
               </div>
 
               <div class="input-group" v-else>
@@ -65,7 +67,7 @@
 
                 <button class="btn btn-danger" @click="removeSideDish(editedOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
 
-                <button class="btn btn-link" @click="setAsNewSideDish(sdIndex)">New side dish</button>
+                <button class="btn btn-link" @click="setAsNewSideDish(sdIndex)">Type your own side dish</button>
               </div>
             </div>
           </div>

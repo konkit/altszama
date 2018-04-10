@@ -101,7 +101,7 @@
               <a target="_blank" :href="order.restaurant.url">{{this.order.restaurant.url}}</a>
             </p>
 
-            <a class="btn btn-success" v-bind:href="createEntryLink(order.id)">
+            <a v-if="numberOfCurrentUserEntries == 0" class="btn btn-success" :href="createEntryLink(order.id)">
               I'm hungry too - add my order &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
             </a>
           </div>
@@ -118,10 +118,8 @@
 
               <template v-for="orderEntry in this.orderEntries">
                 <template v-for="(dishEntry, i) in orderEntry.dishEntries">
-                  <template v-if="isEntryEdited">
+                  <template v-if="isEntryEdited == true && dishEntryId == dishEntry.id">
                     <order-entry-edit-entry 
-                      :orderEntryId="orderEntry.id" 
-                      :dishEntryId="dishEntry.id" 
                       :entriesIndex="i" 
                       :usersDishEntriesCount="orderEntry.dishEntries.length"
                       :username="orderEntry.user.username" 
@@ -181,6 +179,13 @@
                 </template>
                 <tr>
                   <td>
+                    <a v-if="isEntryEdited == false" class="btn btn-success" v-bind:href="createEntryLink(order.id)">
+                      Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b> 
                   </td>
                 </tr>
@@ -216,7 +221,6 @@ export default {
       results: {},
       order: '',
       orderEntries: [],
-      dishEntries: [],
       currentUserId: '',
 
       isEntryEdited: false,
@@ -233,7 +237,6 @@ export default {
         this.results = response.data;
         this.order = response.data.order;
         this.orderEntries = response.data.orderEntries;
-        this.dishEntries = response.data.dishEntries;
         this.currentUserId = response.data.currentUserId;
 
         this.$store.commit('setLoadingFalse')
@@ -315,6 +318,9 @@ export default {
   computed: {
     loading () {
       return this.$store.state.loading;
+    },
+    numberOfCurrentUserEntries () {
+      return this.orderEntries.filter(e => e.user.id == this.currentUserId).length;
     }
   },
   components: {
