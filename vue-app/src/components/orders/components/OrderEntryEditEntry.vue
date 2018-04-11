@@ -1,101 +1,32 @@
 <template>
   <tr>
     <template v-if="this.loadingEntry === false">
-    <errors-component ref="errorsComponent" />
+      <errors-component ref="errorsComponent" />
 
-    <td v-if="entriesIndex == 0" :rowspan="orderEntry.dishEntries.length + 1">
-      {{orderEntry.user.username}}
-    </td>
+      <td v-if="entriesIndex == 0" :rowspan="orderEntry.dishEntries.length + 1">
+        {{orderEntry.user.username}}
+      </td>
 
-    <td>
-      <div v-if="!editedOrderEntry.newDish">
-        <h4>Dish</h4>
-        <div class="input-group">
-          <select class="form-control existing-dish-dropdown" required="" id="dish" v-model="editedOrderEntry.dishId" @change="clearSideDishes">
-            <optgroup v-for='(dishEntry, i) in this.allDishesByCategory' :key='i' :label="dishEntry.category">
-              <option v-for='(dish, i) in dishEntry.dishes' :key='i' :value="dish.id">
-                {{ dish.name }} &nbsp; ( <price :data-price="dish.price" /> )
-              </option>
-            </optgroup>
-          </select>
+      <td>
+        <order-entry-input :editedOrderEntry="editedOrderEntry" :allDishesByCategory="allDishesByCategory" @clearSideDishes="clearSideDishes" />
 
-          <button class="btn btn-link" @click="setNewDishFlag(true)">Type your own dish! &nbsp;</button>
+        <side-dishes-input :editedOrderEntry="editedOrderEntry" :dishIdToSideDishesMap="dishIdToSideDishesMap" />
+        
+        <div class="form-group">
+          <h4>Additional Comments</h4>
+          <textarea class="form-control" name="additionalComments" value="" id="additionalComments" v-model="editedOrderEntry.additionalComments" />
         </div>
-      </div>
 
-      <div v-if="editedOrderEntry.newDish">
-        <h4>Dish</h4>
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="editedOrderEntry.newDishName" />
-          
-          <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="editedOrderEntry.newDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
+        <button class="btn btn-block btn-success" @click="submitForm">
+          Update order
+        </button>
+      </td>
 
-          <button class="btn btn-link" @click="setNewDishFlag(false)">Select dish from list &nbsp;</button>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div>
-          <h4>Side dishes</h4>
-
-          <div v-if="editedOrderEntry.chosenSideDishes.length > 0">
-            <div v-for="(sideDish, sdIndex) in editedOrderEntry.chosenSideDishes" :key="sdIndex">
-
-              <div class="input-group" v-if="sideDish.isNew == true">
-                <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
-                <vue-numeric 
-                  currency="zł" 
-                  separator="." 
-                  currency-symbol-position="suffix" 
-                  v-model="sideDish.newSideDishPrice" 
-                  :precision="2" 
-                  class="form-control" 
-                  required="">
-                </vue-numeric>
-                
-                <button class="btn btn-danger" @click="removeSideDish(editedOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
-
-                <button class="btn btn-link" @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</button>
-              </div>
-
-              <div class="input-group" v-else>
-                <select class="form-control" name="sideDishId" required="" v-model="editedOrderEntry.chosenSideDishes[sdIndex]">
-                  <option v-for="sideDish in dishIdToSideDishesMap[editedOrderEntry.dishId]" :value="sideDish">
-                    {{sideDish.name}} &nbsp; ( <price :data-price="sideDish.price" /> )
-                  </option>
-                </select>
-
-                <button class="btn btn-danger" @click="removeSideDish(editedOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
-
-                <button class="btn btn-link" @click="setAsNewSideDish(sdIndex)">Type your own side dish</button>
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            <p>No side dishes selected</p>
-          </div>
-
-          <button class="btn btn-success" @click="addSideDishEntry()">
-            Add side dish &nbsp; <i class="fa fa-plus" />
-          </button>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <h4>Additional Comments</h4>
-        <textarea class="form-control" name="additionalComments" value="" id="additionalComments" v-model="editedOrderEntry.additionalComments" />
-      </div>
-
-      <button class="btn btn-block btn-success" @click="submitForm">
-        Update order
-      </button>
-    </td>
-
-    <td>
-      <button type="button" class="btn btn-light" @click="cancelEdit()">
-        Cancel
-      </button>
-    </td>
+      <td>
+        <button type="button" class="btn btn-light" @click="cancelEdit()">
+          Cancel
+        </button>
+      </td>
 
     </template>
 
@@ -116,6 +47,9 @@ import ErrorsComponent from '../../commons/errors.vue'
 import Spinner from '../../commons/spinner.vue'
 import Price from '../../commons/priceElement.vue'
 import ApiConnector from '../../../ApiConnector.js'
+
+import OrderEntryInput from './OrderEntryInput.vue'
+import SideDishesInput from './SideDishesInput.vue'
 
 export default {
   name: 'order-entry-edit-entry',
@@ -183,7 +117,6 @@ export default {
       ApiConnector.makePost(action, formData)
         .then(function (response) {
           console.log("Submit sucessful, redirect to " + dataSuccessUrl)
-          // window.location.href = dataSuccessUrl;
           window.location.reload();
         })
         .catch(function(error) {
@@ -196,63 +129,8 @@ export default {
     cancelEdit: function() {
       this.$emit("cancelEdit")
     },
-
     clearSideDishes: function() {
       this.editedOrderEntry.chosenSideDishes = []
-    },
-    removeSideDish: function(sideDishId) {
-      console.log("Removing side dishes, id: " + sideDishId + " before: " + this.editedOrderEntry.chosenSideDishes)
-
-      this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.filter(sd => sd.id !== sideDishId)
-      this.$forceUpdate();
-      
-      console.log("After sidedishes: " + this.editedOrderEntry.chosenSideDishes)
-    },
-    setNewDishFlag: function(newDishValue) {
-      this.editedOrderEntry.newDish = newDishValue;
-    },
-    addSideDishEntry: function() {
-      var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
-      var sideDishToAdd;
-
-      if (sideDishesForGivenDish.size > 0) {
-        sideDishToAdd = sideDishesForGivenDish[0]
-        sideDishToAdd.isNew = false
-      } else {
-        sideDishToAdd = {}
-        sideDishToAdd.isNew = true
-      }
-      
-      sideDishToAdd.newSideDishName = ""
-      sideDishToAdd.newSideDishPrice = 0
-
-      this.editedOrderEntry.chosenSideDishes.push(sideDishToAdd) // = this.orderEntry.chosenSideDishes + sideDishToAdd
-    },
-    setAsNewSideDish: function(sideDishIndex) {
-      this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
-        var newSd = {}
-        if (i === sideDishIndex) {
-          sd.isNew = true
-          newSd = sd
-        } else {
-          newSd = sd
-        }
-
-        return newSd
-      })
-    },
-    setAsExistingSideDish: function(sideDishIndex) {
-      this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
-        var newSd = {}
-        if (i === sideDishIndex) {
-          sd.isNew = false
-          newSd = sd
-        } else {
-          newSd = sd
-        }
-
-        return newSd
-      })
     }
   },
   computed: {
@@ -264,7 +142,9 @@ export default {
     BackButton,
     ErrorsComponent,
     Price,
-    Spinner
+    Spinner,
+    OrderEntryInput,
+    SideDishesInput
   }
 }
 

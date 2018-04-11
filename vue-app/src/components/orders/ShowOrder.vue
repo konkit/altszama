@@ -55,12 +55,7 @@
                   </template>
 
                   <template v-if="isEntryCreating == true">
-                    <order-entry-create-entry 
-                    :order-id="order.id" 
-                    :username="username" 
-                    :entries-index="0"
-                    @cancelEdit="cancelEdit" 
-                    :rowspan="1" />
+                    <order-entry-create-entry :order-id="order.id" :username="username" :entries-index="0" @cancelEdit="cancelEdit" :rowspan="1" />
                   </template>
                 </template>
               </template>
@@ -68,16 +63,21 @@
               <template v-for="orderEntry in this.orderEntries">
                 <template v-for="(dishEntry, i) in orderEntry.dishEntries">
                   <template v-if="isEntryEdited == true && dishEntryId == dishEntry.id">
-                    <order-entry-edit-entry 
-                      :entriesIndex="i" 
-                      :usersDishEntriesCount="orderEntry.dishEntries.length"
-                      :username="username" 
-                      :orderEntry="orderEntry" 
-                      :dishEntry="dishEntry"
-                      @cancelEdit="cancelEdit" />
+                    <order-entry-edit-entry :entriesIndex="i" :usersDishEntriesCount="orderEntry.dishEntries.length" :username="username" :orderEntry="orderEntry" :dishEntry="dishEntry" @cancelEdit="cancelEdit" />
                   </template>
                   <template v-else>
-                    <tr>
+                    <order-entry-row 
+                      :order="order" 
+                      :order-entry="orderEntry" 
+                      :dish-entry="dishEntry" 
+                      :rowIndex="i" 
+                      :currentUserId="currentUserId" 
+                      @createEntry="createEntry" 
+                      @editEntry="editEntry" 
+                      @cancelEdit="cancelEdit" 
+                      @deleteEntry="deleteEntry" 
+                      />
+                    <!-- <tr>
                       <td v-if="i == 0" :rowspan="userColumnRowSpan(order, orderEntry)">
                         {{orderEntry.user.username}}
                       </td>
@@ -123,7 +123,7 @@
 
                         </div>
                       </td>
-                    </tr>
+                    </tr> -->
                   </template>
                 </template>
                 <template v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && isEntryEdited == false">
@@ -135,12 +135,7 @@
                     </td>
                   </tr>
                   <tr v-if="isEntryCreating == true">
-                    <order-entry-create-entry 
-                      :order-id="order.id" 
-                      :username="orderEntry.user.username" 
-                      :entries-index="1"
-                      @cancelEdit="cancelEdit" 
-                      :rowspan="orderEntry.dishEntries.length + 1" />
+                    <order-entry-create-entry :order-id="order.id" :username="orderEntry.user.username" :entries-index="1" @cancelEdit="cancelEdit" :rowspan="orderEntry.dishEntries.length + 1" />
                   </tr>
                 </template>
                 <tr>
@@ -170,6 +165,7 @@ import Spinner from '../commons/spinner.vue'
 import OrderStateButtons from './components/OrderStateButtons.vue'
 import OrderEntryCreateEntry from './components/OrderEntryCreateEntry.vue'
 import OrderEntryEditEntry from './components/OrderEntryEditEntry.vue'
+import OrderEntryRow from './components/OrderEntryRow.vue'
 import OrderStats from './components/OrderStats.vue'
 
 import ApiConnector from '../../ApiConnector.js'
@@ -302,6 +298,7 @@ export default {
     OrderStateButtons,
     OrderEntryCreateEntry,
     OrderEntryEditEntry,
+    OrderEntryRow,
     OrderStats
   }
 }
