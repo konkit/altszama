@@ -53,7 +53,7 @@ import Price from '../../commons/priceElement.vue'
 
 export default {
   name: 'order-entry-row',
-  props: ['order', 'orderEntry', 'dishEntry', 'rowIndex', 'currentUserId'],
+  props: ['order', 'orderEntry', 'dishEntry', 'rowIndex', 'currentUserId', 'isEntryEdited'],
   methods: {
     createEntryLink: function(orderId) {
       return '#/orders/' + orderId + '/create_entry'
@@ -66,9 +66,6 @@ export default {
     },
     isOrderEntryOwner: function(orderEntry) {
       return orderEntry.user.id === this.currentUserId
-    },
-    isNotOrderedYet: function() {
-      return this.order.orderState === 'CREATED';
     },
     shouldShowMarkAsPaidButton: function(orderEntry) {
       return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && (orderEntry.paymentStatus != "MARKED" && orderEntry.paymentStatus != "CONFIRMED") && this.isOrderOwner() == false)
@@ -86,12 +83,6 @@ export default {
       } else {
         return orderEntry.paymentStatus
       }
-    },
-    unlockOrder: function() {
-      ApiConnector.makeGet('/orders/' + this.orderId + '/set_as_created')
-        .then(response => {
-          window.location.reload()
-        })
     },
     confirmAsPaid: function(orderEntryId) {
       ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid')
@@ -116,7 +107,7 @@ export default {
       this.$emit("cancelEdit");
     },
     userColumnRowSpan: function(order, orderEntry) {
-      if ((this.isOrderEntryOwner(orderEntry) || this.isOrderOwner(order)) && this.isEntryEdited == false) {
+      if ((this.isOrderEntryOwner(orderEntry) ) && this.isEntryEdited == false) {
         return orderEntry.dishEntries.length + 2;
       } else {
         return orderEntry.dishEntries.length + 1;

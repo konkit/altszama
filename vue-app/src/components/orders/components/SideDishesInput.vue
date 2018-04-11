@@ -87,7 +87,7 @@ export default {
       var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
       var sideDishToAdd;
 
-      if (sideDishesForGivenDish.size > 0) {
+      if (sideDishesForGivenDish && sideDishesForGivenDish.size > 0) {
         sideDishToAdd = sideDishesForGivenDish[0]
         sideDishToAdd.isNew = false
       } else {

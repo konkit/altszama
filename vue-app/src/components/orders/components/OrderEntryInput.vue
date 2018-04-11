@@ -35,8 +35,8 @@ export default {
   name: 'order-entry-input',
   props: ['editedOrderEntry', 'allDishesByCategory'],
   methods: {
-    setNewDishFlat: function(newValue) {
-      this.$emit("setNewDishFlat", newValue)
+    setNewDishFlag: function(newValue) {
+      this.$emit("setNewDishFlag", newValue)
     },
     clearSideDishes: function() {
       this.$emit("clearSideDishes")

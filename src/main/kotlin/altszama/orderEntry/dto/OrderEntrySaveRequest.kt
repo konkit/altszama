@@ -10,7 +10,7 @@ data class OrderEntrySaveRequest(
   @OrderNotOrderedYet
   var orderId: String,
 
-  @DishExists
+  // @DishExists - separate between new dish and existing dish
   var dishId: String,
 
   var additionalComments: String = "",

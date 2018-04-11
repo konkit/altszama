@@ -42,7 +42,7 @@
               </tr>
 
               <template v-if="numberOfCurrentUserEntries == 0">
-                <template v-if="isEntryEdited == false && numberOfCurrentUserEntries == 0">
+                <template v-if="isEntryEdited == false">
                   <template v-if="isEntryCreating == false">
                     <tr>
                       <td>{{username}}</td>
@@ -63,7 +63,13 @@
               <template v-for="orderEntry in this.orderEntries">
                 <template v-for="(dishEntry, i) in orderEntry.dishEntries">
                   <template v-if="isEntryEdited == true && dishEntryId == dishEntry.id">
-                    <order-entry-edit-entry :entriesIndex="i" :usersDishEntriesCount="orderEntry.dishEntries.length" :username="username" :orderEntry="orderEntry" :dishEntry="dishEntry" @cancelEdit="cancelEdit" />
+                    <order-entry-edit-entry 
+                      :entriesIndex="i" 
+                      :usersDishEntriesCount="orderEntry.dishEntries.length" 
+                      :username="username" 
+                      :orderEntry="orderEntry" 
+                      :dishEntry="dishEntry" 
+                      @cancelEdit="cancelEdit" />
                   </template>
                   <template v-else>
                     <order-entry-row 
@@ -71,61 +77,15 @@
                       :order-entry="orderEntry" 
                       :dish-entry="dishEntry" 
                       :rowIndex="i" 
-                      :currentUserId="currentUserId" 
+                      :currentUserId="currentUserId"
+                      :is-entry-edited="isEntryEdited"
                       @createEntry="createEntry" 
                       @editEntry="editEntry" 
                       @cancelEdit="cancelEdit" 
-                      @deleteEntry="deleteEntry" 
-                      />
-                    <!-- <tr>
-                      <td v-if="i == 0" :rowspan="userColumnRowSpan(order, orderEntry)">
-                        {{orderEntry.user.username}}
-                      </td>
-
-                      <td>
-                        <p class="dish-name">
-                          {{dishEntry.dish.name}} (<price :data-price="dishEntry.price"/>)
-                        </p>
-                        <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
-                          + {{sideDish.name}} (<price :data-price="sideDish.price" />)
-                        </p>
-                        <p v-if="dishEntry.comments.length > 0" class="dish-comments">Additional comments: {{dishEntry.comments}}</p>
-                      </td>
-
-                      <td>
-                        <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
-
-                          <div v-if="order.orderState === 'CREATED'">
-                            <button type="button" class="btn btn-light" @click="editEntry(orderEntry.id, dishEntry.id)">
-                              <i class="fa fa-pencil" aria-hidden="true" />
-                            </button>
-
-                            <button type="button" class="btn btn-danger" @click="deleteEntry(orderEntry.id, dishEntry.id)">
-                              <i class="fa fa-times" aria-hidden="true" />
-                            </button>
-                          </div>
-
-                          <div v-if="order.orderState === 'ORDERED' || order.orderState === 'DELIVERED'" >
-                            {{paymentStatus(orderEntry)}}
-                          </div>
-
-                          <div v-if="shouldShowMarkAsPaidButton(orderEntry)">
-                            <button type="button" class="btn btn-success" @click="markAsPaid(orderEntry.id)">
-                              Mark as paid
-                            </button>
-                          </div>
-
-                          <div v-if="shouldShowConfirmAsPaidButton(orderEntry)">
-                            <button type="button" class="btn btn-success" @click="confirmAsPaid(orderEntry.id)">
-                              Confirm as paid
-                            </button>
-                          </div>
-
-                        </div>
-                      </td>
-                    </tr> -->
+                      @deleteEntry="deleteEntry" />
                   </template>
                 </template>
+
                 <template v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && isEntryEdited == false">
                   <tr v-if="isEntryCreating == false">
                     <td>
@@ -138,6 +98,7 @@
                     <order-entry-create-entry :order-id="order.id" :username="orderEntry.user.username" :entries-index="1" @cancelEdit="cancelEdit" :rowspan="orderEntry.dishEntries.length + 1" />
                   </tr>
                 </template>
+
                 <tr>
                   <td>
                     <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b> 
@@ -215,15 +176,6 @@ export default {
     isOrderEntryOwner: function(orderEntry) {
       return orderEntry.user.id === this.currentUserId
     },
-    isNotOrderedYet: function() {
-      return this.order.orderState === 'CREATED';
-    },
-    shouldShowMarkAsPaidButton: function(orderEntry) {
-      return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && (orderEntry.paymentStatus != "MARKED" && orderEntry.paymentStatus != "CONFIRMED") && this.isOrderOwner() == false)
-    },
-    shouldShowConfirmAsPaidButton: function(orderEntry) {
-      return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && orderEntry.paymentStatus != "CONFIRMED" && this.isOrderOwner() == true)
-    },
     paymentStatus: function(orderEntry) {
       if (orderEntry.paymentStatus == "UNPAID") {
         return "Unpaid"
@@ -271,13 +223,6 @@ export default {
       this.isEntryEdited = false;
       this.orderEntryId = "";
       this.dishEntryId = "";
-    },
-    userColumnRowSpan: function(order, orderEntry) {
-      if ((this.isOrderEntryOwner(orderEntry) || this.isOrderOwner(order)) && this.isEntryEdited == false) {
-        return orderEntry.dishEntries.length + 2;
-      } else {
-        return orderEntry.dishEntries.length + 1;
-      }
     }
   },
   computed: {

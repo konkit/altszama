@@ -8,9 +8,15 @@
       </td>
 
       <td>
-        <order-entry-input :editedOrderEntry="createdOrderEntry" :allDishesByCategory="allDishesByCategory" @clearSideDishes="clearSideDishes" />
+        <order-entry-input 
+          :editedOrderEntry="createdOrderEntry" 
+          :allDishesByCategory="allDishesByCategory" 
+          @clearSideDishes="clearSideDishes"
+          @setNewDishFlag="setNewDishFlag" />
 
-        <side-dishes-input :editedOrderEntry="createdOrderEntry" :dishIdToSideDishesMap="dishIdToSideDishesMap" />
+        <side-dishes-input 
+          :editedOrderEntry="createdOrderEntry" 
+          :dishIdToSideDishesMap="dishIdToSideDishesMap" />
         
         <div class="form-group">
           <h4>Additional Comments</h4>
@@ -139,7 +145,13 @@ export default {
     },
     clearSideDishes: function() {
       this.createdOrderEntry.chosenSideDishes = []
-    }
+    },
+    setNewDishFlag: function(newDishValue) {
+      this.createdOrderEntry.newDish = newDishValue;
+      if (newDishValue == true) {
+        this.createdOrderEntry.dishId = ""
+      }
+    },
   },
   computed: {
     loadingEntry () {
