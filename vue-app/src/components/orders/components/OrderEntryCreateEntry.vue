@@ -1,101 +1,90 @@
 <template>
   <tr>
     <template v-if="this.loadingEntry === false">
-    <errors-component ref="errorsComponent" />
+      <errors-component ref="errorsComponent" />
 
-    <td v-if="entriesIndex == 0" :rowspan="rowspan">
-      {{username}}
-    </td>
+      <td v-if="entriesIndex == 0" :rowspan="rowspan">
+        {{username}}
+      </td>
 
-    <td>
-      <div v-if="!createdOrderEntry.newDish">
+      <td>
         <h4>Dish</h4>
         <div class="input-group">
-          <select class="form-control existing-dish-dropdown" required="" id="dish" v-model="createdOrderEntry.dishId" @change="clearSideDishes">
-            <optgroup v-for='(dishEntry, i) in this.allDishesByCategory' :key='i' :label="dishEntry.category">
-              <option v-for='(dish, i) in dishEntry.dishes' :key='i' :value="dish.id">
-                {{ dish.name }}&nbsp;( <price :data-price="dish.price" /> )
-              </option>
-            </optgroup>
-          </select>
+          <template v-if="!createdOrderEntry.newDish">
+            <select class="form-control existing-dish-dropdown" required="" id="dish" v-model="createdOrderEntry.dishId" @change="clearSideDishes">
+              <optgroup v-for='(dishEntry, i) in this.allDishesByCategory' :key='i' :label="dishEntry.category">
+                <option v-for='(dish, i) in dishEntry.dishes' :key='i' :value="dish.id">
+                  {{ dish.name }}&nbsp;( <price :data-price="dish.price" /> )
+                </option>
+              </optgroup>
+            </select>
 
-          <button class="btn btn-link" @click="setNewDishFlag(true)">Type your own dish! &nbsp;</button>
+            <button class="btn btn-link" @click="setNewDishFlag(true)">Type your own dish! &nbsp;</button>
+          </template>
+
+          <template v-if="createdOrderEntry.newDish">
+            <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="createdOrderEntry.newDishName" />
+            
+            <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="createdOrderEntry.newDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
+
+            <button class="btn btn-link" @click="setNewDishFlag(false)">Select dish from list &nbsp;</button>
+          </template>
         </div>
-      </div>
 
-      <div v-if="createdOrderEntry.newDish">
-        <h4>Dish</h4>
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="createdOrderEntry.newDishName" />
-          
-          <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="createdOrderEntry.newDishPrice" :precision="2" class="form-control" required=""></vue-numeric>
+        <div class="form-group">
+          <div>
+            <h4>Side dishes</h4>
 
-          <button class="btn btn-link" @click="setNewDishFlag(false)">Select dish from list &nbsp;</button>
-        </div>
-      </div>
+            <div v-if="createdOrderEntry.chosenSideDishes.length > 0">
+              <div v-for="(sideDish, sdIndex) in createdOrderEntry.chosenSideDishes" :key="sdIndex">
 
-      <div class="form-group">
-        <div>
-          <h4>Side dishes</h4>
+                <div class="input-group" v-if="sideDish.isNew == true">
+                  <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
+                  <vue-numeric v-model="sideDish.newSideDishPrice" class="form-control" currency="zł" separator="." currency-symbol-position="suffix" :precision="2" required="" />
+                  
+                  <button class="btn btn-danger" @click="removeSideDish(createdOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
 
-          <div v-if="createdOrderEntry.chosenSideDishes.length > 0">
-            <div v-for="(sideDish, sdIndex) in createdOrderEntry.chosenSideDishes" :key="sdIndex">
+                  <button class="btn btn-link" @click="setAsExistingSideDish(sdIndex)">Select from the list</button>
+                </div>
 
-              <div class="input-group" v-if="sideDish.isNew == true">
-                <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
-                <vue-numeric 
-                  currency="zł" 
-                  separator="." 
-                  currency-symbol-position="suffix" 
-                  v-model="sideDish.newSideDishPrice" 
-                  :precision="2" 
-                  class="form-control" 
-                  required="">
-                </vue-numeric>
-                
-                <button class="btn btn-danger" @click="removeSideDish(createdOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
+                <div class="input-group" v-if="sideDish.isNew == false || sideDish.isNew == null">
+                  <select class="form-control" name="sideDishId" required="" v-model="createdOrderEntry.chosenSideDishes[sdIndex]">
+                    <option v-for="sideDish in dishIdToSideDishesMap[createdOrderEntry.dishId]" :value="sideDish">
+                      {{sideDish.name}} &nbsp; ( <price :data-price="sideDish.price" /> )
+                    </option>
+                  </select>
 
-                <button class="btn btn-link" @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</button>
-              </div>
+                  <button class="btn btn-danger" @click="removeSideDish(createdOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
 
-              <div class="input-group" v-if="sideDish.isNew == false || sideDish.isNew == null">
-                <select class="form-control" name="sideDishId" required="" v-model="createdOrderEntry.chosenSideDishes[sdIndex]">
-                  <option v-for="sideDish in dishIdToSideDishesMap[createdOrderEntry.dishId]" :value="sideDish">
-                    {{sideDish.name}} &nbsp; ( <price :data-price="sideDish.price" /> )
-                  </option>
-                </select>
-
-                <button class="btn btn-danger" @click="removeSideDish(createdOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
-
-                <button class="btn btn-link" @click="setAsNewSideDish(sdIndex)">Type your own side dish</button>
+                  <button class="btn btn-link" @click="setAsNewSideDish(sdIndex)">Type your own side dish</button>
+                </div>
               </div>
             </div>
-          </div>
-          <div v-else>
-            <p>No side dishes selected</p>
-          </div>
+            <div v-else>
+              <p>No side dishes selected</p>
+            </div>
 
-          <button class="btn btn-success" @click="addSideDishEntry()">
-            Add side dish &nbsp; <i class="fa fa-plus" />
-          </button>
+            <button class="btn btn-success" @click="addSideDishEntry()">
+              Add side dish &nbsp; <i class="fa fa-plus" />
+            </button>
+          </div>
         </div>
-      </div>
-      
-      <div class="form-group">
-        <h4>Additional Comments</h4>
-        <textarea class="form-control" name="additionalComments" value="" id="additionalComments" v-model="createdOrderEntry.additionalComments" />
-      </div>
+        
+        <div class="form-group">
+          <h4>Additional Comments</h4>
+          <textarea class="form-control" v-model="createdOrderEntry.additionalComments" value="" />
+        </div>
 
-      <button class="btn btn-block btn-success" @click="submitForm">
-        Save order
-      </button>
-    </td>
+        <button class="btn btn-block btn-success" @click="submitForm">
+          Save order
+        </button>
+      </td>
 
-    <td>
-      <button type="button" class="btn btn-light" @click="cancelEdit()">
-        Cancel
-      </button>
-    </td>
+      <td>
+        <button type="button" class="btn btn-light" @click="cancelEdit()">
+          Cancel
+        </button>
+      </td>
 
     </template>
 
@@ -116,8 +105,6 @@ import BackButton from '../../commons/backButton.vue'
 import ErrorsComponent from '../../commons/errors.vue'
 import Spinner from '../../commons/spinner.vue'
 import Price from '../../commons/priceElement.vue'
-
-import OrderEntryForm from '../components/OrderEntryForm.vue'
 
 import ApiConnector from '../../../ApiConnector.js'
 
@@ -273,8 +260,7 @@ export default {
     BackButton,
     ErrorsComponent,
     Price,
-    Spinner,
-    OrderEntryForm
+    Spinner
   }
 }
 

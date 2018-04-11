@@ -23,7 +23,7 @@
                 The order is locked in ordering state and the order entries are freezed.<br/> 
                 If you are not ordering yet, click button to go back to created state.
               </p>
-              <p><button class="btn btn-success" v-on:click="unlockOrder()">Unlock&nbsp;&nbsp;<span class="fa fa-unlock" /></button></p>
+              <p><button class="btn btn-success" @click="unlockOrder()">Unlock&nbsp;&nbsp;<span class="fa fa-unlock" /></button></p>
             </div>
           </div>
         </div>
@@ -314,14 +314,6 @@ export default {
 
   .row {
     margin-top: 2rem;
-  }
-
-  .allowed {
-    color: green;
-  }
-
-  .not-allowed {
-    color: red;
   }
 
   .price-column {

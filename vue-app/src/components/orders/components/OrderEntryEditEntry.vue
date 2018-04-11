@@ -115,7 +115,6 @@ import BackButton from '../../commons/backButton.vue'
 import ErrorsComponent from '../../commons/errors.vue'
 import Spinner from '../../commons/spinner.vue'
 import Price from '../../commons/priceElement.vue'
-import OrderEntryForm from '../components/OrderEntryForm.vue'
 import ApiConnector from '../../../ApiConnector.js'
 
 export default {
@@ -265,8 +264,7 @@ export default {
     BackButton,
     ErrorsComponent,
     Price,
-    Spinner,
-    OrderEntryForm
+    Spinner
   }
 }
 

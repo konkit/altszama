@@ -112,36 +112,5 @@ export default {
   .not-allowed {
     color: red;
   }
-
-  .price-column {
-    min-width: 94px;
-  }
-
-  .names-person {
-    width: 250px;
-  }
-
-  .actions-column {
-    width: 108px;
-  }
-
-  p.dish-name {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  p.side-dish-name {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 10pt;
-    color: #555555;
-  }
-
-  p.dish-comments {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 10pt;
-    color: #444444;
-  }
 </style>
 

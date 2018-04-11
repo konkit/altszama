@@ -40,7 +40,6 @@ import ErrorsComponent from '../commons/errors.vue'
 import MaskedInput from 'vue-text-mask'
 
 import Spinner from '../commons/spinner.vue'
-import OrderForm from './components/OrderForm.vue'
 import ApiConnector from '../../ApiConnector.js'
 
 export default {
@@ -126,8 +125,7 @@ export default {
     BackButton,
     ErrorsComponent,
     MaskedInput,
-    Spinner,
-    OrderForm
+    Spinner
   }
 }
 </script>
