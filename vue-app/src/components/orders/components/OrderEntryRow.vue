@@ -46,10 +46,11 @@
 
 <script>
 import Price from '../../commons/priceElement.vue'
+import ApiConnector from '../../../ApiConnector.js'
 
 export default {
   name: 'order-entry-row',
-  props: ['order', 'orderEntry', 'dishEntry', 'rowIndex', 'currentUserId', 'isEntryEdited'],
+  props: ['order', 'orderEntry', 'dishEntry', 'currentUserId', 'isEntryEdited'],
   methods: {
     createEntryLink: function(orderId) {
       return '#/orders/' + orderId + '/create_entry'
@@ -157,6 +158,6 @@ export default {
   }
 
   .wrapper {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
   }
 </style>

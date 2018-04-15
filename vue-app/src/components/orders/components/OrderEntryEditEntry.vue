@@ -47,7 +47,7 @@ import SideDishesInput from './SideDishesInput.vue'
 
 export default {
   name: 'order-entry-edit-entry',
-  props: ['entriesIndex', 'usersDishEntriesCount', 'username', 'orderEntry', 'dishEntry'],
+  props: ['orderEntry', 'dishEntry'],
   data () {
     return {
       order: {},

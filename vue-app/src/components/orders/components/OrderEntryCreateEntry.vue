@@ -56,7 +56,7 @@ import ApiConnector from '../../../ApiConnector.js'
 
 export default {
   name: 'order-entry-create-entry',
-  props: ['orderId', 'username', 'entriesIndex'],
+  props: ['orderId'],
   data () {
     return {
       allDishesInRestaurant: [],
