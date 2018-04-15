@@ -38,6 +38,7 @@ import Vue from 'vue'
 import BackButton from '../commons/backButton.vue'
 import ErrorsComponent from '../commons/errors.vue'
 import MaskedInput from 'vue-text-mask'
+import OrderForm from './components/OrderForm.vue'
 
 import Spinner from '../commons/spinner.vue'
 import ApiConnector from '../../ApiConnector.js'
@@ -125,7 +126,8 @@ export default {
     BackButton,
     ErrorsComponent,
     MaskedInput,
-    Spinner
+    Spinner,
+    OrderForm
   }
 }
 </script>

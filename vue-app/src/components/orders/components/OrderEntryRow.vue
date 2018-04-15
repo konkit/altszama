@@ -1,20 +1,6 @@
 <template>
-  <tr>
-    <td v-if="rowIndex == 0" :rowspan="userColumnRowSpan(order, orderEntry)">
-      {{orderEntry.user.username}}
-    </td>
-
-    <td>
-      <p class="dish-name">
-        {{dishEntry.dish.name}} (<price :data-price="dishEntry.price"/>)
-      </p>
-      <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
-        + {{sideDish.name}} (<price :data-price="sideDish.price" />)
-      </p>
-      <p v-if="dishEntry.comments.length > 0" class="dish-comments">Additional comments: {{dishEntry.comments}}</p>
-    </td>
-
-    <td>
+  <div class="wrapper">
+    <div class="pull-right">
       <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
 
         <div v-if="order.orderState === 'CREATED'">
@@ -44,8 +30,18 @@
         </div>
 
       </div>
-    </td>
-  </tr>
+    </div>
+
+    <div>
+      <p class="dish-name">
+        {{dishEntry.dish.name}} (<price :data-price="dishEntry.price"/>)
+      </p>
+      <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
+        + {{sideDish.name}} (<price :data-price="sideDish.price" />)
+      </p>
+      <p v-if="dishEntry.comments.length > 0" class="dish-comments">Additional comments: {{dishEntry.comments}}</p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -158,5 +154,9 @@ export default {
     margin-bottom: 0;
     font-size: 10pt;
     color: #444444;
+  }
+
+  .wrapper {
+    margin-bottom: 30px;
   }
 </style>

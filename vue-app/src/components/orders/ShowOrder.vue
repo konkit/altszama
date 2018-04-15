@@ -38,7 +38,6 @@
               <tr>
                 <th class="names-person">Eating person</th>
                 <th>Dish</th>
-                <th class="actions-column">Actions</th>
               </tr>
 
               <template v-if="numberOfCurrentUserEntries == 0">
@@ -55,58 +54,64 @@
                   </template>
 
                   <template v-if="isEntryCreating == true">
-                    <order-entry-create-entry :order-id="order.id" :username="username" :entries-index="0" @cancelEdit="cancelEdit" :rowspan="1" />
+                    <tr>
+                      <td>
+                        {{username}}
+                      </td>
+                      <td>
+                        <order-entry-create-entry :order-id="order.id" :username="username" :entries-index="0" @cancelEdit="cancelEdit" />
+                      </td>     
+                    </tr>
                   </template>
                 </template>
               </template>
 
               <template v-for="orderEntry in this.orderEntries">
-                <template v-for="(dishEntry, i) in orderEntry.dishEntries">
-                  <template v-if="isEntryEdited == true && dishEntryId == dishEntry.id">
-                    <order-entry-edit-entry 
-                      :entriesIndex="i" 
-                      :usersDishEntriesCount="orderEntry.dishEntries.length" 
-                      :username="username" 
-                      :orderEntry="orderEntry" 
-                      :dishEntry="dishEntry" 
-                      @cancelEdit="cancelEdit" />
-                  </template>
-                  <template v-else>
-                    <order-entry-row 
-                      :order="order" 
-                      :order-entry="orderEntry" 
-                      :dish-entry="dishEntry" 
-                      :rowIndex="i" 
-                      :currentUserId="currentUserId"
-                      :is-entry-edited="isEntryEdited"
-                      @createEntry="createEntry" 
-                      @editEntry="editEntry" 
-                      @cancelEdit="cancelEdit" 
-                      @deleteEntry="deleteEntry" />
-                  </template>
-                </template>
-
-                <template v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && isEntryEdited == false">
-                  <tr v-if="isEntryCreating == false">
-                    <td>
-                      <button class="btn btn-success" @click="createEntry()">
-                        Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr v-if="isEntryCreating == true">
-                    <order-entry-create-entry :order-id="order.id" :username="orderEntry.user.username" :entries-index="1" @cancelEdit="cancelEdit" :rowspan="orderEntry.dishEntries.length + 1" />
-                  </tr>
-                </template>
-
                 <tr>
+                  <td>{{username}}</td>
                   <td>
-                    <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b> 
+                      <template v-for="(dishEntry, i) in orderEntry.dishEntries">
+                        <template v-if="isEntryEdited == true && dishEntryId == dishEntry.id">
+                          <order-entry-edit-entry 
+                            :entriesIndex="i" 
+                            :usersDishEntriesCount="orderEntry.dishEntries.length" 
+                            :username="username" 
+                            :orderEntry="orderEntry" 
+                            :dishEntry="dishEntry" 
+                            @cancelEdit="cancelEdit" />
+                        </template>
+                        <template v-else>
+                          <order-entry-row 
+                            :order="order" 
+                            :order-entry="orderEntry" 
+                            :dish-entry="dishEntry" 
+                            :rowIndex="i" 
+                            :currentUserId="currentUserId"
+                            :is-entry-edited="isEntryEdited"
+                            @createEntry="createEntry" 
+                            @editEntry="editEntry" 
+                            @cancelEdit="cancelEdit" 
+                            @deleteEntry="deleteEntry" />
+                        </template>
+                      </template>
+
+                      <template v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && isEntryEdited == false">
+                        <div v-if="isEntryCreating == false">
+                          <button class="btn btn-success" @click="createEntry()">
+                            Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                        <div v-if="isEntryCreating == true">
+                          <order-entry-create-entry :order-id="order.id" :username="orderEntry.user.username" :entries-index="1" @cancelEdit="cancelEdit" :rowspan="orderEntry.dishEntries.length + 1" />
+                        </div>
+                      </template>
+
+                      <hr />
+
+                      <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b> 
                   </td>
                 </tr>
-
               </template>
-
             </table>
           </div>
         </div>

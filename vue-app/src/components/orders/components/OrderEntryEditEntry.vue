@@ -1,13 +1,15 @@
 <template>
-  <tr>
+  <div class="wrapper">
     <template v-if="this.loadingEntry === false">
       <errors-component ref="errorsComponent" />
 
-      <td v-if="entriesIndex == 0" :rowspan="orderEntry.dishEntries.length + 1">
-        {{orderEntry.user.username}}
-      </td>
+      <div class="pull-right">
+        <button type="button" class="btn btn-light" @click="cancelEdit()">
+          Cancel
+        </button>
+      </div>
 
-      <td>
+      <div>
         <order-entry-input :editedOrderEntry="editedOrderEntry" :allDishesByCategory="allDishesByCategory" @clearSideDishes="clearSideDishes" />
 
         <side-dishes-input :editedOrderEntry="editedOrderEntry" :dishIdToSideDishesMap="dishIdToSideDishesMap" />
@@ -20,24 +22,16 @@
         <button class="btn btn-block btn-success" @click="submitForm">
           Update order
         </button>
-      </td>
-
-      <td>
-        <button type="button" class="btn btn-light" @click="cancelEdit()">
-          Cancel
-        </button>
-      </td>
+      </div>
 
     </template>
 
     <template v-if="this.loadingEntry === true">
-      <td colspan=3>
-        <div class="justify-content-center">
-          <spinner></spinner>
-        </div>
-      </td>
+      <div class="justify-content-center">
+        <spinner></spinner>
+      </div>
     </template>
-  </tr>
+  </div>
 </template>
 
 <script>
@@ -170,5 +164,9 @@ function convertToMapEntries(dishesMap) {
 
   .existing-dish-dropdown {
     max-width: 500px;
+  }
+
+  .wrapper {
+    margin-bottom: 30px;
   }
 </style>

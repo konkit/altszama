@@ -1,13 +1,15 @@
 <template>
-  <tr>
+  <div class="wrapper">
     <template v-if="this.loadingEntry === false">
+      <div class="pull-right">
+        <button type="button" class="btn btn-light" @click="cancelEdit()">
+          Cancel
+        </button>
+      </div>
+
       <errors-component ref="errorsComponent" />
 
-      <td v-if="entriesIndex == 0" :rowspan="rowspan">
-        {{username}}
-      </td>
-
-      <td>
+      <div>
         <order-entry-input 
           :editedOrderEntry="createdOrderEntry" 
           :allDishesByCategory="allDishesByCategory" 
@@ -26,24 +28,16 @@
         <button class="btn btn-block btn-success" @click="submitForm">
           Save order
         </button>
-      </td>
-
-      <td>
-        <button type="button" class="btn btn-light" @click="cancelEdit()">
-          Cancel
-        </button>
-      </td>
+      </div>
 
     </template>
 
     <template v-if="this.loadingEntry === true">
-      <td colspan=3>
-        <div class="justify-content-center">
-          <spinner></spinner>
-        </div>
-      </td>
+      <div class="justify-content-center">
+        <spinner></spinner>
+      </div>
     </template>
-  </tr>
+  </div>
 </template>
 
 <script>
@@ -62,7 +56,7 @@ import ApiConnector from '../../../ApiConnector.js'
 
 export default {
   name: 'order-entry-create-entry',
-  props: ['orderId', 'username', 'entriesIndex', 'rowspan'],
+  props: ['orderId', 'username', 'entriesIndex'],
   data () {
     return {
       allDishesInRestaurant: [],
@@ -190,5 +184,9 @@ function convertToMapEntries(dishesMap) {
 
   .existing-dish-dropdown {
     max-width: 500px;
+  }
+
+  .wrapper {
+    margin-bottom: 30px;
   }
 </style>
