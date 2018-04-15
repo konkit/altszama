@@ -38,16 +38,18 @@ data class OrderViewResponse(
 
       val orderTotalPrice = basePriceSum - decrease + order.deliveryCostPerEverybody + deliveryCostPerDishes
 
-      val dishToOrderEntryMap: Map<Dish, List<OrderEntry>> = entries
-              .flatMap { entry -> entry.dishEntries.map { d -> d.dish to entry} }
-              .groupBy { e -> e.first }
-              .mapValues { d -> d.value.map { x -> x.second } }
+      val dishesList: List<Dish> = entries.flatMap { entry -> entry.dishEntries }.map { d -> d.dish }
 
-      val groupedUserEntries = dishToOrderEntryMap.map { dishToEntriesMap ->
-        val dish = dishToEntriesMap.key
-        val entriesForDish: List<OrderEntry> = dishToEntriesMap.value
+      val dishIdToOrderEntryMap: Map<String, List<OrderEntry>> = entries
+          .flatMap { entry -> entry.dishEntries.map { d -> d.dish to entry} }
+          .groupBy { e -> e.first.id }
+          .mapValues { d -> d.value.map { x -> x.second } }
 
-        fun dishEntriesWithCurrentDish(e: OrderEntry) = e.dishEntries.filter { dishEntry -> dishEntry.dish.id == dish.id }
+      val groupedUserEntries = dishIdToOrderEntryMap.map { dishIdToEntriesMap ->
+        val dishId = dishIdToEntriesMap.key
+        val entriesForDish: List<OrderEntry> = dishIdToEntriesMap.value.distinctBy { e -> e.id }
+
+        fun dishEntriesWithCurrentDish(e: OrderEntry) = e.dishEntries.filter { dishEntry -> dishEntry.dish.id == dishId }
 
         val eatingPersonEntries = entriesForDish.flatMap { orderEntry ->
           dishEntriesWithCurrentDish(orderEntry)
@@ -59,7 +61,7 @@ data class OrderViewResponse(
               dishEntriesWithCurrentDish(orderEntry).sumBy { entry -> entry.priceWithSidedishes() }
             }.sum()
 
-        GroupedOrderEntry(dish, priceSumForDish, entriesForDish.size, eatingPersonEntries)
+        GroupedOrderEntry(dishesList.find { dish -> dish.id == dishId }!!, priceSumForDish, entriesForDish.size, eatingPersonEntries)
       }
 
       return OrderViewResponse(order, groupedUserEntries, entries.size, basePriceSum, orderTotalPrice)
