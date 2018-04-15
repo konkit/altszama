@@ -3,7 +3,7 @@
     <div class="pull-right">
       <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
 
-        <div v-if="order.orderState === 'CREATED'">
+        <div v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
           <button type="button" class="btn btn-light" @click="editEntry(orderEntry.id, dishEntry.id)">
             <i class="fa fa-pencil" aria-hidden="true" />
           </button>
@@ -13,7 +13,7 @@
           </button>
         </div>
 
-        <div v-if="order.orderState === 'ORDERED' || order.orderState === 'DELIVERED'" >
+        <div v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')" >
           {{paymentStatus(orderEntry)}}
         </div>
 
