@@ -87,7 +87,7 @@ export default {
       var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
       var sideDishToAdd;
 
-      if (sideDishesForGivenDish && sideDishesForGivenDish.size > 0) {
+      if (sideDishesForGivenDish && sideDishesForGivenDish.length > 0) {
         sideDishToAdd = sideDishesForGivenDish[0]
         sideDishToAdd.isNew = false
       } else {
@@ -112,6 +112,7 @@ export default {
 
         return newSd
       })
+      this.$forceUpdate();
     },
     setAsExistingSideDish: function(sideDishIndex) {
       this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {

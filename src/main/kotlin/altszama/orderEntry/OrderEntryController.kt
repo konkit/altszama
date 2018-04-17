@@ -36,7 +36,11 @@ class OrderEntryController {
   fun create(@PathVariable orderId: String): OrderEntryCreateResponse {
     val order = orderRepository.findOne(orderId)
     val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
-    val allDishesInRestaurantByCategory = allDishesInRestaurant.groupBy { dish -> dish.category }
+    val allDishesInRestaurantByCategory = allDishesInRestaurant
+        .groupBy { dish -> dish.category }
+        .map { x -> x.key to x.value.sortedBy { dish -> dish.name }}
+        .toMap()
+
     val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
 
     return OrderEntryCreateResponse(order, allDishesInRestaurant, allDishesInRestaurantByCategory, dishIdToSideDishesMap)
@@ -55,7 +59,10 @@ class OrderEntryController {
     val order = orderEntry.order
 
     val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
-    val allDishesInRestaurantByCategory = allDishesInRestaurant.groupBy { dish -> dish.category }
+    val allDishesInRestaurantByCategory = allDishesInRestaurant
+        .groupBy { dish -> dish.category }
+        .map { x -> x.key to x.value.sortedBy { dish -> dish.name }}
+        .toMap()
     val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
 
     return OrderEntryEditResponse(order, allDishesInRestaurant, allDishesInRestaurantByCategory, orderEntry, dishEntry!!, dishIdToSideDishesMap)

@@ -35,7 +35,7 @@ class OrderEntryService {
     val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, authService.currentUser())
 
     val dish: Dish = if (orderEntrySaveRequest.newDish == true && orderEntrySaveRequest.newDishName?.isNotBlank() == true) {
-      createNewDish(orderEntry!!.order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
+      createNewDish(order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
     } else {
       dishRepository.findOne(orderEntrySaveRequest.dishId)
     }
