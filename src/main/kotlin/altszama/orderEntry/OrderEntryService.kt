@@ -34,14 +34,14 @@ class OrderEntryService {
     val order = orderRepository.findOne(orderEntrySaveRequest.orderId)
     val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, authService.currentUser())
 
-    val dish: Dish = if (orderEntrySaveRequest.newDish == true) {
+    val dish: Dish = if (orderEntrySaveRequest.newDish == true && orderEntrySaveRequest.newDishName?.isNotBlank() == true) {
       createNewDish(orderEntry!!.order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
     } else {
       dishRepository.findOne(orderEntrySaveRequest.dishId)
     }
 
     val sideDishes: List<SideDish> = orderEntrySaveRequest.sideDishes.mapNotNull { sideDishData ->
-      if (sideDishData.isNew == true) {
+      if (sideDishData.isNew == true && orderEntrySaveRequest.newDishName?.isNotBlank() == true) {
         createNewSideDish(sideDishData, dish)
       } else {
         dish.sideDishes.find { existingSideDish -> sideDishData.id == existingSideDish.id }
@@ -89,14 +89,14 @@ class OrderEntryService {
   fun updateEntry(orderEntryUpdateRequest: OrderEntryUpdateRequest) {
     val orderEntry = orderEntryRepository.findOne(orderEntryUpdateRequest.id)
 
-    val dish: Dish = if (orderEntryUpdateRequest.newDish == true) {
+    val dish: Dish = if (orderEntryUpdateRequest.newDish == true && orderEntryUpdateRequest.newDishName?.isNotBlank() == true) {
       createNewDish(orderEntry.order.restaurant, orderEntryUpdateRequest.newDishName, orderEntryUpdateRequest.newDishPrice)
     } else {
       dishRepository.findOne(orderEntryUpdateRequest.dishId)
     }
 
     val sideDishes = orderEntryUpdateRequest.sideDishes.mapNotNull { sideDishData ->
-      if (sideDishData.isNew == true) {
+      if (sideDishData.isNew == true && sideDishData.newSideDishName?.isNotBlank() == true) {
         createNewSideDish(sideDishData, dish)
       } else {
         dish.sideDishes.find { existingSideDish -> sideDishData.id == existingSideDish.id }
