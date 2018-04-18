@@ -58,9 +58,9 @@
                 </tr>
               </template>
 
-              <template v-for="orderEntry in this.orderEntries">
-                <tr>
-                  <td>{{username}}</td>
+              <template v-for="(orderEntry, entryId) in this.orderEntries">
+                <tr :key="entryId">
+                  <td>{{orderEntry.user.username}}</td>
 
                   <td>
                     <template v-for="dishEntry in orderEntry.dishEntries">
@@ -68,7 +68,8 @@
                         <order-entry-edit-entry 
                             :order-entry="orderEntry" 
                             :dish-entry="dishEntry" 
-                            @cancelEdit="cancelEdit" />
+                            @cancelEdit="cancelEdit"
+                            :key="dishEntry.id" />
                       </template>
                       <template v-else>
                         <order-entry-row 
@@ -80,7 +81,8 @@
                             @createEntry="createEntry" 
                             @editEntry="editEntry" 
                             @cancelEdit="cancelEdit" 
-                            @deleteEntry="deleteEntry" />
+                            @deleteEntry="deleteEntry"
+                            :key="dishEntry.id" />
                       </template>
                     </template>
 
@@ -131,7 +133,6 @@ export default {
     return {
       orderId: this.$route.params.id,
 
-      results: {},
       order: '',
       orderEntries: [],
       currentUserId: '',
@@ -148,7 +149,6 @@ export default {
   mounted() {
     ApiConnector.makeGet("/orders/" + this.orderId + "/show.json")
       .then(response => {
-        this.results = response.data;
         this.order = response.data.order;
         this.orderEntries = response.data.orderEntries;
         this.currentUserId = response.data.currentUserId;

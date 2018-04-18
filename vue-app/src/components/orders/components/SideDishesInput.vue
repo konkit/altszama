@@ -81,7 +81,7 @@ export default {
     },
     removeSideDish: function(sideDishId) {
       this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.filter(sd => sd.id !== sideDishId)
-      this.$forceUpdate();
+      this.$emit("updateEntry", this.editedOrderEntry)
     },
     addSideDishEntry: function() {
       var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
@@ -99,6 +99,8 @@ export default {
       sideDishToAdd.newSideDishPrice = 0
 
       this.editedOrderEntry.chosenSideDishes.push(sideDishToAdd)
+
+      this.$emit("updateEntry", this.editedOrderEntry)
     },
     setAsNewSideDish: function(sideDishIndex) {
       this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
@@ -112,7 +114,8 @@ export default {
 
         return newSd
       })
-      this.$forceUpdate();
+
+      this.$emit("updateEntry", this.editedOrderEntry)
     },
     setAsExistingSideDish: function(sideDishIndex) {
       this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
@@ -126,6 +129,8 @@ export default {
 
         return newSd
       })
+
+      this.$emit("updateEntry", this.editedOrderEntry)
     }
   },
   components: {

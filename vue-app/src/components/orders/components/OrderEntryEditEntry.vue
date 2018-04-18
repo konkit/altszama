@@ -10,9 +10,17 @@
       </div>
 
       <div>
-        <order-entry-input :editedOrderEntry="editedOrderEntry" :allDishesByCategory="allDishesByCategory" @clearSideDishes="clearSideDishes" />
+        <order-entry-input 
+          :editedOrderEntry="editedOrderEntry" 
+          :allDishesByCategory="allDishesByCategory" 
+          @clearSideDishes="clearSideDishes"
+          @setNewDishFlag="setNewDishFlag"
+          @updateEntry="updateEntry" />
 
-        <side-dishes-input :editedOrderEntry="editedOrderEntry" :dishIdToSideDishesMap="dishIdToSideDishesMap" />
+        <side-dishes-input 
+          :editedOrderEntry="editedOrderEntry" 
+          :dishIdToSideDishesMap="dishIdToSideDishesMap"
+          @updateEntry="updateEntry" />
         
         <div class="form-group">
           <h4>Additional Comments</h4>
@@ -103,7 +111,7 @@ export default {
         newDishName: this.editedOrderEntry.newDishName,
         newDishPrice: Math.round(this.editedOrderEntry.newDishPrice * 100),
         additionalComments: this.editedOrderEntry.additionalComments,
-        sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
+        sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign({}, sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
       };
 
       console.log("Starting submit");
@@ -125,7 +133,16 @@ export default {
     },
     clearSideDishes: function() {
       this.editedOrderEntry.chosenSideDishes = []
-    }
+    },
+    updateEntry: function(editedOrderEntry) {
+      this.editedOrderEntry = editedOrderEntry
+    },
+    setNewDishFlag: function(newDishValue) {
+      this.editedOrderEntry.newDish = newDishValue;
+      if (newDishValue == true) {
+        this.editedOrderEntry.dishId = ""
+      }
+    },
   },
   computed: {
     loadingEntry () {

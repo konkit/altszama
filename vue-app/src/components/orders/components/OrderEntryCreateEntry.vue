@@ -14,11 +14,13 @@
           :editedOrderEntry="createdOrderEntry" 
           :allDishesByCategory="allDishesByCategory" 
           @clearSideDishes="clearSideDishes"
-          @setNewDishFlag="setNewDishFlag" />
+          @setNewDishFlag="setNewDishFlag"
+          @updateEntry="updateEntry" />
 
         <side-dishes-input 
           :editedOrderEntry="createdOrderEntry" 
-          :dishIdToSideDishesMap="dishIdToSideDishesMap" />
+          :dishIdToSideDishesMap="dishIdToSideDishesMap"
+          @updateEntry="updateEntry"  />
         
         <div class="form-group">
           <h4>Additional Comments</h4>
@@ -146,6 +148,9 @@ export default {
         this.createdOrderEntry.dishId = ""
       }
     },
+    updateEntry: function(createdOrderEntry) {
+      this.createdOrderEntry = createdOrderEntry
+    }
   },
   computed: {
     loadingEntry () {

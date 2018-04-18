@@ -158,6 +158,7 @@ export default {
   }
 
   .wrapper {
-    margin-bottom: 50px;
+    min-height: 50px;
+    margin-bottom: 10px;
   }
 </style>
