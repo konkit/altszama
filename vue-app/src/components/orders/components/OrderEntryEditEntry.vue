@@ -12,7 +12,6 @@
       <div>
         <order-entry-input 
           :editedOrderEntry="editedOrderEntry" 
-          :allDishesByCategory="allDishesByCategory" 
           @clearSideDishes="clearSideDishes"
           @setNewDishFlag="setNewDishFlag"
           @updateEntry="updateEntry" />
@@ -64,9 +63,6 @@ export default {
     this.$store.commit('setEntryLoadingTrue')
   },
   mounted() {
-    console.log("this.dishEntry", this.dishEntry )
-    console.log("chosenSideDishes", this.dishEntry.chosenSideDishes )
-
     this.editedOrderEntry = {
       id: this.dishEntry.id,
       orderId: this.order.id,

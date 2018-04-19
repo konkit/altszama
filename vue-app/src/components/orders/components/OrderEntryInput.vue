@@ -33,13 +33,18 @@ import Price from '../../commons/priceElement.vue'
 
 export default {
   name: 'order-entry-input',
-  props: ['editedOrderEntry', 'allDishesByCategory'],
+  props: ['editedOrderEntry'],
   methods: {
     setNewDishFlag: function(newValue) {
       this.$emit("setNewDishFlag", newValue)
     },
     clearSideDishes: function() {
       this.$emit("clearSideDishes")
+    }
+  },
+  computed: {
+    allDishesByCategory () { 
+      return this.$store.state.allDishesByCategory; 
     }
   },
   components: {

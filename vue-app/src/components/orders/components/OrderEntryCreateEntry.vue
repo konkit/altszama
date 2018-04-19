@@ -12,7 +12,6 @@
       <div>
         <order-entry-input 
           :editedOrderEntry="createdOrderEntry" 
-          :allDishesByCategory="allDishesByCategory" 
           @clearSideDishes="clearSideDishes"
           @setNewDishFlag="setNewDishFlag"
           @updateEntry="updateEntry" />
