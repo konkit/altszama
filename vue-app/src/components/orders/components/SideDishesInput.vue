@@ -44,41 +44,8 @@ import Price from '../../commons/priceElement.vue'
 
 export default {
   name: 'side-dishes-input',
-  props: ['editedOrderEntry', 'dishIdToSideDishesMap'],
+  props: ['editedOrderEntry'],
   methods: {
-    submitForm: function(e) {
-      e.preventDefault();
-      
-      const action = "/order_entries/update";
-      const dataSuccessUrl = "#/orders/show/" + this.order.id;
-
-      let errorsComponent = this.$refs.errorsComponent;
-
-      let formData = {
-        id: this.orderEntry.id,
-        orderId: this.order.id,
-        dishEntryId: this.editedOrderEntry.id,
-        dishId: this.editedOrderEntry.dishId,
-        newDish: this.editedOrderEntry.newDish,
-        newDishName: this.editedOrderEntry.newDishName,
-        newDishPrice: Math.round(this.editedOrderEntry.newDishPrice * 100),
-        additionalComments: this.editedOrderEntry.additionalComments,
-        sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
-      };
-
-      ApiConnector.makePost(action, formData)
-        .then(function (response) {
-          window.location.reload();
-        })
-        .catch(function(error) {
-          error.body.messages.forEach(msg => errorsComponent.addError(msg));
-        });
-
-      return false;
-    },
-    cancelEdit: function() {
-      this.$emit("cancelEdit")
-    },
     removeSideDish: function(sideDishId) {
       this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.filter(sd => sd.id !== sideDishId)
       this.$emit("updateEntry", this.editedOrderEntry)
@@ -131,6 +98,11 @@ export default {
       })
 
       this.$emit("updateEntry", this.editedOrderEntry)
+    }
+  },
+  computed: {
+    dishIdToSideDishesMap () { 
+      return this.$store.state.dishIdToSideDishesMap; 
     }
   },
   components: {

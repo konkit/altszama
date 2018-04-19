@@ -19,7 +19,6 @@
 
         <side-dishes-input 
           :editedOrderEntry="editedOrderEntry" 
-          :dishIdToSideDishesMap="dishIdToSideDishesMap"
           @updateEntry="updateEntry" />
         
         <div class="form-group">
@@ -55,14 +54,9 @@ import SideDishesInput from './SideDishesInput.vue'
 
 export default {
   name: 'order-entry-edit-entry',
-  props: ['orderEntry', 'dishEntry'],
+  props: ['order', 'orderEntry', 'dishEntry'],
   data () {
     return {
-      order: {},
-      allDishesInRestaurant: [],
-      allDishesByCategory: [],
-      dishIdToSideDishesMap: {},
-
       editedOrderEntry: {}
     }
   },
@@ -70,35 +64,27 @@ export default {
     this.$store.commit('setEntryLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/order_entries/" + this.orderEntry.id + "/dish_entry/" + this.dishEntry.id + "/edit_entry.json")
-      .then(response => {
-        this.order = response.data.order;
+    console.log("this.dishEntry", this.dishEntry )
+    console.log("chosenSideDishes", this.dishEntry.chosenSideDishes )
 
-        this.allDishesInRestaurant = response.data.allDishesInRestaurant;
-        this.allDishesByCategory = convertToMapEntries(response.data.allDishesByCategory);
-        this.dishIdToSideDishesMap = response.data.dishIdToSideDishesMap;
+    this.editedOrderEntry = {
+      id: this.dishEntry.id,
+      orderId: this.order.id,
+      dishId: this.dishEntry.dish.id,
+      additionalComments: this.dishEntry.additionalComments,
+      newDish: false,
+      newDishName: "",
+      newDishPrice: "",
+      chosenSideDishes: this.dishEntry.sideDishes || []
+    }
 
-        this.editedOrderEntry = {
-          id: response.data.dishEntry.id,
-          orderId: this.order.id,
-          dishId: response.data.dishEntry.dish.id,
-          additionalComments: response.data.dishEntry.additionalComments,
-          newDish: false,
-          newDishName: "",
-          newDishPrice: "",
-          chosenSideDishes: response.data.dishEntry.chosenSideDishes || []
-        }
-
-        this.$store.commit('setEntryLoadingFalse')
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse))
+    this.$store.commit('setEntryLoadingFalse')
   },
   methods: {
     submitForm: function(e) {
       e.preventDefault();
       
       const action = "/order_entries/update";
-      const dataSuccessUrl = "#/orders/show/" + this.order.id;
 
       let errorsComponent = this.$refs.errorsComponent;
 
@@ -114,15 +100,13 @@ export default {
         sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign({}, sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
       };
 
-      console.log("Starting submit");
-
       ApiConnector.makePost(action, formData)
-        .then(function (response) {
-          console.log("Submit sucessful, redirect to " + dataSuccessUrl)
-          window.location.reload();
+        .then((response) => {
+          this.$emit("updateOrder")
+          this.$emit("cancelEdit")
         })
-        .catch(function(error) {
-          console.log("Submit error")
+        .catch((error) => {
+          console.log("OrderEntryEditEntry error:", error);
           error.body.messages.forEach(msg => errorsComponent.addError(msg));
         });
 
@@ -147,6 +131,12 @@ export default {
   computed: {
     loadingEntry () {
       return this.$store.state.loadingEntry;
+    },
+    allDishesInRestaurant () { 
+      return this.$store.state.allDishesInRestaurant; 
+    },
+    allDishesByCategory () { 
+      return this.$store.state.allDishesByCategory; 
     }
   },
   components: {

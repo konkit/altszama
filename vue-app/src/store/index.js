@@ -8,7 +8,15 @@ export default new Vuex.Store({
     loading: false,
     loadingEntry: false,
     username: localStorage.getItem("username"),
-    token: localStorage.getItem("token")
+    token: localStorage.getItem("token"),
+
+    // SHOW ORDER
+    order: {},
+    orderEntries: [],
+    currentUserId: '',
+    allDishesInRestaurant: [],
+    allDishesByCategory: [],
+    dishIdToSideDishesMap: []
   },
   mutations: {
     setLoadingTrue (state) {
@@ -35,6 +43,16 @@ export default new Vuex.Store({
       localStorage.setItem("username", "")
       state.token = ""
       localStorage.setItem("token", "")
+    },
+
+    // SHOW ORDER
+    loadShowOrderData (state, payload) {
+      state.order = payload.order;
+      state.orderEntries = payload.orderEntries;
+      state.currentUserId = payload.currentUserId;
+      state.allDishesInRestaurant = payload.allDishesInRestaurant;
+      state.allDishesByCategory = payload.allDishesByCategory;
+      state.dishIdToSideDishesMap  = payload.dishIdToSideDishesMap;
     }
   }
 })

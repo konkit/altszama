@@ -19,7 +19,6 @@
 
         <side-dishes-input 
           :editedOrderEntry="createdOrderEntry" 
-          :dishIdToSideDishesMap="dishIdToSideDishesMap"
           @updateEntry="updateEntry"  />
         
         <div class="form-group">
@@ -58,14 +57,9 @@ import ApiConnector from '../../../ApiConnector.js'
 
 export default {
   name: 'order-entry-create-entry',
-  props: ['orderId'],
+  props: ['order'],
   data () {
     return {
-      allDishesInRestaurant: [],
-      allDishesByCategory: [],
-      dishIdToSideDishesMap: {},
-      order: {},
-
       createdOrderEntry: {},
     }
   },
@@ -73,48 +67,35 @@ export default {
     this.$store.commit('setEntryLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/orders/" + this.orderId + "/create_entry.json")
-      .then(response => {
-        this.order = response.data.order;
+    var dishId;
+    if (this.allDishesInRestaurant.length > 0) {
+      dishId = this.allDishesInRestaurant[0].id;
+    } else {
+      dishId = null
+    }
 
-        this.allDishesInRestaurant = response.data.allDishesInRestaurant;
-        this.allDishesByCategory = convertToMapEntries(response.data.allDishesByCategory);
-        this.dishIdToSideDishesMap = response.data.dishIdToSideDishesMap;
+    this.createdOrderEntry = {
+      orderId: this.order.id,
+      dishId: dishId,
+      additionalComments: '',
+      newDish: false,
+      newDishName: "",
+      newDishPrice: "",
+      chosenSideDishes: []
+    }
 
-        console.log(this.allDishesByCategory);
-
-        var dishId;
-        if (this.allDishesInRestaurant.length > 0) {
-          dishId = this.allDishesInRestaurant[0].id;
-        } else {
-          dishId = null
-        }
-
-        this.createdOrderEntry = {
-          orderId: response.data.order.id,
-          dishId: dishId,
-          additionalComments: '',
-          newDish: false,
-          newDishName: "",
-          newDishPrice: "",
-          chosenSideDishes: []
-        }
-
-        this.$store.commit('setEntryLoadingFalse')
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse))
+    this.$store.commit('setEntryLoadingFalse')
   },
   methods: {
     submitForm: function(e) {
       e.preventDefault();
 
       const action = "/order_entries/save";
-      const dataSuccessUrl = "#/orders/show/" + this.order.id;
 
       let errorsComponent = this.$refs.errorsComponent;
 
       let formData = {
-        orderId: this.orderId,
+        orderId: this.order.id,
         dishId: this.createdOrderEntry.dishId,
         newDish: this.createdOrderEntry.newDish,
         newDishName: this.createdOrderEntry.newDishName,
@@ -124,13 +105,12 @@ export default {
       };
 
       ApiConnector.makePost(action, formData)
-        .then(function (response) {
-          console.log("Submit sucessful, redirect to " + dataSuccessUrl)
-          window.location.reload();
+        .then((response) => {
+          this.$emit("updateOrder")
+          this.$emit("cancelEdit")
         })
-        .catch(function(error) {
-            console.log("orderEntryCreateForm Error:");
-            console.log(error);
+        .catch((error) => {
+            console.log("orderEntryCreateEntry error:", error);
             error.body.messages.forEach(msg => errorsComponent.addError(msg));
         });
 
@@ -155,6 +135,12 @@ export default {
   computed: {
     loadingEntry () {
       return this.$store.state.loadingEntry;
+    },
+    allDishesInRestaurant () { 
+      return this.$store.state.allDishesInRestaurant; 
+    },
+    allDishesByCategory () { 
+      return this.$store.state.allDishesByCategory; 
     }
   },
   components: {

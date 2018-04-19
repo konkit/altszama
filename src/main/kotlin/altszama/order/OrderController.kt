@@ -1,8 +1,10 @@
 package altszama.order
 
 import altszama.auth.AuthService
+import altszama.dish.DishService
 import altszama.order.dto.*
 import altszama.orderEntry.OrderEntryRepository
+import altszama.orderEntry.OrderEntryService
 import altszama.restaurant.RestaurantRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -25,7 +27,13 @@ class OrderController {
   private lateinit var orderEntryRepository: OrderEntryRepository
 
   @Autowired
+  private lateinit var orderEntryService: OrderEntryService
+
+  @Autowired
   private lateinit var restaurantRepository: RestaurantRepository
+
+  @Autowired
+  private lateinit var dishService: DishService
 
   @Autowired
   private lateinit var authService: AuthService
@@ -53,7 +61,15 @@ class OrderController {
     val order = orderRepository.findOne(orderId)
     val entries = orderEntryRepository.findByOrderId(orderId)
 
-    return ShowResponse.create(order, entries, currentUserId)
+    val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
+    val allDishesInRestaurantByCategory = allDishesInRestaurant
+        .groupBy { dish -> dish.category }
+        .map { x -> x.key to x.value.sortedBy { dish -> dish.name }}
+        .toMap()
+
+    val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
+
+    return ShowResponse.create(order, entries, currentUserId, allDishesInRestaurant, allDishesInRestaurantByCategory, dishIdToSideDishesMap)
   }
 
   @RequestMapping("/orders/{orderId}/order_view.json")

@@ -52,8 +52,8 @@
                     </template>
 
                     <template v-if="isEntryCreating == true">
-                      <order-entry-create-entry 
-                        :order-id="order.id" 
+                      <order-entry-create-entry
+                        :order="order" 
                         @cancelEdit="cancelEdit"
                         @updateOrder="fetchOrder" />
                     </template>
@@ -69,6 +69,7 @@
                     <template v-for="dishEntry in orderEntry.dishEntries">
                       <template v-if="isEntryEdited == true && dishEntryId == dishEntry.id">
                         <order-entry-edit-entry 
+                            :order="order" 
                             :order-entry="orderEntry" 
                             :dish-entry="dishEntry" 
                             @cancelEdit="cancelEdit"
@@ -99,7 +100,7 @@
                       </div>
                       <div v-if="isEntryCreating == true">
                         <order-entry-create-entry 
-                          :order-id="order.id"
+                          :order="order"
                           @updateOrder="fetchOrder"
                           @cancelEdit="cancelEdit" />
                       </div>
@@ -141,10 +142,6 @@ export default {
     return {
       orderId: this.$route.params.id,
 
-      order: {},
-      orderEntries: [],
-      currentUserId: '',
-
       isEntryCreating: false,
       isEntryEdited: false,
       orderEntryId: "",
@@ -162,9 +159,15 @@ export default {
       this.$store.commit('setLoadingTrue')
       ApiConnector.makeGet("/orders/" + this.orderId + "/show.json")
         .then(response => {
-          this.order = response.data.order;
-          this.orderEntries = response.data.orderEntries;
-          this.currentUserId = response.data.currentUserId;
+          var showOrderData = {
+            order: response.data.order, 
+            orderEntries: response.data.orderEntries, 
+            currentUserId: response.data.currentUserId,
+            allDishesInRestaurant: response.data.allDishesInRestaurant,
+            allDishesByCategory: convertToMapEntries(response.data.allDishesByCategory),
+            dishIdToSideDishesMap: response.data.dishIdToSideDishesMap
+          }
+          this.$store.commit('loadShowOrderData', showOrderData)
 
           this.$store.commit('setLoadingFalse')
         })
@@ -225,6 +228,15 @@ export default {
     },
     username: function() {
       return this.$store.state.username;
+    },
+    order: function() {
+      return this.$store.state.order;
+    },
+    orderEntries: function() {
+      return this.$store.state.orderEntries;
+    },
+    currentUserId: function() {
+      return this.$store.state.currentUserId;
     }
   },
   components: {
@@ -237,6 +249,16 @@ export default {
     OrderEntryRow,
     OrderStats
   }
+}
+
+function convertToMapEntries(dishesMap) {
+  var result = []
+  
+  for (const key of Object.keys(dishesMap)) {
+    result.push({"category": key, "dishes": dishesMap[key]})
+  }
+
+  return result;
 }
 </script>
 

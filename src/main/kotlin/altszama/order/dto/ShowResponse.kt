@@ -7,11 +7,13 @@ import altszama.order.Order
 import altszama.orderEntry.OrderEntry
 import altszama.orderEntry.OrderEntryPaymentStatus
 
-
 data class ShowResponse(
     val order: Order,
     val orderEntries: List<ParticipantsOrderEntry>,
-    val currentUserId: String
+    val currentUserId: String,
+    var allDishesInRestaurant: List<Dish>,
+    var allDishesByCategory: Map<String, List<Dish>>,
+    var dishIdToSideDishesMap: Map<String, List<SideDish>>
 ) {
 
   companion object {
@@ -32,7 +34,7 @@ data class ShowResponse(
         val comments: String
     )
 
-    fun create(order: Order, entries: List<OrderEntry>, currentUserId: String): ShowResponse {
+    fun create(order: Order, entries: List<OrderEntry>, currentUserId: String, allDishesInRestaurant: List<Dish>, allDishesInRestaurantByCategory: Map<String, List<Dish>>, dishIdToSideDishesMap: Map<String, List<SideDish>>): ShowResponse {
       val orderEntriesByUser: Map<User, List<OrderEntry>> = entries.groupBy { e -> e.user }
 
       val usersCount = orderEntriesByUser.keys.size
@@ -63,7 +65,14 @@ data class ShowResponse(
             )
           }
 
-      return ShowResponse(order, participantsUserEntries, currentUserId)
+      return ShowResponse(
+          order,
+          participantsUserEntries,
+          currentUserId,
+          allDishesInRestaurant,
+          allDishesInRestaurantByCategory,
+          dishIdToSideDishesMap
+      )
     }
   }
 
