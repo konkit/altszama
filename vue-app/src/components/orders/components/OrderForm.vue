@@ -10,7 +10,6 @@
             </option>
           </select>
         </div>
-
       </div>
     </div>
 
@@ -27,7 +26,6 @@
           <label for="timeOfOrder">Time of order</label>
           <masked-input type="text" class="form-control" v-model="order.timeOfOrder" :mask="[/\d/,/\d/,':',/\d/,/\d/]" :keepCharPositions="true" />
         </div>
-
       </div>
 
       <div class="col-4">
@@ -47,7 +45,6 @@
           <label for="deliveryCostPerDish">Delivery cost (per dish)</label>
           <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="order.deliveryCostPerDish" v-bind:precision="2" class="form-control" required="" id="deliveryCostPerDish"></vue-numeric>
         </div>
-
       </div>
 
       <div class="col-4">
@@ -75,12 +72,7 @@
         </div>
       </div>
     </div>
-
   </form> 
-
-          
-
-
 </template>
 
 <script>

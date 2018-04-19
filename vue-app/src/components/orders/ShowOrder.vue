@@ -52,7 +52,10 @@
                     </template>
 
                     <template v-if="isEntryCreating == true">
-                      <order-entry-create-entry :order-id="order.id" @cancelEdit="cancelEdit" />
+                      <order-entry-create-entry 
+                        :order-id="order.id" 
+                        @cancelEdit="cancelEdit"
+                        @updateOrder="fetchOrder" />
                     </template>
                   </td>
                 </tr>
@@ -69,6 +72,7 @@
                             :order-entry="orderEntry" 
                             :dish-entry="dishEntry" 
                             @cancelEdit="cancelEdit"
+                            @updateOrder="fetchOrder"
                             :key="dishEntry.id" />
                       </template>
                       <template v-else>
@@ -82,6 +86,7 @@
                             @editEntry="editEntry" 
                             @cancelEdit="cancelEdit" 
                             @deleteEntry="deleteEntry"
+                            @updateOrder="fetchOrder"
                             :key="dishEntry.id" />
                       </template>
                     </template>
@@ -93,7 +98,10 @@
                         </button>
                       </div>
                       <div v-if="isEntryCreating == true">
-                        <order-entry-create-entry :order-id="order.id" @cancelEdit="cancelEdit" />
+                        <order-entry-create-entry 
+                          :order-id="order.id"
+                          @updateOrder="fetchOrder"
+                          @cancelEdit="cancelEdit" />
                       </div>
                     </template>
 
@@ -133,7 +141,7 @@ export default {
     return {
       orderId: this.$route.params.id,
 
-      order: '',
+      order: {},
       orderEntries: [],
       currentUserId: '',
 
@@ -147,19 +155,20 @@ export default {
     this.$store.commit('setLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/orders/" + this.orderId + "/show.json")
-      .then(response => {
-        this.order = response.data.order;
-        this.orderEntries = response.data.orderEntries;
-        this.currentUserId = response.data.currentUserId;
-
-        this.$store.commit('setLoadingFalse')
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse))
+    this.fetchOrder()
   },
   methods: {
-    createEntryLink: function(orderId) {
-      return '#/orders/' + orderId + '/create_entry'
+    fetchOrder: function() {
+      this.$store.commit('setLoadingTrue')
+      ApiConnector.makeGet("/orders/" + this.orderId + "/show.json")
+        .then(response => {
+          this.order = response.data.order;
+          this.orderEntries = response.data.orderEntries;
+          this.currentUserId = response.data.currentUserId;
+
+          this.$store.commit('setLoadingFalse')
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     isOrdering: function() {
       return this.order.orderState === 'ORDERING';
@@ -183,23 +192,11 @@ export default {
     },
     unlockOrder: function() {
       ApiConnector.makeGet('/orders/' + this.orderId + '/set_as_created')
-        .then(response => {
-          window.location.reload()
-        })
-    },
-    confirmAsPaid: function(orderEntryId) {
-      ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid')
-        .then(successResponse => window.location.reload())
-        .catch(errResponse => console.log(errResponse) );
-    },
-    markAsPaid: function(orderEntryId) {
-      ApiConnector.makeGet('/order_entries/' + orderEntryId + '/mark_as_paid')
-        .then(successResponse => window.location.reload())
-        .catch(errResponse => console.log(errResponse) );
+        .then(response => this.fetchOrder())
     },
     deleteEntry: function(orderEntryId, dishEntryId) {
       ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
-        .then(successResponse => window.location.reload())
+        .then(successResponse => this.fetchOrder())
         .catch(errResponse => console.log(errResponse) );
     },
     createEntry: function() {
