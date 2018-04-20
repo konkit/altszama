@@ -228,9 +228,6 @@ export default {
 
       return false
     },
-    shouldShowCommentsParentheses: function(eatingPersonEntry) {
-      return eatingPersonEntry.comments.length > 0 || eatingPersonEntry.sideDishes.length > 0;
-    },
     loadedAndStateIsOrdering: function() {
       return this.loading === false && this.order.orderState === 'ORDERING';
     },

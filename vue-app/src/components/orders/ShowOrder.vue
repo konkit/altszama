@@ -82,7 +82,6 @@
                             :order-entry="orderEntry" 
                             :dish-entry="dishEntry" 
                             :current-user-id="currentUserId"
-                            :is-entry-edited="isEntryEdited"
                             @createEntry="createEntry" 
                             @editEntry="editEntry" 
                             @cancelEdit="cancelEdit" 

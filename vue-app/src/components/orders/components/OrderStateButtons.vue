@@ -55,9 +55,6 @@ export default {
     setAsCreated: function(e) {
       makeAjaxRequest('/orders/' + this.orderId + '/set_as_created')
     },
-    goToOrderView: function(e) {
-      window.location = "/orders/" + this.orderId + "/order_view" 
-    },
     setAsOrdered: function(e) {
       makeAjaxRequest('/orders/' + this.orderId + '/set_back_as_ordered')
     },

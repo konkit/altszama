@@ -50,14 +50,8 @@ import ApiConnector from '../../../ApiConnector.js'
 
 export default {
   name: 'order-entry-row',
-  props: ['order', 'orderEntry', 'dishEntry', 'currentUserId', 'isEntryEdited'],
+  props: ['order', 'orderEntry', 'dishEntry', 'currentUserId'],
   methods: {
-    createEntryLink: function(orderId) {
-      return '#/orders/' + orderId + '/create_entry'
-    },
-    isOrdering: function() {
-      return this.order.orderState === 'ORDERING';
-    },
     isOrderOwner: function() {
       return this.order.orderCreator.id == this.currentUserId
     },
@@ -99,16 +93,6 @@ export default {
     },
     editEntry: function(orderEntryId, dishEntryId) {
       this.$emit("editEntry", orderEntryId, dishEntryId);
-    },
-    cancelEdit: function() {
-      this.$emit("cancelEdit");
-    },
-    userColumnRowSpan: function(order, orderEntry) {
-      if ((this.isOrderEntryOwner(orderEntry) ) && this.isEntryEdited == false) {
-        return orderEntry.dishEntries.length + 2;
-      } else {
-        return orderEntry.dishEntries.length + 1;
-      }
     }
   },
   components: {

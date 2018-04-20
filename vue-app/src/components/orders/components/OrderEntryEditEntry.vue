@@ -127,12 +127,6 @@ export default {
   computed: {
     loadingEntry () {
       return this.$store.state.loadingEntry;
-    },
-    allDishesInRestaurant () { 
-      return this.$store.state.allDishesInRestaurant; 
-    },
-    allDishesByCategory () { 
-      return this.$store.state.allDishesByCategory; 
     }
   },
   components: {

@@ -137,9 +137,6 @@ export default {
     },
     allDishesInRestaurant () { 
       return this.$store.state.allDishesInRestaurant; 
-    },
-    allDishesByCategory () { 
-      return this.$store.state.allDishesByCategory; 
     }
   },
   components: {
