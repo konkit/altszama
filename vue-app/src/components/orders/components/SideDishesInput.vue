@@ -10,7 +10,7 @@
             <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
             <vue-numeric v-model="sideDish.newSideDishPrice" class="form-control" required="" currency="zł" separator="." currency-symbol-position="suffix" :precision="2" />
             
-            <button class="btn btn-danger" @click="removeSideDish(editedOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
+            <button class="btn btn-danger" @click="removeSideDish(sdIndex)"><span class="fa fa-remove" /></button>
 
             <button class="btn btn-link" @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</button>
           </div>
@@ -22,7 +22,7 @@
               </option>
             </select>
 
-            <button class="btn btn-danger" @click="removeSideDish(editedOrderEntry.chosenSideDishes[sdIndex].id)"><span class="fa fa-remove" /></button>
+            <button class="btn btn-danger" @click="removeSideDish(sdIndex)"><span class="fa fa-remove" /></button>
 
             <button class="btn btn-link" @click="setAsNewSideDish(sdIndex)">Type your own side dish</button>
           </div>
@@ -46,8 +46,8 @@ export default {
   name: 'side-dishes-input',
   props: ['editedOrderEntry'],
   methods: {
-    removeSideDish: function(sideDishId) {
-      this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.filter(sd => sd.id !== sideDishId)
+    removeSideDish: function(id) {
+      this.editedOrderEntry.chosenSideDishes = removeItemWithSlice(this.editedOrderEntry.chosenSideDishes, id)
       this.$emit("updateEntry", this.editedOrderEntry)
     },
     addSideDishEntry: function() {
@@ -109,4 +109,9 @@ export default {
     Price
   }
 }
+
+function removeItemWithSlice(array, index) {
+  return [...array.slice(0, index), ...array.slice(index + 1)]
+}
+
 </script>
