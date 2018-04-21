@@ -104,7 +104,9 @@ class OrderEntryService {
     }
 
     val updatedDishEntry = DishEntry(dish, sideDishes, orderEntryUpdateRequest.additionalComments, orderEntryUpdateRequest.dishEntryId!!)
-    val dishEntries = orderEntry.dishEntries.filter { entry -> entry.id != orderEntryUpdateRequest.dishEntryId!! } + updatedDishEntry
+    val dishEntries = orderEntry.dishEntries.map { entry ->
+      if (entry.id != orderEntryUpdateRequest.dishEntryId!!) entry else updatedDishEntry
+    }
 
     val updatedEntry = orderEntry.copy(dishEntries = dishEntries)
 
