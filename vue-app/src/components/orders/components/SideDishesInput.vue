@@ -8,7 +8,7 @@
 
           <div class="input-group" v-if="sideDish.isNew == true">
             <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
-            <vue-numeric v-model="sideDish.newSideDishPrice" class="form-control" required="" currency="zł" separator="." currency-symbol-position="suffix" :precision="2" />
+            <vue-numeric v-model="sideDish.newSideDishPrice" @input="changeNewSideDishPrice(sdIndex, $event)" class="form-control" required="" currency="zł" separator="." currency-symbol-position="suffix" :precision="2" />
             
             <button class="btn btn-danger" @click="removeSideDish(sdIndex)"><span class="fa fa-remove" /></button>
 
@@ -98,6 +98,12 @@ export default {
       })
 
       this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+    },
+    changeNewSideDishPrice (sdIndex, newPrice) {
+      this.editedOrderEntry.chosenSideDishes[sdIndex].newSideDishPrice = newPrice;
+      this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+
+      this.$forceUpdate();
     }
   },
   computed: {
