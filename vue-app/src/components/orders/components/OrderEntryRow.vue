@@ -88,12 +88,9 @@ export default {
     deleteEntry: function(orderEntryId, dishEntryId) {
       this.$emit("deleteEntry", orderEntryId, dishEntryId);
     },
-    createEntry: function() {
-      this.$emit("createEntry");
-    },
     editEntry: function(orderEntryId, dishEntryId) {
-      this.$emit("editEntry", orderEntryId, dishEntryId);
-    }
+      this.$store.commit('setEntryEditing', {"orderEntryId": orderEntryId, "dishEntryId": dishEntryId})
+    },
   },
   components: {
     Price

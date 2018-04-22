@@ -13,7 +13,7 @@
             <h1>[{{ this.order.orderState }}] Order from {{this.order.restaurant.name}} ({{this.order.orderDate}})</h1>
           
             <template v-if="isOrderOwner()">
-              <order-state-buttons v-bind:order-id="this.order.id" v-bind:order-state="this.order.orderState"></order-state-buttons>
+              <order-state-buttons :order-id="this.order.id" :order-state="this.order.orderState"></order-state-buttons>
             </template>
 
             <div v-if="this.isOrdering() && this.isOrderOwner()" class="alert alert-warning">
@@ -53,8 +53,7 @@
 
                     <template v-if="isEntryCreating == true">
                       <order-entry-create-entry
-                        :order="order" 
-                        @cancelEdit="cancelEdit"
+                        :order="order"
                         @updateOrder="fetchOrder" />
                     </template>
                   </td>
@@ -72,7 +71,6 @@
                             :order="order" 
                             :order-entry="orderEntry" 
                             :dish-entry="dishEntry" 
-                            @cancelEdit="cancelEdit"
                             @updateOrder="fetchOrder"
                             :key="dishEntry.id" />
                       </template>
@@ -82,9 +80,6 @@
                             :order-entry="orderEntry" 
                             :dish-entry="dishEntry" 
                             :current-user-id="currentUserId"
-                            @createEntry="createEntry" 
-                            @editEntry="editEntry" 
-                            @cancelEdit="cancelEdit" 
                             @deleteEntry="deleteEntry"
                             @updateOrder="fetchOrder"
                             :key="dishEntry.id" />
@@ -100,8 +95,7 @@
                       <div v-if="isEntryCreating == true">
                         <order-entry-create-entry 
                           :order="order"
-                          @updateOrder="fetchOrder"
-                          @cancelEdit="cancelEdit" />
+                          @updateOrder="fetchOrder" />
                       </div>
                     </template>
 
@@ -141,10 +135,10 @@ export default {
     return {
       orderId: this.$route.params.id,
 
-      isEntryCreating: false,
-      isEntryEdited: false,
-      orderEntryId: "",
-      dishEntryId: "",
+      // isEntryCreating: false,
+      // isEntryEdited: false,
+      // orderEntryId: "",
+      // dishEntryId: "",
     }
   },
   created() {
@@ -202,41 +196,26 @@ export default {
         .catch(errResponse => console.log(errResponse) );
     },
     createEntry: function() {
-      this.isEntryCreating = true;
-      this.orderEntryId = "";
-      this.dishEntryId = "";
+      this.$store.commit('setEntryCreating', {})
     },
     editEntry: function(orderEntryId, dishEntryId) {
-      this.isEntryEdited = true;
-      this.orderEntryId = orderEntryId;
-      this.dishEntryId = dishEntryId;
+      this.$store.commit('setEntryEditing', {"orderEntryId": orderEntryId, "dishEntryId": dishEntryId})
     },
     cancelEdit: function() {
-      this.isEntryCreating = false;
-      this.isEntryEdited = false;
-      this.orderEntryId = "";
-      this.dishEntryId = "";
+      this.$store.commit('cancelEntryCreateOrEdit', {})
     }
   },
   computed: {
-    loading () {
-      return this.$store.state.loading;
-    },
-    numberOfCurrentUserEntries () {
-      return this.orderEntries.filter(e => e.user.id == this.currentUserId).length;
-    },
-    username: function() {
-      return this.$store.state.username;
-    },
-    order: function() {
-      return this.$store.state.order;
-    },
-    orderEntries: function() {
-      return this.$store.state.orderEntries;
-    },
-    currentUserId: function() {
-      return this.$store.state.currentUserId;
-    }
+    loading () { return this.$store.state.loading; },
+    numberOfCurrentUserEntries () { return this.orderEntries.filter(e => e.user.id == this.currentUserId).length; },
+    username () { return this.$store.state.username; },
+    order () { return this.$store.state.order; },
+    orderEntries () { return this.$store.state.orderEntries; },
+    currentUserId () { return this.$store.state.currentUserId; },
+    isEntryCreating () { return this.$store.state.isEntryCreating; },
+    isEntryEdited () { return this.$store.state.isEntryEdited; },
+    orderEntryId () { return this.$store.state.orderEntryId; },
+    dishEntryId () { return this.$store.state.dishEntryId; }
   },
   components: {
     BackButton,

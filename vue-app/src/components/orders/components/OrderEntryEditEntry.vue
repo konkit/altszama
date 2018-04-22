@@ -10,20 +10,15 @@
       </div>
 
       <div>
-        <order-entry-input 
-          :editedOrderEntry="editedOrderEntry" 
-          @clearSideDishes="clearSideDishes"
-          @setNewDishFlag="setNewDishFlag"
-          @updateEntry="updateEntry" />
+        <order-entry-input />
 
-        <side-dishes-input 
-          :editedOrderEntry="editedOrderEntry" 
-          @updateEntry="updateEntry" />
+        <side-dishes-input />
         
         <div class="form-group">
           <h4>Additional Comments</h4>
           <textarea class="form-control" name="additionalComments" value="" id="additionalComments" v-model="editedOrderEntry.additionalComments" />
         </div>
+
 
         <button class="btn btn-block btn-success" @click="submitForm">
           Update order
@@ -55,15 +50,13 @@ export default {
   name: 'order-entry-edit-entry',
   props: ['order', 'orderEntry', 'dishEntry'],
   data () {
-    return {
-      editedOrderEntry: {}
-    }
+    return { }
   },
   created() {
     this.$store.commit('setEntryLoadingTrue')
   },
   mounted() {
-    this.editedOrderEntry = {
+    var newEditedOrderEntry = {
       id: this.dishEntry.id,
       orderId: this.order.id,
       dishId: this.dishEntry.dish.id,
@@ -74,6 +67,7 @@ export default {
       chosenSideDishes: this.dishEntry.sideDishes || []
     }
 
+    this.$store.commit('setEditedOrderEntry', newEditedOrderEntry)
     this.$store.commit('setEntryLoadingFalse')
   },
   methods: {
@@ -99,7 +93,7 @@ export default {
       ApiConnector.makePost(action, formData)
         .then((response) => {
           this.$emit("updateOrder")
-          this.$emit("cancelEdit")
+          this.$store.commit('cancelEntryCreateOrEdit', {})
         })
         .catch((error) => {
           console.log("OrderEntryEditEntry error:", error);
@@ -109,25 +103,12 @@ export default {
       return false;
     },
     cancelEdit: function() {
-      this.$emit("cancelEdit")
-    },
-    clearSideDishes: function() {
-      this.editedOrderEntry.chosenSideDishes = []
-    },
-    updateEntry: function(editedOrderEntry) {
-      this.editedOrderEntry = editedOrderEntry
-    },
-    setNewDishFlag: function(newDishValue) {
-      this.editedOrderEntry.newDish = newDishValue;
-      if (newDishValue == true) {
-        this.editedOrderEntry.dishId = ""
-      }
+      this.$store.commit('cancelEntryCreateOrEdit', {})
     },
   },
   computed: {
-    loadingEntry () {
-      return this.$store.state.loadingEntry;
-    }
+    loadingEntry () { return this.$store.state.loadingEntry; },
+    editedOrderEntry () { return this.$store.state.editedOrderEntry; }
   },
   components: {
     BackButton,

@@ -10,19 +10,13 @@
       <errors-component ref="errorsComponent" />
 
       <div>
-        <order-entry-input 
-          :editedOrderEntry="createdOrderEntry" 
-          @clearSideDishes="clearSideDishes"
-          @setNewDishFlag="setNewDishFlag"
-          @updateEntry="updateEntry" />
+        <order-entry-input />
 
-        <side-dishes-input 
-          :editedOrderEntry="createdOrderEntry" 
-          @updateEntry="updateEntry"  />
+        <side-dishes-input />
         
         <div class="form-group">
           <h4>Additional Comments</h4>
-          <textarea class="form-control" v-model="createdOrderEntry.additionalComments" value="" />
+          <textarea class="form-control" v-model="editedOrderEntry.additionalComments" value="" />
         </div>
 
         <button class="btn btn-block btn-success" @click="submitForm">
@@ -59,7 +53,6 @@ export default {
   props: ['order'],
   data () {
     return {
-      createdOrderEntry: {},
     }
   },
   created() {
@@ -73,7 +66,7 @@ export default {
       dishId = null
     }
 
-    this.createdOrderEntry = {
+    var newEditedOrderEntry = {
       orderId: this.order.id,
       dishId: dishId,
       additionalComments: '',
@@ -82,6 +75,8 @@ export default {
       newDishPrice: "",
       chosenSideDishes: []
     }
+
+    this.$store.commit('setEditedOrderEntry', newEditedOrderEntry)
 
     this.$store.commit('setEntryLoadingFalse')
   },
@@ -95,18 +90,18 @@ export default {
 
       let formData = {
         orderId: this.order.id,
-        dishId: this.createdOrderEntry.dishId,
-        newDish: this.createdOrderEntry.newDish,
-        newDishName: this.createdOrderEntry.newDishName,
-        newDishPrice: Math.round(this.createdOrderEntry.newDishPrice * 100),
-        additionalComments: this.createdOrderEntry.additionalComments,
-        sideDishes: this.createdOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
+        dishId: this.editedOrderEntry.dishId,
+        newDish: this.editedOrderEntry.newDish,
+        newDishName: this.editedOrderEntry.newDishName,
+        newDishPrice: Math.round(this.editedOrderEntry.newDishPrice * 100),
+        additionalComments: this.editedOrderEntry.additionalComments,
+        sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
       };
 
       ApiConnector.makePost(action, formData)
         .then((response) => {
           this.$emit("updateOrder")
-          this.$emit("cancelEdit")
+          this.$store.commit('cancelEntryCreateOrEdit', {})
         })
         .catch((error) => {
             console.log("orderEntryCreateEntry error:", error);
@@ -116,28 +111,13 @@ export default {
       return false;
     },
     cancelEdit: function() {
-      this.$emit("cancelEdit")
+      this.$store.commit('cancelEntryCreateOrEdit', {})
     },
-    clearSideDishes: function() {
-      this.createdOrderEntry.chosenSideDishes = []
-    },
-    setNewDishFlag: function(newDishValue) {
-      this.createdOrderEntry.newDish = newDishValue;
-      if (newDishValue == true) {
-        this.createdOrderEntry.dishId = ""
-      }
-    },
-    updateEntry: function(createdOrderEntry) {
-      this.createdOrderEntry = createdOrderEntry
-    }
   },
   computed: {
-    loadingEntry () {
-      return this.$store.state.loadingEntry;
-    },
-    allDishesInRestaurant () { 
-      return this.$store.state.allDishesInRestaurant; 
-    }
+    loadingEntry () { return this.$store.state.loadingEntry; },
+    allDishesInRestaurant () { return this.$store.state.allDishesInRestaurant; },
+    editedOrderEntry () { return this.$store.state.editedOrderEntry; }
   },
   components: {
     BackButton,

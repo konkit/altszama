@@ -44,11 +44,11 @@ import Price from '../../commons/priceElement.vue'
 
 export default {
   name: 'side-dishes-input',
-  props: ['editedOrderEntry'],
+  props: [],
   methods: {
     removeSideDish: function(id) {
       this.editedOrderEntry.chosenSideDishes = removeItemWithSlice(this.editedOrderEntry.chosenSideDishes, id)
-      this.$emit("updateEntry", this.editedOrderEntry)
+      this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
     },
     addSideDishEntry: function() {
       var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
@@ -67,7 +67,7 @@ export default {
 
       this.editedOrderEntry.chosenSideDishes.push(sideDishToAdd)
 
-      this.$emit("updateEntry", this.editedOrderEntry)
+      this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
     },
     setAsNewSideDish: function(sideDishIndex) {
       this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
@@ -82,7 +82,7 @@ export default {
         return newSd
       })
 
-      this.$emit("updateEntry", this.editedOrderEntry)
+      this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
     },
     setAsExistingSideDish: function(sideDishIndex) {
       this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
@@ -97,13 +97,12 @@ export default {
         return newSd
       })
 
-      this.$emit("updateEntry", this.editedOrderEntry)
+      this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
     }
   },
   computed: {
-    dishIdToSideDishesMap () { 
-      return this.$store.state.dishIdToSideDishesMap; 
-    }
+    dishIdToSideDishesMap () { return this.$store.state.dishIdToSideDishesMap; },
+    editedOrderEntry () { return this.$store.state.editedOrderEntry; },
   },
   components: {
     Price

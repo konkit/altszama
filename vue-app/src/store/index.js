@@ -16,7 +16,16 @@ export default new Vuex.Store({
     currentUserId: '',
     allDishesInRestaurant: [],
     allDishesByCategory: [],
-    dishIdToSideDishesMap: []
+    dishIdToSideDishesMap: [],
+
+    isEntryCreating: false,
+    isEntryEdited: false,
+    orderEntryId: "",
+    dishEntryId: "",
+
+    // CREATED / EDITED ORDER
+    editedOrderEntry: {},
+
   },
   mutations: {
     setLoadingTrue (state) {
@@ -53,6 +62,43 @@ export default new Vuex.Store({
       state.allDishesInRestaurant = payload.allDishesInRestaurant;
       state.allDishesByCategory = payload.allDishesByCategory;
       state.dishIdToSideDishesMap  = payload.dishIdToSideDishesMap;
-    }
+    },
+
+    setEntryCreating (state, payload) {
+      state.isEntryCreating = true;
+      state.orderEntryId = "";
+      state.dishEntryId = "";
+    },
+
+    setEntryEditing (state, payload) {
+      state.isEntryEdited = true;
+      state.orderEntryId = payload.orderEntryId;
+      state.dishEntryId = payload.dishEntryId;
+    },
+
+    cancelEntryCreateOrEdit (state, payload) {
+      state.isEntryCreating = false;
+      state.isEntryEdited = false;
+      state.orderEntryId = "";
+      state.dishEntryId = "";
+    },
+
+    // CREATED / EDITED ORDER
+
+    setEditedOrderEntry (state, payload) {
+      state.editedOrderEntry = payload
+    },
+    clearEditedSideDishes (state, payload) {
+      state.editedOrderEntry.chosenSideDishes = []
+    },
+    setNewDishFlag (state, payload) {
+      var newDishValue = payload
+
+      state.editedOrderEntry.newDish = newDishValue;
+      if (newDishValue == true) {
+        state.editedOrderEntry.dishId = ""
+      }
+    },
+
   }
 })
