@@ -16,9 +16,9 @@
           </div>
 
           <div class="input-group" v-else>
-            <select class="form-control" name="sideDishId" required="" v-model="editedOrderEntry.chosenSideDishes[sdIndex]">
-              <option v-for="sideDish in dishIdToSideDishesMap[editedOrderEntry.dishId]" :value="sideDish">
-                {{sideDish.name}} &nbsp; ( <price :data-price="sideDish.price" /> )
+            <select class="form-control" name="sideDishId" required="" :value="sideDish.id" @change="updateSideDishComboBox(sdIndex, editedOrderEntry.dishId, $event.target.value)">
+              <option v-for="sideDishToSelect in dishIdToSideDishesMap[editedOrderEntry.dishId]" :value="sideDishToSelect.id">
+                {{sideDishToSelect.name}} &nbsp; ( <price :data-price="sideDishToSelect.price" /> )
               </option>
             </select>
 
@@ -101,6 +101,12 @@ export default {
     },
     changeNewSideDishPrice (sdIndex, newPrice) {
       this.editedOrderEntry.chosenSideDishes[sdIndex].newSideDishPrice = newPrice;
+      this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+
+      this.$forceUpdate();
+    },
+    updateSideDishComboBox (sdIndex, dishId, sidedishId) {
+      this.editedOrderEntry.chosenSideDishes[sdIndex] = this.dishIdToSideDishesMap[dishId].find(sd => sd.id == sidedishId)
       this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
 
       this.$forceUpdate();
