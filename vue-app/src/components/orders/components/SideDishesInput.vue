@@ -8,7 +8,7 @@
 
           <div class="input-group" v-if="sideDish.isNew == true">
             <input type="text" class="form-control" placeholder="New dish name" id="newDishName" v-model="sideDish.newSideDishName" />
-            <vue-numeric v-model="sideDish.newSideDishPrice" @input="changeNewSideDishPrice(sdIndex, $event)" class="form-control" required="" currency="zł" separator="." currency-symbol-position="suffix" :precision="2" />
+            <vue-numeric :value="sideDish.newSideDishPrice" @input="changeNewSideDishPrice(sdIndex, $event)" class="form-control" required="" currency="zł" separator="." currency-symbol-position="suffix" :precision="2" />
             
             <button class="btn btn-danger" @click="removeSideDish(sdIndex)"><span class="fa fa-remove" /></button>
 
