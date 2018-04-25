@@ -30,7 +30,7 @@ buildscript {
   }
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.6.RELEASE")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.51")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.40")
     classpath("com.moowork.gradle:gradle-node-plugin:1.2.0")
   }
 }
