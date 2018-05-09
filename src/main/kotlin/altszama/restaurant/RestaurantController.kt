@@ -54,7 +54,6 @@ class RestaurantController {
       restaurant.id,
       restaurant.name,
       restaurant.address,
-      restaurant.rating,
       restaurant.telephone,
       restaurant.url
     )

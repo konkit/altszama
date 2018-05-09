@@ -5,12 +5,12 @@ import org.springframework.data.annotation.Id
 import javax.validation.constraints.NotNull
 
 data class SideDish(
-    @Id
-    var id: String = ObjectId().toHexString(),
+  @Id
+  var id: String = ObjectId().toHexString(),
 
-    @NotNull
-    var name: String = "",
+  @NotNull
+  var name: String = "",
 
-    @NotNull
-    var price: Int = 0
+  @NotNull
+  var price: Int = 0
 )

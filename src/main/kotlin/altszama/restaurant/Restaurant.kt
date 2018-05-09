@@ -14,8 +14,6 @@ data class Restaurant(
   @Size(min = 1, message = "Restaurant name cannot be blank!")
   var name: String = "",
 
-  var rating: Double = 5.0,
-
   var telephone: String = "",
 
   var address: String = "",

@@ -22,44 +22,35 @@ class RestaurantImportService {
   fun createFromJson(restaurantData: RestaurantImportJson) {
     val restaurant = restaurantRepository.findByName(restaurantData.name) ?: Restaurant()
 
-    updateRestaurant(restaurant, restaurantData)
-    updateDishesFromJson(restaurantData, restaurant)
-  }
-
-  private fun updateRestaurant(restaurant: Restaurant, restaurantData: RestaurantImportJson) {
     val updatedRestaurant = restaurant.copy(
         name = restaurantData.name,
         url = restaurantData.url,
-        rating = restaurantData.rating,
         telephone = restaurantData.telephone,
-        address = restaurantData.street + " " + restaurantData.postalCode + " " + restaurantData.city
+        address = restaurantData.address
     )
 
     restaurantRepository.save(updatedRestaurant)
+
+    restaurantData.dishes.forEach { dishData ->
+      val dish = findOrCreateDish(dishData, restaurant)
+
+      val newSideDishes = dishData.sidedishes
+          .filter { sideDishJson -> findSideDishByName(dish, sideDishJson.name) == null }
+          .map { sdjson -> SideDish(name = sdjson.name, price = priceStringToCents(sdjson.price)) }
+
+      val updatedSideDishes = dishData.sidedishes
+          .filter { sideDishJson -> findSideDishByName(dish, sideDishJson.name) != null }
+          .map { sideDishJson -> findSideDishByName(dish, sideDishJson.name)!!.copy(price = priceStringToCents(sideDishJson.price)) }
+
+      val updatedDish = dish.copy(price = priceStringToCents(dishData.price), sideDishes = (newSideDishes + updatedSideDishes))
+
+      dishRepository.save(updatedDish)
+    }
   }
 
-  private fun updateDishesFromJson(restaurantData: RestaurantImportJson, restaurant: Restaurant) {
-    restaurantData.dishes
-        .map { dishJsonData -> getUpdatedDish(dishJsonData, restaurant) }
-        .forEach { updatedDish -> dishRepository.save(updatedDish) }
-  }
-
-  private fun getUpdatedDish(dishData: DishImportJson, restaurant: Restaurant): Dish {
-    val dish = dishRepository.findByName(dishData.name) ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
-
-    val (newSideDishJson, existingSideDishJson) = dishData.sidedishes.partition { sideDishJson ->
-      findSideDishByName(dish, sideDishJson.name) == null
-    }
-
-    val newSideDishes = newSideDishJson.map { sdjson ->
-      SideDish(name = sdjson.name, price = priceStringToCents(sdjson.price))
-    }
-
-    val updatedSideDishes = existingSideDishJson.map { sideDishJson ->
-      findSideDishByName(dish, sideDishJson.name)!!.copy(price = priceStringToCents(sideDishJson.price))
-    }
-
-    return dish.copy(price = priceStringToCents(dishData.price), sideDishes = (newSideDishes + updatedSideDishes))
+  private fun findOrCreateDish(dishData: DishImportJson, restaurant: Restaurant): Dish {
+    return dishRepository.findByRestaurantIdAndName(restaurant.id, dishData.name).firstOrNull()
+        ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
   }
 
   private fun findSideDishByName(dish: Dish, name: String): SideDish? {
@@ -73,4 +64,5 @@ class RestaurantImportService {
       0
     }
   }
+
 }

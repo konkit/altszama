@@ -4,21 +4,11 @@ data class RestaurantImportJson(
     val name: String,
     val url: String,
 
-    val numberOfVotes: Int,
-    val bestRating: Int,
-    val rating: Double,
+    val dishes: List<DishImportJson>,
 
-    val telephone: String,
+    val telephone: String = "",
 
-    val latitude: Double,
-    val longitude: Double,
-
-    val street: String,
-    val city: String,
-    val postalCode: String,
-    val region: String,
-
-    val dishes: List<DishImportJson>
+    val address: String = ""
 )
 
 data class DishImportJson(
