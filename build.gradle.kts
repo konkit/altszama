@@ -128,10 +128,8 @@ tasks {
     dependsOn(vueProd)
   }
 
-  val runVueDevServer = task("runVueDevServer", type=NodeTask::class) {
-    dependsOn(vueNpmInstall)
-    setGroup("altszama")
-    setWorkingDir("vue-app/")
-    setScript(file("vue-app/build/dev-server.js"))
+  val runVueDevServer = task("runVueDevServer", type=NpmTask::class) {
+    setWorkingDir(file("vue-app/"))
+    setArgs(listOf("run", "dev"))
   }
 }
