@@ -35,7 +35,7 @@ export default {
   name: 'order-entry-input',
   methods: {
     setNewDishFlag: function(newValue) {
-      this.$store.commit('setNewDishFlag', newDishValue)
+      this.$store.commit('setNewDishFlag', newValue)
     },
     clearSideDishes: function() {
       this.$store.commit('clearEditedSideDishes')
