@@ -28,7 +28,7 @@ class DishController {
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/save")
   fun save(@PathVariable restaurantId: String, @RequestBody @Valid dish: Dish): ResponseEntity<String> {
-    val restaurant = restaurantService.findById(restaurantId)
+    val restaurant = restaurantService.findById(restaurantId).get()
     dish.restaurant = restaurant
 
     dishService.insert(dish)
@@ -38,13 +38,15 @@ class DishController {
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/{dishId}/edit.json")
   fun edit(@PathVariable restaurantId: String, @PathVariable dishId: String): EditResponse {
+    val dish = dishService.findById(dishId).get()
     val categories = dishService.allCategories(restaurantId)
-    return EditResponse(dishService.findById(dishId)!!, categories)
+
+    return EditResponse(dish, categories)
   }
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/update")
   fun update(@PathVariable restaurantId: String, @RequestBody @Valid dish: Dish): ResponseEntity<String> {
-    val restaurant = restaurantService.findById(restaurantId)
+    val restaurant = restaurantService.findById(restaurantId).get()
     dish.restaurant = restaurant
 
     dishService.save(dish)

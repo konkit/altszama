@@ -33,7 +33,7 @@ class RestaurantController {
 
   @RequestMapping("/restaurants/{restaurantId}/show.json")
   fun show(@PathVariable restaurantId: String): ShowResponse {
-    val restaurant = restaurantService.findById(restaurantId)!!
+    val restaurant = restaurantService.findById(restaurantId).get()
     val dishes = dishService.findByRestaurantId(restaurant.id)
     val dishesByCategory: Map<String, List<Dish>> = dishes.groupBy { dish -> dish.category }
 
@@ -48,7 +48,7 @@ class RestaurantController {
 
   @RequestMapping("/restaurants/{restaurantId}/edit.json")
   fun editRestaurantJson(@PathVariable restaurantId: String): EditResponse {
-    val restaurant = restaurantService.findById(restaurantId)!!
+    val restaurant = restaurantService.findById(restaurantId).get()
 
     return EditResponse(
       restaurant.id,

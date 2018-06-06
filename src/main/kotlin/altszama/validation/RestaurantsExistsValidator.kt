@@ -24,6 +24,6 @@ class RestaurantExistsValidator : ConstraintValidator<RestaurantExists, String?>
   override fun initialize(constraintAnnotation: RestaurantExists) {}
 
   override fun isValid(restaurantId: String?, context: ConstraintValidatorContext): Boolean {
-    return restaurantId != null && restaurantRepository.exists(restaurantId)
+    return restaurantId != null && restaurantRepository.findByIdExists(restaurantId)
   }
 }

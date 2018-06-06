@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-open class AuthService {
+class AuthService {
 
   @Autowired
   private lateinit var userRepository: UserRepository
@@ -17,17 +17,17 @@ open class AuthService {
   @Value("\${googleClientSecret}")
   private lateinit var clientSecret: String
 
-  open fun currentUser(): User {
+  fun currentUser(): User {
     val securityContext = SecurityContextHolder.getContext()
     val auth = securityContext.authentication
 
     val userId = auth.principal as String
 
-    return userRepository.findOne(userId)
+    return userRepository.findById(userId).get()
   }
 
   @Throws(JwtException::class)
-  open fun getUserIdFromJwt(tokenStr: String): String {
+  fun getUserIdFromJwt(tokenStr: String): String {
     return Jwts.parser()
         .setSigningKey(clientSecret)
         .parseClaimsJws(tokenStr)
@@ -49,7 +49,7 @@ open class AuthService {
     return newUser
   }
 
-  open fun createJwt(userId: String): String {
+  fun createJwt(userId: String): String {
     return Jwts.builder()
         .setSubject(userId)
         .setExpiration(Date(System.currentTimeMillis() + 864_000_000))

@@ -31,13 +31,13 @@ class OrderEntryService {
 
 
   fun saveEntry(orderEntrySaveRequest: OrderEntrySaveRequest) {
-    val order = orderRepository.findOne(orderEntrySaveRequest.orderId)
+    val order = orderRepository.findById(orderEntrySaveRequest.orderId).get()
     val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, authService.currentUser())
 
     val dish: Dish = if (orderEntrySaveRequest.newDish == true && orderEntrySaveRequest.newDishName?.isNotBlank() == true) {
       createNewDish(order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
     } else {
-      dishRepository.findOne(orderEntrySaveRequest.dishId)
+      dishRepository.findById(orderEntrySaveRequest.dishId).get()
     }
 
     val sideDishes: List<SideDish> = orderEntrySaveRequest.sideDishes.mapNotNull { sideDishData ->
@@ -87,12 +87,12 @@ class OrderEntryService {
   }
 
   fun updateEntry(orderEntryUpdateRequest: OrderEntryUpdateRequest) {
-    val orderEntry = orderEntryRepository.findOne(orderEntryUpdateRequest.id)
+    val orderEntry = orderEntryRepository.findById(orderEntryUpdateRequest.id!!).get()
 
     val dish: Dish = if (orderEntryUpdateRequest.newDish == true && orderEntryUpdateRequest.newDishName?.isNotBlank() == true) {
       createNewDish(orderEntry.order.restaurant, orderEntryUpdateRequest.newDishName, orderEntryUpdateRequest.newDishPrice)
     } else {
-      dishRepository.findOne(orderEntryUpdateRequest.dishId)
+      dishRepository.findById(orderEntryUpdateRequest.dishId!!).get()
     }
 
     val sideDishes = orderEntryUpdateRequest.sideDishes.mapNotNull { sideDishData ->
@@ -114,12 +114,12 @@ class OrderEntryService {
   }
 
   fun deleteOrderEntry(orderEntryId: String, dishEntryId: String) {
-    val orderEntry = orderEntryRepository.findOne(orderEntryId)
+    val orderEntry = orderEntryRepository.findById(orderEntryId).get()
 
     val updatedDishEntries = orderEntry.dishEntries.filter { entry -> entry.id != dishEntryId }
 
     if (updatedDishEntries.isEmpty()) {
-      orderEntryRepository.delete(orderEntryId)
+      orderEntryRepository.deleteById(orderEntryId)
     } else {
       val updatedOrderEntry = orderEntry.copy(dishEntries = updatedDishEntries)
       orderEntryRepository.save(updatedOrderEntry)
@@ -132,7 +132,7 @@ class OrderEntryService {
   }
 
   fun setAsMarkedAsPaid(orderEntryId: String) {
-    val entry = orderEntryRepository.findOne(orderEntryId)
+    val entry = orderEntryRepository.findById(orderEntryId).get()
 
     if (entry.paymentStatus != OrderEntryPaymentStatus.CONFIRMED) {
       entry.paymentStatus = OrderEntryPaymentStatus.MARKED
@@ -142,7 +142,7 @@ class OrderEntryService {
   }
 
   fun setAsConfirmedAsPaid(orderEntryId: String) {
-    val entry = orderEntryRepository.findOne(orderEntryId)
+    val entry = orderEntryRepository.findById(orderEntryId).get()
 
     entry.paymentStatus = OrderEntryPaymentStatus.CONFIRMED
 

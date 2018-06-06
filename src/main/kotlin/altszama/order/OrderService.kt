@@ -36,7 +36,7 @@ class OrderService {
 
 
   fun saveOrder(orderSaveRequest: OrderSaveRequest) {
-    val restaurant = restaurantRepository.findById(orderSaveRequest.restaurantId!!)!!
+    val restaurant = restaurantRepository.findById(orderSaveRequest.restaurantId!!).get()
 
     val order = Order(
         restaurant = restaurant,
@@ -57,12 +57,12 @@ class OrderService {
   }
 
   fun updateOrder(orderUpdateRequest: OrderUpdateRequest) {
-    val restaurant = restaurantRepository.findById(orderUpdateRequest.restaurantId!!)
+    val restaurant = restaurantRepository.findById(orderUpdateRequest.restaurantId!!).get()
 
-    val oldOrder = orderRepository.findOne(orderUpdateRequest.orderId)
+    val oldOrder = orderRepository.findById(orderUpdateRequest.orderId!!).get()
 
     val updatedOrder = oldOrder.copy(
-        restaurant = restaurant!!,
+        restaurant = restaurant,
         orderDate = orderUpdateRequest.orderDate!!,
         timeOfOrder = orderUpdateRequest.timeOfOrder,
         decreaseInPercent = orderUpdateRequest.decreaseInPercent,
@@ -79,7 +79,7 @@ class OrderService {
   fun setAsCreated(orderId: String) {
     val currentUser = authService.currentUser()
 
-    val order = orderRepository.findOne(orderId) ?: throw ValidationFailedException("Order not found")
+    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
     if (order.orderCreator != currentUser) {
       throw ValidationFailedException("You can edit only your orders.")
@@ -93,7 +93,7 @@ class OrderService {
   fun setAsOrdering(orderId: String) {
     val currentUser = authService.currentUser()
 
-    val order = orderRepository.findOne(orderId) ?: throw ValidationFailedException("Order not found")
+    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
     if (order.orderCreator != currentUser) {
       throw ValidationFailedException("You can edit only your orders.")
@@ -111,7 +111,7 @@ class OrderService {
   fun setAsOrdered(orderId: String, approxTimeOfDelivery: String?)  {
     val currentUser = authService.currentUser()
 
-    val order = orderRepository.findOne(orderId) ?: throw ValidationFailedException("Order not found")
+    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
     if (order.orderCreator != currentUser) {
       throw ValidationFailedException("You can edit only your orders.")
@@ -137,7 +137,7 @@ class OrderService {
   fun setBackAsOrdered(orderId: String)  {
     val currentUser = authService.currentUser()
 
-    val order = orderRepository.findOne(orderId) ?: throw ValidationFailedException("Order not found")
+    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
     if (order.orderCreator != currentUser) {
       throw ValidationFailedException("You can edit only your orders.")
@@ -151,7 +151,7 @@ class OrderService {
   fun setAsDelivered(orderId: String) {
     val currentUser = authService.currentUser()
 
-    val order = orderRepository.findOne(orderId) ?: throw ValidationFailedException("Order not found")
+    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
     if (order.orderCreator != currentUser) {
       throw ValidationFailedException("You can edit only your orders.")
@@ -166,7 +166,7 @@ class OrderService {
   fun setAsRejected(orderId: String)  {
     val currentUser = authService.currentUser()
 
-    val order = orderRepository.findOne(orderId) ?: throw ValidationFailedException("Order not found")
+    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
     if (order.orderCreator != currentUser) {
       throw ValidationFailedException("You can edit only your orders.")
@@ -180,14 +180,14 @@ class OrderService {
   fun deleteOrder(orderId: String) {
     val currentUser = authService.currentUser()
 
-    val order = orderRepository.findOne(orderId) ?: throw ValidationFailedException("Order not found")
+    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
     if (order.orderCreator != currentUser) {
       throw ValidationFailedException("You can edit only your orders.")
     }
 
     orderEntryRepository.deleteByOrderId(orderId)
-    orderRepository.delete(orderId)
+    orderRepository.deleteById(orderId)
   }
 
   private fun currentLocalTime(): LocalTime {

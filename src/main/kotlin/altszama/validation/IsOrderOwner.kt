@@ -18,7 +18,6 @@ annotation class IsOrderOwner(
     val payload: Array<KClass<out Payload>> = arrayOf()
 )
 
-
 class IsOrderOwnerValidator : ConstraintValidator<IsOrderOwner, String?> {
 
   @Autowired
@@ -31,7 +30,7 @@ class IsOrderOwnerValidator : ConstraintValidator<IsOrderOwner, String?> {
   override fun initialize(constraintAnnotation: IsOrderOwner) {}
 
   override fun isValid(orderId: String?, context: ConstraintValidatorContext): Boolean {
-    val order = orderRepository.findOne(orderId)
+    val order = orderRepository.findById(orderId!!).get()
     val currentUser = authService.currentUser()
 
     return order.orderCreator == currentUser

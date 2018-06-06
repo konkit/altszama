@@ -58,7 +58,7 @@ class OrderController {
   fun show(@PathVariable orderId: String): ShowResponse {
     val currentUserId = authService.currentUser().id
 
-    val order = orderRepository.findOne(orderId)
+    val order = orderRepository.findById(orderId).get()
     val entries = orderEntryRepository.findByOrderId(orderId)
 
     val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
@@ -76,7 +76,7 @@ class OrderController {
   fun orderViewJson(@PathVariable orderId: String): OrderViewResponse {
     orderService.setAsOrdering(orderId)
 
-    val order = orderRepository.findOne(orderId)
+    val order = orderRepository.findById(orderId).get()
     val entries = orderEntryRepository.findByOrderId(orderId)
 
     return OrderViewResponse.create(order, entries)
@@ -95,7 +95,7 @@ class OrderController {
 
   @RequestMapping("/orders/{orderId}/edit.json")
   fun edit(@PathVariable orderId: String): EditResponse {
-    return EditResponse(orderRepository.findOne(orderId), restaurantRepository.findAll())
+    return EditResponse(orderRepository.findById(orderId).get(), restaurantRepository.findAll())
   }
 
   @RequestMapping("/orders/update")

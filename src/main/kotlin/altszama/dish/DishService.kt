@@ -4,6 +4,7 @@ import altszama.orderEntry.OrderEntryRepository
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 
 @Service
@@ -24,8 +25,8 @@ class DishService {
     return dishRepository.save(dish)
   }
 
-  fun findById(dishId: String): Dish? {
-    return dishRepository.findOne(dishId)
+  fun findById(dishId: String): Optional<Dish> {
+    return dishRepository.findById(dishId)
   }
 
   fun findByRestaurantId(restaurantId: String): List<Dish> {
@@ -41,13 +42,13 @@ class DishService {
       throw Exception("There are order entries using this dish!")
     }
 
-    dishRepository.delete(dishId)
+    dishRepository.deleteById(dishId)
   }
 
   fun deleteSideDish(dishId: String, sideDishId: String) {
-    val dish = dishRepository.findOne(dishId)
+    val dishOpt = dishRepository.findById(dishId)
 
-    if (dish != null) {
+    dishOpt.map { dish ->
       dish.sideDishes = dish.sideDishes.filter { sd -> sd.id != sideDishId }
       dishRepository.save(dish)
     }

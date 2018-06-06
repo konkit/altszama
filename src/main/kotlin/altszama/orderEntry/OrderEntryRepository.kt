@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.repository.Query
 
 
 interface OrderEntryRepository : MongoRepository<OrderEntry, String> {
+  fun findByIdExists(orderEntryId: String): Boolean
+
   fun findByOrderId(orderId: String): List<OrderEntry>
 
   fun findByOrderIdAndUser(orderId: String, user: User): OrderEntry?

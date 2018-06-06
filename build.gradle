@@ -1,0 +1,144 @@
+buildscript {
+  ext {
+    kotlinVersion = '1.2.41'
+    springBootVersion = '2.0.2.RELEASE'
+  }
+
+  repositories {
+    mavenCentral()
+    jcenter()
+    maven { url = uri("http://repo.spring.io/plugins-release") }
+    maven { url = uri("https://plugins.gradle.org/m2/") }
+  }
+
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+    classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+    classpath("com.moowork.gradle:gradle-node-plugin:1.2.0")
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.moowork.node'
+
+group = 'altszama'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+compileKotlin {
+  kotlinOptions {
+    freeCompilerArgs = ["-Xjsr305=strict"]
+    jvmTarget = "1.8"
+  }
+}
+compileTestKotlin {
+  kotlinOptions {
+    freeCompilerArgs = ["-Xjsr305=strict"]
+    jvmTarget = "1.8"
+  }
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "altszama.ApplicationKt"
+  }
+
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
+
+repositories {
+  mavenCentral()
+  jcenter()
+  maven { url = uri("http://repo.spring.io/plugins-release") }
+  maven { url = uri("https://plugins.gradle.org/m2/") }
+}
+
+
+dependencies {
+  // Spring Boot
+  compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+  compile('org.springframework.boot:spring-boot-starter-security')
+  compile('org.springframework.boot:spring-boot-starter-web')
+  compile("org.springframework.boot:spring-boot-devtools")
+
+  // Security
+  compile("org.springframework.security:spring-security-config")
+  compile("org.springframework.security:spring-security-data")
+  compile("org.springframework.security:spring-security-web")
+
+  // Web push notifications
+  compile("de.bytefish.fcmjava:fcmjava-core:2.1")
+  compile("de.bytefish.fcmjava:fcmjava-client:2.1")
+
+  // For cryptographic operations
+  compile("org.bouncycastle:bcprov-jdk15on:1.54")
+  compile("nl.martijndwars:web-push:3.0.0")
+
+  // Jackson
+  compile("com.fasterxml.jackson.module:jackson-module-parameter-names")
+  compile("com.fasterxml.jackson.module:jackson-module-kotlin")
+  compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
+  compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
+  // Google OAuth2
+  compile("com.google.apis:google-api-services-oauth2:v2-rev65-1.17.0-rc")
+  compile("com.google.api-client:google-api-client:1.23.0")
+
+  // JJWT
+  compile("io.jsonwebtoken:jjwt:0.9.0")
+
+  // Kotlin
+  compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+  compile("org.jetbrains.kotlin:kotlin-reflect")
+  compile("org.funktionale:funktionale-all:1.2")
+
+  testCompile('org.springframework.boot:spring-boot-starter-test')
+  testCompile('org.springframework.security:spring-security-test')
+}
+
+tasks {
+
+  task "vueNpmInstall"(type: NpmTask) {
+    setWorkingDir(file("vue-app/"))
+    args = ["install"]
+  }
+
+  task "vueRunBuild"(type: NodeTask) {
+    dependsOn(vueNpmInstall)
+    setWorkingDir(file("vue-app/"))
+    setScript(file("vue-app/build/build.js"))
+  }
+
+  task "copyVueToBuild"(type: Copy) {
+    dependsOn(vueRunBuild)
+    from("vue-app/dist")
+    into("build/resources/main/public")
+  }
+
+  task "copyVueToOut"(type: Copy) {
+    dependsOn(vueRunBuild)
+    from("vue-app/dist")
+    into("out/production/resources/public/")
+  }
+
+  task("vueProd") {
+    setGroup("altszama")
+    dependsOn(copyVueToBuild, copyVueToOut)
+  }
+
+  "processResources" {
+    dependsOn(vueProd)
+  }
+
+  task "runVueDevServer"(type: NpmTask) {
+    setWorkingDir(file("vue-app/"))
+    args = ["run", "dev"]
+  }
+}

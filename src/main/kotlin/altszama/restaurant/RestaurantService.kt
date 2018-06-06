@@ -4,6 +4,7 @@ import altszama.dish.DishRepository
 import altszama.order.OrderRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class RestaurantService {
@@ -26,12 +27,12 @@ class RestaurantService {
     return restaurantRepository.save(restaurant)
   }
 
-  fun findById(restaurantId: String): Restaurant? {
+  fun findById(restaurantId: String): Optional<Restaurant> {
     return restaurantRepository.findById(restaurantId)
   }
 
-  fun findOne(restaurantId: String): Restaurant? {
-    return restaurantRepository.findOne(restaurantId)
+  fun findOne(restaurantId: String): Optional<Restaurant> {
+    return restaurantRepository.findById(restaurantId)
   }
 
   fun findAll(): List<Restaurant> {
@@ -48,7 +49,7 @@ class RestaurantService {
         dishRepository.delete(dish)
       }
 
-      restaurantRepository.delete(restaurantId)
+      restaurantRepository.deleteById(restaurantId)
     }
   }
 

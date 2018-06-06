@@ -25,6 +25,8 @@ class MethodArgumentInvalidExceptionHandler : ResponseEntityExceptionHandler() {
       globalError.defaultMessage
     }
 
-    return ResponseEntity(ErrorMessages(apiFieldErrors + apiGlobalErrors), HttpStatus.UNPROCESSABLE_ENTITY)
+    val errorMessagesList = (apiFieldErrors  + apiGlobalErrors).filterNotNull()
+
+    return ResponseEntity(ErrorMessages(errorMessagesList), HttpStatus.UNPROCESSABLE_ENTITY)
   }
 }

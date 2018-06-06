@@ -18,7 +18,6 @@ annotation class OrderNotOrderedYet(
     val payload: Array<KClass<out Payload>> = arrayOf()
 )
 
-
 class OrderNotOrderedYetValidator : ConstraintValidator<OrderNotOrderedYet, String?> {
 
   @Autowired
@@ -27,8 +26,8 @@ class OrderNotOrderedYetValidator : ConstraintValidator<OrderNotOrderedYet, Stri
   override fun initialize(constraintAnnotation: OrderNotOrderedYet) {}
 
   override fun isValid(orderId: String?, context: ConstraintValidatorContext): Boolean {
-    val order = orderRepository.findOne(orderId)
-
-    return order.orderState == OrderState.CREATED
+    return orderRepository.findById(orderId!!)
+        .map { order -> order.orderState == OrderState.CREATED }
+        .orElse(false)
   }
 }
