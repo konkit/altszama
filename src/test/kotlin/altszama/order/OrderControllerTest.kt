@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.junit.Before
+import org.junit.Ignore
 import org.mockito.Matchers
 import org.mockito.Mockito
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -26,6 +27,7 @@ import java.util.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = arrayOf(Application::class))
+@Ignore
 @AutoConfigureMockMvc()
 class OrderControllerTest {
 
