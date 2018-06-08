@@ -41,6 +41,16 @@ Vue.config.errorHandler = function (err, vm, info) {
   }
 }
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/custom-service-worker.js').then(function(registration) {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(err) {
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

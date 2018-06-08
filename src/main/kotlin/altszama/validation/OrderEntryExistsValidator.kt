@@ -24,6 +24,6 @@ class OrderEntryExistsValidator : ConstraintValidator<OrderEntryExists, String?>
   override fun initialize(constraintAnnotation: OrderEntryExists) {}
 
   override fun isValid(orderEntryId: String?, context: ConstraintValidatorContext): Boolean {
-    return orderEntryId != null && orderEntryRepository.findByIdExists(orderEntryId)
+    return orderEntryId != null && orderEntryRepository.existsById(orderEntryId)
   }
 }

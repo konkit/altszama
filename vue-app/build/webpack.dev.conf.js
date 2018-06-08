@@ -89,7 +89,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       theme_color: "#4DBA87",
       orientation: "portrait",
       gcm_sender_id: config.dev.env.gcmSenderId
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        // copy custom service worker
+        from: path.resolve(__dirname, '../src/custom-service-worker.js'),
+        to: config.build.assetsRoot + '/[name].js'
+      }
+    ]),
   ]
 })
 

@@ -25,6 +25,6 @@ class DishExistsValidator : ConstraintValidator<DishExists, String?> {
   override fun initialize(constraintAnnotation: DishExists) {}
 
   override fun isValid(dishId: String?, context: ConstraintValidatorContext): Boolean {
-    return dishId != null && dishRepository.findByIdExists(dishId)
+    return dishId != null && dishRepository.existsById(dishId)
   }
 }
