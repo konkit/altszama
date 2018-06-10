@@ -6,29 +6,29 @@ import altszama.auth.User
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.bson.types.ObjectId
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Matchers
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.junit.Before
-import org.junit.Ignore
-import org.mockito.Matchers
-import org.mockito.Mockito
-import org.springframework.boot.test.mock.mockito.MockBean
 import java.util.*
 
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = arrayOf(Application::class))
-@Ignore
 @AutoConfigureMockMvc()
+@TestPropertySource(properties = arrayOf("googleClientId=qwerty", "googleClientSecret=qwerty", "gcmServerKey=qwerty"))
 class OrderControllerTest {
 
   @Autowired
@@ -42,7 +42,7 @@ class OrderControllerTest {
 
   @Before
   fun setup() {
-    mockAuthService()
+    setupMocks()
   }
 
   @Test
@@ -58,7 +58,7 @@ class OrderControllerTest {
   }
 
 
-  private fun mockAuthService() {
+  private fun setupMocks() {
     val user = User("username", "password", "mail@mail.com")
     user.id = userId
 
