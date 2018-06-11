@@ -4,11 +4,9 @@
       <div class="col">
         <div class="form-group">
           <label for="restaurant">Restaurant: </label>
-          <select id="restaurant" class="form-control" name="restaurantId"  v-model="order.restaurantId">
-            <option v-for="restaurant in this.restaurantsList" :key="restaurant.id" :value="restaurant.id">
-              <span>{{restaurant.name}}</span>
-            </option>
-          </select>
+
+          <v-select :options="this.restaurantsList" label="name" :value="this.restaurantsList.find(r => order.restaurantId == r.id)" @input="order.restaurantId = $event.id">
+          </v-select>
         </div>
       </div>
     </div>
@@ -77,6 +75,7 @@
 
 <script>
 import MaskedInput from 'vue-text-mask'
+import VueSelect from 'vue-select'
 
 export default {
   props: {
@@ -97,6 +96,7 @@ export default {
   },
   components: {
     MaskedInput,
+    'v-select': VueSelect
   }
 }
 </script>
