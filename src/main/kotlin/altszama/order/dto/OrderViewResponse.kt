@@ -61,7 +61,7 @@ data class OrderViewResponse(
               dishEntriesWithCurrentDish(orderEntry).sumBy { entry -> entry.priceWithSidedishes() }
             }.sum()
 
-        GroupedOrderEntry(dishesList.find { dish -> dish.id == dishId }!!, priceSumForDish, entriesForDish.size, eatingPersonEntries)
+        GroupedOrderEntry(dishesList.find { dish -> dish.id == dishId }!!, priceSumForDish, dishIdToEntriesMap.value.size, eatingPersonEntries)
       }
 
       return OrderViewResponse(order, groupedUserEntries, entries.size, basePriceSum, orderTotalPrice)
