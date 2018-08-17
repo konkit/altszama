@@ -101,6 +101,13 @@ dependencies {
 
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('org.springframework.security:spring-security-test')
+
+  testImplementation(
+          'org.junit.jupiter:junit-jupiter-api:5.1.0'
+  )
+  testRuntimeOnly(
+          'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+  )
 }
 
 tasks {
@@ -141,4 +148,8 @@ tasks {
     setWorkingDir(file("vue-app/"))
     args = ["run", "dev"]
   }
+}
+
+test {
+  useJUnitPlatform()
 }

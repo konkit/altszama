@@ -4,6 +4,7 @@ import altszama.auth.User
 import altszama.dish.Dish
 import altszama.dish.SideDish
 import altszama.order.Order
+import altszama.orderEntry.DishEntry
 import altszama.orderEntry.OrderEntry
 
 
@@ -31,40 +32,56 @@ data class OrderViewResponse(
     )
 
     fun create(order: Order, entries: List<OrderEntry>): OrderViewResponse {
-      val basePriceSum = entries.map { e -> e.dishEntries.sumBy { d -> d.priceWithSidedishes() }}.sum()
+      val groupedUserEntries = createGroupedUserEntries(entries)
+      val basePriceSum = getBasePrice(entries)
+      val orderTotalPrice = getTotalPrice(basePriceSum, order, entries)
 
-      val decrease = (order.decreaseInPercent / 100.0 * basePriceSum).toInt()
-      val deliveryCostPerDishes = entries.size * order.deliveryCostPerDish
+      return OrderViewResponse(order, groupedUserEntries, entries.size, basePriceSum, orderTotalPrice)
+    }
 
-      val orderTotalPrice = basePriceSum - decrease + order.deliveryCostPerEverybody + deliveryCostPerDishes
+    private fun getBasePrice(entries: List<OrderEntry>): Int {
+      return entries
+          .map { it.dishEntries.sumBy(DishEntry::priceWithSidedishes) }
+          .sum()
+    }
 
-      val dishesList: List<Dish> = entries.flatMap { entry -> entry.dishEntries }.map { d -> d.dish }
+    private fun getTotalPrice(basePriceSum: Int, order: Order, entries: List<OrderEntry>): Int {
+      val decrease = (basePriceSum * order.decreaseInPercent / 100.0).toInt()
+      val deliveryCostPerDishes = entries.flatMap { it.dishEntries }.size * order.deliveryCostPerDish
+      val priceModifiers = -decrease + order.deliveryCostPerEverybody + deliveryCostPerDishes
 
-      val dishIdToOrderEntryMap: Map<String, List<OrderEntry>> = entries
+      return basePriceSum + priceModifiers
+    }
+
+    private fun createGroupedUserEntries(entries: List<OrderEntry>): List<GroupedOrderEntry> {
+      val dishesList: List<Dish> = entries
+          .flatMap { entry -> entry.dishEntries }
+          .map { d -> d.dish }
+
+      val dishIdToOrderEntriesMap: Map<String, List<OrderEntry>> = entries
           .flatMap { entry -> entry.dishEntries.map { d -> d.dish to entry} }
           .groupBy { e -> e.first.id }
           .mapValues { d -> d.value.map { x -> x.second } }
 
-      val groupedUserEntries = dishIdToOrderEntryMap.map { dishIdToEntriesMap ->
-        val dishId = dishIdToEntriesMap.key
-        val entriesForDish: List<OrderEntry> = dishIdToEntriesMap.value.distinctBy { e -> e.id }
+      return dishIdToOrderEntriesMap
+          .map { mapEntry ->
+              val dishId = mapEntry.key
+              val entriesForDish: List<OrderEntry> = mapEntry.value.distinctBy { e -> e.id }
 
-        fun dishEntriesWithCurrentDish(e: OrderEntry) = e.dishEntries.filter { dishEntry -> dishEntry.dish.id == dishId }
+              fun dishEntriesWithCurrentDish(e: OrderEntry) = e.dishEntries.filter { dishEntry -> dishEntry.dish.id == dishId }
 
-        val eatingPersonEntries = entriesForDish.flatMap { orderEntry ->
-          dishEntriesWithCurrentDish(orderEntry)
-              .map { dishEntry -> EatingPersonEntry(orderEntry.user, dishEntry.additionalComments, dishEntry.chosenSideDishes) }
-        }
+              val eatingPersonEntries = entriesForDish.flatMap { orderEntry ->
+                dishEntriesWithCurrentDish(orderEntry)
+                    .map { dishEntry -> EatingPersonEntry(orderEntry.user, dishEntry.additionalComments, dishEntry.chosenSideDishes) }
+              }
 
-        val priceSumForDish = entriesForDish
-            .map { orderEntry ->
-              dishEntriesWithCurrentDish(orderEntry).sumBy { entry -> entry.priceWithSidedishes() }
-            }.sum()
+              val priceSumForDish = entriesForDish
+                  .map { orderEntry ->
+                    dishEntriesWithCurrentDish(orderEntry).sumBy { entry -> entry.priceWithSidedishes() }
+                  }.sum()
 
-        GroupedOrderEntry(dishesList.find { dish -> dish.id == dishId }!!, priceSumForDish, dishIdToEntriesMap.value.size, eatingPersonEntries)
-      }
-
-      return OrderViewResponse(order, groupedUserEntries, entries.size, basePriceSum, orderTotalPrice)
+              GroupedOrderEntry(dishesList.find { dish -> dish.id == dishId }!!, priceSumForDish, mapEntry.value.size, eatingPersonEntries)
+          }
     }
   }
 
