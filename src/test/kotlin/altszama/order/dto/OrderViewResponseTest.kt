@@ -6,7 +6,7 @@ import altszama.order.Order
 import altszama.orderEntry.DishEntry
 import altszama.orderEntry.OrderEntry
 import altszama.restaurant.Restaurant
-import junit.framework.Assert.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.bson.types.ObjectId
 import org.junit.Test
 import java.time.LocalDate

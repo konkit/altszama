@@ -62,14 +62,10 @@ class OrderController {
     val entries = orderEntryRepository.findByOrderId(orderId)
 
     val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
-    val allDishesInRestaurantByCategory = allDishesInRestaurant
-        .groupBy { dish -> dish.category }
-        .map { x -> x.key to x.value.sortedBy { dish -> dish.name }}
-        .toMap()
 
     val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
 
-    return ShowResponse.create(order, entries, currentUserId, allDishesInRestaurant, allDishesInRestaurantByCategory, dishIdToSideDishesMap)
+    return ShowResponse.create(order, entries, currentUserId, allDishesInRestaurant, dishIdToSideDishesMap)
   }
 
   @RequestMapping("/orders/{orderId}/order_view.json")

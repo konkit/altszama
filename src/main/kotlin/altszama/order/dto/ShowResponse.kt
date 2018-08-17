@@ -4,6 +4,7 @@ import altszama.auth.User
 import altszama.dish.Dish
 import altszama.dish.SideDish
 import altszama.order.Order
+import altszama.orderEntry.DishEntry
 import altszama.orderEntry.OrderEntry
 import altszama.orderEntry.OrderEntryPaymentStatus
 
@@ -34,36 +35,23 @@ data class ShowResponse(
         val comments: String
     )
 
-    fun create(order: Order, entries: List<OrderEntry>, currentUserId: String, allDishesInRestaurant: List<Dish>, allDishesInRestaurantByCategory: Map<String, List<Dish>>, dishIdToSideDishesMap: Map<String, List<SideDish>>): ShowResponse {
+    fun create(order: Order,
+               entries: List<OrderEntry>,
+               currentUserId: String,
+               allDishesInRestaurant: List<Dish>,
+               dishIdToSideDishesMap: Map<String, List<SideDish>>): ShowResponse {
       val orderEntriesByUser: Map<User, List<OrderEntry>> = entries.groupBy { e -> e.user }
 
       val usersCount = orderEntriesByUser.keys.size
 
       val participantsUserEntries = orderEntriesByUser
           .flatMap { userToEntries -> userToEntries.value }
-          .map { orderEntry ->
-            val numberOfDishesForUser = orderEntriesByUser.get(orderEntry.user)!!.sumBy { orderEntries -> orderEntries.dishEntries.size }
+          .map { orderEntry -> createParticipantOrderEntry(orderEntry, order, usersCount) }
 
-            val basePrice = orderEntry.dishEntries.sumBy { dishEntry -> dishEntry.priceWithSidedishes() }
-
-            val decreaseAmount = ( basePrice * (order.decreaseInPercent / 100.0) ).toInt()
-            val deliveryCostPerOrder = (order.deliveryCostPerEverybody / usersCount) / numberOfDishesForUser
-            val deliveryCostPerEntry = order.deliveryCostPerDish
-
-            val finalPrice = basePrice - decreaseAmount + deliveryCostPerOrder + deliveryCostPerEntry
-
-            val dishEntries: List<ParticipantsDishEntry> = orderEntry.dishEntries.map { dishEntry ->
-              ParticipantsDishEntry(dishEntry.id, dishEntry.dish, dishEntry.chosenSideDishes, dishEntry.dish.price, dishEntry.additionalComments)
-            }
-
-            ParticipantsOrderEntry(
-                id = orderEntry.id,
-                user = orderEntry.user,
-                dishEntries = dishEntries,
-                finalPrice = finalPrice,
-                paymentStatus = orderEntry.paymentStatus
-            )
-          }
+      val allDishesInRestaurantByCategory = allDishesInRestaurant
+          .groupBy { dish -> dish.category }
+          .map { x -> x.key to x.value.sortedBy { dish -> dish.name }}
+          .toMap()
 
       return ShowResponse(
           order,
@@ -72,6 +60,41 @@ data class ShowResponse(
           allDishesInRestaurant,
           allDishesInRestaurantByCategory,
           dishIdToSideDishesMap
+      )
+    }
+
+    private fun createParticipantOrderEntry(orderEntry: OrderEntry, order: Order, usersCount: Int): ParticipantsOrderEntry {
+      val basePrice = orderEntry.dishEntries.sumBy { dishEntry -> dishEntry.priceWithSidedishes() }
+
+      val decreaseAmount = (basePrice * (order.decreaseInPercent / 100.0)).toInt()
+      val deliveryCostPerOrder = (order.deliveryCostPerEverybody / usersCount)
+      val deliveryCostPerEntry = order.deliveryCostPerDish
+
+      val finalPrice = basePrice - decreaseAmount + deliveryCostPerOrder + deliveryCostPerEntry
+
+      val dishEntries: List<ParticipantsDishEntry> = orderEntry.dishEntries
+          .map(this::createParticipantsDishEntry)
+
+      return createParticipantsOrderEntry(orderEntry, dishEntries, finalPrice)
+    }
+
+    private fun createParticipantsOrderEntry(orderEntry: OrderEntry, dishEntries: List<ParticipantsDishEntry>, finalPrice: Int): ParticipantsOrderEntry {
+      return ParticipantsOrderEntry(
+          id = orderEntry.id,
+          user = orderEntry.user,
+          dishEntries = dishEntries,
+          finalPrice = finalPrice,
+          paymentStatus = orderEntry.paymentStatus
+      )
+    }
+
+    private fun createParticipantsDishEntry(dishEntry: DishEntry): ParticipantsDishEntry {
+      return ParticipantsDishEntry(
+          dishEntry.id,
+          dishEntry.dish,
+          dishEntry.chosenSideDishes,
+          dishEntry.dish.price,
+          dishEntry.additionalComments
       )
     }
   }
