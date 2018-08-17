@@ -89,4 +89,8 @@ export default {
   .row {
     margin-top: 2rem;
   }
+
+  .pointer {
+    cursor: pointer;
+  }
 </style>
