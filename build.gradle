@@ -149,7 +149,3 @@ tasks {
     args = ["run", "dev"]
   }
 }
-
-test {
-  useJUnitPlatform()
-}
