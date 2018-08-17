@@ -68,7 +68,7 @@ data class ShowResponse(
 
       val decreaseAmount = (basePrice * (order.decreaseInPercent / 100.0)).toInt()
       val deliveryCostPerOrder = (order.deliveryCostPerEverybody / usersCount)
-      val deliveryCostPerEntry = order.deliveryCostPerDish
+      val deliveryCostPerEntry = order.deliveryCostPerDish * orderEntry.dishEntries.size
 
       val finalPrice = basePrice - decreaseAmount + deliveryCostPerOrder + deliveryCostPerEntry
 

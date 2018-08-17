@@ -164,6 +164,93 @@ class ShowResponseTest {
     assertEquals(expected, actual)
   }
 
+  @Test
+  fun twoPeopleWithDeliveryCostPerDish() {
+    val order = order.copy(deliveryCostPerDish = 100)
+
+    val dishEntry1 = DishEntry(dish1)
+    val dishEntry2 = DishEntry(dish2)
+    val dishEntry3 = DishEntry(dish3)
+    val dishEntry4 = DishEntry(dish4)
+
+    val orderEntry1 = OrderEntry(objectId(), order, user1, listOf(dishEntry1, dishEntry2))
+    val orderEntry2 = OrderEntry(objectId(), order, user2, listOf(dishEntry3, dishEntry4))
+
+    val entriesInThisOrder = listOf(orderEntry1, orderEntry2)
+
+    val actual = ShowResponse.create(
+        order,
+        entriesInThisOrder,
+        orderCreator.id,
+        allDishesInRestaurant,
+        dishIdToSideDishesMap
+    )
+
+    val expected = ShowResponse(
+        order,
+        listOf(
+            ShowResponse.Companion.ParticipantsOrderEntry(
+                orderEntry1.id,
+                user1,
+                listOf(
+                    ShowResponse.Companion.ParticipantsDishEntry(
+                        dishEntry1.id,
+                        dish1,
+                        emptyList(),
+                        dish1.price,
+                        ""
+                    ),
+                    ShowResponse.Companion.ParticipantsDishEntry(
+                        dishEntry2.id,
+                        dish2,
+                        emptyList(),
+                        dish2.price,
+                        ""
+                    )
+                ),
+                dish1.price + dish2.price + 200,
+                OrderEntryPaymentStatus.UNPAID
+            ),
+            ShowResponse.Companion.ParticipantsOrderEntry(
+                orderEntry2.id,
+                user2,
+                listOf(
+                    ShowResponse.Companion.ParticipantsDishEntry(
+                        dishEntry3.id,
+                        dish3,
+                        emptyList(),
+                        dish3.price,
+                        ""
+                    ),
+                    ShowResponse.Companion.ParticipantsDishEntry(
+                        dishEntry4.id,
+                        dish4,
+                        emptyList(),
+                        dish4.price,
+                        ""
+                    )
+                ),
+                dish3.price + dish4.price + 200,
+                OrderEntryPaymentStatus.UNPAID
+            )
+        ),
+        orderCreator.id,
+        allDishesInRestaurant,
+        allDishesInRestaurantByCategory,
+        dishIdToSideDishesMap
+    )
+
+
+    assertEquals(expected.order, actual.order)
+    assertEquals(expected.orderEntries, actual.orderEntries)
+    assertEquals(expected.currentUserId, actual.currentUserId)
+    assertEquals(expected.allDishesInRestaurant, actual.allDishesInRestaurant)
+    assertEquals(expected.allDishesByCategory, actual.allDishesByCategory)
+    assertEquals(expected.dishIdToSideDishesMap, actual.dishIdToSideDishesMap)
+    assertEquals(expected, actual)
+  }
+
+
   private fun objectId(): String = ObjectId.get().toHexString()
 
 
