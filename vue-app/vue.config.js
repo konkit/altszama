@@ -3,7 +3,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 module.exports = {
-
+    assetsDir: "static",
     configureWebpack: config => {
         return {
             resolve: {

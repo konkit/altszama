@@ -5,7 +5,7 @@ import EventBus from './EventBus'
 import GoogleLogin from './GoogleLogin.js'
 
 var currentDomain = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
-var backendUrl = process.env.BACKEND_URL || currentDomain;
+var backendUrl = process.env.VUE_APP_BACKEND_URL || currentDomain;
 
 var pushNotificationEnabled = false;
 

@@ -117,10 +117,10 @@ tasks {
     args = ["install"]
   }
 
-  task "vueRunBuild"(type: NodeTask) {
+  task "vueRunBuild"(type: NpmTask) {
     dependsOn(vueNpmInstall)
     setWorkingDir(file("vue-app/"))
-    setScript(file("vue-app/build/build.js"))
+    args = ["run", "build"]
   }
 
   task "copyVueToBuild"(type: Copy) {

@@ -1,9 +1,4 @@
-
-
-var googleConfig = {
-    client_id: process.env.googleClientId
-}
-var gapiUrl = 'https://apis.google.com/js/api:client.js'
+const gapiUrl = 'https://apis.google.com/js/api:client.js';
 
 export default {
   load: function () {
@@ -54,8 +49,14 @@ function installClient () {
 }
 
 function initClient () {
+  const googleConfig = {
+    client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID
+  };
+
   return new Promise(function (resolve, reject) {
     window.gapi.load('auth2', function () {
+      console.log("googleConfig: ", googleConfig);
+
       window.gapi.auth2.init(googleConfig)
       resolve()
     })

@@ -43,7 +43,7 @@
         <div class="row justify-content-center">
           <div class="col-md-6">
             <div>
-              <div v-for="error in errors" :key="error">
+              <div v-for="(error, i) in errors" :key="i">
                 <b-alert variant="danger" show dismissible>
                   <p>{{error}}</p>
                 </b-alert>
