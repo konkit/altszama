@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <template v-if="this.loadingEntry === false">
-      <errors-component ref="errorsComponent" />
+      <errors-component ref="errorsComponent"/>
 
       <div class="pull-right">
         <button type="button" class="btn btn-light" @click="cancelEdit()">
@@ -10,13 +10,14 @@
       </div>
 
       <div>
-        <order-entry-input />
+        <order-entry-input/>
 
-        <side-dishes-input />
-        
+        <side-dishes-input/>
+
         <div class="form-group">
           <h4>Additional Comments</h4>
-          <textarea class="form-control" name="additionalComments" id="additionalComments" v-model="editedOrderEntry.additionalComments"></textarea>
+          <textarea class="form-control" name="additionalComments" id="additionalComments"
+                    v-model="editedOrderEntry.additionalComments"></textarea>
         </div>
 
 
@@ -36,88 +37,92 @@
 </template>
 
 <script>
-import BackButton from '../../commons/backButton.vue'
-import ErrorsComponent from '../../commons/errors.vue'
-import Spinner from '../../commons/spinner.vue'
-import Price from '../../commons/priceElement.vue'
-import ApiConnector from '../../../ApiConnector.js'
+    import BackButton from '../../commons/backButton.vue'
+    import ErrorsComponent from '../../commons/errors.vue'
+    import Spinner from '../../commons/spinner.vue'
+    import Price from '../../commons/priceElement.vue'
+    import ApiConnector from '../../../ApiConnector.js'
 
-import OrderEntryInput from './OrderEntryInput.vue'
-import SideDishesInput from './SideDishesInput.vue'
+    import OrderEntryInput from './OrderEntryInput.vue'
+    import SideDishesInput from './SideDishesInput.vue'
 
-export default {
-  name: 'order-entry-edit-entry',
-  props: ['order', 'orderEntry', 'dishEntry'],
-  data () {
-    return { }
-  },
-  created() {
-    this.$store.commit('setEntryLoadingTrue')
-  },
-  mounted() {
-    var newEditedOrderEntry = {
-      id: this.dishEntry.id,
-      orderId: this.order.id,
-      dishId: this.dishEntry.dish.id,
-      additionalComments: this.dishEntry.additionalComments,
-      newDish: false,
-      newDishName: "",
-      newDishPrice: "",
-      chosenSideDishes: this.dishEntry.sideDishes || []
-    };
+    export default {
+        name: 'order-entry-edit-entry',
+        props: ['order', 'orderEntry', 'dishEntry'],
+        data() {
+            return {}
+        },
+        created() {
+            this.$store.commit('setEntryLoadingTrue')
+        },
+        mounted() {
+            var newEditedOrderEntry = {
+                id: this.dishEntry.id,
+                orderId: this.order.id,
+                dishId: this.dishEntry.dish.id,
+                additionalComments: this.dishEntry.additionalComments,
+                newDish: false,
+                newDishName: "",
+                newDishPrice: "",
+                chosenSideDishes: this.dishEntry.sideDishes || []
+            };
 
-    this.$store.commit('setEditedOrderEntry', newEditedOrderEntry);
-    this.$store.commit('setEntryLoadingFalse');
-  },
-  methods: {
-    submitForm: function(e) {
-      e.preventDefault();
-      
-      const action = "/order_entries/update";
+            this.$store.commit('setEditedOrderEntry', newEditedOrderEntry);
+            this.$store.commit('setEntryLoadingFalse');
+        },
+        methods: {
+            submitForm: function (e) {
+                e.preventDefault();
 
-      let errorsComponent = this.$refs.errorsComponent;
+                const action = "/order_entries/update";
 
-      let formData = {
-        id: this.orderEntry.id,
-        orderId: this.order.id,
-        dishEntryId: this.editedOrderEntry.id,
-        dishId: this.editedOrderEntry.dishId,
-        newDish: this.editedOrderEntry.newDish,
-        newDishName: this.editedOrderEntry.newDishName,
-        newDishPrice: Math.round(this.editedOrderEntry.newDishPrice * 100),
-        additionalComments: this.editedOrderEntry.additionalComments,
-        sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign({}, sd, { newSideDishPrice: Math.round(sd.newSideDishPrice * 100) }))
-      };
+                let errorsComponent = this.$refs.errorsComponent;
 
-      ApiConnector.makePost(action, formData)
-        .then(() => {
-          this.$emit("updateOrder");
-          this.$store.commit('cancelEntryCreateOrEdit', {})
-        })
-        .catch((error) => {
-          console.log("OrderEntryEditEntry error:", error);
-          error.body.messages.forEach(msg => errorsComponent.addError(msg));
-        });
+                let formData = {
+                    id: this.orderEntry.id,
+                    orderId: this.order.id,
+                    dishEntryId: this.editedOrderEntry.id,
+                    dishId: this.editedOrderEntry.dishId,
+                    newDish: this.editedOrderEntry.newDish,
+                    newDishName: this.editedOrderEntry.newDishName,
+                    newDishPrice: Math.round(this.editedOrderEntry.newDishPrice * 100),
+                    additionalComments: this.editedOrderEntry.additionalComments,
+                    sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign({}, sd, {newSideDishPrice: Math.round(sd.newSideDishPrice * 100)}))
+                };
 
-      return false;
-    },
-    cancelEdit: function() {
-      this.$store.commit('cancelEntryCreateOrEdit', {})
-    },
-  },
-  computed: {
-    loadingEntry () { return this.$store.state.loadingEntry; },
-    editedOrderEntry () { return this.$store.state.editedOrderEntry; }
-  },
-  components: {
-    BackButton,
-    ErrorsComponent,
-    Price,
-    Spinner,
-    OrderEntryInput,
-    SideDishesInput
-  }
-}
+                ApiConnector.makePost(action, formData)
+                    .then(() => {
+                        this.$emit("updateOrder");
+                        this.$store.commit('cancelEntryCreateOrEdit', {})
+                    })
+                    .catch((error) => {
+                        console.log("OrderEntryEditEntry error:", error);
+                        error.body.messages.forEach(msg => errorsComponent.addError(msg));
+                    });
+
+                return false;
+            },
+            cancelEdit: function () {
+                this.$store.commit('cancelEntryCreateOrEdit', {})
+            },
+        },
+        computed: {
+            loadingEntry() {
+                return this.$store.state.loadingEntry;
+            },
+            editedOrderEntry() {
+                return this.$store.state.editedOrderEntry;
+            }
+        },
+        components: {
+            BackButton,
+            ErrorsComponent,
+            Price,
+            Spinner,
+            OrderEntryInput,
+            SideDishesInput
+        }
+    }
 
 </script>
 

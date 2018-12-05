@@ -45,7 +45,6 @@
 
     import ApiConnector from '../../../ApiConnector.js'
 
-
     export default {
         name: 'order-entry-create-entry',
         props: ['order'],

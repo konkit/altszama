@@ -21,15 +21,19 @@
         <dd>{{ this.order.decreaseInPercent }} %</dd>
 
         <dt>Delivery cost (total)</dt>
-        <dd><price :data-price="this.order.deliveryCostPerEverybody" /></dd>
+        <dd>
+          <price :data-price="this.order.deliveryCostPerEverybody"/>
+        </dd>
 
         <dt>Delivery cost (per dish)</dt>
-        <dd><price :data-price="this.order.deliveryCostPerDish" /></dd>
+        <dd>
+          <price :data-price="this.order.deliveryCostPerDish"/>
+        </dd>
       </div>
 
       <div class="col-4">
         <h3>Payment</h3>
-        
+
         <p v-if="this.order.paymentByCash == true">
           <b class="allowed">
             Payment by cash
@@ -74,7 +78,7 @@
     <div class="row justify-content-center">
       <div class="col">
         <p>
-          <b>Total order amount:</b>&nbsp;<price :data-price="this.totalOrderPrice" />
+          <b>Total order amount:</b>&nbsp;<price :data-price="this.totalOrderPrice"/>
         </p>
       </div>
     </div>
@@ -82,26 +86,26 @@
 </template>
 
 <script>
-import Price from '../../commons/priceElement.vue'
+    import Price from '../../commons/priceElement.vue'
 
-export default {
-  props: ['order', 'totalOrderPrice'],
-  methods: {
-    timeOfDeliveryOrNA: function() {
-      if (this.order.timeOfDelivery != null) {
-        return this.order.timeOfDelivery
-      } else {
-        return "As ASAP as possible"
-      }
-    },
-    isNotOrderedYet: function() {
-      return this.order.orderState === 'CREATED';
-    },
-  },
-  components: {
-    Price,
-  }
-}
+    export default {
+        props: ['order', 'totalOrderPrice'],
+        methods: {
+            timeOfDeliveryOrNA: function () {
+                if (this.order.timeOfDelivery != null) {
+                    return this.order.timeOfDelivery
+                } else {
+                    return "As ASAP as possible"
+                }
+            },
+            isNotOrderedYet: function () {
+                return this.order.orderState === 'CREATED';
+            },
+        },
+        components: {
+            Price,
+        }
+    }
 </script>
 
 <style scoped>

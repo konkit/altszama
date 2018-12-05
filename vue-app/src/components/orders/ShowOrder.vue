@@ -115,8 +115,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
 import BackButton from '../commons/backButton.vue'
 import Price from '../commons/priceElement.vue'
 import Spinner from '../commons/spinner.vue'
@@ -134,11 +132,6 @@ export default {
   data () {
     return {
       orderId: this.$route.params.id,
-
-      // isEntryCreating: false,
-      // isEntryEdited: false,
-      // orderEntryId: "",
-      // dishEntryId: "",
     }
   },
   created() {
@@ -232,7 +225,7 @@ export default {
 }
 
 function convertToMapEntries(dishesMap) {
-  var result = []
+  var result = [];
   
   for (const key of Object.keys(dishesMap)) {
     result.push({"category": key, "dishes": dishesMap[key]})
@@ -251,34 +244,7 @@ function convertToMapEntries(dishesMap) {
     margin-top: 2rem;
   }
 
-  .price-column {
-    min-width: 94px;
-  }
-
   .names-person {
     width: 250px;
-  }
-
-  .actions-column {
-    width: 108px;
-  }
-
-  p.dish-name {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  p.side-dish-name {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 10pt;
-    color: #555555;
-  }
-
-  p.dish-comments {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 10pt;
-    color: #444444;
   }
 </style>
