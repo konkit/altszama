@@ -33,24 +33,10 @@ data class OrderViewResponse(
 
     fun create(order: Order, entries: List<OrderEntry>): OrderViewResponse {
       val groupedUserEntries = createGroupedUserEntries(entries)
-      val basePriceSum = getBasePrice(entries)
-      val orderTotalPrice = getTotalPrice(basePriceSum, order, entries)
+      val basePriceSum = Order.getBasePrice(entries)
+      val orderTotalPrice = Order.getTotalPrice(order, entries)
 
       return OrderViewResponse(order, groupedUserEntries, entries.size, basePriceSum, orderTotalPrice)
-    }
-
-    private fun getBasePrice(entries: List<OrderEntry>): Int {
-      return entries
-          .map { it.dishEntries.sumBy(DishEntry::priceWithSidedishes) }
-          .sum()
-    }
-
-    private fun getTotalPrice(basePriceSum: Int, order: Order, entries: List<OrderEntry>): Int {
-      val decrease = (basePriceSum * order.decreaseInPercent / 100.0).toInt()
-      val deliveryCostPerDishes = entries.flatMap { it.dishEntries }.size * order.deliveryCostPerDish
-      val priceModifiers = -decrease + order.deliveryCostPerEverybody + deliveryCostPerDishes
-
-      return basePriceSum + priceModifiers
     }
 
     private fun createGroupedUserEntries(entries: List<OrderEntry>): List<GroupedOrderEntry> {

@@ -16,7 +16,7 @@
         
         <div class="form-group">
           <h4>Additional Comments</h4>
-          <textarea class="form-control" name="additionalComments" value="" id="additionalComments" v-model="editedOrderEntry.additionalComments" />
+          <textarea class="form-control" name="additionalComments" id="additionalComments" v-model="editedOrderEntry.additionalComments"></textarea>
         </div>
 
 
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import BackButton from '../../commons/backButton.vue'
 import ErrorsComponent from '../../commons/errors.vue'
 import Spinner from '../../commons/spinner.vue'
@@ -65,10 +64,10 @@ export default {
       newDishName: "",
       newDishPrice: "",
       chosenSideDishes: this.dishEntry.sideDishes || []
-    }
+    };
 
-    this.$store.commit('setEditedOrderEntry', newEditedOrderEntry)
-    this.$store.commit('setEntryLoadingFalse')
+    this.$store.commit('setEditedOrderEntry', newEditedOrderEntry);
+    this.$store.commit('setEntryLoadingFalse');
   },
   methods: {
     submitForm: function(e) {
@@ -91,8 +90,8 @@ export default {
       };
 
       ApiConnector.makePost(action, formData)
-        .then((response) => {
-          this.$emit("updateOrder")
+        .then(() => {
+          this.$emit("updateOrder");
           this.$store.commit('cancelEntryCreateOrEdit', {})
         })
         .catch((error) => {
@@ -120,30 +119,9 @@ export default {
   }
 }
 
-function convertToMapEntries(dishesMap) {
-  var result = []
-  
-  for (const key of Object.keys(dishesMap)) {
-    result.push({"category": key, "dishes": dishesMap[key]})
-  }
-
-  return result;
-}
 </script>
 
 <style scoped>
-  .container {
-    max-width: 900px;
-  }
-
-  .row {
-    margin-top: 2rem;
-  }
-
-  .existing-dish-dropdown {
-    max-width: 500px;
-  }
-
   .wrapper {
     margin-bottom: 30px;
   }

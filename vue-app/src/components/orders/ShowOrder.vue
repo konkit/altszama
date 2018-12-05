@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <order-stats :order="order"></order-stats>
+      <order-stats :order="order" :total-order-price="totalOrderPrice"></order-stats>
 
       <div class="container">
         <div class="row justify-content-center">
@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     fetchOrder: function() {
-      this.$store.commit('setLoadingTrue')
+      this.$store.commit('setLoadingTrue');
       ApiConnector.makeGet("/orders/" + this.orderId + "/show.json")
         .then(response => {
           var showOrderData = {
@@ -158,9 +158,10 @@ export default {
             currentUserId: response.data.currentUserId,
             allDishesInRestaurant: response.data.allDishesInRestaurant,
             allDishesByCategory: convertToMapEntries(response.data.allDishesByCategory),
-            dishIdToSideDishesMap: response.data.dishIdToSideDishesMap
-          }
-          this.$store.commit('loadShowOrderData', showOrderData)
+            dishIdToSideDishesMap: response.data.dishIdToSideDishesMap,
+            totalOrderPrice: response.data.totalOrderPrice
+          };
+          this.$store.commit('loadShowOrderData', showOrderData);
 
           this.$store.commit('setLoadingFalse')
         })
@@ -215,7 +216,8 @@ export default {
     isEntryCreating () { return this.$store.state.isEntryCreating; },
     isEntryEdited () { return this.$store.state.isEntryEdited; },
     orderEntryId () { return this.$store.state.orderEntryId; },
-    dishEntryId () { return this.$store.state.dishEntryId; }
+    dishEntryId () { return this.$store.state.dishEntryId; },
+    totalOrderPrice () { return this.$store.state.totalOrderPrice; }
   },
   components: {
     BackButton,

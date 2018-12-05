@@ -14,7 +14,8 @@ data class ShowResponse(
     val currentUserId: String,
     var allDishesInRestaurant: List<Dish>,
     var allDishesByCategory: Map<String, List<Dish>>,
-    var dishIdToSideDishesMap: Map<String, List<SideDish>>
+    var dishIdToSideDishesMap: Map<String, List<SideDish>>,
+    var totalOrderPrice: Int
 ) {
 
   companion object {
@@ -53,13 +54,16 @@ data class ShowResponse(
           .map { x -> x.key to x.value.sortedBy { dish -> dish.name }}
           .toMap()
 
+      val totalOrderPrice = Order.getTotalPrice(order, entries)
+
       return ShowResponse(
           order,
           participantsUserEntries,
           currentUserId,
           allDishesInRestaurant,
           allDishesInRestaurantByCategory,
-          dishIdToSideDishesMap
+          dishIdToSideDishesMap,
+          totalOrderPrice
       )
     }
 

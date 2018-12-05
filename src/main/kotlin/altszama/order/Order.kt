@@ -2,6 +2,8 @@ package altszama.order
 
 import altszama.restaurant.Restaurant
 import altszama.auth.User
+import altszama.orderEntry.DishEntry
+import altszama.orderEntry.OrderEntry
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.DBRef
@@ -40,4 +42,22 @@ data class Order(
     var paymentByBankTransfer: Boolean = true,
 
     var bankTransferNumber: String = ""
-)
+) {
+    companion object {
+        fun getBasePrice(entries: List<OrderEntry>): Int {
+            return entries
+                .map { it.dishEntries.sumBy(DishEntry::priceWithSidedishes) }
+                .sum()
+        }
+
+        fun getTotalPrice(order: Order, entries: List<OrderEntry>): Int {
+            val basePriceSum = getBasePrice(entries)
+
+            val decrease = (basePriceSum * order.decreaseInPercent / 100.0).toInt()
+            val deliveryCostPerDishes = entries.flatMap { it.dishEntries }.size * order.deliveryCostPerDish
+            val priceModifiers = -decrease + order.deliveryCostPerEverybody + deliveryCostPerDishes
+
+            return basePriceSum + priceModifiers
+        }
+    }
+}

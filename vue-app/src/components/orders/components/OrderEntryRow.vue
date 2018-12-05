@@ -99,26 +99,6 @@ export default {
 </script>
 
 <style scoped>
-  .container {
-    max-width: 1000px;
-  }
-
-  .row {
-    margin-top: 2rem;
-  }
-
-  .price-column {
-    min-width: 94px;
-  }
-
-  .names-person {
-    width: 250px;
-  }
-
-  .actions-column {
-    width: 108px;
-  }
-
   p.dish-name {
     margin-top: 0;
     margin-bottom: 0;

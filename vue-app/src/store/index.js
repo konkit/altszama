@@ -17,6 +17,7 @@ export default new Vuex.Store({
     allDishesInRestaurant: [],
     allDishesByCategory: [],
     dishIdToSideDishesMap: [],
+    totalOrderPrice: 0,
 
     isEntryCreating: false,
     isEntryEdited: false,
@@ -62,6 +63,7 @@ export default new Vuex.Store({
       state.allDishesInRestaurant = payload.allDishesInRestaurant;
       state.allDishesByCategory = payload.allDishesByCategory;
       state.dishIdToSideDishesMap  = payload.dishIdToSideDishesMap;
+      state.totalOrderPrice  = payload.totalOrderPrice;
     },
 
     setEntryCreating (state, payload) {
