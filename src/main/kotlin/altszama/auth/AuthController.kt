@@ -90,12 +90,6 @@ class AuthController {
     }
   }
 
-  private fun createNewUser(userinfo: Userinfoplus): User {
-    val newUser = User(userinfo.name, "somePlaceholderPassword", userinfo.email)
-    userRepository.save(newUser)
-    return newUser
-  }
-
   companion object {
     private val logger = LoggerFactory.getLogger(AuthController::class.java)
 

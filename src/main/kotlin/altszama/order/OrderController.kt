@@ -1,18 +1,15 @@
 package altszama.order
 
-import altszama.auth.AuthService
-import altszama.dish.DishService
 import altszama.order.dto.*
-import altszama.orderEntry.OrderEntryRepository
-import altszama.orderEntry.OrderEntryService
 import altszama.restaurant.RestaurantRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
-
 
 @RestController
 class OrderController {
@@ -21,66 +18,32 @@ class OrderController {
   private lateinit var orderService: OrderService
 
   @Autowired
-  private lateinit var orderRepository: OrderRepository
-
-  @Autowired
-  private lateinit var orderEntryRepository: OrderEntryRepository
-
-  @Autowired
-  private lateinit var orderEntryService: OrderEntryService
-
-  @Autowired
-  private lateinit var restaurantRepository: RestaurantRepository
-
-  @Autowired
-  private lateinit var dishService: DishService
-
-  @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var orderControllerService: OrderControllerService
 
 
   @RequestMapping("/orders.json")
   fun index(): IndexResponse {
-    val currentUser = authService.currentUser()
-
-    val todaysOrders = orderRepository.findByOrderDate(LocalDate.now())
-    val usersOrderEntries = orderEntryRepository.findByUser(currentUser)
-
-    return IndexResponse.create(todaysOrders, usersOrderEntries)
+    return orderControllerService.getIndexData()
   }
 
   @RequestMapping("/orders/all.json")
   fun allOrders(): AllOrdersResponse {
-    return AllOrdersResponse(orderRepository.findAll())
+    return orderControllerService.getAllOrdersData()
   }
 
   @RequestMapping("/orders/{orderId}/show.json")
   fun show(@PathVariable orderId: String): ShowResponse {
-    val currentUserId = authService.currentUser().id
-
-    val order = orderRepository.findById(orderId).get()
-    val entries = orderEntryRepository.findByOrderId(orderId)
-
-    val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
-
-    val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
-
-    return ShowResponse.create(order, entries, currentUserId, allDishesInRestaurant, dishIdToSideDishesMap)
+    return orderControllerService.getShowData(orderId)
   }
 
   @RequestMapping("/orders/{orderId}/order_view.json")
   fun orderViewJson(@PathVariable orderId: String): OrderViewResponse {
-    orderService.setAsOrdering(orderId)
-
-    val order = orderRepository.findById(orderId).get()
-    val entries = orderEntryRepository.findByOrderId(orderId)
-
-    return OrderViewResponse.create(order, entries)
+    return orderControllerService.getOrderViewData(orderId)
   }
 
   @RequestMapping("/orders/create.json")
   fun create(): CreateResponse {
-    return CreateResponse(restaurantRepository.findAll())
+    return orderControllerService.getCreateData()
   }
 
   @RequestMapping("/orders/save")
@@ -91,7 +54,7 @@ class OrderController {
 
   @RequestMapping("/orders/{orderId}/edit.json")
   fun edit(@PathVariable orderId: String): EditResponse {
-    return EditResponse(orderRepository.findById(orderId).get(), restaurantRepository.findAll())
+    return orderControllerService.getEditData(orderId)
   }
 
   @RequestMapping("/orders/update")

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse
 
 class TokenAuthFilter : OncePerRequestFilter() {
 
-  private val AuthHeader = "Authorization"
+  private val authHeader = "Authorization"
 
   @Autowired
   private lateinit var authService: AuthService
@@ -40,7 +40,7 @@ class TokenAuthFilter : OncePerRequestFilter() {
   }
 
   private fun getToken(request: HttpServletRequest): String? {
-    val authHeader: String? = request.getHeader(AuthHeader)
+    val authHeader: String? = request.getHeader(authHeader)
 
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
       return authHeader.substring(7)

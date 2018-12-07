@@ -1,7 +1,5 @@
 package altszama.restaurant
 
-import altszama.dish.Dish;
-import altszama.dish.DishService
 import altszama.restaurant.dto.EditResponse
 import altszama.restaurant.dto.IndexResponse
 import altszama.restaurant.dto.ShowResponse
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
-
 @RestController
 class RestaurantController {
 
@@ -22,22 +19,17 @@ class RestaurantController {
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
-  private lateinit var dishService: DishService
+  private lateinit var restaurantControllerService: RestaurantControllerService
 
 
   @RequestMapping("/restaurants.json")
   fun index(): IndexResponse {
-    val restaurants: List<Restaurant> = restaurantService.findAll()
-    return IndexResponse(restaurants)
+    return restaurantControllerService.getIndexData()
   }
 
   @RequestMapping("/restaurants/{restaurantId}/show.json")
   fun show(@PathVariable restaurantId: String): ShowResponse {
-    val restaurant = restaurantService.findById(restaurantId).get()
-    val dishes = dishService.findByRestaurantId(restaurant.id)
-    val dishesByCategory: Map<String, List<Dish>> = dishes.groupBy { dish -> dish.category }
-
-    return ShowResponse(restaurant, dishes, dishesByCategory)
+    return restaurantControllerService.getShowData(restaurantId)
   }
 
   @RequestMapping("/restaurants/save")
@@ -48,15 +40,7 @@ class RestaurantController {
 
   @RequestMapping("/restaurants/{restaurantId}/edit.json")
   fun editRestaurantJson(@PathVariable restaurantId: String): EditResponse {
-    val restaurant = restaurantService.findById(restaurantId).get()
-
-    return EditResponse(
-      restaurant.id,
-      restaurant.name,
-      restaurant.address,
-      restaurant.telephone,
-      restaurant.url
-    )
+    return restaurantControllerService.getEditRestaurantData(restaurantId)
   }
 
   @RequestMapping("/restaurants/update")

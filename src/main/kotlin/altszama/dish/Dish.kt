@@ -4,6 +4,7 @@ import altszama.restaurant.Restaurant
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.DBRef
+import java.time.Instant
 import javax.validation.constraints.NotNull
 
 
@@ -23,5 +24,7 @@ data class Dish(
 
   var sideDishes: List<SideDish> = emptyList(),
 
-  var category: String = ""
+  var category: String = "",
+
+  var lastCrawled: Instant? = null
 )

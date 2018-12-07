@@ -1,6 +1,7 @@
 package altszama.dish
 
 import altszama.orderEntry.OrderEntryRepository
+import altszama.restaurant.RestaurantService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -16,12 +17,20 @@ class DishService {
   @Autowired
   private lateinit var orderEntryRepository: OrderEntryRepository
 
+  @Autowired
+  private lateinit var restaurantService: RestaurantService
 
-  fun insert(dish: Dish): Dish {
+  fun insert(restaurantId: String, dish: Dish): Dish {
+    val restaurant = restaurantService.findById(restaurantId).get()
+    dish.restaurant = restaurant
+
     return dishRepository.insert(dish)
   }
 
-  fun save(dish: Dish): Dish? {
+  fun save(restaurantId: String, dish: Dish): Dish? {
+    val restaurant = restaurantService.findById(restaurantId).get()
+    dish.restaurant = restaurant
+
     return dishRepository.save(dish)
   }
 
