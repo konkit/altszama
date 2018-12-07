@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Service
-class DishControllerService {
+class DishControllerDataService {
 
   @Autowired
   private lateinit var dishService: DishService

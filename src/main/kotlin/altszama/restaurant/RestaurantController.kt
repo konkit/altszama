@@ -19,17 +19,17 @@ class RestaurantController {
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
-  private lateinit var restaurantControllerService: RestaurantControllerService
+  private lateinit var restaurantControllerDataService: RestaurantControllerDataService
 
 
   @RequestMapping("/restaurants.json")
   fun index(): IndexResponse {
-    return restaurantControllerService.getIndexData()
+    return restaurantControllerDataService.getIndexData()
   }
 
   @RequestMapping("/restaurants/{restaurantId}/show.json")
   fun show(@PathVariable restaurantId: String): ShowResponse {
-    return restaurantControllerService.getShowData(restaurantId)
+    return restaurantControllerDataService.getShowData(restaurantId)
   }
 
   @RequestMapping("/restaurants/save")
@@ -40,7 +40,7 @@ class RestaurantController {
 
   @RequestMapping("/restaurants/{restaurantId}/edit.json")
   fun editRestaurantJson(@PathVariable restaurantId: String): EditResponse {
-    return restaurantControllerService.getEditRestaurantData(restaurantId)
+    return restaurantControllerDataService.getEditRestaurantData(restaurantId)
   }
 
   @RequestMapping("/restaurants/update")

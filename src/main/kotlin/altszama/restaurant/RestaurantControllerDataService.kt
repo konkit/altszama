@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class RestaurantControllerService {
+class RestaurantControllerDataService {
 
   @Autowired
   private lateinit var restaurantService: RestaurantService

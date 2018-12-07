@@ -7,15 +7,12 @@ import altszama.orderEntry.OrderEntryRepository
 import altszama.orderEntry.OrderEntryService
 import altszama.restaurant.RestaurantRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
 import java.time.LocalDate
-import javax.validation.Valid
 
 @Service
-class OrderControllerService {
+class OrderControllerDataService {
 
   @Autowired
   private lateinit var orderService: OrderService

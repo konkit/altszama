@@ -15,7 +15,7 @@ import javax.validation.Valid
 class DishController {
 
   @Autowired
-  private lateinit var dishControllerService: DishControllerService
+  private lateinit var dishControllerDataService: DishControllerDataService
 
   @Autowired
   private lateinit var dishService: DishService
@@ -23,7 +23,7 @@ class DishController {
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/create.json")
   fun create(@PathVariable restaurantId: String): CreateResponse {
-    return dishControllerService.getCreateData(restaurantId)
+    return dishControllerDataService.getCreateData(restaurantId)
   }
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/save")
@@ -34,7 +34,7 @@ class DishController {
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/{dishId}/edit.json")
   fun edit(@PathVariable restaurantId: String, @PathVariable dishId: String): EditResponse {
-    return dishControllerService.getEditData(restaurantId, dishId)
+    return dishControllerDataService.getEditData(restaurantId, dishId)
   }
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/update")

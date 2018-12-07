@@ -1,7 +1,6 @@
 package altszama.order
 
 import altszama.order.dto.*
-import altszama.restaurant.RestaurantRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,32 +17,32 @@ class OrderController {
   private lateinit var orderService: OrderService
 
   @Autowired
-  private lateinit var orderControllerService: OrderControllerService
+  private lateinit var orderControllerDataService: OrderControllerDataService
 
 
   @RequestMapping("/orders.json")
   fun index(): IndexResponse {
-    return orderControllerService.getIndexData()
+    return orderControllerDataService.getIndexData()
   }
 
   @RequestMapping("/orders/all.json")
   fun allOrders(): AllOrdersResponse {
-    return orderControllerService.getAllOrdersData()
+    return orderControllerDataService.getAllOrdersData()
   }
 
   @RequestMapping("/orders/{orderId}/show.json")
   fun show(@PathVariable orderId: String): ShowResponse {
-    return orderControllerService.getShowData(orderId)
+    return orderControllerDataService.getShowData(orderId)
   }
 
   @RequestMapping("/orders/{orderId}/order_view.json")
   fun orderViewJson(@PathVariable orderId: String): OrderViewResponse {
-    return orderControllerService.getOrderViewData(orderId)
+    return orderControllerDataService.getOrderViewData(orderId)
   }
 
   @RequestMapping("/orders/create.json")
   fun create(): CreateResponse {
-    return orderControllerService.getCreateData()
+    return orderControllerDataService.getCreateData()
   }
 
   @RequestMapping("/orders/save")
@@ -54,7 +53,7 @@ class OrderController {
 
   @RequestMapping("/orders/{orderId}/edit.json")
   fun edit(@PathVariable orderId: String): EditResponse {
-    return orderControllerService.getEditData(orderId)
+    return orderControllerDataService.getEditData(orderId)
   }
 
   @RequestMapping("/orders/update")
