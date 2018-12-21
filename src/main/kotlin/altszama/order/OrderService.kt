@@ -12,6 +12,7 @@ import altszama.validation.ValidationFailedException
 import org.funktionale.tries.Try
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -188,6 +189,18 @@ class OrderService {
 
     orderEntryRepository.deleteByOrderId(orderId)
     orderRepository.deleteById(orderId)
+  }
+
+  fun closePastOrders() {
+    val orderStateTreatedAsClosed = listOf(OrderState.ORDERED, OrderState.REJECTED)
+    val today = LocalDate.now()
+
+    val orders = orderRepository.findByOrderStateNotInAndOrderDateBefore(orderStateTreatedAsClosed, today)
+
+    orders.forEach { order: Order ->
+      order.orderState = OrderState.ORDERED
+      orderRepository.save(order)
+    }
   }
 
   private fun currentLocalTime(): LocalTime {

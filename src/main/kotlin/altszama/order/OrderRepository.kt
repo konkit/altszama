@@ -7,4 +7,6 @@ interface OrderRepository : MongoRepository<Order, String> {
   fun findByOrderDate(orderDate: LocalDate): List<Order>
 
   fun findByRestaurantId(restaurantId: String): List<Order>
+
+  fun findByOrderStateNotInAndOrderDateBefore(states: List<OrderState>, beforeDate: LocalDate): List<Order>
 }
