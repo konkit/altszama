@@ -58,9 +58,9 @@
 
 <script>
 import Vue from 'vue'
-import ApiConnector from '../ApiConnector'
+import ApiConnector from '../lib/ApiConnector'
 import router from '../router'
-import GoogleLogin from '../GoogleLogin.js'
+import GoogleLogin from '../lib/GoogleLogin.js'
 
 export default {
   data () {

@@ -54,15 +54,15 @@
 <script>
 import Vue from 'vue'
 
-import Spinner from '../commons/spinner'
-import ErrorsComponent from '../commons/errors'
-import BackButton from '../commons/backButton'
-import Price from '../commons/priceElement'
-import router from '../../router'
+import Spinner from '../components/commons/spinner'
+import ErrorsComponent from '../components/commons/errors'
+import BackButton from '../components/commons/backButton'
+import Price from '../components/commons/priceElement'
+import router from '../router'
 
 import ShowRestaurantDishesTable from './ShowRestaurantDishesTable'
 
-import ApiConnector from '../../ApiConnector.js'
+import ApiConnector from '../lib/ApiConnector.js'
 
 export default {
   name: 'show-restaurant',

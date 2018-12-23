@@ -62,11 +62,11 @@
 <script>
 import Vue from 'vue'
 
-import BackButton from '../commons/backButton'
-import ErrorsComponent from '../commons/errors'
-import Spinner from '../commons/spinner'
+import BackButton from '../components/commons/backButton'
+import ErrorsComponent from '../components/commons/errors'
+import Spinner from '../components/commons/spinner'
 
-import ApiConnector from '../../ApiConnector.js'
+import ApiConnector from '../lib/ApiConnector.js'
 
 export default {
   data () {

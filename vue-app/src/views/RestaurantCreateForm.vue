@@ -52,10 +52,10 @@
 <script>
 import Vue from 'vue'
 
-import BackButton from '../commons/backButton'
-import ErrorsComponent from '../commons/errors'
+import BackButton from '../components/commons/backButton'
+import ErrorsComponent from '../components/commons/errors'
 
-import ApiConnector from '../../ApiConnector.js'
+import ApiConnector from '../lib/ApiConnector.js'
 
 export default {
   props: ['restaurantName'],

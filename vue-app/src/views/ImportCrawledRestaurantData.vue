@@ -33,9 +33,9 @@
 </template>
 
 <script>
-import ApiConnector from '../../ApiConnector.js'
+import ApiConnector from '../lib/ApiConnector.js'
 import FileUpload from 'vue-simple-upload/dist/FileUpload'
-import BackButton from '../commons/backButton'
+import BackButton from '../components/commons/backButton'
 
 export default {
   data () {

@@ -1,7 +1,6 @@
 import Vue from 'vue'
-import store from './store'
-import router from './router'
-import EventBus from './EventBus'
+import store from '../store'
+import router from '../router'
 import GoogleLogin from './GoogleLogin.js'
 
 var currentDomain = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');

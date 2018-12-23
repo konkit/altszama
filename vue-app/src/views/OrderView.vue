@@ -177,15 +177,15 @@
 </template>
 
 <script>
-    import BackButton from '../commons/backButton.vue'
-    import ErrorsComponent from '../commons/errors.vue'
+    import BackButton from '../components/commons/backButton.vue'
+    import ErrorsComponent from '../components/commons/errors.vue'
     import MaskedInput from 'vue-text-mask'
-    import Price from '../commons/priceElement.vue'
+    import Price from '../components/commons/priceElement.vue'
 
-    import Spinner from '../commons/spinner.vue'
-    import Navigation from '../Navigation.vue'
+    import Spinner from '../components/commons/spinner.vue'
+    import Navigation from '../components/Navigation.vue'
 
-    import ApiConnector from '../../ApiConnector.js'
+    import ApiConnector from '../lib/ApiConnector.js'
 
     export default {
         data() {

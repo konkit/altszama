@@ -38,9 +38,9 @@
 <script>
 import Vue from 'vue'
 
-import Price from '../commons/priceElement'
+import Price from '../components/commons/priceElement'
 
-import ApiConnector from '../../ApiConnector.js'
+import ApiConnector from '../lib/ApiConnector.js'
 
 export default {
   name: "show-restaurant-dishes-table",

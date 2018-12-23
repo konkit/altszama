@@ -38,7 +38,7 @@ module.exports = {
                 new CopyWebpackPlugin([
                     {
                         // copy custom service worker
-                        from: './src/custom-service-worker.js',
+                        from: './src/lib/custom-service-worker.js',
                         to: './[name].js'
                     }
                 ])

@@ -115,17 +115,17 @@
 </template>
 
 <script>
-import BackButton from '../commons/backButton.vue'
-import Price from '../commons/priceElement.vue'
-import Spinner from '../commons/spinner.vue'
+import BackButton from '../components/commons/backButton.vue'
+import Price from '../components/commons/priceElement.vue'
+import Spinner from '../components/commons/spinner.vue'
 
-import OrderStateButtons from './components/OrderStateButtons.vue'
-import OrderEntryCreateEntry from './components/OrderEntryCreateEntry.vue'
-import OrderEntryEditEntry from './components/OrderEntryEditEntry.vue'
-import OrderEntryRow from './components/OrderEntryRow.vue'
-import OrderStats from './components/OrderStats.vue'
+import OrderStateButtons from '../components/orders/OrderStateButtons.vue'
+import OrderEntryCreateEntry from '../components/orders/OrderEntryCreateEntry.vue'
+import OrderEntryEditEntry from '../components/orders/OrderEntryEditEntry.vue'
+import OrderEntryRow from '../components/orders/OrderEntryRow.vue'
+import OrderStats from '../components/orders/OrderStats.vue'
 
-import ApiConnector from '../../ApiConnector.js'
+import ApiConnector from '../lib/ApiConnector.js'
 
 
 export default {

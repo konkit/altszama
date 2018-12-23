@@ -14,8 +14,7 @@
 </template>
 
 <script>
-
-import ApiConnector from './ApiConnector.js'
+import Router from 'vue-router'
 import Navigation from './components/Navigation.vue'
 
 export default {
@@ -24,7 +23,8 @@ export default {
     
   },
   components: {
-    Navigation
+    Navigation,
+    Router
   }
 }
 </script>

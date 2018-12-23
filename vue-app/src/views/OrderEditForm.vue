@@ -4,27 +4,27 @@
       <spinner></spinner>
     </div>
 
-    <div v-if="this.loading === false && this.restaurantsList.length === 0" >
-      <p>There are no restaurants, please create one first</p>
-    </div>
-
-    <div v-if="this.loading === false && this.restaurantsList.length > 0" >
+    <div v-if="this.loading === false">
       <div class="container">
-        <back-button href="#/orders"></back-button>
+        <div class="row justify-content-center">
+          <div class="col">
+            <back-button :href="'#/orders/show/' + orderId"></back-button>
+          </div>
+        </div>
 
         <div class="row justify-content-center">
           <div class="col">
-            <h1>Create new order</h1>
+            <h1>Edit order</h1>
           </div>
         </div>
 
         <errors-component ref="errorsComponent" />
 
-        <order-form :order="order" :restaurantsList="restaurantsList" @orderUpdate="order => { this.order = order }" />
+        <order-form :order="order" :restaurantsList="restaurantsList" />
 
         <div class="row justify-content-center">
           <div class="col">
-            <button class="btn btn-block btn-success" v-on:click="submitForm">Create</button>
+            <button class="btn btn-block btn-success" v-on:click="submitForm">Update</button>
           </div>
         </div>
       </div>
@@ -35,48 +35,48 @@
 <script>
 import Vue from 'vue'
 
-import BackButton from '../commons/backButton.vue'
-import ErrorsComponent from '../commons/errors.vue'
+import BackButton from '../components/commons/backButton.vue'
+import ErrorsComponent from '../components/commons/errors.vue'
 import MaskedInput from 'vue-text-mask'
-import OrderForm from './components/OrderForm.vue'
-
-import Spinner from '../commons/spinner.vue'
-import ApiConnector from '../../ApiConnector.js'
+import Spinner from '../components/commons/spinner.vue'
+import ApiConnector from '../lib/ApiConnector.js'
+import OrderForm from '../components/orders/OrderForm.vue'
 
 export default {
-  name: 'order-create-form',
+  name: 'order-edit-form',
   data () {
     return {
+      orderId: this.$route.params.id,
+
       order: {},
-      restaurantsList: []
+      restaurantsList: [],
     }
   },
   created() {
     this.$store.commit('setLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/orders/create.json")
+    ApiConnector.makeGet("/orders/" + this.orderId + "/edit.json")
       .then(response => {
         this.restaurantsList = response.data.restaurantsList;
 
         var restaurantId;
-        if( response.data.restaurant != null) {
-          restaurantId = response.data.restaurant.id
+        if( response.data.order.restaurant != null) {
+          restaurantId = response.data.order.restaurant.id
         } else {
           restaurantId = response.data.restaurantsList[0].id;
         }
 
         this.order = {
           restaurantId: restaurantId,
-          orderDate: response.data.orderDate,
-          timeOfOrder: response.data.timeOfOrder,
-
-          decreaseInPercent: 0,
-          deliveryCostPerEverybody: 0,
-          deliveryCostPerDish: 0,
-          paymentByCash: true,
-          paymentByBankTransfer: false,
-          bankTransferNumber: ''
+          orderDate: response.data.order.orderDate,
+          timeOfOrder: response.data.order.timeOfOrder,
+          decreaseInPercent: response.data.order.decreaseInPercent,
+          deliveryCostPerEverybody: response.data.order.deliveryCostPerEverybody / 100,
+          deliveryCostPerDish: response.data.order.deliveryCostPerDish / 100,
+          paymentByCash: response.data.order.paymentByCash,
+          paymentByBankTransfer: response.data.order.paymentByBankTransfer,
+          bankTransferNumber: response.data.order.bankTransferNumber
         }
 
         this.$store.commit('setLoadingFalse')
@@ -88,6 +88,7 @@ export default {
       e.preventDefault();
 
       let formData = {
+        orderId: this.orderId,
         restaurantId: this.order.restaurantId,
         orderDate: this.order.orderDate,
         timeOfOrder: this.order.timeOfOrder,
@@ -96,20 +97,20 @@ export default {
         deliveryCostPerDish: Math.round(this.order.deliveryCostPerDish * 100),
         paymentByCash: this.order.paymentByCash === true,
         paymentByBankTransfer: this.order.paymentByBankTransfer === true,
-        bankTransferNumber: this.order.bankTransferNumber
+        bankTransferNumber: this.order.bankTransferNumber,
       };
 
-      let action = "/orders/save";
-      let dataSuccessUrl = "#/orders/";
+      let action = "/orders/update";
+      let dataSuccessUrl = "#/orders/show/" + this.orderId;
 
       let errorsComponent = this.$refs.errorsComponent;
 
-      ApiConnector.makePost(action, formData, {'headers': {'Authorization': 'Bearer ' + this.token}})
+      ApiConnector.makePost(action, formData)
         .then(function (response) {
           window.location.href = dataSuccessUrl;
         })
         .catch(function(error) {
-          console.log("orderCreateForm Error:");
+          console.log("orderEditForm Error:");
           console.log(error);
           error.body.messages.forEach(msg => errorsComponent.addError(msg));
         });

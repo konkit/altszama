@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    import Price from '../../commons/priceElement.vue'
+    import Price from '../commons/priceElement.vue'
 
     export default {
         name: 'side-dishes-input',

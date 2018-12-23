@@ -43,11 +43,11 @@
 <script>
 import Vue from 'vue'
 
-import BackButton from '../../commons/backButton.vue'
-import ErrorsComponent from '../../commons/errors.vue'
-import Price from '../../commons/priceElement.vue'
+import BackButton from '../commons/backButton.vue'
+import ErrorsComponent from '../commons/errors.vue'
+import Price from '../commons/priceElement.vue'
 
-import ApiConnector from '../../../ApiConnector.js'
+import ApiConnector from '../../lib/ApiConnector.js'
 
 export default {
   props: [

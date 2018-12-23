@@ -62,13 +62,13 @@
 <script>
 import Vue from 'vue'
 
-import BackButton from '../commons/backButton'
-import ErrorsComponent from '../commons/errors'
-import Price from '../commons/priceElement'
-import Spinner from '../commons/spinner'
-import SideDishes from './components/SideDishes.vue'
+import BackButton from '../components/commons/backButton'
+import ErrorsComponent from '../components/commons/errors'
+import Price from '../components/commons/priceElement'
+import Spinner from '../components/commons/spinner'
+import SideDishes from '../components/restaurants/SideDishes.vue'
 
-import ApiConnector from '../../ApiConnector.js'
+import ApiConnector from '../lib/ApiConnector.js'
 
 export default {
   data () {

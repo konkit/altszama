@@ -32,19 +32,10 @@
 </template>
 
 <script>
-  import ApiConnector from '../ApiConnector'
-  import router from '../router'
-  import EventBus from '../EventBus'
-  
+  import ApiConnector from '../lib/ApiConnector'
+
   export default {
     name: 'navigation',
-    mounted: function() {
-      EventBus.addEvent('user-authenticated', () => {
-        var newUser = localStorage.getItem("username")
-        console.log("Update current username to ", newUser)
-        this.username = newUser
-      })
-    },
     computed: {
       username: function() {
         return this.$store.state.username;
@@ -55,7 +46,7 @@
         return this.$route.name !== "Login"
       },
       logout: function() {
-        console.log("Logging out")
+        console.log("Logging out");
         ApiConnector.logout();
       }
     }

@@ -4,7 +4,7 @@ self.addEventListener('push', function(event) {
   if (event.data) {
     notificationText = event.data.text()
   } else {
-    notificationText = "Hey, your order has changed!"
+    notificationText = "Hey, the status of your order has changed!"
   }
 
   var title = 'AltSzama!';

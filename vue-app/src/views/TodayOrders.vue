@@ -171,9 +171,9 @@
 
 <script>
     import Vue from 'vue'
-    import Spinner from '../commons/spinner.vue'
+    import Spinner from '../components/commons/spinner.vue'
 
-    import ApiConnector from '../../ApiConnector.js'
+    import ApiConnector from '../lib/ApiConnector.js'
 
     export default {
         data() {
@@ -355,7 +355,7 @@
   }
 
   .lunch-bg-img {
-    background-image: url('./../../assets/lunch-bw.png');
+    background-image: url('../assets/lunch-bw.png');
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

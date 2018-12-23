@@ -50,8 +50,8 @@
 </template>
 
 <script>
-    import Price from '../../commons/priceElement.vue'
-    import ApiConnector from '../../../ApiConnector.js'
+    import Price from '../commons/priceElement.vue'
+    import ApiConnector from '../../lib/ApiConnector.js'
 
     export default {
         name: 'order-entry-row',

@@ -43,8 +43,8 @@
 <script>
 import Vue from 'vue'
 
-import Spinner from '../commons/spinner'
-import ApiConnector from '../../ApiConnector.js'
+import Spinner from '../components/commons/spinner'
+import ApiConnector from '../lib/ApiConnector.js'
 
 export default {
   data () {
