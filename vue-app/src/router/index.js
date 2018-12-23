@@ -1,25 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Login from '@/components/Login'
-import TodayOrders from '@/views/TodayOrders'
-import ShowOrder from '@/views/ShowOrder'
-import OrderCreateForm from '@/views/OrderCreateForm'
-import OrderEditForm from '@/views/OrderEditForm'
-import OrderView from '@/views/OrderView'
+import Login from '../components/Login'
+import TodayOrders from '../views/TodayOrders'
+import ShowOrder from '../views/ShowOrder'
+import OrderCreateForm from '../views/OrderCreateForm'
+import OrderEditForm from '../views/OrderEditForm'
+import OrderView from '../views/OrderView'
 
-import AllOrders from '@/views/AllOrders'
+import AllOrders from '../views/AllOrders'
 
-import RestaurantIndex from '@/views/RestaurantIndex'
-import ShowRestaurant from '@/views/ShowRestaurant'
+import RestaurantIndex from '../views/RestaurantIndex'
+import ShowRestaurant from '../views/ShowRestaurant'
 
-import RestaurantCreateForm from '@/views/RestaurantCreateForm'
-import RestaurantEditForm from '@/views/RestaurantEditForm'
+import RestaurantCreateForm from '../views/RestaurantCreateForm'
+import RestaurantEditForm from '../views/RestaurantEditForm'
 
-import DishCreateForm from '@/views/DishCreateForm'
-import DishEditForm from '@/views/DishEditForm'
+import DishCreateForm from '../views/DishCreateForm'
+import DishEditForm from '../views/DishEditForm'
 
-import ImportCrawledRestaurantData from '@/views/ImportCrawledRestaurantData'
+import ImportCrawledRestaurantData from '../views/ImportCrawledRestaurantData'
 
 Vue.use(Router)
 
