@@ -21,7 +21,7 @@ import DishEditForm from '../views/DishEditForm'
 
 import ImportCrawledRestaurantData from '../views/ImportCrawledRestaurantData'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [

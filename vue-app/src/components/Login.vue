@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import ApiConnector from '../lib/ApiConnector'
 import router from '../router'
 import GoogleLogin from '../lib/GoogleLogin.js'
@@ -85,7 +84,7 @@ export default {
 
         ApiConnector.loginWithGoogle(returnPath)
           .catch(e => {
-            this.errors.push(e)
+            this.errors.push(e);
             this.loginPending = false
           })
       }

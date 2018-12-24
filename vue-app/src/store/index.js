@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+import AllOrdersState from './modules/AllOrdersState'
+import ShowOrderState from './modules/ShowOrderState'
+
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -9,24 +12,6 @@ export default new Vuex.Store({
     loadingEntry: false,
     username: localStorage.getItem("username"),
     token: localStorage.getItem("token"),
-
-    // SHOW ORDER
-    order: {},
-    orderEntries: [],
-    currentUserId: '',
-    allDishesInRestaurant: [],
-    allDishesByCategory: [],
-    dishIdToSideDishesMap: [],
-    totalOrderPrice: 0,
-
-    isEntryCreating: false,
-    isEntryEdited: false,
-    orderEntryId: "",
-    dishEntryId: "",
-
-    // CREATED / EDITED ORDER
-    editedOrderEntry: {},
-
   },
   mutations: {
     setLoadingTrue (state) {
@@ -49,58 +34,15 @@ export default new Vuex.Store({
       localStorage.setItem("token", payload.token)
     },
     logoutUser (state, payload) {
-      state.username = ""
-      localStorage.setItem("username", "")
-      state.token = ""
-      localStorage.setItem("token", "")
-    },
+      state.username = "";
+      localStorage.setItem("username", "");
 
-    // SHOW ORDER
-    loadShowOrderData (state, payload) {
-      state.order = payload.order;
-      state.orderEntries = payload.orderEntries;
-      state.currentUserId = payload.currentUserId;
-      state.allDishesInRestaurant = payload.allDishesInRestaurant;
-      state.allDishesByCategory = payload.allDishesByCategory;
-      state.dishIdToSideDishesMap  = payload.dishIdToSideDishesMap;
-      state.totalOrderPrice  = payload.totalOrderPrice;
+      state.token = "";
+      localStorage.setItem("token", "");
     },
-
-    setEntryCreating (state, payload) {
-      state.isEntryCreating = true;
-      state.orderEntryId = "";
-      state.dishEntryId = "";
-    },
-
-    setEntryEditing (state, payload) {
-      state.isEntryEdited = true;
-      state.orderEntryId = payload.orderEntryId;
-      state.dishEntryId = payload.dishEntryId;
-    },
-
-    cancelEntryCreateOrEdit (state, payload) {
-      state.isEntryCreating = false;
-      state.isEntryEdited = false;
-      state.orderEntryId = "";
-      state.dishEntryId = "";
-    },
-
-    // CREATED / EDITED ORDER
-
-    setEditedOrderEntry (state, payload) {
-      state.editedOrderEntry = payload
-    },
-    clearEditedSideDishes (state, payload) {
-      state.editedOrderEntry.chosenSideDishes = []
-    },
-    setNewDishFlag (state, payload) {
-      var newDishValue = payload
-
-      state.editedOrderEntry.newDish = newDishValue;
-      if (newDishValue == true) {
-        state.editedOrderEntry.dishId = ""
-      }
-    },
-
+  },
+  modules: {
+    showOrder: ShowOrderState,
+    allOrders: AllOrdersState,
   }
 })

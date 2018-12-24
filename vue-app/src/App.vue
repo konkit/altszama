@@ -19,9 +19,6 @@ import Navigation from './components/Navigation.vue'
 
 export default {
   name: 'app',
-  methods: {
-    
-  },
   components: {
     Navigation,
     Router

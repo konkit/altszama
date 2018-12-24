@@ -33,13 +33,10 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
 import BackButton from '../components/commons/backButton.vue'
 import ErrorsComponent from '../components/commons/errors.vue'
 import MaskedInput from 'vue-text-mask'
 import OrderForm from '../components/orders/OrderForm.vue'
-
 import Spinner from '../components/commons/spinner.vue'
 import ApiConnector from '../lib/ApiConnector.js'
 
@@ -77,7 +74,7 @@ export default {
           paymentByCash: true,
           paymentByBankTransfer: false,
           bankTransferNumber: ''
-        }
+        };
 
         this.$store.commit('setLoadingFalse')
       })

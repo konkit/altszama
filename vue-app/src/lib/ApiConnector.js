@@ -57,6 +57,21 @@ export default {
     return Vue.http.post(backendUrl + relPath, formData, headersWithToken(this.token))
   },
 
+  fetchOrder: function(orderId) {
+    return this.makeGet("/orders/" + orderId + "/show.json")
+      .then(response => {
+        return {
+          order: response.data.order,
+          orderEntries: response.data.orderEntries,
+          currentUserId: response.data.currentUserId,
+          allDishesInRestaurant: response.data.allDishesInRestaurant,
+          allDishesByCategory: convertToMapEntries(response.data.allDishesByCategory),
+          dishIdToSideDishesMap: response.data.dishIdToSideDishesMap,
+          totalOrderPrice: response.data.totalOrderPrice
+        };
+      })
+  },
+
   handleError: function(errorResponse) {
     console.log("errorResponse: ", errorResponse);
 
@@ -90,4 +105,14 @@ function doLogout() {
 
   var signOutCallback = () => router.push({name: 'Login'})
   GoogleLogin.signOut(signOutCallback, signOutCallback)
+}
+
+function convertToMapEntries(dishesMap) {
+  var result = [];
+
+  for (const key of Object.keys(dishesMap)) {
+    result.push({"category": key, "dishes": dishesMap[key]})
+  }
+
+  return result;
 }

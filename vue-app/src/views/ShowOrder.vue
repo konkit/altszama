@@ -118,15 +118,13 @@
 import BackButton from '../components/commons/backButton.vue'
 import Price from '../components/commons/priceElement.vue'
 import Spinner from '../components/commons/spinner.vue'
-
 import OrderStateButtons from '../components/orders/OrderStateButtons.vue'
 import OrderEntryCreateEntry from '../components/orders/OrderEntryCreateEntry.vue'
 import OrderEntryEditEntry from '../components/orders/OrderEntryEditEntry.vue'
 import OrderEntryRow from '../components/orders/OrderEntryRow.vue'
 import OrderStats from '../components/orders/OrderStats.vue'
-
 import ApiConnector from '../lib/ApiConnector.js'
-
+import { mapState } from 'vuex'
 
 export default {
   data () {
@@ -143,22 +141,14 @@ export default {
   methods: {
     fetchOrder: function() {
       this.$store.commit('setLoadingTrue');
-      ApiConnector.makeGet("/orders/" + this.orderId + "/show.json")
-        .then(response => {
-          var showOrderData = {
-            order: response.data.order, 
-            orderEntries: response.data.orderEntries, 
-            currentUserId: response.data.currentUserId,
-            allDishesInRestaurant: response.data.allDishesInRestaurant,
-            allDishesByCategory: convertToMapEntries(response.data.allDishesByCategory),
-            dishIdToSideDishesMap: response.data.dishIdToSideDishesMap,
-            totalOrderPrice: response.data.totalOrderPrice
-          };
-          this.$store.commit('loadShowOrderData', showOrderData);
 
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      ApiConnector
+          .fetchOrder(this.orderId)
+          .then(showOrderData => {
+              this.$store.commit('showOrder/loadShowOrderData', showOrderData);
+              this.$store.commit('setLoadingFalse')
+          })
+          .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     isOrdering: function() {
       return this.order.orderState === 'ORDERING';
@@ -190,27 +180,33 @@ export default {
         .catch(errResponse => console.log(errResponse) );
     },
     createEntry: function() {
-      this.$store.commit('setEntryCreating', {})
+      this.$store.commit('showOrder/setEntryCreating', {})
     },
     editEntry: function(orderEntryId, dishEntryId) {
-      this.$store.commit('setEntryEditing', {"orderEntryId": orderEntryId, "dishEntryId": dishEntryId})
+      this.$store.commit('showOrder/setEntryEditing', {"orderEntryId": orderEntryId, "dishEntryId": dishEntryId})
     },
     cancelEdit: function() {
-      this.$store.commit('cancelEntryCreateOrEdit', {})
+      this.$store.commit('showOrder/cancelEntryCreateOrEdit', {})
     }
   },
   computed: {
-    loading () { return this.$store.state.loading; },
-    numberOfCurrentUserEntries () { return this.orderEntries.filter(e => e.user.id == this.currentUserId).length; },
-    username () { return this.$store.state.username; },
-    order () { return this.$store.state.order; },
-    orderEntries () { return this.$store.state.orderEntries; },
-    currentUserId () { return this.$store.state.currentUserId; },
-    isEntryCreating () { return this.$store.state.isEntryCreating; },
-    isEntryEdited () { return this.$store.state.isEntryEdited; },
-    orderEntryId () { return this.$store.state.orderEntryId; },
-    dishEntryId () { return this.$store.state.dishEntryId; },
-    totalOrderPrice () { return this.$store.state.totalOrderPrice; }
+    numberOfCurrentUserEntries () {
+      return this.orderEntries.filter(e => e.user.id == this.currentUserId).length;
+    },
+    ...mapState({
+        loading: state => state.loading,
+        username: state => state.username,
+    }),
+    ...mapState('showOrder', {
+      order: state => state.order,
+      orderEntries: state => state.orderEntries,
+      currentUserId: state => state.currentUserId,
+      isEntryCreating: state => state.isEntryCreating,
+      isEntryEdited: state => state.isEntryEdited,
+      orderEntryId: state => state.orderEntryId,
+      dishEntryId: state => state.dishEntryId,
+      totalOrderPrice: state => state.totalOrderPrice,
+    })
   },
   components: {
     BackButton,
