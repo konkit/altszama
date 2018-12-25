@@ -47,93 +47,93 @@
 </template>
 
 <script>
-    import Price from '../commons/priceElement.vue'
+  import Price from '../commons/priceElement.vue'
 
-    export default {
-        name: 'side-dishes-input',
-        props: [],
-        methods: {
-            removeSideDish: function (id) {
-                this.editedOrderEntry.chosenSideDishes = removeItemWithSlice(this.editedOrderEntry.chosenSideDishes, id)
-                this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
-            },
-            addSideDishEntry: function () {
-                var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
-                var sideDishToAdd;
+  export default {
+    name: 'side-dishes-input',
+    props: [],
+    methods: {
+      removeSideDish: function (id) {
+        this.editedOrderEntry.chosenSideDishes = removeItemWithSlice(this.editedOrderEntry.chosenSideDishes, id)
+        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+      },
+      addSideDishEntry: function () {
+        var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
+        var sideDishToAdd;
 
-                if (sideDishesForGivenDish && sideDishesForGivenDish.length > 0) {
-                    sideDishToAdd = sideDishesForGivenDish[0]
-                    sideDishToAdd.isNew = false
-                } else {
-                    sideDishToAdd = {}
-                    sideDishToAdd.isNew = true
-                }
-
-                sideDishToAdd.newSideDishName = ""
-                sideDishToAdd.newSideDishPrice = 0
-
-                this.editedOrderEntry.chosenSideDishes.push(sideDishToAdd)
-
-                this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
-            },
-            setAsNewSideDish: function (sideDishIndex) {
-                this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
-                    var newSd = {}
-                    if (i === sideDishIndex) {
-                        sd.isNew = true
-                        newSd = sd
-                    } else {
-                        newSd = sd
-                    }
-
-                    return newSd
-                })
-
-                this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
-            },
-            setAsExistingSideDish: function (sideDishIndex) {
-                this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
-                    var newSd = {}
-                    if (i === sideDishIndex) {
-                        sd.isNew = false
-                        newSd = sd
-                    } else {
-                        newSd = sd
-                    }
-
-                    return newSd
-                })
-
-                this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
-            },
-            changeNewSideDishPrice(sdIndex, newPrice) {
-                this.editedOrderEntry.chosenSideDishes[sdIndex].newSideDishPrice = newPrice;
-                this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
-
-                this.$forceUpdate();
-            },
-            updateSideDishComboBox(sdIndex, dishId, sidedishId) {
-                this.editedOrderEntry.chosenSideDishes[sdIndex] = this.dishIdToSideDishesMap[dishId].find(sd => sd.id == sidedishId)
-                this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
-
-                this.$forceUpdate();
-            }
-        },
-        computed: {
-            dishIdToSideDishesMap() {
-                return this.$store.state.dishIdToSideDishesMap;
-            },
-            editedOrderEntry() {
-                return this.$store.state.editedOrderEntry;
-            },
-        },
-        components: {
-            Price
+        if (sideDishesForGivenDish && sideDishesForGivenDish.length > 0) {
+          sideDishToAdd = sideDishesForGivenDish[0]
+          sideDishToAdd.isNew = false
+        } else {
+          sideDishToAdd = {}
+          sideDishToAdd.isNew = true
         }
-    }
 
-    function removeItemWithSlice(array, index) {
-        return [...array.slice(0, index), ...array.slice(index + 1)]
+        sideDishToAdd.newSideDishName = ""
+        sideDishToAdd.newSideDishPrice = 0
+
+        this.editedOrderEntry.chosenSideDishes.push(sideDishToAdd)
+
+        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+      },
+      setAsNewSideDish: function (sideDishIndex) {
+        this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
+          var newSd = {}
+          if (i === sideDishIndex) {
+            sd.isNew = true
+            newSd = sd
+          } else {
+            newSd = sd
+          }
+
+          return newSd
+        })
+
+        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+      },
+      setAsExistingSideDish: function (sideDishIndex) {
+        this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
+          var newSd = {}
+          if (i === sideDishIndex) {
+            sd.isNew = false
+            newSd = sd
+          } else {
+            newSd = sd
+          }
+
+          return newSd
+        })
+
+        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+      },
+      changeNewSideDishPrice(sdIndex, newPrice) {
+        this.editedOrderEntry.chosenSideDishes[sdIndex].newSideDishPrice = newPrice;
+        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+
+        this.$forceUpdate();
+      },
+      updateSideDishComboBox(sdIndex, dishId, sidedishId) {
+        this.editedOrderEntry.chosenSideDishes[sdIndex] = this.dishIdToSideDishesMap[dishId].find(sd => sd.id == sidedishId)
+        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+
+        this.$forceUpdate();
+      }
+    },
+    computed: {
+      dishIdToSideDishesMap() {
+        return this.$store.state.dishIdToSideDishesMap;
+      },
+      editedOrderEntry() {
+        return this.$store.state.editedOrderEntry;
+      },
+    },
+    components: {
+      Price
     }
+  }
+
+  function removeItemWithSlice(array, index) {
+    return [...array.slice(0, index), ...array.slice(index + 1)]
+  }
 
 </script>

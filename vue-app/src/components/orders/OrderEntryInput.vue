@@ -35,28 +35,28 @@
 </template>
 
 <script>
-    import Price from '../commons/priceElement.vue'
+  import Price from '../commons/priceElement.vue'
 
-    export default {
-        name: 'order-entry-input',
-        methods: {
-            setNewDishFlag: function (newValue) {
-                this.$store.commit('setNewDishFlag', newValue)
-            },
-            clearSideDishes: function () {
-                this.$store.commit('clearEditedSideDishes')
-            }
-        },
-        computed: {
-            editedOrderEntry() {
-                return this.$store.state.editedOrderEntry;
-            },
-            allDishesByCategory() {
-                return this.$store.state.allDishesByCategory;
-            }
-        },
-        components: {
-            Price
-        }
+  export default {
+    name: 'order-entry-input',
+    methods: {
+      setNewDishFlag: function (newValue) {
+        this.$store.commit('setNewDishFlag', newValue)
+      },
+      clearSideDishes: function () {
+        this.$store.commit('clearEditedSideDishes')
+      }
+    },
+    computed: {
+      editedOrderEntry() {
+        return this.$store.state.editedOrderEntry;
+      },
+      allDishesByCategory() {
+        return this.$store.state.allDishesByCategory;
+      }
+    },
+    components: {
+      Price
     }
+  }
 </script>

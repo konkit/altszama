@@ -12,34 +12,34 @@
       </div>
     </div>
 
-    <errors-component ref="errorsComponent" />
+    <errors-component ref="errorsComponent"/>
 
     <div class="row justify-content-center">
       <div class="col">
         <form id="restaurantCreateForm">
           <div class="form-group">
             <label>Name:</label>
-            <input class="form-control" type="text" name="name" v-model="name" />
+            <input class="form-control" type="text" name="name" v-model="name"/>
           </div>
 
           <div class="form-group">
             <label>URL:</label>
-            <input class="form-control" type="text" name="url" v-model="url" />
+            <input class="form-control" type="text" name="url" v-model="url"/>
           </div>
 
           <div class="form-group">
             <label>Rating:</label>
-            <input class="form-control" type="text" name="rating" v-model="rating" />
+            <input class="form-control" type="text" name="rating" v-model="rating"/>
           </div>
 
           <div class="form-group">
             <label>Telephone:</label>
-            <input class="form-control" type="text" name="telephone" v-model="telephone" />
+            <input class="form-control" type="text" name="telephone" v-model="telephone"/>
           </div>
 
           <div class="form-group">
             <label>Address:</label>
-            <input class="form-control" type="text" name="address" v-model="address" />
+            <input class="form-control" type="text" name="address" v-model="address"/>
           </div>
         </form>
 
@@ -50,61 +50,58 @@
 </template>
 
 <script>
-import BackButton from '../components/commons/backButton'
-import ErrorsComponent from '../components/commons/errors'
+  import BackButton from '../components/commons/backButton'
+  import ErrorsComponent from '../components/commons/errors'
+  import DishesApiConnector from "../lib/DishesApiConnector";
 
-import ApiConnector from '../lib/ApiConnector.js'
+  export default {
+    props: ['restaurantName'],
+    data() {
+      return {
+        restaurantId: this.$route.params.id,
 
-export default {
-  props: ['restaurantName'],
-  data () {
-    return {
-      restaurantId: this.$route.params.id,
+        name: '',
+        url: '',
+        rating: '',
+        telephone: '',
+        address: '',
 
-      name: '',
-      url: '',
-      rating: '',
-      telephone: '',
-      address: '',
+        loaded: false
+      }
+    },
+    mounted: function () {
+      console.log("RestaurantCreateForm")
+    },
+    methods: {
+      submitForm: function () {
+        const dataSuccessUrl = "#/restaurants";
 
-      loaded: false
+        let newRestaurant = {
+          name: this.name,
+          url: this.url,
+          rating: this.rating,
+          telephone: this.telephone,
+          address: this.address
+        };
+
+        let errorsComponent = this.$refs.errorsComponent;
+
+        DishesApiConnector.createRestaurant(newRestaurant)
+          .then(function (response) {
+            window.location.href = dataSuccessUrl;
+          })
+          .catch(function (error) {
+            errorsComponent.addError(error.body.message);
+          });
+
+        return false;
+      }
+    },
+    components: {
+      BackButton,
+      ErrorsComponent
     }
-  },
-  mounted: function() {
-    console.log("RestaurantCreateForm")
-  },
-  methods: {
-    submitForm: function() {
-      const dataSuccessUrl = "#/restaurants";
-
-      let newRestaurant = {
-        name: this.name,
-        url: this.url,
-        rating: this.rating,
-        telephone: this.telephone,
-        address: this.address
-      };
-
-      let errorsComponent = this.$refs.errorsComponent;
-
-      ApiConnector.createRestaurant(newRestaurant)
-        .then(function (response) {
-          window.location.href = dataSuccessUrl;
-        })
-        .catch(function(error) {
-          console.log("restaurantCreateForm Error:");
-          console.log(error);
-          errorsComponent.addError(error.body.message);
-        });
-
-      return false;
-    }
-  },
-  components: {
-    BackButton,
-    ErrorsComponent
   }
-}
 </script>
 
 <style scoped>

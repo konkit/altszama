@@ -126,6 +126,8 @@
   import OrderStats from '../components/orders/OrderStats.vue'
   import ApiConnector from '../lib/ApiConnector.js'
   import {mapState} from 'vuex'
+  import OrdersApiConnector from "../lib/OrdersApiConnector";
+  import DishesApiConnector from "../lib/DishesApiConnector";
 
   export default {
     data() {
@@ -143,7 +145,7 @@
       fetchOrder: function () {
         this.$store.commit('setLoadingTrue');
 
-        ApiConnector
+        OrdersApiConnector
           .fetchOrder(this.orderId)
           .then(showOrderData => {
             this.$store.commit('showOrder/loadShowOrderData', showOrderData);
@@ -172,11 +174,11 @@
         }
       },
       unlockOrder: function () {
-        ApiConnector.setOrderAsCreated(this.orderId)
+        OrdersApiConnector.setOrderAsCreated(this.orderId)
           .then(response => this.fetchOrder())
       },
       deleteEntry: function (orderEntryId, dishEntryId) {
-        ApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
+        DishesApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
           .then(successResponse => this.fetchOrder())
           .catch(errResponse => console.log(errResponse));
       },

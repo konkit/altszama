@@ -37,6 +37,7 @@
 
 <script>
   import ApiConnector from '../lib/ApiConnector.js'
+  import OrdersApiConnector from "../lib/OrdersApiConnector";
   import WithSpinner from "../components/commons/WithSpinner";
 
   export default {
@@ -47,7 +48,7 @@
       this.$store.commit('setLoadingTrue')
     },
     mounted() {
-      ApiConnector.fetchAllOrders()
+      OrdersApiConnector.fetchAllOrders()
         .then(allOrdersList => {
           this.$store.commit('allOrders/setAllOrdersList', allOrdersList);
           this.$store.commit('setLoadingFalse')

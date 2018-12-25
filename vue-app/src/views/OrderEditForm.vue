@@ -34,6 +34,7 @@
   import ApiConnector from '../lib/ApiConnector.js'
   import OrderForm from '../components/orders/OrderForm.vue'
   import WithSpinner from "../components/commons/WithSpinner";
+  import OrdersApiConnector from "../lib/OrdersApiConnector";
 
   export default {
     name: 'order-edit-form',
@@ -49,7 +50,7 @@
       this.$store.commit('setLoadingTrue')
     },
     mounted() {
-      ApiConnector.getOrderEditData(this.orderId)
+      OrdersApiConnector.getOrderEditData(this.orderId)
         .then(response => {
           this.restaurantsList = response.restaurantsList;
           this.order = response.order;
@@ -66,7 +67,7 @@
 
         let errorsComponent = this.$refs.errorsComponent;
 
-        ApiConnector.editOrder(this.orderId, this.order)
+        OrdersApiConnector.editOrder(this.orderId, this.order)
           .then(response => {
             window.location.href = dataSuccessUrl;
           })

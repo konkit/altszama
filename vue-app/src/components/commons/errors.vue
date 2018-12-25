@@ -16,17 +16,17 @@
 <script>
   export default {
     name: 'errors-component',
-    data () {
-      return { 
+    data() {
+      return {
         errorsArray: []
       }
     },
     methods: {
-      addError: function(errors) {
+      addError: function (errors) {
         const errorsArray = this.errorsArray;
 
         if (errors instanceof Array) {
-          errors.forEach(function(errorStr) {
+          errors.forEach(function (errorStr) {
             errorsArray.push(errorStr);
           });
         } else if (typeof errors == 'object' && typeof errors.exception !== "undefined") {
@@ -35,7 +35,7 @@
           errorsArray.push("Error: " + errors);
         }
       },
-      close: function(errorIndex) {
+      close: function (errorIndex) {
         this.errorsArray.splice(errorIndex, 1)
       }
     }

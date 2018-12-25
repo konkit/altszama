@@ -82,29 +82,29 @@
 </template>
 
 <script>
-    import MaskedInput from 'vue-text-mask'
-    import VueSelect from 'vue-select'
+  import MaskedInput from 'vue-text-mask'
+  import VueSelect from 'vue-select'
 
-    export default {
-        props: {
-            order: {
-                type: Object
-            },
-            restaurantsList: {
-                type: Array
-            }
-        },
-        data() {
-            return {
-                yesNoOptions: [
-                    {text: 'Yes', value: true},
-                    {text: 'No', value: false},
-                ]
-            }
-        },
-        components: {
-            MaskedInput,
-            'v-select': VueSelect
-        }
+  export default {
+    props: {
+      order: {
+        type: Object
+      },
+      restaurantsList: {
+        type: Array
+      }
+    },
+    data() {
+      return {
+        yesNoOptions: [
+          {text: 'Yes', value: true},
+          {text: 'No', value: false},
+        ]
+      }
+    },
+    components: {
+      MaskedInput,
+      'v-select': VueSelect
     }
+  }
 </script>

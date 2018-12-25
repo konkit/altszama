@@ -166,6 +166,7 @@
 <script>
   import ApiConnector from '../lib/ApiConnector.js'
   import WithSpinner from "../components/commons/WithSpinner";
+  import DishesApiConnector from "../lib/DishesApiConnector";
 
   export default {
     data() {
@@ -185,7 +186,7 @@
     mounted() {
       ApiConnector.initializePushNotifications();
 
-      ApiConnector.fetchTodaysOrders()
+      DishesApiConnector.fetchTodaysOrders()
         .then(todayOrdersData => {
           this.results = todayOrdersData;
 

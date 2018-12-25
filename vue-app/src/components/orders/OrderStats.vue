@@ -86,26 +86,26 @@
 </template>
 
 <script>
-    import Price from '../commons/priceElement.vue'
+  import Price from '../commons/priceElement.vue'
 
-    export default {
-        props: ['order', 'totalOrderPrice'],
-        methods: {
-            timeOfDeliveryOrNA: function () {
-                if (this.order.timeOfDelivery != null) {
-                    return this.order.timeOfDelivery
-                } else {
-                    return "As ASAP as possible"
-                }
-            },
-            isNotOrderedYet: function () {
-                return this.order.orderState === 'CREATED';
-            },
-        },
-        components: {
-            Price,
+  export default {
+    props: ['order', 'totalOrderPrice'],
+    methods: {
+      timeOfDeliveryOrNA: function () {
+        if (this.order.timeOfDelivery != null) {
+          return this.order.timeOfDelivery
+        } else {
+          return "As ASAP as possible"
         }
+      },
+      isNotOrderedYet: function () {
+        return this.order.orderState === 'CREATED';
+      },
+    },
+    components: {
+      Price,
     }
+  }
 </script>
 
 <style scoped>

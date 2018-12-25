@@ -173,81 +173,82 @@
 </template>
 
 <script>
-    import BackButton from '../components/commons/backButton.vue'
-    import ErrorsComponent from '../components/commons/errors.vue'
-    import MaskedInput from 'vue-text-mask'
-    import Price from '../components/commons/priceElement.vue'
+  import BackButton from '../components/commons/backButton.vue'
+  import ErrorsComponent from '../components/commons/errors.vue'
+  import MaskedInput from 'vue-text-mask'
+  import Price from '../components/commons/priceElement.vue'
 
-    import Spinner from '../components/commons/spinner.vue'
-    import Navigation from '../components/Navigation.vue'
+  import Spinner from '../components/commons/spinner.vue'
+  import Navigation from '../components/Navigation.vue'
 
-    import ApiConnector from '../lib/ApiConnector.js'
-    import WithSpinner from "../components/commons/WithSpinner";
+  import ApiConnector from '../lib/ApiConnector.js'
+  import WithSpinner from "../components/commons/WithSpinner";
+  import OrdersApiConnector from "../lib/OrdersApiConnector";
 
-    export default {
-        data() {
-            return {
-                orderId: this.$route.params.id,
+  export default {
+    data() {
+      return {
+        orderId: this.$route.params.id,
 
-                order: '',
-                groupedEntries: [],
-                allEatingPeopleCount: 0,
-                basePriceSum: 0,
-                totalPrice: 0,
-                approxTimeOfDelivery: "12:00",
-            }
-        },
-        created() {
-            this.$store.commit('setLoadingTrue')
-        },
-        mounted() {
-            ApiConnector.fetchOrderView(this.orderId)
-                .then(responseObj => {
-                    this.order = responseObj.order;
-                    this.groupedEntries = responseObj.groupedEntries;
-                    this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
-                    this.basePriceSum = responseObj.basePriceSum;
-                    this.totalPrice = responseObj.totalPrice;
+        order: '',
+        groupedEntries: [],
+        allEatingPeopleCount: 0,
+        basePriceSum: 0,
+        totalPrice: 0,
+        approxTimeOfDelivery: "12:00",
+      }
+    },
+    created() {
+      this.$store.commit('setLoadingTrue')
+    },
+    mounted() {
+      OrdersApiConnector.fetchOrderView(this.orderId)
+        .then(responseObj => {
+          this.order = responseObj.order;
+          this.groupedEntries = responseObj.groupedEntries;
+          this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
+          this.basePriceSum = responseObj.basePriceSum;
+          this.totalPrice = responseObj.totalPrice;
 
-                    this.$store.commit('setLoadingFalse')
-                })
-                .catch(errResponse => ApiConnector.handleError(errResponse))
-        },
-        methods: {
-            submitForm: function () {
-                let dataSuccessUrl = '#/orders/show/' + this.orderId;
+          this.$store.commit('setLoadingFalse')
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    },
+    methods: {
+      submitForm: function () {
+        let dataSuccessUrl = '#/orders/show/' + this.orderId;
 
-                let errorsComponent = this.$refs.errorsComponent;
+        let errorsComponent = this.$refs.errorsComponent;
 
-                ApiConnector.makeAnOrder(this.orderId, this.approxTimeOfDelivery)
-                    .then(response => {
-                        window.location.href = dataSuccessUrl;
-                    })
-                    .catch(error => {
-                        console.log("orderView Error:");
-                        console.log(error);
-                        errorsComponent.addError(error.body.message);
-                    });
+        OrdersApiConnector.makeAnOrder(this.orderId, this.approxTimeOfDelivery)
+          .then(response => {
+            window.location.href = dataSuccessUrl;
+          })
+          .catch(error => {
+            console.log("orderView Error:");
+            console.log(error);
+            errorsComponent.addError(error.body.message);
+          });
 
-                return false
-            },
-            isStateOrdering: function () {
-                return this.order.orderState === 'ORDERING';
-            },
-            isStateNotOrdering: function () {
-                return this.order.orderState !== 'ORDERING';
-            }
-        },
-        components: {
-            WithSpinner,
-            BackButton,
-            ErrorsComponent,
-            MaskedInput,
-            Price,
-            Navigation,
-            Spinner
-        }
+        return false
+      },
+      isStateOrdering: function () {
+        return this.order.orderState === 'ORDERING';
+      },
+      isStateNotOrdering: function () {
+        return this.order.orderState !== 'ORDERING';
+      }
+    },
+    components: {
+      WithSpinner,
+      BackButton,
+      ErrorsComponent,
+      MaskedInput,
+      Price,
+      Navigation,
+      Spinner
     }
+  }
 
 </script>
 

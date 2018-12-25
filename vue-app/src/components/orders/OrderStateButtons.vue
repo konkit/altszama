@@ -45,41 +45,41 @@
 </template>
 
 <script>
-    import ApiConnector from '../../lib/ApiConnector'
+  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
-    export default {
-        name: 'order-state-buttons',
-        props: ['orderId', 'orderState'],
-        data() {
-            return {}
-        },
-        methods: {
-            setAsCreated: function (e) {
-                ApiConnector.setOrderAsCreated(this.orderId)
-                    .then(successResponse => window.location.reload())
-                    .catch(errResponse => console.log(errResponse));
-            },
-            setAsOrdered: function (e) {
-                ApiConnector.setOrderAsOrdered(this.orderId)
-                    .then(successResponse => window.location.reload())
-                    .catch(errResponse => console.log(errResponse));
-            },
-            setAsDelivered: function (e) {
-                ApiConnector.setOrderAsDelivered(this.orderId)
-                    .then(successResponse => window.location.reload())
-                    .catch(errResponse => console.log(errResponse));
-            },
-            setAsRejected: function (e) {
-                ApiConnector.setOrderAsRejected(this.orderId)
-                    .then(successResponse => window.location.reload())
-                    .catch(errResponse => console.log(errResponse));
-            },
-            deleteEntry: function (e) {
-                ApiConnector.deleteOrder(this.orderId + '/delete')
-                    .then(successResponse => window.location.href = '#/orders')
-                    .catch(errResponse => console.log(errResponse));
-            },
-        }
+  export default {
+    name: 'order-state-buttons',
+    props: ['orderId', 'orderState'],
+    data() {
+      return {}
+    },
+    methods: {
+      setAsCreated: function (e) {
+        OrdersApiConnector.setOrderAsCreated(this.orderId)
+          .then(successResponse => window.location.reload())
+          .catch(errResponse => console.log(errResponse));
+      },
+      setAsOrdered: function (e) {
+        OrdersApiConnector.setOrderAsOrdered(this.orderId)
+          .then(successResponse => window.location.reload())
+          .catch(errResponse => console.log(errResponse));
+      },
+      setAsDelivered: function (e) {
+        OrdersApiConnector.setOrderAsDelivered(this.orderId)
+          .then(successResponse => window.location.reload())
+          .catch(errResponse => console.log(errResponse));
+      },
+      setAsRejected: function (e) {
+        OrdersApiConnector.setOrderAsRejected(this.orderId)
+          .then(successResponse => window.location.reload())
+          .catch(errResponse => console.log(errResponse));
+      },
+      deleteEntry: function (e) {
+        OrdersApiConnector.deleteOrder(this.orderId + '/delete')
+          .then(successResponse => window.location.href = '#/orders')
+          .catch(errResponse => console.log(errResponse));
+      },
     }
+  }
 
 </script>

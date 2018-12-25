@@ -23,7 +23,8 @@
         <div class="col">
           Upload file:
 
-          <fileupload :target="this.getUploadUrl()" action="POST" v-on:progress="progress" v-on:start="startUpload" v-on:finish="finishUpload"></fileupload>
+          <fileupload :target="this.getUploadUrl()" action="POST" v-on:progress="progress" v-on:start="startUpload"
+                      v-on:finish="finishUpload"></fileupload>
 
           <p>Status: {{uploadState}}</p>
         </div>
@@ -33,40 +34,40 @@
 </template>
 
 <script>
-import ApiConnector from '../lib/ApiConnector.js'
-import FileUpload from 'vue-simple-upload/dist/FileUpload'
-import BackButton from '../components/commons/backButton'
+  import ApiConnector from '../lib/ApiConnector.js'
+  import FileUpload from 'vue-simple-upload/dist/FileUpload'
+  import BackButton from '../components/commons/backButton'
 
-export default {
-  data () {
-    return {
-      uploadState: ""
-    }
-  },
-  methods: {
-    getUploadUrl: () => ApiConnector.getBackendUrl() + '/restaurantImport',
-    startUpload: (e) => {
-      // file upload start event
-      console.log("startUpload", e);
-      this.uploadState = "Starting upload"
+  export default {
+    data() {
+      return {
+        uploadState: ""
+      }
     },
-    finishUpload: (e) => {
-      // file upload finish event
-      console.log("finishUpload", e);
-      this.uploadState = "Upload finished"
+    methods: {
+      getUploadUrl: () => ApiConnector.getBackendUrl() + '/restaurantImport',
+      startUpload: (e) => {
+        // file upload start event
+        console.log("startUpload", e);
+        this.uploadState = "Starting upload"
+      },
+      finishUpload: (e) => {
+        // file upload finish event
+        console.log("finishUpload", e);
+        this.uploadState = "Upload finished"
+      },
+      progress: (e) => {
+        // file upload progress
+        // returns false if progress is not computable
+        console.log("Progress", e);
+        this.uploadState = "Progress = " + e
+      }
     },
-    progress: (e) => {
-      // file upload progress
-      // returns false if progress is not computable
-      console.log("Progress", e);
-      this.uploadState = "Progress = " + e
-    }
-  },
-  components: {
-    'fileupload': FileUpload,
-    BackButton
-  },
-}
+    components: {
+      'fileupload': FileUpload,
+      BackButton
+    },
+  }
 </script>
 
 <style scoped>

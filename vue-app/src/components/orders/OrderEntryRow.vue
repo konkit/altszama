@@ -50,57 +50,57 @@
 </template>
 
 <script>
-    import Price from '../commons/priceElement.vue'
-    import ApiConnector from '../../lib/ApiConnector.js'
+  import Price from '../commons/priceElement.vue'
+  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
-    export default {
-        name: 'order-entry-row',
-        props: ['order', 'orderEntry', 'dishEntry', 'currentUserId'],
-        methods: {
-            isOrderOwner: function () {
-                return this.order.orderCreator.id == this.currentUserId
-            },
-            isOrderEntryOwner: function (orderEntry) {
-                return orderEntry.user.id === this.currentUserId
-            },
-            shouldShowMarkAsPaidButton: function (orderEntry) {
-                return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && (orderEntry.paymentStatus != "MARKED" && orderEntry.paymentStatus != "CONFIRMED") && this.isOrderOwner() == false)
-            },
-            shouldShowConfirmAsPaidButton: function (orderEntry) {
-                return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && orderEntry.paymentStatus != "CONFIRMED" && this.isOrderOwner() == true)
-            },
-            paymentStatus: function (orderEntry) {
-                if (orderEntry.paymentStatus == "UNPAID") {
-                    return "Unpaid"
-                } else if (orderEntry.paymentStatus == "MARKED") {
-                    return "Marked as paid"
-                } else if (orderEntry.paymentStatus == "CONFIRMED") {
-                    return "Payment confirmed"
-                } else {
-                    return orderEntry.paymentStatus
-                }
-            },
-            confirmAsPaid: function (orderEntryId) {
-                ApiConnector.confirmOrderEntryAsPaid(orderEntryId)
-                    .then(successResponse => window.location.reload())
-                    .catch(errResponse => console.log(errResponse));
-            },
-            markAsPaid: function (orderEntryId) {
-                ApiConnector.markOrderEntryAsPaid(orderEntryId)
-                    .then(successResponse => window.location.reload())
-                    .catch(errResponse => console.log(errResponse));
-            },
-            deleteEntry: function (orderEntryId, dishEntryId) {
-                this.$emit("deleteEntry", orderEntryId, dishEntryId);
-            },
-            editEntry: function (orderEntryId, dishEntryId) {
-                this.$store.commit('setEntryEditing', {"orderEntryId": orderEntryId, "dishEntryId": dishEntryId})
-            },
-        },
-        components: {
-            Price
+  export default {
+    name: 'order-entry-row',
+    props: ['order', 'orderEntry', 'dishEntry', 'currentUserId'],
+    methods: {
+      isOrderOwner: function () {
+        return this.order.orderCreator.id == this.currentUserId
+      },
+      isOrderEntryOwner: function (orderEntry) {
+        return orderEntry.user.id === this.currentUserId
+      },
+      shouldShowMarkAsPaidButton: function (orderEntry) {
+        return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && (orderEntry.paymentStatus != "MARKED" && orderEntry.paymentStatus != "CONFIRMED") && this.isOrderOwner() == false)
+      },
+      shouldShowConfirmAsPaidButton: function (orderEntry) {
+        return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && orderEntry.paymentStatus != "CONFIRMED" && this.isOrderOwner() == true)
+      },
+      paymentStatus: function (orderEntry) {
+        if (orderEntry.paymentStatus == "UNPAID") {
+          return "Unpaid"
+        } else if (orderEntry.paymentStatus == "MARKED") {
+          return "Marked as paid"
+        } else if (orderEntry.paymentStatus == "CONFIRMED") {
+          return "Payment confirmed"
+        } else {
+          return orderEntry.paymentStatus
         }
+      },
+      confirmAsPaid: function (orderEntryId) {
+        OrdersApiConnector.confirmOrderEntryAsPaid(orderEntryId)
+          .then(successResponse => window.location.reload())
+          .catch(errResponse => console.log(errResponse));
+      },
+      markAsPaid: function (orderEntryId) {
+        OrdersApiConnector.markOrderEntryAsPaid(orderEntryId)
+          .then(successResponse => window.location.reload())
+          .catch(errResponse => console.log(errResponse));
+      },
+      deleteEntry: function (orderEntryId, dishEntryId) {
+        this.$emit("deleteEntry", orderEntryId, dishEntryId);
+      },
+      editEntry: function (orderEntryId, dishEntryId) {
+        this.$store.commit('setEntryEditing', {"orderEntryId": orderEntryId, "dishEntryId": dishEntryId})
+      },
+    },
+    components: {
+      Price
     }
+  }
 </script>
 
 <style scoped>

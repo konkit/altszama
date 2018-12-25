@@ -37,78 +37,78 @@
 </template>
 
 <script>
-    import BackButton from '../commons/backButton.vue'
-    import ErrorsComponent from '../commons/errors.vue'
-    import Spinner from '../commons/spinner.vue'
-    import Price from '../commons/priceElement.vue'
-    import ApiConnector from '../../lib/ApiConnector.js'
+  import BackButton from '../commons/backButton.vue'
+  import ErrorsComponent from '../commons/errors.vue'
+  import Spinner from '../commons/spinner.vue'
+  import Price from '../commons/priceElement.vue'
 
-    import OrderEntryInput from './OrderEntryInput.vue'
-    import SideDishesInput from './SideDishesInput.vue'
+  import OrderEntryInput from './OrderEntryInput.vue'
+  import SideDishesInput from './SideDishesInput.vue'
+  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
-    export default {
-        name: 'order-entry-edit-entry',
-        props: ['order', 'orderEntry', 'dishEntry'],
-        data() {
-            return {}
-        },
-        created() {
-            this.$store.commit('setEntryLoadingTrue')
-        },
-        mounted() {
-            var newEditedOrderEntry = {
-                id: this.dishEntry.id,
-                orderId: this.order.id,
-                dishId: this.dishEntry.dish.id,
-                additionalComments: this.dishEntry.additionalComments,
-                newDish: false,
-                newDishName: "",
-                newDishPrice: "",
-                chosenSideDishes: this.dishEntry.sideDishes || []
-            };
+  export default {
+    name: 'order-entry-edit-entry',
+    props: ['order', 'orderEntry', 'dishEntry'],
+    data() {
+      return {}
+    },
+    created() {
+      this.$store.commit('setEntryLoadingTrue')
+    },
+    mounted() {
+      var newEditedOrderEntry = {
+        id: this.dishEntry.id,
+        orderId: this.order.id,
+        dishId: this.dishEntry.dish.id,
+        additionalComments: this.dishEntry.additionalComments,
+        newDish: false,
+        newDishName: "",
+        newDishPrice: "",
+        chosenSideDishes: this.dishEntry.sideDishes || []
+      };
 
-            this.$store.commit('setEditedOrderEntry', newEditedOrderEntry);
-            this.$store.commit('setEntryLoadingFalse');
-        },
-        methods: {
-            submitForm: function (e) {
-                e.preventDefault();
+      this.$store.commit('setEditedOrderEntry', newEditedOrderEntry);
+      this.$store.commit('setEntryLoadingFalse');
+    },
+    methods: {
+      submitForm: function (e) {
+        e.preventDefault();
 
-                let errorsComponent = this.$refs.errorsComponent;
+        let errorsComponent = this.$refs.errorsComponent;
 
-                ApiConnector.editOrderEntry(this.order.id, this.orderEntry.id, this.editedOrderEntry)
-                    .then(() => {
-                        this.$emit("updateOrder");
-                        this.$store.commit('cancelEntryCreateOrEdit', {})
-                    })
-                    .catch((error) => {
-                        console.log("OrderEntryEditEntry error:", error);
-                        error.body.messages.forEach(msg => errorsComponent.addError(msg));
-                    });
+        OrdersApiConnector.editOrderEntry(this.order.id, this.orderEntry.id, this.editedOrderEntry)
+          .then(() => {
+            this.$emit("updateOrder");
+            this.$store.commit('cancelEntryCreateOrEdit', {})
+          })
+          .catch((error) => {
+            console.log("OrderEntryEditEntry error:", error);
+            error.body.messages.forEach(msg => errorsComponent.addError(msg));
+          });
 
-                return false;
-            },
-            cancelEdit: function () {
-                this.$store.commit('cancelEntryCreateOrEdit', {})
-            },
-        },
-        computed: {
-            loadingEntry() {
-                return this.$store.state.loadingEntry;
-            },
-            editedOrderEntry() {
-                return this.$store.state.editedOrderEntry;
-            }
-        },
-        components: {
-            BackButton,
-            ErrorsComponent,
-            Price,
-            Spinner,
-            OrderEntryInput,
-            SideDishesInput
-        }
+        return false;
+      },
+      cancelEdit: function () {
+        this.$store.commit('cancelEntryCreateOrEdit', {})
+      },
+    },
+    computed: {
+      loadingEntry() {
+        return this.$store.state.loadingEntry;
+      },
+      editedOrderEntry() {
+        return this.$store.state.editedOrderEntry;
+      }
+    },
+    components: {
+      BackButton,
+      ErrorsComponent,
+      Price,
+      Spinner,
+      OrderEntryInput,
+      SideDishesInput
     }
+  }
 
 </script>
 
