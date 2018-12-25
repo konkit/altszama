@@ -80,21 +80,9 @@
             submitForm: function (e) {
                 e.preventDefault();
 
-                const action = "/order_entries/save";
-
                 let errorsComponent = this.$refs.errorsComponent;
 
-                let formData = {
-                    orderId: this.order.id,
-                    dishId: this.editedOrderEntry.dishId,
-                    newDish: this.editedOrderEntry.newDish,
-                    newDishName: this.editedOrderEntry.newDishName,
-                    newDishPrice: Math.round(this.editedOrderEntry.newDishPrice * 100),
-                    additionalComments: this.editedOrderEntry.additionalComments,
-                    sideDishes: this.editedOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, {newSideDishPrice: Math.round(sd.newSideDishPrice * 100)}))
-                };
-
-                ApiConnector.makePost(action, formData)
+                ApiConnector.saveOrderEntry(this.order.id, this.editedOrderEntry)
                     .then(() => {
                         this.$emit("updateOrder");
                         this.$store.commit('cancelEntryCreateOrEdit', {})

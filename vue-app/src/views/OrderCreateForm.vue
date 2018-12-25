@@ -1,14 +1,10 @@
 <template>
-  <div>
-    <div v-if="this.loading === true">
-      <spinner></spinner>
-    </div>
-
-    <div v-if="this.loading === false && this.restaurantsList.length === 0" >
+  <WithSpinner>
+    <div v-if="this.restaurantsList.length === 0" >
       <p>There are no restaurants, please create one first</p>
     </div>
 
-    <div v-if="this.loading === false && this.restaurantsList.length > 0" >
+    <div v-if="this.restaurantsList.length > 0" >
       <div class="container">
         <back-button href="#/orders"></back-button>
 
@@ -29,7 +25,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </WithSpinner>
 </template>
 
 <script>
@@ -39,6 +35,7 @@ import MaskedInput from 'vue-text-mask'
 import OrderForm from '../components/orders/OrderForm.vue'
 import Spinner from '../components/commons/spinner.vue'
 import ApiConnector from '../lib/ApiConnector.js'
+import WithSpinner from "../components/commons/WithSpinner";
 
 export default {
   name: 'order-create-form',
@@ -52,29 +49,10 @@ export default {
     this.$store.commit('setLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/orders/create.json")
+    ApiConnector.getOrderCreateData()
       .then(response => {
-        this.restaurantsList = response.data.restaurantsList;
-
-        var restaurantId;
-        if( response.data.restaurant != null) {
-          restaurantId = response.data.restaurant.id
-        } else {
-          restaurantId = response.data.restaurantsList[0].id;
-        }
-
-        this.order = {
-          restaurantId: restaurantId,
-          orderDate: response.data.orderDate,
-          timeOfOrder: response.data.timeOfOrder,
-
-          decreaseInPercent: 0,
-          deliveryCostPerEverybody: 0,
-          deliveryCostPerDish: 0,
-          paymentByCash: true,
-          paymentByBankTransfer: false,
-          bankTransferNumber: ''
-        };
+        this.restaurantsList = response.restaurantsList;
+        this.order = response.order;
 
         this.$store.commit('setLoadingFalse')
       })
@@ -84,28 +62,13 @@ export default {
     submitForm: function(e) {
       e.preventDefault();
 
-      let formData = {
-        restaurantId: this.order.restaurantId,
-        orderDate: this.order.orderDate,
-        timeOfOrder: this.order.timeOfOrder,
-        decreaseInPercent: this.order.decreaseInPercent,
-        deliveryCostPerEverybody: Math.round(this.order.deliveryCostPerEverybody * 100),
-        deliveryCostPerDish: Math.round(this.order.deliveryCostPerDish * 100),
-        paymentByCash: this.order.paymentByCash === true,
-        paymentByBankTransfer: this.order.paymentByBankTransfer === true,
-        bankTransferNumber: this.order.bankTransferNumber
-      };
-
-      let action = "/orders/save";
       let dataSuccessUrl = "#/orders/";
 
       let errorsComponent = this.$refs.errorsComponent;
 
-      ApiConnector.makePost(action, formData, {'headers': {'Authorization': 'Bearer ' + this.token}})
-        .then(function (response) {
-          window.location.href = dataSuccessUrl;
-        })
-        .catch(function(error) {
+      ApiConnector.createOrder(order, this.token)
+        .then(response => { window.location.href = dataSuccessUrl; })
+        .catch(error => {
           console.log("orderCreateForm Error:");
           console.log(error);
           error.body.messages.forEach(msg => errorsComponent.addError(msg));
@@ -120,6 +83,7 @@ export default {
     }
   },
   components: {
+      WithSpinner,
     BackButton,
     ErrorsComponent,
     MaskedInput,

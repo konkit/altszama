@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <div v-if="this.loading === true">
-      <spinner></spinner>
-    </div>
-
-    <div v-if="this.loading === false">
+  <WithSpinner>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col">
@@ -47,22 +42,18 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+  </WithSpinner>
 </template>
 
 <script>
-import Vue from 'vue'
-
 import Spinner from '../components/commons/spinner'
 import ErrorsComponent from '../components/commons/errors'
 import BackButton from '../components/commons/backButton'
 import Price from '../components/commons/priceElement'
 import router from '../router'
-
 import ShowRestaurantDishesTable from './ShowRestaurantDishesTable'
-
 import ApiConnector from '../lib/ApiConnector.js'
+import WithSpinner from "../components/commons/WithSpinner";
 
 export default {
   name: 'show-restaurant',
@@ -80,14 +71,11 @@ export default {
     this.$store.commit('setLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/restaurants/" + this.restaurantId + "/show.json")
+    ApiConnector.getShowRestaurantData(this.restaurantId)
       .then(response => {
-        this.restaurant = response.data.restaurant;
-        this.dishes = response.data.dishes;
-        this.dishesByCategory = convertToMapEntries(response.data.dishesByCategory);
-
-        console.log("response: ", response.data)
-        console.log("dishesByCategory: ", this.dishesByCategory)
+        this.restaurant = response.restaurant;
+        this.dishes = response.dishes;
+        this.dishesByCategory = response.dishesByCategory;
 
         this.$store.commit('setLoadingFalse')
       })
@@ -97,7 +85,7 @@ export default {
     deleteRestaurant: function(e) {
       let errorsComponent = this.$refs.errorsComponent;
 
-      ApiConnector.makeGet("/restaurants/" + this.restaurantId + "/delete")
+      ApiConnector.deleteRestaurant(this.restaurantId)
         .then(response => router.push({'path': '/restaurants'}))
         .catch(function(error) {
           console.log("Delete restaurant error:");
@@ -121,6 +109,7 @@ export default {
     }
   },
   components: {
+      WithSpinner,
     Spinner,
     BackButton,
     Price,

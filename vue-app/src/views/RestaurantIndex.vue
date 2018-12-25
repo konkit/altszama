@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <div v-if="this.loading === true">
-      <spinner></spinner>
-    </div>
-
-    <div v-if="this.loading === false">
+  <WithSpinner>
       <div class="container">
         
         <div class="row justify-content-center">
@@ -36,8 +31,7 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+  </WithSpinner>
 </template>
 
 <script>
@@ -45,11 +39,11 @@ import Vue from 'vue'
 
 import Spinner from '../components/commons/spinner'
 import ApiConnector from '../lib/ApiConnector.js'
+import WithSpinner from "../components/commons/WithSpinner";
 
 export default {
   data () {
     return { 
-      results: {},
       restaurants: [],
       restaurantToDishesMap: {},
     }
@@ -58,11 +52,10 @@ export default {
     this.$store.commit('setLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/restaurants.json")
+    ApiConnector.getRestaurants()
       .then(response => {
-        this.results = response.data;
-        this.restaurants = response.data.restaurants;
-        this.restaurantToDishesMap = response.data.restaurantToDishesMap;
+        this.restaurants = response.restaurants;
+        this.restaurantToDishesMap = response.restaurantToDishesMap;
 
         this.$store.commit('setLoadingFalse')
       })
@@ -79,6 +72,7 @@ export default {
     }
   },
   components: {
+      WithSpinner,
     Spinner
   }
 }

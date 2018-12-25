@@ -26,8 +26,8 @@
             </div>
 
             <div class="form-group">
-              <label for="price">Price</label>
-              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="price" v-bind:precision="2" class="form-control" required="" id="price"></vue-numeric>
+              <label for="dish-price">Price</label>
+              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="price" v-bind:precision="2" class="form-control" required="" id="dish-price"></vue-numeric>
             </div>
 
             <div class="form-group">
@@ -55,17 +55,15 @@
 </template>
 
 <script>
-import Vue from 'vue'
+  import BackButton from '../components/commons/backButton.vue'
+  import ErrorsComponent from '../components/commons/errors.vue'
+  import Price from '../components/commons/priceElement.vue'
+  import Spinner from '../components/commons/spinner'
+  import SideDishes from '../components/restaurants/SideDishes.vue'
 
-import BackButton from '../components/commons/backButton.vue'
-import ErrorsComponent from '../components/commons/errors.vue'
-import Price from '../components/commons/priceElement.vue'
-import Spinner from '../components/commons/spinner'
-import SideDishes from '../components/restaurants/SideDishes.vue'
+  import ApiConnector from '../lib/ApiConnector.js'
 
-import ApiConnector from '../lib/ApiConnector.js'
-
-export default {
+  export default {
   props: ['restaurantName'],
   data () {
     return {
@@ -79,15 +77,17 @@ export default {
     }
   },
   mounted() {
-    ApiConnector.makeGet("/restaurants/" + this.restaurantId + "/dishes/create.json")
-      .then(response => this.categories = response.data.categories)
+    ApiConnector.getDishCreateData(this.restaurantId)
+      .then(response => {
+          this.categories = response.data.categories
+      })
       .catch(errResponse => ApiConnector.handleError(errResponse))
   },
   methods: {
     submitForm: function() {
       let sideDishesElement = this.$refs.sideDishesElement;
 
-      var formData = {
+      const formData = {
         "restaurant.id": this.restaurantId,
         name: this.name,
         price: Math.round(this.price * 100),
@@ -95,17 +95,14 @@ export default {
         sideDishes: sideDishesElement.getSideDishes()
       };
 
-      var action = "/restaurants/" + this.restaurantId + "/dishes/save"
-      var dataSuccessUrl = this.getBackUrl();
-
       let errorsComponent = this.$refs.errorsComponent;
 
-      ApiConnector.makePost(action, formData)
-        .then(function (response) {
-          window.location.href = dataSuccessUrl;
+      ApiConnector.createDish(this.restaurantId, formData)
+        .then(response => {
+          window.location.href = this.getBackUrl();
         })
         .catch(function(error) {
-          console.log("dishCreateForm Error:")
+          console.log("dishCreateForm Error:");
           console.log(error);
           errorsComponent.addError(error.body.message);
         });

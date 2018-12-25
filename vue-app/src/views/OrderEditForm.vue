@@ -1,136 +1,98 @@
 <template>
-  <div>
-    <div v-if="this.loading === true">
-      <spinner></spinner>
-    </div>
-
-    <div v-if="this.loading === false">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col">
-            <back-button :href="'#/orders/show/' + orderId"></back-button>
-          </div>
+  <WithSpinner>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col">
+          <back-button :href="'#/orders/show/' + orderId"></back-button>
         </div>
+      </div>
 
-        <div class="row justify-content-center">
-          <div class="col">
-            <h1>Edit order</h1>
-          </div>
+      <div class="row justify-content-center">
+        <div class="col">
+          <h1>Edit order</h1>
         </div>
+      </div>
 
-        <errors-component ref="errorsComponent" />
+      <errors-component ref="errorsComponent"/>
 
-        <order-form :order="order" :restaurantsList="restaurantsList" />
+      <order-form :order="order" :restaurantsList="restaurantsList"/>
 
-        <div class="row justify-content-center">
-          <div class="col">
-            <button class="btn btn-block btn-success" v-on:click="submitForm">Update</button>
-          </div>
+      <div class="row justify-content-center">
+        <div class="col">
+          <button class="btn btn-block btn-success" v-on:click="submitForm">Update</button>
         </div>
       </div>
     </div>
-  </div>
+  </WithSpinner>
 </template>
 
 <script>
-import Vue from 'vue'
+  import BackButton from '../components/commons/backButton.vue'
+  import ErrorsComponent from '../components/commons/errors.vue'
+  import MaskedInput from 'vue-text-mask'
+  import Spinner from '../components/commons/spinner.vue'
+  import ApiConnector from '../lib/ApiConnector.js'
+  import OrderForm from '../components/orders/OrderForm.vue'
+  import WithSpinner from "../components/commons/WithSpinner";
 
-import BackButton from '../components/commons/backButton.vue'
-import ErrorsComponent from '../components/commons/errors.vue'
-import MaskedInput from 'vue-text-mask'
-import Spinner from '../components/commons/spinner.vue'
-import ApiConnector from '../lib/ApiConnector.js'
-import OrderForm from '../components/orders/OrderForm.vue'
+  export default {
+    name: 'order-edit-form',
+    data() {
+      return {
+        orderId: this.$route.params.id,
 
-export default {
-  name: 'order-edit-form',
-  data () {
-    return {
-      orderId: this.$route.params.id,
+        order: {},
+        restaurantsList: [],
+      }
+    },
+    created() {
+      this.$store.commit('setLoadingTrue')
+    },
+    mounted() {
+      ApiConnector.getOrderEditData(this.orderId)
+        .then(response => {
+          this.restaurantsList = response.restaurantsList;
+          this.order = response.order;
 
-      order: {},
-      restaurantsList: [],
-    }
-  },
-  created() {
-    this.$store.commit('setLoadingTrue')
-  },
-  mounted() {
-    ApiConnector.makeGet("/orders/" + this.orderId + "/edit.json")
-      .then(response => {
-        this.restaurantsList = response.data.restaurantsList;
-
-        var restaurantId;
-        if( response.data.order.restaurant != null) {
-          restaurantId = response.data.order.restaurant.id
-        } else {
-          restaurantId = response.data.restaurantsList[0].id;
-        }
-
-        this.order = {
-          restaurantId: restaurantId,
-          orderDate: response.data.order.orderDate,
-          timeOfOrder: response.data.order.timeOfOrder,
-          decreaseInPercent: response.data.order.decreaseInPercent,
-          deliveryCostPerEverybody: response.data.order.deliveryCostPerEverybody / 100,
-          deliveryCostPerDish: response.data.order.deliveryCostPerDish / 100,
-          paymentByCash: response.data.order.paymentByCash,
-          paymentByBankTransfer: response.data.order.paymentByBankTransfer,
-          bankTransferNumber: response.data.order.bankTransferNumber
-        }
-
-        this.$store.commit('setLoadingFalse')
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse))
-  },
-  methods: {
-    submitForm: function(e) {
-      e.preventDefault();
-
-      let formData = {
-        orderId: this.orderId,
-        restaurantId: this.order.restaurantId,
-        orderDate: this.order.orderDate,
-        timeOfOrder: this.order.timeOfOrder,
-        decreaseInPercent: this.order.decreaseInPercent,
-        deliveryCostPerEverybody: Math.round(this.order.deliveryCostPerEverybody * 100),
-        deliveryCostPerDish: Math.round(this.order.deliveryCostPerDish * 100),
-        paymentByCash: this.order.paymentByCash === true,
-        paymentByBankTransfer: this.order.paymentByBankTransfer === true,
-        bankTransferNumber: this.order.bankTransferNumber,
-      };
-
-      let action = "/orders/update";
-      let dataSuccessUrl = "#/orders/show/" + this.orderId;
-
-      let errorsComponent = this.$refs.errorsComponent;
-
-      ApiConnector.makePost(action, formData)
-        .then(function (response) {
-          window.location.href = dataSuccessUrl;
+          this.$store.commit('setLoadingFalse')
         })
-        .catch(function(error) {
-          console.log("orderEditForm Error:");
-          console.log(error);
-          error.body.messages.forEach(msg => errorsComponent.addError(msg));
-        });
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    },
+    methods: {
+      submitForm: function (e) {
+        e.preventDefault();
 
-      return false;
+        let dataSuccessUrl = "#/orders/show/" + this.orderId;
+
+        let errorsComponent = this.$refs.errorsComponent;
+
+        ApiConnector.editOrder(this.orderId, this.order)
+          .then(response => {
+            window.location.href = dataSuccessUrl;
+          })
+          .catch(error => {
+            console.log("orderEditForm Error:");
+            console.log(error);
+            error.body.messages.forEach(msg => errorsComponent.addError(msg));
+          });
+
+        return false;
+      }
+    },
+    computed: {
+      loading() {
+        return this.$store.state.loading;
+      }
+    },
+    components: {
+      WithSpinner,
+      BackButton,
+      ErrorsComponent,
+      MaskedInput,
+      Spinner,
+      OrderForm
     }
-  },
-  computed: {
-    loading () {
-      return this.$store.state.loading;
-    }
-  },
-  components: {
-    BackButton,
-    ErrorsComponent,
-    MaskedInput,
-    Spinner,
-    OrderForm
   }
-}
 </script>
 
 <style scoped>

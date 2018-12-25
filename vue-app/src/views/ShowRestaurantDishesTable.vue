@@ -36,13 +36,11 @@
 </template>
 
 <script>
-import Vue from 'vue'
+    import Price from '../components/commons/priceElement'
 
-import Price from '../components/commons/priceElement'
+    import ApiConnector from '../lib/ApiConnector.js'
 
-import ApiConnector from '../lib/ApiConnector.js'
-
-export default {
+    export default {
   name: "show-restaurant-dishes-table",
   props: ["restaurant", "dishesByCategory"],
   data () {
@@ -55,11 +53,7 @@ export default {
       this.sideDishesShown = !this.sideDishesShown;
     },
     deleteDish: function(dishId) {
-      var url = "/restaurants/" + this.restaurant.id + "/dishes/" + dishId + "/delete"
-
-      console.log("AJAX GET request to " + url)
-
-      ApiConnector.makeGet(url)
+      ApiConnector.deleteDish(this.restaurant.id, dishId)
         .then(successResponse => window.location.reload())
         .catch(errResponse => console.log(errResponse) );
     },

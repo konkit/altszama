@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <div v-if="this.loading === true">
-      <spinner></spinner>
-    </div>
-
-    <div v-if="this.loading === false">
+  <WithSpinner>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col">
@@ -55,18 +50,16 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+  </WithSpinner>
 </template>
 
 <script>
-import Vue from 'vue'
-
 import BackButton from '../components/commons/backButton'
 import ErrorsComponent from '../components/commons/errors'
 import Spinner from '../components/commons/spinner'
 
 import ApiConnector from '../lib/ApiConnector.js'
+import WithSpinner from "../components/commons/WithSpinner";
 
 export default {
   data () {
@@ -85,18 +78,14 @@ export default {
     this.$store.commit('setLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/restaurants/" + this.restaurantId + "/edit.json")
+    ApiConnector.getRestaurantEditData(this.restaurantId)
       .then(response => {
-        console.log(response.data);
-
-        this.results = response.data;
-
-        this.id = response.data.id;
-        this.url = response.data.url;
-        this.name = response.data.name;
-        this.rating = response.data.rating;
-        this.telephone = response.data.telephone;
-        this.address = response.data.address;
+        this.id = response.id;
+        this.url = response.url;
+        this.name = response.name;
+        this.rating = response.rating;
+        this.telephone = response.telephone;
+        this.address = response.address;
 
         this.$store.commit('setLoadingFalse')
       })
@@ -104,8 +93,7 @@ export default {
   },
   methods: {
     submitForm: function() {
-      let formData = {
-        "restaurant.id": this.restaurantId,
+      let restaurant = {
         id: this.id,
         name: this.name,
         rating: this.rating,
@@ -114,12 +102,11 @@ export default {
         url: this.url
       };
 
-      const action = "/restaurants/update";
       const dataSuccessUrl = "#/restaurants/show/" + this.restaurantId;
 
       let errorsComponent = this.$refs.errorsComponent;
 
-      ApiConnector.makePost(action, formData)
+      ApiConnector.editRestaurant(this.restaurantId, restaurant)
         .then(function (response) {
           window.location.href = dataSuccessUrl;
         })
@@ -138,6 +125,7 @@ export default {
     }
   },
   components: {
+      WithSpinner,
     BackButton,
     ErrorsComponent,
     Spinner

@@ -50,8 +50,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
 import BackButton from '../components/commons/backButton'
 import ErrorsComponent from '../components/commons/errors'
 
@@ -77,10 +75,9 @@ export default {
   },
   methods: {
     submitForm: function() {
-      const action = "/restaurants/save";
       const dataSuccessUrl = "#/restaurants";
 
-      let formData = {
+      let newRestaurant = {
         name: this.name,
         url: this.url,
         rating: this.rating,
@@ -90,7 +87,7 @@ export default {
 
       let errorsComponent = this.$refs.errorsComponent;
 
-      ApiConnector.makePost(action, formData)
+      ApiConnector.createRestaurant(newRestaurant)
         .then(function (response) {
           window.location.href = dataSuccessUrl;
         })

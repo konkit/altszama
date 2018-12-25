@@ -81,12 +81,12 @@
                 }
             },
             confirmAsPaid: function (orderEntryId) {
-                ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid')
+                ApiConnector.confirmOrderEntryAsPaid(orderEntryId)
                     .then(successResponse => window.location.reload())
                     .catch(errResponse => console.log(errResponse));
             },
             markAsPaid: function (orderEntryId) {
-                ApiConnector.makeGet('/order_entries/' + orderEntryId + '/mark_as_paid')
+                ApiConnector.markOrderEntryAsPaid(orderEntryId)
                     .then(successResponse => window.location.reload())
                     .catch(errResponse => console.log(errResponse));
             },

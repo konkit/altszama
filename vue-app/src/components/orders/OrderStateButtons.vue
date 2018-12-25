@@ -45,7 +45,6 @@
 </template>
 
 <script>
-    import Vue from 'vue'
     import ApiConnector from '../../lib/ApiConnector'
 
     export default {
@@ -56,37 +55,31 @@
         },
         methods: {
             setAsCreated: function (e) {
-                makeAjaxRequest('/orders/' + this.orderId + '/set_as_created')
+                ApiConnector.setOrderAsCreated(this.orderId)
+                    .then(successResponse => window.location.reload())
+                    .catch(errResponse => console.log(errResponse));
             },
             setAsOrdered: function (e) {
-                makeAjaxRequest('/orders/' + this.orderId + '/set_back_as_ordered')
+                ApiConnector.setOrderAsOrdered(this.orderId)
+                    .then(successResponse => window.location.reload())
+                    .catch(errResponse => console.log(errResponse));
             },
             setAsDelivered: function (e) {
-                makeAjaxRequest('/orders/' + this.orderId + '/set_as_delivered')
+                ApiConnector.setOrderAsDelivered(this.orderId)
+                    .then(successResponse => window.location.reload())
+                    .catch(errResponse => console.log(errResponse));
             },
             setAsRejected: function (e) {
-                makeAjaxRequest('/orders/' + this.orderId + '/set_as_rejected')
+                ApiConnector.setOrderAsRejected(this.orderId)
+                    .then(successResponse => window.location.reload())
+                    .catch(errResponse => console.log(errResponse));
             },
             deleteEntry: function (e) {
-                makeAjaxRequestWithSuccessUrl('/orders/' + this.orderId + '/delete', '#/orders')
+                ApiConnector.deleteOrder(this.orderId + '/delete')
+                    .then(successResponse => window.location.href = '#/orders')
+                    .catch(errResponse => console.log(errResponse));
             },
         }
-    }
-
-    function makeAjaxRequest(url) {
-        console.log("AJAX GET request to " + url)
-
-        ApiConnector.makeGet(url)
-            .then(successResponse => window.location.reload())
-            .catch(errResponse => console.log(errResponse));
-    }
-
-    function makeAjaxRequestWithSuccessUrl(url, successUrl) {
-        console.log("AJAX GET with REDIRECT request to " + url)
-
-        ApiConnector.makeGet(url)
-            .then(successResponse => window.location.href = successUrl)
-            .catch(errResponse => console.log(errResponse));
     }
 
 </script>

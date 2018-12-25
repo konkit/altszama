@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <div v-if="this.loading === true">
-      <spinner></spinner>
-    </div>
-
-    <div v-if="loadedAndStateIsOrdering()">
+  <WithSpinner>
+    <div v-if="isStateOrdering()">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col">
@@ -149,7 +145,7 @@
       </div>
     </div>
 
-    <div v-if="loadedAndStateIsNotOrdering()">
+    <div v-if="isStateNotOrdering()">
       <navigation user-name="Tmp name"></navigation>
 
       <div class="container">
@@ -173,7 +169,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </WithSpinner>
 </template>
 
 <script>
@@ -186,13 +182,13 @@
     import Navigation from '../components/Navigation.vue'
 
     import ApiConnector from '../lib/ApiConnector.js'
+    import WithSpinner from "../components/commons/WithSpinner";
 
     export default {
         data() {
             return {
                 orderId: this.$route.params.id,
 
-                results: {},
                 order: '',
                 groupedEntries: [],
                 allEatingPeopleCount: 0,
@@ -205,14 +201,13 @@
             this.$store.commit('setLoadingTrue')
         },
         mounted() {
-            ApiConnector.makeGet("/orders/" + this.orderId + "/order_view.json")
-                .then(response => {
-                    this.results = response.data;
-                    this.order = response.data.order;
-                    this.groupedEntries = response.data.groupedEntries;
-                    this.allEatingPeopleCount = response.data.allEatingPeopleCount;
-                    this.basePriceSum = response.data.basePriceSum;
-                    this.totalPrice = response.data.totalPrice;
+            ApiConnector.fetchOrderView(this.orderId)
+                .then(responseObj => {
+                    this.order = responseObj.order;
+                    this.groupedEntries = responseObj.groupedEntries;
+                    this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
+                    this.basePriceSum = responseObj.basePriceSum;
+                    this.totalPrice = responseObj.totalPrice;
 
                     this.$store.commit('setLoadingFalse')
                 })
@@ -220,20 +215,15 @@
         },
         methods: {
             submitForm: function () {
-                let action = '/orders/' + this.orderId + '/set_as_ordered';
                 let dataSuccessUrl = '#/orders/show/' + this.orderId;
-
-                let formData = {
-                    approxTimeOfDelivery: this.approxTimeOfDelivery.toString()
-                };
 
                 let errorsComponent = this.$refs.errorsComponent;
 
-                ApiConnector.makePost(action, formData)
-                    .then(function (response) {
+                ApiConnector.makeAnOrder(this.orderId, this.approxTimeOfDelivery)
+                    .then(response => {
                         window.location.href = dataSuccessUrl;
                     })
-                    .catch(function (error) {
+                    .catch(error => {
                         console.log("orderView Error:");
                         console.log(error);
                         errorsComponent.addError(error.body.message);
@@ -241,19 +231,15 @@
 
                 return false
             },
-            loadedAndStateIsOrdering: function () {
-                return this.loading === false && this.order.orderState === 'ORDERING';
+            isStateOrdering: function () {
+                return this.order.orderState === 'ORDERING';
             },
-            loadedAndStateIsNotOrdering: function () {
-                return this.loading === false && this.order.orderState !== 'ORDERING';
-            }
-        },
-        computed: {
-            loading() {
-                return this.$store.state.loading;
+            isStateNotOrdering: function () {
+                return this.order.orderState !== 'ORDERING';
             }
         },
         components: {
+            WithSpinner,
             BackButton,
             ErrorsComponent,
             MaskedInput,

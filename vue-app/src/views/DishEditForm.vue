@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <div v-if="this.loading === true">
-      <spinner></spinner>
-    </div>
-
-    <div v-if="this.loading === false">
+  <WithSpinner>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col">
@@ -23,21 +18,21 @@
         <div class="row justify-content-center">
           <div class="col">
             <input type="hidden" name="restaurant.id" v-bind:value="this.restaurantId" />
-            <input type="hidden" name="id" v-bind:value="this.dishId" />
+            <input type="hidden" name="id" v-bind:value="dishData.dishId" />
 
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" class="form-control" v-model="name" required="" id="name" />
+              <input type="text" class="form-control" v-model="dishData.name" required="" id="name" />
             </div>
 
             <div class="form-group">
               <label for="price">Price</label>
-              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="price" v-bind:precision="2" class="form-control" required="" id="price"></vue-numeric>
+              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="dishData.price" v-bind:precision="2" class="form-control" required="" id="price"></vue-numeric>
             </div>
 
             <div class="form-group">
               <label for="category">Category</label>
-              <input type="text" class="form-control" v-model="category" id="category" list="categoryNames" />
+              <input type="text" class="form-control" v-model="dishData.category" id="category" list="categoryNames" />
               <datalist id="categoryNames">
                 <option v-for="categoryName in categories" :value="categoryName" />
               </datalist>
@@ -55,13 +50,10 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+  </WithSpinner>
 </template>
 
 <script>
-import Vue from 'vue'
-
 import BackButton from '../components/commons/backButton'
 import ErrorsComponent from '../components/commons/errors'
 import Price from '../components/commons/priceElement'
@@ -69,37 +61,31 @@ import Spinner from '../components/commons/spinner'
 import SideDishes from '../components/restaurants/SideDishes.vue'
 
 import ApiConnector from '../lib/ApiConnector.js'
+import WithSpinner from "../components/commons/WithSpinner";
 
 export default {
   data () {
     return {
       restaurantId: this.$route.params.id,
       dishId: this.$route.params.dishId,
-      initialSideDishes: [],
-      categories: [],
 
-      results: {},
-
-      name: '',
-      price: '',
-      category: '',
+      dishData: {
+          name: '',
+          price: '',
+          category: '',
+          initialSideDishes: [],
+          categories: [],
+      }
     }
   },
   created() {
     this.$store.commit('setLoadingTrue')
   },
   mounted() {
-    ApiConnector.makeGet("/restaurants/" + this.restaurantId + "/dishes/" + this.dishId + "/edit.json")
-      .then(response => {
-        this.results = response.data;
-
-        this.name = response.data.dish.name;
-        this.price = response.data.dish.price / 100;
-        this.category = response.data.dish.category;
-        this.initialSideDishes = response.data.dish.sideDishes;
-        this.categories = response.data.categories;
-
-        this.$store.commit('setLoadingFalse')
+    ApiConnector.getDishEditData(this.restaurantId, this.dishId)
+      .then(dishData => {
+          this.dishData = dishData;
+          this.$store.commit('setLoadingFalse')
       })
       .catch(errResponse => ApiConnector.handleError(errResponse))
   },
@@ -107,25 +93,23 @@ export default {
     submitForm: function() {
       let sideDishesElement = this.$refs.sideDishesElement;
 
-      var formData = {
-        "restaurant.id": this.restaurantId,
+      var dishObj = {
         id: this.dishId,
-        name: this.name,
-        price: Math.round(this.price * 100),
-        category: this.category,
+        name: dishData.name,
+        price: Math.round(dishData.price * 100),
+        category: dishData.category,
         sideDishes: sideDishesElement.getSideDishes()
       };
 
-      var action = "/restaurants/" + this.restaurantId + "/dishes/update"
       var dataSuccessUrl = "#/restaurants/show/" + this.restaurantId
 
       let errorsComponent = this.$refs.errorsComponent;
 
-      ApiConnector.makePost(action, formData)
-        .then(function (response) {
+      ApiConnector.editDish(this.restaurantId, dishObj)
+        .then(response => {
             window.location.href = dataSuccessUrl;
         })
-        .catch(function(error) {
+        .catch(error => {
             console.log("dishCreateForm Error:")
             console.log(error);
             errorsComponent.addError(error.body.message);
@@ -151,6 +135,7 @@ export default {
     }
   },
   components: {
+      WithSpinner,
     BackButton,
     ErrorsComponent,
     Price,
