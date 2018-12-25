@@ -14,6 +14,9 @@
 <script>
   export default {
     name: 'WithSpinner',
+    created() {
+      this.$store.commit('setLoadingTrue')
+    },
     computed: {
       loading() {
         return this.$store.state.loading;

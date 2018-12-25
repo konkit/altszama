@@ -1,0 +1,7 @@
+body {
+  margin-bottom: 1.5rem;
+}
+
+body, html, #app {
+  height: 100%;
+}

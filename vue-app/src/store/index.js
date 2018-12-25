@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import AllOrdersState from './modules/AllOrdersState'
 import ShowOrderState from './modules/ShowOrderState'
+import CreateOrderState from "./modules/CreateOrderState";
 
 Vue.use(Vuex);
 
@@ -28,7 +29,7 @@ export default new Vuex.Store({
     },
     loginUser (state, payload) {
       state.username = payload.username;
-      localStorage.setItem("username", payload.username)
+      localStorage.setItem("username", payload.username);
 
       state.token = payload.token;
       localStorage.setItem("token", payload.token)
@@ -44,5 +45,6 @@ export default new Vuex.Store({
   modules: {
     showOrder: ShowOrderState,
     allOrders: AllOrdersState,
+    createOrder: CreateOrderState,
   }
 })

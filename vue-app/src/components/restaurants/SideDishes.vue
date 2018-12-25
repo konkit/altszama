@@ -44,9 +44,9 @@
 </template>
 
 <script>
-  import BackButton from '../commons/backButton.vue'
-  import ErrorsComponent from '../commons/errors.vue'
-  import Price from '../commons/priceElement.vue'
+  import BackButton from '../commons/BackButton.vue'
+  import ErrorsComponent from '../commons/Errors.vue'
+  import Price from '../commons/PriceElement.vue'
 
   export default {
     props: [

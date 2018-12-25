@@ -167,8 +167,9 @@ export default {
     return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid')
   },
 
-  createOrder: function(order, token) {
+  createOrder: function(order) {
     let action = "/orders/save";
+    let dataSuccessUrl = "#/orders/";
 
     let formData = {
       restaurantId: order.restaurantId,
@@ -182,7 +183,8 @@ export default {
       bankTransferNumber: order.bankTransferNumber
     };
 
-    return ApiConnector.makePost(action, formData, {'headers': {'Authorization': 'Bearer ' + token}})
+    return ApiConnector.makePost(action, formData)
+      .then(response => window.location.href = dataSuccessUrl)
   },
 
   editOrder: function(orderId, order) {

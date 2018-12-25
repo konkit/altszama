@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import Price from '../commons/priceElement.vue'
+  import Price from '../commons/PriceElement.vue'
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
   export default {

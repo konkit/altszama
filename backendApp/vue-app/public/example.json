@@ -1,0 +1,46 @@
+{
+  "name": "RestaurantName",
+  "url": "https:\/\/www.pyszne.pl\/example",
+  "numberOfVotes": 2066,
+  "bestRating": "5",
+  "rating": 3.5,
+  "telephone": "123456789",
+  "latitude": 50.0679107,
+  "longitude": 19.9451284,
+  "street": "Przykladowa 21/37",
+  "city": "Krak\u00f3w",
+  "postalCode": "31-154",
+  "region": "Ma\u0142opolskieKrak\u00f3w",
+  "dishes": [
+    {
+      "name": "Frytki",
+      "price": "7,00 z\u0142",
+      "sidedishes": [
+        {
+          "name": "jakiś dodatek",
+          "price": "1,00 z\u0142"
+        },
+        {
+          "name": "jakiś inny dodatek",
+          "price": "1,00 z\u0142"
+        },
+      ],
+      "category": "Kategoria1"
+    },
+    {
+      "name": "Inne Frytki",
+      "price": "8,00 z\u0142",
+      "sidedishes": [
+        {
+          "name": "jakiś dodatek",
+          "price": "1,00 z\u0142"
+        },
+        {
+          "name": "jakiś inny dodatek",
+          "price": "1,00 z\u0142"
+        },
+      ],
+      "category": "Kategoria1"
+    }
+  ]
+}

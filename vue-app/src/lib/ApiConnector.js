@@ -45,21 +45,25 @@ export default {
     })
   },
 
-  makeGet: function(relPath) {
+  makeGet (relPath) {
+    console.log(`Making GET to ${relPath}`);
+
     this.token = store.state.token;
     return Vue.http.get(backendUrl + relPath, headersWithToken(this.token))
   },
 
-  makePost: function(relPath, formData) {
+  makePost (relPath, formData) {
+    console.log(`Making POST to ${relPath}`);
+
     this.token = store.state.token;
     return Vue.http.post(backendUrl + relPath, formData, headersWithToken(this.token))
   },
 
-  handleError: function(errorResponse) {
+  handleError (errorResponse) {
     console.log("errorResponse: ", errorResponse);
 
     if (errorResponse.status === 401) {
-      var fullRoutePath = router.currentRoute.fullPath;
+      const fullRoutePath = router.currentRoute.fullPath;
       console.log("Current path", fullRoutePath);
 
       store.commit("logoutUser");
@@ -67,12 +71,12 @@ export default {
       pushNotificationEnabled = false;
 
       console.log("401 Unauthorized");
-      var signOutCallback = () => router.push({name: 'Login', query: { returnPath: fullRoutePath } });
+      const signOutCallback = () => router.push({name: 'Login', query: { returnPath: fullRoutePath }});
       GoogleLogin.signOut(signOutCallback, signOutCallback)
     }
   },
 
-  initializePushNotifications: function() {
+  initializePushNotifications () {
     if (this.getPushNotificationEnabled() === false) {
       if ('serviceWorker' in navigator) {
         console.log("Initialise state");
@@ -85,7 +89,7 @@ export default {
     }
   },
 
-  initialiseState: function() {
+  initialiseState () {
     console.log("Initialise state");
 
     if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
@@ -104,47 +108,36 @@ export default {
       return;
     }
 
-    navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
-      // Get the push notification subscription object
-      serviceWorkerRegistration.pushManager.getSubscription().then(function (subscription) {
-
-        // If this is the user's first visit we need to set up
-        // a subscription to push notifications
-        if (!subscription) {
-          this.subscribe();
-
-          return;
-        }
-
-        // Update the server state with the new subscription
-        this.sendSubscriptionToServer(subscription);
-      })
-        .catch(function (err) {
-          // Handle the error - show a notification in the GUI
-          console.warn('Error during getSubscription()', err);
-        });
-    });
+    return navigator.serviceWorker.ready
+      .then(serviceWorkerRegistration => {
+        serviceWorkerRegistration.pushManager.getSubscription()
+          .then((subscription) => {
+            if (!subscription) {
+              this.subscribe();
+            } else {
+              this.sendSubscriptionToServer(subscription);
+            }
+          })
+          .catch(err => console.warn('Error during getSubscription()', err));
+      });
   },
 
-  subscribe: function () {
-    navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
-
-      serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true}).then(function (subscription) {
-
-        // Update the server state with the new subscription
-        return this.sendSubscriptionToServer(subscription);
-      })
-        .catch(function (e) {
-          if (Notification.permission === 'denied') {
-            console.warn('Permission for Notifications was denied');
-          } else {
-            console.error('Unable to subscribe to push.', e);
-          }
-        });
-    });
+  subscribe: () => {
+    return navigator.serviceWorker.ready
+      .then(serviceWorkerRegistration => {
+        serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
+          .then(subscription => this.sendSubscriptionToServer(subscription))
+          .catch(e => {
+            if (Notification.permission === 'denied') {
+              console.warn('Permission for Notifications was denied');
+            } else {
+              console.error('Unable to subscribe to push.', e);
+            }
+          });
+      });
   },
 
-  sendSubscriptionToServer: function(subscription) {
+  sendSubscriptionToServer(subscription) {
     const key = subscription.getKey ? subscription.getKey('p256dh') : '';
     const auth = subscription.getKey ? subscription.getKey('auth') : '';
 
@@ -155,12 +148,11 @@ export default {
     });
 
     const url = this.getBackendUrl() + '/notification/subscribe';
-    const authToken = localStorage.getItem("token");
 
-    this.makePost(url, subscribeData);
+    return this.makePost(url, subscribeData);
   },
 
-  logout: function() {
+  logout () {
     doLogout()
   }
 }

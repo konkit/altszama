@@ -35,10 +35,10 @@
 </template>
 
 <script>
-  import BackButton from '../commons/backButton.vue'
-  import ErrorsComponent from '../commons/errors.vue'
-  import Spinner from '../commons/spinner.vue'
-  import Price from '../commons/priceElement.vue'
+  import BackButton from '../commons/BackButton.vue'
+  import ErrorsComponent from '../commons/Errors.vue'
+  import Spinner from '../commons/Spinner.vue'
+  import Price from '../commons/PriceElement.vue'
 
   import OrderEntryInput from './OrderEntryInput.vue'
   import SideDishesInput from './SideDishesInput.vue'
