@@ -7,6 +7,7 @@ export default {
 
     // Order
     restaurantId: 0,
+    orderId: 0,
     orderDate: "",
     timeOfOrder: "",
     decreaseInPercent: "",
@@ -21,13 +22,14 @@ export default {
       state.restaurantsList = payload.restaurantsList;
 
       state.restaurantId = payload.order.restaurantId;
+      state.orderId = payload.order.orderId;
       state.orderDate = payload.order.orderDate;
       state.timeOfOrder = payload.order.timeOfOrder;
       state.decreaseInPercent = payload.order.decreaseInPercent;
       state.deliveryCostPerEverybody = payload.order.deliveryCostPerEverybody;
       state.deliveryCostPerDish = payload.order.deliveryCostPerDish;
       state.paymentByCash = payload.order.paymentByCash;
-      state.paymentByBankTransfer = payload.order.paymentByBankTransfer ;
+      state.paymentByBankTransfer = payload.order.paymentByBankTransfer;
       state.bankTransferNumber = payload.order.bankTransferNumber;
     },
     updateRestaurantId(state, newValue) {

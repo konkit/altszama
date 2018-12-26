@@ -2,7 +2,12 @@
 export default {
     namespaced: true,
     state: {
-        order: {},
+        order: {
+            restaurant: {
+                name: ""
+            },
+            orderCreator: {}
+        },
         orderEntries: [],
         currentUserId: '',
         allDishesInRestaurant: [],

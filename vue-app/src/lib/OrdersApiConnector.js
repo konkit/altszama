@@ -189,6 +189,7 @@ export default {
 
   editOrder: function(orderId, order) {
     let action = "/orders/update";
+    let dataSuccessUrl = "#/orders/show/" + orderId;
 
     let formData = {
       orderId: orderId,
@@ -204,6 +205,7 @@ export default {
     };
 
     return ApiConnector.makePost(action, formData)
+      .then(response => window.location.href = dataSuccessUrl)
   },
 
   makeAnOrder: function (orderId, approxTimeOfDelivery) {
