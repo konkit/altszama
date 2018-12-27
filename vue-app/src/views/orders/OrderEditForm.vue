@@ -20,8 +20,8 @@
           <div class="col">
             <div class="form-group">
               <label for="restaurant">Restaurant: </label>
-
               <v-select
+                  id="restaurant"
                   :options="this.restaurantsList"
                   label="name"
                   :value="this.restaurantsList.find(r => restaurantId == r.id)"
@@ -51,6 +51,7 @@
             <div class="form-group">
               <label for="timeOfOrder">Time of order</label>
               <masked-input
+                  id="timeOfOrder"
                   type="text"
                   class="form-control"
                   :mask="[/\d/,/\d/,':',/\d/,/\d/]"
@@ -161,13 +162,13 @@
   import BackButton from '../../components/commons/BackButton'
   import ErrorsComponent from '../../components/commons/Errors'
   import MaskedInput from 'vue-text-mask'
-  import OrderForm from '../../components/orders/OrderForm'
-  import Spinner from '../../components/commons/Spinner'
-  import ApiConnector from '../../lib/ApiConnector'
   import WithSpinner from "../../components/commons/WithSpinner";
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import VueSelect from 'vue-select'
 
+  const yesNoOptions = [
+    {text: 'Yes', value: true},
+    {text: 'No', value: false},
+  ];
 
   export default {
     name: 'order-edit-form',
@@ -175,22 +176,11 @@
       return {
         orderId: this.$route.params.id,
 
-        yesNoOptions: [
-          {text: 'Yes', value: true},
-          {text: 'No', value: false},
-        ]
+        yesNoOptions: yesNoOptions,
       }
     },
     mounted() {
-      OrdersApiConnector.getOrderEditData(this.orderId)
-        .then(response => {
-          // this.restaurantsList = response.restaurantsList;
-          // this.order = response.order;
-
-          this.$store.commit('editOrder/initData', response);
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch('editOrder/initEditOrder', { orderId: this.orderId })
     },
     methods: {
       submitForm: function (e) {
@@ -198,21 +188,7 @@
 
         let errorsComponent = this.$refs.errorsComponent;
 
-        const order = {
-          restaurantId: this.restaurantId,
-          orderId: this.orderId,
-          orderDate: this.orderDate,
-          timeOfOrder: this.timeOfOrder,
-          decreaseInPercent: this.decreaseInPercent,
-          deliveryCostPerEverybody: this.deliveryCostPerEverybody,
-          deliveryCostPerDish: this.deliveryCostPerDish,
-          paymentByCash: this.paymentByCash,
-          paymentByBankTransfer: this.paymentByBankTransfer,
-          bankTransferNumber: this.bankTransferNumber,
-        };
-
-        OrdersApiConnector.editOrder(this.orderId, order)
-          .catch(error => error.body.messages.forEach(msg => errorsComponent.addError(msg)));
+        this.$store.dispatch('editOrder/updateOrder', { errorsComponent: errorsComponent});
 
         return false;
       },
@@ -223,31 +199,24 @@
         this.$store.commit('editOrder/updateOrderDate', newOrderDate);
       },
       updateTimeOfOrder(newTimeOfOrder) {
-        console.log("updateTimeOfOrder", newTimeOfOrder);
         this.$store.commit('editOrder/updateTimeOfOrder', newTimeOfOrder);
       },
       updateDecreaseInPercent(newValue) {
-        console.log("updateDecreaseInPercent", newValue);
         this.$store.commit('editOrder/updateDecreaseInPercent', newValue);
       },
       updateDeliveryCostPerEverybody(newValue) {
-        console.log("updateDeliveryCostPerEverybody", newValue);
         this.$store.commit('editOrder/updateDeliveryCostPerEverybody', newValue);
       },
       updateDeliveryCostPerDish(newValue) {
-        console.log("updateDeliveryCostPerDish", newValue);
         this.$store.commit('editOrder/updateDeliveryCostPerDish', newValue);
       },
       updatePaymentByCash(newValue) {
-        console.log("updatePaymentByCash", newValue);
         this.$store.commit('editOrder/updatePaymentByCash', newValue);
       },
       updatePaymentByBankTransfer(newValue) {
-        console.log("updatePaymentByBankTransfer", newValue);
         this.$store.commit('editOrder/updatePaymentByBankTransfer', newValue);
       },
       updateBankTransferNumber(newValue) {
-        console.log("updateBankTransferNumber", newValue);
         this.$store.commit('editOrder/updateBankTransferNumber', newValue);
       },
     },
@@ -302,8 +271,6 @@
       BackButton,
       ErrorsComponent,
       MaskedInput,
-      Spinner,
-      OrderForm,
       'v-select': VueSelect
     }
   }

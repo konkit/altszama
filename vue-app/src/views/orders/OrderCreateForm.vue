@@ -23,6 +23,7 @@
                 <label for="restaurant">Restaurant: </label>
 
                 <v-select
+                    id="restaurant"
                     :options="this.restaurantsList"
                     label="name"
                     :value="this.restaurantsList.find(r => restaurantId == r.id)"
@@ -52,6 +53,7 @@
               <div class="form-group">
                 <label for="timeOfOrder">Time of order</label>
                 <masked-input
+                    id="timeOfOrder"
                     type="text"
                     class="form-control"
                     :mask="[/\d/,/\d/,':',/\d/,/\d/]"
@@ -163,11 +165,7 @@
   import BackButton from '../../components/commons/BackButton'
   import ErrorsComponent from '../../components/commons/Errors'
   import MaskedInput from 'vue-text-mask'
-  import OrderForm from '../../components/orders/OrderForm'
-  import Spinner from '../../components/commons/Spinner'
-  import ApiConnector from '../../lib/ApiConnector'
   import WithSpinner from "../../components/commons/WithSpinner";
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import VueSelect from 'vue-select'
 
   export default {
@@ -184,16 +182,7 @@
       this.$store.commit('setLoadingTrue')
     },
     mounted() {
-      OrdersApiConnector.getOrderCreateData()
-        .then(response => {
-          // this.restaurantsList = response.restaurantsList;
-          // this.order = response.order;
-
-          this.$store.commit('createOrder/initData', response);
-
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch('createOrder/initCreateOrder');
     },
     methods: {
       updateRestaurantId(newValue) {
@@ -203,31 +192,24 @@
         this.$store.commit('createOrder/updateOrderDate', newOrderDate);
       },
       updateTimeOfOrder(newTimeOfOrder) {
-        console.log("updateTimeOfOrder", newTimeOfOrder);
         this.$store.commit('createOrder/updateTimeOfOrder', newTimeOfOrder);
       },
       updateDecreaseInPercent(newValue) {
-        console.log("updateDecreaseInPercent", newValue);
         this.$store.commit('createOrder/updateDecreaseInPercent', newValue);
       },
       updateDeliveryCostPerEverybody(newValue) {
-        console.log("updateDeliveryCostPerEverybody", newValue);
         this.$store.commit('createOrder/updateDeliveryCostPerEverybody', newValue);
       },
       updateDeliveryCostPerDish(newValue) {
-        console.log("updateDeliveryCostPerDish", newValue);
         this.$store.commit('createOrder/updateDeliveryCostPerDish', newValue);
       },
       updatePaymentByCash(newValue) {
-        console.log("updatePaymentByCash", newValue);
         this.$store.commit('createOrder/updatePaymentByCash', newValue);
       },
       updatePaymentByBankTransfer(newValue) {
-        console.log("updatePaymentByBankTransfer", newValue);
         this.$store.commit('createOrder/updatePaymentByBankTransfer', newValue);
       },
       updateBankTransferNumber(newValue) {
-        console.log("updateBankTransferNumber", newValue);
         this.$store.commit('createOrder/updateBankTransferNumber', newValue);
       },
       submitForm (e) {
@@ -235,24 +217,7 @@
 
         let errorsComponent = this.$refs.errorsComponent;
 
-        const order = {
-          restaurantId: this.restaurantId,
-          orderDate: this.orderDate,
-          timeOfOrder: this.timeOfOrder,
-          decreaseInPercent: this.decreaseInPercent,
-          deliveryCostPerEverybody: this.deliveryCostPerEverybody,
-          deliveryCostPerDish: this.deliveryCostPerDish,
-          paymentByCash: this.paymentByCash,
-          paymentByBankTransfer: this.paymentByBankTransfer,
-          bankTransferNumber: this.bankTransferNumber,
-        };
-
-        OrdersApiConnector.createOrder(order, this.token)
-          .catch(error => {
-            console.log("orderCreateForm Error:");
-            console.log(error);
-            error.body.messages.forEach(msg => errorsComponent.addError(msg));
-          });
+        this.$store.dispatch('createOrder/saveOrder', { errorsComponent: errorsComponent });
 
         return false;
       }
@@ -308,8 +273,6 @@
       BackButton,
       ErrorsComponent,
       MaskedInput,
-      Spinner,
-      OrderForm,
       'v-select': VueSelect
     }
   }

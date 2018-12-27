@@ -1,4 +1,5 @@
-import {mapMutations} from "vuex";
+import OrdersApiConnector from "../../lib/OrdersApiConnector";
+import ApiConnector from "../../lib/ApiConnector";
 
 export default {
   namespaced: true,
@@ -60,5 +61,66 @@ export default {
     updateBankTransferNumber(state, newValue) {
       state.bankTransferNumber = newValue;
     },
+  },
+  actions: {
+    initCreateOrder(context) {
+      OrdersApiConnector.getOrderCreateData()
+        .then(response => {
+          this.commit('createOrder/initData', response);
+          this.commit('setLoadingFalse')
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+
+      // OrdersApiConnector.getOrderEditData(payload.orderId)
+      //   .then(response => {
+      //     const responseWithOrderId = Object.assign(response, {orderId: payload.orderId});
+      //
+      //     console.log("responseWithOrderId: ", responseWithOrderId);
+      //
+      //     this.commit('editOrder/initData', responseWithOrderId);
+      //     this.commit('setLoadingFalse')
+      //   })
+      //   .catch(errResponse => ApiConnector.handleError(errResponse))
+    },
+    saveOrder({state}, payload) {
+      let errorsComponent = payload.errorsComponent;
+
+      const order = {
+        restaurantId: state.restaurantId,
+        orderDate: state.orderDate,
+        timeOfOrder: state.timeOfOrder,
+        decreaseInPercent: state.decreaseInPercent,
+        deliveryCostPerEverybody: state.deliveryCostPerEverybody,
+        deliveryCostPerDish: state.deliveryCostPerDish,
+        paymentByCash: state.paymentByCash,
+        paymentByBankTransfer: state.paymentByBankTransfer,
+        bankTransferNumber: state.bankTransferNumber,
+      };
+
+      OrdersApiConnector.createOrder(order)
+        .catch(error => error.body.messages.forEach(msg => errorsComponent.addError(msg)));
+
+      return false;
+
+      // let errorsComponent = payload.errorsComponent;
+      //
+      // const order = {
+      //   restaurantId: state.restaurantId,
+      //   orderId: state.orderId,
+      //   orderDate: state.orderDate,
+      //   timeOfOrder: state.timeOfOrder,
+      //   decreaseInPercent: state.decreaseInPercent,
+      //   deliveryCostPerEverybody: state.deliveryCostPerEverybody,
+      //   deliveryCostPerDish: state.deliveryCostPerDish,
+      //   paymentByCash: state.paymentByCash,
+      //   paymentByBankTransfer: state.paymentByBankTransfer,
+      //   bankTransferNumber: state.bankTransferNumber || "",
+      // };
+      //
+      // console.log("Order: ", order);
+      //
+      // OrdersApiConnector.editOrder(order.orderId, order)
+      //   .catch(error => ApiConnector.handleError(error) && error.body.messages.forEach(msg => errorsComponent.addError(msg)));
+    }
   },
 };

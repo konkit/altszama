@@ -1,4 +1,5 @@
-import {mapMutations} from "vuex";
+import OrdersApiConnector from "../../lib/OrdersApiConnector";
+import ApiConnector from "../../lib/ApiConnector";
 
 export default {
   namespaced: true,
@@ -6,8 +7,8 @@ export default {
     restaurantsList: [],
 
     // Order
-    restaurantId: 0,
     orderId: 0,
+    restaurantId: 0,
     orderDate: "",
     timeOfOrder: "",
     decreaseInPercent: "",
@@ -20,9 +21,9 @@ export default {
   mutations: {
     initData (state, payload) {
       state.restaurantsList = payload.restaurantsList;
+      state.orderId = payload.orderId;
 
       state.restaurantId = payload.order.restaurantId;
-      state.orderId = payload.order.orderId;
       state.orderDate = payload.order.orderDate;
       state.timeOfOrder = payload.order.timeOfOrder;
       state.decreaseInPercent = payload.order.decreaseInPercent;
@@ -30,7 +31,7 @@ export default {
       state.deliveryCostPerDish = payload.order.deliveryCostPerDish;
       state.paymentByCash = payload.order.paymentByCash;
       state.paymentByBankTransfer = payload.order.paymentByBankTransfer;
-      state.bankTransferNumber = payload.order.bankTransferNumber;
+      state.bankTransferNumber = payload.order.bankTransferNumber || "";
     },
     updateRestaurantId(state, newValue) {
       state.restaurantId = newValue
@@ -63,4 +64,39 @@ export default {
       state.bankTransferNumber = newValue;
     },
   },
+  actions: {
+    initEditOrder(context, payload) {
+      OrdersApiConnector.getOrderEditData(payload.orderId)
+        .then(response => {
+          const responseWithOrderId = Object.assign(response, {orderId: payload.orderId});
+
+          console.log("responseWithOrderId: ", responseWithOrderId);
+
+          this.commit('editOrder/initData', responseWithOrderId);
+          this.commit('setLoadingFalse')
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    },
+    updateOrder({state}, payload) {
+      let errorsComponent = payload.errorsComponent;
+
+      const order = {
+        restaurantId: state.restaurantId,
+        orderId: state.orderId,
+        orderDate: state.orderDate,
+        timeOfOrder: state.timeOfOrder,
+        decreaseInPercent: state.decreaseInPercent,
+        deliveryCostPerEverybody: state.deliveryCostPerEverybody,
+        deliveryCostPerDish: state.deliveryCostPerDish,
+        paymentByCash: state.paymentByCash,
+        paymentByBankTransfer: state.paymentByBankTransfer,
+        bankTransferNumber: state.bankTransferNumber || "",
+      };
+
+      console.log("Order: ", order);
+
+      OrdersApiConnector.editOrder(order.orderId, order)
+        .catch(error => ApiConnector.handleError(error) && error.body.messages.forEach(msg => errorsComponent.addError(msg)));
+    }
+  }
 };
