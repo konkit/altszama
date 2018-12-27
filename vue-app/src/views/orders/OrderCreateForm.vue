@@ -124,7 +124,8 @@
                     button-variant="outline-primary"
                     :options="yesNoOptions"
                     v-model="paymentByCash"
-                />
+                >
+                </b-form-radio-group>
               </b-form-group>
 
               <b-form-group label="Payment by bank transfer">
@@ -133,7 +134,8 @@
                     button-variant="outline-primary"
                     :options="yesNoOptions"
                     v-model="paymentByBankTransfer"
-                />
+                >
+                </b-form-radio-group>
               </b-form-group>
 
               <div class="form-group" v-if="paymentByBankTransfer">

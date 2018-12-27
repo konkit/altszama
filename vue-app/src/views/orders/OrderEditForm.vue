@@ -24,7 +24,7 @@
                   id="restaurant"
                   :options="this.restaurantsList"
                   label="name"
-                  :value="this.restaurantsList.find(r => restaurantId == r.id)"
+                  :value="this.restaurantsList.find(r => restaurantId === r.id)"
                   @input="updateRestaurantId($event.id)"
               >
               </v-select>
@@ -68,12 +68,12 @@
             <div class="form-group">
               <label for="decreaseInPercent">Price decrease (in percent)</label>
               <vue-numeric
+                  id="decreaseInPercent"
                   currency="%"
                   :min="0"
                   :max="100"
                   currency-symbol-position="suffix"
                   decimal-precision="false"
-                  id="decreaseInPercent"
                   class="form-control"
                   :value="decreaseInPercent"
                   @input="updateDecreaseInPercent($event)"
@@ -83,13 +83,13 @@
             <div class="form-group">
               <label for="deliveryCostPerEverybody">Delivery cost (total)</label>
               <vue-numeric
+                  id="deliveryCostPerEverybody"
                   currency="zł"
                   separator="."
                   currency-symbol-position="suffix"
                   :precision="2"
                   class="form-control"
                   required=""
-                  id="deliveryCostPerEverybody"
                   :value="deliveryCostPerEverybody"
                   @input="updateDeliveryCostPerEverybody($event)"
               >
@@ -99,13 +99,13 @@
             <div class="form-group">
               <label for="deliveryCostPerDish">Delivery cost (per dish)</label>
               <vue-numeric
+                  id="deliveryCostPerDish"
                   currency="zł"
                   separator="."
                   currency-symbol-position="suffix"
                   :precision="2"
                   class="form-control"
                   required=""
-                  id="deliveryCostPerDish"
                   :value="deliveryCostPerDish"
                   @input="updateDeliveryCostPerDish($event)"
               >
@@ -122,7 +122,8 @@
                   button-variant="outline-primary"
                   :options="yesNoOptions"
                   v-model="paymentByCash"
-              />
+              >
+              </b-form-radio-group>
             </b-form-group>
 
             <b-form-group label="Payment by bank transfer">
@@ -131,11 +132,12 @@
                   button-variant="outline-primary"
                   :options="yesNoOptions"
                   v-model="paymentByBankTransfer"
-              />
+              >
+              </b-form-radio-group>
             </b-form-group>
 
             <div class="form-group" v-if="paymentByBankTransfer">
-              <label>Bank transfer number</label>
+              <label for="bankTransferNumber">Bank transfer number</label>
               <input
                   type="text"
                   id="bankTransferNumber"
