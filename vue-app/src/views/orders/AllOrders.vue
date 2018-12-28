@@ -20,8 +20,8 @@
             </thead>
 
             <tbody>
-            <tr v-on:click="goToOrder(order.id)" v-for="order in allOrdersList" v-bind:key="order.id"
-                v-bind:data-href="'/orders/show/' + order.id" class="pointer">
+            <tr @click="goToOrder(order.id)" v-for="order in allOrdersList" :key="order.id"
+                :data-href="'/orders/show/' + order.id" class="pointer">
               <td>{{order.orderDate}}</td>
               <td>{{order.restaurant.name}}</td>
               <td>{{order.orderState}}</td>
@@ -36,26 +36,17 @@
 </template>
 
 <script>
-  import ApiConnector from '../../lib/ApiConnector.js'
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import WithSpinner from "../../components/commons/WithSpinner";
+  import {FETCH_ALL_ORDERS} from "../../store/mutation-types"
 
   export default {
     mounted() {
-      OrdersApiConnector.fetchAllOrders()
-        .then(allOrdersList => {
-          this.$store.commit('allOrders/setAllOrdersList', allOrdersList);
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch(`allOrders/${FETCH_ALL_ORDERS}`)
     },
     computed: {
       allOrdersList() {
         return this.$store.state.allOrders.allOrdersList;
       },
-      loading() {
-        return this.$store.state.loading;
-      }
     },
     methods: {
       goToOrder: function (selectedOrderId) {

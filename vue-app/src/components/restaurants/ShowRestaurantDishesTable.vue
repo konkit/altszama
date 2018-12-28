@@ -37,8 +37,7 @@
 </template>
 
 <script>
-  import Price from '../../components/commons/PriceElement'
-  import DishesApiConnector from "../../lib/DishesApiConnector";
+  import Price from '../commons/PriceElement'
 
   export default {
     name: "show-restaurant-dishes-table",
@@ -49,40 +48,17 @@
       }
     },
     methods: {
-      toggleSideDishes: function () {
-        this.sideDishesShown = !this.sideDishesShown;
-      },
       deleteDish: function (dishId) {
-        DishesApiConnector.deleteDish(this.restaurant.id, dishId)
-          .then(successResponse => window.location.reload())
-          .catch(errResponse => console.log(errResponse));
+        this.$store.dispatch("showRestaurant/deleteDish", {restaurantId: this.restaurant.id, dishId: dishId})
       },
     },
     components: {
       Price,
     }
   }
-
-  function convertToMapEntries(dishesMap) {
-    var result = []
-
-    for (const key of Object.keys(dishesMap)) {
-      result.push({"category": key, "dishes": dishesMap[key]})
-    }
-
-    return result;
-  }
 </script>
 
 <style scoped>
-  .container {
-    max-width: 1200px;
-  }
-
-  .row {
-    margin-top: 2rem;
-  }
-
   .table td {
     vertical-align: middle;
   }

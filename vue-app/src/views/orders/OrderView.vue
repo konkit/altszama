@@ -4,7 +4,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col">
-            <back-button v-bind:href="'#/orders/show/' + order.id"></back-button>
+            <back-button :href="'#/orders/show/' + order.id"></back-button>
           </div>
         </div>
 
@@ -37,7 +37,7 @@
               </div>
             </form>
 
-            <button class="btn btn-block btn-success" v-on:click="submitForm">
+            <button class="btn btn-block btn-success" @click="submitForm">
               Order placed!
               &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"/>
             </button>
@@ -65,7 +65,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="entry in this.groupedEntries" v-bind:key="entry.id">
+              <tr v-for="entry in this.groupedEntries" :key="entry.id">
                 <td>{{entry.eatingPeopleCount}}x {{entry.dish.name}} (
                   <price :data-price="entry.dish.price"></price>
                   )
@@ -89,7 +89,7 @@
                   </div>
                 </td>
                 <td>
-                  <price v-bind:data-price="entry.price"></price>
+                  <price :data-price="entry.price"></price>
                 </td>
               </tr>
               </tbody>
@@ -124,7 +124,7 @@
             </dt>
             <dd v-if="order.deliveryCostPerEverybody != 0">
               +
-              <price v-bind:data-price="order.deliveryCostPerEverybody"/>
+              <price :data-price="order.deliveryCostPerEverybody"/>
             </dd>
 
             <dt v-if="order.deliveryCostPerDish != 0">
@@ -132,13 +132,13 @@
             </dt>
             <dd v-if="order.deliveryCostPerDish != 0">
               +
-              <price v-bind:data-price="order.deliveryCostPerDish"/>
+              <price :data-price="order.deliveryCostPerDish"/>
               * {{this.allEatingPeopleCount}}
             </dd>
 
             <dt>Total:</dt>
             <dd><b>
-              <price v-bind:data-price="this.totalPrice"/>
+              <price :data-price="this.totalPrice"/>
             </b></dd>
           </div>
         </div>
@@ -149,7 +149,7 @@
       <navigation user-name="Tmp name"></navigation>
 
       <div class="container">
-        <back-button v-bind:href="'#/orders/show/' + order.id"></back-button>
+        <back-button :href="'#/orders/show/' + order.id"></back-button>
 
         <div class="row justify-content-center">
           <div class="col">
@@ -163,7 +163,7 @@
           <div class="col">
             <h4>Sorry, the order is empty</h4>
             <p>
-              <back-button v-bind:href="'#/orders/show/' + order.id"></back-button>
+              <back-button :href="'#/orders/show/' + order.id"></back-button>
             </p>
           </div>
         </div>
@@ -178,54 +178,28 @@
   import MaskedInput from 'vue-text-mask'
   import Price from '../../components/commons/PriceElement.vue'
 
-  import Spinner from '../../components/commons/Spinner.vue'
   import Navigation from '../../components/Navigation.vue'
 
-  import ApiConnector from '../../lib/ApiConnector.js'
   import WithSpinner from "../../components/commons/WithSpinner";
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
   export default {
     data() {
       return {
         orderId: this.$route.params.id,
-
-        order: '',
-        groupedEntries: [],
-        allEatingPeopleCount: 0,
-        basePriceSum: 0,
-        totalPrice: 0,
-        approxTimeOfDelivery: "12:00",
       }
     },
     mounted() {
-      OrdersApiConnector.fetchOrderView(this.orderId)
-        .then(responseObj => {
-          this.order = responseObj.order;
-          this.groupedEntries = responseObj.groupedEntries;
-          this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
-          this.basePriceSum = responseObj.basePriceSum;
-          this.totalPrice = responseObj.totalPrice;
+      let errorsComponent = this.$refs.errorsComponent;
 
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      console.log(errorsComponent);
+
+      this.$store.dispatch("orderView/fetchOrderViewData", {orderId: this.orderId, errorsComponent: errorsComponent});
     },
     methods: {
       submitForm: function () {
-        let dataSuccessUrl = '#/orders/show/' + this.orderId;
-
         let errorsComponent = this.$refs.errorsComponent;
 
-        OrdersApiConnector.makeAnOrder(this.orderId, this.approxTimeOfDelivery)
-          .then(response => {
-            window.location.href = dataSuccessUrl;
-          })
-          .catch(error => {
-            console.log("orderView Error:");
-            console.log(error);
-            errorsComponent.addError(error.body.message);
-          });
+        this.$store.dispatch('orderView/makeAnOrder', { errorsComponent: errorsComponent });
 
         return false
       },
@@ -236,6 +210,26 @@
         return this.order.orderState !== 'ORDERING';
       }
     },
+    computed: {
+      order () {
+        return this.$store.state.orderView.order
+      },
+      groupedEntries () {
+        return this.$store.state.orderView.groupedEntries
+      },
+      allEatingPeopleCount () {
+        return this.$store.state.orderView.allEatingPeopleCount
+      },
+      basePriceSum () {
+        return this.$store.state.orderView.basePriceSum
+      },
+      totalPrice () {
+        return this.$store.state.orderView.totalPrice
+      },
+      approxTimeOfDelivery () {
+        return this.$store.state.orderView.approxTimeOfDelivery
+      },
+    },
     components: {
       WithSpinner,
       BackButton,
@@ -243,7 +237,6 @@
       MaskedInput,
       Price,
       Navigation,
-      Spinner
     }
   }
 

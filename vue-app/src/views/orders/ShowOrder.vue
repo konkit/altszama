@@ -124,10 +124,7 @@
   import OrderEntryEditEntry from '../../components/orders/OrderEntryEditEntry.vue'
   import OrderEntryRow from '../../components/orders/OrderEntryRow.vue'
   import OrderStats from '../../components/orders/OrderStats.vue'
-  import ApiConnector from '../../lib/ApiConnector.js'
   import {mapState} from 'vuex'
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
-  import DishesApiConnector from "../../lib/DishesApiConnector";
 
   export default {
     data() {
@@ -141,14 +138,7 @@
     methods: {
       fetchOrder: function () {
         this.$store.commit('setLoadingTrue');
-
-        OrdersApiConnector
-          .fetchOrder(this.orderId)
-          .then(showOrderData => {
-            this.$store.commit('showOrder/loadShowOrderData', showOrderData);
-            this.$store.commit('setLoadingFalse')
-          })
-          .catch(errResponse => ApiConnector.handleError(errResponse))
+        this.$store.dispatch("showOrder/fetchOrderData", {orderId: this.orderId});
       },
       isOrdering: function () {
         return this.order.orderState === 'ORDERING';
@@ -171,13 +161,15 @@
         }
       },
       unlockOrder: function () {
-        OrdersApiConnector.setOrderAsCreated(this.orderId)
-          .then(response => this.fetchOrder())
+        // OrdersApiConnector.setOrderAsCreated(this.orderId)
+        //   .then(response => this.fetchOrder())
+        this.$store.dispatch("showOrder/unlockOrder", {orderId: this.orderId})
       },
       deleteEntry: function (orderEntryId, dishEntryId) {
-        DishesApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
-          .then(successResponse => this.fetchOrder())
-          .catch(errResponse => console.log(errResponse));
+        this.$store.dispatch("showOrder/deleteDishEntry", {orderId: this.orderId, orderEntryId: orderEntryId, dishEntryId: dishEntryId})
+        // OrdersApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
+        //   .then(successResponse => this.fetchOrder())
+        //   .catch(errResponse => console.log(errResponse));
       },
       createEntry: function () {
         this.$store.commit('showOrder/setEntryCreating', {})
@@ -221,16 +213,6 @@
       OrderEntryRow,
       OrderStats
     }
-  }
-
-  function convertToMapEntries(dishesMap) {
-    var result = [];
-
-    for (const key of Object.keys(dishesMap)) {
-      result.push({"category": key, "dishes": dishesMap[key]})
-    }
-
-    return result;
   }
 </script>
 

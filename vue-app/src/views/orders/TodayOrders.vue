@@ -6,8 +6,8 @@
           <div class="col">
             <h2>So today you ordered ...</h2>
 
-            <div v-if="this.results.currentOrderEntries.length > 0">
-              <template v-for="orderEntry in this.results.currentOrderEntries">
+            <div v-if="this.currentOrderEntries.length > 0">
+              <template v-for="orderEntry in this.currentOrderEntries">
                 <template v-for="dishEntry in orderEntry.dishEntries">
                   <p class="pointer" @click="goToOrder(orderEntry.order.id)" :key="dishEntry.id">
                     <b>{{dishEntry.dish.name}}</b>
@@ -42,9 +42,9 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <h3>Not ordered yet ({{ this.results.createdOrders.length }})</h3>
+          <h3>Not ordered yet ({{ this.createdOrders.length }})</h3>
 
-          <div v-if="this.results.createdOrders.length > 0">
+          <div v-if="this.createdOrders.length > 0">
             <table class="table table-hover">
               <thead>
               <tr>
@@ -54,7 +54,7 @@
               </thead>
 
               <tbody>
-              <tr v-on:click="goToOrder(order.id)" v-for="order in this.results.createdOrders" v-bind:key="order.id"
+              <tr @click="goToOrder(order.id)" v-for="order in this.createdOrders" :key="order.id"
                   class="pointer">
                 <td>{{order.restaurant.name}}</td>
                 <td>{{order.orderCreator.username}}</td>
@@ -72,9 +72,9 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <h3>Ordering right now ({{ this.results.orderingOrders.length }})</h3>
+          <h3>Ordering right now ({{ this.orderingOrders.length }})</h3>
 
-          <div v-if="this.results.orderingOrders.length > 0">
+          <div v-if="this.orderingOrders.length > 0">
             <table class="table table-hover">
               <thead>
               <tr>
@@ -84,7 +84,7 @@
               </thead>
 
               <tbody>
-              <tr v-on:click="goToOrder(order.id)" v-for="order in this.results.orderingOrders" v-bind:key="order.id"
+              <tr @click="goToOrder(order.id)" v-for="order in this.orderingOrders" :key="order.id"
                   class="pointer">
                 <td>{{order.restaurant.name}}</td>
                 <td>{{order.orderCreator.username}}</td>
@@ -102,9 +102,9 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <h3>Ordered ({{ this.results.orderedOrders.length }})</h3>
+          <h3>Ordered ({{ this.orderedOrders.length }})</h3>
 
-          <div v-if="this.results.orderedOrders.length > 0">
+          <div v-if="this.orderedOrders.length > 0">
             <table class="table table-hover">
               <thead>
               <tr>
@@ -114,7 +114,7 @@
               </thead>
 
               <tbody>
-              <tr @click="goToOrder(order.id)" v-for="order in this.results.orderedOrders" v-bind:key="order.id"
+              <tr @click="goToOrder(order.id)" v-for="order in this.orderedOrders" :key="order.id"
                   class="pointer">
                 <td>{{order.restaurant.name}}</td>
                 <td>{{order.orderCreator.username}}</td>
@@ -132,9 +132,9 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <h3>Delivered ({{ this.results.deliveredOrders.length }})</h3>
+          <h3>Delivered ({{ this.deliveredOrders.length }})</h3>
 
-          <div v-if="this.results.deliveredOrders.length > 0">
+          <div v-if="this.deliveredOrders.length > 0">
             <table class="table table-hover">
               <thead>
               <tr>
@@ -144,7 +144,7 @@
               </thead>
 
               <tbody>
-              <tr v-on:click="goToOrder(order.id)" v-for="order in this.results.deliveredOrders" v-bind:key="order.id"
+              <tr @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id"
                   class="pointer">
                 <td>{{order.restaurant.name}}</td>
                 <td>{{order.orderCreator.username}}</td>
@@ -166,36 +166,40 @@
 <script>
   import ApiConnector from '../../lib/ApiConnector.js'
   import WithSpinner from "../../components/commons/WithSpinner";
-  import DishesApiConnector from "../../lib/DishesApiConnector";
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
   export default {
     data() {
       return {
-        results: {
-          currentOrderEntries: [],
-          createdOrders: [],
-          orderingOrders: [],
-          orderedOrders: [],
-          deliveredOrders: []
-        }
       }
     },
     mounted() {
       ApiConnector.initializePushNotifications();
 
-      OrdersApiConnector.fetchTodaysOrders()
-        .then(todayOrdersData => {
-          this.results = todayOrdersData;
+      let errorsComponent = this.$refs.errorsComponent;
 
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch("todayOrders/fetchTodayOrders", {errorsComponent: errorsComponent});
     },
     methods: {
       goToOrder: function (selectedOrderId) {
         location = "#/orders/show/" + selectedOrderId
       }
+    },
+    computed: {
+      currentOrderEntries() {
+        return this.$store.state.todayOrders.currentOrderEntries;
+      },
+      createdOrders() {
+        return this.$store.state.todayOrders.createdOrders;
+      },
+      orderingOrders() {
+        return this.$store.state.todayOrders.orderingOrders;
+      },
+      orderedOrders() {
+        return this.$store.state.todayOrders.orderedOrders;
+      },
+      deliveredOrders() {
+        return this.$store.state.todayOrders.deliveredOrders;
+      },
     },
     components: {
       WithSpinner,

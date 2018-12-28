@@ -22,8 +22,8 @@
         <div class="col">
           <table class="table table-hover">
             <tbody>
-            <tr v-on:click="goToRestaurant(restaurant.id)" v-for="restaurant in this.restaurants"
-                v-bind:key="restaurant.id" class="pointer">
+            <tr @click="goToRestaurant(restaurant.id)" v-for="restaurant in this.restaurants"
+                :key="restaurant.id" class="pointer">
               <td>{{restaurant.name}}</td>
             </tr>
             </tbody>
@@ -37,29 +37,15 @@
 
 <script>
   import Spinner from '../../components/commons/Spinner'
-  import ApiConnector from '../../lib/ApiConnector.js'
   import WithSpinner from "../../components/commons/WithSpinner";
-  import DishesApiConnector from "../../lib/DishesApiConnector";
 
   export default {
     data() {
       return {
-        restaurants: [],
-        restaurantToDishesMap: {},
       }
     },
-    created() {
-      this.$store.commit('setLoadingTrue')
-    },
     mounted() {
-      DishesApiConnector.getRestaurants()
-        .then(response => {
-          this.restaurants = response.restaurants;
-          this.restaurantToDishesMap = response.restaurantToDishesMap;
-
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch("restaurantIndex/fetchAllRestaurants")
     },
     methods: {
       goToRestaurant: function (restaurantId) {
@@ -67,9 +53,12 @@
       }
     },
     computed: {
-      loading() {
-        return this.$store.state.loading;
-      }
+      restaurants() {
+        return this.$store.state.restaurantIndex.restaurants;
+      },
+      restaurantToDishesMap() {
+        return this.$store.state.restaurantIndex.restaurantToDishesMap;
+      },
     },
     components: {
       WithSpinner,

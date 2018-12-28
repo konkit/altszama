@@ -121,10 +121,10 @@
     },
     computed: {
       dishIdToSideDishesMap() {
-        return this.$store.state.dishIdToSideDishesMap;
+        return this.$store.state.showOrder.dishIdToSideDishesMap;
       },
       editedOrderEntry() {
-        return this.$store.state.editedOrderEntry;
+        return this.$store.state.showOrder.editedOrderEntry;
       },
     },
     components: {

@@ -155,7 +155,7 @@
 
         <div class="row justify-content-center">
           <div class="col">
-            <button class="btn btn-block btn-success" v-on:click="submitForm">Create</button>
+            <button class="btn btn-block btn-success" @click="submitForm">Create</button>
           </div>
         </div>
       </div>

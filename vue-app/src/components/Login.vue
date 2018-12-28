@@ -33,7 +33,7 @@
             </div>
 
             <div v-if="loginPending == false">
-              <button type="submit" :disabled = "loginLoaded == false" class="btn btn-success" v-on:click="googleSignIn">Login using Google</button>
+              <button type="submit" :disabled = "loginLoaded == false" class="btn btn-success" @click="googleSignIn">Login using Google</button>
             </div>
           </div>
         </div>

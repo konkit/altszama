@@ -36,6 +36,10 @@ export default {
     return ApiConnector.makePost(action, formData)
   },
 
+  deleteDishEntry: function(orderEntryId, dishEntryId) {
+    return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
+  },
+
   fetchOrder: function(orderId) {
     return ApiConnector.makeGet("/orders/" + orderId + "/show.json")
       .then(response => {
@@ -208,7 +212,7 @@ export default {
       .then(response => window.location.href = dataSuccessUrl)
   },
 
-  makeAnOrder: function (orderId, approxTimeOfDelivery) {
+  makeAnOrder: function (orderId, {approxTimeOfDelivery}) {
     let action = '/orders/' + orderId + '/set_as_ordered';
 
     let formData = {

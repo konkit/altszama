@@ -44,15 +44,15 @@
         this.$store.commit('setNewDishFlag', newValue)
       },
       clearSideDishes: function () {
-        this.$store.commit('clearEditedSideDishes')
+        this.$store.commit('showOrder/clearEditedSideDishes')
       }
     },
     computed: {
       editedOrderEntry() {
-        return this.$store.state.editedOrderEntry;
+        return this.$store.state.showOrder.editedOrderEntry;
       },
       allDishesByCategory() {
-        return this.$store.state.allDishesByCategory;
+        return this.$store.state.showOrder.allDishesByCategory;
       }
     },
     components: {

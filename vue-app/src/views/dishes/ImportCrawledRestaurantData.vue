@@ -23,8 +23,8 @@
         <div class="col">
           Upload file:
 
-          <fileupload :target="this.getUploadUrl()" action="POST" v-on:progress="progress" v-on:start="startUpload"
-                      v-on:finish="finishUpload"></fileupload>
+          <fileupload :target="this.getUploadUrl()" action="POST" @progress="progress" @start="startUpload"
+                      @finish="finishUpload"></fileupload>
 
           <p>Status: {{uploadState}}</p>
         </div>

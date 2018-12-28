@@ -3,7 +3,7 @@
     <h4>Side dishes</h4>
 
     <div v-if="this.sideDishes.length > 0">
-      <p v-for="sideDish in this.sideDishes" v-bind:key="sideDish.id">
+      <p v-for="sideDish in this.sideDishes" :key="sideDish.id">
         {{sideDish.name}}&nbsp;(
         <price :data-price="sideDish.price"/>
         )
@@ -15,7 +15,7 @@
     </div>
 
     <div v-if="this.sideDishFormVisible === false">
-      <button class="btn btn-success" v-on:click="setSideDishFormVisible(true)">
+      <button class="btn btn-success" @click="setSideDishFormVisible(true)">
         Add side dish &nbsp; <i class="fa fa-plus"/>
       </button>
     </div>
@@ -29,14 +29,14 @@
       <div class="form-group">
         <label>New Side dish price</label>
         <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="newSideDishPrice"
-                     v-bind:precision="2" class="form-control" required="" id="newSideDishPrice"></vue-numeric>
+                     :precision="2" class="form-control" required="" id="newSideDishPrice"></vue-numeric>
       </div>
 
-      <button class="btn btn-success" v-on:click="addSideDish">
+      <button class="btn btn-success" @click="addSideDish">
         Add &nbsp; <i class="fa fa-plus"/>
       </button>
 
-      <button class="btn btn-secondary" v-on:click="setSideDishFormVisible(false)">
+      <button class="btn btn-secondary" @click="setSideDishFormVisible(false)">
         Cancel
       </button>
     </div>

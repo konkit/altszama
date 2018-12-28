@@ -9,7 +9,7 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <h1>Create dish in restaurant {{this.restaurantName}}</h1>
+          <h1>Create dish in restaurant {{restaurantName}}</h1>
         </div>
       </div>
 
@@ -18,22 +18,22 @@
       <div class="row justify-content-center">
         <div class="col">
           <div class="form">
-            <input type="hidden" name="restaurant.id" v-bind:value="this.restaurantId"/>
+            <input type="hidden" name="restaurant.id" :value="restaurantId"/>
 
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" class="form-control" v-model="name" required="" id="name"/>
+              <input type="text" class="form-control" :value="name" @input="updateName($event.target.value)" required="" id="name"/>
             </div>
 
             <div class="form-group">
               <label for="dish-price">Price</label>
-              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="price"
-                           v-bind:precision="2" class="form-control" required="" id="dish-price"></vue-numeric>
+              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input="updatePrice($event)"
+                           :precision="2" class="form-control" required="" id="dish-price"></vue-numeric>
             </div>
 
             <div class="form-group">
               <label for="category">Category</label>
-              <input type="text" class="form-control" v-model="category" id="category" list="categoryNames"/>
+              <input type="text" class="form-control" :value="category" @input="updateCategory($event.target.value)" id="category" list="categoryNames"/>
               <datalist id="categoryNames">
                 <option v-for="categoryName in categories" :value="categoryName"/>
               </datalist>
@@ -48,7 +48,7 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <button v-on:click="submitForm" class="btn btn-block btn-success">Create</button>
+          <button @click="submitForm" class="btn btn-block btn-success">Create</button>
         </div>
       </div>
     </div>
@@ -61,51 +61,25 @@
   import Price from '../../components/commons/PriceElement.vue'
   import Spinner from '../../components/commons/Spinner'
   import SideDishes from '../../components/restaurants/SideDishes.vue'
-
-  import ApiConnector from '../../lib/ApiConnector.js'
-  import DishesApiConnector from "../../lib/DishesApiConnector";
+  import {mapMutations, mapState} from "vuex"
 
   export default {
     props: ['restaurantName'],
     data() {
       return {
         restaurantId: this.$route.params.id,
-
-        categories: [],
-
-        name: '',
-        price: '',
-        category: ''
       }
     },
     mounted() {
-      DishesApiConnector.getDishCreateData(this.restaurantId)
-        .then(response => {
-          this.categories = response.data.categories
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch("createDish/initCreateDish", {restaurantId: this.restaurantId})
     },
     methods: {
       submitForm: function () {
-        let sideDishesElement = this.$refs.sideDishesElement;
-
-        const formData = {
-          "restaurant.id": this.restaurantId,
-          name: this.name,
-          price: Math.round(this.price * 100),
-          category: this.category,
-          sideDishes: sideDishesElement.getSideDishes()
-        };
-
         let errorsComponent = this.$refs.errorsComponent;
 
-        DishesApiConnector.createDish(this.restaurantId, formData)
-          .then(response => {
-            window.location.href = this.getBackUrl();
-          })
-          .catch(function (error) {
-            errorsComponent.addError(error.body.message);
-          });
+        let sideDishes = this.$refs.sideDishesElement.getSideDishes();
+
+        this.$store.dispatch("createDish/saveDish", {errorsComponent: errorsComponent, sideDishes: sideDishes, backUrl: this.getBackUrl()});
 
         return false;
       },
@@ -115,7 +89,20 @@
         } else {
           return "#/restaurants/show/" + this.restaurantId
         }
-      }
+      },
+      ...mapMutations("createDish", [
+        "updateName",
+        "updatePrice",
+        "updateCategory",
+      ])
+    },
+    computed: {
+      ...mapState("createDish", [
+        'categories',
+        'name',
+        'price',
+        'category'
+      ])
     },
     components: {
       BackButton,

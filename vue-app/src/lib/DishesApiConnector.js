@@ -23,12 +23,11 @@ export default {
         })
   },
 
-  createRestaurant: function(restaurant, errorsComponent) {
+  createRestaurant: function(restaurant) {
     const action = "/restaurants/save";
 
     return ApiConnector.makePost(action, restaurant)
       .then(response => window.location.href = "#/restaurants")
-      .catch(error => errorsComponent.addError(error.body.message));
   },
 
   getRestaurantEditData: function(restaurantId) {
@@ -90,7 +89,8 @@ export default {
   },
 
   editDish: function(restaurantId, dishObj) {
-    const action = "/restaurants/" + restaurantId + "/dishes/update";
+    const action = "/restaurants/" + restaurantId + "/dishes/update"
+    const dataSuccessUrl = "#/restaurants/show/" + restaurantId;
 
     const formData = {
       "restaurant.id": restaurantId,
@@ -102,15 +102,14 @@ export default {
     };
 
     return ApiConnector.makePost(action, formData)
+      .then(response => window.location.href = dataSuccessUrl)
   },
 
   deleteDish: function(restaurantId, dishId) {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/" + dishId + "/delete")
   },
 
-  deleteDishEntry: function(orderEntryId, dishEntryId) {
-    return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
-  },
+
 }
 
 function convertToMapEntries(dishesMap) {

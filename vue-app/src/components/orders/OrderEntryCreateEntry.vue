@@ -42,7 +42,6 @@
 
   import OrderEntryInput from './OrderEntryInput.vue'
   import SideDishesInput from './SideDishesInput.vue'
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
   export default {
     name: 'order-entry-create-entry',
@@ -71,8 +70,7 @@
         chosenSideDishes: []
       };
 
-      this.$store.commit('setEditedOrderEntry', newEditedOrderEntry);
-
+      this.$store.commit('showOrder/setEditedOrderEntry', newEditedOrderEntry);
       this.$store.commit('setEntryLoadingFalse')
     },
     methods: {
@@ -81,20 +79,22 @@
 
         let errorsComponent = this.$refs.errorsComponent;
 
-        OrdersApiConnector.saveOrderEntry(this.order.id, this.editedOrderEntry)
-          .then(() => {
-            this.$emit("updateOrder");
-            this.$store.commit('cancelEntryCreateOrEdit', {})
-          })
-          .catch((error) => {
-            console.log("orderEntryCreateEntry error:", error);
-            error.body.messages.forEach(msg => errorsComponent.addError(msg));
-          });
+        this.$store.dispatch("showOrder/saveOrderEntry", {orderId: this.order.id, editedOrderEntry: this.editedOrderEntry, errorsComponent: errorsComponent});
+
+        // OrdersApiConnector.saveOrderEntry(this.order.id, this.editedOrderEntry)
+        //   .then(() => {
+        //     this.$emit("updateOrder");
+        //     this.$store.commit('cancelEntryCreateOrEdit', {})
+        //   })
+        //   .catch((error) => {
+        //     console.log("orderEntryCreateEntry error:", error);
+        //     error.body.messages.forEach(msg => errorsComponent.addError(msg));
+        //   });
 
         return false;
       },
       cancelEdit: function () {
-        this.$store.commit('cancelEntryCreateOrEdit', {})
+        this.$store.commit('showOrder/cancelEntryCreateOrEdit', {})
       },
     },
     computed: {
@@ -102,10 +102,10 @@
         return this.$store.state.loadingEntry;
       },
       allDishesInRestaurant() {
-        return this.$store.state.allDishesInRestaurant;
+        return this.$store.state.showOrder.allDishesInRestaurant;
       },
       editedOrderEntry() {
-        return this.$store.state.editedOrderEntry;
+        return this.$store.state.showOrder.editedOrderEntry;
       }
     },
     components: {

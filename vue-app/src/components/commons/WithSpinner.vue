@@ -1,8 +1,9 @@
 <template>
   <div>
     <div v-if="loading === true">
+      <errors-component ref="errorsComponent"/>
+
       <div class="loader">Loading ....</div>
-      \
     </div>
 
     <div v-if="loading === false">
@@ -12,6 +13,8 @@
 </template>
 
 <script>
+  import ErrorsComponent from "../commons/Errors"
+
   export default {
     name: 'WithSpinner',
     created() {
@@ -21,6 +24,9 @@
       loading() {
         return this.$store.state.loading;
       }
+    },
+    components: {
+      ErrorsComponent
     }
   }
 </script>

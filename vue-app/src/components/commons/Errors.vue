@@ -35,6 +35,15 @@
           errorsArray.push("Error: " + Errors);
         }
       },
+      addError2: function(error) {
+        if (typeof error.message !== "undefined") {
+          errorsComponent.addError(error.message);
+        } else if (typeof error.body !== "undefined" && typeof error.body.message !== "undefined") {
+          errorsComponent.addError(error.body.message);
+        } else {
+          errorsComponent.addError(error);
+        }
+      },
       close: function (errorIndex) {
         this.errorsArray.splice(errorIndex, 1)
       }

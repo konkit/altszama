@@ -5,6 +5,14 @@ import AllOrdersState from './modules/AllOrdersState'
 import ShowOrderState from './modules/ShowOrderState'
 import CreateOrderState from "./modules/CreateOrderState";
 import EditOrderState from "./modules/EditOrderState";
+import OrderViewState from "./modules/OrderViewState";
+import TodayOrdersState from "./modules/TodayOrdersState";
+import RestaurantIndexState from "./modules/RestaurantIndexState";
+import ShowRestaurantState from "./modules/ShowRestaurantState";
+import CreateRestaurantState from "./modules/CreateRestaurantState";
+import EditRestaurantState from "./modules/EditRestaurantState";
+import CreateDishState from "./modules/CreateDishState";
+import EditDishState from "./modules/EditDishState";
 
 Vue.use(Vuex);
 
@@ -44,9 +52,20 @@ export default new Vuex.Store({
     },
   },
   modules: {
+    // Orders
     showOrder: ShowOrderState,
     allOrders: AllOrdersState,
     createOrder: CreateOrderState,
     editOrder: EditOrderState,
+    orderView: OrderViewState,
+    todayOrders: TodayOrdersState,
+
+    // Dishes
+    restaurantIndex: RestaurantIndexState,
+    showRestaurant: ShowRestaurantState,
+    createRestaurant: CreateRestaurantState,
+    editRestaurant: EditRestaurantState,
+    createDish: CreateDishState,
+    editDish: EditDishState
   }
 })

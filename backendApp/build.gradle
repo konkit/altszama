@@ -113,25 +113,25 @@ dependencies {
 tasks {
 
   task "vueNpmInstall"(type: NpmTask) {
-    setWorkingDir(file("vue-app/"))
+    setWorkingDir(file("../vue-app/"))
     args = ["install"]
   }
 
   task "vueRunBuild"(type: NpmTask) {
     dependsOn(vueNpmInstall)
-    setWorkingDir(file("vue-app/"))
+    setWorkingDir(file("../vue-app/"))
     args = ["run", "build"]
   }
 
   task "copyVueToBuild"(type: Copy) {
     dependsOn(vueRunBuild)
-    from("vue-app/dist")
+    from("../vue-app/dist")
     into("build/resources/main/public")
   }
 
   task "copyVueToOut"(type: Copy) {
     dependsOn(vueRunBuild)
-    from("vue-app/dist")
+    from("../vue-app/dist")
     into("out/production/resources/public/")
   }
 
@@ -145,7 +145,7 @@ tasks {
   }
 
   task "runVueDevServer"(type: NpmTask) {
-    setWorkingDir(file("vue-app/"))
+    setWorkingDir(file("../vue-app/"))
     args = ["run", "dev"]
   }
 }

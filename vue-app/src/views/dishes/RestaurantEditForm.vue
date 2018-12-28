@@ -9,7 +9,7 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <h1>Edit restaurant {{this.restaurant.name}}</h1>
+          <h1>Edit restaurant {{name}}</h1>
         </div>
       </div>
 
@@ -18,35 +18,35 @@
       <div class="row justify-content-center">
         <div class="col">
           <form>
-            <input type="hidden" name="id" v-model="restaurant.id"/>
+            <input type="hidden" name="id" :value="restaurantId"/>
 
             <div class="form-group">
               <label>Name:</label>
-              <input class="form-control" type="text" v-model="restaurant.name"/>
+              <input class="form-control" type="text" :value="name" @input="updateName($event.target.value)"/>
             </div>
 
             <div class="form-group">
               <label>URL:</label>
-              <input class="form-control" type="text" v-model="restaurant.url"/>
+              <input class="form-control" type="text" :value="url" @input="updateUrl($event.target.value)"/>
             </div>
 
             <div class="form-group">
               <label>Rating:</label>
-              <input class="form-control" type="text" v-model="restaurant.rating"/>
+              <input class="form-control" type="text" :value="rating" @input="updateRating($event.target.value)" />
             </div>
 
             <div class="form-group">
               <label>Telephone:</label>
-              <input class="form-control" type="text" v-model="restaurant.telephone"/>
+              <input class="form-control" type="text" :value="telephone" @input="updateTelephone($event.target.value)" />
             </div>
 
             <div class="form-group">
               <label>Address:</label>
-              <input class="form-control" type="text" v-model="restaurant.address"/>
+              <input class="form-control" type="text" :value="address" @input="updateAddress($event.target.value)" />
             </div>
           </form>
 
-          <button class="btn btn-block btn-success" v-on:click="submitForm">Update</button>
+          <button class="btn btn-block btn-success" @click="submitForm">Update</button>
         </div>
       </div>
     </div>
@@ -58,52 +58,42 @@
   import ErrorsComponent from '../../components/commons/Errors'
   import Spinner from '../../components/commons/Spinner'
 
-  import ApiConnector from '../../lib/ApiConnector.js'
   import WithSpinner from "../../components/commons/WithSpinner";
-  import DishesApiConnector from "../../lib/DishesApiConnector";
+  import {mapMutations, mapState} from 'vuex'
 
   export default {
     data() {
       return {
         restaurantId: this.$route.params.id,
-
-        restaurant: {
-          id: '',
-          name: '',
-          url: '',
-          rating: '',
-          telephone: '',
-          address: '',
-        }
       }
     },
-    created() {
-      this.$store.commit('setLoadingTrue')
-    },
     mounted() {
-      DishesApiConnector.getRestaurantEditData(this.restaurantId)
-        .then(response => {
-          this.restaurant = response;
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch("editRestaurant/initEditRestaurant", {restaurantId: this.restaurantId});
     },
     methods: {
       submitForm: function () {
         let errorsComponent = this.$refs.errorsComponent;
 
-        DishesApiConnector.editRestaurant(this.restaurantId, restaurant)
-          .catch(error => {
-            errorsComponent.addError(error.body.message);
-          });
+        this.$store.dispatch("editRestaurant/updateRestaurant", {errorsComponent: errorsComponent});
 
         return false;
-      }
+      },
+      ...mapMutations("editRestaurant", [
+        "updateName",
+        "updateUrl",
+        "updateRating",
+        "updateTelephone",
+        "updateAddress",
+      ])
     },
     computed: {
-      loading() {
-        return this.$store.state.loading;
-      }
+      ...mapState('editRestaurant', [
+        'name',
+        'url',
+        'rating',
+        'telephone',
+        'address'
+      ]),
     },
     components: {
       WithSpinner,

@@ -19,31 +19,31 @@
         <form id="restaurantCreateForm">
           <div class="form-group">
             <label>Name:</label>
-            <input class="form-control" type="text" name="name" v-model="restaurant.name"/>
+            <input class="form-control" type="text" name="name" :value="name" @input="updateName($event.target.value)"/>
           </div>
 
           <div class="form-group">
             <label>URL:</label>
-            <input class="form-control" type="text" name="url" v-model="restaurant.url"/>
+            <input class="form-control" type="text" name="url" :value="url" @input="updateUrl($event.target.value)"/>
           </div>
 
           <div class="form-group">
             <label>Rating:</label>
-            <input class="form-control" type="text" name="rating" v-model="restaurant.rating"/>
+            <input class="form-control" type="text" name="rating" :value="rating" @input="updateRating($event.target.value)" />
           </div>
 
           <div class="form-group">
             <label>Telephone:</label>
-            <input class="form-control" type="text" name="telephone" v-model="restaurant.telephone"/>
+            <input class="form-control" type="text" name="telephone" :value="telephone" @input="updateTelephone($event.target.value)" />
           </div>
 
           <div class="form-group">
             <label>Address:</label>
-            <input class="form-control" type="text" name="address" v-model="restaurant.address"/>
+            <input class="form-control" type="text" name="address" :value="address" @input="updateAddress($event.target.value)" />
           </div>
         </form>
 
-        <button v-on:click="submitForm" class="btn btn-block btn-success">Create</button>
+        <button @click="submitForm" class="btn btn-block btn-success">Create</button>
       </div>
     </div>
   </div>
@@ -52,28 +52,30 @@
 <script>
   import BackButton from '../../components/commons/BackButton'
   import ErrorsComponent from '../../components/commons/Errors'
-  import DishesApiConnector from "../../lib/DishesApiConnector";
+  import {mapMutations, mapState} from 'vuex'
 
   export default {
     props: ['restaurantName'],
-    data() {
-      return {
-        restaurantId: this.$route.params.id,
-
-        restaurant: {
-          name: '',
-          url: '',
-          rating: '',
-          telephone: '',
-          address: '',
-        },
-      }
-    },
     methods: {
       submitForm: function () {
-        DishesApiConnector.createRestaurant(this.restaurant, this.$refs.errorsComponent);
-        return false;
-      }
+        this.$store.dispatch("createRestaurant/saveRestaurant", {errorsComponent: this.$refs.errorsComponent})
+      },
+      ...mapMutations("createRestaurant", [
+        "updateName",
+        "updateUrl",
+        "updateRating",
+        "updateTelephone",
+        "updateAddress",
+      ])
+    },
+    computed: {
+      ...mapState('createRestaurant', [
+        'name',
+        'url',
+        'rating',
+        'telephone',
+        'address'
+      ]),
     },
     components: {
       BackButton,

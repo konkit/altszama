@@ -51,7 +51,6 @@
 
 <script>
   import Price from '../commons/PriceElement.vue'
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
   export default {
     name: 'order-entry-row',
@@ -81,14 +80,10 @@
         }
       },
       confirmAsPaid: function (orderEntryId) {
-        OrdersApiConnector.confirmOrderEntryAsPaid(orderEntryId)
-          .then(successResponse => window.location.reload())
-          .catch(errResponse => console.log(errResponse));
+        this.$store.dispatch("showOrder/confirmOrderEntryAsPaid", {orderEntryId: orderEntryId})
       },
       markAsPaid: function (orderEntryId) {
-        OrdersApiConnector.markOrderEntryAsPaid(orderEntryId)
-          .then(successResponse => window.location.reload())
-          .catch(errResponse => console.log(errResponse));
+        this.$store.dispatch("showOrder/markOrderEntryAsPaid", {orderEntryId: orderEntryId})
       },
       deleteEntry: function (orderEntryId, dishEntryId) {
         this.$emit("deleteEntry", orderEntryId, dishEntryId);

@@ -44,7 +44,6 @@
 
   import OrderEntryInput from './OrderEntryInput.vue'
   import SideDishesInput from './SideDishesInput.vue'
-  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
   export default {
     name: 'order-entry-edit-entry',
@@ -76,20 +75,12 @@
 
         let errorsComponent = this.$refs.errorsComponent;
 
-        OrdersApiConnector.editOrderEntry(this.order.id, this.orderEntry.id, this.editedOrderEntry)
-          .then(() => {
-            this.$emit("updateOrder");
-            this.$store.commit('cancelEntryCreateOrEdit', {})
-          })
-          .catch((error) => {
-            console.log("OrderEntryEditEntry error:", error);
-            error.body.messages.forEach(msg => errorsComponent.addError(msg));
-          });
+        this.$store.dispatch("showOrder/editOrderEntry", {orderId: this.order.id, orderEntryId: this.orderEntry.id, editedOrderEntry: this.editedOrderEntry, errorsComponent: errorsComponent});
 
         return false;
       },
       cancelEdit: function () {
-        this.$store.commit('cancelEntryCreateOrEdit', {})
+        this.$store.commit('showOrder/cancelEntryCreateOrEdit', {})
       },
     },
     computed: {

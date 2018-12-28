@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
-          <back-button :href="'#/restaurants/show/' + this.restaurantId"></back-button>
+          <back-button :href="'#/restaurants/show/' + restaurantId"></back-button>
         </div>
       </div>
 
@@ -17,23 +17,23 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <input type="hidden" name="restaurant.id" v-bind:value="this.restaurantId"/>
-          <input type="hidden" name="id" v-bind:value="dishData.dishId"/>
+          <input type="hidden" name="restaurant.id" :value="restaurantId"/>
+          <input type="hidden" name="id" :value="dishId"/>
 
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" v-model="dishData.name" required="" id="name"/>
+            <input type="text" class="form-control" :value="name" @input="updateName($event.target.value)" required="" id="name"/>
           </div>
 
           <div class="form-group">
             <label for="price">Price</label>
-            <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="dishData.price"
-                         v-bind:precision="2" class="form-control" required="" id="price"></vue-numeric>
+            <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input="updatePrice($event)"
+                         :precision="2" class="form-control" required="" id="price"></vue-numeric>
           </div>
 
           <div class="form-group">
             <label for="category">Category</label>
-            <input type="text" class="form-control" v-model="dishData.category" id="category" list="categoryNames"/>
+            <input type="text" class="form-control" :value="category" @input="updateCategory($event.target.value)" id="category" list="categoryNames"/>
             <datalist id="categoryNames">
               <option v-for="categoryName in categories" :value="categoryName"/>
             </datalist>
@@ -47,7 +47,7 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <button v-on:click="submitForm" class="btn btn-block btn-success">Update</button>
+          <button @click="submitForm" class="btn btn-block btn-success">Update</button>
         </div>
       </div>
     </div>
@@ -60,62 +60,26 @@
   import Price from '../../components/commons/PriceElement'
   import Spinner from '../../components/commons/Spinner'
   import SideDishes from '../../components/restaurants/SideDishes.vue'
-
-  import ApiConnector from '../../lib/ApiConnector.js'
   import WithSpinner from "../../components/commons/WithSpinner";
-  import DishesApiConnector from "../../lib/DishesApiConnector";
+  import {mapMutations, mapState} from "vuex"
 
   export default {
     data() {
       return {
         restaurantId: this.$route.params.id,
         dishId: this.$route.params.dishId,
-
-        dishData: {
-          name: '',
-          price: '',
-          category: '',
-          initialSideDishes: [],
-          categories: [],
-        }
       }
     },
-    created() {
-      this.$store.commit('setLoadingTrue')
-    },
     mounted() {
-      DishesApiConnector.getDishEditData(this.restaurantId, this.dishId)
-        .then(dishData => {
-          this.dishData = dishData;
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch("editDish/initEditDish", {restaurantId: this.restaurantId, dishId: this.dishId})
     },
     methods: {
       submitForm: function () {
-        let sideDishesElement = this.$refs.sideDishesElement;
-
-        var dishObj = {
-          id: this.dishId,
-          name: dishData.name,
-          price: Math.round(dishData.price * 100),
-          category: dishData.category,
-          sideDishes: sideDishesElement.getSideDishes()
-        };
-
-        var dataSuccessUrl = "#/restaurants/show/" + this.restaurantId
+        let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
         let errorsComponent = this.$refs.errorsComponent;
 
-        DishesApiConnector.editDish(this.restaurantId, dishObj)
-          .then(response => {
-            window.location.href = dataSuccessUrl;
-          })
-          .catch(error => {
-            console.log("dishCreateForm Error:")
-            console.log(error);
-            errorsComponent.addError(error.body.message);
-          });
+        this.$store.dispatch("editDish/updateDish", {errorsComponent: errorsComponent, sideDishes: sideDishes});
 
         return false;
       },
@@ -130,11 +94,20 @@
       removeSideDish: function (sideDishId) {
         this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
       },
+      ...mapMutations("editDish", [
+        "updateName",
+        "updatePrice",
+        "updateCategory"
+      ])
     },
     computed: {
-      loading() {
-        return this.$store.state.loading;
-      }
+      ...mapState("editDish", [
+        'categories',
+        'initialSideDishes',
+        'name',
+        'price',
+        'category'
+      ])
     },
     components: {
       WithSpinner,

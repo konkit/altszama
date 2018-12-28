@@ -11,7 +11,7 @@
         <div class="col">
           <h1>Restaurant {{this.restaurant.name}}</h1>
 
-          <a v-bind:href="'#/restaurants/' + this.restaurantId + '/edit'" class="btn btn-light">
+          <a :href="'#/restaurants/' + this.restaurantId + '/edit'" class="btn btn-light">
             Edit restaurant&nbsp;<span class="fa fa-pencil"/>
           </a>
 
@@ -27,7 +27,7 @@
         <div class="col">
           <h4>Details</h4>
 
-          <p><b>Rating from Pyszne.pl : </b> {{this.restaurant.rating}} </p>
+          <p><b>Rating: </b> {{this.restaurant.rating}} </p>
           <p><b>Address : </b> {{this.restaurant.address}} </p>
           <p><b>URL : </b> {{this.restaurant.url}} </p>
           <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
@@ -50,64 +50,35 @@
   import ErrorsComponent from '../../components/commons/Errors'
   import BackButton from '../../components/commons/BackButton'
   import Price from '../../components/commons/PriceElement'
-  import router from '../../router'
-  import ShowRestaurantDishesTable from './ShowRestaurantDishesTable'
-  import ApiConnector from '../../lib/ApiConnector.js'
+  import ShowRestaurantDishesTable from '../../components/restaurants/ShowRestaurantDishesTable'
   import WithSpinner from "../../components/commons/WithSpinner";
-  import DishesApiConnector from "../../lib/DishesApiConnector";
 
   export default {
     name: 'show-restaurant',
     data() {
       return {
         restaurantId: this.$route.params.id,
-
-        results: {},
-        restaurants: [],
-        dishes: [],
-        dishesByCategory: {},
       }
     },
-    created() {
-      this.$store.commit('setLoadingTrue')
-    },
     mounted() {
-      DishesApiConnector.getShowRestaurantData(this.restaurantId)
-        .then(response => {
-          this.restaurant = response.restaurant;
-          this.dishes = response.dishes;
-          this.dishesByCategory = response.dishesByCategory;
-
-          this.$store.commit('setLoadingFalse')
-        })
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      this.$store.dispatch("showRestaurant/fetchRestaurant", {restaurantId: this.restaurantId});
     },
     methods: {
       deleteRestaurant: function (e) {
         let errorsComponent = this.$refs.errorsComponent;
-
-        DishesApiConnector.deleteRestaurant(this.restaurantId)
-          .then(response => router.push({'path': '/restaurants'}))
-          .catch(function (error) {
-            console.log("Delete restaurant error:");
-            console.log(error);
-
-            if (typeof error.message !== "undefined") {
-              errorsComponent.addError(error.message);
-            } else if (typeof error.body !== "undefined" && typeof error.body.message !== "undefined") {
-              errorsComponent.addError(error.body.message);
-            } else {
-              errorsComponent.addError(error);
-            }
-
-            ApiConnector.handleError(error);
-          });
+        this.$store.dispatch("showRestaurant/deleteRestaurant", {restaurantId: this.restaurantId, errorsComponent: errorsComponent});
       }
     },
     computed: {
-      loading() {
-        return this.$store.state.loading;
-      }
+      restaurant () {
+        return this.$store.state.showRestaurant.restaurant;
+      },
+      dishes () {
+        return this.$store.state.showRestaurant.dishes;
+      },
+      dishesByCategory () {
+        return this.$store.state.showRestaurant.dishesByCategory;
+      },
     },
     components: {
       WithSpinner,
@@ -118,16 +89,6 @@
       ShowRestaurantDishesTable
     }
   }
-
-  function convertToMapEntries(dishesMap) {
-    var result = []
-
-    for (const key of Object.keys(dishesMap)) {
-      result.push({"category": key, "dishes": dishesMap[key]})
-    }
-
-    return result;
-  }
 </script>
 
 <style scoped>
@@ -137,9 +98,5 @@
 
   .row {
     margin-top: 2rem;
-  }
-
-  .table {
-    margin-top: 10px;
   }
 </style>
