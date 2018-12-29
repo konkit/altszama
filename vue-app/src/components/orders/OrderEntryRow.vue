@@ -51,6 +51,7 @@
 
 <script>
   import Price from '../commons/PriceElement.vue'
+  import {CONFIRM_ORDER_ENTRY_AS_PAID_ACTION, MARK_ORDER_ENTRY_AS_PAID_ACTION} from "../../store/modules/ShowOrderState";
 
   export default {
     name: 'order-entry-row',
@@ -80,10 +81,10 @@
         }
       },
       confirmAsPaid: function (orderEntryId) {
-        this.$store.dispatch("showOrder/confirmOrderEntryAsPaid", {orderEntryId: orderEntryId})
+        this.$store.dispatch(`showOrder/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
       markAsPaid: function (orderEntryId) {
-        this.$store.dispatch("showOrder/markOrderEntryAsPaid", {orderEntryId: orderEntryId})
+        this.$store.dispatch(`showOrder/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
       deleteEntry: function (orderEntryId, dishEntryId) {
         this.$emit("deleteEntry", orderEntryId, dishEntryId);

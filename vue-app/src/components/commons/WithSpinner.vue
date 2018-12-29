@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="loading === true">
-      <errors-component ref="errorsComponent"/>
+      <errors-component />
 
       <div class="loader">Loading ....</div>
     </div>

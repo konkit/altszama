@@ -15,7 +15,7 @@ export default {
     }
   },
   actions: {
-    [FETCH_ALL_ORDERS] (context) {
+    [FETCH_ALL_ORDERS] () {
       OrdersApiConnector.fetchAllOrders()
         .then(allOrdersList => {
           this.commit('allOrders/setAllOrdersList', allOrdersList);

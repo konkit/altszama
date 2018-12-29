@@ -45,6 +45,14 @@
 </template>
 
 <script>
+  import {
+    SET_ORDER_AS_CREATED_ACTION,
+    SET_ORDER_AS_ORDERED_ACTION,
+    SET_ORDER_AS_DELIVERED_ACTION,
+    SET_ORDER_AS_REJECTED_ACTION,
+    DELETE_ORDER_ACTION
+  } from "../../store/modules/ShowOrderState";
+
   export default {
     name: 'order-state-buttons',
     props: ['orderId', 'orderState'],
@@ -53,19 +61,19 @@
     },
     methods: {
       setAsCreated: function (e) {
-        this.$store.dispatch("showOrder/setOrderAsCreated", {orderId: this.orderId});
+        this.$store.dispatch(`showOrder/${SET_ORDER_AS_CREATED_ACTION}`, { orderId: this.orderId });
       },
       setAsOrdered: function (e) {
-        this.$store.dispatch("showOrder/setOrderAsOrdered", {orderId: this.orderId});
+        this.$store.dispatch(`showOrder/${SET_ORDER_AS_ORDERED_ACTION}`, { orderId: this.orderId });
       },
       setAsDelivered: function (e) {
-        this.$store.dispatch("showOrder/setOrderAsDelivered", {orderId: this.orderId});
+        this.$store.dispatch(`showOrder/${SET_ORDER_AS_DELIVERED_ACTION}`, { orderId: this.orderId });
       },
       setAsRejected: function (e) {
-        this.$store.dispatch("showOrder/setOrderAsRejected", {orderId: this.orderId});
+        this.$store.dispatch(`showOrder/${SET_ORDER_AS_REJECTED_ACTION}`, { orderId: this.orderId });
       },
       deleteEntry: function (e) {
-        this.$store.dispatch("showOrder/deleteOrder", {orderId: this.orderId});
+        this.$store.dispatch(`showOrder/${DELETE_ORDER_ACTION}`, { orderId: this.orderId });
       },
     }
   }

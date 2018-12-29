@@ -36,24 +36,23 @@
 
 <script>
   import Price from '../commons/PriceElement.vue'
+  import {SET_NEW_DISH_FLAG, CLEAR_EDITED_SIDE_DISHES} from "../../store/modules/ShowOrderState";
 
   export default {
     name: 'order-entry-input',
     methods: {
       setNewDishFlag: function (newValue) {
-        this.$store.commit('setNewDishFlag', newValue)
+        this.$store.commit(`showOrder/${SET_NEW_DISH_FLAG}`, newValue)
       },
       clearSideDishes: function () {
-        this.$store.commit('showOrder/clearEditedSideDishes')
+        this.$store.commit(`showOrder/${CLEAR_EDITED_SIDE_DISHES}`)
       }
     },
     computed: {
-      editedOrderEntry() {
-        return this.$store.state.showOrder.editedOrderEntry;
-      },
-      allDishesByCategory() {
-        return this.$store.state.showOrder.allDishesByCategory;
-      }
+      ...mapState("showOrder", [
+        "editedOrderEntry",
+        "allDishesByCategory"
+      ])
     },
     components: {
       Price

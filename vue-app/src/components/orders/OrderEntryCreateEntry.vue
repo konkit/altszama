@@ -7,7 +7,7 @@
         </button>
       </div>
 
-      <errors-component ref="errorsComponent"/>
+      <errors-component/>
 
       <div>
         <order-entry-input/>
@@ -42,6 +42,13 @@
 
   import OrderEntryInput from './OrderEntryInput.vue'
   import SideDishesInput from './SideDishesInput.vue'
+  import {
+    SET_EDITED_ORDER_ENTRY,
+    SAVE_ORDER_ENTRY_ACTION,
+    CANCEL_ENTRY_CREATE_OR_EDIT,
+    SET_ENTRY_LOADING_FALSE,
+    SET_ENTRY_LOADING_TRUE
+  } from "../../store/modules/ShowOrderState";
 
   export default {
     name: 'order-entry-create-entry',
@@ -50,7 +57,7 @@
       return {}
     },
     created() {
-      this.$store.commit('setEntryLoadingTrue')
+      this.$store.commit(`showOrder/${SET_ENTRY_LOADING_TRUE}`)
     },
     mounted() {
       let dishId;
@@ -70,43 +77,32 @@
         chosenSideDishes: []
       };
 
-      this.$store.commit('showOrder/setEditedOrderEntry', newEditedOrderEntry);
-      this.$store.commit('setEntryLoadingFalse')
+      this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, newEditedOrderEntry);
+      this.$store.commit(`showOrder/${SET_ENTRY_LOADING_FALSE}`)
     },
     methods: {
       submitForm: function (e) {
         e.preventDefault();
 
-        let errorsComponent = this.$refs.errorsComponent;
-
-        this.$store.dispatch("showOrder/saveOrderEntry", {orderId: this.order.id, editedOrderEntry: this.editedOrderEntry, errorsComponent: errorsComponent});
-
-        // OrdersApiConnector.saveOrderEntry(this.order.id, this.editedOrderEntry)
-        //   .then(() => {
-        //     this.$emit("updateOrder");
-        //     this.$store.commit('cancelEntryCreateOrEdit', {})
-        //   })
-        //   .catch((error) => {
-        //     console.log("orderEntryCreateEntry error:", error);
-        //     error.body.messages.forEach(msg => errorsComponent.addError(msg));
-        //   });
+        this.$store.dispatch(`showOrder/${SAVE_ORDER_ENTRY_ACTION}`, {
+          orderId: this.order.id,
+          editedOrderEntry: this.editedOrderEntry
+        });
 
         return false;
       },
       cancelEdit: function () {
-        this.$store.commit('showOrder/cancelEntryCreateOrEdit', {})
+        this.$store.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
       },
     },
     computed: {
       loadingEntry() {
         return this.$store.state.loadingEntry;
       },
-      allDishesInRestaurant() {
-        return this.$store.state.showOrder.allDishesInRestaurant;
-      },
-      editedOrderEntry() {
-        return this.$store.state.showOrder.editedOrderEntry;
-      }
+      ...mapState("showOrder", [
+        "allDishesInRestaurant",
+        "editedOrderEntry"
+      ]),
     },
     components: {
       BackButton,

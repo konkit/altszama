@@ -21,6 +21,8 @@ export const SET_ORDER_AS_ORDERED_ACTION = "SET_ORDER_AS_ORDERED_ACTION";
 export const SET_ORDER_AS_DELIVERED_ACTION = "SET_ORDER_AS_DELIVERED_ACTION";
 export const SET_ORDER_AS_REJECTED_ACTION = "SET_ORDER_AS_REJECTED_ACTION";
 export const DELETE_ORDER_ACTION = "DELETE_ORDER_ACTION";
+export const SET_ENTRY_LOADING_TRUE = "SET_ENTRY_LOADING_TRUE";
+export const SET_ENTRY_LOADING_FALSE = "SET_ENTRY_LOADING_FALSE";
 
 export default {
   namespaced: true,
@@ -83,6 +85,12 @@ export default {
       if (newDishValue === true) {
         state.editedOrderEntry.dishId = ""
       }
+    },
+    [SET_ENTRY_LOADING_TRUE] (state) {
+      state.loadingEntry = true;
+    },
+    [SET_ENTRY_LOADING_FALSE] (state) {
+      state.loadingEntry = false;
     },
   },
   actions: {

@@ -38,6 +38,7 @@
 
 <script>
   import Price from '../commons/PriceElement'
+  import {DELETE_DISH_ACTION} from "../../store/modules/ShowRestaurantState";
 
   export default {
     name: "show-restaurant-dishes-table",
@@ -49,7 +50,7 @@
     },
     methods: {
       deleteDish: function (dishId) {
-        this.$store.dispatch("showRestaurant/deleteDish", {restaurantId: this.restaurant.id, dishId: dishId})
+        this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {restaurantId: this.restaurant.id, dishId: dishId})
       },
     },
     components: {

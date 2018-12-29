@@ -31,12 +31,6 @@ export default new Vuex.Store({
     setLoadingFalse (state) {
       state.loading = false;
     },
-    setEntryLoadingTrue (state) {
-      state.loadingEntry = true;
-    },
-    setEntryLoadingFalse (state) {
-      state.loadingEntry = false;
-    },
     loginUser (state, payload) {
       state.username = payload.username;
       localStorage.setItem("username", payload.username);

@@ -47,7 +47,7 @@
       </div>
 
       <div class="container">
-        <errors-component ref="errorsComponent"/>
+        <errors-component />
       </div>
 
       <div class="container">

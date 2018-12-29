@@ -48,6 +48,7 @@
 
 <script>
   import Price from '../commons/PriceElement.vue'
+  import {SET_EDITED_ORDER_ENTRY} from "../../store/modules/ShowOrderState";
 
   export default {
     name: 'side-dishes-input',
@@ -55,7 +56,7 @@
     methods: {
       removeSideDish: function (id) {
         this.editedOrderEntry.chosenSideDishes = removeItemWithSlice(this.editedOrderEntry.chosenSideDishes, id)
-        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+        this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, this.editedOrderEntry)
       },
       addSideDishEntry: function () {
         var sideDishesForGivenDish = this.dishIdToSideDishesMap[this.editedOrderEntry.dishId];
@@ -74,7 +75,7 @@
 
         this.editedOrderEntry.chosenSideDishes.push(sideDishToAdd)
 
-        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+        this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, this.editedOrderEntry)
       },
       setAsNewSideDish: function (sideDishIndex) {
         this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
@@ -89,7 +90,7 @@
           return newSd
         })
 
-        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+        this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, this.editedOrderEntry)
       },
       setAsExistingSideDish: function (sideDishIndex) {
         this.editedOrderEntry.chosenSideDishes = this.editedOrderEntry.chosenSideDishes.map((sd, i) => {
@@ -104,17 +105,17 @@
           return newSd
         })
 
-        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+        this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, this.editedOrderEntry)
       },
       changeNewSideDishPrice(sdIndex, newPrice) {
         this.editedOrderEntry.chosenSideDishes[sdIndex].newSideDishPrice = newPrice;
-        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+        this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, this.editedOrderEntry)
 
         this.$forceUpdate();
       },
       updateSideDishComboBox(sdIndex, dishId, sidedishId) {
         this.editedOrderEntry.chosenSideDishes[sdIndex] = this.dishIdToSideDishesMap[dishId].find(sd => sd.id == sidedishId)
-        this.$store.commit('setEditedOrderEntry', this.editedOrderEntry)
+        this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, this.editedOrderEntry)
 
         this.$forceUpdate();
       }

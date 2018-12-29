@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <errors-component ref="errorsComponent"/>
+      <errors-component />
 
       <form>
         <div class="row justify-content-center">

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <template v-if="this.loadingEntry === false">
-      <errors-component ref="errorsComponent"/>
+      <errors-component />
 
       <div class="pull-right">
         <button type="button" class="btn btn-light" @click="cancelEdit()">
@@ -44,6 +44,13 @@
 
   import OrderEntryInput from './OrderEntryInput.vue'
   import SideDishesInput from './SideDishesInput.vue'
+  import {
+    SET_EDITED_ORDER_ENTRY,
+    CANCEL_ENTRY_CREATE_OR_EDIT,
+    EDIT_ORDER_ENTRY_ACTION,
+    SET_ENTRY_LOADING_TRUE,
+    SET_ENTRY_LOADING_FALSE
+  } from "../../store/modules/ShowOrderState";
 
   export default {
     name: 'order-entry-edit-entry',
@@ -52,7 +59,7 @@
       return {}
     },
     created() {
-      this.$store.commit('setEntryLoadingTrue')
+      this.$store.commit(`showOrder/${SET_ENTRY_LOADING_TRUE}`)
     },
     mounted() {
       var newEditedOrderEntry = {
@@ -66,21 +73,19 @@
         chosenSideDishes: this.dishEntry.sideDishes || []
       };
 
-      this.$store.commit('setEditedOrderEntry', newEditedOrderEntry);
-      this.$store.commit('setEntryLoadingFalse');
+      this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, newEditedOrderEntry);
+      this.$store.commit(`showOrder/${SET_ENTRY_LOADING_FALSE}`)
     },
     methods: {
       submitForm: function (e) {
         e.preventDefault();
 
-        let errorsComponent = this.$refs.errorsComponent;
-
-        this.$store.dispatch("showOrder/editOrderEntry", {orderId: this.order.id, orderEntryId: this.orderEntry.id, editedOrderEntry: this.editedOrderEntry, errorsComponent: errorsComponent});
+        this.$store.dispatch(`showOrder/${EDIT_ORDER_ENTRY_ACTION}`, {orderId: this.order.id, orderEntryId: this.orderEntry.id, editedOrderEntry: this.editedOrderEntry});
 
         return false;
       },
       cancelEdit: function () {
-        this.$store.commit('showOrder/cancelEntryCreateOrEdit', {})
+        this.$store.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
       },
     },
     computed: {

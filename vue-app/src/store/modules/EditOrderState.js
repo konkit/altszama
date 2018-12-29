@@ -92,7 +92,7 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    [UPDATE_ORDER] ({state}, payload) {
+    [UPDATE_ORDER] ({state}) {
       const order = {
         restaurantId: state.restaurantId,
         orderId: state.orderId,
