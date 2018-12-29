@@ -22,27 +22,27 @@
 
             <div class="form-group">
               <label>Name:</label>
-              <input class="form-control" type="text" :value="name" @input="updateName($event.target.value)"/>
+              <input class="form-control" type="text" :value="name" @input="[UPDATE_NAME]($event.target.value)"/>
             </div>
 
             <div class="form-group">
               <label>URL:</label>
-              <input class="form-control" type="text" :value="url" @input="updateUrl($event.target.value)"/>
+              <input class="form-control" type="text" :value="url" @input="[UPDATE_URL]($event.target.value)"/>
             </div>
 
             <div class="form-group">
               <label>Rating:</label>
-              <input class="form-control" type="text" :value="rating" @input="updateRating($event.target.value)"/>
+              <input class="form-control" type="text" :value="rating" @input="[UPDATE_RATING]($event.target.value)"/>
             </div>
 
             <div class="form-group">
               <label>Telephone:</label>
-              <input class="form-control" type="text" :value="telephone" @input="updateTelephone($event.target.value)"/>
+              <input class="form-control" type="text" :value="telephone" @input="[UPDATE_TELEPHONE]($event.target.value)"/>
             </div>
 
             <div class="form-group">
               <label>Address:</label>
-              <input class="form-control" type="text" :value="address" @input="updateAddress($event.target.value)"/>
+              <input class="form-control" type="text" :value="address" @input="[UPDATE_ADDRESS]($event.target.value)"/>
             </div>
           </form>
 

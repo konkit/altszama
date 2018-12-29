@@ -19,30 +19,30 @@
         <form id="restaurantCreateForm">
           <div class="form-group">
             <label>Name:</label>
-            <input class="form-control" type="text" name="name" :value="name" @input="updateName($event.target.value)"/>
+            <input class="form-control" type="text" name="name" :value="name" @input="[UPDATE_NAME]($event.target.value)"/>
           </div>
 
           <div class="form-group">
             <label>URL:</label>
-            <input class="form-control" type="text" name="url" :value="url" @input="updateUrl($event.target.value)"/>
+            <input class="form-control" type="text" name="url" :value="url" @input="[UPDATE_URL]($event.target.value)"/>
           </div>
 
           <div class="form-group">
             <label>Rating:</label>
             <input class="form-control" type="text" name="rating" :value="rating"
-                   @input="updateRating($event.target.value)"/>
+                   @input="[UPDATE_RATING]($event.target.value)"/>
           </div>
 
           <div class="form-group">
             <label>Telephone:</label>
             <input class="form-control" type="text" name="telephone" :value="telephone"
-                   @input="updateTelephone($event.target.value)"/>
+                   @input="[UPDATE_TELEPHONE]($event.target.value)"/>
           </div>
 
           <div class="form-group">
             <label>Address:</label>
             <input class="form-control" type="text" name="address" :value="address"
-                   @input="updateAddress($event.target.value)"/>
+                   @input="[UPDATE_ADDRESS]($event.target.value)"/>
           </div>
         </form>
 

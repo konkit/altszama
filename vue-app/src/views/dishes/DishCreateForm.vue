@@ -22,20 +22,20 @@
 
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" class="form-control" :value="name" @input="[CREATE_DISH_UPDATE_NAME]($event.target.value)" required=""
+              <input type="text" class="form-control" :value="name" @input="updateName($event.target.value)" required=""
                      id="name"/>
             </div>
 
             <div class="form-group">
               <label for="dish-price">Price</label>
               <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price"
-                           @input="[CREATE_DISH_UPDATE_PRICE]($event)"
+                           @input="updatePrice($event)"
                            :precision="2" class="form-control" required="" id="dish-price"></vue-numeric>
             </div>
 
             <div class="form-group">
               <label for="category">Category</label>
-              <input type="text" class="form-control" :value="category" @input="[CREATE_DISH_UPDATE_CATEGORY]($event.target.value)"
+              <input type="text" class="form-control" :value="category" @input="updateCategory($event.target.value)"
                      id="category" list="categoryNames"/>
               <datalist id="categoryNames">
                 <option v-for="categoryName in categories" :value="categoryName"/>
@@ -98,11 +98,15 @@
           return "#/restaurants/show/" + this.restaurantId
         }
       },
-      ...mapMutations("createDish", [
-        UPDATE_NAME,
-        UPDATE_PRICE,
-        UPDATE_CATEGORY,
-      ])
+      updateName() {
+        this.$store.commit(`createDish/${UPDATE_NAME}`)
+      },
+      updatePrice() {
+        this.$store.commit(`createDish/${UPDATE_PRICE}`)
+      },
+      updateCategory() {
+        this.$store.commit(`createDish/${UPDATE_CATEGORY}`)
+      }
     },
     computed: {
       ...mapState("createDish", [

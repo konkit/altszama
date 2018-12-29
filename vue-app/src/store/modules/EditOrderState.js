@@ -90,7 +90,7 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    [UPDATE_ORDER] ({state}) {
+    [UPDATE_ORDER_ACTION] ({state}) {
       const order = {
         restaurantId: state.restaurantId,
         orderId: state.orderId,

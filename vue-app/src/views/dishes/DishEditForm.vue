@@ -93,11 +93,15 @@
       removeSideDish: function (sideDishId) {
         this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
       },
-      ...mapMutations("editDish", [
-        UPDATE_NAME,
-        UPDATE_PRICE,
-        UPDATE_CATEGORY,
-      ])
+      updateName() {
+        this.$store.commit(`editDish/${UPDATE_NAME}`)
+      },
+      updatePrice() {
+        this.$store.commit(`editDish/${UPDATE_PRICE}`)
+      },
+      updateCategory() {
+        this.$store.commit(`editDish/${UPDATE_CATEGORY}`)
+      }
     },
     computed: {
       ...mapState("editDish", [
