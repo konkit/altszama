@@ -125,6 +125,27 @@
   import OrderEntryRow from '../../components/orders/OrderEntryRow.vue'
   import OrderStats from '../../components/orders/OrderStats.vue'
   import {mapState} from 'vuex'
+  import {
+    DELETE_ORDER_ACTION,
+    SET_ORDER_AS_REJECTED_ACTION,
+    SET_ORDER_AS_DELIVERED_ACTION,
+    SET_ORDER_AS_ORDERED_ACTION,
+    SET_ORDER_AS_CREATED_ACTION,
+    MARK_ORDER_ENTRY_AS_PAID_ACTION,
+    CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
+    DELETE_DISH_ENTRY_ACTION,
+    UNLOCK_ORDER_ACTION,
+    EDIT_ORDER_ENTRY_ACTION,
+    SAVE_ORDER_ENTRY_ACTION,
+    FETCH_ORDER_DATA_ACTION,
+    CANCEL_ENTRY_CREATE_OR_EDIT,
+    CLEAR_EDITED_SIDE_DISHES,
+    LOAD_SHOW_ORDER_DATA,
+    SET_EDITED_ORDER_ENTRY,
+    SET_ENTRY_CREATING,
+    SET_ENTRY_EDITING,
+    SET_NEW_DISH_FLAG
+  } from "../../store/modules/ShowOrderState"
 
   export default {
     data() {
@@ -138,7 +159,7 @@
     methods: {
       fetchOrder: function () {
         this.$store.commit('setLoadingTrue');
-        this.$store.dispatch("showOrder/fetchOrderData", {orderId: this.orderId});
+        this.$store.dispatch(`showOrder/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
       },
       isOrdering: function () {
         return this.order.orderState === 'ORDERING';
@@ -161,27 +182,26 @@
         }
       },
       unlockOrder: function () {
-        // OrdersApiConnector.setOrderAsCreated(this.orderId)
-        //   .then(response => this.fetchOrder())
-        this.$store.dispatch("showOrder/unlockOrder", {orderId: this.orderId})
+        this.$store.dispatch(`showOrder/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
       },
       deleteEntry: function (orderEntryId, dishEntryId) {
-        this.$store.dispatch("showOrder/deleteDishEntry", {orderId: this.orderId, orderEntryId: orderEntryId, dishEntryId: dishEntryId})
-        // OrdersApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
-        //   .then(successResponse => this.fetchOrder())
-        //   .catch(errResponse => console.log(errResponse));
+        this.$store.dispatch(`showOrder/${DELETE_DISH_ENTRY_ACTION}`, {
+          orderId: this.orderId,
+          orderEntryId: orderEntryId,
+          dishEntryId: dishEntryId
+        })
       },
       createEntry: function () {
-        this.$store.commit('showOrder/setEntryCreating', {})
+        this.$store.commit(`showOrder/${SET_ENTRY_CREATING}`, {})
       },
       editEntry: function (orderEntryId, dishEntryId) {
-        this.$store.commit('showOrder/setEntryEditing', {
+        this.$store.commit(`showOrder/${SET_ENTRY_EDITING}`, {
           "orderEntryId": orderEntryId,
           "dishEntryId": dishEntryId
         })
       },
       cancelEdit: function () {
-        this.$store.commit('showOrder/cancelEntryCreateOrEdit', {})
+        this.$store.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
       }
     },
     computed: {
@@ -191,16 +211,16 @@
       ...mapState({
         username: state => state.username,
       }),
-      ...mapState('showOrder', {
-        order: state => state.order,
-        orderEntries: state => state.orderEntries,
-        currentUserId: state => state.currentUserId,
-        isEntryCreating: state => state.isEntryCreating,
-        isEntryEdited: state => state.isEntryEdited,
-        orderEntryId: state => state.orderEntryId,
-        dishEntryId: state => state.dishEntryId,
-        totalOrderPrice: state => state.totalOrderPrice,
-      })
+      ...mapState('showOrder', [
+        "order",
+        "orderEntries",
+        "currentUserId",
+        "isEntryCreating",
+        "isEntryEdited",
+        "orderEntryId",
+        "dishEntryId",
+        "totalOrderPrice",
+      ])
     },
     components: {
       BackButton,

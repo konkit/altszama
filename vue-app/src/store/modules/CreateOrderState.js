@@ -1,6 +1,20 @@
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 
+export const INIT_DATA = "INIT_DATA";
+export const UPDATE_RESTAURANT_ID = "UPDATE_RESTAURANT_ID";
+export const UPDATE_ORDER_DATE = "UPDATE_ORDER_DATE";
+export const UPDATE_TIME_OF_ORDER = "UPDATE_TIME_OF_ORDER";
+export const UPDATE_DECREASE_IN_PERCENT = "UPDATE_DECREASE_IN_PERCENT";
+export const UPDATE_DELIVERY_COST_PER_EVERYBODY = "UPDATE_DELIVERY_COST_PER_EVERYBODY";
+export const UPDATE_DELIVERY_COST_PER_DISH = "UPDATE_DELIVERY_COST_PER_DISH";
+export const UPDATE_PAYMENT_BY_CASH = "UPDATE_PAYMENT_BY_CASH";
+export const UPDATE_PAYMENT_BY_BANK_TRANSFER = "UPDATE_PAYMENT_BY_BANK_TRANSFER";
+export const UPDATE_BANK_TRANSFER_NUMBER = "UPDATE_BANK_TRANSFER_NUMBER";
+
+export const INIT_CREATE_ORDER_ACTION = "INIT_CREATE_ORDER_ACTION";
+export const SAVE_ORDER_ACTION = "SAVE_ORDER_ACTION";
+
 export default {
   namespaced: true,
   state: {
@@ -18,7 +32,7 @@ export default {
     bankTransferNumber: "",
   },
   mutations: {
-    initData (state, payload) {
+    [INIT_DATA] (state, payload) {
       state.restaurantsList = payload.restaurantsList;
 
       state.restaurantId = payload.order.restaurantId;
@@ -31,39 +45,36 @@ export default {
       state.paymentByBankTransfer = payload.order.paymentByBankTransfer ;
       state.bankTransferNumber = payload.order.bankTransferNumber;
     },
-    updateRestaurantId(state, newValue) {
+    [UPDATE_RESTAURANT_ID] (state, newValue) {
       state.restaurantId = newValue
     },
-    updateOrder (state, newOrder) {
-      state.order = newOrder;
-    },
-    updateOrderDate (state, newOrderDate) {
+    [UPDATE_ORDER_DATE] (state, newOrderDate) {
       state.orderDate = newOrderDate
     },
-    updateTimeOfOrder (state, newTimeOfOrder) {
+    [UPDATE_TIME_OF_ORDER] (state, newTimeOfOrder) {
       state.timeOfOrder = newTimeOfOrder;
     },
-    updateDecreaseInPercent(state, newValue) {
+    [UPDATE_DECREASE_IN_PERCENT] (state, newValue) {
       state.decreaseInPercent = newValue;
     },
-    updateDeliveryCostPerEverybody(state, newValue) {
+    [UPDATE_DELIVERY_COST_PER_EVERYBODY] (state, newValue) {
       state.deliveryCostPerEverybody = newValue;
     },
-    updateDeliveryCostPerDish(state, newValue) {
+    [UPDATE_DELIVERY_COST_PER_DISH] (state, newValue) {
       state.deliveryCostPerDish = newValue;
     },
-    updatePaymentByCash(state, newValue) {
+    [UPDATE_PAYMENT_BY_CASH] (state, newValue) {
       state.paymentByCash = newValue;
     },
-    updatePaymentByBankTransfer(state, newValue) {
+    [UPDATE_PAYMENT_BY_BANK_TRANSFER] (state, newValue) {
       state.paymentByBankTransfer = newValue;
     },
-    updateBankTransferNumber(state, newValue) {
+    [UPDATE_BANK_TRANSFER_NUMBER] (state, newValue) {
       state.bankTransferNumber = newValue;
     },
   },
   actions: {
-    initCreateOrder(context) {
+    [INIT_CREATE_ORDER_ACTION] (context) {
       OrdersApiConnector.getOrderCreateData()
         .then(response => {
           this.commit('createOrder/initData', response);
@@ -71,9 +82,7 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    saveOrder({state}, payload) {
-      let errorsComponent = payload.errorsComponent;
-
+    [SAVE_ORDER_ACTION] ({state}, payload) {
       const order = {
         restaurantId: state.restaurantId,
         orderDate: state.orderDate,
@@ -87,7 +96,7 @@ export default {
       };
 
       OrdersApiConnector.createOrder(order)
-        .catch(error => error.body.messages.forEach(msg => errorsComponent.addError(msg)));
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false;
     }

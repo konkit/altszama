@@ -166,6 +166,7 @@
 <script>
   import ApiConnector from '../../lib/ApiConnector.js'
   import WithSpinner from "../../components/commons/WithSpinner";
+  import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
 
   export default {
     data() {
@@ -177,7 +178,7 @@
 
       let errorsComponent = this.$refs.errorsComponent;
 
-      this.$store.dispatch("todayOrders/fetchTodayOrders", {errorsComponent: errorsComponent});
+      this.$store.dispatch(`todayOrders/${FETCH_TODAY_ORDERS_ACTION}`, {errorsComponent: errorsComponent});
     },
     methods: {
       goToOrder: function (selectedOrderId) {
@@ -185,21 +186,13 @@
       }
     },
     computed: {
-      currentOrderEntries() {
-        return this.$store.state.todayOrders.currentOrderEntries;
-      },
-      createdOrders() {
-        return this.$store.state.todayOrders.createdOrders;
-      },
-      orderingOrders() {
-        return this.$store.state.todayOrders.orderingOrders;
-      },
-      orderedOrders() {
-        return this.$store.state.todayOrders.orderedOrders;
-      },
-      deliveredOrders() {
-        return this.$store.state.todayOrders.deliveredOrders;
-      },
+      ...mapState("todayOrders", [
+        "currentOrderEntries",
+        "createdOrders",
+        "orderingOrders",
+        "orderedOrders",
+        "deliveredOrders"
+      ])
     },
     components: {
       WithSpinner,

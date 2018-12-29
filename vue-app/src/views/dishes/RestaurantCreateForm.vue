@@ -29,17 +29,20 @@
 
           <div class="form-group">
             <label>Rating:</label>
-            <input class="form-control" type="text" name="rating" :value="rating" @input="updateRating($event.target.value)" />
+            <input class="form-control" type="text" name="rating" :value="rating"
+                   @input="updateRating($event.target.value)"/>
           </div>
 
           <div class="form-group">
             <label>Telephone:</label>
-            <input class="form-control" type="text" name="telephone" :value="telephone" @input="updateTelephone($event.target.value)" />
+            <input class="form-control" type="text" name="telephone" :value="telephone"
+                   @input="updateTelephone($event.target.value)"/>
           </div>
 
           <div class="form-group">
             <label>Address:</label>
-            <input class="form-control" type="text" name="address" :value="address" @input="updateAddress($event.target.value)" />
+            <input class="form-control" type="text" name="address" :value="address"
+                   @input="updateAddress($event.target.value)"/>
           </div>
         </form>
 
@@ -53,19 +56,27 @@
   import BackButton from '../../components/commons/BackButton'
   import ErrorsComponent from '../../components/commons/Errors'
   import {mapMutations, mapState} from 'vuex'
+  import {
+    UPDATE_NAME,
+    UPDATE_URL,
+    UPDATE_RATING,
+    UPDATE_TELEPHONE,
+    UPDATE_ADDRESS,
+    SAVE_RESTAURANT_ACTION
+  } from "../../store/modules/CreateRestaurantState"
 
   export default {
     props: ['restaurantName'],
     methods: {
       submitForm: function () {
-        this.$store.dispatch("createRestaurant/saveRestaurant", {errorsComponent: this.$refs.errorsComponent})
+        this.$store.dispatch(`createRestaurant/${SAVE_RESTAURANT_ACTION}`, {errorsComponent: this.$refs.errorsComponent})
       },
       ...mapMutations("createRestaurant", [
-        "updateName",
-        "updateUrl",
-        "updateRating",
-        "updateTelephone",
-        "updateAddress",
+        UPDATE_NAME,
+        UPDATE_URL,
+        UPDATE_RATING,
+        UPDATE_TELEPHONE,
+        UPDATE_ADDRESS,
       ])
     },
     computed: {

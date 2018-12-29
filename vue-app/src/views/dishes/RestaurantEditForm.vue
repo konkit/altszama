@@ -32,17 +32,17 @@
 
             <div class="form-group">
               <label>Rating:</label>
-              <input class="form-control" type="text" :value="rating" @input="updateRating($event.target.value)" />
+              <input class="form-control" type="text" :value="rating" @input="updateRating($event.target.value)"/>
             </div>
 
             <div class="form-group">
               <label>Telephone:</label>
-              <input class="form-control" type="text" :value="telephone" @input="updateTelephone($event.target.value)" />
+              <input class="form-control" type="text" :value="telephone" @input="updateTelephone($event.target.value)"/>
             </div>
 
             <div class="form-group">
               <label>Address:</label>
-              <input class="form-control" type="text" :value="address" @input="updateAddress($event.target.value)" />
+              <input class="form-control" type="text" :value="address" @input="updateAddress($event.target.value)"/>
             </div>
           </form>
 
@@ -60,6 +60,15 @@
 
   import WithSpinner from "../../components/commons/WithSpinner";
   import {mapMutations, mapState} from 'vuex'
+  import {
+    UPDATE_RESTAURANT_ACTION,
+    INIT_EDIT_RESTAURANT_ACTION,
+    UPDATE_ADDRESS,
+    UPDATE_TELEPHONE,
+    UPDATE_RATING,
+    UPDATE_URL,
+    UPDATE_NAME
+  } from "../../store/modules/EditRestaurantState"
 
   export default {
     data() {
@@ -68,22 +77,22 @@
       }
     },
     mounted() {
-      this.$store.dispatch("editRestaurant/initEditRestaurant", {restaurantId: this.restaurantId});
+      this.$store.dispatch(`editRestaurant/${INIT_EDIT_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
     },
     methods: {
       submitForm: function () {
         let errorsComponent = this.$refs.errorsComponent;
 
-        this.$store.dispatch("editRestaurant/updateRestaurant", {errorsComponent: errorsComponent});
+        this.$store.dispatch(`editRestaurant/${UPDATE_RESTAURANT_ACTION}`, {errorsComponent: errorsComponent});
 
         return false;
       },
       ...mapMutations("editRestaurant", [
-        "updateName",
-        "updateUrl",
-        "updateRating",
-        "updateTelephone",
-        "updateAddress",
+        UPDATE_NAME,
+        UPDATE_URL,
+        UPDATE_RATING,
+        UPDATE_TELEPHONE,
+        UPDATE_ADDRESS,
       ])
     },
     computed: {

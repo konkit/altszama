@@ -169,6 +169,20 @@
   import MaskedInput from 'vue-text-mask'
   import WithSpinner from "../../components/commons/WithSpinner";
   import VueSelect from 'vue-select'
+  import {
+    INIT_CREATE_ORDER_ACTION,
+    UPDATE_BANK_TRANSFER_NUMBER,
+    UPDATE_PAYMENT_BY_BANK_TRANSFER,
+    UPDATE_PAYMENT_BY_CASH,
+    UPDATE_DELIVERY_COST_PER_DISH,
+    UPDATE_DELIVERY_COST_PER_EVERYBODY,
+    UPDATE_DECREASE_IN_PERCENT,
+    UPDATE_TIME_OF_ORDER,
+    UPDATE_ORDER_DATE,
+    UPDATE_RESTAURANT_ID,
+    SAVE_ORDER_ACTION,
+
+  } from "../../store/modules/CreateOrderState";
 
   export default {
     name: 'order-create-form',
@@ -184,42 +198,39 @@
       this.$store.commit('setLoadingTrue')
     },
     mounted() {
-      this.$store.dispatch('createOrder/initCreateOrder');
+      this.$store.dispatch(`createOrder/${INIT_CREATE_ORDER_ACTION}`);
     },
     methods: {
       updateRestaurantId(newValue) {
-        this.$store.commit('createOrder/updateRestaurantId', newValue);
+        this.$store.commit(`createOrder/${UPDATE_RESTAURANT_ID}`, newValue);
       },
       updateOrderDate(newOrderDate) {
-        this.$store.commit('createOrder/updateOrderDate', newOrderDate);
+        this.$store.commit(`createOrder/${UPDATE_ORDER_DATE}`, newOrderDate);
       },
       updateTimeOfOrder(newTimeOfOrder) {
-        this.$store.commit('createOrder/updateTimeOfOrder', newTimeOfOrder);
+        this.$store.commit(`createOrder/${UPDATE_TIME_OF_ORDER}`, newTimeOfOrder);
       },
       updateDecreaseInPercent(newValue) {
-        this.$store.commit('createOrder/updateDecreaseInPercent', newValue);
+        this.$store.commit(`createOrder/${UPDATE_DECREASE_IN_PERCENT}`, newValue);
       },
       updateDeliveryCostPerEverybody(newValue) {
-        this.$store.commit('createOrder/updateDeliveryCostPerEverybody', newValue);
+        this.$store.commit(`createOrder/${UPDATE_DELIVERY_COST_PER_EVERYBODY}`, newValue);
       },
       updateDeliveryCostPerDish(newValue) {
-        this.$store.commit('createOrder/updateDeliveryCostPerDish', newValue);
+        this.$store.commit(`createOrder/${UPDATE_DELIVERY_COST_PER_DISH}`, newValue);
       },
       updatePaymentByCash(newValue) {
-        this.$store.commit('createOrder/updatePaymentByCash', newValue);
+        this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_CASH}`, newValue);
       },
       updatePaymentByBankTransfer(newValue) {
-        this.$store.commit('createOrder/updatePaymentByBankTransfer', newValue);
+        this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_BANK_TRANSFER}`, newValue);
       },
       updateBankTransferNumber(newValue) {
-        this.$store.commit('createOrder/updateBankTransferNumber', newValue);
+        this.$store.commit(`createOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
       },
-      submitForm (e) {
+      submitForm(e) {
         e.preventDefault();
-
-        let errorsComponent = this.$refs.errorsComponent;
-
-        this.$store.dispatch('createOrder/saveOrder', { errorsComponent: errorsComponent });
+        this.$store.dispatch(`createOrder/${SAVE_ORDER_ACTION}`);
 
         return false;
       }
@@ -228,47 +239,32 @@
       loading() {
         return this.$store.state.loading;
       },
-      restaurantsList() {
-        return this.$store.state.createOrder.restaurantsList;
-      },
-
-      restaurantId() {
-        return this.$store.state.createOrder.restaurantId;
-      },
-      orderDate() {
-        return this.$store.state.createOrder.orderDate;
-      },
-      timeOfOrder() {
-        return this.$store.state.createOrder.timeOfOrder;
-      },
-      decreaseInPercent() {
-        return this.$store.state.createOrder.decreaseInPercent;
-      },
-      deliveryCostPerEverybody() {
-        return this.$store.state.createOrder.deliveryCostPerEverybody;
-      },
-      deliveryCostPerDish() {
-        return this.$store.state.createOrder.deliveryCostPerDish;
-      },
+      ...mapState("createOrder", [
+        "restaurantsList",
+        "restaurantId",
+        "orderDate",
+        "timeOfOrder",
+        "decreaseInPercent",
+        "deliveryCostPerEverybody",
+        "deliveryCostPerDish",
+        "bankTransferNumber",
+      ]),
       paymentByCash: {
-        get () {
-          return this.$store.state.editOrder.paymentByCash;
+        get() {
+          return this.$store.state.createOrder.paymentByCash;
         },
-        set (newValue) {
+        set(newValue) {
           this.updatePaymentByCash(newValue)
         }
       },
       paymentByBankTransfer: {
-        get () {
-          return this.$store.state.editOrder.paymentByBankTransfer;
+        get() {
+          return this.$store.state.createOrder.paymentByBankTransfer;
         },
-        set (newValue) {
+        set(newValue) {
           this.updatePaymentByBankTransfer(newValue)
         }
       },
-      bankTransferNumber() {
-        return this.$store.state.createOrder.bankTransferNumber;
-      }
     },
     components: {
       WithSpinner,

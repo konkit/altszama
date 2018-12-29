@@ -177,10 +177,9 @@
   import ErrorsComponent from '../../components/commons/Errors.vue'
   import MaskedInput from 'vue-text-mask'
   import Price from '../../components/commons/PriceElement.vue'
-
   import Navigation from '../../components/Navigation.vue'
-
   import WithSpinner from "../../components/commons/WithSpinner";
+  import {MAKE_AN_ORDER_ACTION, FETCH_ORDER_VIEW_DATA_ACTION} from "../../store/modules/OrderViewState"
 
   export default {
     data() {
@@ -189,17 +188,13 @@
       }
     },
     mounted() {
-      let errorsComponent = this.$refs.errorsComponent;
-
-      console.log(errorsComponent);
-
-      this.$store.dispatch("orderView/fetchOrderViewData", {orderId: this.orderId, errorsComponent: errorsComponent});
+      this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
     },
     methods: {
       submitForm: function () {
         let errorsComponent = this.$refs.errorsComponent;
 
-        this.$store.dispatch('orderView/makeAnOrder', { errorsComponent: errorsComponent });
+        this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, { errorsComponent: errorsComponent });
 
         return false
       },
@@ -211,24 +206,14 @@
       }
     },
     computed: {
-      order () {
-        return this.$store.state.orderView.order
-      },
-      groupedEntries () {
-        return this.$store.state.orderView.groupedEntries
-      },
-      allEatingPeopleCount () {
-        return this.$store.state.orderView.allEatingPeopleCount
-      },
-      basePriceSum () {
-        return this.$store.state.orderView.basePriceSum
-      },
-      totalPrice () {
-        return this.$store.state.orderView.totalPrice
-      },
-      approxTimeOfDelivery () {
-        return this.$store.state.orderView.approxTimeOfDelivery
-      },
+      ...mapState("orderView", [
+        "order",
+        "groupedEntries",
+        "allEatingPeopleCount",
+        "basePriceSum",
+        "totalPrice",
+        "approxTimeOfDelivery",
+      ])
     },
     components: {
       WithSpinner,

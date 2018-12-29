@@ -1,6 +1,10 @@
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 
+export const SET_ALL_ORDERS_LIST = "SET_ALL_ORDERS_LIST";
+export const FETCH_ORDER_VIEW_DATA_ACTION = "FETCH_ORDER_VIEW_DATA_ACTION";
+export const MAKE_AN_ORDER_ACTION = "MAKE_AN_ORDER_ACTION";
+
 export default {
   namespaced: true,
   state: {
@@ -14,14 +18,12 @@ export default {
     approxTimeOfDelivery: "12:00",
   },
   mutations: {
-    setAllOrdersList(state, payload) {
+    [SET_ALL_ORDERS_LIST] (state, payload) {
       state.allOrdersList = payload
     }
   },
   actions: {
-    fetchOrderViewData({state}, payload) {
-      let errorsComponent = payload.errorsComponent;
-
+    [FETCH_ORDER_VIEW_DATA_ACTION] ({state}, payload) {
       OrdersApiConnector.fetchOrderView(payload.orderId)
         .then(responseObj => {
           state.order = responseObj.order;
@@ -32,18 +34,11 @@ export default {
 
           this.commit('setLoadingFalse')
         })
-        .catch(errResponse => {
-          ApiConnector.handleError(errResponse)
-          errorsComponent.addError(errResponse.body.message);
-        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    makeAnOrder(context, payload) {
-      let errorsComponent = payload.errorsComponent;
-
+    [MAKE_AN_ORDER_ACTION] (context, payload) {
       OrdersApiConnector.makeAnOrder(this.orderId, {approxTimeOfDelivery: payload.approxTimeOfDelivery})
-        .catch(error => {
-          errorsComponent.addError(error.body.message);
-        });
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     }
   }
 };

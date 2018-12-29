@@ -1,6 +1,9 @@
 import ApiConnector from "../../lib/ApiConnector";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 
+export const LOAD_RESTAURANTS = "LOAD_RESTAURANTS";
+export const FETCH_ALL_RESTAURANTS = "FETCH_ALL_RESTAURANTS";
+
 export default {
   namespaced: true,
   state: {
@@ -8,13 +11,13 @@ export default {
     restaurantToDishesMap: {},
   },
   mutations: {
-    loadRestaurants(state, payload) {
+    [LOAD_RESTAURANTS] (state, payload) {
       state.restaurants = payload.restaurants;
       state.restaurantToDishesMap = payload.restaurantToDishesMap;
     }
   },
   actions: {
-    fetchAllRestaurants({state}) {
+    [FETCH_ALL_RESTAURANTS] ({state}) {
       DishesApiConnector.getRestaurants()
         .then(response => {
           this.commit("restaurantIndex/loadRestaurants", response);

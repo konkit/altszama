@@ -1,6 +1,27 @@
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 
+export const LOAD_SHOW_ORDER_DATA = "LOAD_SHOW_ORDER_DATA";
+export const SET_ENTRY_CREATING = "SET_ENTRY_CREATING";
+export const SET_ENTRY_EDITING = "SET_ENTRY_EDITING";
+export const CANCEL_ENTRY_CREATE_OR_EDIT = "CANCEL_ENTRY_CREATE_OR_EDIT";
+export const SET_EDITED_ORDER_ENTRY = "SET_EDITED_ORDER_ENTRY";
+export const CLEAR_EDITED_SIDE_DISHES = "CLEAR_EDITED_SIDE_DISHES";
+export const SET_NEW_DISH_FLAG = "SET_NEW_DISH_FLAG";
+
+export const FETCH_ORDER_DATA_ACTION = "FETCH_ORDER_DATA_ACTION";
+export const SAVE_ORDER_ENTRY_ACTION = "SAVE_ORDER_ENTRY_ACTION";
+export const EDIT_ORDER_ENTRY_ACTION = "EDIT_ORDER_ENTRY_ACTION";
+export const UNLOCK_ORDER_ACTION = "UNLOCK_ORDER_ACTION";
+export const DELETE_DISH_ENTRY_ACTION = "DELETE_DISH_ENTRY_ACTION";
+export const CONFIRM_ORDER_ENTRY_AS_PAID_ACTION = "CONFIRM_ORDER_ENTRY_AS_PAID_ACTION";
+export const MARK_ORDER_ENTRY_AS_PAID_ACTION = "MARK_ORDER_ENTRY_AS_PAID_ACTION";
+export const SET_ORDER_AS_CREATED_ACTION = "SET_ORDER_AS_CREATED_ACTION";
+export const SET_ORDER_AS_ORDERED_ACTION = "SET_ORDER_AS_ORDERED_ACTION";
+export const SET_ORDER_AS_DELIVERED_ACTION = "SET_ORDER_AS_DELIVERED_ACTION";
+export const SET_ORDER_AS_REJECTED_ACTION = "SET_ORDER_AS_REJECTED_ACTION";
+export const DELETE_ORDER_ACTION = "DELETE_ORDER_ACTION";
+
 export default {
   namespaced: true,
   state: {
@@ -25,7 +46,7 @@ export default {
     editedOrderEntry: {},
   },
   mutations: {
-    loadShowOrderData(state, payload) {
+    [LOAD_SHOW_ORDER_DATA] (state, payload) {
       state.order = payload.order;
       state.orderEntries = payload.orderEntries;
       state.currentUserId = payload.currentUserId;
@@ -34,45 +55,38 @@ export default {
       state.dishIdToSideDishesMap = payload.dishIdToSideDishesMap;
       state.totalOrderPrice = payload.totalOrderPrice;
     },
-
-    setEntryCreating(state, payload) {
+    [SET_ENTRY_CREATING] (state, payload) {
       state.isEntryCreating = true;
       state.orderEntryId = "";
       state.dishEntryId = "";
     },
-
-    setEntryEditing(state, payload) {
+    [SET_ENTRY_EDITING] (state, payload) {
       state.isEntryEdited = true;
       state.orderEntryId = payload.orderEntryId;
       state.dishEntryId = payload.dishEntryId;
     },
-
-    cancelEntryCreateOrEdit(state, payload) {
+    [CANCEL_ENTRY_CREATE_OR_EDIT] (state, payload) {
       state.isEntryCreating = false;
       state.isEntryEdited = false;
       state.orderEntryId = "";
       state.dishEntryId = "";
     },
-
-    // CREATED / EDITED ORDER
-
-    setEditedOrderEntry(state, payload) {
+    [SET_EDITED_ORDER_ENTRY] (state, payload) {
       state.editedOrderEntry = payload
     },
-    clearEditedSideDishes(state, payload) {
+    [CLEAR_EDITED_SIDE_DISHES] (state, payload) {
       state.editedOrderEntry.chosenSideDishes = []
     },
-    setNewDishFlag(state, payload) {
-      var newDishValue = payload
-
+    [SET_NEW_DISH_FLAG] (state, newDishValue) {
       state.editedOrderEntry.newDish = newDishValue;
-      if (newDishValue == true) {
+
+      if (newDishValue === true) {
         state.editedOrderEntry.dishId = ""
       }
     },
   },
   actions: {
-    fetchOrderData({state}, payload) {
+    [FETCH_ORDER_DATA_ACTION] ({state}, payload) {
       const orderId = payload.orderId;
 
       OrdersApiConnector
@@ -83,7 +97,7 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    saveOrderEntry({state}, {orderId, editedOrderEntry, errorsComponent}) {
+    [SAVE_ORDER_ENTRY_ACTION] ({state}, {orderId, editedOrderEntry, errorsComponent}) {
       OrdersApiConnector.saveOrderEntry(orderId, editedOrderEntry)
         .then(() => {
           // this.$emit("updateOrder");
@@ -93,12 +107,9 @@ export default {
 
           this.commit('showOrder/cancelEntryCreateOrEdit', {})
         })
-        .catch((error) => {
-          console.log("orderEntryCreateEntry error:", error);
-          error.body.messages.forEach(msg => errorsComponent.addError(msg));
-        });
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    editOrderEntry({state}, {orderId, orderEntryId, editedOrderEntry, errorsComponent}) {
+    [EDIT_ORDER_ENTRY_ACTION] ({state}, {orderId, orderEntryId, editedOrderEntry, errorsComponent}) {
       OrdersApiConnector.editOrderEntry(this.order.id, this.orderEntry.id, this.editedOrderEntry)
         .then(() => {
           // this.$emit("updateOrder");
@@ -107,60 +118,58 @@ export default {
 
           this.commit('showOrder/cancelEntryCreateOrEdit', {})
         })
-        .catch((error) => {
-          console.log("OrderEntryEditEntry error:", error);
-          error.body.messages.forEach(msg => errorsComponent.addError(msg));
-        });
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    unlockOrder({state}, {orderId}) {
+    [UNLOCK_ORDER_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsCreated(orderId)
         .then(response => {
           this.commit('setLoadingTrue');
           this.dispatch("showOrder/fetchOrderData", {orderId: orderId});
         })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    deleteDishEntry({state}, {orderId, orderEntryId, dishEntryId}) {
+    [DELETE_DISH_ENTRY_ACTION] ({state}, {orderId, orderEntryId, dishEntryId}) {
       OrdersApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
         .then(successResponse => {
           this.commit('setLoadingTrue');
           this.dispatch("showOrder/fetchOrderData", {orderId: orderId});
         })
-        .catch(errResponse => console.log(errResponse));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    confirmOrderEntryAsPaid({state}, {orderEntryId}) {
+    [CONFIRM_ORDER_ENTRY_AS_PAID_ACTION] ({state}, {orderEntryId}) {
       OrdersApiConnector.confirmOrderEntryAsPaid(orderEntryId)
         .then(successResponse => window.location.reload())
-        .catch(errResponse => console.log(errResponse));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    markOrderEntryAsPaid({state}, {orderEntryId}) {
+    [MARK_ORDER_ENTRY_AS_PAID_ACTION] ({state}, {orderEntryId}) {
       OrdersApiConnector.markOrderEntryAsPaid(orderEntryId)
         .then(successResponse => window.location.reload())
-        .catch(errResponse => console.log(errResponse));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    setOrderAsCreated({state}, {orderId}) {
+    [SET_ORDER_AS_CREATED_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsCreated(orderId)
         .then(successResponse => window.location.reload())
-        .catch(errResponse => console.log(errResponse));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    setOrderAsOrdered({state}, {orderId}) {
+    [SET_ORDER_AS_ORDERED_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsOrdered(orderId)
         .then(successResponse => window.location.reload())
-        .catch(errResponse => console.log(errResponse));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    setOrderAsDelivered({state}, {orderId}) {
+    [SET_ORDER_AS_DELIVERED_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsDelivered(orderId)
         .then(successResponse => window.location.reload())
-        .catch(errResponse => console.log(errResponse));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    setOrderAsRejected({state}, {orderId}) {
+    [SET_ORDER_AS_REJECTED_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsRejected(orderId)
         .then(successResponse => window.location.reload())
-        .catch(errResponse => console.log(errResponse));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    deleteOrder({state}, {orderId}) {
+    [DELETE_ORDER_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.deleteOrder(orderId + '/delete')
         .then(successResponse => window.location.href = '#/orders')
-        .catch(errResponse => console.log(errResponse));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
   }
 };

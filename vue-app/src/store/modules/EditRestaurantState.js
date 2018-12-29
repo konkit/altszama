@@ -1,6 +1,16 @@
 import ApiConnector from "../../lib/ApiConnector";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 
+export const INIT_DATA = "INIT_DATA";
+export const UPDATE_NAME = "UPDATE_NAME";
+export const UPDATE_URL = "UPDATE_NAME";
+export const UPDATE_RATING = "UPDATE_NAME";
+export const UPDATE_TELEPHONE = "UPDATE_NAME";
+export const UPDATE_ADDRESS = "UPDATE_NAME";
+
+export const INIT_EDIT_RESTAURANT_ACTION = "INIT_EDIT_RESTAURANT_ACTION";
+export const UPDATE_RESTAURANT_ACTION = "UPDATE_RESTAURANT_ACTION";
+
 export default {
   namespaced: true,
   state: {
@@ -14,7 +24,7 @@ export default {
     address: '',
   },
   mutations: {
-    initData (state, payload) {
+    [INIT_DATA] (state, payload) {
       state.restaurantId = payload.restaurantId;
 
       state.name = payload.name;
@@ -23,24 +33,24 @@ export default {
       state.telephone = payload.telephone;
       state.address = payload.address;
     },
-    updateName (state, newValue) {
+    [UPDATE_NAME] (state, newValue) {
       state.name = newValue;
     },
-    updateUrl (state, newValue) {
+    [UPDATE_URL] (state, newValue) {
       state.url = newValue
     },
-    updateRating (state, newValue) {
+    [UPDATE_RATING] (state, newValue) {
       state.rating = newValue
     },
-    updateTelephone (state, newValue) {
+    [UPDATE_TELEPHONE] (state, newValue) {
       state.telephone = newValue
     },
-    updateAddress (state, newValue) {
+    [UPDATE_ADDRESS] (state, newValue) {
       state.address = newValue
     },
   },
   actions: {
-    initEditRestaurant(context, {restaurantId}) {
+    [INIT_EDIT_RESTAURANT_ACTION] (context, {restaurantId}) {
       DishesApiConnector.getRestaurantEditData(restaurantId)
         .then(response => {
           this.commit("editRestaurant/initData", Object.assign(response, {restaurantId: restaurantId}));
@@ -48,9 +58,7 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    updateRestaurant({state}, payload) {
-      let errorsComponent = payload.errorsComponent;
-
+    [UPDATE_RESTAURANT_ACTION] ({state}, payload) {
       const restaurant = {
         name: state.name,
         url: state.url,
@@ -60,7 +68,7 @@ export default {
       };
 
       DishesApiConnector.editRestaurant(state.restaurantId, restaurant)
-        .catch(error => error.body.messages.forEach(msg => errorsComponent.addError(msg)));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     }
   }
 };

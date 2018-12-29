@@ -1,6 +1,15 @@
 import ApiConnector from "../../lib/ApiConnector";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 
+export const INIT_DATA = "INIT_DATA";
+export const UPDATE_NAME = "UPDATE_NAME";
+export const UPDATE_PRICE = "UPDATE_PRICE";
+export const UPDATE_CATEGORY = "UPDATE_CATEGORY";
+
+export const INIT_EDIT_DISH_ACTION = "INIT_EDIT_DISH_ACTION";
+export const UPDATE_DISH_ACTION = "UPDATE_DISH_ACTION";
+
+
 export default {
   namespaced: true,
   state: {
@@ -16,8 +25,7 @@ export default {
     category: '',
   },
   mutations: {
-    initData (state, payload) {
-
+    [INIT_DATA] (state, payload) {
       state.restaurantId = payload.restaurantId;
       state.dishId = payload.dishId;
 
@@ -26,18 +34,18 @@ export default {
       state.category = payload.category;
       state.initialSideDishes = payload.initialSideDishes;
     },
-    updateName (state, newValue) {
+    [UPDATE_NAME] (state, newValue) {
       state.name = newValue;
     },
-    updatePrice (state, newValue) {
+    [UPDATE_PRICE] (state, newValue) {
       state.price = newValue
     },
-    updateCategory (state, newValue) {
+    [UPDATE_CATEGORY] (state, newValue) {
       state.category = newValue
     },
   },
   actions: {
-    initEditDish(context, {restaurantId, dishId}) {
+    [INIT_EDIT_DISH_ACTION] (context, {restaurantId, dishId}) {
       DishesApiConnector.getDishEditData(restaurantId, dishId)
         .then(dishData => {
           this.commit("editDish/initData", Object.assign(dishData, {restaurantId: restaurantId, dishId: dishId}));
@@ -45,7 +53,7 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    updateDish({state}, {errorsComponent, sideDishes}) {
+    [UPDATE_DISH_ACTION] ({state}, {sideDishes}) {
       const dishObj = {
         id: state.dishId,
         name: state.name,
@@ -55,7 +63,7 @@ export default {
       };
 
       DishesApiConnector.editDish(state.restaurantId, dishObj)
-        .catch(error => errorsComponent.addError(error.body.message));
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     }
   }
 };

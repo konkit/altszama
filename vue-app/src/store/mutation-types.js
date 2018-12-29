@@ -1,1 +1,0 @@
-export const FETCH_ALL_ORDERS = "FETCH_ALL_ORDERS";

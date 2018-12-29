@@ -73,6 +73,8 @@ export default {
       console.log("401 Unauthorized");
       const signOutCallback = () => router.push({name: 'Login', query: { returnPath: fullRoutePath }});
       GoogleLogin.signOut(signOutCallback, signOutCallback)
+    } else {
+      store.commit("addError", errorResponse)
     }
   },
 

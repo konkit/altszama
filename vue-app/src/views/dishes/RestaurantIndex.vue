@@ -38,14 +38,11 @@
 <script>
   import Spinner from '../../components/commons/Spinner'
   import WithSpinner from "../../components/commons/WithSpinner";
+  import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
 
   export default {
-    data() {
-      return {
-      }
-    },
     mounted() {
-      this.$store.dispatch("restaurantIndex/fetchAllRestaurants")
+      this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
     },
     methods: {
       goToRestaurant: function (restaurantId) {

@@ -22,6 +22,7 @@ export default new Vuex.Store({
     loadingEntry: false,
     username: localStorage.getItem("username"),
     token: localStorage.getItem("token"),
+    errors: []
   },
   mutations: {
     setLoadingTrue (state) {
@@ -43,13 +44,32 @@ export default new Vuex.Store({
       state.token = payload.token;
       localStorage.setItem("token", payload.token)
     },
-    logoutUser (state, payload) {
+    logoutUser (state) {
       state.username = "";
       localStorage.setItem("username", "");
 
       state.token = "";
       localStorage.setItem("token", "");
     },
+    addError (state, error) {
+      if (error instanceof Array) {
+        error.forEach(errorStr => state.errors.push(errorStr));
+      } else if (typeof error == 'object' && typeof error.exception !== "undefined") {
+        state.errors.push("Error: " + error.exception + " occured!");
+      } else if (typeof error == 'object' && typeof error.message !== "undefined") {
+        state.errors.push(error.message)
+      } else if (typeof error == 'object' && typeof error.body.message !== "undefined") {
+        state.errors.push(error.body.message)
+      } else {
+        state.errors.push(error)
+      }
+    },
+    clearErrorAtIndex (state, index) {
+      state.errors.splice(index, 1)
+    },
+    clearErrors (state) {
+      state.errors = []
+    }
   },
   modules: {
     // Orders

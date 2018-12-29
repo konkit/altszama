@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <errors-component ref="errorsComponent"/>
+      <errors-component />
 
       <div class="row justify-content-center">
         <div class="col">
@@ -62,6 +62,7 @@
   import SideDishes from '../../components/restaurants/SideDishes.vue'
   import WithSpinner from "../../components/commons/WithSpinner";
   import {mapMutations, mapState} from "vuex"
+  import {INIT_EDIT_DISH_ACTION, UPDATE_DISH_ACTION, UPDATE_NAME, UPDATE_PRICE, UPDATE_CATEGORY} from "../../store/modules/EditDishState"
 
   export default {
     data() {
@@ -71,23 +72,21 @@
       }
     },
     mounted() {
-      this.$store.dispatch("editDish/initEditDish", {restaurantId: this.restaurantId, dishId: this.dishId})
+      this.$store.dispatch(`editDish/${INIT_EDIT_DISH_ACTION}`, {restaurantId: this.restaurantId, dishId: this.dishId})
     },
     methods: {
       submitForm: function () {
         let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
-        let errorsComponent = this.$refs.errorsComponent;
-
-        this.$store.dispatch("editDish/updateDish", {errorsComponent: errorsComponent, sideDishes: sideDishes});
+        this.$store.dispatch(`editDish/${UPDATE_DISH_ACTION}`, {sideDishes: sideDishes});
 
         return false;
       },
       addSideDish: function () {
-        var newSideDish = {
+        const newSideDish = {
           name: this.newSideDishName,
           price: Math.round(this.newSideDishPrice * 100)
-        }
+        };
 
         this.sideDishes.push(newSideDish)
       },
@@ -95,9 +94,9 @@
         this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
       },
       ...mapMutations("editDish", [
-        "updateName",
-        "updatePrice",
-        "updateCategory"
+        UPDATE_NAME,
+        UPDATE_PRICE,
+        UPDATE_CATEGORY,
       ])
     },
     computed: {

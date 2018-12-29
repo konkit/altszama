@@ -37,7 +37,7 @@
 
 <script>
   import WithSpinner from "../../components/commons/WithSpinner";
-  import {FETCH_ALL_ORDERS} from "../../store/mutation-types"
+  import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
 
   export default {
     mounted() {

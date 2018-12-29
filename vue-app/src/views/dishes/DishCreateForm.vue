@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <errors-component ref="errorsComponent"/>
+      <errors-component />
 
       <div class="row justify-content-center">
         <div class="col">
@@ -22,18 +22,21 @@
 
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" class="form-control" :value="name" @input="updateName($event.target.value)" required="" id="name"/>
+              <input type="text" class="form-control" :value="name" @input="[CREATE_DISH_UPDATE_NAME]($event.target.value)" required=""
+                     id="name"/>
             </div>
 
             <div class="form-group">
               <label for="dish-price">Price</label>
-              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input="updatePrice($event)"
+              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price"
+                           @input="[CREATE_DISH_UPDATE_PRICE]($event)"
                            :precision="2" class="form-control" required="" id="dish-price"></vue-numeric>
             </div>
 
             <div class="form-group">
               <label for="category">Category</label>
-              <input type="text" class="form-control" :value="category" @input="updateCategory($event.target.value)" id="category" list="categoryNames"/>
+              <input type="text" class="form-control" :value="category" @input="[CREATE_DISH_UPDATE_CATEGORY]($event.target.value)"
+                     id="category" list="categoryNames"/>
               <datalist id="categoryNames">
                 <option v-for="categoryName in categories" :value="categoryName"/>
               </datalist>
@@ -62,6 +65,13 @@
   import Spinner from '../../components/commons/Spinner'
   import SideDishes from '../../components/restaurants/SideDishes.vue'
   import {mapMutations, mapState} from "vuex"
+  import {
+    UPDATE_NAME,
+    UPDATE_PRICE,
+    UPDATE_CATEGORY,
+    INIT_ACTION,
+    SAVE_DISH_ACTION
+  } from "../../store/modules/CreateDishState"
 
   export default {
     props: ['restaurantName'],
@@ -71,15 +81,13 @@
       }
     },
     mounted() {
-      this.$store.dispatch("createDish/initCreateDish", {restaurantId: this.restaurantId})
+      this.$store.dispatch(`createDish/${INIT_ACTION}`, {restaurantId: this.restaurantId})
     },
     methods: {
       submitForm: function () {
-        let errorsComponent = this.$refs.errorsComponent;
-
         let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
-        this.$store.dispatch("createDish/saveDish", {errorsComponent: errorsComponent, sideDishes: sideDishes, backUrl: this.getBackUrl()});
+        this.$store.dispatch(`createDish/${SAVE_DISH_ACTION}`, { sideDishes: sideDishes, backUrl: this.getBackUrl() });
 
         return false;
       },
@@ -91,9 +99,9 @@
         }
       },
       ...mapMutations("createDish", [
-        "updateName",
-        "updatePrice",
-        "updateCategory",
+        UPDATE_NAME,
+        UPDATE_PRICE,
+        UPDATE_CATEGORY,
       ])
     },
     computed: {

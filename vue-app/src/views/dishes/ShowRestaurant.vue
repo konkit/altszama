@@ -52,6 +52,7 @@
   import Price from '../../components/commons/PriceElement'
   import ShowRestaurantDishesTable from '../../components/restaurants/ShowRestaurantDishesTable'
   import WithSpinner from "../../components/commons/WithSpinner";
+  import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantState"
 
   export default {
     name: 'show-restaurant',
@@ -61,12 +62,12 @@
       }
     },
     mounted() {
-      this.$store.dispatch("showRestaurant/fetchRestaurant", {restaurantId: this.restaurantId});
+      this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
     },
     methods: {
       deleteRestaurant: function (e) {
         let errorsComponent = this.$refs.errorsComponent;
-        this.$store.dispatch("showRestaurant/deleteRestaurant", {restaurantId: this.restaurantId, errorsComponent: errorsComponent});
+        this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId, errorsComponent: errorsComponent});
       }
     },
     computed: {

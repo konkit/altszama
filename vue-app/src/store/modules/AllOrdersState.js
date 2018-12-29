@@ -1,6 +1,8 @@
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
-import {FETCH_ALL_ORDERS} from "../mutation-types"
+
+export const SET_ALL_ORDERS_LIST = "SET_ALL_ORDERS_LIST";
+export const FETCH_ALL_ORDERS = "FETCH_ALL_ORDERS";
 
 export default {
   namespaced: true,
@@ -8,7 +10,7 @@ export default {
     allOrdersList: []
   },
   mutations: {
-    setAllOrdersList(state, payload) {
+    [SET_ALL_ORDERS_LIST] (state, payload) {
       state.allOrdersList = payload
     }
   },
