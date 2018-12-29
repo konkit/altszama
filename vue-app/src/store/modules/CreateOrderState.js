@@ -77,7 +77,7 @@ export default {
     [INIT_CREATE_ORDER_ACTION] (context) {
       OrdersApiConnector.getOrderCreateData()
         .then(response => {
-          this.commit('createOrder/initData', response);
+          this.commit(`createOrder/${INIT_DATA}`, response);
           this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))

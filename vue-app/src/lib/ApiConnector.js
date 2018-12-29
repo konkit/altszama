@@ -46,31 +46,23 @@ export default {
   },
 
   makeGet (relPath) {
-    console.log(`Making GET to ${relPath}`);
-
     this.token = store.state.token;
     return Vue.http.get(backendUrl + relPath, headersWithToken(this.token))
   },
 
   makePost (relPath, formData) {
-    console.log(`Making POST to ${relPath}`);
-
     this.token = store.state.token;
     return Vue.http.post(backendUrl + relPath, formData, headersWithToken(this.token))
   },
 
   handleError (errorResponse) {
-    console.log("errorResponse: ", errorResponse);
-
     if (errorResponse.status === 401) {
       const fullRoutePath = router.currentRoute.fullPath;
-      console.log("Current path", fullRoutePath);
 
       store.commit("logoutUser");
 
       pushNotificationEnabled = false;
 
-      console.log("401 Unauthorized");
       const signOutCallback = () => router.push({name: 'Login', query: { returnPath: fullRoutePath }});
       GoogleLogin.signOut(signOutCallback, signOutCallback)
     } else {
@@ -81,7 +73,6 @@ export default {
   initializePushNotifications () {
     if (this.getPushNotificationEnabled() === false) {
       if ('serviceWorker' in navigator) {
-        console.log("Initialise state");
         this.initialiseState();
       } else {
         console.warn('Service workers are not supported in this browser.');
@@ -92,8 +83,6 @@ export default {
   },
 
   initialiseState () {
-    console.log("Initialise state");
-
     if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
       console.warn('Notifications aren\'t supported.');
       return;

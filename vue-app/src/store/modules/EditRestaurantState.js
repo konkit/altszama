@@ -53,7 +53,7 @@ export default {
     [INIT_EDIT_RESTAURANT_ACTION] (context, {restaurantId}) {
       DishesApiConnector.getRestaurantEditData(restaurantId)
         .then(response => {
-          this.commit("editRestaurant/initData", Object.assign(response, {restaurantId: restaurantId}));
+          this.commit(`editRestaurant/${INIT_DATA}`, Object.assign(response, {restaurantId: restaurantId}));
           this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))

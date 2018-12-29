@@ -48,7 +48,7 @@ export default {
     [INIT_EDIT_DISH_ACTION] (context, {restaurantId, dishId}) {
       DishesApiConnector.getDishEditData(restaurantId, dishId)
         .then(dishData => {
-          this.commit("editDish/initData", Object.assign(dishData, {restaurantId: restaurantId, dishId: dishId}));
+          this.commit(`editDish/${INIT_DATA}`, Object.assign(dishData, {restaurantId: restaurantId, dishId: dishId}));
           this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))

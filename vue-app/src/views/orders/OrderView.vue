@@ -180,6 +180,7 @@
   import Navigation from '../../components/Navigation.vue'
   import WithSpinner from "../../components/commons/WithSpinner";
   import {MAKE_AN_ORDER_ACTION, FETCH_ORDER_VIEW_DATA_ACTION} from "../../store/modules/OrderViewState"
+  import {mapState} from "vuex"
 
   export default {
     data() {

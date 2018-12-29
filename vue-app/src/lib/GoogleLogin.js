@@ -55,8 +55,6 @@ function initClient () {
 
   return new Promise(function (resolve, reject) {
     window.gapi.load('auth2', function () {
-      console.log("googleConfig: ", googleConfig);
-
       window.gapi.auth2.init(googleConfig)
       resolve()
     })

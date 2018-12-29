@@ -25,7 +25,7 @@ export default {
     [FETCH_RESTAURANT_ACTION] (context, {restaurantId}) {
       DishesApiConnector.getShowRestaurantData(restaurantId)
         .then(response => {
-          this.commit("showRestaurant/initRestaurantData", response);
+          this.commit(`showRestaurant/${INIT_RESTAURANT_DATA}`, response);
           this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))

@@ -85,9 +85,7 @@ export default {
         .then(response => {
           const responseWithOrderId = Object.assign(response, {orderId: payload.orderId});
 
-          console.log("responseWithOrderId: ", responseWithOrderId);
-
-          this.commit('editOrder/initData', responseWithOrderId);
+          this.commit(`editOrder/${INIT_DATA}`, responseWithOrderId);
           this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))

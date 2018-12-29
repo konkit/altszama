@@ -20,7 +20,7 @@ export default {
     [FETCH_ALL_RESTAURANTS] ({state}) {
       DishesApiConnector.getRestaurants()
         .then(response => {
-          this.commit("restaurantIndex/loadRestaurants", response);
+          this.commit(`restaurantIndex/${LOAD_RESTAURANTS}`, response);
           this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))

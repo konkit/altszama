@@ -34,8 +34,6 @@ if (typeof process.env.sentryURL !== "undefined") {
 Vue.config.productionTip = false
 
 Vue.config.errorHandler = function (err, vm, info) {
-  console.log("err", err)
-
   if (typeof process.env.sentryURL !== "undefined") {
     Raven.captureException(err)
   }
@@ -44,7 +42,6 @@ Vue.config.errorHandler = function (err, vm, info) {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/custom-service-worker.js').then(function(registration) {
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
     }, function(err) {
       console.log('ServiceWorker registration failed: ', err);
     });

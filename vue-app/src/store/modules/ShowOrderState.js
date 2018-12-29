@@ -100,7 +100,7 @@ export default {
       OrdersApiConnector
         .fetchOrder(orderId)
         .then(showOrderData => {
-          this.commit('showOrder/loadShowOrderData', showOrderData);
+          this.commit(`showOrder/${LOAD_SHOW_ORDER_DATA}`, showOrderData);
           this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
@@ -110,10 +110,8 @@ export default {
         .then(() => {
           // this.$emit("updateOrder");
           this.commit('setLoadingTrue');
-          this.dispatch("showOrder/fetchOrderData", {orderId: orderId});
-
-
-          this.commit('showOrder/cancelEntryCreateOrEdit', {})
+          this.dispatch(`showOrder/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
+            .then(this.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {}))
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -122,9 +120,8 @@ export default {
         .then(() => {
           // this.$emit("updateOrder");
           this.commit('setLoadingTrue');
-          this.dispatch("showOrder/fetchOrderData", {orderId: orderId});
-
-          this.commit('showOrder/cancelEntryCreateOrEdit', {})
+          this.dispatch(`showOrder/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
+            .then(this.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {}))
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -132,7 +129,7 @@ export default {
       OrdersApiConnector.setOrderAsCreated(orderId)
         .then(response => {
           this.commit('setLoadingTrue');
-          this.dispatch("showOrder/fetchOrderData", {orderId: orderId});
+          this.dispatch(`showOrder/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -140,7 +137,7 @@ export default {
       OrdersApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
         .then(successResponse => {
           this.commit('setLoadingTrue');
-          this.dispatch("showOrder/fetchOrderData", {orderId: orderId});
+          this.dispatch(`showOrder/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

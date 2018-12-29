@@ -46,7 +46,6 @@
         return this.$route.name !== "Login"
       },
       logout: function() {
-        console.log("Logging out");
         ApiConnector.logout();
       }
     }

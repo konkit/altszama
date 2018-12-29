@@ -37,6 +37,7 @@
 <script>
   import Price from '../commons/PriceElement.vue'
   import {SET_NEW_DISH_FLAG, CLEAR_EDITED_SIDE_DISHES} from "../../store/modules/ShowOrderState";
+  import {mapState} from "vuex"
 
   export default {
     name: 'order-entry-input',

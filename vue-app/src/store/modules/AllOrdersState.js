@@ -18,7 +18,7 @@ export default {
     [FETCH_ALL_ORDERS] () {
       OrdersApiConnector.fetchAllOrders()
         .then(allOrdersList => {
-          this.commit('allOrders/setAllOrdersList', allOrdersList);
+          this.commit(`allOrders/${SET_ALL_ORDERS_LIST}`, allOrdersList);
           this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))

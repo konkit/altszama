@@ -166,6 +166,7 @@
   import MaskedInput from 'vue-text-mask'
   import WithSpinner from "../../components/commons/WithSpinner";
   import VueSelect from 'vue-select'
+  import {mapState} from "vuex"
   import {
     UPDATE_BANK_TRANSFER_NUMBER,
     UPDATE_PAYMENT_BY_BANK_TRANSFER,
