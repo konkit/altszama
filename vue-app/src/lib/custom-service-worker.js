@@ -1,4 +1,4 @@
-self.addEventListener('push', function(event) {
+self.addEventListener('push', event => {
 
   var notificationText;
   if (event.data) {

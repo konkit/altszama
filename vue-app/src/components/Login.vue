@@ -69,11 +69,11 @@ export default {
       errors: []
     }
   },
-  mounted: function() {
+  mounted: () => {
     GoogleLogin.load().then(() => this.loginLoaded = true)
   },
   methods: {
-    googleSignIn: function() {
+    googleSignIn () {
       if (this.loginLoaded === true) {
         this.loginPending = true;
 

@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div class="container">
 
       <div class="row justify-content-center">
@@ -32,12 +32,11 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
-  import Spinner from '../../components/commons/Spinner'
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
 
   export default {
@@ -45,7 +44,7 @@
       this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
     },
     methods: {
-      goToRestaurant: function (restaurantId) {
+      goToRestaurant (restaurantId) {
         location = "#/restaurants/show/" + restaurantId
       }
     },
@@ -58,8 +57,7 @@
       },
     },
     components: {
-      WithSpinner,
-      Spinner
+      LoadingView,
     }
   }
 </script>

@@ -49,7 +49,7 @@
       }
     },
     methods: {
-      deleteDish: function (dishId) {
+      deleteDish (dishId) {
         this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {restaurantId: this.restaurant.id, dishId: dishId})
       },
     },

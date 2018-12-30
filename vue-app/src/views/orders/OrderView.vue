@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div v-if="isStateOrdering()">
       <div class="container">
         <div class="row justify-content-center">
@@ -169,7 +169,7 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
@@ -178,7 +178,7 @@
   import MaskedInput from 'vue-text-mask'
   import Price from '../../components/commons/PriceElement.vue'
   import Navigation from '../../components/Navigation.vue'
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import {MAKE_AN_ORDER_ACTION, FETCH_ORDER_VIEW_DATA_ACTION} from "../../store/modules/OrderViewState"
   import {mapState} from "vuex"
 
@@ -192,17 +192,17 @@
       this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
     },
     methods: {
-      submitForm: function () {
+      submitForm () {
         let errorsComponent = this.$refs.errorsComponent;
 
         this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, { errorsComponent: errorsComponent });
 
         return false
       },
-      isStateOrdering: function () {
+      isStateOrdering () {
         return this.order.orderState === 'ORDERING';
       },
-      isStateNotOrdering: function () {
+      isStateNotOrdering () {
         return this.order.orderState !== 'ORDERING';
       }
     },
@@ -217,7 +217,7 @@
       ])
     },
     components: {
-      WithSpinner,
+      LoadingView,
       BackButton,
       ErrorsComponent,
       MaskedInput,

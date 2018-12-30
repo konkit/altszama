@@ -2,7 +2,7 @@ import ApiConnector from "./ApiConnector";
 
 export default {
 
-  getRestaurants: function() {
+  getRestaurants () {
     return ApiConnector.makeGet("/restaurants.json")
       .then(response => {
         return {
@@ -12,7 +12,7 @@ export default {
       })
   },
 
-  getShowRestaurantData: function(restaurantId) {
+  getShowRestaurantData (restaurantId) {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/show.json")
         .then(response => {
           return {
@@ -23,14 +23,14 @@ export default {
         })
   },
 
-  createRestaurant: function(restaurant) {
+  createRestaurant (restaurant) {
     const action = "/restaurants/save";
 
     return ApiConnector.makePost(action, restaurant)
       .then(response => window.location.href = "#/restaurants")
   },
 
-  getRestaurantEditData: function(restaurantId) {
+  getRestaurantEditData (restaurantId) {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/edit.json")
       .then(response => {
         return {
@@ -44,7 +44,7 @@ export default {
       })
   },
 
-  editRestaurant: function(restaurantId, restaurant) {
+  editRestaurant (restaurantId, restaurant) {
     const action = "/restaurants/update";
 
     let formData = {
@@ -61,21 +61,21 @@ export default {
       .then(response => window.location.href = "#/restaurants/show/" + restaurantId)
   },
 
-  deleteRestaurant: function(restaurantId) {
+  deleteRestaurant (restaurantId) {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/delete")
   },
 
-  getDishCreateData: function(restaurantId) {
+  getDishCreateData (restaurantId) {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/create.json")
   },
 
-  createDish: function(restaurantId, formData) {
+  createDish (restaurantId, formData) {
     const action = "/restaurants/" + restaurantId + "/dishes/save";
 
     return ApiConnector.makePost(action, formData)
   },
 
-  getDishEditData: function(restaurantId, dishId) {
+  getDishEditData (restaurantId, dishId) {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/" + dishId + "/edit.json")
       .then(response => {
         return {
@@ -88,7 +88,7 @@ export default {
       })
   },
 
-  editDish: function(restaurantId, dishObj) {
+  editDish (restaurantId, dishObj) {
     const action = "/restaurants/" + restaurantId + "/dishes/update"
     const dataSuccessUrl = "#/restaurants/show/" + restaurantId;
 
@@ -105,7 +105,7 @@ export default {
       .then(response => window.location.href = dataSuccessUrl)
   },
 
-  deleteDish: function(restaurantId, dishId) {
+  deleteDish (restaurantId, dishId) {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/" + dishId + "/delete")
   },
 

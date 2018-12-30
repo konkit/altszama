@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
@@ -32,11 +32,11 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
 
   export default {
@@ -49,12 +49,12 @@
       },
     },
     methods: {
-      goToOrder: function (selectedOrderId) {
+      goToOrder (selectedOrderId) {
         window.location = "#/orders/show/" + selectedOrderId
       }
     },
     components: {
-      WithSpinner,
+      LoadingView,
     }
   }
 </script>

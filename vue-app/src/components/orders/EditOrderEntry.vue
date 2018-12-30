@@ -10,14 +10,13 @@
       </div>
 
       <div>
-        <order-entry-input/>
+        <order-entry-form></order-entry-form>
 
-        <side-dishes-input/>
+        <side-dishes-input></side-dishes-input>
 
         <div class="form-group">
           <h4>Additional Comments</h4>
-          <textarea class="form-control" name="additionalComments" id="additionalComments"
-                    v-model="editedOrderEntry.additionalComments"></textarea>
+          <textarea class="form-control" :value="additionalComments" @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"></textarea>
         </div>
 
 
@@ -42,25 +41,23 @@
   import Spinner from '../commons/Spinner.vue'
   import Price from '../commons/PriceElement.vue'
 
-  import OrderEntryInput from './OrderEntryInput.vue'
+  import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
   import {
-    SET_EDITED_ORDER_ENTRY,
     CANCEL_ENTRY_CREATE_OR_EDIT,
     EDIT_ORDER_ENTRY_ACTION,
-    SET_ENTRY_LOADING_TRUE,
-    SET_ENTRY_LOADING_FALSE
   } from "../../store/modules/ShowOrderState";
-  import {mapState} from "vuex"
+  import {mapState, mapMutations, mapGetters} from "vuex"
+  import {INIT_EDITED_ORDER, SET_ENTRY_LOADING_FALSE, SET_ENTRY_LOADING_TRUE, UPDATE_ADDITIONAL_COMMENTS} from "../../store/modules/ModifyOrderEntryState";
 
   export default {
-    name: 'order-entry-edit-entry',
-    props: ['order', 'orderEntry', 'dishEntry'],
+    name: 'edit-order-entry',
+    props: ['orderEntry', 'dishEntry'],
     data() {
       return {}
     },
     created() {
-      this.$store.commit(`showOrder/${SET_ENTRY_LOADING_TRUE}`)
+      this.$store.commit(`modifyOrderEntry/${SET_ENTRY_LOADING_TRUE}`)
     },
     mounted() {
       var newEditedOrderEntry = {
@@ -74,35 +71,50 @@
         chosenSideDishes: this.dishEntry.sideDishes || []
       };
 
-      this.$store.commit(`showOrder/${SET_EDITED_ORDER_ENTRY}`, newEditedOrderEntry);
-      this.$store.commit(`showOrder/${SET_ENTRY_LOADING_FALSE}`)
+      this.$store.commit(`modifyOrderEntry/${INIT_EDITED_ORDER}`, newEditedOrderEntry);
+      this.$store.commit(`modifyOrderEntry/${SET_ENTRY_LOADING_FALSE}`)
     },
     methods: {
-      submitForm: function (e) {
+      submitForm (e) {
         e.preventDefault();
 
         this.$store.dispatch(`showOrder/${EDIT_ORDER_ENTRY_ACTION}`, {orderId: this.order.id, orderEntryId: this.orderEntry.id, editedOrderEntry: this.editedOrderEntry});
 
         return false;
       },
-      cancelEdit: function () {
+      cancelEdit () {
         this.$store.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
       },
+      ...mapMutations("modifyOrderEntry", [
+        UPDATE_ADDITIONAL_COMMENTS
+      ])
     },
     computed: {
-      loadingEntry() {
-        return this.$store.state.loadingEntry;
-      },
-      editedOrderEntry() {
-        return this.$store.state.editedOrderEntry;
-      }
+      ...mapGetters("modifyOrderEntry", [
+        "editedOrderEntry"
+      ]),
+      ...mapState("modifyOrderEntry", [
+        "loadingEntry",
+
+        "orderId",
+        "dishId",
+        "additionalComments",
+        "newDish",
+        "newDishName",
+        "newDishPrice",
+        "chosenSideDishes",
+      ]),
+      ...mapState("showOrder", [
+        "order",
+        "allDishesInRestaurant"
+      ]),
     },
     components: {
       BackButton,
       ErrorsComponent,
       Price,
       Spinner,
-      OrderEntryInput,
+      OrderEntryForm,
       SideDishesInput
     }
   }

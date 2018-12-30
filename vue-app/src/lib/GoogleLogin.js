@@ -1,22 +1,22 @@
 const gapiUrl = 'https://apis.google.com/js/api:client.js';
 
 export default {
-  load: function () {
-    return new Promise(function (resolve, reject) {
+  load () {
+    return new Promise((resolve, reject) => {
       if (window.gapi === undefined) {
         installClient()
-            .then(function () { return initClient() })
-            .then(function () { resolve() })
+            .then(() => initClient())
+            .then(() => { resolve() })
       } else if (window.gapi !== undefined && window.gapi.auth2 === undefined) {
         initClient()
-          .then(function () { resolve() })
+          .then(() => { resolve() })
       } else {
         resolve()
       }}
     )
   },
 
-  signIn: function () {
+  signIn () {
     return new Promise((resolve, reject) => {
       window.gapi.auth2.getAuthInstance().grantOfflineAccess( { redirect_uri: 'postmessage' } )
         .then((response) => resolve(response.code))
@@ -24,7 +24,7 @@ export default {
     })
   },
 
-  signOut: function (successCallback, errorCallback) {
+  signOut (successCallback, errorCallback) {
     if (window.gapi && window.gapi.auth2) {
       window.gapi.auth2.getAuthInstance().signOut()
         .then(() => successCallback(), () => errorCallback(error)) 
@@ -36,12 +36,12 @@ export default {
 }
 
 function installClient () {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     var script = document.createElement('script')
     script.src = gapiUrl
-    script.onreadystatechange = script.onload = function () {
+    script.onreadystatechange = script.onload = () => {
       if (!script.readyState || /loaded|complete/.test(script.readyState)) {
-        setTimeout(function () { resolve() }, 500)
+        setTimeout(() => { resolve() }, 500)
       }
     }
     document.getElementsByTagName('head')[0].appendChild(script)
@@ -53,8 +53,8 @@ function initClient () {
     client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID
   };
 
-  return new Promise(function (resolve, reject) {
-    window.gapi.load('auth2', function () {
+  return new Promise((resolve, reject) => {
+    window.gapi.load('auth2', () => {
       window.gapi.auth2.init(googleConfig)
       resolve()
     })

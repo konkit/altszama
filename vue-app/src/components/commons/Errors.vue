@@ -17,7 +17,7 @@
   export default {
     name: 'errors-component',
     methods: {
-      close: function (errorIndex) {
+      close (errorIndex) {
         this.$store.commit("clearErrorAtIndex", errorIndex)
       }
     },

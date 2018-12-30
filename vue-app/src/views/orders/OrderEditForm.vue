@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
@@ -157,14 +157,14 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
   import BackButton from '../../components/commons/BackButton'
   import ErrorsComponent from '../../components/commons/Errors'
   import MaskedInput from 'vue-text-mask'
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import VueSelect from 'vue-select'
   import {mapState} from "vuex"
   import {
@@ -199,7 +199,7 @@
       this.$store.dispatch(`editOrder/${INIT_EDIT_ORDER_ACTION}`, {orderId: this.orderId})
     },
     methods: {
-      submitForm: function (e) {
+      submitForm (e) {
         e.preventDefault();
 
         this.$store.dispatch(`editOrder/${UPDATE_ORDER_ACTION}`);
@@ -266,7 +266,7 @@
       },
     },
     components: {
-      WithSpinner,
+      LoadingView,
       BackButton,
       ErrorsComponent,
       MaskedInput,

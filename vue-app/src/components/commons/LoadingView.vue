@@ -16,9 +16,10 @@
   import ErrorsComponent from "../commons/Errors"
 
   export default {
-    name: 'WithSpinner',
+    name: 'LoadingView',
     created() {
-      this.$store.commit('setLoadingTrue')
+      this.$store.commit('clearErrors');
+      this.$store.commit('setLoadingTrue');
     },
     computed: {
       loading() {

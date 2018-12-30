@@ -87,20 +87,26 @@
 
 <script>
   import Price from '../commons/PriceElement.vue'
+  import {mapState} from "vuex"
 
   export default {
-    props: ['order', 'totalOrderPrice'],
     methods: {
-      timeOfDeliveryOrNA: function () {
+      timeOfDeliveryOrNA () {
         if (this.order.timeOfDelivery != null) {
           return this.order.timeOfDelivery
         } else {
           return "As ASAP as possible"
         }
       },
-      isNotOrderedYet: function () {
+      isNotOrderedYet () {
         return this.order.orderState === 'CREATED';
       },
+    },
+    computed: {
+      ...mapState('showOrder', [
+        "order",
+        "totalOrderPrice",
+      ])
     },
     components: {
       Price,

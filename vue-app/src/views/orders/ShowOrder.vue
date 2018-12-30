@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
@@ -8,7 +8,7 @@
           <h1>[{{ this.order.orderState }}] Order from {{this.order.restaurant.name}} ({{this.order.orderDate}})</h1>
 
           <template v-if="isOrderOwner()">
-            <order-state-buttons :order-id="this.order.id" :order-state="this.order.orderState"></order-state-buttons>
+            <order-state-buttons></order-state-buttons>
           </template>
 
           <div v-if="this.isOrdering() && this.isOrderOwner()" class="alert alert-warning">
@@ -19,7 +19,8 @@
               If you are not ordering yet, click button to go back to created state.
             </p>
             <p>
-              <button class="btn btn-success" @click="unlockOrder()">Unlock&nbsp;&nbsp;<span class="fa fa-unlock"/>
+              <button class="btn btn-success" @click="unlockOrder()">Unlock&nbsp;&nbsp;<span
+                  class="fa fa-unlock"></span>
               </button>
             </p>
           </div>
@@ -27,7 +28,7 @@
       </div>
     </div>
 
-    <order-stats :order="order" :total-order-price="totalOrderPrice"></order-stats>
+    <order-stats></order-stats>
 
     <div class="container">
       <div class="row justify-content-center">
@@ -38,21 +39,19 @@
               <th>Dish</th>
             </tr>
 
-            <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries == 0">
+            <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
               <tr>
                 <td>{{username}}</td>
 
                 <td>
-                  <template v-if="isEntryCreating == false">
+                  <template v-if="isEntryCreating === false">
                     <button class="btn btn-success" @click="createEntry()">
                       Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
                   </template>
 
-                  <template v-if="isEntryCreating == true">
-                    <order-entry-create-entry
-                        :order="order"
-                        @updateOrder="fetchOrder"/>
+                  <template v-if="isEntryCreating === true">
+                    <create-order-entry></create-order-entry>
                   </template>
                 </td>
               </tr>
@@ -64,37 +63,31 @@
 
                 <td>
                   <template v-for="dishEntry in orderEntry.dishEntries">
-                    <template v-if="isEntryEdited == true && dishEntryId == dishEntry.id">
-                      <order-entry-edit-entry
-                          :order="order"
+                    <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+                      <edit-order-entry
                           :order-entry="orderEntry"
                           :dish-entry="dishEntry"
-                          @updateOrder="fetchOrder"
-                          :key="dishEntry.id"/>
+                          :key="dishEntry.id">
+                      </edit-order-entry>
                     </template>
                     <template v-else>
-                      <order-entry-row
-                          :order="order"
+                      <order-entry
                           :order-entry="orderEntry"
                           :dish-entry="dishEntry"
                           :current-user-id="currentUserId"
-                          @deleteEntry="deleteEntry"
-                          @updateOrder="fetchOrder"
-                          :key="dishEntry.id"/>
+                          :key="dishEntry.id"></order-entry>
                     </template>
                   </template>
 
                   <template
-                      v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited == false">
-                    <div v-if="isEntryCreating == false">
+                      v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+                    <div v-if="isEntryCreating === false">
                       <button class="btn btn-success" @click="createEntry()">
                         Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
                       </button>
                     </div>
-                    <div v-if="isEntryCreating == true">
-                      <order-entry-create-entry
-                          :order="order"
-                          @updateOrder="fetchOrder"/>
+                    <div v-if="isEntryCreating === true">
+                      <create-order-entry></create-order-entry>
                     </div>
                   </template>
 
@@ -111,40 +104,26 @@
       </div>
     </div>
 
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
   import BackButton from '../../components/commons/BackButton.vue'
   import Price from '../../components/commons/PriceElement.vue'
-  import Spinner from '../../components/commons/Spinner.vue'
-  import WithSpinner from '../../components/commons/WithSpinner.vue'
+  import LoadingView from '../../components/commons/LoadingView.vue'
   import OrderStateButtons from '../../components/orders/OrderStateButtons.vue'
-  import OrderEntryCreateEntry from '../../components/orders/OrderEntryCreateEntry.vue'
-  import OrderEntryEditEntry from '../../components/orders/OrderEntryEditEntry.vue'
-  import OrderEntryRow from '../../components/orders/OrderEntryRow.vue'
+  import CreateOrderEntry from '../../components/orders/CreateOrderEntry.vue'
+  import EditOrderEntry from '../../components/orders/EditOrderEntry.vue'
+  import OrderEntry from '../../components/orders/OrderEntry.vue'
   import OrderStats from '../../components/orders/OrderStats.vue'
   import {mapState} from 'vuex'
   import {
-    DELETE_ORDER_ACTION,
-    SET_ORDER_AS_REJECTED_ACTION,
-    SET_ORDER_AS_DELIVERED_ACTION,
-    SET_ORDER_AS_ORDERED_ACTION,
-    SET_ORDER_AS_CREATED_ACTION,
-    MARK_ORDER_ENTRY_AS_PAID_ACTION,
-    CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
     DELETE_DISH_ENTRY_ACTION,
     UNLOCK_ORDER_ACTION,
-    EDIT_ORDER_ENTRY_ACTION,
-    SAVE_ORDER_ENTRY_ACTION,
     FETCH_ORDER_DATA_ACTION,
     CANCEL_ENTRY_CREATE_OR_EDIT,
-    CLEAR_EDITED_SIDE_DISHES,
-    LOAD_SHOW_ORDER_DATA,
-    SET_EDITED_ORDER_ENTRY,
     SET_ENTRY_CREATING,
     SET_ENTRY_EDITING,
-    SET_NEW_DISH_FLAG
   } from "../../store/modules/ShowOrderState"
 
   export default {
@@ -157,56 +136,56 @@
       this.fetchOrder()
     },
     methods: {
-      fetchOrder: function () {
+      fetchOrder () {
         this.$store.commit('setLoadingTrue');
-        this.$store.dispatch(`showOrder/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
+        return this.$store.dispatch(`showOrder/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
       },
-      isOrdering: function () {
+      isOrdering () {
         return this.order.orderState === 'ORDERING';
       },
-      isOrderOwner: function () {
-        return this.order.orderCreator.id == this.currentUserId
+      isOrderOwner () {
+        return this.order.orderCreator.id === this.currentUserId
       },
-      isOrderEntryOwner: function (orderEntry) {
+      isOrderEntryOwner (orderEntry) {
         return orderEntry.user.id === this.currentUserId
       },
-      paymentStatus: function (orderEntry) {
-        if (orderEntry.paymentStatus == "UNPAID") {
+      paymentStatus (orderEntry) {
+        if (orderEntry.paymentStatus === "UNPAID") {
           return "Unpaid"
-        } else if (orderEntry.paymentStatus == "MARKED") {
+        } else if (orderEntry.paymentStatus === "MARKED") {
           return "Marked as paid"
-        } else if (orderEntry.paymentStatus == "CONFIRMED") {
+        } else if (orderEntry.paymentStatus === "CONFIRMED") {
           return "Payment confirmed"
         } else {
           return orderEntry.paymentStatus
         }
       },
-      unlockOrder: function () {
+      unlockOrder () {
         this.$store.dispatch(`showOrder/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
       },
-      deleteEntry: function (orderEntryId, dishEntryId) {
+      deleteEntry (orderEntryId, dishEntryId) {
         this.$store.dispatch(`showOrder/${DELETE_DISH_ENTRY_ACTION}`, {
           orderId: this.orderId,
           orderEntryId: orderEntryId,
           dishEntryId: dishEntryId
         })
       },
-      createEntry: function () {
+      createEntry () {
         this.$store.commit(`showOrder/${SET_ENTRY_CREATING}`, {})
       },
-      editEntry: function (orderEntryId, dishEntryId) {
+      editEntry (orderEntryId, dishEntryId) {
         this.$store.commit(`showOrder/${SET_ENTRY_EDITING}`, {
           "orderEntryId": orderEntryId,
           "dishEntryId": dishEntryId
         })
       },
-      cancelEdit: function () {
+      cancelEdit () {
         this.$store.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
       }
     },
     computed: {
       numberOfCurrentUserEntries() {
-        return this.orderEntries.filter(e => e.user.id == this.currentUserId).length;
+        return this.orderEntries.filter(e => e.user.id === this.currentUserId).length;
       },
       ...mapState({
         username: state => state.username,
@@ -225,12 +204,11 @@
     components: {
       BackButton,
       Price,
-      Spinner,
-      WithSpinner,
+      LoadingView,
       OrderStateButtons,
-      OrderEntryCreateEntry,
-      OrderEntryEditEntry,
-      OrderEntryRow,
+      CreateOrderEntry,
+      EditOrderEntry,
+      OrderEntry,
       OrderStats
     }
   }

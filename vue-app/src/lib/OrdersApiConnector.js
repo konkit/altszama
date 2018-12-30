@@ -2,7 +2,7 @@ import ApiConnector from "./ApiConnector";
 
 export default {
 
-  saveOrderEntry: function(orderId, editedOrderEntry) {
+  saveOrderEntry (orderId, editedOrderEntry) {
     const action = "/order_entries/save";
 
     let formData = {
@@ -18,7 +18,7 @@ export default {
     return ApiConnector.makePost(action, formData)
   },
 
-  editOrderEntry: function(orderId, orderEntryId, editedOrderEntry) {
+  editOrderEntry (orderId, orderEntryId, editedOrderEntry) {
     const action = "/order_entries/update";
 
     let formData = {
@@ -36,11 +36,11 @@ export default {
     return ApiConnector.makePost(action, formData)
   },
 
-  deleteDishEntry: function(orderEntryId, dishEntryId) {
+  deleteDishEntry (orderEntryId, dishEntryId) {
     return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
   },
 
-  fetchOrder: function(orderId) {
+  fetchOrder (orderId) {
     return ApiConnector.makeGet("/orders/" + orderId + "/show.json")
       .then(response => {
         return {
@@ -55,14 +55,14 @@ export default {
       })
   },
 
-  fetchAllOrders: function() {
+  fetchAllOrders () {
     return ApiConnector.makeGet("/orders/all.json")
       .then(response => {
           return response.data.allOrdersList;
       })
   },
 
-  fetchTodaysOrders: function() {
+  fetchTodaysOrders () {
     return ApiConnector.makeGet("/orders.json")
       .then(response => {
         return {
@@ -75,7 +75,7 @@ export default {
       })
   },
 
-  fetchOrderView: function(orderId) {
+  fetchOrderView (orderId) {
     return ApiConnector.makeGet("/orders/" + orderId + "/order_view.json")
         .then(response => {
           return {
@@ -88,7 +88,7 @@ export default {
         })
   },
 
-  getOrderCreateData: function() {
+  getOrderCreateData () {
     return ApiConnector.makeGet("/orders/create.json")
         .then(response => {
           let restaurantId;
@@ -116,7 +116,7 @@ export default {
         });
   },
 
-  getOrderEditData: function(orderId) {
+  getOrderEditData (orderId) {
     return ApiConnector.makeGet("/orders/" + orderId + "/edit.json")
         .then(response => {
           let restaurantId;
@@ -143,35 +143,35 @@ export default {
         })
   },
 
-  setOrderAsCreated: function(orderId) {
+  setOrderAsCreated (orderId) {
     return ApiConnector.makeGet('/orders/' + orderId + '/set_as_created')
   },
 
-  setOrderAsOrdered: function(orderId) {
+  setOrderAsOrdered (orderId) {
     return ApiConnector.makeGet('/orders/' + orderId + '/set_back_as_ordered')
   },
 
-  setOrderAsDelivered: function(orderId) {
+  setOrderAsDelivered (orderId) {
     return ApiConnector.makeGet('/orders/' + orderId + '/set_as_delivered')
   },
 
-  setOrderAsRejected: function(orderId) {
+  setOrderAsRejected (orderId) {
     return ApiConnector.makeGet('/orders/' + orderId + '/set_as_rejected')
   },
 
-  deleteOrder: function(orderId) {
+  deleteOrder (orderId) {
     return ApiConnector.makeGet('/orders/' + orderId + '/delete')
   },
 
-  markOrderEntryAsPaid: function(orderEntryId) {
+  markOrderEntryAsPaid (orderEntryId) {
     return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/mark_as_paid')
   },
 
-  confirmOrderEntryAsPaid: function(orderEntryId) {
+  confirmOrderEntryAsPaid (orderEntryId) {
     return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid')
   },
 
-  createOrder: function(order) {
+  createOrder (order) {
     let action = "/orders/save";
     let dataSuccessUrl = "#/orders/";
 
@@ -191,7 +191,7 @@ export default {
       .then(response => window.location.href = dataSuccessUrl)
   },
 
-  editOrder: function(orderId, order) {
+  editOrder (orderId, order) {
     let action = "/orders/update";
     let dataSuccessUrl = "#/orders/show/" + orderId;
 
@@ -212,7 +212,7 @@ export default {
       .then(response => window.location.href = dataSuccessUrl)
   },
 
-  makeAnOrder: function (orderId, {approxTimeOfDelivery}) {
+  makeAnOrder (orderId, {approxTimeOfDelivery}) {
     let action = '/orders/' + orderId + '/set_as_ordered';
 
     let formData = {

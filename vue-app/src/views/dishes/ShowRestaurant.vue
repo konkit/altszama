@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
@@ -42,16 +42,15 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
-  import Spinner from '../../components/commons/Spinner'
   import ErrorsComponent from '../../components/commons/Errors'
   import BackButton from '../../components/commons/BackButton'
   import Price from '../../components/commons/PriceElement'
   import ShowRestaurantDishesTable from '../../components/restaurants/ShowRestaurantDishesTable'
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantState"
 
   export default {
@@ -65,7 +64,7 @@
       this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
     },
     methods: {
-      deleteRestaurant: function (e) {
+      deleteRestaurant (e) {
         let errorsComponent = this.$refs.errorsComponent;
         this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId, errorsComponent: errorsComponent});
       }
@@ -82,8 +81,7 @@
       },
     },
     components: {
-      WithSpinner,
-      Spinner,
+      LoadingView,
       BackButton,
       Price,
       ErrorsComponent,

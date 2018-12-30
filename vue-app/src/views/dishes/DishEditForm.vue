@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
@@ -51,16 +51,15 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
   import BackButton from '../../components/commons/BackButton'
   import ErrorsComponent from '../../components/commons/Errors'
   import Price from '../../components/commons/PriceElement'
-  import Spinner from '../../components/commons/Spinner'
   import SideDishes from '../../components/restaurants/SideDishes.vue'
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import {mapMutations, mapState} from "vuex"
   import {INIT_EDIT_DISH_ACTION, UPDATE_DISH_ACTION, UPDATE_NAME, UPDATE_PRICE, UPDATE_CATEGORY} from "../../store/modules/EditDishState"
 
@@ -75,14 +74,14 @@
       this.$store.dispatch(`editDish/${INIT_EDIT_DISH_ACTION}`, {restaurantId: this.restaurantId, dishId: this.dishId})
     },
     methods: {
-      submitForm: function () {
+      submitForm () {
         let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
         this.$store.dispatch(`editDish/${UPDATE_DISH_ACTION}`, {sideDishes: sideDishes});
 
         return false;
       },
-      addSideDish: function () {
+      addSideDish () {
         const newSideDish = {
           name: this.newSideDishName,
           price: Math.round(this.newSideDishPrice * 100)
@@ -90,7 +89,7 @@
 
         this.sideDishes.push(newSideDish)
       },
-      removeSideDish: function (sideDishId) {
+      removeSideDish (sideDishId) {
         this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
       },
       updateName() {
@@ -113,11 +112,10 @@
       ])
     },
     components: {
-      WithSpinner,
+      LoadingView,
       BackButton,
       ErrorsComponent,
       Price,
-      Spinner,
       SideDishes
     }
   }

@@ -62,7 +62,7 @@
       }
     },
     methods: {
-      addSideDish: function () {
+      addSideDish () {
         var newSideDish = {
           name: this.newSideDishName,
           price: Math.round(this.newSideDishPrice * 100)
@@ -71,16 +71,16 @@
         this.sideDishes.push(newSideDish)
         this.setSideDishFormVisible(false);
       },
-      removeSideDish: function (sideDishId) {
+      removeSideDish (sideDishId) {
         this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
       },
-      setSideDishFormVisible: function (isVisible) {
+      setSideDishFormVisible (isVisible) {
         this.sideDishFormVisible = isVisible;
       },
-      getSideDishes: function () {
+      getSideDishes () {
         return this.sideDishes
       },
-      setSideDishes: function (sideDishes) {
+      setSideDishes (sideDishes) {
         this.sideDishes = sideDishes
       }
     },

@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div v-if="this.restaurantsList.length === 0">
       <p>There are no restaurants, please create one first</p>
     </div>
@@ -160,14 +160,14 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
   import BackButton from '../../components/commons/BackButton'
   import ErrorsComponent from '../../components/commons/Errors'
   import MaskedInput from 'vue-text-mask'
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import VueSelect from 'vue-select'
   import {
     INIT_CREATE_ORDER_ACTION,
@@ -268,7 +268,7 @@
       },
     },
     components: {
-      WithSpinner,
+      LoadingView,
       BackButton,
       ErrorsComponent,
       MaskedInput,

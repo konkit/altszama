@@ -68,7 +68,7 @@
   export default {
     props: ['restaurantName'],
     methods: {
-      submitForm: function () {
+      submitForm () {
         this.$store.dispatch(`createRestaurant/${SAVE_RESTAURANT_ACTION}`, {errorsComponent: this.$refs.errorsComponent})
       },
       ...mapMutations("createRestaurant", [

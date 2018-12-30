@@ -9,7 +9,7 @@
     name: 'back-button',
     props: ['href'],
     methods: {
-      followLink: function () {
+      followLink  () {
         location = this.href
       }
     }

@@ -13,13 +13,13 @@ import CreateRestaurantState from "./modules/CreateRestaurantState";
 import EditRestaurantState from "./modules/EditRestaurantState";
 import CreateDishState from "./modules/CreateDishState";
 import EditDishState from "./modules/EditDishState";
+import ModifyOrderEntryState from "./modules/ModifyOrderEntryState";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     loading: false,
-    loadingEntry: false,
     username: localStorage.getItem("username"),
     token: localStorage.getItem("token"),
     errors: []
@@ -80,6 +80,7 @@ export default new Vuex.Store({
     createRestaurant: CreateRestaurantState,
     editRestaurant: EditRestaurantState,
     createDish: CreateDishState,
-    editDish: EditDishState
+    editDish: EditDishState,
+    modifyOrderEntry: ModifyOrderEntryState
   }
 })

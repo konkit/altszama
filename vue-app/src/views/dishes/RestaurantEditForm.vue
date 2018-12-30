@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
@@ -50,15 +50,14 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
   import BackButton from '../../components/commons/BackButton'
   import ErrorsComponent from '../../components/commons/Errors'
-  import Spinner from '../../components/commons/Spinner'
 
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import {mapMutations, mapState} from 'vuex'
   import {
     UPDATE_RESTAURANT_ACTION,
@@ -80,7 +79,7 @@
       this.$store.dispatch(`editRestaurant/${INIT_EDIT_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
     },
     methods: {
-      submitForm: function () {
+      submitForm () {
         let errorsComponent = this.$refs.errorsComponent;
 
         this.$store.dispatch(`editRestaurant/${UPDATE_RESTAURANT_ACTION}`, {errorsComponent: errorsComponent});
@@ -105,10 +104,9 @@
       ]),
     },
     components: {
-      WithSpinner,
+      LoadingView,
       BackButton,
       ErrorsComponent,
-      Spinner
     }
   }
 </script>

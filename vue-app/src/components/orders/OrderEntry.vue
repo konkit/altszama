@@ -5,11 +5,11 @@
 
         <div v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
           <button type="button" class="btn btn-light" @click="editEntry(orderEntry.id, dishEntry.id)">
-            <i class="fa fa-pencil" aria-hidden="true"/>
+            <i class="fa fa-pencil" aria-hidden="true"></i>
           </button>
 
-          <button type="button" class="btn btn-danger" @click="deleteEntry(orderEntry.id, dishEntry.id)">
-            <i class="fa fa-times" aria-hidden="true"/>
+          <button type="button" class="btn btn-danger" @click="deleteEntry()">
+            <i class="fa fa-times" aria-hidden="true"></i>
           </button>
         </div>
 
@@ -51,47 +51,58 @@
 
 <script>
   import Price from '../commons/PriceElement.vue'
-  import {CONFIRM_ORDER_ENTRY_AS_PAID_ACTION, MARK_ORDER_ENTRY_AS_PAID_ACTION} from "../../store/modules/ShowOrderState";
+  import {
+    CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
+    MARK_ORDER_ENTRY_AS_PAID_ACTION,
+    DELETE_DISH_ENTRY_ACTION,
+    SET_ENTRY_EDITING
+  } from "../../store/modules/ShowOrderState";
+  import {mapState} from "vuex";
 
   export default {
-    name: 'order-entry-row',
-    props: ['order', 'orderEntry', 'dishEntry', 'currentUserId'],
+    name: 'order-entry',
+    props: ['orderEntry', 'dishEntry', 'currentUserId'],
     methods: {
-      isOrderOwner: function () {
-        return this.order.orderCreator.id == this.currentUserId
+      isOrderOwner () {
+        return this.order.orderCreator.id === this.currentUserId
       },
-      isOrderEntryOwner: function (orderEntry) {
+      isOrderEntryOwner (orderEntry) {
         return orderEntry.user.id === this.currentUserId
       },
-      shouldShowMarkAsPaidButton: function (orderEntry) {
-        return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && (orderEntry.paymentStatus != "MARKED" && orderEntry.paymentStatus != "CONFIRMED") && this.isOrderOwner() == false)
+      shouldShowMarkAsPaidButton (orderEntry) {
+        return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && (orderEntry.paymentStatus !== "MARKED" && orderEntry.paymentStatus !== "CONFIRMED") && this.isOrderOwner() === false)
       },
-      shouldShowConfirmAsPaidButton: function (orderEntry) {
-        return (this.order.orderState != 'CREATED' && this.order.orderState != 'ORDERING' && orderEntry.paymentStatus != "CONFIRMED" && this.isOrderOwner() == true)
+      shouldShowConfirmAsPaidButton (orderEntry) {
+        return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && orderEntry.paymentStatus !== "CONFIRMED" && this.isOrderOwner() === true)
       },
-      paymentStatus: function (orderEntry) {
-        if (orderEntry.paymentStatus == "UNPAID") {
+      paymentStatus (orderEntry) {
+        if (orderEntry.paymentStatus === "UNPAID") {
           return "Unpaid"
-        } else if (orderEntry.paymentStatus == "MARKED") {
+        } else if (orderEntry.paymentStatus === "MARKED") {
           return "Marked as paid"
-        } else if (orderEntry.paymentStatus == "CONFIRMED") {
+        } else if (orderEntry.paymentStatus === "CONFIRMED") {
           return "Payment confirmed"
         } else {
           return orderEntry.paymentStatus
         }
       },
-      confirmAsPaid: function (orderEntryId) {
+      confirmAsPaid (orderEntryId) {
         this.$store.dispatch(`showOrder/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
-      markAsPaid: function (orderEntryId) {
+      markAsPaid (orderEntryId) {
         this.$store.dispatch(`showOrder/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
-      deleteEntry: function (orderEntryId, dishEntryId) {
-        this.$emit("deleteEntry", orderEntryId, dishEntryId);
+      deleteEntry () {
+        this.$store.dispatch(`showOrder/${DELETE_DISH_ENTRY_ACTION}`, {orderId: this.order.id, orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id});
       },
-      editEntry: function (orderEntryId, dishEntryId) {
-        this.$store.commit('setEntryEditing', {"orderEntryId": orderEntryId, "dishEntryId": dishEntryId})
+      editEntry () {
+        this.$store.commit(`showOrder/${SET_ENTRY_EDITING}`, {"orderEntryId": this.orderEntry.id, "dishEntryId": this.dishEntry.id})
       },
+    },
+    computed: {
+      ...mapState("showOrder", [
+        "order"
+      ])
     },
     components: {
       Price

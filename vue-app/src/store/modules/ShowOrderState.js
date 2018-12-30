@@ -21,8 +21,6 @@ export const SET_ORDER_AS_ORDERED_ACTION = "SET_ORDER_AS_ORDERED_ACTION";
 export const SET_ORDER_AS_DELIVERED_ACTION = "SET_ORDER_AS_DELIVERED_ACTION";
 export const SET_ORDER_AS_REJECTED_ACTION = "SET_ORDER_AS_REJECTED_ACTION";
 export const DELETE_ORDER_ACTION = "DELETE_ORDER_ACTION";
-export const SET_ENTRY_LOADING_TRUE = "SET_ENTRY_LOADING_TRUE";
-export const SET_ENTRY_LOADING_FALSE = "SET_ENTRY_LOADING_FALSE";
 
 export default {
   namespaced: true,
@@ -31,6 +29,7 @@ export default {
       restaurant: {
         name: ""
       },
+      orderState: "",
       orderCreator: {}
     },
     orderEntries: [],
@@ -44,8 +43,6 @@ export default {
     isEntryEdited: false,
     orderEntryId: "",
     dishEntryId: "",
-
-    editedOrderEntry: {},
   },
   mutations: {
     [LOAD_SHOW_ORDER_DATA] (state, payload) {
@@ -86,12 +83,6 @@ export default {
         state.editedOrderEntry.dishId = ""
       }
     },
-    [SET_ENTRY_LOADING_TRUE] (state) {
-      state.loadingEntry = true;
-    },
-    [SET_ENTRY_LOADING_FALSE] (state) {
-      state.loadingEntry = false;
-    },
   },
   actions: {
     [FETCH_ORDER_DATA_ACTION] ({state}, payload) {
@@ -106,6 +97,9 @@ export default {
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [SAVE_ORDER_ENTRY_ACTION] ({state}, {orderId, editedOrderEntry, errorsComponent}) {
+      console.log("Save Order Entry Action");
+      console.log("Edited order entry: ", editedOrderEntry);
+
       OrdersApiConnector.saveOrderEntry(orderId, editedOrderEntry)
         .then(() => {
           // this.$emit("updateOrder");

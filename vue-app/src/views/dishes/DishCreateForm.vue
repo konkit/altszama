@@ -62,7 +62,6 @@
   import BackButton from '../../components/commons/BackButton.vue'
   import ErrorsComponent from '../../components/commons/Errors.vue'
   import Price from '../../components/commons/PriceElement.vue'
-  import Spinner from '../../components/commons/Spinner'
   import SideDishes from '../../components/restaurants/SideDishes.vue'
   import {mapMutations, mapState} from "vuex"
   import {
@@ -84,14 +83,14 @@
       this.$store.dispatch(`createDish/${INIT_ACTION}`, {restaurantId: this.restaurantId})
     },
     methods: {
-      submitForm: function () {
+      submitForm () {
         let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
         this.$store.dispatch(`createDish/${SAVE_DISH_ACTION}`, { sideDishes: sideDishes, backUrl: this.getBackUrl() });
 
         return false;
       },
-      getBackUrl: function () {
+      getBackUrl () {
         if (typeof this.$route.query.addingToOrderId !== "undefined" && this.$route.query.addingToOrderId.length > 0) {
           return "#/orders/" + this.$route.query.addingToOrderId + "/create_entry"
         } else {
@@ -119,7 +118,6 @@
     components: {
       BackButton,
       ErrorsComponent,
-      Spinner,
       Price,
       SideDishes
     }

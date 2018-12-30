@@ -37,15 +37,15 @@
   export default {
     name: 'navigation',
     computed: {
-      username: function() {
+      username () {
         return this.$store.state.username;
       }
     },
     methods: {
-      shouldDisplayNavigation: function() {
+      shouldDisplayNavigation () {
         return this.$route.name !== "Login"
       },
-      logout: function() {
+      logout () {
         ApiConnector.logout();
       }
     }

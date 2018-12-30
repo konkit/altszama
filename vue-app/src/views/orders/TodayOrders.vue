@@ -1,5 +1,5 @@
 <template>
-  <WithSpinner>
+  <LoadingView>
     <div class="jumbotron lunch-bg-img">
       <div class="container">
         <div class="row justify-content-center">
@@ -160,12 +160,12 @@
         </div>
       </div>
     </div>
-  </WithSpinner>
+  </LoadingView>
 </template>
 
 <script>
   import ApiConnector from '../../lib/ApiConnector.js'
-  import WithSpinner from "../../components/commons/WithSpinner";
+  import LoadingView from "../../components/commons/LoadingView";
   import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
   import {mapState} from "vuex"
 
@@ -182,7 +182,7 @@
       this.$store.dispatch(`todayOrders/${FETCH_TODAY_ORDERS_ACTION}`, {errorsComponent: errorsComponent});
     },
     methods: {
-      goToOrder: function (selectedOrderId) {
+      goToOrder (selectedOrderId) {
         location = "#/orders/show/" + selectedOrderId
       }
     },
@@ -196,7 +196,7 @@
       ])
     },
     components: {
-      WithSpinner,
+      LoadingView,
     }
   }
 </script>
