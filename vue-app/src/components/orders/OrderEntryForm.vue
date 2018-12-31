@@ -30,7 +30,7 @@
           </optgroup>
         </select>
 
-        <button class="btn btn-link" @click="setNewDishFlag(true)">Type your own dish! &nbsp;</button>
+        <button class="btn btn-link" @click="setDishAsNew()">Type your own dish! &nbsp;</button>
       </template>
     </div>
 
@@ -44,29 +44,48 @@
                      class="form-control"
                      required=""></vue-numeric>
 
-        <button class="btn btn-link" @click="setNewDishFlag(false)">Select dish from list &nbsp;</button>
+        <button class="btn btn-link" @click="setDishAsExisting()">Select dish from list &nbsp;</button>
       </template>
+    </div>
+
+    <side-dishes-input></side-dishes-input>
+
+    <div class="form-group">
+      <h4>Additional Comments</h4>
+      <textarea class="form-control" :value="additionalComments"
+                @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"></textarea>
     </div>
   </div>
 </template>
 
 <script>
+  import BackButton from '../commons/BackButton.vue'
+  import ErrorsComponent from '../commons/Errors.vue'
+  import Spinner from '../commons/Spinner.vue'
   import Price from '../commons/PriceElement.vue'
+
+  import OrderEntryForm from './OrderEntryForm.vue'
+  import SideDishesInput from './SideDishesInput.vue'
   import {
-    SET_NEW_DISH_FLAG,
     UPDATE_DISH_ID,
     CLEAR_EDITED_SIDE_DISHES,
     UPDATE_NEW_DISH_NAME,
     UPDATE_NEW_DISH_PRICE,
-    NAMESPACE_MODIFY_ORDER_ENTRY
+    NAMESPACE_MODIFY_ORDER_ENTRY,
+    UPDATE_ADDITIONAL_COMMENTS,
+    SET_DISH_AS_NEW,
+    SET_DISH_AS_EXISTING,
   } from "../../store/modules/ModifyOrderEntryState";
-  import {mapState} from "vuex"
+  import {mapState, mapMutations} from "vuex"
 
   export default {
     name: 'order-entry-form',
     methods: {
-      setNewDishFlag(newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_NEW_DISH_FLAG}`, newValue)
+      setDishAsNew() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_NEW}`, newValue)
+      },
+      setDishAsExisting() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`, newValue)
       },
       updateDishId(newValue) {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`, newValue);
@@ -78,6 +97,9 @@
       updateNewDishPrice(newValue) {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`, newValue)
       },
+      ...mapMutations(NAMESPACE_MODIFY_ORDER_ENTRY, [
+        UPDATE_ADDITIONAL_COMMENTS
+      ])
     },
     computed: {
       ...mapState("showOrder", [
@@ -94,7 +116,16 @@
       ])
     },
     components: {
-      Price
+      Price,
+      BackButton,
+      ErrorsComponent,
+      Price,
+      Spinner,
+      OrderEntryForm,
+      SideDishesInput
     }
   }
 </script>
+
+<style>
+</style>

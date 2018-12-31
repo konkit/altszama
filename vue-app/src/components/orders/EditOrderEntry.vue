@@ -12,14 +12,6 @@
       <div>
         <order-entry-form></order-entry-form>
 
-        <side-dishes-input></side-dishes-input>
-
-        <div class="form-group">
-          <h4>Additional Comments</h4>
-          <textarea class="form-control" :value="additionalComments"
-                    @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"></textarea>
-        </div>
-
         <button class="btn btn-block btn-success" @click="submitForm">
           Update order
         </button>
@@ -43,13 +35,12 @@
 
   import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
-  import {mapState, mapMutations} from "vuex"
+  import {mapState} from "vuex"
   import {
     UPDATE_ORDER_ENTRY_ACTION,
-    CANCEL_ENTRY_CREATE_OR_EDIT,
+    CANCEL_DISH_ENTRY_MODIFICATION,
     SETUP_EDIT_ORDER_ENTRY_ACTION,
     SET_ENTRY_LOADING_TRUE,
-    UPDATE_ADDITIONAL_COMMENTS,
     NAMESPACE_MODIFY_ORDER_ENTRY
   } from "../../store/modules/ModifyOrderEntryState";
 
@@ -74,16 +65,12 @@
         return false;
       },
       cancelEdit() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
       },
-      ...mapMutations(NAMESPACE_MODIFY_ORDER_ENTRY, [
-        UPDATE_ADDITIONAL_COMMENTS
-      ])
     },
     computed: {
       ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
         "loadingEntry",
-        "additionalComments",
       ]),
     },
     components: {

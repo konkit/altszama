@@ -4,11 +4,11 @@
       <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
 
         <div v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
-          <button type="button" class="btn btn-light" @click="editEntry()">
+          <button type="button" class="btn btn-light" @click="editDishEntry()">
             <i class="fa fa-pencil" aria-hidden="true"></i>
           </button>
 
-          <button type="button" class="btn btn-danger" @click="deleteEntry()">
+          <button type="button" class="btn btn-danger" @click="deleteDishEntry()">
             <i class="fa fa-times" aria-hidden="true"></i>
           </button>
         </div>
@@ -57,26 +57,26 @@
     DELETE_DISH_ENTRY_ACTION,
     NAMESPACE_SHOW_ORDER
   } from "../../store/modules/ShowOrderState";
-  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_ENTRY_EDITING} from "../../store/modules/ModifyOrderEntryState";
+  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../store/modules/ModifyOrderEntryState";
   import {mapState} from "vuex";
 
   export default {
     name: 'order-entry',
     props: ['orderEntry', 'dishEntry', 'currentUserId'],
     methods: {
-      isOrderOwner () {
+      isOrderOwner() {
         return this.order.orderCreator.id === this.currentUserId
       },
-      isOrderEntryOwner (orderEntry) {
+      isOrderEntryOwner(orderEntry) {
         return orderEntry.user.id === this.currentUserId
       },
-      shouldShowMarkAsPaidButton (orderEntry) {
+      shouldShowMarkAsPaidButton(orderEntry) {
         return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && (orderEntry.paymentStatus !== "MARKED" && orderEntry.paymentStatus !== "CONFIRMED") && this.isOrderOwner() === false)
       },
-      shouldShowConfirmAsPaidButton (orderEntry) {
+      shouldShowConfirmAsPaidButton(orderEntry) {
         return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && orderEntry.paymentStatus !== "CONFIRMED" && this.isOrderOwner() === true)
       },
-      paymentStatus (orderEntry) {
+      paymentStatus(orderEntry) {
         if (orderEntry.paymentStatus === "UNPAID") {
           return "Unpaid"
         } else if (orderEntry.paymentStatus === "MARKED") {
@@ -87,17 +87,23 @@
           return orderEntry.paymentStatus
         }
       },
-      confirmAsPaid (orderEntryId) {
+      confirmAsPaid(orderEntryId) {
         this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
-      markAsPaid (orderEntryId) {
+      markAsPaid(orderEntryId) {
         this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
-      editEntry () {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_EDITING}`, {orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id})
+      editDishEntry() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {
+          orderEntryId: this.orderEntry.id,
+          dishEntryId: this.dishEntry.id
+        })
       },
-      deleteEntry () {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id});
+      deleteDishEntry() {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
+          orderEntryId: this.orderEntry.id,
+          dishEntryId: this.dishEntry.id
+        });
       },
     },
     computed: {

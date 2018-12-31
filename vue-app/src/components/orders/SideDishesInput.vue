@@ -80,44 +80,45 @@
     SET_SIDE_DISH_AS_EXISTING,
     SET_SIDE_DISH_AS_NEW,
     ADD_SIDE_DISH_ACTION,
-    REMOVE_SIDE_DISH
+    REMOVE_SIDE_DISH,
+    NAMESPACE_MODIFY_ORDER_ENTRY
   } from "../../store/modules/ModifyOrderEntryState";
 
   export default {
     name: 'side-dishes-input',
     methods: {
       removeSideDish (sideDishIndex) {
-        this.$store.commit(`modifyOrderEntry/${REMOVE_SIDE_DISH}`, sideDishIndex);
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${REMOVE_SIDE_DISH}`, sideDishIndex);
 
         this.$forceUpdate();
       },
       addSideDishEntry () {
-        this.$store.dispatch(`modifyOrderEntry/${ADD_SIDE_DISH_ACTION}`);
+        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${ADD_SIDE_DISH_ACTION}`);
 
         this.$forceUpdate();
       },
       setAsNewSideDish(sdIndex) {
-        this.$store.commit(`modifyOrderEntry/${SET_SIDE_DISH_AS_NEW}`, {sdIndex: sdIndex});
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_NEW}`, {sdIndex: sdIndex});
 
         this.$forceUpdate();
       },
       setAsExistingSideDish(sdIndex) {
-        this.$store.commit(`modifyOrderEntry/${SET_SIDE_DISH_AS_EXISTING}`, {sdIndex: sdIndex});
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_EXISTING}`, {sdIndex: sdIndex});
 
         this.$forceUpdate();
       },
       updateNewSideDishName(sdIndex, newValue) {
-        this.$store.commit(`modifyOrderEntry/${UPDATE_NEW_SIDE_DISH_NAME}`, {sdIndex: sdIndex, newValue: newValue});
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_NAME}`, {sdIndex: sdIndex, newValue: newValue});
 
         this.$forceUpdate();
       },
       changeNewSideDishPrice(sdIndex, newValue) {
-        this.$store.commit(`modifyOrderEntry/${UPDATE_NEW_SIDE_DISH_PRICE}`, {sdIndex: sdIndex, newValue: newValue});
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_PRICE}`, {sdIndex: sdIndex, newValue: newValue});
 
         this.$forceUpdate();
       },
       updateSideDishComboBox(sdIndex, sideDishId) {
-        this.$store.dispatch(`modifyOrderEntry/${UPDATE_SIDE_DISH_ACTION}`, {sdIndex: sdIndex, sideDishId: sideDishId});
+        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_SIDE_DISH_ACTION}`, {sdIndex: sdIndex, sideDishId: sideDishId});
 
         this.$forceUpdate();
       },

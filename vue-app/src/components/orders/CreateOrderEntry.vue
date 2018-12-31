@@ -12,14 +12,6 @@
       <div>
         <order-entry-form></order-entry-form>
 
-        <side-dishes-input></side-dishes-input>
-
-        <div class="form-group">
-          <h4>Additional Comments</h4>
-          <textarea class="form-control" :value="additionalComments"
-                    @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"></textarea>
-        </div>
-
         <button class="btn btn-block btn-success" @click="submitForm">
           Save order
         </button>
@@ -46,14 +38,13 @@
   import {NAMESPACE_SHOW_ORDER} from "../../store/modules/ShowOrderState";
   import {
     NAMESPACE_MODIFY_ORDER_ENTRY,
-    CANCEL_ENTRY_CREATE_OR_EDIT,
+    CANCEL_DISH_ENTRY_MODIFICATION,
     SAVE_ORDER_ENTRY_ACTION,
     SETUP_CREATE_ORDER_ENTRY_ACTION,
     SET_ENTRY_LOADING_FALSE,
     SET_ENTRY_LOADING_TRUE,
-    UPDATE_ADDITIONAL_COMMENTS
   } from "../../store/modules/ModifyOrderEntryState";
-  import {mapState, mapMutations} from "vuex"
+  import {mapState} from "vuex"
 
   export default {
     name: 'create-order-entry',
@@ -76,11 +67,8 @@
         return false;
       },
       cancelEdit() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
-      },
-      ...mapMutations(NAMESPACE_MODIFY_ORDER_ENTRY, [
-        UPDATE_ADDITIONAL_COMMENTS
-      ])
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
+      }
     },
     computed: {
       ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [

@@ -1,7 +1,7 @@
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "./ShowOrderState";
-import {CANCEL_ENTRY_CREATE_OR_EDIT, NAMESPACE_MODIFY_ORDER_ENTRY} from "./ModifyOrderEntryState";
+import {CANCEL_DISH_ENTRY_MODIFICATION, NAMESPACE_MODIFY_ORDER_ENTRY} from "./ModifyOrderEntryState";
 
 export const INIT_DATA = "INIT_DATA";
 export const UPDATE_RESTAURANT_ID = "UPDATE_RESTAURANT_ID";
@@ -109,7 +109,7 @@ export default {
       OrdersApiConnector.editOrder(order.orderId, order)
         .then(() => {
           this.commit('setLoadingTrue');
-          this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {});
+          this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
           this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.orderId});
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))

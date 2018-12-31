@@ -124,9 +124,9 @@
     NAMESPACE_SHOW_ORDER
   } from "../../store/modules/ShowOrderState"
   import {
-    SET_ENTRY_CREATING,
-    SET_ENTRY_EDITING,
-    CANCEL_ENTRY_CREATE_OR_EDIT,
+    SET_DISH_ENTRY_CREATING,
+    SET_DISH_ENTRY_EDITING,
+    CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY,
   } from "../../store/modules/ModifyOrderEntryState";
 
@@ -168,16 +168,16 @@
         this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
       },
       createEntry() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_CREATING}`, {})
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
       },
-      editEntry(orderEntryId, dishEntryId) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_EDITING}`, {orderEntryId: orderEntryId, dishEntryId: dishEntryId})
+      editDishEntry(orderEntryId, dishEntryId) {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {orderEntryId: orderEntryId, dishEntryId: dishEntryId})
       },
-      deleteEntry(orderEntryId, dishEntryId) {
+      deleteDishEntry(orderEntryId, dishEntryId) {
         this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {orderEntryId: orderEntryId, dishEntryId: dishEntryId})
       },
       cancelEdit() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
       }
     },
     computed: {

@@ -79,7 +79,7 @@
       setAsRejected () {
         return this.$store.dispatch(`showOrder/${SET_ORDER_AS_REJECTED_ACTION}`, { orderId: this.orderId });
       },
-      deleteEntry () {
+      deleteDishEntry () {
         return this.$store.dispatch(`showOrder/${DELETE_ORDER_ACTION}`, { orderId: this.orderId });
       },
     }
