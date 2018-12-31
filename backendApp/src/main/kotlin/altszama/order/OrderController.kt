@@ -20,8 +20,8 @@ class OrderController {
   private lateinit var orderControllerDataService: OrderControllerDataService
 
 
-  @RequestMapping("/orders.json")
-  fun index(): IndexResponse {
+  @RequestMapping("/orders/today.json")
+  fun todayOrders(): TodayOrdersResponse {
     return orderControllerDataService.getIndexData()
   }
 

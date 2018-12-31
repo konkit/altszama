@@ -9,11 +9,11 @@
             <div v-if="this.currentOrderEntries.length > 0">
               <template v-for="orderEntry in this.currentOrderEntries">
                 <template v-for="dishEntry in orderEntry.dishEntries">
-                  <p class="pointer" @click="goToOrder(orderEntry.order.id)" :key="dishEntry.id">
+                  <p class="pointer" @click="goToOrder(orderEntry.orderId)" :key="dishEntry.id">
                     <b>{{dishEntry.dish.name}}</b>
                     from
                     <b>{{dishEntry.dish.restaurant.name}}</b>
-                    (STATUS: {{orderEntry.order.orderState}})
+                    (STATUS: {{orderEntry.orderState}})
                   </p>
                 </template>
               </template>
@@ -32,8 +32,9 @@
       <div class="row justify-content-center">
         <div class="col">
 
-          <a href="#/orders/create" class="btn btn-success pull-right">Create new order &nbsp;<i class="fa fa-plus"
-                                                                                                 aria-hidden="true"></i></a>
+          <a href="#/orders/create" class="btn btn-success pull-right">
+            Create new order &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+          </a>
 
           <h1>Orders today:</h1>
 
@@ -56,8 +57,8 @@
               <tbody>
               <tr @click="goToOrder(order.id)" v-for="order in this.createdOrders" :key="order.id"
                   class="pointer">
-                <td>{{order.restaurant.name}}</td>
-                <td>{{order.orderCreator.username}}</td>
+                <td>{{order.restaurantName}}</td>
+                <td>{{order.orderCreatorUsername}}</td>
               </tr>
               </tbody>
             </table>
@@ -86,8 +87,8 @@
               <tbody>
               <tr @click="goToOrder(order.id)" v-for="order in this.orderingOrders" :key="order.id"
                   class="pointer">
-                <td>{{order.restaurant.name}}</td>
-                <td>{{order.orderCreator.username}}</td>
+                <td>{{order.restaurantName}}</td>
+                <td>{{order.orderCreatorUsername}}</td>
               </tr>
               </tbody>
             </table>
@@ -116,8 +117,8 @@
               <tbody>
               <tr @click="goToOrder(order.id)" v-for="order in this.orderedOrders" :key="order.id"
                   class="pointer">
-                <td>{{order.restaurant.name}}</td>
-                <td>{{order.orderCreator.username}}</td>
+                <td>{{order.restaurantName}}</td>
+                <td>{{order.orderCreatorUsername}}</td>
               </tr>
               </tbody>
             </table>
@@ -146,8 +147,8 @@
               <tbody>
               <tr @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id"
                   class="pointer">
-                <td>{{order.restaurant.name}}</td>
-                <td>{{order.orderCreator.username}}</td>
+                <td>{{order.restaurantName}}</td>
+                <td>{{order.orderCreatorUsername}}</td>
               </tr>
               </tbody>
             </table>

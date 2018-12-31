@@ -58,12 +58,9 @@ class OrderService {
   }
 
   fun updateOrder(orderUpdateRequest: OrderUpdateRequest) {
-    val restaurant = restaurantRepository.findById(orderUpdateRequest.restaurantId!!).get()
-
     val oldOrder = orderRepository.findById(orderUpdateRequest.orderId!!).get()
 
     val updatedOrder = oldOrder.copy(
-        restaurant = restaurant,
         orderDate = orderUpdateRequest.orderDate!!,
         timeOfOrder = orderUpdateRequest.timeOfOrder,
         decreaseInPercent = orderUpdateRequest.decreaseInPercent,

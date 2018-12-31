@@ -37,7 +37,7 @@
     </a>
 
     <!-- delete-order-button -->
-    <a class="btn btn-danger" @click=deleteEntry>
+    <a class="btn btn-danger" @click=deleteDishEntry()>
       Delete &nbsp;
       <i class="fa fa-times" aria-hidden="true"></i>
     </a>

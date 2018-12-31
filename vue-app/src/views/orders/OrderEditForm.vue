@@ -9,29 +9,13 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <h1>Edit order</h1>
+          <h1>Edit order from {{restaurantName}}</h1>
         </div>
       </div>
 
       <errors-component />
 
       <form>
-        <div class="row justify-content-center">
-          <div class="col">
-            <div class="form-group">
-              <label for="restaurant">Restaurant: </label>
-              <v-select
-                  id="restaurant"
-                  :options="this.restaurantsList"
-                  label="name"
-                  :value="this.restaurantsList.find(r => restaurantId === r.id)"
-                  @input="updateRestaurantId($event.id)"
-              >
-              </v-select>
-            </div>
-          </div>
-        </div>
-
         <div class="row justify-content-center">
           <div class="col-4">
             <h3>Order time</h3>
@@ -176,7 +160,6 @@
     UPDATE_DECREASE_IN_PERCENT,
     UPDATE_TIME_OF_ORDER,
     UPDATE_ORDER_DATE,
-    UPDATE_RESTAURANT_ID,
     INIT_EDIT_ORDER_ACTION,
     UPDATE_ORDER_ACTION,
   } from "../../store/modules/EditOrderState"
@@ -205,9 +188,6 @@
         this.$store.dispatch(`editOrder/${UPDATE_ORDER_ACTION}`);
 
         return false;
-      },
-      updateRestaurantId(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_RESTAURANT_ID}`, newValue);
       },
       updateOrderDate(newOrderDate) {
         this.$store.commit(`editOrder/${UPDATE_ORDER_DATE}`, newOrderDate);
@@ -239,8 +219,7 @@
         return this.$store.state.loading;
       },
       ...mapState("editOrder", [
-        "restaurantsList",
-        "restaurantId",
+        "restaurantName",
         "orderDate",
         "timeOfOrder",
         "decreaseInPercent",

@@ -4,7 +4,6 @@ import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "./ShowOrderState";
 import {CANCEL_DISH_ENTRY_MODIFICATION, NAMESPACE_MODIFY_ORDER_ENTRY} from "./ModifyOrderEntryState";
 
 export const INIT_DATA = "INIT_DATA";
-export const UPDATE_RESTAURANT_ID = "UPDATE_RESTAURANT_ID";
 export const UPDATE_ORDER = "UPDATE_ORDER";
 export const UPDATE_ORDER_DATE = "UPDATE_ORDER_DATE";
 export const UPDATE_TIME_OF_ORDER = "UPDATE_TIME_OF_ORDER";
@@ -21,11 +20,10 @@ export const UPDATE_ORDER_ACTION = "UPDATE_ORDER_ACTION";
 export default {
   namespaced: true,
   state: {
-    restaurantsList: [],
-
     // Order
     orderId: 0,
     restaurantId: 0,
+    restaurantName: "",
     orderDate: "",
     timeOfOrder: "",
     decreaseInPercent: "",
@@ -37,10 +35,9 @@ export default {
   },
   mutations: {
     [INIT_DATA] (state, payload) {
-      state.restaurantsList = payload.restaurantsList;
       state.orderId = payload.orderId;
 
-      state.restaurantId = payload.order.restaurantId;
+      state.restaurantName = payload.order.restaurantName;
       state.orderDate = payload.order.orderDate;
       state.timeOfOrder = payload.order.timeOfOrder;
       state.decreaseInPercent = payload.order.decreaseInPercent;
@@ -49,9 +46,6 @@ export default {
       state.paymentByCash = payload.order.paymentByCash;
       state.paymentByBankTransfer = payload.order.paymentByBankTransfer;
       state.bankTransferNumber = payload.order.bankTransferNumber || "";
-    },
-    [UPDATE_RESTAURANT_ID] (state, newValue) {
-      state.restaurantId = newValue
     },
     [UPDATE_ORDER] (state, newOrder) {
       state.order = newOrder;
@@ -94,7 +88,6 @@ export default {
     },
     [UPDATE_ORDER_ACTION] ({state}) {
       const order = {
-        restaurantId: state.restaurantId,
         orderId: state.orderId,
         orderDate: state.orderDate,
         timeOfOrder: state.timeOfOrder,

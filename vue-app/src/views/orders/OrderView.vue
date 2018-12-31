@@ -1,16 +1,16 @@
 <template>
   <LoadingView>
-    <div v-if="isStateOrdering()">
+    <div v-if="isStateOrdering">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col">
-            <back-button :href="'#/orders/show/' + order.id"></back-button>
+            <back-button :href="'#/orders/show/' + orderId"></back-button>
           </div>
         </div>
 
         <div class="row justify-content-center">
           <div class="col">
-            <h1>Ordering from {{order.restaurant.name}}</h1>
+            <h1>Ordering from {{restaurantName}}</h1>
 
             <div class="alert alert-warning">
               <p>Order is now locked, so no one should order anything else now.</p>
@@ -19,7 +19,7 @@
             </div>
 
             <h4>Now please call:</h4>
-            <h4>tel. {{order.restaurant.telephone}}</h4>
+            <h4>tel. {{restaurantTelephone}}</h4>
             <h4>make an order and then enter approximate delivery time and click "Order placed"</h4>
 
           </div>
@@ -32,14 +32,20 @@
 
             <form id="place-order-form">
               <div class="form-group">
-                <masked-input class="form-control" type="text" v-model="approxTimeOfDelivery"
-                              :mask="[/\d/,/\d/,':',/\d/,/\d/]" :keepCharPositions="true"/>
+                <masked-input
+                    class="form-control"
+                    type="text"
+                    :value="approxTimeOfDelivery"
+                    @input="updateApproxTimeOfDelivery($event.target.value)"
+                    :mask="[/\d/,/\d/,':',/\d/,/\d/]"
+                    :keepCharPositions="true"
+                />
               </div>
             </form>
 
             <button class="btn btn-block btn-success" @click="submitForm">
               Order placed!
-              &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"/>
+              &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
             </button>
 
           </div>
@@ -47,7 +53,7 @@
       </div>
 
       <div class="container">
-        <errors-component />
+        <errors-component/>
       </div>
 
       <div class="container">
@@ -65,7 +71,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="entry in this.groupedEntries" :key="entry.id">
+              <tr v-for="entry in groupedEntries" :key="entry.id">
                 <td>{{entry.eatingPeopleCount}}x {{entry.dish.name}} (
                   <price :data-price="entry.dish.price"></price>
                   )
@@ -105,55 +111,55 @@
 
             <h4>Price summary</h4>
 
-            <dt v-if="order.decreaseInPercent != 0 || order.deliveryCostPerEverybody != 0">
+            <dt v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
               Base price :
             </dt>
-            <dd v-if="order.decreaseInPercent != 0 || order.deliveryCostPerEverybody != 0">
-              <price :data-price="this.basePriceSum"/>
+            <dd v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
+              <price :data-price="basePriceSum"/>
             </dd>
 
-            <dt v-if="order.decreaseInPercent != 0">
+            <dt v-if="orderDecreaseInPercent !== 0">
               Price decrease :
             </dt>
-            <dd v-if="order.decreaseInPercent != 0">
-              - {{order.decreaseInPercent}} %
+            <dd v-if="orderDecreaseInPercent !== 0">
+              - {{orderDecreaseInPercent}} %
             </dd>
 
-            <dt v-if="order.deliveryCostPerEverybody != 0">
+            <dt v-if="orderDeliveryCostPerEverybody !== 0">
               Delivery :
             </dt>
-            <dd v-if="order.deliveryCostPerEverybody != 0">
+            <dd v-if="orderDeliveryCostPerEverybody !== 0">
               +
-              <price :data-price="order.deliveryCostPerEverybody"/>
+              <price :data-price="orderDeliveryCostPerEverybody"/>
             </dd>
 
-            <dt v-if="order.deliveryCostPerDish != 0">
+            <dt v-if="orderDeliveryCostPerDish !== 0">
               Delivery per dish:
             </dt>
-            <dd v-if="order.deliveryCostPerDish != 0">
+            <dd v-if="orderDeliveryCostPerDish !== 0">
               +
-              <price :data-price="order.deliveryCostPerDish"/>
-              * {{this.allEatingPeopleCount}}
+              <price :data-price="orderDeliveryCostPerDish"/>
+              * {{allEatingPeopleCount}}
             </dd>
 
             <dt>Total:</dt>
             <dd><b>
-              <price :data-price="this.totalPrice"/>
+              <price :data-price="totalPrice"/>
             </b></dd>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="isStateNotOrdering()">
+    <div v-if="isStateNotOrdering">
       <navigation user-name="Tmp name"></navigation>
 
       <div class="container">
-        <back-button :href="'#/orders/show/' + order.id"></back-button>
+        <back-button :href="'#/orders/show/' + orderId"></back-button>
 
         <div class="row justify-content-center">
           <div class="col">
-            <h1>Ordering from {{order.restaurant.name}}</h1>
+            <h1>Ordering from {{restaurantName}}</h1>
           </div>
         </div>
       </div>
@@ -163,7 +169,7 @@
           <div class="col">
             <h4>Sorry, the order is empty</h4>
             <p>
-              <back-button :href="'#/orders/show/' + order.id"></back-button>
+              <back-button :href="'#/orders/show/' + orderId"></back-button>
             </p>
           </div>
         </div>
@@ -179,7 +185,7 @@
   import Price from '../../components/commons/PriceElement.vue'
   import Navigation from '../../components/Navigation.vue'
   import LoadingView from "../../components/commons/LoadingView";
-  import {MAKE_AN_ORDER_ACTION, FETCH_ORDER_VIEW_DATA_ACTION} from "../../store/modules/OrderViewState"
+  import {MAKE_AN_ORDER_ACTION, FETCH_ORDER_VIEW_DATA_ACTION, UPDATE_APPROX_TIME_OF_DELIVERY} from "../../store/modules/OrderViewState"
   import {mapState} from "vuex"
 
   export default {
@@ -192,29 +198,35 @@
       this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
     },
     methods: {
-      submitForm () {
-        let errorsComponent = this.$refs.errorsComponent;
-
-        this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, { errorsComponent: errorsComponent });
+      submitForm() {
+        this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, {approxTimeOfDelivery: this.approxTimeOfDelivery});
 
         return false
       },
-      isStateOrdering () {
-        return this.order.orderState === 'ORDERING';
-      },
-      isStateNotOrdering () {
-        return this.order.orderState !== 'ORDERING';
+      updateApproxTimeOfDelivery() {
+        this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`)
       }
     },
     computed: {
       ...mapState("orderView", [
-        "order",
+        "orderState",
+        "orderDecreaseInPercent",
+        "orderDeliveryCostPerEverybody",
+        "orderDeliveryCostPerDish",
+        "restaurantName",
+        "restaurantTelephone",
         "groupedEntries",
         "allEatingPeopleCount",
         "basePriceSum",
         "totalPrice",
-        "approxTimeOfDelivery",
-      ])
+        "approxTimeOfDelivery"
+      ]),
+      isStateOrdering() {
+        return this.orderState === 'ORDERING';
+      },
+      isStateNotOrdering() {
+        return this.orderState !== 'ORDERING';
+      }
     },
     components: {
       LoadingView,

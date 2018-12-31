@@ -36,17 +36,17 @@ class OrderControllerDataService {
   private lateinit var authService: AuthService
 
 
-  fun getIndexData(): IndexResponse {
+  fun getIndexData(): TodayOrdersResponse {
     val currentUser = authService.currentUser()
 
     val todaysOrders = orderRepository.findByOrderDate(LocalDate.now())
     val usersOrderEntries = orderEntryRepository.findByUser(currentUser)
 
-    return IndexResponse.create(todaysOrders, usersOrderEntries)
+    return TodayOrdersResponse.create(todaysOrders, usersOrderEntries)
   }
 
   fun getAllOrdersData(): AllOrdersResponse {
-    return AllOrdersResponse(orderRepository.findAll())
+    return AllOrdersResponse.fromOrderList(orderRepository.findAll())
   }
 
   fun getShowData(orderId: String): ShowResponse {
@@ -76,6 +76,6 @@ class OrderControllerDataService {
   }
 
   fun getEditData(@PathVariable orderId: String): EditResponse {
-    return EditResponse(orderRepository.findById(orderId).get(), restaurantRepository.findAll())
+    return EditResponse.create(orderRepository.findById(orderId).get())
   }
 }

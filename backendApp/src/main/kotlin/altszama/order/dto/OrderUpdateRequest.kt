@@ -18,9 +18,6 @@ data class OrderUpdateRequest(
     @IsOrderOwner
     val orderId: String?,
 
-    @RestaurantExists
-    val restaurantId: String?,
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull("Order date is empty.")
     val orderDate: LocalDate?,

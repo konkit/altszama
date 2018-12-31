@@ -63,7 +63,7 @@ export default {
   },
 
   fetchTodaysOrders () {
-    return ApiConnector.makeGet("/orders.json")
+    return ApiConnector.makeGet("/orders/today.json")
       .then(response => {
         return {
           currentOrderEntries: response.data.currentOrderEntries,
@@ -79,7 +79,12 @@ export default {
     return ApiConnector.makeGet("/orders/" + orderId + "/order_view.json")
         .then(response => {
           return {
-            order: response.data.order,
+            orderState: response.data.orderState,
+            orderDecreaseInPercent: response.data.orderDecreaseInPercent,
+            orderDeliveryCostPerEverybody: response.data.orderDeliveryCostPerEverybody,
+            orderDeliveryCostPerDish: response.data.orderDeliveryCostPerDish,
+            restaurantName: response.data.restaurantName,
+            restaurantTelephone: response.data.restaurantTelephone,
             groupedEntries: response.data.groupedEntries,
             allEatingPeopleCount: response.data.allEatingPeopleCount,
             basePriceSum: response.data.basePriceSum,
@@ -119,17 +124,10 @@ export default {
   getOrderEditData (orderId) {
     return ApiConnector.makeGet("/orders/" + orderId + "/edit.json")
         .then(response => {
-          let restaurantId;
-          if (response.data.order.restaurant != null) {
-            restaurantId = response.data.order.restaurant.id
-          } else {
-            restaurantId = response.data.restaurantsList[0].id;
-          }
-
           return {
-            restaurantsList: response.data.restaurantsList,
             order: {
-              restaurantId: restaurantId,
+              restaurantId: response.data.order.restaurantId,
+              restaurantName: response.data.order.restaurantName,
               orderDate: response.data.order.orderDate,
               timeOfOrder: response.data.order.timeOfOrder,
               decreaseInPercent: response.data.order.decreaseInPercent,

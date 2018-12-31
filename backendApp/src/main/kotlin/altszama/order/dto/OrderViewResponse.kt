@@ -4,12 +4,17 @@ import altszama.auth.User
 import altszama.dish.Dish
 import altszama.dish.SideDish
 import altszama.order.Order
-import altszama.orderEntry.DishEntry
+import altszama.order.OrderState
 import altszama.orderEntry.OrderEntry
 
 
 data class OrderViewResponse(
-    val order: Order,
+    val orderState: OrderState,
+    val orderDecreaseInPercent: Int,
+    val orderDeliveryCostPerEverybody: Int,
+    val orderDeliveryCostPerDish: Int,
+    val restaurantName: String,
+    val restaurantTelephone: String,
     val groupedEntries: List<GroupedOrderEntry>,
     val allEatingPeopleCount: Int,
     val basePriceSum: Int,
@@ -36,7 +41,18 @@ data class OrderViewResponse(
       val basePriceSum = Order.getBasePrice(entries)
       val orderTotalPrice = Order.getTotalPrice(order, entries)
 
-      return OrderViewResponse(order, groupedUserEntries, entries.size, basePriceSum, orderTotalPrice)
+      return OrderViewResponse(
+          order.orderState,
+          order.decreaseInPercent,
+          order.deliveryCostPerEverybody,
+          order.deliveryCostPerDish,
+          order.restaurant.name,
+          order.restaurant.telephone,
+          groupedUserEntries,
+          entries.size,
+          basePriceSum,
+          orderTotalPrice
+      )
     }
 
     private fun createGroupedUserEntries(entries: List<OrderEntry>): List<GroupedOrderEntry> {

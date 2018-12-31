@@ -23,9 +23,9 @@
             <tr @click="goToOrder(order.id)" v-for="order in allOrdersList" :key="order.id"
                 :data-href="'/orders/show/' + order.id" class="pointer">
               <td>{{order.orderDate}}</td>
-              <td>{{order.restaurant.name}}</td>
+              <td>{{order.restaurantName}}</td>
               <td>{{order.orderState}}</td>
-              <td>{{order.orderCreator.username}}</td>
+              <td>{{order.orderCreatorUsername}}</td>
             </tr>
             </tbody>
           </table>
