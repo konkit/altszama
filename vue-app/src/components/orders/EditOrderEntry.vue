@@ -20,7 +20,6 @@
                     @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"></textarea>
         </div>
 
-
         <button class="btn btn-block btn-success" @click="submitForm">
           Update order
         </button>
@@ -44,9 +43,6 @@
 
   import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
-  import {
-    NAMESPACE_SHOW_ORDER
-  } from "../../store/modules/ShowOrderState";
   import {mapState, mapMutations} from "vuex"
   import {
     UPDATE_ORDER_ENTRY_ACTION,
@@ -87,18 +83,7 @@
     computed: {
       ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
         "loadingEntry",
-
-        "orderId",
-        "dishId",
         "additionalComments",
-        "newDish",
-        "newDishName",
-        "newDishPrice",
-        "chosenSideDishes",
-      ]),
-      ...mapState(NAMESPACE_SHOW_ORDER, [
-        "order",
-        "allDishesInRestaurant"
       ]),
     },
     components: {

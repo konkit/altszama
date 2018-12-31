@@ -1,13 +1,13 @@
 <template>
   <div class="wrapper">
     <template v-if="this.loadingEntry === false">
+      <errors-component/>
+
       <div class="pull-right">
         <button type="button" class="btn btn-light" @click="cancelEdit()">
           Cancel
         </button>
       </div>
-
-      <errors-component/>
 
       <div>
         <order-entry-form></order-entry-form>
