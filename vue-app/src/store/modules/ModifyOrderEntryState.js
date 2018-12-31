@@ -7,32 +7,38 @@ export const NAMESPACE_MODIFY_ORDER_ENTRY = "modifyOrderEntry";
 
 export const SET_ENTRY_LOADING_TRUE = "SET_ENTRY_LOADING_TRUE";
 export const SET_ENTRY_LOADING_FALSE = "SET_ENTRY_LOADING_FALSE";
-export const UPDATE_ORDER_ID = "UPDATE_ORDER_ID";
+
+export const SET_ENTRY_CREATING = "SET_ENTRY_CREATING";
+
+export const SET_ENTRY_EDITING = "SET_ENTRY_EDITING";
+export const SET_NEW_DISH_FLAG = "SET_NEW_DISH_FLAG";
+export const CANCEL_ENTRY_CREATE_OR_EDIT = "CANCEL_ENTRY_CREATE_OR_EDIT";
+
 export const UPDATE_DISH_ID = "UPDATE_DISH_ID";
 export const UPDATE_ADDITIONAL_COMMENTS = "UPDATE_ADDITIONAL_COMMENTS";
-export const UPDATE_NEW_DISH = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH";
+
 export const UPDATE_NEW_DISH_NAME = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH_NAME";
 export const UPDATE_NEW_DISH_PRICE = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH_PRICE";
-export const UPDATE_CHOSEN_SIDE_DISHES = "UPDATE_CHOSEN_SIDE_DISHES";
-export const INIT_CREATE_ORDER_ENTRY_ACTION = "INIT_CREATE_ORDER_ENTRY_ACTION";
-export const INIT_EDIT_ORDER_ENTRY_ACTION = "INIT_EDIT_ORDER_ENTRY_ACTION";
 export const UPDATE_NEW_SIDE_DISH_NAME = "UPDATE_NEW_SIDE_DISH_NAME";
 export const UPDATE_NEW_SIDE_DISH_PRICE = "UPDATE_NEW_SIDE_DISH_PRICE";
 export const SET_SIDE_DISH = "SET_SIDE_DISH";
-export const UPDATE_SIDE_DISH_ACTION = "UPDATE_SIDE_DISH_ACTION";
-export const ADD_SIDE_DISH_ACTION = "ADD_SIDE_DISH_ACTION";
 export const SET_SIDE_DISH_AS_NEW = "SET_SIDE_DISH_AS_NEW";
 export const SET_SIDE_DISH_AS_EXISTING = "SET_SIDE_DISH_AS_EXISTING";
-export const REMOVE_SIDE_DISH = "REMOVE_SIDE_DISH";
+
 export const CLEAR_EDITED_SIDE_DISHES = "CLEAR_EDITED_SIDE_DISHES";
-export const SET_NEW_DISH_FLAG = "SET_NEW_DISH_FLAG";
-export const SET_ENTRY_CREATING = "SET_ENTRY_CREATING";
-export const SET_ENTRY_EDITING = "SET_ENTRY_EDITING";
-export const CANCEL_ENTRY_CREATE_OR_EDIT = "CANCEL_ENTRY_CREATE_OR_EDIT";
-export const SAVE_ORDER_ENTRY_ACTION = "SAVE_ORDER_ENTRY_ACTION";
-export const EDIT_ORDER_ENTRY_ACTION = "EDIT_ORDER_ENTRY_ACTION";
+
+export const ADD_SIDE_DISH = "ADD_SIDE_DISH";
+export const REMOVE_SIDE_DISH = "REMOVE_SIDE_DISH";
+
 export const SET_INITIAL_CREATED_ORDER_ENTRY = "SET_INITIAL_CREATED_ORDER_ENTRY";
 export const SET_INITIAL_EDITED_ORDER_ENTRY = "SET_INITIAL_EDITED_ORDER_ENTRY";
+
+export const SETUP_CREATE_ORDER_ENTRY_ACTION = "SETUP_CREATE_ORDER_ENTRY_ACTION";
+export const SETUP_EDIT_ORDER_ENTRY_ACTION = "SETUP_EDIT_ORDER_ENTRY_ACTION";
+export const ADD_SIDE_DISH_ACTION = "ADD_SIDE_DISH_ACTION";
+export const UPDATE_SIDE_DISH_ACTION = "UPDATE_SIDE_DISH_ACTION";
+export const SAVE_ORDER_ENTRY_ACTION = "SAVE_ORDER_ENTRY_ACTION";
+export const UPDATE_ORDER_ENTRY_ACTION = "UPDATE_ORDER_ENTRY_ACTION";
 
 export default {
   namespaced: true,
@@ -71,17 +77,11 @@ export default {
       state.orderEntryId = "";
       state.dishEntryId = "";
     },
-    [UPDATE_ORDER_ID] (state, newValue) {
-      state.orderId = newValue;
-    },
     [UPDATE_DISH_ID] (state, newValue) {
       state.dishId = newValue;
     },
     [UPDATE_ADDITIONAL_COMMENTS] (state, newValue) {
       state.additionalComments = newValue;
-    },
-    [UPDATE_NEW_DISH] (state, newValue) {
-      state.newDish = newValue;
     },
     [UPDATE_NEW_DISH_NAME] (state, newValue) {
       state.newDishName = newValue;
@@ -89,14 +89,10 @@ export default {
     [UPDATE_NEW_DISH_PRICE] (state, newValue) {
       state.newDishPrice = newValue;
     },
-    [UPDATE_CHOSEN_SIDE_DISHES] (state, newValue) {
-      state.newDishPrice = newValue;
-    },
     [SET_ENTRY_LOADING_TRUE] (state) {
       state.loadingEntry = true;
     },
     [SET_ENTRY_LOADING_FALSE] (state) {
-      console.log("Set entry loading false");
       state.loadingEntry = false;
     },
     [UPDATE_NEW_SIDE_DISH_NAME] (state, {sdIndex, newValue}) {
@@ -113,6 +109,9 @@ export default {
     },
     [SET_SIDE_DISH_AS_EXISTING] (state, {sdIndex}) {
       Vue.set(state.chosenSideDishes[sdIndex], "isNew", false);
+    },
+    [ADD_SIDE_DISH] (state, sideDishToAdd) {
+      state.chosenSideDishes.push(sideDishToAdd);
     },
     [REMOVE_SIDE_DISH] (state, {sdIndex}) {
       state.chosenSideDishes.splice(sdIndex, 1)
@@ -148,6 +147,24 @@ export default {
     }
   },
   actions: {
+    [SETUP_CREATE_ORDER_ENTRY_ACTION] ({state, rootState}) {
+      const orderId = rootState.showOrder.order.id;
+
+      let dishId;
+      if (rootState.showOrder.allDishesInRestaurant.length > 0) {
+        dishId = rootState.showOrder.allDishesInRestaurant[0].id;
+      } else {
+        dishId = null
+      }
+
+      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_CREATED_ORDER_ENTRY}`, {orderId: orderId, dishId: dishId})
+    },
+    [SETUP_EDIT_ORDER_ENTRY_ACTION] ({state, rootState}, {dishEntry}) {
+      const orderId = rootState.showOrder.order.id;
+
+      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_EDITED_ORDER_ENTRY}`, {orderId: orderId, dishEntry: dishEntry});
+      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
+    },
     [SAVE_ORDER_ENTRY_ACTION] ({state}) {
       const orderId = state.orderId;
 
@@ -170,12 +187,10 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    [EDIT_ORDER_ENTRY_ACTION] ({state, rootState, getters}, {orderEntryId}) {
-      console.log("state on save: ", JSON.stringify(state));
-
+    [UPDATE_ORDER_ENTRY_ACTION] ({state, rootState, getters}, {orderEntryId}) {
       const orderId = state.orderId;
       const orderEntryToUpdate = {
-        orderId: state.orderId,
+        orderId: orderId,
         dishId: state.dishId,
         dishEntryId: state.dishEntryId,
         additionalComments: state.additionalComments,
@@ -185,7 +200,7 @@ export default {
         chosenSideDishes: state.chosenSideDishes
       };
 
-      OrdersApiConnector.editOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
+      OrdersApiConnector.updateOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
         .then(() => {
           this.commit('setLoadingTrue');
           this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {});
@@ -208,27 +223,7 @@ export default {
       sideDishToAdd.newSideDishName = "";
       sideDishToAdd.newSideDishPrice = 0;
 
-      state.chosenSideDishes.push(sideDishToAdd);
-    },
-    [INIT_CREATE_ORDER_ENTRY_ACTION] ({state, rootState}) {
-      const orderId = rootState.showOrder.order.id;
-
-      let dishId;
-      if (rootState.showOrder.allDishesInRestaurant.length > 0) {
-        dishId = rootState.showOrder.allDishesInRestaurant[0].id;
-      } else {
-        dishId = null
-      }
-
-      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_CREATED_ORDER_ENTRY}`, {orderId: orderId, dishId: dishId})
-    },
-    [INIT_EDIT_ORDER_ENTRY_ACTION] ({state, rootState}, {dishEntry}) {
-      console.log("Dupa1", dishEntry);
-
-      const orderId = rootState.showOrder.order.id;
-
-      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_EDITED_ORDER_ENTRY}`, {orderId: orderId, dishEntry: dishEntry});
-      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
+      this.commit(`${NAMESPACE_SHOW_ORDER}/${ADD_SIDE_DISH}`, sideDishToAdd);
     },
     [UPDATE_SIDE_DISH_ACTION] ({state, rootState}, {sdIndex, sideDishId}) {
       const newSideDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId].find(sd => sd.id === sideDishId);

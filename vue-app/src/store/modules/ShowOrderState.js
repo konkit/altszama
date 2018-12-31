@@ -58,19 +58,19 @@ export default {
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
 
-    [UNLOCK_ORDER_ACTION] ({state}, {orderId}) {
-      OrdersApiConnector.setOrderAsCreated(orderId)
+    [UNLOCK_ORDER_ACTION] ({state}, {}) {
+      OrdersApiConnector.setOrderAsCreated(state.order.id)
         .then(() => {
           this.commit('setLoadingTrue');
-          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    [DELETE_DISH_ENTRY_ACTION] ({state}, {orderId, orderEntryId, dishEntryId}) {
+    [DELETE_DISH_ENTRY_ACTION] ({state}, {orderEntryId, dishEntryId}) {
       OrdersApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
         .then(() => {
           this.commit('setLoadingTrue');
-          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

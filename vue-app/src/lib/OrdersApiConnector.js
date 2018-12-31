@@ -18,7 +18,7 @@ export default {
     return ApiConnector.makePost(action, formData)
   },
 
-  editOrderEntry (orderId, orderEntryId, editedOrderEntry) {
+  updateOrderEntry (orderId, orderEntryId, editedOrderEntry) {
     const action = "/order_entries/update";
 
     let formData = {

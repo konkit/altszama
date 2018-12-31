@@ -49,9 +49,9 @@
   } from "../../store/modules/ShowOrderState";
   import {mapState, mapMutations} from "vuex"
   import {
-    EDIT_ORDER_ENTRY_ACTION,
+    UPDATE_ORDER_ENTRY_ACTION,
     CANCEL_ENTRY_CREATE_OR_EDIT,
-    INIT_EDIT_ORDER_ENTRY_ACTION,
+    SETUP_EDIT_ORDER_ENTRY_ACTION,
     SET_ENTRY_LOADING_TRUE,
     UPDATE_ADDITIONAL_COMMENTS,
     NAMESPACE_MODIFY_ORDER_ENTRY
@@ -67,13 +67,13 @@
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`)
     },
     mounted() {
-      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${INIT_EDIT_ORDER_ENTRY_ACTION}`, {dishEntry: this.dishEntry})
+      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SETUP_EDIT_ORDER_ENTRY_ACTION}`, {dishEntry: this.dishEntry})
     },
     methods: {
       submitForm(e) {
         e.preventDefault();
 
-        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${EDIT_ORDER_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id});
+        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ORDER_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id});
 
         return false;
       },

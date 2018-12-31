@@ -93,11 +93,11 @@
       markAsPaid (orderEntryId) {
         this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
-      deleteEntry () {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {orderId: this.order.id, orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id});
-      },
       editEntry () {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_EDITING}`, {"orderEntryId": this.orderEntry.id, "dishEntryId": this.dishEntry.id})
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_EDITING}`, {orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id})
+      },
+      deleteEntry () {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id});
       },
     },
     computed: {

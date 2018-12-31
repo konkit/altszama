@@ -128,8 +128,6 @@
     SET_ENTRY_EDITING,
     CANCEL_ENTRY_CREATE_OR_EDIT,
     NAMESPACE_MODIFY_ORDER_ENTRY,
-    INIT_EDIT_ORDER_ENTRY_ACTION,
-    SET_ENTRY_LOADING_FALSE,
   } from "../../store/modules/ModifyOrderEntryState";
 
   export default {
@@ -169,21 +167,14 @@
       unlockOrder() {
         this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
       },
-      deleteEntry(orderEntryId, dishEntryId) {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
-          orderId: this.orderId,
-          orderEntryId: orderEntryId,
-          dishEntryId: dishEntryId
-        })
-      },
       createEntry() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_CREATING}`, {})
       },
       editEntry(orderEntryId, dishEntryId) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_EDITING}`, {
-          "orderEntryId": orderEntryId,
-          "dishEntryId": dishEntryId
-        })
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_EDITING}`, {orderEntryId: orderEntryId, dishEntryId: dishEntryId})
+      },
+      deleteEntry(orderEntryId, dishEntryId) {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {orderEntryId: orderEntryId, dishEntryId: dishEntryId})
       },
       cancelEdit() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
