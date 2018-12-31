@@ -4,7 +4,7 @@
       <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
 
         <div v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
-          <button type="button" class="btn btn-light" @click="editEntry(orderEntry.id, dishEntry.id)">
+          <button type="button" class="btn btn-light" @click="editEntry()">
             <i class="fa fa-pencil" aria-hidden="true"></i>
           </button>
 
@@ -55,8 +55,9 @@
     CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
     MARK_ORDER_ENTRY_AS_PAID_ACTION,
     DELETE_DISH_ENTRY_ACTION,
-    SET_ENTRY_EDITING
+    NAMESPACE_SHOW_ORDER
   } from "../../store/modules/ShowOrderState";
+  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_ENTRY_EDITING} from "../../store/modules/ModifyOrderEntryState";
   import {mapState} from "vuex";
 
   export default {
@@ -87,20 +88,20 @@
         }
       },
       confirmAsPaid (orderEntryId) {
-        this.$store.dispatch(`showOrder/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
       markAsPaid (orderEntryId) {
-        this.$store.dispatch(`showOrder/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
       },
       deleteEntry () {
-        this.$store.dispatch(`showOrder/${DELETE_DISH_ENTRY_ACTION}`, {orderId: this.order.id, orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id});
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {orderId: this.order.id, orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id});
       },
       editEntry () {
-        this.$store.commit(`showOrder/${SET_ENTRY_EDITING}`, {"orderEntryId": this.orderEntry.id, "dishEntryId": this.dishEntry.id})
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_EDITING}`, {"orderEntryId": this.orderEntry.id, "dishEntryId": this.dishEntry.id})
       },
     },
     computed: {
-      ...mapState("showOrder", [
+      ...mapState(NAMESPACE_SHOW_ORDER, [
         "order"
       ])
     },

@@ -1,8 +1,12 @@
 import Vue from "vue";
+import OrdersApiConnector from "../../lib/OrdersApiConnector";
+import ApiConnector from "../../lib/ApiConnector";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "./ShowOrderState";
+
+export const NAMESPACE_MODIFY_ORDER_ENTRY = "modifyOrderEntry";
 
 export const SET_ENTRY_LOADING_TRUE = "SET_ENTRY_LOADING_TRUE";
 export const SET_ENTRY_LOADING_FALSE = "SET_ENTRY_LOADING_FALSE";
-
 export const UPDATE_ORDER_ID = "UPDATE_ORDER_ID";
 export const UPDATE_DISH_ID = "UPDATE_DISH_ID";
 export const UPDATE_ADDITIONAL_COMMENTS = "UPDATE_ADDITIONAL_COMMENTS";
@@ -10,7 +14,8 @@ export const UPDATE_NEW_DISH = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH";
 export const UPDATE_NEW_DISH_NAME = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH_NAME";
 export const UPDATE_NEW_DISH_PRICE = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH_PRICE";
 export const UPDATE_CHOSEN_SIDE_DISHES = "UPDATE_CHOSEN_SIDE_DISHES";
-export const INIT_EDITED_ORDER = "INIT_EDITED_ORDER";
+export const INIT_CREATE_ORDER_ENTRY_ACTION = "INIT_CREATE_ORDER_ENTRY_ACTION";
+export const INIT_EDIT_ORDER_ENTRY_ACTION = "INIT_EDIT_ORDER_ENTRY_ACTION";
 export const UPDATE_NEW_SIDE_DISH_NAME = "UPDATE_NEW_SIDE_DISH_NAME";
 export const UPDATE_NEW_SIDE_DISH_PRICE = "UPDATE_NEW_SIDE_DISH_PRICE";
 export const SET_SIDE_DISH = "SET_SIDE_DISH";
@@ -19,12 +24,25 @@ export const ADD_SIDE_DISH_ACTION = "ADD_SIDE_DISH_ACTION";
 export const SET_SIDE_DISH_AS_NEW = "SET_SIDE_DISH_AS_NEW";
 export const SET_SIDE_DISH_AS_EXISTING = "SET_SIDE_DISH_AS_EXISTING";
 export const REMOVE_SIDE_DISH = "REMOVE_SIDE_DISH";
-
+export const CLEAR_EDITED_SIDE_DISHES = "CLEAR_EDITED_SIDE_DISHES";
+export const SET_NEW_DISH_FLAG = "SET_NEW_DISH_FLAG";
+export const SET_ENTRY_CREATING = "SET_ENTRY_CREATING";
+export const SET_ENTRY_EDITING = "SET_ENTRY_EDITING";
+export const CANCEL_ENTRY_CREATE_OR_EDIT = "CANCEL_ENTRY_CREATE_OR_EDIT";
+export const SAVE_ORDER_ENTRY_ACTION = "SAVE_ORDER_ENTRY_ACTION";
+export const EDIT_ORDER_ENTRY_ACTION = "EDIT_ORDER_ENTRY_ACTION";
+export const SET_INITIAL_CREATED_ORDER_ENTRY = "SET_INITIAL_CREATED_ORDER_ENTRY";
+export const SET_INITIAL_EDITED_ORDER_ENTRY = "SET_INITIAL_EDITED_ORDER_ENTRY";
 
 export default {
   namespaced: true,
   state: {
     loadingEntry: false,
+
+    isEntryCreating: false,
+    isEntryEdited: false,
+    orderEntryId: "",
+    dishEntryId: "",
 
     orderId: '',
     dishId: '',
@@ -34,20 +52,25 @@ export default {
     newDishPrice: "",
     chosenSideDishes: []
   },
-  getters: {
-    editedOrderEntry (state) {
-      return {
-        orderId: state.orderId,
-        dishId: state.dishId,
-        additionalComments: state.additionalComments,
-        newDish: state.newDish,
-        newDishName: state.newDishName,
-        newDishPrice: state.newDishPrice,
-        chosenSideDishes: state.chosenSideDishes
-      }
-    }
-  },
   mutations: {
+    [SET_ENTRY_CREATING] (state) {
+      state.isEntryCreating = true;
+      state.isEntryEdited = false;
+      state.orderEntryId = "";
+      state.dishEntryId = "";
+    },
+    [SET_ENTRY_EDITING] (state, payload) {
+      state.isEntryCreating = false;
+      state.isEntryEdited = true;
+      state.orderEntryId = payload.orderEntryId;
+      state.dishEntryId = payload.dishEntryId;
+    },
+    [CANCEL_ENTRY_CREATE_OR_EDIT] (state) {
+      state.isEntryCreating = false;
+      state.isEntryEdited = false;
+      state.orderEntryId = "";
+      state.dishEntryId = "";
+    },
     [UPDATE_ORDER_ID] (state, newValue) {
       state.orderId = newValue;
     },
@@ -55,7 +78,7 @@ export default {
       state.dishId = newValue;
     },
     [UPDATE_ADDITIONAL_COMMENTS] (state, newValue) {
-      state.additionalCommentsd = newValue;
+      state.additionalComments = newValue;
     },
     [UPDATE_NEW_DISH] (state, newValue) {
       state.newDish = newValue;
@@ -73,16 +96,8 @@ export default {
       state.loadingEntry = true;
     },
     [SET_ENTRY_LOADING_FALSE] (state) {
+      console.log("Set entry loading false");
       state.loadingEntry = false;
-    },
-    [INIT_EDITED_ORDER] (state, payload) {
-      state.orderId = payload.orderId;
-      state.dishId = payload.dishId;
-      state.additionalComments = payload.additionalComments;
-      state.newDish = payload.newDish;
-      state.newDishName = payload.newDishName;
-      state.newDishPrice = payload.newDishPrice;
-      state.chosenSideDishes = payload.chosenSideDishes;
     },
     [UPDATE_NEW_SIDE_DISH_NAME] (state, {sdIndex, newValue}) {
       state.chosenSideDishes[sdIndex].newSideDishName = newValue
@@ -101,9 +116,83 @@ export default {
     },
     [REMOVE_SIDE_DISH] (state, {sdIndex}) {
       state.chosenSideDishes.splice(sdIndex, 1)
+    },
+    [CLEAR_EDITED_SIDE_DISHES] (state) {
+      state.chosenSideDishes = []
+    },
+    [SET_NEW_DISH_FLAG] (state, newDishValue) {
+      state.newDish = newDishValue;
+
+      if (newDishValue === true) {
+        state.dishId = ""
+      }
+    },
+    [SET_INITIAL_CREATED_ORDER_ENTRY] (state, {orderId, dishId}) {
+      state.orderId = orderId;
+      state.dishId = dishId;
+      state.additionalComments = "";
+      state.newDish = false;
+      state.newDishName = "";
+      state.newDishPrice = 0;
+      state.chosenSideDishes = [];
+    },
+    [SET_INITIAL_EDITED_ORDER_ENTRY] (state, {orderId, dishEntry}) {
+      state.orderId = orderId;
+      state.dishId = dishEntry.dish.id;
+      state.dishEntryId = dishEntry.id;
+      state.additionalComments = dishEntry.additionalComments;
+      state.newDish = false;
+      state.newDishName = "";
+      state.newDishPrice = 0;
+      state.chosenSideDishes = dishEntry.sideDishes || [];
     }
   },
   actions: {
+    [SAVE_ORDER_ENTRY_ACTION] ({state}) {
+      const orderId = state.orderId;
+
+      const orderEntryToSave = {
+        orderId: state.orderId,
+        dishId: state.dishId,
+        dishEntryId: state.dishEntryId,
+        additionalComments: state.additionalComments,
+        newDish: state.newDish,
+        newDishName: state.newDishName,
+        newDishPrice: state.newDishPrice,
+        chosenSideDishes: state.chosenSideDishes
+      };
+
+      OrdersApiConnector.saveOrderEntry(orderId, orderEntryToSave)
+        .then(() => {
+          this.commit('setLoadingTrue');
+          this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {});
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    },
+    [EDIT_ORDER_ENTRY_ACTION] ({state, rootState, getters}, {orderEntryId}) {
+      console.log("state on save: ", JSON.stringify(state));
+
+      const orderId = state.orderId;
+      const orderEntryToUpdate = {
+        orderId: state.orderId,
+        dishId: state.dishId,
+        dishEntryId: state.dishEntryId,
+        additionalComments: state.additionalComments,
+        newDish: state.newDish,
+        newDishName: state.newDishName,
+        newDishPrice: state.newDishPrice,
+        chosenSideDishes: state.chosenSideDishes
+      };
+
+      OrdersApiConnector.editOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
+        .then(() => {
+          this.commit('setLoadingTrue');
+          this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {});
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    },
     [ADD_SIDE_DISH_ACTION] ({state, rootState}) {
       const sideDishesForGivenDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId];
       let sideDishToAdd = {};
@@ -121,9 +210,29 @@ export default {
 
       state.chosenSideDishes.push(sideDishToAdd);
     },
+    [INIT_CREATE_ORDER_ENTRY_ACTION] ({state, rootState}) {
+      const orderId = rootState.showOrder.order.id;
+
+      let dishId;
+      if (rootState.showOrder.allDishesInRestaurant.length > 0) {
+        dishId = rootState.showOrder.allDishesInRestaurant[0].id;
+      } else {
+        dishId = null
+      }
+
+      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_CREATED_ORDER_ENTRY}`, {orderId: orderId, dishId: dishId})
+    },
+    [INIT_EDIT_ORDER_ENTRY_ACTION] ({state, rootState}, {dishEntry}) {
+      console.log("Dupa1", dishEntry);
+
+      const orderId = rootState.showOrder.order.id;
+
+      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_EDITED_ORDER_ENTRY}`, {orderId: orderId, dishEntry: dishEntry});
+      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
+    },
     [UPDATE_SIDE_DISH_ACTION] ({state, rootState}, {sdIndex, sideDishId}) {
       const newSideDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId].find(sd => sd.id === sideDishId);
-      this.commit(`showOrder/${SET_SIDE_DISH}`, newSideDish);
+      this.commit(`${NAMESPACE_SHOW_ORDER}/${SET_SIDE_DISH}`, newSideDish);
     },
   }
 };

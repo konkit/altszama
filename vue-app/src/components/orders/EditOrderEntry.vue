@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <template v-if="this.loadingEntry === false">
-      <errors-component />
+      <errors-component/>
 
       <div class="pull-right">
         <button type="button" class="btn btn-light" @click="cancelEdit()">
@@ -16,7 +16,8 @@
 
         <div class="form-group">
           <h4>Additional Comments</h4>
-          <textarea class="form-control" :value="additionalComments" @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"></textarea>
+          <textarea class="form-control" :value="additionalComments"
+                    @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"></textarea>
         </div>
 
 
@@ -44,11 +45,17 @@
   import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
   import {
-    CANCEL_ENTRY_CREATE_OR_EDIT,
-    EDIT_ORDER_ENTRY_ACTION,
+    NAMESPACE_SHOW_ORDER
   } from "../../store/modules/ShowOrderState";
-  import {mapState, mapMutations, mapGetters} from "vuex"
-  import {INIT_EDITED_ORDER, SET_ENTRY_LOADING_FALSE, SET_ENTRY_LOADING_TRUE, UPDATE_ADDITIONAL_COMMENTS} from "../../store/modules/ModifyOrderEntryState";
+  import {mapState, mapMutations} from "vuex"
+  import {
+    EDIT_ORDER_ENTRY_ACTION,
+    CANCEL_ENTRY_CREATE_OR_EDIT,
+    INIT_EDIT_ORDER_ENTRY_ACTION,
+    SET_ENTRY_LOADING_TRUE,
+    UPDATE_ADDITIONAL_COMMENTS,
+    NAMESPACE_MODIFY_ORDER_ENTRY
+  } from "../../store/modules/ModifyOrderEntryState";
 
   export default {
     name: 'edit-order-entry',
@@ -57,43 +64,28 @@
       return {}
     },
     created() {
-      this.$store.commit(`modifyOrderEntry/${SET_ENTRY_LOADING_TRUE}`)
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`)
     },
     mounted() {
-      var newEditedOrderEntry = {
-        id: this.dishEntry.id,
-        orderId: this.order.id,
-        dishId: this.dishEntry.dish.id,
-        additionalComments: this.dishEntry.additionalComments,
-        newDish: false,
-        newDishName: "",
-        newDishPrice: "",
-        chosenSideDishes: this.dishEntry.sideDishes || []
-      };
-
-      this.$store.commit(`modifyOrderEntry/${INIT_EDITED_ORDER}`, newEditedOrderEntry);
-      this.$store.commit(`modifyOrderEntry/${SET_ENTRY_LOADING_FALSE}`)
+      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${INIT_EDIT_ORDER_ENTRY_ACTION}`, {dishEntry: this.dishEntry})
     },
     methods: {
-      submitForm (e) {
+      submitForm(e) {
         e.preventDefault();
 
-        this.$store.dispatch(`showOrder/${EDIT_ORDER_ENTRY_ACTION}`, {orderId: this.order.id, orderEntryId: this.orderEntry.id, editedOrderEntry: this.editedOrderEntry});
+        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${EDIT_ORDER_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id});
 
         return false;
       },
-      cancelEdit () {
-        this.$store.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
+      cancelEdit() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
       },
-      ...mapMutations("modifyOrderEntry", [
+      ...mapMutations(NAMESPACE_MODIFY_ORDER_ENTRY, [
         UPDATE_ADDITIONAL_COMMENTS
       ])
     },
     computed: {
-      ...mapGetters("modifyOrderEntry", [
-        "editedOrderEntry"
-      ]),
-      ...mapState("modifyOrderEntry", [
+      ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
         "loadingEntry",
 
         "orderId",
@@ -104,7 +96,7 @@
         "newDishPrice",
         "chosenSideDishes",
       ]),
-      ...mapState("showOrder", [
+      ...mapState(NAMESPACE_SHOW_ORDER, [
         "order",
         "allDishesInRestaurant"
       ]),

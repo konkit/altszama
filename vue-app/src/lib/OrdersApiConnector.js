@@ -24,7 +24,7 @@ export default {
     let formData = {
       id: orderEntryId,
       orderId: orderId,
-      dishEntryId: editedOrderEntry.id,
+      dishEntryId: editedOrderEntry.dishEntryId,
       dishId: editedOrderEntry.dishId,
       newDish: editedOrderEntry.newDish,
       newDishName: editedOrderEntry.newDishName,

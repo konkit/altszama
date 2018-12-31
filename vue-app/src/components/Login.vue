@@ -69,7 +69,7 @@ export default {
       errors: []
     }
   },
-  mounted: () => {
+  mounted () {
     GoogleLogin.load().then(() => this.loginLoaded = true)
   },
   methods: {

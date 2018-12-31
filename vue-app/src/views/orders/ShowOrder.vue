@@ -121,10 +121,16 @@
     DELETE_DISH_ENTRY_ACTION,
     UNLOCK_ORDER_ACTION,
     FETCH_ORDER_DATA_ACTION,
-    CANCEL_ENTRY_CREATE_OR_EDIT,
+    NAMESPACE_SHOW_ORDER
+  } from "../../store/modules/ShowOrderState"
+  import {
     SET_ENTRY_CREATING,
     SET_ENTRY_EDITING,
-  } from "../../store/modules/ShowOrderState"
+    CANCEL_ENTRY_CREATE_OR_EDIT,
+    NAMESPACE_MODIFY_ORDER_ENTRY,
+    INIT_EDIT_ORDER_ENTRY_ACTION,
+    SET_ENTRY_LOADING_FALSE,
+  } from "../../store/modules/ModifyOrderEntryState";
 
   export default {
     data() {
@@ -136,20 +142,20 @@
       this.fetchOrder()
     },
     methods: {
-      fetchOrder () {
+      fetchOrder() {
         this.$store.commit('setLoadingTrue');
-        return this.$store.dispatch(`showOrder/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
+        return this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
       },
-      isOrdering () {
+      isOrdering() {
         return this.order.orderState === 'ORDERING';
       },
-      isOrderOwner () {
+      isOrderOwner() {
         return this.order.orderCreator.id === this.currentUserId
       },
-      isOrderEntryOwner (orderEntry) {
+      isOrderEntryOwner(orderEntry) {
         return orderEntry.user.id === this.currentUserId
       },
-      paymentStatus (orderEntry) {
+      paymentStatus(orderEntry) {
         if (orderEntry.paymentStatus === "UNPAID") {
           return "Unpaid"
         } else if (orderEntry.paymentStatus === "MARKED") {
@@ -160,27 +166,27 @@
           return orderEntry.paymentStatus
         }
       },
-      unlockOrder () {
-        this.$store.dispatch(`showOrder/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
+      unlockOrder() {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
       },
-      deleteEntry (orderEntryId, dishEntryId) {
-        this.$store.dispatch(`showOrder/${DELETE_DISH_ENTRY_ACTION}`, {
+      deleteEntry(orderEntryId, dishEntryId) {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
           orderId: this.orderId,
           orderEntryId: orderEntryId,
           dishEntryId: dishEntryId
         })
       },
-      createEntry () {
-        this.$store.commit(`showOrder/${SET_ENTRY_CREATING}`, {})
+      createEntry() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_CREATING}`, {})
       },
-      editEntry (orderEntryId, dishEntryId) {
-        this.$store.commit(`showOrder/${SET_ENTRY_EDITING}`, {
+      editEntry(orderEntryId, dishEntryId) {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_EDITING}`, {
           "orderEntryId": orderEntryId,
           "dishEntryId": dishEntryId
         })
       },
-      cancelEdit () {
-        this.$store.commit(`showOrder/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
+      cancelEdit() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_ENTRY_CREATE_OR_EDIT}`, {})
       }
     },
     computed: {
@@ -194,11 +200,12 @@
         "order",
         "orderEntries",
         "currentUserId",
+      ]),
+      ...mapState('modifyOrderEntry', [
         "isEntryCreating",
         "isEntryEdited",
         "orderEntryId",
         "dishEntryId",
-        "totalOrderPrice",
       ])
     },
     components: {

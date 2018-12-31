@@ -52,32 +52,38 @@
 
 <script>
   import Price from '../commons/PriceElement.vue'
-  import {SET_NEW_DISH_FLAG, CLEAR_EDITED_SIDE_DISHES} from "../../store/modules/ShowOrderState";
-  import {UPDATE_DISH_ID, UPDATE_NEW_DISH_NAME, UPDATE_NEW_DISH_PRICE} from "../../store/modules/ModifyOrderEntryState";
+  import {
+    SET_NEW_DISH_FLAG,
+    UPDATE_DISH_ID,
+    CLEAR_EDITED_SIDE_DISHES,
+    UPDATE_NEW_DISH_NAME,
+    UPDATE_NEW_DISH_PRICE,
+    NAMESPACE_MODIFY_ORDER_ENTRY
+  } from "../../store/modules/ModifyOrderEntryState";
   import {mapState} from "vuex"
 
   export default {
     name: 'order-entry-form',
     methods: {
-      setNewDishFlag (newValue) {
-        this.$store.commit(`showOrder/${SET_NEW_DISH_FLAG}`, newValue)
+      setNewDishFlag(newValue) {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_NEW_DISH_FLAG}`, newValue)
       },
       updateDishId(newValue) {
-        this.$store.commit(`modifyOrderEntry/${UPDATE_DISH_ID}`, newValue);
-        this.$store.commit(`showOrder/${CLEAR_EDITED_SIDE_DISHES}`)
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`, newValue);
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CLEAR_EDITED_SIDE_DISHES}`)
       },
       updateNewDishName(newValue) {
-        this.$store.commit(`modifyOrderEntry/${UPDATE_NEW_DISH_NAME}`, newValue)
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_NAME}`, newValue)
       },
       updateNewDishPrice(newValue) {
-        this.$store.commit(`modifyOrderEntry/${UPDATE_NEW_DISH_PRICE}`, newValue)
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`, newValue)
       },
     },
     computed: {
       ...mapState("showOrder", [
         "allDishesByCategory"
       ]),
-      ...mapState("modifyOrderEntry", [
+      ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
         "orderId",
         "dishId",
         "additionalComments",
