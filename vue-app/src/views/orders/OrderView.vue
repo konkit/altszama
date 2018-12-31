@@ -230,7 +230,6 @@
 
 <style scoped>
   .container {
-    max-width: 1000px;
     margin-bottom: 2rem;
   }
 

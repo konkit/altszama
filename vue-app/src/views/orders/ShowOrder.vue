@@ -19,8 +19,8 @@
               If you are not ordering yet, click button to go back to created state.
             </p>
             <p>
-              <button class="btn btn-success" @click="unlockOrder()">Unlock&nbsp;&nbsp;<span
-                  class="fa fa-unlock"></span>
+              <button class="btn btn-success" @click="unlockOrder()">
+                Unlock&nbsp;&nbsp;<span class="fa fa-unlock"></span>
               </button>
             </p>
           </div>
@@ -171,10 +171,16 @@
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
       },
       editDishEntry(orderEntryId, dishEntryId) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {orderEntryId: orderEntryId, dishEntryId: dishEntryId})
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {
+          orderEntryId: orderEntryId,
+          dishEntryId: dishEntryId
+        })
       },
       deleteDishEntry(orderEntryId, dishEntryId) {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {orderEntryId: orderEntryId, dishEntryId: dishEntryId})
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
+          orderEntryId: orderEntryId,
+          dishEntryId: dishEntryId
+        })
       },
       cancelEdit() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
@@ -213,10 +219,6 @@
 </script>
 
 <style scoped>
-  .container {
-    max-width: 1000px;
-  }
-
   .row {
     margin-top: 2rem;
   }

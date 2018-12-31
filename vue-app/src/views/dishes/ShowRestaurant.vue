@@ -31,6 +31,7 @@
           <p><b>Address : </b> {{this.restaurant.address}} </p>
           <p><b>URL : </b> {{this.restaurant.url}} </p>
           <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
+          <p><b>Last updated:</b> {{this.restaurant.telephone}} </p>
         </div>
       </div>
     </div>
@@ -91,10 +92,6 @@
 </script>
 
 <style scoped>
-  .container {
-    max-width: 900px;
-  }
-
   .row {
     margin-top: 2rem;
   }

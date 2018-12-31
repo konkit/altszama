@@ -70,8 +70,4 @@
   .row {
     margin-top: 2rem;
   }
-
-  .container {
-    max-width: 900px;
-  }
 </style>

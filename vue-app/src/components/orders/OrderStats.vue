@@ -115,10 +115,6 @@
 </script>
 
 <style scoped>
-  .container {
-    max-width: 1000px;
-  }
-
   .row {
     margin-top: 2rem;
   }

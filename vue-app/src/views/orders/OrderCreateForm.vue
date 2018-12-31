@@ -278,10 +278,6 @@
 </script>
 
 <style scoped>
-  .container {
-    max-width: 900px;
-  }
-
   .row {
     margin-top: 2rem;
   }

@@ -202,10 +202,6 @@
 </script>
 
 <style scoped>
-  .container {
-    max-width: 900px;
-  }
-
   .pointer {
     cursor: pointer;
   }
