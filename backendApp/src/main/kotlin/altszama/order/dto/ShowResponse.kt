@@ -22,7 +22,8 @@ data class ShowResponse(
 
     data class ParticipantsOrderEntry(
         val id: String,
-        val user: User,
+        val userId: String,
+        val username: String,
         val dishEntries: List<ParticipantsDishEntry>,
         val finalPrice: Int,
         val paymentStatus: OrderEntryPaymentStatus
@@ -85,7 +86,8 @@ data class ShowResponse(
     private fun createParticipantsOrderEntry(orderEntry: OrderEntry, dishEntries: List<ParticipantsDishEntry>, finalPrice: Int): ParticipantsOrderEntry {
       return ParticipantsOrderEntry(
           id = orderEntry.id,
-          user = orderEntry.user,
+          userId = orderEntry.user.id,
+          username = orderEntry.user.username,
           dishEntries = dishEntries,
           finalPrice = finalPrice,
           paymentStatus = orderEntry.paymentStatus

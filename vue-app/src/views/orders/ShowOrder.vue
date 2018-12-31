@@ -59,7 +59,7 @@
 
             <template v-for="(orderEntry, entryId) in this.orderEntries">
               <tr :key="entryId">
-                <td>{{orderEntry.user.username}}</td>
+                <td>{{orderEntry.username}}</td>
 
                 <td>
                   <template v-for="dishEntry in orderEntry.dishEntries">
@@ -151,7 +151,7 @@
         return this.order.orderCreator.id === this.currentUserId
       },
       isOrderEntryOwner(orderEntry) {
-        return orderEntry.user.id === this.currentUserId
+        return orderEntry.userId === this.currentUserId
       },
       paymentStatus(orderEntry) {
         if (orderEntry.paymentStatus === "UNPAID") {
@@ -188,7 +188,7 @@
     },
     computed: {
       numberOfCurrentUserEntries() {
-        return this.orderEntries.filter(e => e.user.id === this.currentUserId).length;
+        return this.orderEntries.filter(e => e.userId === this.currentUserId).length;
       },
       ...mapState({
         username: state => state.username,

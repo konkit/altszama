@@ -68,7 +68,7 @@
         return this.order.orderCreator.id === this.currentUserId
       },
       isOrderEntryOwner(orderEntry) {
-        return orderEntry.user.id === this.currentUserId
+        return orderEntry.userId === this.currentUserId
       },
       shouldShowMarkAsPaidButton(orderEntry) {
         return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && (orderEntry.paymentStatus !== "MARKED" && orderEntry.paymentStatus !== "CONFIRMED") && this.isOrderOwner() === false)

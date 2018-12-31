@@ -80,7 +80,7 @@
                 <td>
                   <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
                     <p class="dish-name">
-                      {{ eatingPersonEntry.user.username }}
+                      {{ eatingPersonEntry.username }}
                     </p>
 
                     <p class="side-dish-name" v-for="(sd, i) in eatingPersonEntry.sideDishes" :key="i">

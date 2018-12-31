@@ -31,7 +31,7 @@ data class OrderViewResponse(
     )
 
     data class EatingPersonEntry(
-        val user: User,
+        val username: String,
         val comments: String,
         val sideDishes: List<SideDish>
     )
@@ -74,7 +74,7 @@ data class OrderViewResponse(
 
               val eatingPersonEntries = entriesForDish.flatMap { orderEntry ->
                 dishEntriesWithCurrentDish(orderEntry)
-                    .map { dishEntry -> EatingPersonEntry(orderEntry.user, dishEntry.additionalComments, dishEntry.chosenSideDishes) }
+                    .map { dishEntry -> EatingPersonEntry(orderEntry.user.username, dishEntry.additionalComments, dishEntry.chosenSideDishes) }
               }
 
               val priceSumForDish = entriesForDish
