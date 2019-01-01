@@ -35,7 +35,7 @@
 
     <div>
       <p class="dish-name">
-        {{dishEntry.dish.name}} (
+        {{dishEntry.dishName}} (
         <price :data-price="dishEntry.price"/>
         )
       </p>

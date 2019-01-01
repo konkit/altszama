@@ -62,7 +62,8 @@ data class ShowResponse(
 
     data class ParticipantsDishEntry(
         val id: String,
-        val dish: DishDto,
+        val dishId: String,
+        val dishName: String,
         val sideDishes: List<SideDish>,
         val price: Int,
         val comments: String
@@ -130,7 +131,8 @@ data class ShowResponse(
     private fun createParticipantsDishEntry(dishEntry: DishEntry): ParticipantsDishEntry {
       return ParticipantsDishEntry(
           dishEntry.id,
-          DishDto.fromDish(dishEntry.dish),
+          dishEntry.dish.id,
+          dishEntry.dish.name,
           dishEntry.chosenSideDishes,
           dishEntry.dish.price,
           dishEntry.additionalComments
