@@ -65,7 +65,7 @@
     props: ['orderEntry', 'dishEntry', 'currentUserId'],
     methods: {
       isOrderOwner() {
-        return this.order.orderCreator.id === this.currentUserId
+        return this.order.orderCreatorId === this.currentUserId
       },
       isOrderEntryOwner(orderEntry) {
         return orderEntry.userId === this.currentUserId

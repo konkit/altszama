@@ -25,6 +25,6 @@ class DishControllerDataService {
     val dish = dishService.findById(dishId).get()
     val categories = dishService.allCategories(restaurantId)
 
-    return EditResponse(dish, categories)
+    return EditResponse.create(dish, categories)
   }
 }

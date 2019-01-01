@@ -1,11 +1,12 @@
 package altszama.order.dto
 
-import altszama.auth.User
 import altszama.dish.Dish
 import altszama.dish.SideDish
+import altszama.dish.dto.DishDto
 import altszama.order.Order
 import altszama.order.OrderState
 import altszama.orderEntry.OrderEntry
+import java.time.Instant
 
 
 data class OrderViewResponse(
@@ -24,7 +25,7 @@ data class OrderViewResponse(
   companion object {
 
     data class GroupedOrderEntry(
-        val dish: Dish,
+        val dish: DishDto,
         val price: Int,
         val eatingPeopleCount: Int,
         val eatingPeopleEntries: List<EatingPersonEntry>
@@ -82,7 +83,8 @@ data class OrderViewResponse(
                     dishEntriesWithCurrentDish(orderEntry).sumBy { entry -> entry.priceWithSidedishes() }
                   }.sum()
 
-              GroupedOrderEntry(dishesList.find { dish -> dish.id == dishId }!!, priceSumForDish, mapEntry.value.size, eatingPersonEntries)
+            val dishDto = DishDto.fromDish(dishesList.find { dish -> dish.id == dishId }!!)
+            GroupedOrderEntry(dishDto, priceSumForDish, mapEntry.value.size, eatingPersonEntries)
           }
     }
   }

@@ -2,9 +2,9 @@ package altszama.order.dto
 
 import altszama.order.Order
 import altszama.order.OrderState
-import altszama.orderEntry.DishEntry
 import altszama.orderEntry.OrderEntry
 import altszama.orderEntry.OrderEntryPaymentStatus
+import altszama.orderEntry.dto.DishEntryDto
 import org.bson.types.ObjectId
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
@@ -30,14 +30,14 @@ data class TodayOrdersResponse(
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         val orderDate: LocalDate,
         val timeOfOrder: LocalTime?,
-        var timeOfDelivery: LocalTime?,
-        var orderState: OrderState,
-        var decreaseInPercent: Int,
-        var deliveryCostPerEverybody: Int,
-        var deliveryCostPerDish: Int,
-        var paymentByCash: Boolean,
-        var paymentByBankTransfer: Boolean,
-        var bankTransferNumber: String
+        val timeOfDelivery: LocalTime?,
+        val orderState: OrderState,
+        val decreaseInPercent: Int,
+        val deliveryCostPerEverybody: Int,
+        val deliveryCostPerDish: Int,
+        val paymentByCash: Boolean,
+        val paymentByBankTransfer: Boolean,
+        val bankTransferNumber: String
     )
 
     data class OrderEntryDto(
@@ -45,7 +45,7 @@ data class TodayOrdersResponse(
         var orderId: String,
         var orderState: OrderState,
 
-        var dishEntries: List<DishEntry> = emptyList(),
+        var dishEntries: List<DishEntryDto> = emptyList(),
 
         var paymentStatus: OrderEntryPaymentStatus = OrderEntryPaymentStatus.UNPAID,
 
@@ -77,7 +77,7 @@ data class TodayOrdersResponse(
         orderEntry.id,
         orderEntry.order.id,
         orderEntry.order.orderState,
-        orderEntry.dishEntries,
+        orderEntry.dishEntries.map { dishEntry -> DishEntryDto.fromDishEntry(dishEntry) },
         orderEntry.paymentStatus,
         orderEntry.created
       )

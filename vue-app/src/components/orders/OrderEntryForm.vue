@@ -12,12 +12,12 @@
             @change="updateDishId($event.target.value)"
         >
           <optgroup
-              v-for='(dishEntry, i) in allDishesByCategory'
+              v-for='(dishGroup, i) in allDishesByCategory'
               :key='i'
-              :label="dishEntry.category"
+              :label="dishGroup.category"
           >
             <option
-                v-for='(dish, i) in dishEntry.dishes'
+                v-for='(dish, i) in dishGroup.dishes'
                 :key='i'
                 :value="dish.id"
             >

@@ -14,7 +14,7 @@ data class AllOrdersResponse(val allOrdersList: List<OrderDto>) {
         val orderCreatorUsername: String,
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         val orderDate: LocalDate,
-        var orderState: OrderState
+        val orderState: OrderState
     )
 
     fun fromOrderList(list: List<Order>): AllOrdersResponse {

@@ -5,7 +5,7 @@
         <h3>Order data</h3>
 
         <dt>Who will order?</dt>
-        <dd>{{ this.order.orderCreator.username }}</dd>
+        <dd>{{ this.order.orderCreatorUsername }}</dd>
 
         <dt>When?</dt>
         <dd>{{ this.order.timeOfOrder }}</dd>
@@ -60,8 +60,8 @@
           </b>
         </p>
 
-        <dt v-if="this.order.paymentByBankTransfer">Bank transfer number</dt>
-        <dd v-if="this.order.paymentByBankTransfer">{{ this.order.bankTransferNumber }}</dd>
+        <dt v-if="order.paymentByBankTransfer">Bank transfer number</dt>
+        <dd v-if="order.paymentByBankTransfer">{{ order.bankTransferNumber }}</dd>
       </div>
 
     </div>
@@ -70,7 +70,7 @@
       <div class="col">
         <p>
           <b>Link to menu:</b>
-          <a target="_blank" :href="order.restaurant.url">{{this.order.restaurant.url}}</a>
+          <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
         </p>
       </div>
     </div>

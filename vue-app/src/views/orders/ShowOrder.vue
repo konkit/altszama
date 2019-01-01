@@ -5,7 +5,7 @@
         <div class="col">
           <back-button href="#/orders"/>
 
-          <h1>[{{ this.order.orderState }}] Order from {{this.order.restaurant.name}} ({{this.order.orderDate}})</h1>
+          <h1>[{{ this.order.orderState }}] Order from {{this.order.restaurantName}} ({{this.order.orderDate}})</h1>
 
           <template v-if="isOrderOwner()">
             <order-state-buttons></order-state-buttons>
@@ -148,7 +148,7 @@
         return this.order.orderState === 'ORDERING';
       },
       isOrderOwner() {
-        return this.order.orderCreator.id === this.currentUserId
+        return this.order.orderCreatorId === this.currentUserId
       },
       isOrderEntryOwner(orderEntry) {
         return orderEntry.userId === this.currentUserId
