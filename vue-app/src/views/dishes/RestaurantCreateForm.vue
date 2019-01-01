@@ -69,7 +69,7 @@
     props: ['restaurantName'],
     methods: {
       submitForm () {
-        this.$store.dispatch(`createRestaurant/${SAVE_RESTAURANT_ACTION}`, {errorsComponent: this.$refs.errorsComponent})
+        this.$store.dispatch(`createRestaurant/${SAVE_RESTAURANT_ACTION}`)
       },
       ...mapMutations("createRestaurant", [
         UPDATE_NAME,

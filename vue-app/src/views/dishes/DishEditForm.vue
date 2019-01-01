@@ -60,8 +60,14 @@
   import Price from '../../components/commons/PriceElement'
   import SideDishes from '../../components/restaurants/SideDishes.vue'
   import LoadingView from "../../components/commons/LoadingView";
-  import {mapMutations, mapState} from "vuex"
-  import {INIT_EDIT_DISH_ACTION, UPDATE_DISH_ACTION, UPDATE_NAME, UPDATE_PRICE, UPDATE_CATEGORY} from "../../store/modules/EditDishState"
+  import {mapState} from "vuex"
+  import {
+    INIT_EDIT_DISH_ACTION,
+    UPDATE_CATEGORY,
+    UPDATE_DISH_ACTION,
+    UPDATE_NAME,
+    UPDATE_PRICE
+  } from "../../store/modules/EditDishState"
 
   export default {
     data() {

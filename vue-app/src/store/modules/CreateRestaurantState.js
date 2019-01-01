@@ -38,7 +38,7 @@ export default {
     },
   },
   actions: {
-    [SAVE_RESTAURANT_ACTION] ({state}, payload) {
+    [SAVE_RESTAURANT_ACTION] ({state}) {
       const restaurant = {
         name: state.name,
         url: state.url,
@@ -48,7 +48,7 @@ export default {
       };
 
       DishesApiConnector.createRestaurant(restaurant)
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false;
     }

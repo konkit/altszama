@@ -58,7 +58,7 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    [UPDATE_RESTAURANT_ACTION] ({state}, payload) {
+    [UPDATE_RESTAURANT_ACTION] ({state}) {
       const restaurant = {
         name: state.name,
         url: state.url,

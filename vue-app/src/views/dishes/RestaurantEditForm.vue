@@ -80,9 +80,7 @@
     },
     methods: {
       submitForm () {
-        let errorsComponent = this.$refs.errorsComponent;
-
-        this.$store.dispatch(`editRestaurant/${UPDATE_RESTAURANT_ACTION}`, {errorsComponent: errorsComponent});
+        this.$store.dispatch(`editRestaurant/${UPDATE_RESTAURANT_ACTION}`);
 
         return false;
       },
