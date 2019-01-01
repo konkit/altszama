@@ -2,6 +2,7 @@ package altszama.restaurant
 
 import altszama.dish.Dish
 import altszama.dish.DishService
+import altszama.dish.dto.DishDto
 import altszama.restaurant.dto.EditResponse
 import altszama.restaurant.dto.IndexResponse
 import altszama.restaurant.dto.ShowResponse
@@ -24,8 +25,8 @@ class RestaurantControllerDataService {
 
   fun getShowData(restaurantId: String): ShowResponse {
     val restaurant = restaurantService.findById(restaurantId).get()
-    val dishes = dishService.findByRestaurantId(restaurant.id)
-    val dishesByCategory: Map<String, List<Dish>> = dishes.groupBy { dish -> dish.category }
+    val dishes = dishService.findByRestaurantId(restaurant.id).map { dish -> DishDto.fromDish(dish) }
+    val dishesByCategory: Map<String, List<DishDto>> = dishes.groupBy { dish -> dish.category }
 
     return ShowResponse(restaurant, dishes, dishesByCategory)
   }

@@ -92,14 +92,14 @@
       removeSideDish (sideDishId) {
         this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
       },
-      updateName() {
-        this.$store.commit(`editDish/${UPDATE_NAME}`)
+      updateName(newValue) {
+        this.$store.commit(`editDish/${UPDATE_NAME}`, newValue)
       },
-      updatePrice() {
-        this.$store.commit(`editDish/${UPDATE_PRICE}`)
+      updatePrice(newValue) {
+        this.$store.commit(`editDish/${UPDATE_PRICE}`, newValue)
       },
-      updateCategory() {
-        this.$store.commit(`editDish/${UPDATE_CATEGORY}`)
+      updateCategory(newValue) {
+        this.$store.commit(`editDish/${UPDATE_CATEGORY}`, newValue)
       }
     },
     computed: {

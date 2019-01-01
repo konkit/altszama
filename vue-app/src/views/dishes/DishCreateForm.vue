@@ -97,14 +97,14 @@
           return "#/restaurants/show/" + this.restaurantId
         }
       },
-      updateName() {
-        this.$store.commit(`createDish/${UPDATE_NAME}`)
+      updateName(newValue) {
+        this.$store.commit(`createDish/${UPDATE_NAME}`, newValue)
       },
-      updatePrice() {
-        this.$store.commit(`createDish/${UPDATE_PRICE}`)
+      updatePrice(newValue) {
+        this.$store.commit(`createDish/${UPDATE_PRICE}`, newValue)
       },
-      updateCategory() {
-        this.$store.commit(`createDish/${UPDATE_CATEGORY}`)
+      updateCategory(newValue) {
+        this.$store.commit(`createDish/${UPDATE_CATEGORY}`, newValue)
       }
     },
     computed: {
