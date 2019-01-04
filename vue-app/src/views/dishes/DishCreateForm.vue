@@ -1,65 +1,55 @@
 <template>
   <div>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          <back-button :href="getBackUrl()"></back-button>
-        </div>
-      </div>
+    <v-toolbar>
+      <back-button2 :href="getBackUrl()"></back-button2>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <h1>Create dish in restaurant {{restaurantName}}</h1>
-        </div>
-      </div>
+      <v-toolbar-title>
+        Create dish in restaurant {{restaurantName}}
+      </v-toolbar-title>
+    </v-toolbar>
 
-      <errors-component />
+    <v-content>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
+                <errors-component />
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <div class="form">
-            <input type="hidden" name="restaurant.id" :value="restaurantId"/>
+                <input type="hidden" name="restaurant.id" :value="restaurantId"/>
 
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" class="form-control" :value="name" @input="updateName($event.target.value)" required=""
-                     id="name"/>
-            </div>
+                <v-text-field label="Name" :value="name" @input="updateName($event)" required=""></v-text-field>
 
-            <div class="form-group">
-              <label for="dish-price">Price</label>
-              <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price"
-                           @input="updatePrice($event)"
-                           :precision="2" class="form-control" required="" id="dish-price"></vue-numeric>
-            </div>
+                <div class="form-group">
+                  <label for="dish-price">Price</label>
+                  <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input="updatePrice($event)" :precision="2" class="form-control" required="" id="dish-price">
+                  </vue-numeric>
+                </div>
 
-            <div class="form-group">
-              <label for="category">Category</label>
-              <input type="text" class="form-control" :value="category" @input="updateCategory($event.target.value)"
-                     id="category" list="categoryNames"/>
-              <datalist id="categoryNames">
-                <option v-for="categoryName in categories" :value="categoryName"/>
-              </datalist>
-            </div>
+                <v-text-field label="Category" :value="category" @input="updateCategory($event)" id="category" list="categoryNames"></v-text-field>
 
-            <div>
-              <side-dishes ref="sideDishesElement"></side-dishes>
-            </div>
-          </div>
-        </div>
-      </div>
+                <datalist id="categoryNames">
+                  <option v-for="categoryName in categories" :value="categoryName"/>
+                </datalist>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <button @click="submitForm" class="btn btn-block btn-success">Create</button>
-        </div>
-      </div>
-    </div>
+                <div>
+                  <side-dishes ref="sideDishesElement"></side-dishes>
+                </div>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-btn color="primary" @click="submitForm">Create</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
   </div>
 </template>
 
 <script>
-  import BackButton from '../../components/commons/BackButton.vue'
+  import BackButton2 from '../../components/commons/BackButton2.vue'
   import ErrorsComponent from '../../components/commons/Errors.vue'
   import Price from '../../components/commons/PriceElement.vue'
   import SideDishes from '../../components/restaurants/SideDishes.vue'
@@ -98,6 +88,7 @@
         }
       },
       updateName(newValue) {
+        console.log("newValue", newValue);
         this.$store.commit(`createDish/${UPDATE_NAME}`, newValue)
       },
       updatePrice(newValue) {
@@ -116,7 +107,7 @@
       ])
     },
     components: {
-      BackButton,
+      BackButton2,
       ErrorsComponent,
       Price,
       SideDishes

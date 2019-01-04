@@ -1,61 +1,62 @@
 <template>
   <LoadingView>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          <back-button :href="'#/restaurants/show/' + restaurantId"></back-button>
-        </div>
-      </div>
+    <v-toolbar>
+      <back-button2 :href="'#/restaurants/show/' + restaurantId"></back-button2>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <h1>Edit dish</h1>
-        </div>
-      </div>
+      <v-toolbar-title>
+        Edit dish
+      </v-toolbar-title>
+    </v-toolbar>
 
-      <errors-component />
+    <v-content>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
+                <errors-component />
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <input type="hidden" name="restaurant.id" :value="restaurantId"/>
-          <input type="hidden" name="id" :value="dishId"/>
+                <input type="hidden" name="restaurant.id" :value="restaurantId"/>
+                <input type="hidden" name="id" :value="dishId"/>
 
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" :value="name" @input="updateName($event.target.value)" required="" id="name"/>
-          </div>
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" class="form-control" :value="name" @input="updateName($event)" required="" id="name"/>
+                </div>
 
-          <div class="form-group">
-            <label for="price">Price</label>
-            <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input="updatePrice($event)"
-                         :precision="2" class="form-control" required="" id="price"></vue-numeric>
-          </div>
+                <div class="form-group">
+                  <label for="price">Price</label>
+                  <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input="updatePrice($event)"
+                               :precision="2" class="form-control" required="" id="price"></vue-numeric>
+                </div>
 
-          <div class="form-group">
-            <label for="category">Category</label>
-            <input type="text" class="form-control" :value="category" @input="updateCategory($event.target.value)" id="category" list="categoryNames"/>
-            <datalist id="categoryNames">
-              <option v-for="categoryName in categories" :value="categoryName"/>
-            </datalist>
-          </div>
+                <div class="form-group">
+                  <label for="category">Category</label>
+                  <input type="text" class="form-control" :value="category" @input="updateCategory($event)" id="category" list="categoryNames"/>
+                  <datalist id="categoryNames">
+                    <option v-for="categoryName in categories" :value="categoryName"/>
+                  </datalist>
+                </div>
 
-          <div>
-            <side-dishes ref="sideDishesElement" :initialSideDishes="initialSideDishes"></side-dishes>
-          </div>
-        </div>
-      </div>
+                <div>
+                  <side-dishes ref="sideDishesElement" :initialSideDishes="initialSideDishes"></side-dishes>
+                </div>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <button @click="submitForm" class="btn btn-block btn-success">Update</button>
-        </div>
-      </div>
-    </div>
+              </v-card-text>
+
+              <v-card-actions>
+                <button @click="submitForm" class="btn btn-block btn-success">Update</button>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
   </LoadingView>
 </template>
 
 <script>
-  import BackButton from '../../components/commons/BackButton'
+  import BackButton2 from '../../components/commons/BackButton2'
   import ErrorsComponent from '../../components/commons/Errors'
   import Price from '../../components/commons/PriceElement'
   import SideDishes from '../../components/restaurants/SideDishes.vue'
@@ -119,7 +120,7 @@
     },
     components: {
       LoadingView,
-      BackButton,
+      BackButton2,
       ErrorsComponent,
       Price,
       SideDishes

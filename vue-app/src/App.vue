@@ -1,15 +1,17 @@
 <template>
   <div id="app">
-    <header>
-      <navigation></navigation>
-    </header>
-    
-    <main>
-      <router-view></router-view>
-    </main>
+    <v-app>
+      <header>
+        <navigation></navigation>
+      </header>
 
-    <footer>
-    </footer>
+      <main>
+        <router-view></router-view>
+      </main>
+
+      <footer>
+      </footer>
+    </v-app>
   </div>
 </template>
 

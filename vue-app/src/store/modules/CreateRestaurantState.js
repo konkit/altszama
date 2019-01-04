@@ -3,10 +3,10 @@ import ApiConnector from "../../lib/ApiConnector";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 
 export const UPDATE_NAME = "UPDATE_NAME";
-export const UPDATE_URL = "UPDATE_NAME";
-export const UPDATE_RATING = "UPDATE_NAME";
-export const UPDATE_TELEPHONE = "UPDATE_NAME";
-export const UPDATE_ADDRESS = "UPDATE_NAME";
+export const UPDATE_URL = "UPDATE_URL";
+export const UPDATE_RATING = "UPDATE_RATING";
+export const UPDATE_TELEPHONE = "UPDATE_TELEPHONE";
+export const UPDATE_ADDRESS = "UPDATE_ADDRESS";
 
 export const SAVE_RESTAURANT_ACTION = "SAVE_RESTAURANT_ACTION";
 

@@ -1,37 +1,48 @@
 <template>
   <LoadingView>
-    <div class="container">
+    <v-toolbar>
+      <v-toolbar-title>
+        Restaurants
+      </v-toolbar-title>
+    </v-toolbar>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <a href="#/restaurants/create" class="btn btn-success float-right">
-            Create new restaurant&nbsp;<span class="fa fa-plus"/>
-          </a>
+    <v-content>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
 
-          <h1>Restaurants</h1>
-        </div>
-      </div>
+                <div class="row justify-content-center">
+                  <div class="col">
+                    <a href="#/restaurants/import/upload">Import restaurant from JSON</a>
+                  </div>
+                </div>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <a href="#/restaurants/import/upload">Import restaurant from JSON</a>
-        </div>
-      </div>
+                <div class="row justify-content-center">
+                  <div class="col">
+                    <table class="table table-hover">
+                      <tbody>
+                      <tr @click="goToRestaurant(restaurant.id)" v-for="restaurant in this.restaurants"
+                          :key="restaurant.id" class="pointer">
+                        <td>{{restaurant.name}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <table class="table table-hover">
-            <tbody>
-            <tr @click="goToRestaurant(restaurant.id)" v-for="restaurant in this.restaurants"
-                :key="restaurant.id" class="pointer">
-              <td>{{restaurant.name}}</td>
-            </tr>
-            </tbody>
-          </table>
+                    <v-btn fixed dark fab bottom right color="green" @click="goToCreateRestaurant()">
+                      <v-icon>add</v-icon>
+                    </v-btn>
 
-        </div>
-      </div>
-    </div>
+                  </div>
+                </div>
+
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
   </LoadingView>
 </template>
 
@@ -46,6 +57,9 @@
     methods: {
       goToRestaurant (restaurantId) {
         location = "#/restaurants/show/" + restaurantId
+      },
+      goToCreateRestaurant () {
+        location = '#/restaurants/create'
       }
     },
     computed: {

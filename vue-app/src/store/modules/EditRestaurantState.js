@@ -3,10 +3,10 @@ import DishesApiConnector from "../../lib/DishesApiConnector";
 
 export const INIT_DATA = "INIT_DATA";
 export const UPDATE_NAME = "UPDATE_NAME";
-export const UPDATE_URL = "UPDATE_NAME";
-export const UPDATE_RATING = "UPDATE_NAME";
-export const UPDATE_TELEPHONE = "UPDATE_NAME";
-export const UPDATE_ADDRESS = "UPDATE_NAME";
+export const UPDATE_URL = "UPDATE_URL";
+export const UPDATE_RATING = "UPDATE_RATING";
+export const UPDATE_TELEPHONE = "UPDATE_TELEPHONE";
+export const UPDATE_ADDRESS = "UPDATE_ADDRESS";
 
 export const INIT_EDIT_RESTAURANT_ACTION = "INIT_EDIT_RESTAURANT_ACTION";
 export const UPDATE_RESTAURANT_ACTION = "UPDATE_RESTAURANT_ACTION";

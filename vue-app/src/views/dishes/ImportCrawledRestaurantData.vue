@@ -1,35 +1,40 @@
 <template>
   <div>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          <back-button href="#/restaurants"></back-button>
+    <v-toolbar>
+      <back-button2 href="#/restaurants"></back-button2>
 
-          <h1>Import restaurant from JSON</h1>
-        </div>
-      </div>
-    </div>
+      <v-toolbar-title>
+        Import restaurant from JSON
+      </v-toolbar-title>
+    </v-toolbar>
 
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          <a href="/static/example.json" download>Download JSON template</a>
-        </div>
-      </div>
-    </div>
+    <v-content>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
+                <errors-component />
 
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          Upload file:
+                <v-layout>
+                  <a href="/static/example.json" download>Download JSON template</a>
+                </v-layout>
 
-          <fileupload :target="this.getUploadUrl()" action="POST" @progress="progress" @start="startUpload"
-                      @finish="finishUpload"></fileupload>
+                <v-layout>
+                  Upload file:
 
-          <p>Status: {{uploadState}}</p>
-        </div>
-      </div>
-    </div>
+                  <fileupload :target="this.getUploadUrl()" action="POST" @progress="progress" @start="startUpload"
+                              @finish="finishUpload"></fileupload>
+
+                  <p>Status: {{uploadState}}</p>
+                </v-layout>
+
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
   </div>
 </template>
 
@@ -37,6 +42,7 @@
   import ApiConnector from '../../lib/ApiConnector.js'
   import FileUpload from 'vue-simple-upload/dist/FileUpload'
   import BackButton from '../../components/commons/BackButton'
+  import BackButton2 from '../../components/commons/BackButton2'
 
   export default {
     data() {
@@ -65,13 +71,14 @@
     },
     components: {
       'fileupload': FileUpload,
-      BackButton
+      BackButton,
+      BackButton2,
     },
   }
 </script>
 
 <style scoped>
-  .row {
+  .layout {
     margin-top: 2rem;
   }
 </style>

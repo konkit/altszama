@@ -1,60 +1,44 @@
 <template>
   <LoadingView>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          <back-button :href="'#/restaurants/show/' + this.restaurantId"></back-button>
-        </div>
-      </div>
+    <v-toolbar>
+      <back-button2 :href="'#/restaurants/show/' + this.restaurantId"></back-button2>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <h1>Edit restaurant {{name}}</h1>
-        </div>
-      </div>
+      <v-toolbar-title>
+        Edit restaurant {{name}}
+      </v-toolbar-title>
+    </v-toolbar>
 
-      <errors-component />
+    <v-content>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
+                <errors-component />
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <form>
-            <input type="hidden" name="id" :value="restaurantId"/>
+                <v-form id="restaurantCreateForm">
+                  <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
+                  <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
+                  <v-text-field label="Rating" :value="rating" @input="updateRating($event)"></v-text-field>
+                  <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
+                  <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
+                </v-form>
 
-            <div class="form-group">
-              <label>Name:</label>
-              <input class="form-control" type="text" :value="name" @input="[UPDATE_NAME]($event.target.value)"/>
-            </div>
-
-            <div class="form-group">
-              <label>URL:</label>
-              <input class="form-control" type="text" :value="url" @input="[UPDATE_URL]($event.target.value)"/>
-            </div>
-
-            <div class="form-group">
-              <label>Rating:</label>
-              <input class="form-control" type="text" :value="rating" @input="[UPDATE_RATING]($event.target.value)"/>
-            </div>
-
-            <div class="form-group">
-              <label>Telephone:</label>
-              <input class="form-control" type="text" :value="telephone" @input="[UPDATE_TELEPHONE]($event.target.value)"/>
-            </div>
-
-            <div class="form-group">
-              <label>Address:</label>
-              <input class="form-control" type="text" :value="address" @input="[UPDATE_ADDRESS]($event.target.value)"/>
-            </div>
-          </form>
-
-          <button class="btn btn-block btn-success" @click="submitForm">Update</button>
-        </div>
-      </div>
-    </div>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="primary" @click="submitForm">Update</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
   </LoadingView>
 </template>
 
 <script>
   import BackButton from '../../components/commons/BackButton'
+  import BackButton2 from '../../components/commons/BackButton2'
   import ErrorsComponent from '../../components/commons/Errors'
 
   import LoadingView from "../../components/commons/LoadingView";
@@ -84,13 +68,21 @@
 
         return false;
       },
-      ...mapMutations("editRestaurant", [
-        UPDATE_NAME,
-        UPDATE_URL,
-        UPDATE_RATING,
-        UPDATE_TELEPHONE,
-        UPDATE_ADDRESS,
-      ])
+      updateName(newValue) {
+        this.$store.commit(`editRestaurant/${UPDATE_NAME}`, newValue);
+      },
+      updateUrl(newValue) {
+        this.$store.commit(`editRestaurant/${UPDATE_URL}`, newValue);
+      },
+      updateRating(newValue) {
+        this.$store.commit(`editRestaurant/${UPDATE_RATING}`, newValue);
+      },
+      updateTelephone(newValue) {
+        this.$store.commit(`editRestaurant/${UPDATE_TELEPHONE}`, newValue);
+      },
+      updateAddress(newValue) {
+        this.$store.commit(`editRestaurant/${UPDATE_ADDRESS}`, newValue);
+      },
     },
     computed: {
       ...mapState('editRestaurant', [
@@ -104,6 +96,7 @@
     components: {
       LoadingView,
       BackButton,
+      BackButton2,
       ErrorsComponent,
     }
   }
