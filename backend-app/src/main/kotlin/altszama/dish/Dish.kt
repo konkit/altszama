@@ -26,5 +26,7 @@ data class Dish(
 
   var category: String = "",
 
-  var lastCrawled: Instant? = null
+  var lastCrawled: Instant? = null,
+
+  var lastEdited: Instant? = null
 )

@@ -23,7 +23,7 @@ class RestaurantImportService {
   fun createFromJson(restaurantData: RestaurantImportJson) {
     val now = Instant.now()
 
-    val restaurant = restaurantRepository.findByName(restaurantData.name) ?: Restaurant()
+    val restaurant = restaurantRepository.findByName(restaurantData.name) ?: restaurantRepository.findByUrl(restaurantData.url) ?: Restaurant()
 
     val updatedRestaurant = restaurant.copy(
         name = restaurantData.name,
@@ -36,7 +36,8 @@ class RestaurantImportService {
     restaurantRepository.save(updatedRestaurant)
 
     restaurantData.dishes.forEach { dishData ->
-      val dish = findOrCreateDish(dishData, restaurant)
+      val dish = dishRepository.findByRestaurantIdAndName(restaurant.id, dishData.name).firstOrNull()
+          ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
 
       val sideDishes = getUpdatedSideDishes(dishData, dish)
 
@@ -48,11 +49,8 @@ class RestaurantImportService {
 
       dishRepository.save(updatedDish)
     }
-  }
 
-  private fun findOrCreateDish(dishData: DishImportJson, restaurant: Restaurant): Dish {
-    return dishRepository.findByRestaurantIdAndName(restaurant.id, dishData.name).firstOrNull()
-        ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
+    dishRepository.deleteAllByLastCrawledBeforeAndLastEditedIsNull(now);
   }
 
   private fun getUpdatedSideDishes(dishData: DishImportJson, dish: Dish): List<SideDish> {

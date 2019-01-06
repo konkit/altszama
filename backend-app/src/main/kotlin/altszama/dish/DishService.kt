@@ -1,10 +1,13 @@
 package altszama.dish
 
+import altszama.dish.dto.DishCreateRequest
+import altszama.dish.dto.DishUpdateRequest
 import altszama.orderEntry.OrderEntryRepository
 import altszama.restaurant.RestaurantService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.Instant
 import java.util.*
 
 
@@ -20,18 +23,38 @@ class DishService {
   @Autowired
   private lateinit var restaurantService: RestaurantService
 
-  fun insert(restaurantId: String, dish: Dish): Dish {
+  fun insert(restaurantId: String, dish: DishCreateRequest): Dish {
     val restaurant = restaurantService.findById(restaurantId).get()
-    dish.restaurant = restaurant
 
-    return dishRepository.insert(dish)
+    val newDish = Dish(
+        restaurant = restaurant,
+        id = ObjectId().toHexString(),
+        name = dish.name,
+        price = dish.price,
+        sideDishes = dish.sideDishes,
+        category = dish.category,
+        lastEdited = Instant.now()
+    )
+
+    return dishRepository.insert(newDish)
   }
 
-  fun save(restaurantId: String, dish: Dish): Dish? {
+  fun update(restaurantId: String, dishId: String, dish: DishUpdateRequest): Optional<Dish> {
     val restaurant = restaurantService.findById(restaurantId).get()
-    dish.restaurant = restaurant
 
-    return dishRepository.save(dish)
+    return dishRepository.findById(dishId)
+        .map { dish ->
+          val newDish = dish.copy(
+              restaurant = restaurant,
+              name = dish.name,
+              price = dish.price,
+              sideDishes = dish.sideDishes,
+              category = dish.category,
+              lastEdited = Instant.now()
+          )
+
+          dishRepository.save(newDish)
+        }
   }
 
   fun findById(dishId: String): Optional<Dish> {

@@ -1,6 +1,8 @@
 package altszama.dish
 
 import altszama.dish.dto.CreateResponse
+import altszama.dish.dto.DishCreateRequest
+import altszama.dish.dto.DishUpdateRequest
 import altszama.dish.dto.EditResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -27,8 +29,8 @@ class DishController {
   }
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/save")
-  fun save(@PathVariable restaurantId: String, @RequestBody @Valid dish: Dish): ResponseEntity<String> {
-    dishService.insert(restaurantId, dish)
+  fun save(@PathVariable restaurantId: String, @RequestBody @Valid dishCreateRequest: DishCreateRequest): ResponseEntity<String> {
+    dishService.insert(restaurantId, dishCreateRequest)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
@@ -38,8 +40,8 @@ class DishController {
   }
 
   @RequestMapping("/restaurants/{restaurantId}/dishes/update")
-  fun update(@PathVariable restaurantId: String, @RequestBody @Valid dish: Dish): ResponseEntity<String> {
-    dishService.save(restaurantId, dish)
+  fun update(@PathVariable restaurantId: String, @RequestBody @Valid dishUpdateRequest: DishUpdateRequest): ResponseEntity<String> {
+    dishService.update(restaurantId, dishUpdateRequest.id, dishUpdateRequest)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 

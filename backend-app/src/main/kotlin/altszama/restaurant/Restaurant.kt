@@ -21,5 +21,7 @@ data class Restaurant(
 
   var url: String = "",
 
-  var lastCrawled: Instant? = null
+  var lastCrawled: Instant? = null,
+
+  var lastEdited: Instant? = null
 )

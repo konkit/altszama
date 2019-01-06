@@ -1,8 +1,6 @@
 package altszama.restaurant
 
-import altszama.restaurant.dto.EditResponse
-import altszama.restaurant.dto.IndexResponse
-import altszama.restaurant.dto.ShowResponse
+import altszama.restaurant.dto.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -33,8 +31,8 @@ class RestaurantController {
   }
 
   @RequestMapping("/restaurants/save")
-  fun saveRestaurant(@Valid @RequestBody restaurant: Restaurant): ResponseEntity<String> {
-    restaurantService.insert(restaurant)
+  fun saveRestaurant(@Valid @RequestBody saveRequest: RestaurantSaveRequest): ResponseEntity<String> {
+    restaurantService.createRestaurant(saveRequest)
     return ResponseEntity(HttpStatus.CREATED)
   }
 
@@ -44,8 +42,8 @@ class RestaurantController {
   }
 
   @RequestMapping("/restaurants/update")
-  fun updateRestaurant(@RequestBody @Valid restaurant: Restaurant): ResponseEntity<String> {
-    restaurantService.save(restaurant)
+  fun updateRestaurant(@RequestBody @Valid updateRequest: RestaurantUpdateRequest): ResponseEntity<String> {
+    restaurantService.updateRestaurant(updateRequest)
     return ResponseEntity("{}", HttpStatus.CREATED)
   }
 
