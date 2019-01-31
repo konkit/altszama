@@ -25,7 +25,15 @@
                       <tbody>
                       <tr @click="goToRestaurant(restaurant.id)" v-for="restaurant in this.restaurants"
                           :key="restaurant.id" class="pointer">
-                        <td>{{restaurant.name}}</td>
+                        <td>
+                          <span>{{restaurant.name}}</span>
+                          <v-chip outline="true" text-color="blue" v-if="restaurant.lastCrawled != null">
+                            crawled
+                          </v-chip>
+                          <v-chip outline="true" text-color="green" v-if="restaurant.lastCrawled == null">
+                            user-created
+                          </v-chip>
+                        </td>
                       </tr>
                       </tbody>
                     </table>

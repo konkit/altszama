@@ -31,7 +31,8 @@
                     <p><b>Address : </b> {{this.restaurant.address}} </p>
                     <p><b>URL : </b> {{this.restaurant.url}} </p>
                     <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
-                    <p><b>Last updated:</b> {{this.restaurant.telephone}} </p>
+                    <p><b>Last crawled:</b> {{this.restaurant.lastCrawled}} </p>
+                    <p><b>Last edited:</b> {{this.restaurant.lastEdited}} </p>
                 </v-layout>
               </v-card-text>
             </v-card>
@@ -47,6 +48,10 @@
                 <v-layout column>
                   <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
                 </v-layout>
+
+                <v-btn fixed dark fab bottom right color="green" @click="goToCreateDish()">
+                  <v-icon>add</v-icon>
+                </v-btn>
               </v-card-text>
             </v-card>
           </v-flex>
@@ -79,6 +84,9 @@
       deleteRestaurant (e) {
         let errorsComponent = this.$refs.errorsComponent;
         this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId, errorsComponent: errorsComponent});
+      },
+      goToCreateDish() {
+        location = '#/restaurants/' + this.restaurant.id + '/dishes/create'
       }
     },
     computed: {

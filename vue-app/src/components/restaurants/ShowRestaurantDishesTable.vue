@@ -1,8 +1,5 @@
 <template>
   <div>
-    <a :href="'#/restaurants/' + this.restaurant.id + '/dishes/create'" class="btn btn-success pull-right">Add new dish&nbsp;<span
-        class="fa fa-plus"/></a>
-
     <h4>Dishes</h4>
 
     <table class="table" v-for="(categoryEntry, i) in this.dishesByCategory" :key="i">
