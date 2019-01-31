@@ -1,166 +1,165 @@
 <template>
   <LoadingView>
-    <div class="jumbotron lunch-bg-img">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col">
-            <h2>So today you ordered ...</h2>
+    <v-toolbar>
+      <v-toolbar-title>
+        Today orders
+      </v-toolbar-title>
+    </v-toolbar>
 
-            <div v-if="this.currentOrderEntries.length > 0">
-              <template v-for="orderEntry in this.currentOrderEntries">
-                <template v-for="dishEntry in orderEntry.dishEntries">
-                  <p class="pointer" @click="goToOrder(orderEntry.orderId)" :key="dishEntry.id">
-                    <b>{{dishEntry.dish.name}}</b>
-                    from
-                    <b>{{dishEntry.dish.restaurant.name}}</b>
-                    (STATUS: {{orderEntry.orderState}})
-                  </p>
-                </template>
-              </template>
-            </div>
-            <div v-else>
-              <div>
-                <p>... nothing yet.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <v-content>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-layout column>
+                <h2>So today you ordered ...</h2>
 
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
+                <div v-if="this.currentOrderEntries.length > 0">
+                  <template v-for="orderEntry in this.currentOrderEntries">
+                    <template v-for="dishEntry in orderEntry.dishEntries">
+                      <p class="pointer" @click="goToOrder(orderEntry.orderId)" :key="dishEntry.id">
+                        <b>{{dishEntry.dish.name}}</b>
+                        from
+                        <b>{{dishEntry.restaurantName}}</b>
+                        (STATUS: {{orderEntry.orderState}})
+                      </p>
+                    </template>
+                  </template>
+                </div>
+                <div v-else>
+                  <div>
+                    <p>... nothing yet.</p>
+                  </div>
+                </div>
+              </v-layout>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
 
-          <a href="#/orders/create" class="btn btn-success pull-right">
-            Create new order &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-          </a>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
+                <v-layout column>
 
-          <h1>Orders today:</h1>
+                  <errors-component />
 
-        </div>
-      </div>
+                  <h1>Orders today:</h1>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <h3>Not ordered yet ({{ this.createdOrders.length }})</h3>
+                  <h3>Not ordered yet ({{ this.createdOrders.length }})</h3>
 
-          <div v-if="this.createdOrders.length > 0">
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th>Restaurant</th>
-                <th>Who will order?</th>
-              </tr>
-              </thead>
+                  <div v-if="this.createdOrders.length > 0">
+                    <table class="table table-hover">
+                      <thead>
+                      <tr>
+                        <th>Restaurant</th>
+                        <th>Who will order?</th>
+                      </tr>
+                      </thead>
 
-              <tbody>
-              <tr @click="goToOrder(order.id)" v-for="order in this.createdOrders" :key="order.id"
-                  class="pointer">
-                <td>{{order.restaurantName}}</td>
-                <td>{{order.orderCreatorUsername}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+                      <tbody>
+                      <tr @click="goToOrder(order.id)" v-for="order in this.createdOrders" :key="order.id"
+                          class="pointer">
+                        <td>{{order.restaurantName}}</td>
+                        <td>{{order.orderCreatorUsername}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-          <div v-else>
-            <p>No orders.</p>
-          </div>
+                  <div v-else>
+                    <p>No orders.</p>
+                  </div>
 
-        </div>
-      </div>
+                  <h3>Ordering right now ({{ this.orderingOrders.length }})</h3>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <h3>Ordering right now ({{ this.orderingOrders.length }})</h3>
+                  <div v-if="this.orderingOrders.length > 0">
+                    <table class="table table-hover">
+                      <thead>
+                      <tr>
+                        <th>Restaurant</th>
+                        <th>Who will order?</th>
+                      </tr>
+                      </thead>
 
-          <div v-if="this.orderingOrders.length > 0">
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th>Restaurant</th>
-                <th>Who will order?</th>
-              </tr>
-              </thead>
+                      <tbody>
+                      <tr @click="goToOrder(order.id)" v-for="order in this.orderingOrders" :key="order.id"
+                          class="pointer">
+                        <td>{{order.restaurantName}}</td>
+                        <td>{{order.orderCreatorUsername}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-              <tbody>
-              <tr @click="goToOrder(order.id)" v-for="order in this.orderingOrders" :key="order.id"
-                  class="pointer">
-                <td>{{order.restaurantName}}</td>
-                <td>{{order.orderCreatorUsername}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+                  <div v-else>
+                    <p>No orders.</p>
+                  </div>
 
-          <div v-else>
-            <p>No orders.</p>
-          </div>
+                  <h3>Ordered ({{ this.orderedOrders.length }})</h3>
 
-        </div>
-      </div>
+                  <div v-if="this.orderedOrders.length > 0">
+                    <table class="table table-hover">
+                      <thead>
+                      <tr>
+                        <th>Restaurant</th>
+                        <th>Who will order?</th>
+                      </tr>
+                      </thead>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <h3>Ordered ({{ this.orderedOrders.length }})</h3>
+                      <tbody>
+                      <tr @click="goToOrder(order.id)" v-for="order in this.orderedOrders" :key="order.id"
+                          class="pointer">
+                        <td>{{order.restaurantName}}</td>
+                        <td>{{order.orderCreatorUsername}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-          <div v-if="this.orderedOrders.length > 0">
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th>Restaurant</th>
-                <th>Who will order?</th>
-              </tr>
-              </thead>
+                  <div v-else>
+                    <p>No orders.</p>
+                  </div>
 
-              <tbody>
-              <tr @click="goToOrder(order.id)" v-for="order in this.orderedOrders" :key="order.id"
-                  class="pointer">
-                <td>{{order.restaurantName}}</td>
-                <td>{{order.orderCreatorUsername}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+                  <h3>Delivered ({{ this.deliveredOrders.length }})</h3>
 
-          <div v-else>
-            <p>No orders.</p>
-          </div>
+                  <div v-if="this.deliveredOrders.length > 0">
+                    <table class="table table-hover">
+                      <thead>
+                      <tr>
+                        <th>Restaurant</th>
+                        <th>Who will order?</th>
+                      </tr>
+                      </thead>
 
-        </div>
-      </div>
+                      <tbody>
+                      <tr @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id"
+                          class="pointer">
+                        <td>{{order.restaurantName}}</td>
+                        <td>{{order.orderCreatorUsername}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <h3>Delivered ({{ this.deliveredOrders.length }})</h3>
+                  <div v-else>
+                    <p>No orders.</p>
+                  </div>
+                </v-layout>
 
-          <div v-if="this.deliveredOrders.length > 0">
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th>Restaurant</th>
-                <th>Who will order?</th>
-              </tr>
-              </thead>
+                <v-btn fixed dark fab bottom right color="green" @click="goToCreateOrder()">
+                  <v-icon>add</v-icon>
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
 
-              <tbody>
-              <tr @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id"
-                  class="pointer">
-                <td>{{order.restaurantName}}</td>
-                <td>{{order.orderCreatorUsername}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div v-else>
-            <p>No orders.</p>
-          </div>
-
-        </div>
-      </div>
-    </div>
   </LoadingView>
 </template>
 
@@ -169,12 +168,10 @@
   import LoadingView from "../../components/commons/LoadingView";
   import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
   import {mapState} from "vuex"
+  import ErrorsComponent from '../../components/commons/Errors'
+
 
   export default {
-    data() {
-      return {
-      }
-    },
     mounted() {
       ApiConnector.initializePushNotifications();
 
@@ -185,6 +182,9 @@
     methods: {
       goToOrder (selectedOrderId) {
         location = "#/orders/show/" + selectedOrderId
+      },
+      goToCreateOrder () {
+        location = "#/orders/create"
       }
     },
     computed: {
@@ -198,6 +198,7 @@
     },
     components: {
       LoadingView,
+      ErrorsComponent
     }
   }
 </script>

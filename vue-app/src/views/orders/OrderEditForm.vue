@@ -1,18 +1,14 @@
 <template>
   <LoadingView>
+    <v-toolbar>
+      <back-button2 :href="'#/orders/show/' + orderId"></back-button2>
+
+      <v-toolbar-title>
+        Edit order from {{restaurantName}}
+      </v-toolbar-title>
+    </v-toolbar>
+
     <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          <back-button :href="'#/orders/show/' + orderId"></back-button>
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col">
-          <h1>Edit order from {{restaurantName}}</h1>
-        </div>
-      </div>
-
       <errors-component />
 
       <form>
@@ -146,6 +142,7 @@
 
 <script>
   import BackButton from '../../components/commons/BackButton'
+  import BackButton2 from '../../components/commons/BackButton2'
   import ErrorsComponent from '../../components/commons/Errors'
   import MaskedInput from 'vue-text-mask'
   import LoadingView from "../../components/commons/LoadingView";
@@ -247,6 +244,7 @@
     components: {
       LoadingView,
       BackButton,
+      BackButton2,
       ErrorsComponent,
       MaskedInput,
       'v-select': VueSelect

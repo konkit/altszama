@@ -1,37 +1,44 @@
 <template>
   <LoadingView>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          <h1>All orders</h1>
-        </div>
-      </div>
+    <v-toolbar>
+      <v-toolbar-title>
+        All orders
+      </v-toolbar-title>
+    </v-toolbar>
 
-      <div class="row justify-content-center">
-        <div class="col">
-          <table class="table table-hover">
-            <thead>
-            <tr>
-              <th>Date</th>
-              <th>Restaurant</th>
-              <th>Status</th>
-              <th>Order creator</th>
-            </tr>
-            </thead>
+    <v-content>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
+                <table class="table table-hover">
+                  <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Restaurant</th>
+                    <th>Status</th>
+                    <th>Order creator</th>
+                  </tr>
+                  </thead>
 
-            <tbody>
-            <tr @click="goToOrder(order.id)" v-for="order in allOrdersList" :key="order.id"
-                :data-href="'/orders/show/' + order.id" class="pointer">
-              <td>{{order.orderDate}}</td>
-              <td>{{order.restaurantName}}</td>
-              <td>{{order.orderState}}</td>
-              <td>{{order.orderCreatorUsername}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+                  <tbody>
+                  <tr @click="goToOrder(order.id)" v-for="order in allOrdersList" :key="order.id"
+                      :data-href="'/orders/show/' + order.id" class="pointer">
+                    <td>{{order.orderDate}}</td>
+                    <td>{{order.restaurantName}}</td>
+                    <td>{{order.orderState}}</td>
+                    <td>{{order.orderCreatorUsername}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+
   </LoadingView>
 </template>
 

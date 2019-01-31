@@ -1,17 +1,17 @@
 <template>
   <LoadingView>
+    <v-toolbar>
+      <back-button2 :href="'#/orders/show/' + orderId"></back-button2>
+
+      <v-toolbar-title>
+        Ordering from {{restaurantName}}
+      </v-toolbar-title>
+    </v-toolbar>
+
     <div v-if="isStateOrdering">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col">
-            <back-button :href="'#/orders/show/' + orderId"></back-button>
-          </div>
-        </div>
-
-        <div class="row justify-content-center">
-          <div class="col">
-            <h1>Ordering from {{restaurantName}}</h1>
-
             <div class="alert alert-warning">
               <p>Order is now locked, so no one should order anything else now.</p>
 
@@ -179,7 +179,7 @@
 </template>
 
 <script>
-  import BackButton from '../../components/commons/BackButton.vue'
+  import BackButton2 from '../../components/commons/BackButton2.vue'
   import ErrorsComponent from '../../components/commons/Errors.vue'
   import MaskedInput from 'vue-text-mask'
   import Price from '../../components/commons/PriceElement.vue'
@@ -230,7 +230,7 @@
     },
     components: {
       LoadingView,
-      BackButton,
+      BackButton2,
       ErrorsComponent,
       MaskedInput,
       Price,

@@ -15,22 +15,16 @@
 
                 <div class="row justify-content-center">
                   <div class="col">
-                    <a href="#/restaurants/import/upload">Import restaurant from JSON</a>
-                  </div>
-                </div>
-
-                <div class="row justify-content-center">
-                  <div class="col">
                     <table class="table table-hover">
                       <tbody>
                       <tr @click="goToRestaurant(restaurant.id)" v-for="restaurant in this.restaurants"
                           :key="restaurant.id" class="pointer">
                         <td>
                           <span>{{restaurant.name}}</span>
-                          <v-chip outline="true" text-color="blue" v-if="restaurant.lastCrawled != null">
+                          <v-chip text-color="blue" v-if="restaurant.lastCrawled != null">
                             crawled
                           </v-chip>
-                          <v-chip outline="true" text-color="green" v-if="restaurant.lastCrawled == null">
+                          <v-chip text-color="green" v-if="restaurant.lastCrawled == null">
                             user-created
                           </v-chip>
                         </td>

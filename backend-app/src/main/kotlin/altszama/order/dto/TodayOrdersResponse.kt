@@ -77,7 +77,7 @@ data class TodayOrdersResponse(
         orderEntry.id,
         orderEntry.order.id,
         orderEntry.order.orderState,
-        orderEntry.dishEntries.map { dishEntry -> DishEntryDto.fromDishEntry(dishEntry) },
+        orderEntry.dishEntries.map { dishEntry -> DishEntryDto.fromDishEntry(dishEntry, orderEntry.order.restaurant.name) },
         orderEntry.paymentStatus,
         orderEntry.created
       )

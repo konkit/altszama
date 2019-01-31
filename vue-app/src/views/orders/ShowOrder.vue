@@ -1,15 +1,25 @@
 <template>
   <LoadingView>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
-          <back-button href="#/orders"/>
+    <v-toolbar>
+      <back-button2 href="#/orders/"></back-button2>
 
-          <h1>[{{ this.order.orderState }}] Order from {{this.order.restaurantName}} ({{this.order.orderDate}})</h1>
+      <v-toolbar-title>
+        [{{ this.order.orderState }}] Order from {{this.order.restaurantName}} ({{this.order.orderDate}})
+      </v-toolbar-title>
 
-          <template v-if="isOrderOwner()">
-            <order-state-buttons></order-state-buttons>
-          </template>
+      <v-spacer></v-spacer>
+
+      <template v-if="isOrderOwner()">
+        <order-state-buttons></order-state-buttons>
+      </template>
+    </v-toolbar>
+
+    <v-content>
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
 
           <div v-if="this.isOrdering() && this.isOrderOwner()" class="alert alert-warning">
             <p><strong>The order is locked!</strong></p>
@@ -24,15 +34,22 @@
               </button>
             </p>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <order-stats></order-stats>
+                <order-stats></order-stats>
 
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col">
+
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10>
+            <v-card>
+              <v-card-text>
+
           <table class="table">
             <tr>
               <th class="names-person">Eating person</th>
@@ -100,15 +117,19 @@
               </tr>
             </template>
           </table>
-        </div>
-      </div>
-    </div>
+
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
 
   </LoadingView>
 </template>
 
 <script>
-  import BackButton from '../../components/commons/BackButton.vue'
+  import BackButton2 from '../../components/commons/BackButton2.vue'
   import Price from '../../components/commons/PriceElement.vue'
   import LoadingView from '../../components/commons/LoadingView.vue'
   import OrderStateButtons from '../../components/orders/OrderStateButtons.vue'
@@ -206,7 +227,7 @@
       ])
     },
     components: {
-      BackButton,
+      BackButton2,
       Price,
       LoadingView,
       OrderStateButtons,
@@ -219,9 +240,6 @@
 </script>
 
 <style scoped>
-  .row {
-    margin-top: 2rem;
-  }
 
   .names-person {
     width: 250px;

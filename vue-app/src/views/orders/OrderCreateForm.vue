@@ -1,19 +1,19 @@
 <template>
   <LoadingView>
+    <v-toolbar>
+      <back-button2 href="#/orders"></back-button2>
+
+      <v-toolbar-title>
+        Create new order
+      </v-toolbar-title>
+    </v-toolbar>
+
     <div v-if="this.restaurantsList.length === 0">
       <p>There are no restaurants, please create one first</p>
     </div>
 
     <div v-if="this.restaurantsList.length > 0">
       <div class="container">
-        <back-button href="#/orders"></back-button>
-
-        <div class="row justify-content-center">
-          <div class="col">
-            <h1>Create new order</h1>
-          </div>
-        </div>
-
         <errors-component />
 
         <form>
@@ -165,6 +165,7 @@
 
 <script>
   import BackButton from '../../components/commons/BackButton'
+  import BackButton2 from '../../components/commons/BackButton2'
   import ErrorsComponent from '../../components/commons/Errors'
   import MaskedInput from 'vue-text-mask'
   import LoadingView from "../../components/commons/LoadingView";
@@ -270,6 +271,7 @@
     components: {
       LoadingView,
       BackButton,
+      BackButton2,
       ErrorsComponent,
       MaskedInput,
       'v-select': VueSelect
