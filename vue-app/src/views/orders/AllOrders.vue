@@ -7,44 +7,36 @@
     </v-toolbar>
 
     <v-content>
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
-            <v-card>
-              <v-card-text>
-                <table class="table table-hover">
-                  <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Restaurant</th>
-                    <th>Status</th>
-                    <th>Order creator</th>
-                  </tr>
-                  </thead>
+      <simple-card>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Date</th>
+            <th>Restaurant</th>
+            <th>Status</th>
+            <th>Order creator</th>
+          </tr>
+          </thead>
 
-                  <tbody>
-                  <tr @click="goToOrder(order.id)" v-for="order in allOrdersList" :key="order.id"
-                      :data-href="'/orders/show/' + order.id" class="pointer">
-                    <td>{{order.orderDate}}</td>
-                    <td>{{order.restaurantName}}</td>
-                    <td>{{order.orderState}}</td>
-                    <td>{{order.orderCreatorUsername}}</td>
-                  </tr>
-                  </tbody>
-                </table>
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+          <tbody>
+          <tr @click="goToOrder(order.id)" v-for="order in allOrdersList" :key="order.id"
+              :data-href="'/orders/show/' + order.id" class="pointer">
+            <td>{{order.orderDate}}</td>
+            <td>{{order.restaurantName}}</td>
+            <td>{{order.orderState}}</td>
+            <td>{{order.orderCreatorUsername}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </simple-card>
     </v-content>
-
   </LoadingView>
 </template>
 
 <script>
   import LoadingView from "../../components/commons/LoadingView";
   import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
+  import SimpleCard from "../../components/commons/SimpleCard";
 
   export default {
     mounted() {
@@ -61,6 +53,7 @@
       }
     },
     components: {
+      SimpleCard,
       LoadingView,
     }
   }
