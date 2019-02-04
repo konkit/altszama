@@ -29,13 +29,13 @@
                   </p>
 
                   <p>
-                    <button class="btn btn-success" @click="unlockOrder()">
+                    <v-btn color="success" @click="unlockOrder()">
                       Unlock&nbsp;&nbsp;<span class="fa fa-unlock"></span>
-                    </button>
+                    </v-btn>
 
-                    <button class="btn btn-success" @click="placeOrder()">
+                    <v-btn color="success" @click="placeOrder()">
                       Place order&nbsp;&nbsp;<span class="fa fa-arrow-right"></span>
-                    </button>
+                    </v-btn>
                   </p>
                 </div>
 
@@ -65,9 +65,9 @@
 
                       <td>
                         <template v-if="isEntryCreating === false">
-                          <button class="btn btn-success" @click="createEntry()">
+                          <v-btn color="success" @click="createEntry()">
                             Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                          </button>
+                          </v-btn>
                         </template>
 
                         <template v-if="isEntryCreating === true">
@@ -100,13 +100,11 @@
                           </template>
                         </template>
 
-                        <template
-                            v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+                        <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
                           <div v-if="isEntryCreating === false">
-                            <button class="btn btn-success" @click="createEntry()">
-                              Add entry &nbsp;<i class="fa fa-plus"
-                                                 aria-hidden="true"></i>
-                            </button>
+                            <v-btn color="success" @click="createEntry()">
+                              Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                            </v-btn>
                           </div>
                           <div v-if="isEntryCreating === true">
                             <create-order-entry></create-order-entry>

@@ -37,7 +37,7 @@ class OrderEntryService {
     val dish: Dish = if (orderEntrySaveRequest.newDish == true && orderEntrySaveRequest.newDishName?.isNotBlank() == true) {
       createNewDish(order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
     } else {
-      dishRepository.findById(orderEntrySaveRequest.dishId).get()
+      dishRepository.findById(orderEntrySaveRequest.dishId!!).get()
     }
 
     val sideDishes: List<SideDish> = orderEntrySaveRequest.sideDishes.mapNotNull { sideDishData ->

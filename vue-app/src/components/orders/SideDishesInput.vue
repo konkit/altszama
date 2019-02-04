@@ -18,7 +18,7 @@
 
             <vue-numeric
                 :value="sideDish.newSideDishPrice"
-                @input="changeNewSideDishPrice(sdIndex, $event)"
+                @input.native="changeNewSideDishPrice(sdIndex, $event.target.value)"
                 class="form-control"
                 required=""
                 currency="zł"
@@ -27,9 +27,9 @@
                 :precision="2"
             />
 
-            <button class="btn btn-danger" @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></button>
+            <v-btn color="error" @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
 
-            <button class="btn btn-link" @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</button>
+            <v-btn flat @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</v-btn>
           </div>
 
           <div class="input-group" v-else>
@@ -50,13 +50,13 @@
               </option>
             </select>
 
-            <button class="btn btn-danger" @click="removeSideDish(sdIndex)">
+            <v-btn color="error" @click="removeSideDish(sdIndex)">
               <span class="fa fa-remove"></span>
-            </button>
+            </v-btn>
 
-            <button class="btn btn-link" @click="setAsNewSideDish(sdIndex)">
+            <v-btn flat @click="setAsNewSideDish(sdIndex)">
               Type your own side dish
-            </button>
+            </v-btn>
           </div>
         </div>
       </div>
@@ -64,9 +64,9 @@
         <p>No side dishes selected</p>
       </div>
 
-      <button class="btn btn-success" @click="addSideDishEntry()">
+      <v-btn color="success" @click="addSideDishEntry()">
         Add side dish &nbsp; <i class="fa fa-plus"></i>
-      </button>
+      </v-btn>
     </div>
   </div>
 </template>

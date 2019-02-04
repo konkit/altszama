@@ -26,7 +26,7 @@
 
                 <div class="form-group">
                   <label for="price">Price</label>
-                  <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input="updatePrice($event)"
+                  <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input.native="updatePrice($event)"
                                :precision="2" class="form-control" required="" id="price"></vue-numeric>
                 </div>
 
@@ -45,7 +45,7 @@
               </v-card-text>
 
               <v-card-actions>
-                <button @click="submitForm" class="btn btn-block btn-success">Update</button>
+                <v-btn color="success" @click="submitForm">Update</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>

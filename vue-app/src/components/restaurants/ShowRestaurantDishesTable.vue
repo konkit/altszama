@@ -19,13 +19,13 @@
           {{dish.name}}
           <price :data-price="dish.price"></price>
 
-          <button @click="deleteDish(dish.id)" class="btn btn-danger pull-right">
+          <v-btn color="error" @click="deleteDish(dish.id)" class="pull-right">
             Delete&nbsp;<span class="fa fa-times"/>
-          </button>
+          </v-btn>
 
-          <a :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'" class="btn btn-light pull-right">
+          <v-btn :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'" class="pull-right">
             Edit&nbsp;<span class="fa fa-pencil"/>
-          </a>
+          </v-btn>
         </td>
       </tr>
       </tbody>

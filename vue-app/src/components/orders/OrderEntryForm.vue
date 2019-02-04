@@ -11,26 +11,14 @@
             :value="dishId"
             @change="updateDishId($event.target.value)"
         >
-          <optgroup
-              v-for='(dishGroup, i) in allDishesByCategory'
-              :key='i'
-              :label="dishGroup.category"
-          >
-            <option
-                v-for='(dish, i) in dishGroup.dishes'
-                :key='i'
-                :value="dish.id"
-            >
-              {{ dish.name }} &nbsp; (
-              <price
-                  :data-price="dish.price"
-              />
-              )
+          <optgroup v-for='(dishGroup, i) in allDishesByCategory' :key='i' :label="dishGroup.category">
+            <option v-for='(dish, i) in dishGroup.dishes' :key='i' :value="dish.id">
+              {{ dish.name }} &nbsp; ( <price :data-price="dish.price" /> )
             </option>
           </optgroup>
         </select>
 
-        <button class="btn btn-link" @click="setDishAsNew()">Type your own dish! &nbsp;</button>
+        <v-btn flat @click="setDishAsNew()">Type your own dish! &nbsp;</v-btn>
       </template>
     </div>
 
@@ -40,11 +28,11 @@
                :value="newDishName" @input="updateNewDishName($event.target.value)"/>
 
         <vue-numeric currency="zł" separator="." currency-symbol-position="suffix"
-                     :value="newDishPrice" @input="updateNewDishPrice($event.target.value)" :precision="2"
+                     :value="newDishPrice" @input.native="updateNewDishPrice($event.target.value)" :precision="2"
                      class="form-control"
                      required=""></vue-numeric>
 
-        <button class="btn btn-link" @click="setDishAsExisting()">Select dish from list &nbsp;</button>
+        <v-btn flat @click="setDishAsExisting()">Select dish from list &nbsp;</v-btn>
       </template>
     </div>
 
@@ -59,7 +47,6 @@
 </template>
 
 <script>
-  import BackButton from '../commons/BackButton.vue'
   import ErrorsComponent from '../commons/Errors.vue'
   import Spinner from '../commons/Spinner.vue'
   import Price from '../commons/PriceElement.vue'
@@ -82,10 +69,10 @@
     name: 'order-entry-form',
     methods: {
       setDishAsNew() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_NEW}`, newValue)
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_NEW}`)
       },
       setDishAsExisting() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`, newValue)
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`)
       },
       updateDishId(newValue) {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`, newValue);
@@ -116,8 +103,6 @@
       ])
     },
     components: {
-      Price,
-      BackButton,
       ErrorsComponent,
       Price,
       Spinner,

@@ -4,30 +4,29 @@
       <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
 
         <div v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
-          <button type="button" class="btn btn-light" @click="editDishEntry()">
+          <v-btn @click="editDishEntry()">
             <i class="fa fa-pencil" aria-hidden="true"></i>
-          </button>
+          </v-btn>
 
-          <button type="button" class="btn btn-danger" @click="deleteDishEntry()">
+          <v-btn color="error" @click="deleteDishEntry()">
             <i class="fa fa-times" aria-hidden="true"></i>
-          </button>
+          </v-btn>
         </div>
 
-        <div
-            v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
+        <div v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
           {{paymentStatus(orderEntry)}}
         </div>
 
         <div v-if="shouldShowMarkAsPaidButton(orderEntry)">
-          <button type="button" class="btn btn-success" @click="markAsPaid(orderEntry.id)">
+          <v-btn color="success" @click="markAsPaid(orderEntry.id)">
             Mark as paid
-          </button>
+          </v-btn>
         </div>
 
         <div v-if="shouldShowConfirmAsPaidButton(orderEntry)">
-          <button type="button" class="btn btn-success" @click="confirmAsPaid(orderEntry.id)">
+          <v-btn color="success" @click="confirmAsPaid(orderEntry.id)">
             Confirm as paid
-          </button>
+          </v-btn>
         </div>
 
       </div>
@@ -35,9 +34,7 @@
 
     <div>
       <p class="dish-name">
-        {{dishEntry.dishName}} (
-        <price :data-price="dishEntry.price"/>
-        )
+        {{dishEntry.dishName}} ( <price :data-price="dishEntry.price"/> )
       </p>
       <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
         + {{sideDish.name}} (

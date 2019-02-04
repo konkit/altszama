@@ -88,7 +88,7 @@ export default {
 
     [SET_DISH_AS_NEW] (state) {
       state.newDish = true;
-      state.dishId = ""
+      // state.dishId = ""
     },
     [SET_DISH_AS_EXISTING] (state) {
       state.newDish = false;
@@ -104,7 +104,7 @@ export default {
     },
     [SET_INITIAL_EDITED_ORDER_ENTRY] (state, {orderId, dishEntry}) {
       state.orderId = orderId;
-      state.dishId = dishEntry.dish.id;
+      state.dishId = dishEntry.dishId;
       state.dishEntryId = dishEntry.id;
       state.additionalComments = dishEntry.additionalComments;
       state.newDish = false;

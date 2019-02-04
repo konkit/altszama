@@ -8,55 +8,64 @@
 
     <v-content>
       <simple-card>
-        <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>Date</th>
-            <th>Restaurant</th>
-            <th>Status</th>
-            <th>Order creator</th>
-          </tr>
-          </thead>
+        <v-data-table class="table table-hover elevation-1" :items="allOrdersList" :headers="headers" :loading="false">
+          <template slot="headers" slot-scope="props">
+            <tr>
+              <th v-for="header in props.headers" :key="header.text">
+                {{ header.text }}
+              </th>
+            </tr>
+          </template>
 
-          <tbody>
-          <tr @click="goToOrder(order.id)" v-for="order in allOrdersList" :key="order.id"
-              :data-href="'/orders/show/' + order.id" class="pointer">
-            <td>{{order.orderDate}}</td>
-            <td>{{order.restaurantName}}</td>
-            <td>{{order.orderState}}</td>
-            <td>{{order.orderCreatorUsername}}</td>
-          </tr>
-          </tbody>
-        </table>
+          <template slot="items" slot-scope="props">
+            <tr @click="goToOrder(props.item.id)" :key="props.item.id" :data-href="'/orders/show/' + props.item.id"
+                class="pointer">
+              <td>{{props.item.orderDate}}</td>
+              <td>{{props.item.restaurantName}}</td>
+              <td>{{props.item.orderState}}</td>
+              <td>{{props.item.orderCreatorUsername}}</td>
+            </tr>
+          </template>
+        </v-data-table>
       </simple-card>
     </v-content>
   </LoadingView>
 </template>
 
 <script>
-  import LoadingView from "../../components/commons/LoadingView";
-  import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
-  import SimpleCard from "../../components/commons/SimpleCard";
+    import LoadingView from "../../components/commons/LoadingView";
+    import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
+    import SimpleCard from "../../components/commons/SimpleCard";
 
-  export default {
-    mounted() {
-      this.$store.dispatch(`allOrders/${FETCH_ALL_ORDERS}`)
-    },
-    computed: {
-      allOrdersList() {
-        return this.$store.state.allOrders.allOrdersList;
-      },
-    },
-    methods: {
-      goToOrder (selectedOrderId) {
-        window.location = "#/orders/show/" + selectedOrderId
-      }
-    },
-    components: {
-      SimpleCard,
-      LoadingView,
+    export default {
+        data() {
+            return {
+                headers: [
+                    { text: 'Date', align: 'left', value: 'date' },
+                    { text: 'Restaurant', value: 'restaurant' },
+                    { text: 'Status', value: 'status' },
+                    { text: 'Order creator', value: 'orderCreator' },
+                ],
+            }
+        },
+        mounted() {
+            this.$store.dispatch(`allOrders/${FETCH_ALL_ORDERS}`)
+        },
+        computed: {
+            allOrdersList() {
+                return this.$store.state.allOrders.allOrdersList;
+            },
+        },
+        methods: {
+            goToOrder(selectedOrderId) {
+                window.location = "#/orders/show/" + selectedOrderId
+            }
+        },
+        components: {
+            SimpleCard,
+            LoadingView,
+        }
     }
-  }
 </script>
 
 <style scoped>

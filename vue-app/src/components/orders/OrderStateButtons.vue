@@ -1,88 +1,63 @@
 <template>
   <div>
   <div v-if="longVersion">
-    <!-- orderCreatedButton -->
-    <button v-if="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'" type="button" class="btn btn-success" @click="setAsCreated">
+    <v-btn color="success" v-if="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'" @click="setAsCreated">
       <i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Mark back as un-ordered
-    </button>
+    </v-btn>
 
-    <!-- placeOrderButton -->
-    <span>
-      <a v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'"
-         :href="'#/orders/' + this.orderId + '/order_view'">
-        <button class="btn btn-success">
-          Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-        </button>
-      </a>
+    <v-btn color="success" v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'" @click="placeOrder">
+      Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+    </v-btn>
 
-      <button v-if="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'" @click="setAsOrdered"
-              class="btn btn-success">
-        <i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Back to ordered
-      </button>
-    </span>
+    <v-btn color="success" v-if="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'" @click="setAsOrdered">
+      <i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Back to ordered
+    </v-btn>
 
-    <!-- order-delivered-button -->
-    <button v-if="this.orderState === 'ORDERED'" type="button" class="btn btn-success" @click="setAsDelivered">
+    <v-btn color="success" v-if="this.orderState === 'ORDERED'" @click="setAsDelivered">
       Mark as delivered&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-    </button>
+    </v-btn>
 
-    <!-- order-rejected-button -->
-    <a class="btn btn-danger" @click="setAsRejected">
+    <v-btn color="error" @click="setAsRejected">
       Mark as rejected&nbsp;<i class="fa fa-ban" aria-hidden="true"></i>
-    </a>
+    </v-btn>
 
-    <!-- edit-order-button -->
-    <a :href="'#/orders/' + this.orderId + '/edit'" class="btn btn-light">
+    <v-btn @click="edit">
       Edit &nbsp;<i class="fa fa-pencil" aria-hidden="true"></i>
-    </a>
+    </v-btn>
 
-    <!-- delete-order-button -->
-    <a class="btn btn-danger" @click=deleteDishEntry()>
-      Delete &nbsp;
-      <i class="fa fa-times" aria-hidden="true"></i>
-    </a>
+    <v-btn color="error" @click=deleteDishEntry()>
+      Delete &nbsp;<i class="fa fa-times" aria-hidden="true"></i>
+    </v-btn>
   </div>
 
   <div v-if="!longVersion">
-    <!-- orderCreatedButton -->
-    <button v-if="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'" type="button" class="btn btn-success"
-            @click="setAsCreated" title="Mark back as un-ordered">
+    <v-btn color="success" v-if="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'" @click="setAsCreated">
       <i class="fa fa-undo" aria-hidden="true"></i>
-    </button>
+    </v-btn>
 
-    <!-- placeOrderButton -->
-    <span>
-      <a v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'" :href="'#/orders/' + this.orderId + '/order_view'">
-        <button class="btn btn-success" title="Place order">
-          <i class="fa fa-arrow-right" aria-hidden="true"></i>
-        </button>
-      </a>
-
-      <button v-if="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'" @click="setAsOrdered"
-              class="btn btn-success" title="Back to ordered">
-        <i class="fa fa-undo" aria-hidden="true"></i>
-      </button>
-    </span>
-
-    <!-- order-delivered-button -->
-    <button v-if="this.orderState === 'ORDERED'" type="button" class="btn btn-success" @click="setAsDelivered" title="Mark as delivered">
+    <v-btn color="success" v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'" @click="placeOrder">
       <i class="fa fa-arrow-right" aria-hidden="true"></i>
-    </button>
+    </v-btn>
 
-    <!-- order-rejected-button -->
-    <a class="btn btn-danger" @click="setAsRejected" title="Mark as rejected">
+    <v-btn color="success" v-if="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'" @click="setAsOrdered">
+      <i class="fa fa-undo" aria-hidden="true"></i>
+    </v-btn>
+
+    <v-btn color="success" v-if="this.orderState === 'ORDERED'" @click="setAsDelivered">
+      <i class="fa fa-arrow-right" aria-hidden="true"></i>
+    </v-btn>
+
+    <v-btn color="error" @click="setAsRejected">
       <i class="fa fa-ban" aria-hidden="true"></i>
-    </a>
+    </v-btn>
 
-    <!-- edit-order-button -->
-    <a :href="'#/orders/' + this.orderId + '/edit'" class="btn btn-light" title="Edit">
+    <v-btn @click="edit">
       <i class="fa fa-pencil" aria-hidden="true"></i>
-    </a>
+    </v-btn>
 
-    <!-- delete-order-button -->
-    <a class="btn btn-danger" @click=deleteDishEntry() title="Delete">
+    <v-btn color="error" @click=deleteDishEntry()>
       <i class="fa fa-times" aria-hidden="true"></i>
-    </a>
+    </v-btn>
   </div>
   </div>
 </template>
@@ -127,6 +102,12 @@
       deleteDishEntry () {
         return this.$store.dispatch(`showOrder/${DELETE_ORDER_ACTION}`, { orderId: this.orderId });
       },
+      placeOrder () {
+        window.location = '#/orders/' + this.orderId + '/order_view'
+      },
+      edit() {
+        window.location = '#/orders/' + this.orderId + '/edit'
+      }
     }
   }
 

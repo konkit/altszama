@@ -29,11 +29,11 @@
             <p>The button below will use your business Google Account to log in</p>
 
             <div v-if="loginPending == true">
-              <button class="btn btn-success">Loggin in ... wait plox.</button>
+              <v-btn color="success">Loggin in ... wait plox.</v-btn>
             </div>
 
             <div v-if="loginPending == false">
-              <button type="submit" :disabled = "loginLoaded == false" class="btn btn-success" @click="googleSignIn">Login using Google</button>
+              <v-btn color="success" type="submit" :disabled = "loginLoaded == false"  @click="googleSignIn">Login using Google</v-btn>
             </div>
           </div>
         </div>

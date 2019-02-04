@@ -31,10 +31,10 @@
           </div>
         </form>
 
-        <button class="btn btn-block btn-success" @click="submitForm">
+        <v-btn color="success" block @click="submitForm">
           Order placed!
           &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-        </button>
+        </v-btn>
 
       </simple-card>
 

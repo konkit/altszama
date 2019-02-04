@@ -9,13 +9,13 @@
 
       <v-spacer></v-spacer>
 
-      <a :href="'#/restaurants/' + this.restaurantId + '/edit'" class="btn btn-light">
+      <v-btn @click="editRestaurant">
         Edit restaurant&nbsp;<span class="fa fa-pencil"/>
-      </a>
+      </v-btn>
 
-      <button @click="deleteRestaurant" class="btn btn-danger">
+      <v-btn color="error" @click="deleteRestaurant">
         Delete restaurant&nbsp;<span class="fa fa-times"/>
-      </button>
+      </v-btn>
     </v-toolbar>
 
     <v-content>
@@ -63,7 +63,6 @@
 
 <script>
   import ErrorsComponent from '../../components/commons/Errors'
-  import BackButton from '../../components/commons/BackButton'
   import BackButton2 from '../../components/commons/BackButton2'
   import Price from '../../components/commons/PriceElement'
   import ShowRestaurantDishesTable from '../../components/restaurants/ShowRestaurantDishesTable'
@@ -86,7 +85,10 @@
         this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId, errorsComponent: errorsComponent});
       },
       goToCreateDish() {
-        location = '#/restaurants/' + this.restaurant.id + '/dishes/create'
+        location = '#/restaurants/' + this.restaurantId + '/dishes/create'
+      },
+      editRestaurant() {
+          location = '#/restaurants/' + this.restaurantId + '/edit'
       }
     },
     computed: {
@@ -102,7 +104,6 @@
     },
     components: {
       LoadingView,
-      BackButton,
       BackButton2,
       Price,
       ErrorsComponent,

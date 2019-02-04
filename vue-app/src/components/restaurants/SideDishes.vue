@@ -15,9 +15,9 @@
     </div>
 
     <div v-if="this.sideDishFormVisible === false">
-      <button class="btn btn-success" @click="setSideDishFormVisible(true)">
+      <v-btn color="success" @click="setSideDishFormVisible(true)">
         Add side dish &nbsp; <i class="fa fa-plus"/>
-      </button>
+      </v-btn>
     </div>
 
     <div v-if="this.sideDishFormVisible === true">
@@ -32,62 +32,61 @@
                      :precision="2" class="form-control" required="" id="newSideDishPrice"></vue-numeric>
       </div>
 
-      <button class="btn btn-success" @click="addSideDish">
+      <v-btn color="success" @click="addSideDish">
         Add &nbsp; <i class="fa fa-plus"/>
-      </button>
+      </v-btn>
 
-      <button class="btn btn-secondary" @click="setSideDishFormVisible(false)">
+      <v-btn @click="setSideDishFormVisible(false)">
         Cancel
-      </button>
+      </v-btn>
     </div>
   </div>
 </template>
 
 <script>
-  import BackButton from '../commons/BackButton.vue'
-  import ErrorsComponent from '../commons/Errors.vue'
-  import Price from '../commons/PriceElement.vue'
+    import ErrorsComponent from '../commons/Errors.vue'
+    import Price from '../commons/PriceElement.vue'
 
-  export default {
-    props: [
-      'initialSideDishes'
-    ],
-    data() {
-      return {
-        sideDishes: this.initialSideDishes || [],
+    export default {
+        props: [
+            'initialSideDishes'
+        ],
+        data() {
+            return {
+                sideDishes: this.initialSideDishes || [],
 
-        newSideDishName: '',
-        newSideDishPrice: '',
-        sideDishFormVisible: false
-      }
-    },
-    methods: {
-      addSideDish () {
-        var newSideDish = {
-          name: this.newSideDishName,
-          price: Math.round(this.newSideDishPrice * 100)
+                newSideDishName: '',
+                newSideDishPrice: '',
+                sideDishFormVisible: false
+            }
+        },
+        methods: {
+            addSideDish() {
+                var newSideDish = {
+                    name: this.newSideDishName,
+                    price: Math.round(this.newSideDishPrice * 100)
+                }
+
+                this.sideDishes.push(newSideDish)
+                this.setSideDishFormVisible(false);
+            },
+            removeSideDish(sideDishId) {
+                this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
+            },
+            setSideDishFormVisible(isVisible) {
+                this.sideDishFormVisible = isVisible;
+            },
+            getSideDishes() {
+                return this.sideDishes
+            },
+            setSideDishes(sideDishes) {
+                this.sideDishes = sideDishes
+            },
+
+        },
+        components: {
+            ErrorsComponent,
+            Price
         }
-
-        this.sideDishes.push(newSideDish)
-        this.setSideDishFormVisible(false);
-      },
-      removeSideDish (sideDishId) {
-        this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
-      },
-      setSideDishFormVisible (isVisible) {
-        this.sideDishFormVisible = isVisible;
-      },
-      getSideDishes () {
-        return this.sideDishes
-      },
-      setSideDishes (sideDishes) {
-        this.sideDishes = sideDishes
-      }
-    },
-    components: {
-      BackButton,
-      ErrorsComponent,
-      Price
     }
-  }
 </script>

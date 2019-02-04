@@ -4,17 +4,17 @@
       <errors-component/>
 
       <div class="pull-right">
-        <button type="button" class="btn btn-light" @click="cancelEdit()">
+        <v-btn @click="cancelEdit()">
           Cancel
-        </button>
+        </v-btn>
       </div>
 
       <div>
         <order-entry-form></order-entry-form>
 
-        <button class="btn btn-block btn-success" @click="submitForm">
+        <v-btn color="success" block="true" @click="submitForm">
           Update order
-        </button>
+        </v-btn>
       </div>
 
     </template>
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-  import BackButton from '../commons/BackButton.vue'
   import ErrorsComponent from '../commons/Errors.vue'
   import Spinner from '../commons/Spinner.vue'
   import Price from '../commons/PriceElement.vue'
@@ -74,7 +73,6 @@
       ]),
     },
     components: {
-      BackButton,
       ErrorsComponent,
       Price,
       Spinner,

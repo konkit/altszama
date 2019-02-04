@@ -41,7 +41,6 @@
 <script>
   import ApiConnector from '../../lib/ApiConnector.js'
   import FileUpload from 'vue-simple-upload/dist/FileUpload'
-  import BackButton from '../../components/commons/BackButton'
   import BackButton2 from '../../components/commons/BackButton2'
 
   export default {
@@ -71,7 +70,6 @@
     },
     components: {
       'fileupload': FileUpload,
-      BackButton,
       BackButton2,
     },
   }
