@@ -1,22 +1,19 @@
 <template>
   <div>
-    <h4>Dish</h4>
+    <div class="pull-right">
+      <v-btn @click="cancelEdit()">
+        Cancel
+      </v-btn>
+    </div>
 
     <div class="input-group">
       <template v-if="!newDish">
-        <select
-            class="form-control existing-dish-dropdown"
-            required=""
-            id="dish"
+        <v-select
+            :items="allDishesAtOnce"
+            label="Dish"
             :value="dishId"
             @change="updateDishId($event.target.value)"
-        >
-          <optgroup v-for='(dishGroup, i) in allDishesByCategory' :key='i' :label="dishGroup.category">
-            <option v-for='(dish, i) in dishGroup.dishes' :key='i' :value="dish.id">
-              {{ dish.name }} &nbsp; ( <price :data-price="dish.price" /> )
-            </option>
-          </optgroup>
-        </select>
+        ></v-select>
 
         <v-btn flat @click="setDishAsNew()">Type your own dish! &nbsp;</v-btn>
       </template>
@@ -54,14 +51,14 @@
   import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
   import {
-    UPDATE_DISH_ID,
-    CLEAR_EDITED_SIDE_DISHES,
-    UPDATE_NEW_DISH_NAME,
-    UPDATE_NEW_DISH_PRICE,
-    NAMESPACE_MODIFY_ORDER_ENTRY,
-    UPDATE_ADDITIONAL_COMMENTS,
-    SET_DISH_AS_NEW,
-    SET_DISH_AS_EXISTING,
+      UPDATE_DISH_ID,
+      CLEAR_EDITED_SIDE_DISHES,
+      UPDATE_NEW_DISH_NAME,
+      UPDATE_NEW_DISH_PRICE,
+      NAMESPACE_MODIFY_ORDER_ENTRY,
+      UPDATE_ADDITIONAL_COMMENTS,
+      SET_DISH_AS_NEW,
+      SET_DISH_AS_EXISTING, CANCEL_DISH_ENTRY_MODIFICATION,
   } from "../../store/modules/ModifyOrderEntryState";
   import {mapState, mapMutations} from "vuex"
 
@@ -86,7 +83,10 @@
       },
       ...mapMutations(NAMESPACE_MODIFY_ORDER_ENTRY, [
         UPDATE_ADDITIONAL_COMMENTS
-      ])
+      ]),
+      cancelEdit() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
+      },
     },
     computed: {
       ...mapState("showOrder", [
@@ -100,7 +100,17 @@
         "newDishName",
         "newDishPrice",
         "chosenSideDishes",
-      ])
+      ]),
+      allDishesAtOnce() {
+        return this.allDishesByCategory.flatMap(categoryData => categoryData.dishes.flatMap(dish => {
+            var price = (dish.price/100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+
+            return Object.assign({}, {
+                text: `${dish.name} ( ${price} )`,
+                value: dish.id
+            })
+        }))
+      }
     },
     components: {
       ErrorsComponent,

@@ -3,16 +3,10 @@
     <template v-if="this.loadingEntry === false">
       <errors-component/>
 
-      <div class="pull-right">
-        <v-btn @click="cancelEdit()">
-          Cancel
-        </v-btn>
-      </div>
-
       <div>
         <order-entry-form></order-entry-form>
 
-        <v-btn color="success" block="true" @click="submitForm">
+        <v-btn color="success" block @click="submitForm">
           Save order
         </v-btn>
       </div>
@@ -65,9 +59,6 @@
 
         return false;
       },
-      cancelEdit() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
-      }
     },
     computed: {
       ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [

@@ -1,8 +1,6 @@
 <template>
   <div class="form-group">
     <div>
-      <h4>Side dishes</h4>
-
       <div v-if="chosenSideDishes.length > 0">
         <div v-for="(sideDish, sdIndex) in chosenSideDishes" :key="sdIndex">
 
@@ -33,22 +31,12 @@
           </div>
 
           <div class="input-group" v-else>
-            <select
-                class="form-control"
-                name="sideDishId"
-                required=""
+            <v-select
+                :items="sideDishesItems"
+                label="Side dish"
                 :value="sideDish.id"
                 @change="updateSideDishComboBox(sdIndex, $event.target.value)"
-            >
-              <option
-                  v-for="sideDishToSelect in dishIdToSideDishesMap[dishId]"
-                  :value="sideDishToSelect.id"
-              >
-                {{sideDishToSelect.name}} &nbsp; (
-                <price :data-price="sideDishToSelect.price"/>
-                )
-              </option>
-            </select>
+            ></v-select>
 
             <v-btn color="error" @click="removeSideDish(sdIndex)">
               <span class="fa fa-remove"></span>
@@ -72,72 +60,89 @@
 </template>
 
 <script>
-  import Price from '../commons/PriceElement.vue'
-  import {
-    UPDATE_NEW_SIDE_DISH_NAME,
-    UPDATE_NEW_SIDE_DISH_PRICE,
-    UPDATE_SIDE_DISH_ACTION,
-    SET_SIDE_DISH_AS_EXISTING,
-    SET_SIDE_DISH_AS_NEW,
-    ADD_SIDE_DISH_ACTION,
-    REMOVE_SIDE_DISH,
-    NAMESPACE_MODIFY_ORDER_ENTRY
-  } from "../../store/modules/ModifyOrderEntryState";
+    import Price from '../commons/PriceElement.vue'
+    import {
+        UPDATE_NEW_SIDE_DISH_NAME,
+        UPDATE_NEW_SIDE_DISH_PRICE,
+        UPDATE_SIDE_DISH_ACTION,
+        SET_SIDE_DISH_AS_EXISTING,
+        SET_SIDE_DISH_AS_NEW,
+        ADD_SIDE_DISH_ACTION,
+        REMOVE_SIDE_DISH,
+        NAMESPACE_MODIFY_ORDER_ENTRY
+    } from "../../store/modules/ModifyOrderEntryState";
 
-  export default {
-    name: 'side-dishes-input',
-    methods: {
-      removeSideDish (sideDishIndex) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${REMOVE_SIDE_DISH}`, sideDishIndex);
+    export default {
+        name: 'side-dishes-input',
+        methods: {
+            removeSideDish(sideDishIndex) {
+                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${REMOVE_SIDE_DISH}`, sideDishIndex);
 
-        this.$forceUpdate();
-      },
-      addSideDishEntry () {
-        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${ADD_SIDE_DISH_ACTION}`);
+                this.$forceUpdate();
+            },
+            addSideDishEntry() {
+                this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${ADD_SIDE_DISH_ACTION}`);
 
-        this.$forceUpdate();
-      },
-      setAsNewSideDish(sdIndex) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_NEW}`, {sdIndex: sdIndex});
+                this.$forceUpdate();
+            },
+            setAsNewSideDish(sdIndex) {
+                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_NEW}`, {sdIndex: sdIndex});
 
-        this.$forceUpdate();
-      },
-      setAsExistingSideDish(sdIndex) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_EXISTING}`, {sdIndex: sdIndex});
+                this.$forceUpdate();
+            },
+            setAsExistingSideDish(sdIndex) {
+                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_EXISTING}`, {sdIndex: sdIndex});
 
-        this.$forceUpdate();
-      },
-      updateNewSideDishName(sdIndex, newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_NAME}`, {sdIndex: sdIndex, newValue: newValue});
+                this.$forceUpdate();
+            },
+            updateNewSideDishName(sdIndex, newValue) {
+                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_NAME}`, {
+                    sdIndex: sdIndex,
+                    newValue: newValue
+                });
 
-        this.$forceUpdate();
-      },
-      changeNewSideDishPrice(sdIndex, newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_PRICE}`, {sdIndex: sdIndex, newValue: newValue});
+                this.$forceUpdate();
+            },
+            changeNewSideDishPrice(sdIndex, newValue) {
+                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_PRICE}`, {
+                    sdIndex: sdIndex,
+                    newValue: newValue
+                });
 
-        this.$forceUpdate();
-      },
-      updateSideDishComboBox(sdIndex, sideDishId) {
-        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_SIDE_DISH_ACTION}`, {sdIndex: sdIndex, sideDishId: sideDishId});
+                this.$forceUpdate();
+            },
+            updateSideDishComboBox(sdIndex, sideDishId) {
+                this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_SIDE_DISH_ACTION}`, {
+                    sdIndex: sdIndex,
+                    sideDishId: sideDishId
+                });
 
-        this.$forceUpdate();
-      },
+                this.$forceUpdate();
+            },
 
-    },
-    computed: {
-      dishId() {
-        return this.$store.state.modifyOrderEntry.dishId;
-      },
-      dishIdToSideDishesMap() {
-        return this.$store.state.showOrder.dishIdToSideDishesMap;
-      },
-      chosenSideDishes() {
-        return this.$store.state.modifyOrderEntry.chosenSideDishes;
-      },
-    },
-    components: {
-      Price
+        },
+        computed: {
+            dishId() {
+                return this.$store.state.modifyOrderEntry.dishId;
+            },
+            dishIdToSideDishesMap() {
+                return this.$store.state.showOrder.dishIdToSideDishesMap;
+            },
+            chosenSideDishes() {
+                return this.$store.state.modifyOrderEntry.chosenSideDishes;
+            },
+            sideDishesItems() {
+                console.log("Dupa", this.dishIdToSideDishesMap[this.dishId])
+
+                return this.dishIdToSideDishesMap[this.dishId].map(entry => {
+                    var text = `${entry.name} (${entry.price})`;
+                    return Object.assign({}, {text: text, value: entry.id})
+                })
+            }
+        },
+        components: {
+            Price
+        }
     }
-  }
 
 </script>

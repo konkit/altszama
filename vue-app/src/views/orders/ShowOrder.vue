@@ -79,7 +79,7 @@
 
                   <template v-for="(orderEntry, entryId) in this.orderEntries">
                     <tr :key="entryId">
-                      <td>{{orderEntry.username}}</td>
+                      <td class="username">{{orderEntry.username}}</td>
 
                       <td>
                         <template v-for="dishEntry in orderEntry.dishEntries">
@@ -249,5 +249,9 @@
 
   .names-person {
     width: 250px;
+  }
+
+  .username {
+    padding-top: 24px;
   }
 </style>

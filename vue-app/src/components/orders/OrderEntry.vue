@@ -118,6 +118,7 @@
   p.dish-name {
     margin-top: 0;
     margin-bottom: 0;
+    padding-top: 15px;
   }
 
   p.side-dish-name {
