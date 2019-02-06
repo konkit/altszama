@@ -26,7 +26,7 @@
                       </tbody>
                     </table>
 
-                    <v-btn fixed dark fab bottom right color="green" @click="goToCreateRestaurant()">
+                    <v-btn fixed dark fab bottom left color="green" @click="goToCreateRestaurant()">
                       <v-icon>add</v-icon>
                     </v-btn>
 
