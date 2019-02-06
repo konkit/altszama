@@ -94,7 +94,7 @@ export default {
 
     const formData = {
       "restaurant.id": restaurantId,
-      id: dishObj.dishId,
+      id: dishObj.id,
       name: dishObj.name,
       price: dishObj.price,
       category: dishObj.category,

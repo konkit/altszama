@@ -45,7 +45,7 @@ export default {
       const dish = {
         "restaurant.id": state.restaurantId,
         name: state.name,
-        price: Math.round(state.price * 100),
+        price: state.price,
         category: state.category,
         sideDishes: sideDishes
       };

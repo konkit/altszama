@@ -11,93 +11,45 @@
     <v-content>
       <simple-card>
 
+        <errors-component/>
 
-        <div class="container">
-          <errors-component/>
-
-          <form>
-            <div class="row justify-content-center">
-              <div class="col-4">
+        <v-container grid-list-md>
+          <v-layout row>
+              <v-flex xs5>
                 <h3>Order time</h3>
 
-                <div class="form-group">
-                  <label for="orderDate">Order date</label>
-                  <input
-                      type="date"
-                      id="orderDate"
-                      name="orderDate"
-                      class="form-control"
-                      :value="orderDate"
-                      @input="updateOrderDate($event.target.value)"
-                  />
-                </div>
+                <v-time-picker :value="timeOfOrder"
+                               @input="updateTimeOfOrder($event)"
+                               format="24hr"
+                ></v-time-picker>
+              </v-flex>
 
-                <div class="form-group">
-                  <label for="timeOfOrder">Time of order</label>
-                  <masked-input
-                      id="timeOfOrder"
-                      type="text"
-                      class="form-control"
-                      :mask="[/\d/,/\d/,':',/\d/,/\d/]"
-                      :keepCharPositions="true"
-                      :value="timeOfOrder"
-                      @input="updateTimeOfOrder($event)"
-                  />
-                </div>
-              </div>
-
-              <div class="col-4">
+              <v-flex xs4>
                 <h3>Price change</h3>
 
-                <div class="form-group">
-                  <label for="decreaseInPercent">Price decrease (in percent)</label>
-                  <vue-numeric
-                      id="decreaseInPercent"
-                      currency="%"
-                      :min="0"
-                      :max="100"
-                      currency-symbol-position="suffix"
-                      decimal-precision="false"
-                      class="form-control"
-                      :value="decreaseInPercent"
-                      @input.native="updateDecreaseInPercent($event)"
-                  />
-                </div>
+                <v-text-field
+                    class="percent-input"
+                    label="Price decrease (in percent)"
+                    suffix="%"
+                    :value="decreaseInPercent"
+                    @input="updateDecreaseInPercent($event)"></v-text-field>
 
-                <div class="form-group">
-                  <label for="deliveryCostPerEverybody">Delivery cost (total)</label>
-                  <vue-numeric
-                      id="deliveryCostPerEverybody"
-                      currency="zł"
-                      separator="."
-                      currency-symbol-position="suffix"
-                      :precision="2"
-                      class="form-control"
-                      required=""
-                      :value="deliveryCostPerEverybody"
-                      @input.native="updateDeliveryCostPerEverybody($event)"
-                  >
-                  </vue-numeric>
-                </div>
+                <MoneyInput
+                    class="short-input"
+                    label="Delivery cost (total)"
+                    :value="deliveryCostPerEverybody"
+                    @input="updateDeliveryCostPerEverybody($event)">
+                </MoneyInput>
 
-                <div class="form-group">
-                  <label for="deliveryCostPerDish">Delivery cost (per dish)</label>
-                  <vue-numeric
-                      id="deliveryCostPerDish"
-                      currency="zł"
-                      separator="."
-                      currency-symbol-position="suffix"
-                      :precision="2"
-                      class="form-control"
-                      required=""
-                      :value="deliveryCostPerDish"
-                      @input.native="updateDeliveryCostPerDish($event)"
-                  >
-                  </vue-numeric>
-                </div>
-              </div>
+                <MoneyInput
+                    class="short-input"
+                    label="Delivery cost (per dish)"
+                    :value="deliveryCostPerDish"
+                    @input="updateDeliveryCostPerDish($event)">
+                </MoneyInput>
+              </v-flex>
 
-              <div class="col-4">
+              <v-flex xs3>
                 <h3>Payment</h3>
 
                 <b-form-group label="Payment by cash">
@@ -121,7 +73,7 @@
                 </b-form-group>
 
                 <div class="form-group" v-if="paymentByBankTransfer">
-                  <label for="bankTransferNumber">Bank transfer number</label>
+                  <label>Bank transfer number</label>
                   <input
                       type="text"
                       id="bankTransferNumber"
@@ -131,9 +83,9 @@
                       @change="updateBankTransferNumber($event)"
                   />
                 </div>
-              </div>
-            </div>
-          </form>
+              </v-flex>
+            </v-layout>
+        </v-container>
 
           <div class="row justify-content-center">
             <div class="col">
@@ -142,7 +94,6 @@
               </v-btn>
             </div>
           </div>
-        </div>
       </simple-card>
     </v-content>
   </LoadingView>
@@ -172,6 +123,7 @@
         CANCEL_DISH_ENTRY_MODIFICATION,
         NAMESPACE_MODIFY_ORDER_ENTRY
     } from "../../store/modules/ModifyOrderEntryState";
+    import MoneyInput from "../../components/commons/MoneyInput";
 
     const yesNoOptions = [
         {text: 'Yes', value: true},
@@ -257,6 +209,7 @@
             },
         },
         components: {
+            MoneyInput,
             SimpleCard,
             LoadingView,
             BackButton2,
@@ -270,5 +223,13 @@
 <style scoped>
   .row {
     margin-top: 2rem;
+  }
+
+  .percent-input {
+    width: 150px;
+  }
+
+  .short-input {
+    width: 200px;
   }
 </style>

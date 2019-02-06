@@ -33,6 +33,7 @@ export default {
       state.price = payload.price;
       state.category = payload.category;
       state.initialSideDishes = payload.initialSideDishes;
+      state.categories = payload.categories;
     },
     [UPDATE_NAME] (state, newValue) {
       state.name = newValue;
@@ -57,7 +58,7 @@ export default {
       const dishObj = {
         id: state.dishId,
         name: state.name,
-        price: Math.round(state.price * 100),
+        price: state.price,
         category: state.category,
         sideDishes: sideDishes
       };

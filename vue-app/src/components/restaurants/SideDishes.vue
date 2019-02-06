@@ -4,9 +4,7 @@
 
     <div v-if="this.sideDishes.length > 0">
       <p v-for="sideDish in this.sideDishes" :key="sideDish.id">
-        {{sideDish.name}}&nbsp;(
-        <price :data-price="sideDish.price"/>
-        )
+        {{sideDish.name}}&nbsp;(<price :data-price="sideDish.price"/>)
         <span @click="removeSideDish(sideDish.id)"><span class="fa fa-times"/></span>
       </p>
     </div>
@@ -21,16 +19,16 @@
     </div>
 
     <div v-if="this.sideDishFormVisible === true">
-      <div class="form-group">
-        <label>New Side dish name</label>
-        <input class="form-control" type="text" name="newSideDishName" v-model="newSideDishName"/>
-      </div>
+      <v-text-field
+        label="New Side dish name"
+        v-model="newSideDishName">
+      </v-text-field>
 
-      <div class="form-group">
-        <label>New Side dish price</label>
-        <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" v-model="newSideDishPrice"
-                     :precision="2" class="form-control" required="" id="newSideDishPrice"></vue-numeric>
-      </div>
+      <MoneyInput
+          label="New Side dish price"
+          :value="newSideDishPrice"
+          @input="newSideDishPrice = $event">
+      </MoneyInput>
 
       <v-btn color="success" @click="addSideDish">
         Add &nbsp; <i class="fa fa-plus"/>
@@ -46,6 +44,7 @@
 <script>
     import ErrorsComponent from '../commons/Errors.vue'
     import Price from '../commons/PriceElement.vue'
+    import MoneyInput from "../commons/MoneyInput";
 
     export default {
         props: [
@@ -64,7 +63,7 @@
             addSideDish() {
                 var newSideDish = {
                     name: this.newSideDishName,
-                    price: Math.round(this.newSideDishPrice * 100)
+                    price: this.newSideDishPrice
                 }
 
                 this.sideDishes.push(newSideDish)
@@ -85,6 +84,7 @@
 
         },
         components: {
+            MoneyInput,
             ErrorsComponent,
             Price
         }

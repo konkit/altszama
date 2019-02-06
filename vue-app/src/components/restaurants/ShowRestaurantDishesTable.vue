@@ -16,8 +16,14 @@
       <tbody>
       <tr v-for="(dish, j) in categoryEntry.dishes" :key="j">
         <td>
-          {{dish.name}}
-          <price :data-price="dish.price"></price>
+          {{dish.name}} (<price :data-price="dish.price"></price>)
+
+          <v-chip text-color="blue" v-if="dish.lastCrawled != null">
+            crawled
+          </v-chip>
+          <v-chip text-color="green" v-if="dish.lastCrawled == null">
+            user-created
+          </v-chip>
 
           <v-btn color="error" @click="deleteDish(dish.id)" class="pull-right">
             Delete&nbsp;<span class="fa fa-times"/>

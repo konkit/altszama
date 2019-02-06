@@ -19,24 +19,16 @@
                 <input type="hidden" name="restaurant.id" :value="restaurantId"/>
                 <input type="hidden" name="id" :value="dishId"/>
 
-                <div class="form-group">
-                  <label for="name">Name</label>
-                  <input type="text" class="form-control" :value="name" @input="updateName($event)" required="" id="name"/>
-                </div>
+                <v-text-field label="Name" :value="name" @input="updateName($event)" required=""></v-text-field>
 
-                <div class="form-group">
-                  <label for="price">Price</label>
-                  <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input.native="updatePrice($event)"
-                               :precision="2" class="form-control" required="" id="price"></vue-numeric>
-                </div>
+                <MoneyInput label="Price" :value="price" @input="updatePrice($event)"></MoneyInput>
 
-                <div class="form-group">
-                  <label for="category">Category</label>
-                  <input type="text" class="form-control" :value="category" @input="updateCategory($event)" id="category" list="categoryNames"/>
-                  <datalist id="categoryNames">
-                    <option v-for="categoryName in categories" :value="categoryName"/>
-                  </datalist>
-                </div>
+                <v-combobox
+                    :items="categories"
+                    label="Category"
+                    :value="category"
+                    @input="updateCategory($event)"
+                ></v-combobox>
 
                 <div>
                   <side-dishes ref="sideDishesElement" :initialSideDishes="initialSideDishes"></side-dishes>
@@ -69,6 +61,7 @@
     UPDATE_NAME,
     UPDATE_PRICE
   } from "../../store/modules/EditDishState"
+  import MoneyInput from "../../components/commons/MoneyInput";
 
   export default {
     data() {
@@ -119,6 +112,7 @@
       ])
     },
     components: {
+      MoneyInput,
       LoadingView,
       BackButton2,
       ErrorsComponent,

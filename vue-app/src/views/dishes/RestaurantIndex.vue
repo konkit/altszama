@@ -21,12 +21,6 @@
                           :key="restaurant.id" class="pointer">
                         <td>
                           <span>{{restaurant.name}}</span>
-                          <v-chip text-color="blue" v-if="restaurant.lastCrawled != null">
-                            crawled
-                          </v-chip>
-                          <v-chip text-color="green" v-if="restaurant.lastCrawled == null">
-                            user-created
-                          </v-chip>
                         </td>
                       </tr>
                       </tbody>

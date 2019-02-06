@@ -15,89 +15,58 @@
         </div>
 
         <div v-if="this.restaurantsList.length > 0">
-          <div class="container">
             <errors-component/>
 
-            <form>
-              <div class="row justify-content-center">
-                <div class="col">
-                  <div class="form-group">
-                    <v-autocomplete
-                        :items="restaurantsList"
-                        label="Restaurant"
-                        :value="this.restaurantsList.find(r => restaurantId == r.id)"
-                        @input="updateRestaurantId($event.id)"
-                        item-text="name"
-                    >
-                    </v-autocomplete>
-                  </div>
-                </div>
-              </div>
+            <v-container grid-list-md>
+              <v-layout row wrap>
+                <v-flex xs12>
+                  <v-autocomplete
+                      :items="restaurantsList"
+                      label="Restaurant"
+                      :value="this.restaurantsList.find(r => restaurantId == r.id)"
+                      @input="updateRestaurantId($event.id)"
+                      item-text="name"
+                  >
+                  </v-autocomplete>
+                </v-flex>
+              </v-layout>
 
-              <div class="row justify-content-center">
-                <div class="col-4">
+              <v-layout row>
+                <v-flex xs5>
                   <h3>Order time</h3>
 
-                  <div class="form-group">
-                    <v-time-picker :value="timeOfOrder"
-                                   @input="updateTimeOfOrder($event)"
-                                   format="24hr"
-                    ></v-time-picker>
-                  </div>
-                </div>
+                  <v-time-picker :value="timeOfOrder"
+                                 @input="updateTimeOfOrder($event)"
+                                 format="24hr"
+                  ></v-time-picker>
+                </v-flex>
 
-                <div class="col-4">
+                <v-flex xs4>
                   <h3>Price change</h3>
 
-                  <div class="form-group">
-                    <label for="decreaseInPercent">Price decrease (in percent)</label>
-                    <vue-numeric
-                        currency="%"
-                        :min="0"
-                        :max="100"
-                        currency-symbol-position="suffix"
-                        decimal-precision="false"
-                        id="decreaseInPercent"
-                        class="form-control"
-                        :value="decreaseInPercent"
-                        @input.native="updateDecreaseInPercent($event)"
-                    />
-                  </div>
+                  <v-text-field
+                      class="percent-input"
+                      label="Price decrease (in percent)"
+                      suffix="%"
+                      :value="decreaseInPercent"
+                      @input="updateDecreaseInPercent($event)"></v-text-field>
 
-                  <div class="form-group">
-                    <label for="deliveryCostPerEverybody">Delivery cost (total)</label>
-                    <vue-numeric
-                        currency="zł"
-                        separator="."
-                        currency-symbol-position="suffix"
-                        :precision="2"
-                        class="form-control"
-                        required=""
-                        id="deliveryCostPerEverybody"
-                        :value="deliveryCostPerEverybody"
-                        @input.native="updateDeliveryCostPerEverybody($event)"
-                    >
-                    </vue-numeric>
-                  </div>
+                  <MoneyInput
+                      class="short-input"
+                      label="Delivery cost (total)"
+                      :value="deliveryCostPerEverybody"
+                      @input="updateDeliveryCostPerEverybody($event)">
+                  </MoneyInput>
 
-                  <div class="form-group">
-                    <label for="deliveryCostPerDish">Delivery cost (per dish)</label>
-                    <vue-numeric
-                        currency="zł"
-                        separator="."
-                        currency-symbol-position="suffix"
-                        :precision="2"
-                        class="form-control"
-                        required=""
-                        id="deliveryCostPerDish"
-                        :value="deliveryCostPerDish"
-                        @input.native="updateDeliveryCostPerDish($event)"
-                    >
-                    </vue-numeric>
-                  </div>
-                </div>
+                  <MoneyInput
+                      class="short-input"
+                      label="Delivery cost (per dish)"
+                      :value="deliveryCostPerDish"
+                      @input="updateDeliveryCostPerDish($event)">
+                  </MoneyInput>
+                </v-flex>
 
-                <div class="col-4">
+                <v-flex xs3>
                   <h3>Payment</h3>
 
                   <b-form-group label="Payment by cash">
@@ -131,9 +100,9 @@
                         @change="updateBankTransferNumber($event)"
                     />
                   </div>
-                </div>
-              </div>
-            </form>
+                </v-flex>
+              </v-layout>
+            </v-container>
 
             <div class="row justify-content-center">
               <div class="col">
@@ -142,7 +111,6 @@
                 </v-btn>
               </div>
             </div>
-          </div>
         </div>
 
       </simple-card>
@@ -176,6 +144,7 @@
         CANCEL_DISH_ENTRY_MODIFICATION,
         NAMESPACE_MODIFY_ORDER_ENTRY
     } from "../../store/modules/ModifyOrderEntryState";
+    import MoneyInput from "../../components/commons/MoneyInput";
 
     export default {
         name: 'order-create-form',
@@ -263,6 +232,7 @@
             },
         },
         components: {
+            MoneyInput,
             SimpleCard,
             LoadingView,
             BackButton2,
@@ -277,4 +247,13 @@
   .row {
     margin-top: 2rem;
   }
+
+  .percent-input {
+    width: 150px;
+  }
+
+  .short-input {
+    width: 200px;
+  }
+
 </style>

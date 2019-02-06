@@ -5,25 +5,18 @@
         <div v-for="(sideDish, sdIndex) in chosenSideDishes" :key="sdIndex">
 
           <div class="input-group" v-if="sideDish.isNew === true">
-            <input
-                type="text"
-                class="form-control"
-                placeholder="New dish name"
-                id="newDishName"
+            <v-text-field
+                label="New side dish name"
                 v-model="sideDish.newSideDishName"
-                @input="updateNewSideDishName(sdIndex, $event.target.value)"
+                @input="updateNewSideDishName(sdIndex, $event)"
             />
 
-            <vue-numeric
+            <MoneyInput
+                label="New side dish price"
                 :value="sideDish.newSideDishPrice"
-                @input.native="changeNewSideDishPrice(sdIndex, $event.target.value)"
-                class="form-control"
-                required=""
-                currency="zł"
-                separator="."
-                currency-symbol-position="suffix"
-                :precision="2"
-            />
+                @input="changeNewSideDishPrice(sdIndex, $event.target.value)"
+            >
+            </MoneyInput>
 
             <v-btn color="error" @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
 
@@ -132,10 +125,8 @@
                 return this.$store.state.modifyOrderEntry.chosenSideDishes;
             },
             sideDishesItems() {
-                console.log("Dupa", this.dishIdToSideDishesMap[this.dishId])
-
                 return this.dishIdToSideDishesMap[this.dishId].map(entry => {
-                    var price = (entry.price/100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+                    var price = entry.price.toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
                     var text = `${entry.name} (${price})`;
 
                     return Object.assign({}, {text: text, value: entry.id})

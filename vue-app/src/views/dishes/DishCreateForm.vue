@@ -20,17 +20,14 @@
 
                 <v-text-field label="Name" :value="name" @input="updateName($event)" required=""></v-text-field>
 
-                <div class="form-group">
-                  <label for="dish-price">Price</label>
-                  <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input.native="updatePrice($event.target.value)" :precision="2" class="form-control" required="" id="dish-price">
-                  </vue-numeric>
-                </div>
+                <MoneyInput label="Price" :value="price" @input="updatePrice($event)"></MoneyInput>
 
-                <v-text-field label="Category" :value="category" @input="updateCategory($event)" id="category" list="categoryNames"></v-text-field>
-
-                <datalist id="categoryNames">
-                  <option v-for="categoryName in categories" :value="categoryName"/>
-                </datalist>
+                <v-combobox
+                    :items="categories"
+                    label="Category"
+                    :value="category"
+                    @input="updateCategory($event)"
+                ></v-combobox>
 
                 <div>
                   <side-dishes ref="sideDishesElement"></side-dishes>
@@ -61,6 +58,7 @@
     INIT_ACTION,
     SAVE_DISH_ACTION
   } from "../../store/modules/CreateDishState"
+  import MoneyInput from "../../components/commons/MoneyInput";
 
   export default {
     props: ['restaurantName'],
@@ -107,6 +105,7 @@
       ])
     },
     components: {
+      MoneyInput,
       BackButton2,
       ErrorsComponent,
       Price,

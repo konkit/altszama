@@ -39,17 +39,14 @@ class DishService {
     return dishRepository.insert(newDish)
   }
 
-  fun update(restaurantId: String, dishId: String, dish: DishUpdateRequest): Optional<Dish> {
-    val restaurant = restaurantService.findById(restaurantId).get()
-
+  fun update(restaurantId: String, dishId: String, dishDto: DishUpdateRequest): Optional<Dish> {
     return dishRepository.findById(dishId)
         .map { dish ->
           val newDish = dish.copy(
-              restaurant = restaurant,
-              name = dish.name,
-              price = dish.price,
-              sideDishes = dish.sideDishes,
-              category = dish.category,
+              name = dishDto.name,
+              price = dishDto.price,
+              sideDishes = dishDto.sideDishes,
+              category = dishDto.category,
               lastEdited = Instant.now()
           )
 
