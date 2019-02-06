@@ -31,12 +31,12 @@
           </div>
 
           <div class="input-group" v-else>
-            <v-select
+            <v-autocomplete
                 :items="sideDishesItems"
                 label="Side dish"
                 :value="sideDish.id"
                 @change="updateSideDishComboBox(sdIndex, $event.target.value)"
-            ></v-select>
+            ></v-autocomplete>
 
             <v-btn color="error" @click="removeSideDish(sdIndex)">
               <span class="fa fa-remove"></span>
@@ -135,7 +135,9 @@
                 console.log("Dupa", this.dishIdToSideDishesMap[this.dishId])
 
                 return this.dishIdToSideDishesMap[this.dishId].map(entry => {
-                    var text = `${entry.name} (${entry.price})`;
+                    var price = (entry.price/100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+                    var text = `${entry.name} (${price})`;
+
                     return Object.assign({}, {text: text, value: entry.id})
                 })
             }

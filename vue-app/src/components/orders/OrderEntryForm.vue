@@ -1,19 +1,34 @@
 <template>
   <div>
-    <div class="pull-right">
-      <v-btn @click="cancelEdit()">
-        Cancel
-      </v-btn>
-    </div>
-
     <div class="input-group">
       <template v-if="!newDish">
-        <v-select
+        <v-autocomplete
             :items="allDishesAtOnce"
             label="Dish"
             :value="dishId"
             @change="updateDishId($event.target.value)"
-        ></v-select>
+            item-text="text"
+            item-value="value"
+        >
+          <template slot="selection" slot-scope="data">
+              {{ data.item.text }}
+          </template>
+
+          <template slot="item" slot-scope="data">
+            <template v-if="typeof data.item !== 'object'">
+              <v-list-tile-content v-text="data.item"></v-list-tile-content>
+            </template>
+
+            <template v-else>
+              <v-list-tile-content>
+                <v-list-tile-title v-html="data.item.text"></v-list-tile-title>
+                <v-list-tile-sub-title v-html="data.item.subtitle"></v-list-tile-sub-title>
+              </v-list-tile-content>
+            </template>
+          </template>
+
+
+        </v-autocomplete>
 
         <v-btn flat @click="setDishAsNew()">Type your own dish! &nbsp;</v-btn>
       </template>
@@ -35,11 +50,12 @@
 
     <side-dishes-input></side-dishes-input>
 
-    <div class="form-group">
-      <h4>Additional Comments</h4>
-      <textarea class="form-control" :value="additionalComments"
-                @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"></textarea>
-    </div>
+    <v-textarea
+        label="Additional Comments"
+        :value="additionalComments"
+        @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"
+    >
+    </v-textarea>
   </div>
 </template>
 
@@ -102,14 +118,22 @@
         "chosenSideDishes",
       ]),
       allDishesAtOnce() {
-        return this.allDishesByCategory.flatMap(categoryData => categoryData.dishes.flatMap(dish => {
-            var price = (dish.price/100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+        return this.allDishesByCategory.flatMap(categoryData => {
+            let dishes = categoryData.dishes.flatMap(dish => {
+                var price = (dish.price/100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
 
-            return Object.assign({}, {
-                text: `${dish.name} ( ${price} )`,
-                value: dish.id
-            })
-        }))
+                return Object.assign({}, {
+                    text: `${dish.name}`,
+                    value: dish.id,
+                    subtitle: `Price: ${price}`
+                })
+            });
+
+            dishes.unshift({"header": `Category: ${categoryData.category}`});
+            dishes.push({"divider": true})
+
+            return dishes
+        })
       }
     },
     components: {

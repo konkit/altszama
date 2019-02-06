@@ -6,8 +6,14 @@
       <div>
         <order-entry-form></order-entry-form>
 
-        <v-btn color="success" block @click="submitForm">
+        <v-spacer></v-spacer>
+
+        <v-btn color="success" @click="submitForm">
           Save order
+        </v-btn>
+
+        <v-btn @click="cancelEdit()">
+          Cancel
         </v-btn>
       </div>
 
@@ -22,69 +28,72 @@
 </template>
 
 <script>
-  import ErrorsComponent from '../commons/Errors.vue'
-  import Spinner from '../commons/Spinner.vue'
-  import Price from '../commons/PriceElement.vue'
+    import ErrorsComponent from '../commons/Errors.vue'
+    import Spinner from '../commons/Spinner.vue'
+    import Price from '../commons/PriceElement.vue'
 
-  import OrderEntryForm from './OrderEntryForm.vue'
-  import SideDishesInput from './SideDishesInput.vue'
-  import {NAMESPACE_SHOW_ORDER} from "../../store/modules/ShowOrderState";
-  import {
-    NAMESPACE_MODIFY_ORDER_ENTRY,
-    CANCEL_DISH_ENTRY_MODIFICATION,
-    SAVE_ORDER_ENTRY_ACTION,
-    SETUP_CREATE_ORDER_ENTRY_ACTION,
-    SET_ENTRY_LOADING_FALSE,
-    SET_ENTRY_LOADING_TRUE,
-  } from "../../store/modules/ModifyOrderEntryState";
-  import {mapState} from "vuex"
+    import OrderEntryForm from './OrderEntryForm.vue'
+    import SideDishesInput from './SideDishesInput.vue'
+    import {NAMESPACE_SHOW_ORDER} from "../../store/modules/ShowOrderState";
+    import {
+        NAMESPACE_MODIFY_ORDER_ENTRY,
+        CANCEL_DISH_ENTRY_MODIFICATION,
+        SAVE_ORDER_ENTRY_ACTION,
+        SETUP_CREATE_ORDER_ENTRY_ACTION,
+        SET_ENTRY_LOADING_FALSE,
+        SET_ENTRY_LOADING_TRUE,
+    } from "../../store/modules/ModifyOrderEntryState";
+    import {mapState} from "vuex"
 
-  export default {
-    name: 'create-order-entry',
-    data() {
-      return {}
-    },
-    created() {
-      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`)
-    },
-    mounted() {
-      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SETUP_CREATE_ORDER_ENTRY_ACTION}`);
-      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
-    },
-    methods: {
-      submitForm(e) {
-        e.preventDefault();
+    export default {
+        name: 'create-order-entry',
+        data() {
+            return {}
+        },
+        created() {
+            this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`)
+        },
+        mounted() {
+            this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SETUP_CREATE_ORDER_ENTRY_ACTION}`);
+            this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
+        },
+        methods: {
+            submitForm(e) {
+                e.preventDefault();
 
-        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SAVE_ORDER_ENTRY_ACTION}`);
+                this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SAVE_ORDER_ENTRY_ACTION}`);
 
-        return false;
-      },
-    },
-    computed: {
-      ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
-        "loadingEntry",
+                return false;
+            },
+            cancelEdit() {
+                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
+            },
+        },
+        computed: {
+            ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
+                "loadingEntry",
 
-        "orderId",
-        "dishId",
-        "additionalComments",
-        "newDish",
-        "newDishName",
-        "newDishPrice",
-        "chosenSideDishes",
-      ]),
-      ...mapState(NAMESPACE_SHOW_ORDER, [
-        "order",
-        "allDishesInRestaurant"
-      ]),
-    },
-    components: {
-      ErrorsComponent,
-      Price,
-      Spinner,
-      OrderEntryForm,
-      SideDishesInput
+                "orderId",
+                "dishId",
+                "additionalComments",
+                "newDish",
+                "newDishName",
+                "newDishPrice",
+                "chosenSideDishes",
+            ]),
+            ...mapState(NAMESPACE_SHOW_ORDER, [
+                "order",
+                "allDishesInRestaurant"
+            ]),
+        },
+        components: {
+            ErrorsComponent,
+            Price,
+            Spinner,
+            OrderEntryForm,
+            SideDishesInput
+        }
     }
-  }
 </script>
 
 <style scoped>

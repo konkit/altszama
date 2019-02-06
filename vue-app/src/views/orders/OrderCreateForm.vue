@@ -22,16 +22,14 @@
               <div class="row justify-content-center">
                 <div class="col">
                   <div class="form-group">
-                    <label for="restaurant">Restaurant: </label>
-
-                    <v-select
-                        id="restaurant"
-                        :options="this.restaurantsList"
-                        label="name"
+                    <v-autocomplete
+                        :items="restaurantsList"
+                        label="Restaurant"
                         :value="this.restaurantsList.find(r => restaurantId == r.id)"
                         @input="updateRestaurantId($event.id)"
+                        item-text="name"
                     >
-                    </v-select>
+                    </v-autocomplete>
                   </div>
                 </div>
               </div>
@@ -41,28 +39,10 @@
                   <h3>Order time</h3>
 
                   <div class="form-group">
-                    <label for="orderDate">Order date</label>
-                    <input
-                        type="date"
-                        id="orderDate"
-                        name="orderDate"
-                        class="form-control"
-                        :value="orderDate"
-                        @input="updateOrderDate($event.target.value)"
-                    />
-                  </div>
-
-                  <div class="form-group">
-                    <label for="timeOfOrder">Time of order</label>
-                    <masked-input
-                        id="timeOfOrder"
-                        type="text"
-                        class="form-control"
-                        :mask="[/\d/,/\d/,':',/\d/,/\d/]"
-                        :keepCharPositions="true"
-                        :value="timeOfOrder"
-                        @input="updateTimeOfOrder($event)"
-                    />
+                    <v-time-picker :value="timeOfOrder"
+                                   @input="updateTimeOfOrder($event)"
+                                   format="24hr"
+                    ></v-time-picker>
                   </div>
                 </div>
 
@@ -157,7 +137,9 @@
 
             <div class="row justify-content-center">
               <div class="col">
-                <v-btn color="success" block @click="submitForm">Create</v-btn>
+                <v-btn color="success" block @click="submitForm">
+                  Create
+                </v-btn>
               </div>
             </div>
           </div>
@@ -190,6 +172,10 @@
     } from "../../store/modules/CreateOrderState";
     import {mapState} from "vuex"
     import SimpleCard from "../../components/commons/SimpleCard";
+    import {
+        CANCEL_DISH_ENTRY_MODIFICATION,
+        NAMESPACE_MODIFY_ORDER_ENTRY
+    } from "../../store/modules/ModifyOrderEntryState";
 
     export default {
         name: 'order-create-form',
@@ -240,7 +226,10 @@
                 this.$store.dispatch(`createOrder/${SAVE_ORDER_ACTION}`);
 
                 return false;
-            }
+            },
+            cancelEdit() {
+                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
+            },
         },
         computed: {
             loading() {

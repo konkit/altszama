@@ -137,7 +137,9 @@
 
           <div class="row justify-content-center">
             <div class="col">
-              <v-btn color="success" block @click="submitForm">Update</v-btn>
+              <v-btn color="success" block @click="submitForm">
+                Update
+              </v-btn>
             </div>
           </div>
         </div>
@@ -166,6 +168,10 @@
         UPDATE_ORDER_ACTION,
     } from "../../store/modules/EditOrderState"
     import SimpleCard from "../../components/commons/SimpleCard";
+    import {
+        CANCEL_DISH_ENTRY_MODIFICATION,
+        NAMESPACE_MODIFY_ORDER_ENTRY
+    } from "../../store/modules/ModifyOrderEntryState";
 
     const yesNoOptions = [
         {text: 'Yes', value: true},
@@ -215,6 +221,9 @@
             },
             updateBankTransferNumber(newValue) {
                 this.$store.commit(`editOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
+            },
+            cancelEdit() {
+                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
             },
         },
         computed: {

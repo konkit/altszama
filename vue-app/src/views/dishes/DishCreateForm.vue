@@ -22,7 +22,7 @@
 
                 <div class="form-group">
                   <label for="dish-price">Price</label>
-                  <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input.native="updatePrice($event)" :precision="2" class="form-control" required="" id="dish-price">
+                  <vue-numeric currency="zł" separator="." currency-symbol-position="suffix" :value="price" @input.native="updatePrice($event.target.value)" :precision="2" class="form-control" required="" id="dish-price">
                   </vue-numeric>
                 </div>
 
