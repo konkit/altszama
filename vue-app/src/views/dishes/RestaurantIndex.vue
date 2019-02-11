@@ -6,71 +6,90 @@
       </v-toolbar-title>
     </v-toolbar>
 
-    <v-content>
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
-            <v-card>
-              <v-card-text>
+    <simple-card>
 
-                <div class="row justify-content-center">
-                  <div class="col">
-                    <table class="table table-hover">
-                      <tbody>
-                      <tr @click="goToRestaurant(restaurant.id)" v-for="restaurant in this.restaurants"
-                          :key="restaurant.id" class="pointer">
-                        <td>
-                          <span>{{restaurant.name}}</span>
-                        </td>
-                      </tr>
-                      </tbody>
-                    </table>
+      <v-data-table
+          class="table table-hover"
+          :items="restaurantsEntries"
+          :headers="headers"
+          :loading="false"
+          :pagination.sync="pagination">
+        <template slot="headers" slot-scope="props">
+          <tr>
+            <th v-for="header in props.headers" :key="header.text">
+              {{ header.text }}
+            </th>
+          </tr>
+        </template>
 
-                    <v-btn fixed dark fab bottom left color="green" @click="goToCreateRestaurant()">
-                      <v-icon>add</v-icon>
-                    </v-btn>
+        <template slot="items" slot-scope="props">
+          <tr @click="goToRestaurant(props.item.id)" :key="props.item.id" :data-href="'/orders/show/' + props.item.id"
+              class="pointer">
+            <td>{{props.item.name}}</td>
+            <td>{{props.item.dishCount}}</td>
+            <td>{{props.item.lastCrawled}}</td>
+            <td>{{props.item.lastEdited}}</td>
+          </tr>
+        </template>
+      </v-data-table>
 
-                  </div>
-                </div>
+      <v-btn fixed dark fab bottom left color="green" @click="goToCreateRestaurant()">
+        <v-icon>add</v-icon>
+      </v-btn>
 
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-content>
+    </simple-card>
   </LoadingView>
 </template>
 
 <script>
-  import LoadingView from "../../components/commons/LoadingView";
-  import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
-  import router from '../../router/index'
+    import LoadingView from "../../components/commons/LoadingView";
+    import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
+    import router from '../../router/index'
+    import SimpleCard from "../../components/commons/SimpleCard";
 
-  export default {
-    mounted() {
-      this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
-    },
-    methods: {
-      goToRestaurant (restaurantId) {
-        router.push("/restaurants/show/" + restaurantId)
-      },
-      goToCreateRestaurant () {
-        router.push("/restaurants/create")
-      }
-    },
-    computed: {
-      restaurants() {
-        return this.$store.state.restaurantIndex.restaurants;
-      },
-      restaurantToDishesMap() {
-        return this.$store.state.restaurantIndex.restaurantToDishesMap;
-      },
-    },
-    components: {
-      LoadingView,
+    export default {
+        data() {
+            return {
+                headers: [
+                    { text: "Restaurant name", align: 'left' },
+                    { text: "Dish count" },
+                    { text: "Last crawled" },
+                    { text: "Last manual modification" },
+                ],
+                pagination: {
+                    rowsPerPage: 20
+                },
+            }
+        },
+        mounted() {
+            this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
+        },
+        methods: {
+            goToRestaurant(restaurantId) {
+                router.push("/restaurants/show/" + restaurantId)
+            },
+            goToCreateRestaurant() {
+                router.push("/restaurants/create")
+            }
+        },
+        computed: {
+            restaurants() {
+                return this.$store.state.restaurantIndex.restaurants;
+            },
+            restaurantToDishesMap() {
+                return this.$store.state.restaurantIndex.restaurantToDishesMap;
+            },
+            restaurantsEntries() {
+                return this.$store.state.restaurantIndex.restaurants.map(e => {
+                    return {"id": e.id, "name": e.name, "dishCount": e.dishCount, "lastCrawled": e.lastCrawled, "lastEdited": e.lastEdited}
+                })
+            }
+        },
+        components: {
+            SimpleCard,
+            LoadingView,
+        }
     }
-  }
 </script>
 
 <style scoped>

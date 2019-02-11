@@ -8,7 +8,13 @@
 
     <v-content>
       <simple-card>
-        <v-data-table class="table table-hover" :items="allOrdersList" :headers="headers" :loading="false">
+        <v-data-table
+            class="table table-hover"
+            :items="allOrdersList"
+            :headers="headers"
+            :loading="false"
+            :pagination.sync="pagination">
+
           <template slot="headers" slot-scope="props">
             <tr>
               <th v-for="header in props.headers" :key="header.text">
@@ -47,6 +53,9 @@
                     { text: 'Status', value: 'status' },
                     { text: 'Order creator', value: 'orderCreator' },
                 ],
+                pagination: {
+                    rowsPerPage: 20
+                },
             }
         },
         mounted() {

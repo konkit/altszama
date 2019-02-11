@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout align-center justify-center>
-      <v-flex xs10>
+      <v-flex xs10 xl8>
         <v-card>
           <v-card-text>
             <v-layout column>

@@ -1,7 +1,9 @@
 package altszama.restaurant.dto
 
-import altszama.restaurant.Restaurant
+import java.time.Instant
 
 data class IndexResponse(
-    var restaurants: List<Restaurant>
+    var restaurants: List<RestaurantInfo>
 )
+
+data class RestaurantInfo(val id: String, val name: String, var lastCrawled: Instant?, var lastEdited: Instant?, val dishCount: Long)

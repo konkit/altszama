@@ -52,6 +52,29 @@
           <v-flex xs10 xl8>
             <v-card>
               <v-card-text>
+                <v-layout column>
+                  <price-summary
+                      :orderDecreaseInPercent="this.order.decreaseInPercent"
+                      :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
+                      :basePriceSum="this.order.basePriceSum"
+                      :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
+                      :allEatingPeopleCount="this.order.allEatingPeopleCount"
+                      :totalPrice="this.totalOrderPrice"
+                  >
+                  </price-summary>
+                </v-layout>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+
+
+      <v-container fluid>
+        <v-layout align-center justify-center>
+          <v-flex xs10 xl8>
+            <v-card>
+              <v-card-text>
 
                 <table class="table">
                   <tr>
@@ -154,6 +177,7 @@
         NAMESPACE_MODIFY_ORDER_ENTRY,
     } from "../../store/modules/ModifyOrderEntryState";
     import router from '../../router/index'
+    import PriceSummary from "../../components/orders/PriceSummary";
 
     export default {
         data() {
@@ -190,7 +214,7 @@
                 }
             },
             placeOrder() {
-                router.push("#/orders/" + this.orderId + "/order_view")
+                router.push("/orders/" + this.orderId + "/order_view")
             },
             unlockOrder() {
                 this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
@@ -225,6 +249,7 @@
                 "order",
                 "orderEntries",
                 "currentUserId",
+                "totalOrderPrice",
             ]),
             ...mapState('modifyOrderEntry', [
                 "isEntryCreating",
@@ -234,6 +259,7 @@
             ])
         },
         components: {
+            PriceSummary,
             BackButton2,
             Price,
             LoadingView,

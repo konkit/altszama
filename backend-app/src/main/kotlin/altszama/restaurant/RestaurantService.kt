@@ -73,4 +73,10 @@ class RestaurantService {
     }
   }
 
+  fun restaurantsToDishCountMap(): Map<Restaurant, Long> {
+    return restaurantRepository.findAll().map { restaurant ->
+      restaurant to dishRepository.countAllByRestaurantId(restaurant.id)
+    }.toMap()
+  }
+
 }

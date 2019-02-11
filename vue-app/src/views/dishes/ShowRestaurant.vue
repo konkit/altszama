@@ -89,7 +89,7 @@
         router.push("/restaurants/" + this.restaurantId + "/dishes/create")
       },
       editRestaurant() {
-        router.push("#/restaurants/" + this.restaurantId + "/edit")
+        router.push("/restaurants/" + this.restaurantId + "/edit")
       }
     },
     computed: {
