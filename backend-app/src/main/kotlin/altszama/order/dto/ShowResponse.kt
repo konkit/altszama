@@ -49,7 +49,9 @@ data class ShowResponse(
         val deliveryCostPerDish: Int,
         val paymentByCash: Boolean,
         val paymentByBankTransfer: Boolean,
-        val bankTransferNumber: String
+        val bankTransferNumber: String,
+        val paymentByBlik: Boolean,
+        val blikPhoneNumber: String
     )
 
     data class ParticipantsOrderEntry(
@@ -159,7 +161,9 @@ data class ShowResponse(
           order.deliveryCostPerDish,
           order.paymentByCash,
           order.paymentByBankTransfer,
-          order.bankTransferNumber
+          order.bankTransferNumber,
+          order.paymentByBlik,
+          order.blikPhoneNumber
       )
     }
   }

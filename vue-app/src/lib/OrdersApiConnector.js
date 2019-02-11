@@ -118,7 +118,9 @@ export default {
               deliveryCostPerDish: 0,
               paymentByCash: true,
               paymentByBankTransfer: false,
-              bankTransferNumber: ''
+              bankTransferNumber: '',
+              paymentByBlik: false,
+              blikPhoneNumber: ''
             }
           }
         });
@@ -138,7 +140,9 @@ export default {
               deliveryCostPerDish: response.data.order.deliveryCostPerDish,
               paymentByCash: response.data.order.paymentByCash,
               paymentByBankTransfer: response.data.order.paymentByBankTransfer,
-              bankTransferNumber: response.data.order.bankTransferNumber
+              bankTransferNumber: response.data.order.bankTransferNumber,
+              paymentByBlik: response.data.order.paymentByBlik,
+              blikPhoneNumber: response.data.order.blikPhoneNumber
             }
           }
         })
@@ -182,7 +186,9 @@ export default {
       deliveryCostPerDish: Math.round(order.deliveryCostPerDish * 100),
       paymentByCash: order.paymentByCash === true,
       paymentByBankTransfer: order.paymentByBankTransfer === true,
-      bankTransferNumber: order.bankTransferNumber
+      bankTransferNumber: order.bankTransferNumber,
+      paymentByBlik: order.paymentByBlik === true,
+      blikPhoneNumber: order.blikPhoneNumber
     };
 
     return ApiConnector.makePost("/orders/save", formData)
@@ -201,6 +207,8 @@ export default {
       paymentByCash: order.paymentByCash === true,
       paymentByBankTransfer: order.paymentByBankTransfer === true,
       bankTransferNumber: order.bankTransferNumber,
+      paymentByBlik: order.paymentByBlik === true,
+      blikPhoneNumber: order.blikPhoneNumber
     };
 
     return ApiConnector.makePost("/orders/update", formData)

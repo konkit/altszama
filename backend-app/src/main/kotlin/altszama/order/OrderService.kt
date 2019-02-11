@@ -50,8 +50,10 @@ class OrderService {
         deliveryCostPerDish = orderSaveRequest.deliveryCostPerDish,
         paymentByCash = orderSaveRequest.paymentByCash,
         paymentByBankTransfer = orderSaveRequest.paymentByBankTransfer,
+        paymentByBlik = orderSaveRequest.paymentByBlik,
         orderState = OrderState.CREATED,
-        bankTransferNumber = orderSaveRequest.bankTransferNumber
+        bankTransferNumber = orderSaveRequest.bankTransferNumber,
+        blikPhoneNumber = orderSaveRequest.blikPhoneNumber
     )
 
     orderRepository.save(order)
@@ -68,7 +70,9 @@ class OrderService {
         deliveryCostPerDish = orderUpdateRequest.deliveryCostPerDish,
         paymentByCash = orderUpdateRequest.paymentByCash,
         paymentByBankTransfer = orderUpdateRequest.paymentByBankTransfer,
-        bankTransferNumber = orderUpdateRequest.bankTransferNumber
+        paymentByBlik = orderUpdateRequest.paymentByBlik,
+        bankTransferNumber = orderUpdateRequest.bankTransferNumber,
+        blikPhoneNumber = orderUpdateRequest.blikPhoneNumber
     )
 
     orderRepository.save(updatedOrder)

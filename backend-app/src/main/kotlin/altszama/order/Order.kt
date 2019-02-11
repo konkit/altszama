@@ -41,7 +41,11 @@ data class Order(
 
     var paymentByBankTransfer: Boolean = true,
 
-    var bankTransferNumber: String = ""
+    var bankTransferNumber: String = "",
+
+    var paymentByBlik: Boolean = false,
+
+    var blikPhoneNumber: String = ""
 ) {
     companion object {
         fun getBasePrice(entries: List<OrderEntry>): Int {

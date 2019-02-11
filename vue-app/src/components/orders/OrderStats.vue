@@ -57,6 +57,24 @@
 
         <dt v-if="order.paymentByBankTransfer">Bank transfer number</dt>
         <dd v-if="order.paymentByBankTransfer">{{ order.bankTransferNumber }}</dd>
+
+
+
+        <p v-if="this.order.paymentByBlik == true">
+          <b class="allowed">
+            Payment by BLIK
+            <span class="fa fa-check"></span>
+          </b>
+        </p>
+        <p v-if="this.order.paymentByBlik == false">
+          <b class="not-allowed">
+            Payment by BLIK
+            <span class="fa fa-times"></span>
+          </b>
+        </p>
+
+        <dt v-if="order.paymentByBlik">BLIK phone number</dt>
+        <dd v-if="order.paymentByBlik">{{ order.blikPhoneNumber }}</dd>
       </div>
 
     </div>

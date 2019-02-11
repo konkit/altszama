@@ -30,5 +30,7 @@ data class OrderUpdateRequest(
     val deliveryCostPerDish: Int = 0,
     val paymentByCash: Boolean = false,
     val paymentByBankTransfer: Boolean = false,
-    val bankTransferNumber: String
+    val bankTransferNumber: String,
+    val paymentByBlik: Boolean = false,
+    val blikPhoneNumber: String
 )

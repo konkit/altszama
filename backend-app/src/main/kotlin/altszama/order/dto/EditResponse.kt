@@ -26,7 +26,9 @@ data class EditResponse(val order: OrderDto) {
         var deliveryCostPerDish: Int,
         var paymentByCash: Boolean,
         var paymentByBankTransfer: Boolean,
-        var bankTransferNumber: String
+        var bankTransferNumber: String,
+        val paymentByBlik: Boolean,
+        val blikPhoneNumber: String
     )
 
     fun create(order: Order): EditResponse {
@@ -45,7 +47,9 @@ data class EditResponse(val order: OrderDto) {
           order.deliveryCostPerDish,
           order.paymentByCash,
           order.paymentByBankTransfer,
-          order.bankTransferNumber
+          order.bankTransferNumber,
+          order.paymentByBlik,
+          order.blikPhoneNumber
       )
 
       return EditResponse(ordedDto)

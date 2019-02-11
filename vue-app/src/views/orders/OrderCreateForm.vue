@@ -98,7 +98,29 @@
                         name="bankTransferNumber"
                         class="form-control"
                         :value="bankTransferNumber"
-                        @change="updateBankTransferNumber($event)"
+                        @change="updateBankTransferNumber($event.target.value)"
+                    />
+                  </div>
+
+                  <b-form-group label="Payment by BLIK">
+                    <b-form-radio-group
+                        buttons
+                        button-variant="outline-primary"
+                        :options="yesNoOptions"
+                        v-model="paymentByBlik"
+                    >
+                    </b-form-radio-group>
+                  </b-form-group>
+
+                  <div class="form-group" v-if="paymentByBlik">
+                    <label>BLIK phone number</label>
+                    <input
+                        type="text"
+                        id="blikPhoneNumber"
+                        name="bankTransferNumber"
+                        class="form-control"
+                        :value="blikPhoneNumber"
+                        @change="updateBlikPhoneNumber($event.target.value)"
                     />
                   </div>
                 </v-flex>
@@ -136,7 +158,7 @@
         UPDATE_TIME_OF_ORDER,
         UPDATE_ORDER_DATE,
         UPDATE_RESTAURANT_ID,
-        SAVE_ORDER_ACTION,
+        SAVE_ORDER_ACTION, UPDATE_BLIK_PHONE_NUMBER, UPDATE_PAYMENT_BY_BLIK,
 
     } from "../../store/modules/CreateOrderState";
     import {mapState} from "vuex"
@@ -191,6 +213,12 @@
             updateBankTransferNumber(newValue) {
                 this.$store.commit(`createOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
             },
+            updatePaymentByBlik(newValue) {
+                this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_BLIK}`, newValue);
+            },
+            updateBlikPhoneNumber(newValue) {
+                this.$store.commit(`createOrder/${UPDATE_BLIK_PHONE_NUMBER}`, newValue);
+            },
             submitForm(e) {
                 e.preventDefault();
                 this.$store.dispatch(`createOrder/${SAVE_ORDER_ACTION}`);
@@ -214,6 +242,7 @@
                 "deliveryCostPerEverybody",
                 "deliveryCostPerDish",
                 "bankTransferNumber",
+                "blikPhoneNumber"
             ]),
             paymentByCash: {
                 get() {
@@ -229,6 +258,14 @@
                 },
                 set(newValue) {
                     this.updatePaymentByBankTransfer(newValue)
+                }
+            },
+            paymentByBlik: {
+                get() {
+                    return this.$store.state.createOrder.paymentByBlik;
+                },
+                set(newValue) {
+                    this.updatePaymentByBlik(newValue)
                 }
             },
         },

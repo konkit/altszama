@@ -13,6 +13,8 @@ export const UPDATE_DELIVERY_COST_PER_DISH = "UPDATE_DELIVERY_COST_PER_DISH";
 export const UPDATE_PAYMENT_BY_CASH = "UPDATE_PAYMENT_BY_CASH";
 export const UPDATE_PAYMENT_BY_BANK_TRANSFER = "UPDATE_PAYMENT_BY_BANK_TRANSFER";
 export const UPDATE_BANK_TRANSFER_NUMBER = "UPDATE_BANK_TRANSFER_NUMBER";
+export const UPDATE_PAYMENT_BY_BLIK = "UPDATE_PAYMENT_BY_BLIK";
+export const UPDATE_BLIK_PHONE_NUMBER = "UPDATE_BLIK_PHONE_NUMBER";
 
 export const INIT_EDIT_ORDER_ACTION = "INIT_EDIT_ORDER_ACTION";
 export const UPDATE_ORDER_ACTION = "UPDATE_ORDER_ACTION";
@@ -32,6 +34,8 @@ export default {
     paymentByCash: true,
     paymentByBankTransfer: false,
     bankTransferNumber: "",
+    paymentByBlik: false,
+    blikPhoneNumber: ""
   },
   mutations: {
     [INIT_DATA] (state, payload) {
@@ -46,6 +50,8 @@ export default {
       state.paymentByCash = payload.order.paymentByCash;
       state.paymentByBankTransfer = payload.order.paymentByBankTransfer;
       state.bankTransferNumber = payload.order.bankTransferNumber || "";
+      state.paymentByBlik = payload.order.paymentByBlik ;
+      state.blikPhoneNumber = payload.order.blikPhoneNumber || "";
     },
     [UPDATE_ORDER] (state, newOrder) {
       state.order = newOrder;
@@ -74,6 +80,12 @@ export default {
     [UPDATE_BANK_TRANSFER_NUMBER] (state, newValue) {
       state.bankTransferNumber = newValue;
     },
+    [UPDATE_PAYMENT_BY_BLIK] (state, newValue) {
+      state.paymentByBlik = newValue;
+    },
+    [UPDATE_BLIK_PHONE_NUMBER] (state, newValue) {
+      state.blikPhoneNumber = newValue;
+    },
   },
   actions: {
     [INIT_EDIT_ORDER_ACTION] (context, payload) {
@@ -97,6 +109,8 @@ export default {
         paymentByCash: state.paymentByCash,
         paymentByBankTransfer: state.paymentByBankTransfer,
         bankTransferNumber: state.bankTransferNumber || "",
+        paymentByBlik: state.paymentByBlik,
+        blikPhoneNumber: state.blikPhoneNumber || ""
       };
 
       OrdersApiConnector.editOrder(order.orderId, order)

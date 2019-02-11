@@ -80,7 +80,29 @@
                       name="bankTransferNumber"
                       class="form-control"
                       :value="bankTransferNumber"
-                      @change="updateBankTransferNumber($event)"
+                      @change="updateBankTransferNumber($event.target.value)"
+                  />
+                </div>
+
+                <b-form-group label="Payment by BLIK">
+                  <b-form-radio-group
+                      buttons
+                      button-variant="outline-primary"
+                      :options="yesNoOptions"
+                      v-model="paymentByBlik"
+                  >
+                  </b-form-radio-group>
+                </b-form-group>
+
+                <div class="form-group" v-if="paymentByBlik">
+                  <label>BLIK phone number</label>
+                  <input
+                      type="text"
+                      id="blikPhoneNumber"
+                      name="bankTransferNumber"
+                      class="form-control"
+                      :value="blikPhoneNumber"
+                      @change="updateBlikPhoneNumber($event.target.value)"
                   />
                 </div>
               </v-flex>
@@ -117,6 +139,8 @@
         UPDATE_ORDER_DATE,
         INIT_EDIT_ORDER_ACTION,
         UPDATE_ORDER_ACTION,
+        UPDATE_BLIK_PHONE_NUMBER,
+        UPDATE_PAYMENT_BY_BLIK
     } from "../../store/modules/EditOrderState"
     import SimpleCard from "../../components/commons/SimpleCard";
     import {
@@ -174,6 +198,12 @@
             updateBankTransferNumber(newValue) {
                 this.$store.commit(`editOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
             },
+            updatePaymentByBlik(newValue) {
+                this.$store.commit(`editOrder/${UPDATE_PAYMENT_BY_BLIK}`, newValue);
+            },
+            updateBlikPhoneNumber(newValue) {
+                this.$store.commit(`editOrder/${UPDATE_BLIK_PHONE_NUMBER}`, newValue);
+            },
             cancelEdit() {
                 this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
             },
@@ -190,6 +220,7 @@
                 "deliveryCostPerEverybody",
                 "deliveryCostPerDish",
                 "bankTransferNumber",
+                "blikPhoneNumber"
             ]),
             paymentByCash: {
                 get() {
@@ -205,6 +236,14 @@
                 },
                 set(newValue) {
                     this.updatePaymentByBankTransfer(newValue)
+                }
+            },
+            paymentByBlik: {
+                get() {
+                    return this.$store.state.editOrder.paymentByBlik;
+                },
+                set(newValue) {
+                    this.updatePaymentByBlik(newValue)
                 }
             },
         },
