@@ -81,7 +81,7 @@ export default {
       .then(response => {
         return {
           name: response.data.dish.name,
-          price: response.data.dish.price / 100,
+          price: response.data.dish.price,
           category: response.data.dish.category,
           initialSideDishes: response.data.dish.sideDishes,
           categories: response.data.categories,

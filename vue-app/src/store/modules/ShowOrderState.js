@@ -32,6 +32,7 @@ export default {
     allDishesByCategory: [],
     dishIdToSideDishesMap: [],
     totalOrderPrice: 0,
+    baseOrderPrice: 0,
   },
   mutations: {
     [LOAD_SHOW_ORDER_DATA] (state, payload) {
@@ -42,6 +43,7 @@ export default {
       state.allDishesByCategory = payload.allDishesByCategory;
       state.dishIdToSideDishesMap = payload.dishIdToSideDishesMap;
       state.totalOrderPrice = payload.totalOrderPrice;
+      state.baseOrderPrice = payload.baseOrderPrice;
     },
 
   },

@@ -26,6 +26,7 @@ data class ShowResponse(
     val allDishesInRestaurant: List<DishDto>,
     val allDishesByCategory: Map<String, List<DishDto>>,
     val dishIdToSideDishesMap: Map<String, List<SideDish>>,
+    val baseOrderPrice: Int,
     val totalOrderPrice: Int
 ) {
 
@@ -89,6 +90,7 @@ data class ShowResponse(
           .map { x -> x.key to x.value.sortedBy { dish -> dish.name }}
           .toMap()
 
+      val baseOrderPrice = Order.getBasePrice(entries)
       val totalOrderPrice = Order.getTotalPrice(order, entries)
 
       return ShowResponse(
@@ -98,6 +100,7 @@ data class ShowResponse(
           allDishesInRestaurantAsDtos,
           allDishesInRestaurantByCategory,
           dishIdToSideDishesMap,
+          baseOrderPrice,
           totalOrderPrice
       )
     }

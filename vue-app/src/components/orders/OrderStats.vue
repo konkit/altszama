@@ -75,13 +75,6 @@
       </div>
     </div>
 
-    <div class="row justify-content-center">
-      <div class="col">
-        <p>
-          <b>Total order amount:</b>&nbsp;<price :data-price="this.totalOrderPrice"/>
-        </p>
-      </div>
-    </div>
   </div>
 </template>
 

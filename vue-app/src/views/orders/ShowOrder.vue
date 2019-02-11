@@ -56,9 +56,9 @@
                   <price-summary
                       :orderDecreaseInPercent="this.order.decreaseInPercent"
                       :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
-                      :basePriceSum="this.order.basePriceSum"
+                      :basePriceSum="this.baseOrderPrice"
                       :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
-                      :allEatingPeopleCount="this.order.allEatingPeopleCount"
+                      :allEatingPeopleCount="this.orderEntries.flatMap(e => e.dishEntries).length"
                       :totalPrice="this.totalOrderPrice"
                   >
                   </price-summary>
@@ -250,6 +250,7 @@
                 "orderEntries",
                 "currentUserId",
                 "totalOrderPrice",
+                "baseOrderPrice"
             ]),
             ...mapState('modifyOrderEntry', [
                 "isEntryCreating",

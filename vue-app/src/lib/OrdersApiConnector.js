@@ -52,7 +52,8 @@ export default {
           allDishesInRestaurant: response.data.allDishesInRestaurant,
           allDishesByCategory: convertToMapEntries(response.data.allDishesByCategory),
           dishIdToSideDishesMap: response.data.dishIdToSideDishesMap,
-          totalOrderPrice: response.data.totalOrderPrice
+          totalOrderPrice: response.data.totalOrderPrice,
+          baseOrderPrice: response.data.baseOrderPrice
         };
       })
   },
@@ -133,8 +134,8 @@ export default {
               orderDate: response.data.order.orderDate,
               timeOfOrder: response.data.order.timeOfOrder,
               decreaseInPercent: response.data.order.decreaseInPercent,
-              deliveryCostPerEverybody: response.data.order.deliveryCostPerEverybody / 100,
-              deliveryCostPerDish: response.data.order.deliveryCostPerDish / 100,
+              deliveryCostPerEverybody: response.data.order.deliveryCostPerEverybody,
+              deliveryCostPerDish: response.data.order.deliveryCostPerDish,
               paymentByCash: response.data.order.paymentByCash,
               paymentByBankTransfer: response.data.order.paymentByBankTransfer,
               bankTransferNumber: response.data.order.bankTransferNumber
@@ -195,8 +196,8 @@ export default {
       orderDate: order.orderDate,
       timeOfOrder: order.timeOfOrder,
       decreaseInPercent: order.decreaseInPercent,
-      deliveryCostPerEverybody: Math.round(order.deliveryCostPerEverybody * 100),
-      deliveryCostPerDish: Math.round(order.deliveryCostPerDish * 100),
+      deliveryCostPerEverybody: Math.round(order.deliveryCostPerEverybody),
+      deliveryCostPerDish: Math.round(order.deliveryCostPerDish),
       paymentByCash: order.paymentByCash === true,
       paymentByBankTransfer: order.paymentByBankTransfer === true,
       bankTransferNumber: order.bankTransferNumber,

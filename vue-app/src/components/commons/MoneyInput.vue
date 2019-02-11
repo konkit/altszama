@@ -31,6 +31,12 @@
                 newStringValue: "",
             }
         },
+        mounted () {
+            const newValue = calcNewValue(this.value, this.currency);
+
+            this.stringValue = newValue;
+            this.newStringValue = newValue;
+        },
         methods: {
             onInput(event) {
                 this.newStringValue = event;
@@ -41,12 +47,19 @@
         },
         watch: {
             value(newVal) {
-                let wholePart = Math.floor(newVal / 100);
-                let fractionPart = ("0" + (newVal % 100)).slice(-2);
+                const newValue = calcNewValue(newVal, this.currency);
 
-                this.stringValue = `${wholePart},${fractionPart} ${this.currency}`
+                this.stringValue = newValue;
+                this.newStringValue = newValue;
             }
         }
+    }
+
+    function calcNewValue(newVal, currency) {
+        let wholePart = Math.floor(newVal / 100);
+        let fractionPart = ("0" + (newVal % 100)).slice(-2);
+
+        return `${wholePart},${fractionPart} ${currency}`
     }
 
     function fromString(a) {
