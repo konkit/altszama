@@ -15,20 +15,15 @@
       </div>
 
       <div class="col-4">
-        <h3>Price modifiers</h3>
-
-        <dt>Price decrease</dt>
-        <dd>{{ this.order.decreaseInPercent }} %</dd>
-
-        <dt>Delivery cost (total)</dt>
-        <dd>
-          <price :data-price="this.order.deliveryCostPerEverybody"/>
-        </dd>
-
-        <dt>Delivery cost (per dish)</dt>
-        <dd>
-          <price :data-price="this.order.deliveryCostPerDish"/>
-        </dd>
+        <price-summary
+            :orderDecreaseInPercent="this.order.decreaseInPercent"
+            :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
+            :basePriceSum="this.baseOrderPrice"
+            :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
+            :allEatingPeopleCount="this.orderEntries.flatMap(e => e.dishEntries).length"
+            :totalPrice="this.totalOrderPrice"
+        >
+        </price-summary>
       </div>
 
       <div class="col-4">
@@ -81,6 +76,7 @@
 <script>
   import Price from '../commons/PriceElement.vue'
   import {mapState} from "vuex"
+  import PriceSummary from "./PriceSummary";
 
   export default {
     methods: {
@@ -98,10 +94,13 @@
     computed: {
       ...mapState('showOrder', [
         "order",
+        "orderEntries",
+        "baseOrderPrice",
         "totalOrderPrice",
       ])
     },
     components: {
+        PriceSummary,
       Price,
     }
   }

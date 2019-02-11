@@ -15,140 +15,97 @@
     </v-toolbar>
 
     <v-content>
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10 xl8>
-            <v-card>
-              <v-card-text>
-                <div v-if="this.isOrdering() && this.isOrderOwner()" class="alert alert-warning">
-                  <p><strong>The order is locked!</strong></p>
+      <simple-card>
+        <div v-if="this.isOrdering() && this.isOrderOwner()" class="alert alert-warning">
+          <p><strong>The order is locked!</strong></p>
 
-                  <p>
-                    The order is locked in ordering state and the order entries are freezed.<br/>
-                    If you are not ordering yet, click button to go back to created state.
-                  </p>
+          <p>
+            The order is locked in ordering state and the order entries are freezed.<br/>
+            If you are not ordering yet, click button to go back to created state.
+          </p>
 
-                  <p>
-                    <v-btn color="success" @click="unlockOrder()">
-                      Unlock&nbsp;&nbsp;<span class="fa fa-unlock"></span>
-                    </v-btn>
+          <p>
+            <v-btn color="success" @click="unlockOrder()">
+              Unlock&nbsp;&nbsp;<span class="fa fa-unlock"></span>
+            </v-btn>
 
-                    <v-btn color="success" @click="placeOrder()">
-                      Place order&nbsp;&nbsp;<span class="fa fa-arrow-right"></span>
-                    </v-btn>
-                  </p>
-                </div>
+            <v-btn color="success" @click="placeOrder()">
+              Place order&nbsp;&nbsp;<span class="fa fa-arrow-right"></span>
+            </v-btn>
+          </p>
+        </div>
 
-                <order-stats></order-stats>
+        <order-stats></order-stats>
+      </simple-card>
 
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+      <simple-card>
+        <table class="table">
+          <tr>
+            <th class="names-person">Eating person</th>
+            <th>Dish</th>
+          </tr>
 
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10 xl8>
-            <v-card>
-              <v-card-text>
-                <v-layout column>
-                  <price-summary
-                      :orderDecreaseInPercent="this.order.decreaseInPercent"
-                      :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
-                      :basePriceSum="this.baseOrderPrice"
-                      :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
-                      :allEatingPeopleCount="this.orderEntries.flatMap(e => e.dishEntries).length"
-                      :totalPrice="this.totalOrderPrice"
-                  >
-                  </price-summary>
-                </v-layout>
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+          <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
+            <tr>
+              <td>{{username}}</td>
 
+              <td>
+                <template v-if="isEntryCreating === false">
+                  <v-btn color="success" @click="createEntry()">
+                    Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                  </v-btn>
+                </template>
 
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10 xl8>
-            <v-card>
-              <v-card-text>
+                <template v-if="isEntryCreating === true">
+                  <create-order-entry></create-order-entry>
+                </template>
+              </td>
+            </tr>
+          </template>
 
-                <table class="table">
-                  <tr>
-                    <th class="names-person">Eating person</th>
-                    <th>Dish</th>
-                  </tr>
+          <template v-for="(orderEntry, entryId) in this.orderEntries">
+            <tr :key="entryId">
+              <td class="username">{{orderEntry.username}}</td>
 
-                  <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
-                    <tr>
-                      <td>{{username}}</td>
-
-                      <td>
-                        <template v-if="isEntryCreating === false">
-                          <v-btn color="success" @click="createEntry()">
-                            Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                          </v-btn>
-                        </template>
-
-                        <template v-if="isEntryCreating === true">
-                          <create-order-entry></create-order-entry>
-                        </template>
-                      </td>
-                    </tr>
+              <td>
+                <template v-for="dishEntry in orderEntry.dishEntries">
+                  <template
+                      v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+                    <edit-order-entry
+                        :order-entry="orderEntry"
+                        :dish-entry="dishEntry"
+                        :key="dishEntry.id">
+                    </edit-order-entry>
                   </template>
-
-                  <template v-for="(orderEntry, entryId) in this.orderEntries">
-                    <tr :key="entryId">
-                      <td class="username">{{orderEntry.username}}</td>
-
-                      <td>
-                        <template v-for="dishEntry in orderEntry.dishEntries">
-                          <template
-                              v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
-                            <edit-order-entry
-                                :order-entry="orderEntry"
-                                :dish-entry="dishEntry"
-                                :key="dishEntry.id">
-                            </edit-order-entry>
-                          </template>
-                          <template v-else>
-                            <order-entry
-                                :order-entry="orderEntry"
-                                :dish-entry="dishEntry"
-                                :current-user-id="currentUserId"
-                                :key="dishEntry.id"></order-entry>
-                          </template>
-                        </template>
-
-                        <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
-                          <div v-if="isEntryCreating === false">
-                            <v-btn color="success" @click="createEntry()">
-                              Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                            </v-btn>
-                          </div>
-                          <div v-if="isEntryCreating === true">
-                            <create-order-entry></create-order-entry>
-                          </div>
-                        </template>
-
-                        <hr/>
-
-                        <b>Cost for user:
-                          <price :data-price="orderEntry.finalPrice"/>
-                        </b>
-                      </td>
-                    </tr>
+                  <template v-else>
+                    <order-entry
+                        :order-entry="orderEntry"
+                        :dish-entry="dishEntry"
+                        :current-user-id="currentUserId"
+                        :key="dishEntry.id"></order-entry>
                   </template>
-                </table>
+                </template>
 
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+                <template
+                    v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+                  <div v-if="isEntryCreating === false">
+                    <v-btn color="success" @click="createEntry()">
+                      Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                    </v-btn>
+                  </div>
+                  <div v-if="isEntryCreating === true">
+                    <create-order-entry></create-order-entry>
+                  </div>
+                </template>
+
+                <hr/>
+
+                <b>Cost for user: <price :data-price="orderEntry.finalPrice"/></b>
+              </td>
+            </tr>
+          </template>
+        </table>
+      </simple-card>
     </v-content>
 
   </LoadingView>
@@ -178,6 +135,7 @@
     } from "../../store/modules/ModifyOrderEntryState";
     import router from '../../router/index'
     import PriceSummary from "../../components/orders/PriceSummary";
+    import SimpleCard from "../../components/commons/SimpleCard";
 
     export default {
         data() {
@@ -260,6 +218,7 @@
             ])
         },
         components: {
+            SimpleCard,
             PriceSummary,
             BackButton2,
             Price,
