@@ -1,4 +1,5 @@
 import ApiConnector from "./ApiConnector";
+import router from '../router/index'
 
 export default {
 
@@ -27,7 +28,7 @@ export default {
     const action = "/restaurants/save";
 
     return ApiConnector.makePost(action, restaurant)
-      .then(response => window.location.href = "#/restaurants")
+      .then(response => router.push("/restaurants"))
   },
 
   getRestaurantEditData (restaurantId) {
@@ -58,7 +59,7 @@ export default {
     };
 
     return ApiConnector.makePost(action, formData)
-      .then(response => window.location.href = "#/restaurants/show/" + restaurantId)
+      .then(response => router.push("/restaurants/show/" + restaurantId))
   },
 
   deleteRestaurant (restaurantId) {
@@ -89,9 +90,6 @@ export default {
   },
 
   editDish (restaurantId, dishObj) {
-    const action = "/restaurants/" + restaurantId + "/dishes/update"
-    const dataSuccessUrl = "#/restaurants/show/" + restaurantId;
-
     const formData = {
       "restaurant.id": restaurantId,
       id: dishObj.id,
@@ -101,8 +99,8 @@ export default {
       sideDishes: dishObj.sideDishes
     };
 
-    return ApiConnector.makePost(action, formData)
-      .then(response => window.location.href = dataSuccessUrl)
+    return ApiConnector.makePost("/restaurants/" + restaurantId + "/dishes/update", formData)
+      .then(response => router.push("/restaurants/show/" + restaurantId))
   },
 
   deleteDish (restaurantId, dishId) {

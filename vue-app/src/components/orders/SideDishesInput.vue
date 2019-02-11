@@ -28,7 +28,7 @@
                 :items="sideDishesItems"
                 label="Side dish"
                 :value="sideDish.id"
-                @change="updateSideDishComboBox(sdIndex, $event.target.value)"
+                @change="updateSideDishComboBox(sdIndex, $event)"
             ></v-autocomplete>
 
             <v-btn color="error" @click="removeSideDish(sdIndex)">

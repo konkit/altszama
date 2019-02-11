@@ -17,7 +17,7 @@
     <v-content>
       <v-container fluid>
         <v-layout align-center justify-center>
-          <v-flex xs10>
+          <v-flex xs10 xl8>
             <v-card>
               <v-card-text>
                 <div v-if="this.isOrdering() && this.isOrderOwner()" class="alert alert-warning">
@@ -49,7 +49,7 @@
 
       <v-container fluid>
         <v-layout align-center justify-center>
-          <v-flex xs10>
+          <v-flex xs10 xl8>
             <v-card>
               <v-card-text>
 
@@ -153,6 +153,7 @@
         CANCEL_DISH_ENTRY_MODIFICATION,
         NAMESPACE_MODIFY_ORDER_ENTRY,
     } from "../../store/modules/ModifyOrderEntryState";
+    import router from '../../router/index'
 
     export default {
         data() {
@@ -189,7 +190,7 @@
                 }
             },
             placeOrder() {
-                window.location = '#/orders/' + this.orderId + '/order_view'
+                router.push("#/orders/" + this.orderId + "/order_view")
             },
             unlockOrder() {
                 this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})

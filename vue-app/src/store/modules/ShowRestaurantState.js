@@ -37,7 +37,10 @@ export default {
     },
     [DELETE_DISH_ACTION] (context, {restaurantId, dishId}) {
       DishesApiConnector.deleteDish(restaurantId, dishId)
-        .then(successResponse => window.location.reload())
+        .then(successResponse => {
+            this.commit('setLoadingFalse')
+            this.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: restaurantId})
+        })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
   }

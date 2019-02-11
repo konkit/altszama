@@ -6,7 +6,7 @@
             :items="allDishesAtOnce"
             label="Dish"
             :value="dishId"
-            @change="updateDishId($event.target.value)"
+            @change="updateDishId($event)"
             item-text="text"
             item-value="value"
         >
@@ -36,8 +36,7 @@
 
     <div class="input-group">
       <template v-if="newDish">
-        <input type="text" class="form-control" placeholder="New dish name" id="newDishName"
-               :value="newDishName" @input="updateNewDishName($event.target.value)"/>
+        <input type="text" class="form-control" placeholder="New dish name" id="newDishName" :value="newDishName" @input="updateNewDishName($event.target.value)"/>
 
         <vue-numeric currency="zł" separator="." currency-symbol-position="suffix"
                      :value="newDishPrice" @input.native="updateNewDishPrice($event.target.value)" :precision="2"
@@ -121,16 +120,19 @@
         return this.allDishesByCategory.flatMap(categoryData => {
             let dishes = categoryData.dishes.flatMap(dish => {
                 var price = (dish.price/100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+                let updateDesc = "";
+                if (dish.lastCrawled) {
+                    updateDesc = `Last automatically updated on ${dish.lastCrawled}`
+                }
 
                 return Object.assign({}, {
                     text: `${dish.name}`,
                     value: dish.id,
-                    subtitle: `Price: ${price}`
+                    subtitle: `Price: ${price}, ${updateDesc}`
                 })
             });
 
             dishes.unshift({"header": `Category: ${categoryData.category}`});
-            dishes.push({"divider": true})
 
             return dishes
         })

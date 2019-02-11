@@ -8,7 +8,7 @@
 
     <v-content>
       <simple-card>
-        <v-data-table class="table table-hover elevation-1" :items="allOrdersList" :headers="headers" :loading="false">
+        <v-data-table class="table table-hover" :items="allOrdersList" :headers="headers" :loading="false">
           <template slot="headers" slot-scope="props">
             <tr>
               <th v-for="header in props.headers" :key="header.text">
@@ -36,6 +36,7 @@
     import LoadingView from "../../components/commons/LoadingView";
     import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
     import SimpleCard from "../../components/commons/SimpleCard";
+    import router from '../../router/index'
 
     export default {
         data() {
@@ -58,7 +59,7 @@
         },
         methods: {
             goToOrder(selectedOrderId) {
-                window.location = "#/orders/show/" + selectedOrderId
+                router.push("/orders/show/" + selectedOrderId)
             }
         },
         components: {

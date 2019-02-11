@@ -1,5 +1,6 @@
 import ApiConnector from "../../lib/ApiConnector";
 import DishesApiConnector from "../../lib/DishesApiConnector";
+import router from '../../router/index'
 
 export const INIT_DATA = "INIT_DATA";
 export const UPDATE_NAME = "UPDATE_NAME";
@@ -17,7 +18,7 @@ export default {
 
     // Dish
     name: '',
-    price: '',
+    price: 0,
     category: ''
   },
   mutations: {
@@ -51,7 +52,7 @@ export default {
       };
 
       DishesApiConnector.createDish(state.restaurantId, dish)
-        .then(response => window.location.href = backUrl)
+        .then(response => router.push(backUrl))
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
   },

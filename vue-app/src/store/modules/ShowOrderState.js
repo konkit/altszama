@@ -1,6 +1,6 @@
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
-
+import router from '../../router/index'
 
 export const NAMESPACE_SHOW_ORDER = "showOrder";
 
@@ -76,37 +76,55 @@ export default {
     },
     [CONFIRM_ORDER_ENTRY_AS_PAID_ACTION] ({state}, {orderEntryId}) {
       OrdersApiConnector.confirmOrderEntryAsPaid(orderEntryId)
-        .then(() => window.location.reload())
+        .then(() => {
+          this.commit('setLoadingTrue');
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+        })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [MARK_ORDER_ENTRY_AS_PAID_ACTION] ({state}, {orderEntryId}) {
       OrdersApiConnector.markOrderEntryAsPaid(orderEntryId)
-        .then(() => window.location.reload())
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+          .then(() => {
+            this.commit('setLoadingTrue');
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+          })
+          .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [SET_ORDER_AS_CREATED_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsCreated(orderId)
-        .then(() => window.location.reload())
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+          .then(() => {
+            this.commit('setLoadingTrue');
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+          })
+          .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [SET_ORDER_AS_ORDERED_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsOrdered(orderId)
-        .then(() => window.location.reload())
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+          .then(() => {
+            this.commit('setLoadingTrue');
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+          })
+          .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [SET_ORDER_AS_DELIVERED_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsDelivered(orderId)
-        .then(() => window.location.reload())
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+          .then(() => {
+            this.commit('setLoadingTrue');
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+          })
+          .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [SET_ORDER_AS_REJECTED_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.setOrderAsRejected(orderId)
-        .then(() => window.location.reload())
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+          .then(() => {
+            this.commit('setLoadingTrue');
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+          })
+          .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [DELETE_ORDER_ACTION] ({state}, {orderId}) {
       OrdersApiConnector.deleteOrder(orderId + '/delete')
-        .then(() => window.location.href = '#/orders')
+        .then(() => router.push('#/orders'))
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
   }

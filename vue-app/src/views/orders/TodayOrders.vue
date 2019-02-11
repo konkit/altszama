@@ -32,7 +32,7 @@
         </div>
         <div v-else>
           <div>
-            <p>You haven't ordered anything yet.</p>
+            <p>You haven't ordered anything today yet.</p>
           </div>
         </div>
       </simple-card>
@@ -145,6 +145,7 @@
     import {mapState} from "vuex"
     import ErrorsComponent from '../../components/commons/Errors'
     import SimpleCard from "../../components/commons/SimpleCard";
+    import router from '../../router/index'
 
 
     export default {
@@ -157,10 +158,10 @@
         },
         methods: {
             goToOrder(selectedOrderId) {
-                location = "#/orders/show/" + selectedOrderId
+                router.push("/orders/show/" + selectedOrderId)
             },
             goToCreateOrder() {
-                location = "#/orders/create"
+                router.push("/orders/create")
             }
         },
         computed: {

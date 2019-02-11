@@ -68,6 +68,7 @@
   import ShowRestaurantDishesTable from '../../components/restaurants/ShowRestaurantDishesTable'
   import LoadingView from "../../components/commons/LoadingView";
   import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantState"
+  import router from "../../router/index"
 
   export default {
     name: 'show-restaurant',
@@ -85,10 +86,10 @@
         this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId, errorsComponent: errorsComponent});
       },
       goToCreateDish() {
-        location = '#/restaurants/' + this.restaurantId + '/dishes/create'
+        router.push("/restaurants/" + this.restaurantId + "/dishes/create")
       },
       editRestaurant() {
-          location = '#/restaurants/' + this.restaurantId + '/edit'
+        router.push("#/restaurants/" + this.restaurantId + "/edit")
       }
     },
     computed: {

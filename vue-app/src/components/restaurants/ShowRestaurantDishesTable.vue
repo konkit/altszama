@@ -19,10 +19,10 @@
           {{dish.name}} (<price :data-price="dish.price"></price>)
 
           <v-chip text-color="blue" v-if="dish.lastCrawled != null">
-            crawled
+            crawled-automatically
           </v-chip>
           <v-chip text-color="green" v-if="dish.lastCrawled == null">
-            user-created
+            created-by-user
           </v-chip>
 
           <v-btn color="error" @click="deleteDish(dish.id)" class="pull-right">

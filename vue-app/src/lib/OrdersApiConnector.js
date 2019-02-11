@@ -1,5 +1,7 @@
 import ApiConnector from "./ApiConnector";
 
+import router from '../router/index'
+
 export default {
 
   saveOrderEntry (orderId, editedOrderEntry) {
@@ -170,9 +172,6 @@ export default {
   },
 
   createOrder (order) {
-    let action = "/orders/save";
-    let dataSuccessUrl = "#/orders/";
-
     let formData = {
       restaurantId: order.restaurantId,
       orderDate: order.orderDate,
@@ -185,14 +184,11 @@ export default {
       bankTransferNumber: order.bankTransferNumber
     };
 
-    return ApiConnector.makePost(action, formData)
-      .then(response => window.location.href = dataSuccessUrl)
+    return ApiConnector.makePost("/orders/save", formData)
+      .then(response => router.push("/orders/"))
   },
 
   editOrder (orderId, order) {
-    let action = "/orders/update";
-    let dataSuccessUrl = "#/orders/show/" + orderId;
-
     let formData = {
       orderId: orderId,
       restaurantId: order.restaurantId,
@@ -206,8 +202,8 @@ export default {
       bankTransferNumber: order.bankTransferNumber,
     };
 
-    return ApiConnector.makePost(action, formData)
-      .then(response => window.location.href = dataSuccessUrl)
+    return ApiConnector.makePost("/orders/update", formData)
+      .then(response => router.push("/orders/show/" + orderId))
   },
 
   makeAnOrder (orderId, {approxTimeOfDelivery}) {

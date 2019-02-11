@@ -45,6 +45,7 @@
 <script>
   import LoadingView from "../../components/commons/LoadingView";
   import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
+  import router from '../../router/index'
 
   export default {
     mounted() {
@@ -52,10 +53,10 @@
     },
     methods: {
       goToRestaurant (restaurantId) {
-        location = "#/restaurants/show/" + restaurantId
+        router.push("/restaurants/show/" + restaurantId)
       },
       goToCreateRestaurant () {
-        location = '#/restaurants/create'
+        router.push("/restaurants/create")
       }
     },
     computed: {

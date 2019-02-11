@@ -22,10 +22,11 @@
                 <v-flex xs12>
                   <v-autocomplete
                       :items="restaurantsList"
+                      item-text="name"
+                      item-value="id"
                       label="Restaurant"
                       :value="this.restaurantsList.find(r => restaurantId == r.id)"
-                      @input="updateRestaurantId($event.id)"
-                      item-text="name"
+                      @input="updateRestaurantId($event)"
                   >
                   </v-autocomplete>
                 </v-flex>

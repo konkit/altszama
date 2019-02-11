@@ -70,6 +70,7 @@
     SET_ORDER_AS_REJECTED_ACTION,
     DELETE_ORDER_ACTION
   } from "../../store/modules/ShowOrderState";
+  import router from '../../router/index'
 
   export default {
     name: 'order-state-buttons',
@@ -103,10 +104,10 @@
         return this.$store.dispatch(`showOrder/${DELETE_ORDER_ACTION}`, { orderId: this.orderId });
       },
       placeOrder () {
-        window.location = '#/orders/' + this.orderId + '/order_view'
+        router.push("/orders/" + this.orderId + '/order_view')
       },
       edit() {
-        window.location = '#/orders/' + this.orderId + '/edit'
+        router.push("/orders/" + this.orderId + '/edit')
       }
     }
   }

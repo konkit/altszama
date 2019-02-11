@@ -21,7 +21,7 @@ export default {
 
     // Dish
     name: '',
-    price: '',
+    price: 0,
     category: '',
   },
   mutations: {

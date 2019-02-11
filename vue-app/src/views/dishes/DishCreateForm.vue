@@ -80,9 +80,9 @@
       },
       getBackUrl () {
         if (typeof this.$route.query.addingToOrderId !== "undefined" && this.$route.query.addingToOrderId.length > 0) {
-          return "#/orders/" + this.$route.query.addingToOrderId + "/create_entry"
+          return "/orders/" + this.$route.query.addingToOrderId + "/create_entry"
         } else {
-          return "#/restaurants/show/" + this.restaurantId
+          return "/restaurants/show/" + this.restaurantId
         }
       },
       updateName(newValue) {
