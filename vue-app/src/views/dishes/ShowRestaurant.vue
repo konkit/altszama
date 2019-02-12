@@ -49,7 +49,7 @@
                   <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
                 </v-layout>
 
-                <v-btn fixed dark fab bottom left color="green" @click="goToCreateDish()">
+                <v-btn fixed dark fab large bottom left color="green" @click="goToCreateDish()">
                   <v-icon>add</v-icon>
                 </v-btn>
               </v-card-text>

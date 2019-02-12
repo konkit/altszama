@@ -33,7 +33,7 @@
         </template>
       </v-data-table>
 
-      <v-btn fixed dark fab bottom left color="green" @click="goToCreateRestaurant()">
+      <v-btn fixed dark fab large bottom left color="green" @click="goToCreateRestaurant()">
         <v-icon>add</v-icon>
       </v-btn>
 

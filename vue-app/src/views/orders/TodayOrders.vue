@@ -130,7 +130,7 @@
 
       </simple-card>
 
-      <v-btn fixed dark fab bottom left color="green" @click="goToCreateOrder()">
+      <v-btn fixed dark fab large bottom left color="green" @click="goToCreateOrder()">
         <v-icon>add</v-icon>
       </v-btn>
     </v-content>
