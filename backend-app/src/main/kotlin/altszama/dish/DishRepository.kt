@@ -11,5 +11,5 @@ interface DishRepository : MongoRepository<Dish, String> {
 
   fun findByRestaurantIdAndName(restaurantId: String, name: String): List<Dish>
 
-  fun deleteAllByLastCrawledBeforeAndLastEditedIsNull(lastCrawledDate: Instant)
+  fun deleteAllByRestaurantIdAndLastEditedIsNull(restaurantId: String)
 }

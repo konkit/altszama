@@ -35,6 +35,8 @@ class RestaurantImportService {
 
     restaurantRepository.save(updatedRestaurant)
 
+    dishRepository.deleteAllByRestaurantIdAndLastEditedIsNull(restaurant.id);
+
     restaurantData.dishes.forEach { dishData ->
       val dish = dishRepository.findByRestaurantIdAndName(restaurant.id, dishData.name).firstOrNull()
           ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
@@ -49,8 +51,6 @@ class RestaurantImportService {
 
       dishRepository.save(updatedDish)
     }
-
-    dishRepository.deleteAllByLastCrawledBeforeAndLastEditedIsNull(now);
   }
 
   private fun getUpdatedSideDishes(dishData: DishImportJson, dish: Dish): List<SideDish> {
