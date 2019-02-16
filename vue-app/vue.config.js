@@ -33,7 +33,7 @@ module.exports = {
                     background_color: "#000000",
                     theme_color: "#4DBA87",
                     orientation: "portrait",
-                    gcm_sender_id: process.env.gcmSenderId
+                    gcm_sender_id: process.env.altszamaGcmSenderId
                 }),
                 new CopyWebpackPlugin([
                     {

@@ -144,7 +144,7 @@ data class ShowResponse(
       )
     }
 
-    private fun fromOrder(order: Order): OrderDto {
+    fun fromOrder(order: Order): OrderDto {
       return OrderDto(
           order.id,
           order.restaurant.id,

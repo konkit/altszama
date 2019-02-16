@@ -4,3 +4,6 @@ build/
 out/
 vue-components.js.map
 src/main/resources/public/
+.DS_Store
+src/main/resources/application-development.properties
+src/main/resources/application-production.properties

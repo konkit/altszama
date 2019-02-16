@@ -50,7 +50,7 @@ function installClient () {
 
 function initClient () {
   const googleConfig = {
-    client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID
+    client_id: process.env.altszamaGoogleClientId
   };
 
   return new Promise((resolve, reject) => {

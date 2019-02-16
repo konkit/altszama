@@ -4,7 +4,7 @@ import router from '../router'
 import GoogleLogin from './GoogleLogin.js'
 
 var currentDomain = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
-var backendUrl = process.env.VUE_APP_BACKEND_URL || currentDomain;
+var backendUrl = process.env.altszamaBackendUrl || currentDomain;
 
 var pushNotificationEnabled = false;
 

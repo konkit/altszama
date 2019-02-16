@@ -1,5 +1,6 @@
 package altszama.auth
 
+import altszama.config.SecretsConfig
 import com.google.api.services.oauth2.model.Userinfoplus
 import io.jsonwebtoken.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,13 +10,12 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class AuthService {
+class AuthService(envVarConfig: SecretsConfig) {
 
   @Autowired
   private lateinit var userRepository: UserRepository
 
-  @Value("\${googleClientSecret}")
-  private lateinit var clientSecret: String
+  private val clientSecret: String = envVarConfig.googleClientSecret
 
   fun currentUser(): User {
     val securityContext = SecurityContextHolder.getContext()

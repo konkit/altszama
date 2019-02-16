@@ -22,9 +22,9 @@ import './assets/main-styles.css'
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 
-if (typeof process.env.sentryURL !== "undefined") {
+if (typeof process.env.altszamaSentryUrl !== "undefined") {
   Raven
-    .config(process.env.sentryURL)
+    .config(process.env.altszamaSentryUrl)
     .addPlugin(RavenVue, Vue)
     .install();
 
@@ -33,7 +33,7 @@ if (typeof process.env.sentryURL !== "undefined") {
 Vue.config.productionTip = false
 
 Vue.config.errorHandler = (err, vm, info) => {
-  if (typeof process.env.sentryURL !== "undefined") {
+  if (typeof process.env.altszamaSentryUrl !== "undefined") {
     Raven.captureException(err)
   }
 };

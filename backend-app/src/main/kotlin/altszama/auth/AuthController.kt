@@ -1,5 +1,6 @@
 package altszama.auth
 
+import altszama.config.SecretsConfig
 import com.google.api.client.auth.oauth2.TokenResponseException
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
@@ -12,21 +13,18 @@ import com.google.api.services.oauth2.Oauth2
 import com.google.api.services.oauth2.model.Userinfoplus
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class AuthController {
+class AuthController(envVarConfig: SecretsConfig) {
 
   private val logger = LoggerFactory.getLogger(AuthController::class.java)
 
-  @Value("\${googleClientId}")
-  private lateinit var clientId: String
+  private var clientId: String = envVarConfig.googleClientId
 
-  @Value("\${googleClientSecret}")
-  private lateinit var clientSecret: String
+  private var clientSecret: String = envVarConfig.googleClientSecret
 
   @Autowired
   private lateinit var userRepository: UserRepository
@@ -42,7 +40,7 @@ class AuthController {
 
   @RequestMapping("/auth/authorizationCode")
   fun loginWithIdToken(@RequestParam authCode: String): AuthTokenInfo {
-    logger.info("Logging with Google, clientId: $clientId, clientSecret: $clientSecret, authCode: $authCode")
+    logger.info("Logging with Google, googleClientId: $clientId, googleClientSecret: $clientSecret, authCode: $authCode")
 
     val accessTokenResponse = requestAccessToken(authCode)
 

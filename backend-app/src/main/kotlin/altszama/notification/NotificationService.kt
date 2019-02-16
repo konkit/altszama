@@ -3,6 +3,7 @@ package altszama.notification
 import altszama.order.Order
 import altszama.orderEntry.OrderEntryRepository
 import altszama.auth.User
+import altszama.config.SecretsConfig
 import nl.martijndwars.webpush.Notification
 import nl.martijndwars.webpush.PushService
 import org.slf4j.Logger
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class NotificationService {
+class NotificationService(secretsConfig: SecretsConfig) {
 
   private val logger: Logger = LoggerFactory.getLogger(NotificationService::class.java)
 
@@ -23,8 +24,7 @@ class NotificationService {
   @Autowired
   private lateinit var orderEntryRepository: OrderEntryRepository
 
-  @Value("\${gcmServerKey}")
-  private lateinit var serverKey: String
+  private var serverKey: String = secretsConfig.gcmServerKey
 
   private val TTL = 255
 
