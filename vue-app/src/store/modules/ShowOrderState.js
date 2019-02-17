@@ -125,7 +125,7 @@ export default {
           .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [DELETE_ORDER_ACTION] ({state}, {orderId}) {
-      OrdersApiConnector.deleteOrder(orderId + '/delete')
+      OrdersApiConnector.deleteOrder(orderId)
         .then(() => router.push('/orders'))
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

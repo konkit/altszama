@@ -50,8 +50,10 @@ function installClient () {
 
 function initClient () {
   const googleConfig = {
-    client_id: process.env.altszamaGoogleClientId
+    client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID
   };
+
+  console.log("ENV: ", process.env)
 
   return new Promise((resolve, reject) => {
     window.gapi.load('auth2', () => {

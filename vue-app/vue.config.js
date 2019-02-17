@@ -1,6 +1,7 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     assetsDir: "static",
@@ -33,7 +34,7 @@ module.exports = {
                     background_color: "#000000",
                     theme_color: "#4DBA87",
                     orientation: "portrait",
-                    gcm_sender_id: process.env.altszamaGcmSenderId
+                    gcm_sender_id: process.env.VUE_APP_GCM_SENDER_ID
                 }),
                 new CopyWebpackPlugin([
                     {
@@ -41,7 +42,8 @@ module.exports = {
                         from: './src/lib/custom-service-worker.js',
                         to: './[name].js'
                     }
-                ])
+                ]),
+                // new BundleAnalyzerPlugin()
             ],
         }
     },

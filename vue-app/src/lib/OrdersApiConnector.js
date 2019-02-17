@@ -102,7 +102,7 @@ export default {
           let restaurantId;
           if( response.data.restaurant != null) {
             restaurantId = response.data.restaurant.id
-          } else {
+          } else if (response.data.restaurantsList.length > 0) {
             restaurantId = response.data.restaurantsList[0].id;
           }
 
