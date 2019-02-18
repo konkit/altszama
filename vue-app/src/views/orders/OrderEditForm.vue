@@ -15,13 +15,39 @@
 
         <v-container grid-list-md>
           <v-layout row>
-              <v-flex xs5>
+              <v-flex xs4>
                 <h3>Order time</h3>
 
-                <v-time-picker :value="timeOfOrder"
-                               @input="updateTimeOfOrder($event)"
-                               format="24hr"
-                ></v-time-picker>
+                <v-dialog
+                    ref="dialog"
+                    v-model="timeOfOrderModal"
+                    :return-value.sync="time"
+                    persistent
+                    lazy
+                    full-width
+                    width="290px"
+                >
+                  <v-text-field
+                      class="short-input"
+                      slot="activator"
+                      :value="timeOfOrder"
+                      @input="updateTimeOfOrder($event)"
+                      label="Time of order"
+                      prepend-icon="access_time"
+                      readonly
+                  ></v-text-field>
+                  <v-time-picker
+                      v-if="timeOfOrderModal"
+                      :value="timeOfOrder"
+                      @input="updateTimeOfOrder($event)"
+                      format="24hr"
+                      full-width
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="timeOfOrderModal = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
+                  </v-time-picker>
+                </v-dialog>
               </v-flex>
 
               <v-flex xs4>
@@ -49,7 +75,7 @@
                 </MoneyInput>
               </v-flex>
 
-              <v-flex xs3>
+              <v-flex xs4>
                 <h3>Payment</h3>
 
                 <b-form-group label="Payment by cash">
@@ -161,6 +187,7 @@
                 orderId: this.$route.params.id,
 
                 yesNoOptions: yesNoOptions,
+                timeOfOrderModal: false,
             }
         },
         mounted() {
