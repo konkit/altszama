@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>Price summary</h4>
+    <h3>Price summary</h3>
 
     <dt v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
       Base price :

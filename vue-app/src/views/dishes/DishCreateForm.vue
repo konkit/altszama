@@ -1,14 +1,14 @@
 <template>
   <div>
-    <v-toolbar>
-      <back-button2 :href="getBackUrl()"></back-button2>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <back-button2 :href="getBackUrl()"></back-button2>
 
-      <v-toolbar-title>
-        Create dish in restaurant {{restaurantName}}
-      </v-toolbar-title>
-    </v-toolbar>
+        <v-toolbar-title>
+          Create dish in restaurant {{restaurantName}}
+        </v-toolbar-title>
+      </template>
 
-    <v-content>
       <v-container fluid>
         <v-layout align-center justify-center>
           <v-flex xs10>
@@ -41,7 +41,7 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-content>
+    </ViewWrapper>
   </div>
 </template>
 
@@ -59,6 +59,7 @@
     SAVE_DISH_ACTION
   } from "../../store/modules/CreateDishState"
   import MoneyInput from "../commons/MoneyInput";
+  import ViewWrapper from "../commons/ViewWrapper";
 
   export default {
     props: ['restaurantName'],
@@ -105,6 +106,7 @@
       ])
     },
     components: {
+      ViewWrapper,
       MoneyInput,
       BackButton2,
       ErrorsComponent,

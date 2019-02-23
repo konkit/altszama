@@ -1,12 +1,12 @@
 <template>
   <LoadingView>
-    <v-toolbar>
-      <v-toolbar-title>
-        All orders
-      </v-toolbar-title>
-    </v-toolbar>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <v-toolbar-title>
+          All orders
+        </v-toolbar-title>
+      </template>
 
-    <v-content>
       <simple-card>
         <v-data-table
             class="table table-hover"
@@ -34,7 +34,7 @@
           </template>
         </v-data-table>
       </simple-card>
-    </v-content>
+    </ViewWrapper>
   </LoadingView>
 </template>
 
@@ -43,6 +43,7 @@
     import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
     import SimpleCard from "../commons/SimpleCard";
     import router from '../../router/index'
+    import ViewWrapper from "../commons/ViewWrapper";
 
     export default {
         data() {
@@ -72,6 +73,7 @@
             }
         },
         components: {
+          ViewWrapper,
             SimpleCard,
             LoadingView,
         }
@@ -79,9 +81,7 @@
 </script>
 
 <style scoped>
-  .row {
-    margin-top: 2rem;
-  }
+
 
   .pointer {
     cursor: pointer;

@@ -1,24 +1,24 @@
 <template>
   <LoadingView>
-    <v-toolbar>
-      <back-button2 href="#/restaurants"></back-button2>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <back-button2 href="#/restaurants"></back-button2>
 
-      <v-toolbar-title>
-        Restaurant {{this.restaurant.name}}
-      </v-toolbar-title>
+        <v-toolbar-title>
+          Restaurant {{this.restaurant.name}}
+        </v-toolbar-title>
 
-      <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
 
-      <v-btn @click="editRestaurant">
-        Edit restaurant&nbsp;<span class="fa fa-pencil"/>
-      </v-btn>
+        <v-btn @click="editRestaurant">
+          Edit restaurant&nbsp;<span class="fa fa-pencil"/>
+        </v-btn>
 
-      <v-btn color="error" @click="deleteRestaurant">
-        Delete restaurant&nbsp;<span class="fa fa-times"/>
-      </v-btn>
-    </v-toolbar>
+        <v-btn color="error" @click="deleteRestaurant">
+          Delete restaurant&nbsp;<span class="fa fa-times"/>
+        </v-btn>
+      </template>
 
-    <v-content>
       <errors-component />
 
       <v-container fluid>
@@ -57,7 +57,7 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-content>
+    </ViewWrapper>
   </LoadingView>
 </template>
 
@@ -70,6 +70,7 @@
   import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantState"
   import router from "../../router/index"
   import moment from "moment"
+  import ViewWrapper from "../commons/ViewWrapper";
 
   export default {
     name: 'show-restaurant',
@@ -114,6 +115,7 @@
       },
     },
     components: {
+      ViewWrapper,
       LoadingView,
       BackButton2,
       Price,

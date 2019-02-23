@@ -1,103 +1,113 @@
 <template>
   <LoadingView>
-    <v-toolbar>
-      <v-toolbar-title>
-        Restaurants
-      </v-toolbar-title>
-    </v-toolbar>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <v-toolbar-title>
+          Restaurants
+        </v-toolbar-title>
+      </template>
 
-    <simple-card>
+      <simple-card>
+        <v-data-table
+            class="table table-hover"
+            :items="restaurantsEntries"
+            :headers="headers"
+            :loading="false"
+            :pagination.sync="pagination">
+          <template slot="headers" slot-scope="props">
+            <tr>
+              <th v-for="header in props.headers" :key="header.text">
+                {{ header.text }}
+              </th>
+            </tr>
+          </template>
 
-      <v-data-table
-          class="table table-hover"
-          :items="restaurantsEntries"
-          :headers="headers"
-          :loading="false"
-          :pagination.sync="pagination">
-        <template slot="headers" slot-scope="props">
-          <tr>
-            <th v-for="header in props.headers" :key="header.text">
-              {{ header.text }}
-            </th>
-          </tr>
-        </template>
+          <template slot="items" slot-scope="props">
+            <tr @click="goToRestaurant(props.item.id)" :key="props.item.id" :data-href="'/orders/show/' + props.item.id"
+                class="pointer">
+              <td>{{ props.item.name }}</td>
+              <td>{{ props.item.dishCount }}</td>
+              <td>{{ dateToTimeFromNow(props.item.lastCrawled) }}</td>
+              <td>{{ dateToTimeFromNow(props.item.lastEdited) }}</td>
+            </tr>
+          </template>
+        </v-data-table>
 
-        <template slot="items" slot-scope="props">
-          <tr @click="goToRestaurant(props.item.id)" :key="props.item.id" :data-href="'/orders/show/' + props.item.id"
-              class="pointer">
-            <td>{{ props.item.name }}</td>
-            <td>{{ props.item.dishCount }}</td>
-            <td>{{ dateToTimeFromNow(props.item.lastCrawled) }}</td>
-            <td>{{ dateToTimeFromNow(props.item.lastEdited) }}</td>
-          </tr>
-        </template>
-      </v-data-table>
+        <v-btn fixed dark fab large bottom left color="green" @click="goToCreateRestaurant()">
+          <v-icon>add</v-icon>
+        </v-btn>
 
-      <v-btn fixed dark fab large bottom left color="green" @click="goToCreateRestaurant()">
-        <v-icon>add</v-icon>
-      </v-btn>
+      </simple-card>
 
-    </simple-card>
+    </ViewWrapper>
   </LoadingView>
 </template>
 
 <script>
-    import LoadingView from "../commons/LoadingView";
-    import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
-    import router from '../../router/index'
-    import SimpleCard from "../commons/SimpleCard";
-    import moment from "moment"
+  import LoadingView from "../commons/LoadingView";
+  import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
+  import router from '../../router/index'
+  import SimpleCard from "../commons/SimpleCard";
+  import moment from "moment"
+  import ViewWrapper from "../commons/ViewWrapper";
 
-    export default {
-        data() {
-            return {
-                headers: [
-                    { text: "Restaurant name", align: 'left' },
-                    { text: "Dish count" },
-                    { text: "Last auto-updated" },
-                    { text: "Last updated manually" },
-                ],
-                pagination: {
-                    rowsPerPage: 20
-                },
-            }
+  export default {
+    data() {
+      return {
+        headers: [
+          {text: "Restaurant name", align: 'left'},
+          {text: "Dish count"},
+          {text: "Last auto-updated"},
+          {text: "Last updated manually"},
+        ],
+        pagination: {
+          rowsPerPage: 20
         },
-        mounted() {
-            this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
-        },
-        methods: {
-            goToRestaurant(restaurantId) {
-                router.push("/restaurants/show/" + restaurantId)
-            },
-            goToCreateRestaurant() {
-                router.push("/restaurants/create")
-            },
-            dateToTimeFromNow(date) {
-              if (date) {
-                return moment(date).fromNow()
-              } else {
-                return ""
-              }
-            }
-        },
-        computed: {
-            restaurants() {
-                return this.$store.state.restaurantIndex.restaurants;
-            },
-            restaurantToDishesMap() {
-                return this.$store.state.restaurantIndex.restaurantToDishesMap;
-            },
-            restaurantsEntries() {
-                return this.$store.state.restaurantIndex.restaurants.map(e => {
-                    return {"id": e.id, "name": e.name, "dishCount": e.dishCount, "lastCrawled": e.lastCrawled, "lastEdited": e.lastEdited}
-                })
-            }
-        },
-        components: {
-            SimpleCard,
-            LoadingView,
+      }
+    },
+    mounted() {
+      this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
+    },
+    methods: {
+      goToRestaurant(restaurantId) {
+        router.push("/restaurants/show/" + restaurantId)
+      },
+      goToCreateRestaurant() {
+        router.push("/restaurants/create")
+      },
+      dateToTimeFromNow(date) {
+        if (date) {
+          return moment(date).fromNow()
+        } else {
+          return ""
         }
+      }
+    },
+    computed: {
+      restaurants() {
+        return this.$store.state.restaurantIndex.restaurants;
+      },
+      restaurantToDishesMap() {
+        return this.$store.state.restaurantIndex.restaurantToDishesMap;
+      },
+      restaurantsEntries() {
+        return this.$store.state.restaurantIndex.restaurants.map(e => {
+          return {
+            "id": e.id,
+            "name": e.name,
+            "dishCount": e.dishCount,
+            "lastCrawled": e.lastCrawled,
+            "lastEdited": e.lastEdited
+          }
+        })
+      }
+    },
+    components: {
+      ViewWrapper,
+      SimpleCard,
+      LoadingView,
     }
+  }
 </script>
 
 <style scoped>

@@ -5,17 +5,13 @@ import App from './App'
 import router from './router'
 import store from './store'
 import VueResource from 'vue-resource'
-import BootstrapVue from 'bootstrap-vue'
 import VueNumeric from 'vue-numeric'
 import './plugins/vuetify'
 
 Vue.use(VueResource);
-Vue.use(BootstrapVue);
 Vue.use(VueNumeric);
 
 // CSS libs
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'font-awesome/css/font-awesome.css';
 import './assets/main-styles.css'
 
@@ -33,6 +29,7 @@ if (typeof process.env.VUE_APP_SENTRY_URL !== "undefined") {
 Vue.config.productionTip = false
 
 Vue.config.errorHandler = (err, vm, info) => {
+  console.error(err, vm, info);
   if (typeof process.env.VUE_APP_SENTRY_URL !== "undefined") {
     Raven.captureException(err)
   }

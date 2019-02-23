@@ -1,33 +1,33 @@
 <template>
   <div v-if="shouldDisplayNavigation()">
-    <b-navbar toggleable="md" type="light" variant="light">
+    <v-toolbar extended flat>
+      <v-toolbar-title>
+        <i class="fa fa-cutlery" aria-hidden="true"></i> Alt Szama
+      </v-toolbar-title>
 
-    <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand href="#"><i class="fa fa-cutlery" aria-hidden="true"></i> Alt Szama</b-navbar-brand>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn flat @click="goToPath('/orders')">Today's orders</v-btn>
+        <v-btn flat @click="goToPath('/all_orders')">All orders</v-btn>
+        <v-btn flat @click="goToPath('/restaurants')">Restaurants and dishes</v-btn>
+      </v-toolbar-items>
 
-      <b-collapse is-nav id="nav_collapse">
 
-        <b-navbar-nav>
-          <b-nav-item href="#/orders">Today's orders</b-nav-item>
-          <b-nav-item href="#/all_orders">All orders</b-nav-item>
-          <b-nav-item href="#/restaurants">Restaurants and dishes</b-nav-item>
-        </b-navbar-nav>
+      <v-spacer></v-spacer>
 
-        <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto">
 
-          <b-nav-item-dropdown right>
-            <!-- Using button-content slot -->
-            <template slot="button-content">
-              <em>Hi {{this.username}}!</em>
-            </template>
-            <b-dropdown-item @click="logout">Logout</b-dropdown-item>
-          </b-nav-item-dropdown>
+      <v-menu :nudge-width="100">
+        <v-toolbar-title slot="activator">
+          <span>Hi {{this.username}}!</span>
+          <v-icon>arrow_drop_down</v-icon>
+        </v-toolbar-title>
 
-        </b-navbar-nav>
-
-      </b-collapse>
-    </b-navbar>
+        <v-list>
+          <v-list-tile @click="logout">
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+    </v-toolbar>
   </div>
 </template>
 
@@ -47,6 +47,9 @@
       },
       logout () {
         ApiConnector.logout();
+      },
+      goToPath(path) {
+        this.$router.push(path)
       }
     }
   }

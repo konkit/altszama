@@ -1,126 +1,128 @@
 <template>
   <LoadingView>
-    <v-toolbar>
-      <back-button2 :href="'#/orders/show/' + orderId"></back-button2>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <back-button2 :href="'#/orders/show/' + orderId"></back-button2>
 
-      <v-toolbar-title>
-        Ordering from {{restaurantName}}
-      </v-toolbar-title>
-    </v-toolbar>
+        <v-toolbar-title>
+          Ordering from {{restaurantName}}
+        </v-toolbar-title>
+      </template>
 
-    <div v-if="isStateOrdering">
-      <simple-card>
-        <v-container>
-          <v-layout row>
-            <v-flex>
-              <v-alert :value="true" color="warning" icon="new_releases">
-                Order is now locked, so no one should order anything else now.
-              </v-alert>
-            </v-flex>
-          </v-layout>
+      <div v-if="isStateOrdering">
+        <simple-card>
+          <v-container>
+            <v-layout row>
+              <v-flex>
+                <v-alert :value="true" color="warning" icon="new_releases">
+                  Order is now locked, so no one should order anything else now.
+                </v-alert>
+              </v-flex>
+            </v-layout>
 
-          <v-layout row>
-            <v-flex xs12>
-              <p>Now please call: <b>tel. {{restaurantTelephone}}</b>, make an order and then enter approximate delivery time and click "Order placed"</p>
-            </v-flex>
-          </v-layout>
+            <v-layout row>
+              <v-flex xs12>
+                <p>Now please call: <b>tel. {{restaurantTelephone}}</b>, make an order and then enter approximate delivery time and click "Order placed"</p>
+              </v-flex>
+            </v-layout>
 
-          <v-layout row>
-            <v-flex xs3>
-              <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)" label="Approximate time of delivery"></TimePicker>
-            </v-flex>
+            <v-layout row>
+              <v-flex xs3>
+                <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)" label="Approximate time of delivery"></TimePicker>
+              </v-flex>
 
-            <v-flex xs3>
-              <v-btn color="success" @click="submitForm">
-                Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-              </v-btn>
+              <v-flex xs3>
+                <v-btn color="success" @click="submitForm">
+                  Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </simple-card>
+
+        <simple-card>
+          <errors-component/>
+
+          <h4>Dishes:</h4>
+
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Dish</th>
+              <th>Eaters (and their comments)</th>
+              <th class="price-column">Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="entry in groupedEntries" :key="entry.id">
+              <td>{{entry.eatingPeopleCount}}x {{entry.dish.name}} (
+                <price :data-price="entry.dish.price"></price>
+                )
+              </td>
+
+              <td>
+                <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
+                  <p class="dish-name">
+                    {{ eatingPersonEntry.username }}
+                  </p>
+
+                  <p class="side-dish-name" v-for="(sd, i) in eatingPersonEntry.sideDishes" :key="i">
+                    + {{sd.name}} (
+                    <price :data-price="sd.price"/>
+                    )
+                  </p>
+
+                  <p class="dish-comments" v-if="eatingPersonEntry.comments.length > 0">
+                    Additional comments: {{ eatingPersonEntry.comments }}
+                  </p>
+                </div>
+              </td>
+              <td>
+                <price :data-price="entry.price"></price>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+        </simple-card>
+
+        <v-container fluid>
+          <v-layout align-center justify-center>
+            <v-flex xs10 xl8>
+              <v-card>
+                <v-card-text>
+                  <v-layout column>
+
+                    <price-summary
+                        :orderDecreaseInPercent="orderDecreaseInPercent"
+                        :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
+                        :basePriceSum="basePriceSum"
+                        :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
+                        :allEatingPeopleCount="allEatingPeopleCount"
+                        :totalPrice="totalPrice"
+                    >
+                    </price-summary>
+
+                  </v-layout>
+                </v-card-text>
+              </v-card>
             </v-flex>
           </v-layout>
         </v-container>
-      </simple-card>
 
-      <simple-card>
-        <errors-component/>
+        <div v-if="isStateNotOrdering">
+          <navigation user-name="Tmp name"></navigation>
 
-        <h4>Dishes:</h4>
-
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Dish</th>
-            <th>Eaters (and their comments)</th>
-            <th class="price-column">Price</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="entry in groupedEntries" :key="entry.id">
-            <td>{{entry.eatingPeopleCount}}x {{entry.dish.name}} (
-              <price :data-price="entry.dish.price"></price>
-              )
-            </td>
-
-            <td>
-              <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
-                <p class="dish-name">
-                  {{ eatingPersonEntry.username }}
-                </p>
-
-                <p class="side-dish-name" v-for="(sd, i) in eatingPersonEntry.sideDishes" :key="i">
-                  + {{sd.name}} (
-                  <price :data-price="sd.price"/>
-                  )
-                </p>
-
-                <p class="dish-comments" v-if="eatingPersonEntry.comments.length > 0">
-                  Additional comments: {{ eatingPersonEntry.comments }}
-                </p>
-              </div>
-            </td>
-            <td>
-              <price :data-price="entry.price"></price>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-
-      </simple-card>
-
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10 xl8>
-            <v-card>
-              <v-card-text>
-                <v-layout column>
-
-                  <price-summary
-                      :orderDecreaseInPercent="orderDecreaseInPercent"
-                      :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
-                      :basePriceSum="basePriceSum"
-                      :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
-                      :allEatingPeopleCount="allEatingPeopleCount"
-                      :totalPrice="totalPrice"
-                  >
-                  </price-summary>
-
-                </v-layout>
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-
-      <div v-if="isStateNotOrdering">
-        <navigation user-name="Tmp name"></navigation>
-
-        <simple-card>
-          <h1>Ordering from {{restaurantName}}</h1>
-          <h4>Sorry, the order is empty</h4>
-          <p>
-            <back-button :href="'#/orders/show/' + orderId"></back-button>
-          </p>
-        </simple-card>
+          <simple-card>
+            <h1>Ordering from {{restaurantName}}</h1>
+            <h4>Sorry, the order is empty</h4>
+            <p>
+              <back-button :href="'#/orders/show/' + orderId"></back-button>
+            </p>
+          </simple-card>
+        </div>
       </div>
-    </div>
+    </ViewWrapper>
   </LoadingView>
 </template>
 
@@ -140,6 +142,7 @@
   import SimpleCard from "../commons/SimpleCard";
   import PriceSummary from "./components/PriceSummary";
   import TimePicker from "../commons/TimePicker";
+  import ViewWrapper from "../commons/ViewWrapper";
 
   export default {
     data() {
@@ -184,6 +187,7 @@
       }
     },
     components: {
+      ViewWrapper,
       TimePicker,
       PriceSummary,
       SimpleCard,

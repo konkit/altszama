@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Login from '../views/commons/Login'
+import Login from '../views/Login'
 import TodayOrders from '../views/orders/TodayOrders'
 import ShowOrder from '../views/orders/ShowOrder'
 import OrderCreateForm from '../views/orders/OrderCreateForm'

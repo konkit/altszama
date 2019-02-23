@@ -1,14 +1,14 @@
 <template>
   <LoadingView>
-    <v-toolbar>
-      <back-button2 :href="'#/orders/show/' + orderId"></back-button2>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <back-button2 :href="'#/orders/show/' + orderId"></back-button2>
 
-      <v-toolbar-title>
-        Edit order from {{restaurantName}}
-      </v-toolbar-title>
-    </v-toolbar>
+        <v-toolbar-title>
+          Edit order from {{restaurantName}}
+        </v-toolbar-title>
+      </template>
 
-    <v-content>
       <simple-card>
         <order-state-buttons></order-state-buttons>
       </simple-card>
@@ -51,59 +51,25 @@
             <v-flex xs4>
               <h3>Payment</h3>
 
-              <b-form-group label="Payment by cash">
-                <b-form-radio-group
-                    buttons
-                    button-variant="outline-primary"
-                    :options="yesNoOptions"
-                    v-model="paymentByCash"
-                >
-                </b-form-radio-group>
-              </b-form-group>
+              <v-switch v-model="paymentByCash" label="Payment by cash"></v-switch>
 
-              <b-form-group label="Payment by bank transfer">
-                <b-form-radio-group
-                    buttons
-                    button-variant="outline-primary"
-                    :options="yesNoOptions"
-                    v-model="paymentByBankTransfer"
-                >
-                </b-form-radio-group>
-              </b-form-group>
+              <v-switch v-model="paymentByBankTransfer" label="Payment by bank transfer"></v-switch>
 
-              <div class="form-group" v-if="paymentByBankTransfer">
-                <label>Bank transfer number</label>
-                <v-text-field
-                    type="text"
-                    id="bankTransferNumber"
-                    name="bankTransferNumber"
-                    class="form-control"
-                    :value="bankTransferNumber"
-                    @change="updateBankTransferNumber($event)"
-                />
-              </div>
+              <v-text-field
+                  v-if="paymentByBankTransfer"
+                  label="Bank transfer number"
+                  :value="bankTransferNumber"
+                  @change="updateBankTransferNumber($event)"
+              />
 
-              <b-form-group label="Payment by BLIK">
-                <b-form-radio-group
-                    buttons
-                    button-variant="outline-primary"
-                    :options="yesNoOptions"
-                    v-model="paymentByBlik"
-                >
-                </b-form-radio-group>
-              </b-form-group>
+              <v-switch v-model="paymentByBlik" label="Payment by BLIK"></v-switch>
 
-              <div class="form-group" v-if="paymentByBlik">
-                <label>BLIK phone number</label>
-                <v-text-field
-                    type="text"
-                    id="blikPhoneNumber"
-                    name="bankTransferNumber"
-                    class="form-control"
-                    :value="blikPhoneNumber"
-                    @change="updateBlikPhoneNumber($event)"
-                />
-              </div>
+              <v-text-field
+                  v-if="paymentByBlik"
+                  label="BLIK phone number"
+                  :value="blikPhoneNumber"
+                  @change="updateBlikPhoneNumber($event)"
+              />
             </v-flex>
           </v-layout>
         </v-container>
@@ -116,7 +82,7 @@
           </div>
         </div>
       </simple-card>
-    </v-content>
+    </ViewWrapper>
   </LoadingView>
 </template>
 
@@ -149,6 +115,7 @@
   import MoneyInput from "../commons/MoneyInput";
   import TimePicker from "../commons/TimePicker";
   import OrderStateButtons from "./components/OrderStateButtons";
+  import ViewWrapper from "../commons/ViewWrapper";
 
   const yesNoOptions = [
     {text: 'Yes', value: true},
@@ -248,6 +215,7 @@
       },
     },
     components: {
+      ViewWrapper,
       OrderStateButtons,
       TimePicker,
       MoneyInput,

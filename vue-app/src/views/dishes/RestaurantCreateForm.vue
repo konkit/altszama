@@ -1,14 +1,15 @@
 <template>
   <div>
-    <v-toolbar>
-      <back-button2 href="#/restaurants"></back-button2>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <back-button2 href="#/restaurants"></back-button2>
 
-      <v-toolbar-title>
-        Create restaurant
-      </v-toolbar-title>
-    </v-toolbar>
+        <v-toolbar-title>
+          Create restaurant
+        </v-toolbar-title>
+      </template>
 
-    <v-content>
+
       <v-container fluid>
         <v-layout align-center justify-center>
           <v-flex xs10>
@@ -31,7 +32,7 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-content>
+    </ViewWrapper>
   </div>
 </template>
 
@@ -47,6 +48,7 @@
     UPDATE_ADDRESS,
     SAVE_RESTAURANT_ACTION
   } from "../../store/modules/CreateRestaurantState"
+  import ViewWrapper from "../commons/ViewWrapper";
 
   export default {
     props: ['restaurantName'],
@@ -81,6 +83,7 @@
       ]),
     },
     components: {
+      ViewWrapper,
       BackButton2,
       ErrorsComponent,
     }

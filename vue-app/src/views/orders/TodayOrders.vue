@@ -1,12 +1,12 @@
 <template>
   <LoadingView>
-    <v-toolbar>
-      <v-toolbar-title>
-        Today orders
-      </v-toolbar-title>
-    </v-toolbar>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <v-toolbar-title>
+          Today orders
+        </v-toolbar-title>
+      </template>
 
-    <v-content>
       <simple-card>
         <div v-if="this.currentOrderEntries.length > 0">
           <v-list>
@@ -133,8 +133,7 @@
       <v-btn fixed dark fab large bottom left color="green" @click="goToCreateOrder()">
         <v-icon>add</v-icon>
       </v-btn>
-    </v-content>
-
+    </ViewWrapper>
   </LoadingView>
 </template>
 
@@ -146,6 +145,7 @@
     import ErrorsComponent from '../commons/Errors'
     import SimpleCard from "../commons/SimpleCard";
     import router from '../../router/index'
+    import ViewWrapper from "../commons/ViewWrapper";
 
 
     export default {
@@ -174,6 +174,7 @@
             ])
         },
         components: {
+          ViewWrapper,
             SimpleCard,
             LoadingView,
             ErrorsComponent,

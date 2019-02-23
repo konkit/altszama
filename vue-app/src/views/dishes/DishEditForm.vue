@@ -1,14 +1,14 @@
 <template>
   <LoadingView>
-    <v-toolbar>
-      <back-button2 :href="'#/restaurants/show/' + restaurantId"></back-button2>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <back-button2 :href="'#/restaurants/show/' + restaurantId"></back-button2>
 
-      <v-toolbar-title>
-        Edit dish
-      </v-toolbar-title>
-    </v-toolbar>
+        <v-toolbar-title>
+          Edit dish
+        </v-toolbar-title>
+      </template>
 
-    <v-content>
       <v-container fluid>
         <v-layout align-center justify-center>
           <v-flex xs10>
@@ -43,7 +43,7 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-content>
+    </ViewWrapper>
   </LoadingView>
 </template>
 
@@ -62,6 +62,7 @@
     UPDATE_PRICE
   } from "../../store/modules/EditDishState"
   import MoneyInput from "../commons/MoneyInput";
+  import ViewWrapper from "../commons/ViewWrapper";
 
   export default {
     data() {
@@ -112,6 +113,7 @@
       ])
     },
     components: {
+      ViewWrapper,
       MoneyInput,
       LoadingView,
       BackButton2,

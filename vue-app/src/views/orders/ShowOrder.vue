@@ -1,27 +1,28 @@
 <template>
   <LoadingView>
-    <v-toolbar>
-      <back-button2 href="#/orders/"></back-button2>
+    <ViewWrapper>
+      <template slot="toolbar">
+        <back-button2 href="#/orders/"></back-button2>
 
-      <v-toolbar-title>
-        [{{ this.order.orderState }}] Order from {{this.order.restaurantName}} ({{this.order.orderDate}})
-      </v-toolbar-title>
+        <v-toolbar-title>
+          [{{ this.order.orderState }}] Order from {{this.order.restaurantName}} ({{this.order.orderDate}})
+        </v-toolbar-title>
 
-      <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
 
-      <template v-if="isOrderOwner()">
-        <v-btn @click="edit">
-          <i class="fa fa-cog" aria-hidden="true"></i>
-        </v-btn>
+        <template v-if="isOrderOwner()">
+          <v-btn @click="edit">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+          </v-btn>
+        </template>
       </template>
-    </v-toolbar>
 
-    <v-content>
       <simple-card>
         <v-container>
           <v-layout row>
             <v-flex xs12>
-              <v-alert  v-if="this.isOrdering() && this.isOrderOwner()" :value="true" color="warning" icon="new_releases">
+              <v-alert v-if="this.isOrdering() && this.isOrderOwner()" :value="true" color="warning"
+                       icon="new_releases">
                 <p><strong>The order is locked!</strong></p>
 
                 <p>
@@ -44,16 +45,16 @@
 
           <v-layout row>
             <v-flex xs4>
-                <h3>Order data</h3>
+              <h3>Order data</h3>
 
-                <dt>Who will order?</dt>
-                <dd>{{ this.order.orderCreatorUsername }}</dd>
+              <dt>Who will order?</dt>
+              <dd><b>{{ this.order.orderCreatorUsername }}</b></dd>
 
-                <dt>When?</dt>
-                <dd>{{ this.order.timeOfOrder }}</dd>
+              <dt>When?</dt>
+              <dd><b>{{ this.order.timeOfOrder }}</b></dd>
 
-                <dt>When it'll arrive?</dt>
-                <dd>{{ this.timeOfDeliveryOrNA() }}</dd>
+              <dt>When it'll arrive?</dt>
+              <dd><b>{{ this.timeOfDeliveryOrNA() }}</b></dd>
             </v-flex>
 
             <v-flex xs4>
@@ -130,7 +131,8 @@
 
           <v-layout row>
             <v-flex xs12>
-              <v-btn block color="success" v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'" @click="placeOrder">
+              <v-btn block color="success" v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'"
+                     @click="placeOrder">
                 Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
               </v-btn>
 
@@ -197,7 +199,8 @@
                   </template>
                 </template>
 
-                <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+                <template
+                    v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
                   <div v-if="isEntryCreating === false">
                     <v-btn color="success" @click="createEntry()">
                       Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
@@ -218,8 +221,7 @@
           </template>
         </table>
       </simple-card>
-    </v-content>
-
+    </ViewWrapper>
   </LoadingView>
 </template>
 
@@ -251,6 +253,7 @@
   import router from '../../router/index'
   import PriceSummary from "./components/PriceSummary";
   import SimpleCard from "../commons/SimpleCard";
+  import ViewWrapper from "../commons/ViewWrapper";
 
   export default {
     data() {
@@ -310,22 +313,22 @@
       cancelEdit() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
       },
-      setAsCreated () {
-        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_CREATED_ACTION}`, { orderId: this.orderId });
+      setAsCreated() {
+        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_CREATED_ACTION}`, {orderId: this.orderId});
       },
-      setAsOrdered () {
-        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_ORDERED_ACTION}`, { orderId: this.orderId });
+      setAsOrdered() {
+        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_ORDERED_ACTION}`, {orderId: this.orderId});
       },
-      setAsDelivered () {
-        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_DELIVERED_ACTION}`, { orderId: this.orderId });
+      setAsDelivered() {
+        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_DELIVERED_ACTION}`, {orderId: this.orderId});
       },
-      setAsRejected () {
-        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_REJECTED_ACTION}`, { orderId: this.orderId });
+      setAsRejected() {
+        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_REJECTED_ACTION}`, {orderId: this.orderId});
       },
-      deleteDishEntry () {
-        return this.$store.dispatch(`showOrder/${DELETE_ORDER_ACTION}`, { orderId: this.orderId });
+      deleteDishEntry() {
+        return this.$store.dispatch(`showOrder/${DELETE_ORDER_ACTION}`, {orderId: this.orderId});
       },
-      placeOrder () {
+      placeOrder() {
         router.push("/orders/" + this.orderId + '/order_view')
       },
       edit() {
@@ -343,7 +346,7 @@
       numberOfCurrentUserEntries() {
         return this.orderEntries.filter(e => e.userId === this.currentUserId).length;
       },
-      orderState () {
+      orderState() {
         return this.$store.state.showOrder.order.orderState;
       },
       ...mapState({
@@ -364,6 +367,7 @@
       ])
     },
     components: {
+      ViewWrapper,
       SimpleCard,
       PriceSummary,
       BackButton2,
