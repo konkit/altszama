@@ -146,17 +146,12 @@
       </simple-card>
 
       <simple-card>
-        <table class="table">
-          <tr>
-            <th class="names-person">Eating person</th>
-            <th>Dish</th>
-          </tr>
 
           <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
-            <tr>
-              <td>{{username}}</td>
+            <div class="row">
+              <div class="user-name-col">{{username}}</div>
 
-              <td>
+              <div class="user-order-col">
                 <template v-if="isEntryCreating === false">
                   <v-btn color="success" @click="createEntry()">
                     Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
@@ -166,18 +161,21 @@
                 <template v-if="isEntryCreating === true">
                   <create-order-entry></create-order-entry>
                 </template>
-              </td>
-            </tr>
+              </div>
+            </div>
           </template>
 
           <template v-for="(orderEntry, entryId) in this.orderEntries">
-            <tr :key="entryId">
-              <td class="username">{{orderEntry.username}}</td>
+            <div class="row" :key="entryId">
+              <div class="user-name-col username">
+                <div class="username-wrapper">
+                    {{orderEntry.username}}
+                </div>
+              </div>
 
-              <td>
+              <div class="user-order-col">
                 <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
                   <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
-                    <!--<v-divider v-if="dishEntryIndex > 0"></v-divider>-->
 
                     <edit-order-entry
                         :order-entry="orderEntry"
@@ -199,9 +197,8 @@
                   </template>
                 </template>
 
-                <template
-                    v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
-                  <div v-if="isEntryCreating === false">
+                <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+                  <div v-if="isEntryCreating === false" class="py-3">
                     <v-btn color="success" @click="createEntry()">
                       Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
                     </v-btn>
@@ -211,15 +208,14 @@
                   </div>
                 </template>
 
-                <hr/>
+                <v-divider></v-divider>
 
-                <b>Cost for user:
-                  <price :data-price="orderEntry.finalPrice"/>
-                </b>
-              </td>
-            </tr>
+                <div class="py-3">
+                  <b>Cost for user: <price :data-price="orderEntry.finalPrice"/></b>
+                </div>
+              </div>
+            </div>
           </template>
-        </table>
       </simple-card>
     </ViewWrapper>
   </LoadingView>
@@ -383,12 +379,22 @@
 
 <style scoped>
 
-  .names-person {
-    width: 250px;
+  .row {
+    display: flex;
+    flex-direction: row;
   }
 
-  .username {
-    padding-top: 24px;
+  .user-name-col {
+    width: 300px;
+  }
+
+  .user-order-col {
+    width: 100%;
+  }
+
+  .username-wrapper {
+    height: 50px;
+    padding-top: 12px;
   }
 
   .allowed {
