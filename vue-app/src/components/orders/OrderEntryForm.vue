@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="input-group">
+    <v-layout>
       <template v-if="!newDish">
         <v-autocomplete
             :items="allDishesAtOnce"
@@ -11,7 +11,7 @@
             item-value="value"
         >
           <template slot="selection" slot-scope="data">
-              {{ data.item.text }}
+            {{ data.item.text }}
           </template>
 
           <template slot="item" slot-scope="data">
@@ -26,35 +26,42 @@
               </v-list-tile-content>
             </template>
           </template>
-
-
         </v-autocomplete>
-
         <v-btn flat @click="setDishAsNew()">Type your own dish! &nbsp;</v-btn>
       </template>
-    </div>
 
-    <div class="input-group">
       <template v-if="newDish">
-        <input type="text" class="form-control" placeholder="New dish name" id="newDishName" :value="newDishName" @input="updateNewDishName($event.target.value)"/>
+        <v-text-field
+            type="text"
+            placeholder="New dish name"
+            id="newDishName"
+            :value="newDishName"
+            @input="updateNewDishName($event.target.value)">
+        </v-text-field>
 
-        <vue-numeric currency="zł" separator="." currency-symbol-position="suffix"
-                     :value="newDishPrice" @input.native="updateNewDishPrice($event.target.value)" :precision="2"
-                     class="form-control"
-                     required=""></vue-numeric>
+        <MoneyInput
+            label="New dish price"
+            :value="newDishPrice"
+            @input="updateNewDishPrice($event.target.value)"
+        >
+        </MoneyInput>
 
         <v-btn flat @click="setDishAsExisting()">Select dish from list &nbsp;</v-btn>
       </template>
-    </div>
+    </v-layout>
+
+    <p>Side dishes:</p>
 
     <side-dishes-input></side-dishes-input>
 
-    <v-textarea
-        label="Additional Comments"
-        :value="additionalComments"
-        @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"
-    >
-    </v-textarea>
+    <v-layout>
+      <v-text-field
+          label="Additional Comments"
+          :value="additionalComments"
+          @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"
+      >
+      </v-text-field>
+    </v-layout>
   </div>
 </template>
 
@@ -62,20 +69,22 @@
   import ErrorsComponent from '../commons/Errors.vue'
   import Spinner from '../commons/Spinner.vue'
   import Price from '../commons/PriceElement.vue'
+  import moment from "moment"
 
   import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
   import {
-      UPDATE_DISH_ID,
-      CLEAR_EDITED_SIDE_DISHES,
-      UPDATE_NEW_DISH_NAME,
-      UPDATE_NEW_DISH_PRICE,
-      NAMESPACE_MODIFY_ORDER_ENTRY,
-      UPDATE_ADDITIONAL_COMMENTS,
-      SET_DISH_AS_NEW,
-      SET_DISH_AS_EXISTING, CANCEL_DISH_ENTRY_MODIFICATION,
+    UPDATE_DISH_ID,
+    CLEAR_EDITED_SIDE_DISHES,
+    UPDATE_NEW_DISH_NAME,
+    UPDATE_NEW_DISH_PRICE,
+    NAMESPACE_MODIFY_ORDER_ENTRY,
+    UPDATE_ADDITIONAL_COMMENTS,
+    SET_DISH_AS_NEW,
+    SET_DISH_AS_EXISTING, CANCEL_DISH_ENTRY_MODIFICATION,
   } from "../../store/modules/ModifyOrderEntryState";
   import {mapState, mapMutations} from "vuex"
+  import MoneyInput from "../commons/MoneyInput";
 
   export default {
     name: 'order-entry-form',
@@ -102,6 +111,7 @@
       cancelEdit() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
       },
+
     },
     computed: {
       ...mapState("showOrder", [
@@ -118,32 +128,41 @@
       ]),
       allDishesAtOnce() {
         return this.allDishesByCategory.flatMap(categoryData => {
-            let dishes = categoryData.dishes.flatMap(dish => {
-                var price = (dish.price/100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
-                let updateDesc = "";
-                if (dish.lastCrawled) {
-                    updateDesc = `Last automatically updated on ${dish.lastCrawled}`
-                }
+          let dishes = categoryData.dishes.flatMap(dish => {
+            var price = (dish.price / 100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+            let updateDesc = "";
+            if (dish.lastCrawled) {
+              updateDesc = `auto-updated ${dateToRel(dish.lastCrawled)}`
+            }
 
-                return Object.assign({}, {
-                    text: `${dish.name}`,
-                    value: dish.id,
-                    subtitle: `Price: ${price}, ${updateDesc}`
-                })
-            });
+            return Object.assign({}, {
+              text: `${dish.name}`,
+              value: dish.id,
+              subtitle: `Price: ${price}, ${updateDesc}`
+            })
+          });
 
-            dishes.unshift({"header": `Category: ${categoryData.category}`});
+          dishes.unshift({"header": `Category: ${categoryData.category}`});
 
-            return dishes
+          return dishes
         })
       }
     },
     components: {
+      MoneyInput,
       ErrorsComponent,
       Price,
       Spinner,
       OrderEntryForm,
       SideDishesInput
+    }
+  }
+
+  function dateToRel(date) {
+    if (date) {
+      return moment(date).fromNow()
+    } else {
+      return ""
     }
   }
 </script>

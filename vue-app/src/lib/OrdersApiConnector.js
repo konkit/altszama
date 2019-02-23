@@ -223,6 +223,7 @@ export default {
     };
 
     return ApiConnector.makePost(action, formData)
+        .then(response => router.push("/orders/show/" + orderId))
   }
 }
 

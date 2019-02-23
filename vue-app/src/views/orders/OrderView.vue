@@ -31,7 +31,7 @@
           </div>
         </form>
 
-        <v-btn color="success" block @click="submitForm">
+        <v-btn color="success" @click="submitForm">
           Order placed!
           &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
         </v-btn>

@@ -31,8 +31,8 @@
                     <p><b>Address : </b> {{this.restaurant.address}} </p>
                     <p><b>URL : </b> {{this.restaurant.url}} </p>
                     <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
-                    <p><b>Last crawled:</b> {{this.restaurant.lastCrawled}} </p>
-                    <p><b>Last edited:</b> {{this.restaurant.lastEdited}} </p>
+                    <p><b>Last crawled:</b> {{ dateToRel(this.restaurant.lastCrawled) }} </p>
+                    <p><b>Last edited:</b>  {{ dateToRel(this.restaurant.lastEdited) }} </p>
                 </v-layout>
               </v-card-text>
             </v-card>
@@ -69,6 +69,7 @@
   import LoadingView from "../../components/commons/LoadingView";
   import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantState"
   import router from "../../router/index"
+  import moment from "moment"
 
   export default {
     name: 'show-restaurant',
@@ -90,6 +91,15 @@
       },
       editRestaurant() {
         router.push("/restaurants/" + this.restaurantId + "/edit")
+      },
+      dateToRel(date) {
+        console.log("date: ", date);
+
+        if (date) {
+          return moment(date).fromNow()
+        } else {
+          return ""
+        }
       }
     },
     computed: {
@@ -111,6 +121,7 @@
       ShowRestaurantDishesTable
     }
   }
+
 </script>
 
 <style scoped>

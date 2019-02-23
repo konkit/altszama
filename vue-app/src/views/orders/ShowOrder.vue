@@ -10,7 +10,9 @@
       <v-spacer></v-spacer>
 
       <template v-if="isOrderOwner()">
-        <order-state-buttons></order-state-buttons>
+        <v-btn @click="edit">
+          <i class="fa fa-pencil" aria-hidden="true"></i>
+        </v-btn>
       </template>
     </v-toolbar>
 
@@ -36,6 +38,14 @@
         </div>
 
         <order-stats></order-stats>
+
+        <v-btn color="success" v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'" @click="placeOrder">
+          Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+        </v-btn>
+
+        <v-btn color="success" v-if="this.orderState === 'ORDERED'" @click="setAsDelivered">
+          Mark as delivered&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+        </v-btn>
       </simple-card>
 
       <simple-card>
@@ -68,14 +78,17 @@
               <td class="username">{{orderEntry.username}}</td>
 
               <td>
-                <template v-for="dishEntry in orderEntry.dishEntries">
-                  <template
-                      v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+                <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
+                  <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+                    <v-divider v-if="dishEntryIndex > 0"></v-divider>
+
                     <edit-order-entry
                         :order-entry="orderEntry"
                         :dish-entry="dishEntry"
                         :key="dishEntry.id">
                     </edit-order-entry>
+
+                    <v-divider v-if="dishEntryIndex < orderEntry.dishEntries.length - 1"></v-divider>
                   </template>
                   <template v-else>
                     <order-entry
@@ -86,21 +99,24 @@
                   </template>
                 </template>
 
-                <template
-                    v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+                <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
                   <div v-if="isEntryCreating === false">
                     <v-btn color="success" @click="createEntry()">
                       Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
                     </v-btn>
                   </div>
                   <div v-if="isEntryCreating === true">
+                    <v-divider></v-divider>
+
                     <create-order-entry></create-order-entry>
                   </div>
                 </template>
 
                 <hr/>
 
-                <b>Cost for user: <price :data-price="orderEntry.finalPrice"/></b>
+                <b>Cost for user:
+                  <price :data-price="orderEntry.finalPrice"/>
+                </b>
               </td>
             </tr>
           </template>
@@ -112,124 +128,152 @@
 </template>
 
 <script>
-    import BackButton2 from '../../components/commons/BackButton2.vue'
-    import Price from '../../components/commons/PriceElement.vue'
-    import LoadingView from '../../components/commons/LoadingView.vue'
-    import OrderStateButtons from '../../components/orders/OrderStateButtons.vue'
-    import CreateOrderEntry from '../../components/orders/CreateOrderEntry.vue'
-    import EditOrderEntry from '../../components/orders/EditOrderEntry.vue'
-    import OrderEntry from '../../components/orders/OrderEntry.vue'
-    import OrderStats from '../../components/orders/OrderStats.vue'
-    import {mapState} from 'vuex'
-    import {
-        DELETE_DISH_ENTRY_ACTION,
-        UNLOCK_ORDER_ACTION,
-        FETCH_ORDER_DATA_ACTION,
-        NAMESPACE_SHOW_ORDER
-    } from "../../store/modules/ShowOrderState"
-    import {
-        SET_DISH_ENTRY_CREATING,
-        SET_DISH_ENTRY_EDITING,
-        CANCEL_DISH_ENTRY_MODIFICATION,
-        NAMESPACE_MODIFY_ORDER_ENTRY,
-    } from "../../store/modules/ModifyOrderEntryState";
-    import router from '../../router/index'
-    import PriceSummary from "../../components/orders/PriceSummary";
-    import SimpleCard from "../../components/commons/SimpleCard";
+  import BackButton2 from '../../components/commons/BackButton2.vue'
+  import Price from '../../components/commons/PriceElement.vue'
+  import LoadingView from '../../components/commons/LoadingView.vue'
+  import OrderStateButtons from '../../components/orders/OrderStateButtons.vue'
+  import CreateOrderEntry from '../../components/orders/CreateOrderEntry.vue'
+  import EditOrderEntry from '../../components/orders/EditOrderEntry.vue'
+  import OrderEntry from '../../components/orders/OrderEntry.vue'
+  import OrderStats from '../../components/orders/OrderStats.vue'
+  import {mapState} from 'vuex'
+  import {
+    DELETE_DISH_ENTRY_ACTION,
+    UNLOCK_ORDER_ACTION,
+    FETCH_ORDER_DATA_ACTION,
+    NAMESPACE_SHOW_ORDER,
+    SET_ORDER_AS_CREATED_ACTION,
+    SET_ORDER_AS_ORDERED_ACTION,
+    SET_ORDER_AS_DELIVERED_ACTION,
+    SET_ORDER_AS_REJECTED_ACTION, DELETE_ORDER_ACTION
+  } from "../../store/modules/ShowOrderState"
+  import {
+    SET_DISH_ENTRY_CREATING,
+    SET_DISH_ENTRY_EDITING,
+    CANCEL_DISH_ENTRY_MODIFICATION,
+    NAMESPACE_MODIFY_ORDER_ENTRY,
+  } from "../../store/modules/ModifyOrderEntryState";
+  import router from '../../router/index'
+  import PriceSummary from "../../components/orders/PriceSummary";
+  import SimpleCard from "../../components/commons/SimpleCard";
 
-    export default {
-        data() {
-            return {
-                orderId: this.$route.params.id,
-            }
-        },
-        mounted() {
-            this.fetchOrder()
-        },
-        methods: {
-            fetchOrder() {
-                this.$store.commit('setLoadingTrue');
-                return this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
-            },
-            isOrdering() {
-                return this.order.orderState === 'ORDERING';
-            },
-            isOrderOwner() {
-                return this.order.orderCreatorId === this.currentUserId
-            },
-            isOrderEntryOwner(orderEntry) {
-                return orderEntry.userId === this.currentUserId
-            },
-            paymentStatus(orderEntry) {
-                if (orderEntry.paymentStatus === "UNPAID") {
-                    return "Unpaid"
-                } else if (orderEntry.paymentStatus === "MARKED") {
-                    return "Marked as paid"
-                } else if (orderEntry.paymentStatus === "CONFIRMED") {
-                    return "Payment confirmed"
-                } else {
-                    return orderEntry.paymentStatus
-                }
-            },
-            placeOrder() {
-                router.push("/orders/" + this.orderId + "/order_view")
-            },
-            unlockOrder() {
-                this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
-            },
-            createEntry() {
-                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
-            },
-            editDishEntry(orderEntryId, dishEntryId) {
-                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {
-                    orderEntryId: orderEntryId,
-                    dishEntryId: dishEntryId
-                })
-            },
-            deleteDishEntry(orderEntryId, dishEntryId) {
-                this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
-                    orderEntryId: orderEntryId,
-                    dishEntryId: dishEntryId
-                })
-            },
-            cancelEdit() {
-                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
-            }
-        },
-        computed: {
-            numberOfCurrentUserEntries() {
-                return this.orderEntries.filter(e => e.userId === this.currentUserId).length;
-            },
-            ...mapState({
-                username: state => state.username,
-            }),
-            ...mapState('showOrder', [
-                "order",
-                "orderEntries",
-                "currentUserId",
-                "totalOrderPrice",
-                "baseOrderPrice"
-            ]),
-            ...mapState('modifyOrderEntry', [
-                "isEntryCreating",
-                "isEntryEdited",
-                "orderEntryId",
-                "dishEntryId",
-            ])
-        },
-        components: {
-            SimpleCard,
-            PriceSummary,
-            BackButton2,
-            Price,
-            LoadingView,
-            OrderStateButtons,
-            CreateOrderEntry,
-            EditOrderEntry,
-            OrderEntry,
-            OrderStats
+  export default {
+    data() {
+      return {
+        orderId: this.$route.params.id,
+      }
+    },
+    mounted() {
+      this.fetchOrder()
+    },
+    methods: {
+      fetchOrder() {
+        this.$store.commit('setLoadingTrue');
+        return this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
+      },
+      isOrdering() {
+        return this.order.orderState === 'ORDERING';
+      },
+      isOrderOwner() {
+        return this.order.orderCreatorId === this.currentUserId
+      },
+      isOrderEntryOwner(orderEntry) {
+        return orderEntry.userId === this.currentUserId
+      },
+      paymentStatus(orderEntry) {
+        if (orderEntry.paymentStatus === "UNPAID") {
+          return "Unpaid"
+        } else if (orderEntry.paymentStatus === "MARKED") {
+          return "Marked as paid"
+        } else if (orderEntry.paymentStatus === "CONFIRMED") {
+          return "Payment confirmed"
+        } else {
+          return orderEntry.paymentStatus
         }
+      },
+      placeOrder() {
+        router.push("/orders/" + this.orderId + "/order_view")
+      },
+      unlockOrder() {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
+      },
+      createEntry() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
+      },
+      editDishEntry(orderEntryId, dishEntryId) {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {
+          orderEntryId: orderEntryId,
+          dishEntryId: dishEntryId
+        })
+      },
+      deleteDishEntry(orderEntryId, dishEntryId) {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
+          orderEntryId: orderEntryId,
+          dishEntryId: dishEntryId
+        })
+      },
+      cancelEdit() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
+      },
+      setAsCreated () {
+        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_CREATED_ACTION}`, { orderId: this.orderId });
+      },
+      setAsOrdered () {
+        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_ORDERED_ACTION}`, { orderId: this.orderId });
+      },
+      setAsDelivered () {
+        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_DELIVERED_ACTION}`, { orderId: this.orderId });
+      },
+      setAsRejected () {
+        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_REJECTED_ACTION}`, { orderId: this.orderId });
+      },
+      deleteDishEntry () {
+        return this.$store.dispatch(`showOrder/${DELETE_ORDER_ACTION}`, { orderId: this.orderId });
+      },
+      placeOrder () {
+        router.push("/orders/" + this.orderId + '/order_view')
+      },
+      edit() {
+        router.push("/orders/" + this.orderId + '/edit')
+      }
+    },
+    computed: {
+      numberOfCurrentUserEntries() {
+        return this.orderEntries.filter(e => e.userId === this.currentUserId).length;
+      },
+      orderState () {
+        return this.$store.state.showOrder.order.orderState;
+      },
+      ...mapState({
+        username: state => state.username,
+      }),
+      ...mapState('showOrder', [
+        "order",
+        "orderEntries",
+        "currentUserId",
+        "totalOrderPrice",
+        "baseOrderPrice"
+      ]),
+      ...mapState('modifyOrderEntry', [
+        "isEntryCreating",
+        "isEntryEdited",
+        "orderEntryId",
+        "dishEntryId",
+      ])
+    },
+    components: {
+      SimpleCard,
+      PriceSummary,
+      BackButton2,
+      Price,
+      LoadingView,
+      OrderStateButtons,
+      CreateOrderEntry,
+      EditOrderEntry,
+      OrderEntry,
+      OrderStats
     }
+  }
 </script>
 
 <style scoped>

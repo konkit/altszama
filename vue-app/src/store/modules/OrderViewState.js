@@ -9,6 +9,7 @@ export const UPDATE_APPROX_TIME_OF_DELIVERY = "UPDATE_APPROX_TIME_OF_DELIVERY";
 export default {
   namespaced: true,
   state: {
+    orderId: "",
     orderState: "",
     orderDecreaseInPercent: 0,
     orderDeliveryCostPerEverybody: 0,
@@ -33,6 +34,7 @@ export default {
     [FETCH_ORDER_VIEW_DATA_ACTION] ({state}, payload) {
       OrdersApiConnector.fetchOrderView(payload.orderId)
         .then(responseObj => {
+          state.orderId = payload.orderId;
           state.orderState = responseObj.orderState;
           state.orderDecreaseInPercent = responseObj.orderDecreaseInPercent;
           state.orderDeliveryCostPerEverybody = responseObj.orderDeliveryCostPerEverybody;
@@ -48,8 +50,8 @@ export default {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    [MAKE_AN_ORDER_ACTION] (context, payload) {
-      OrdersApiConnector.makeAnOrder(this.orderId, {approxTimeOfDelivery: payload.approxTimeOfDelivery})
+    [MAKE_AN_ORDER_ACTION] ({state, rootState}, payload) {
+      OrdersApiConnector.makeAnOrder(state.orderId, {approxTimeOfDelivery: payload.approxTimeOfDelivery})
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
   }

@@ -19,10 +19,10 @@
           {{dish.name}} (<price :data-price="dish.price"></price>)
 
           <v-chip text-color="blue" v-if="dish.lastCrawled != null">
-            crawled-automatically
+            auto-updated {{ dateToRel(dish.lastCrawled) }}
           </v-chip>
           <v-chip text-color="green" v-if="dish.lastCrawled == null">
-            created-by-user
+            updated manually
           </v-chip>
 
           <v-btn color="error" @click="deleteDish(dish.id)" class="pull-right">
@@ -42,6 +42,7 @@
 <script>
   import Price from '../commons/PriceElement'
   import {DELETE_DISH_ACTION} from "../../store/modules/ShowRestaurantState";
+  import moment from "moment"
 
   export default {
     name: "show-restaurant-dishes-table",
@@ -55,6 +56,13 @@
       deleteDish (dishId) {
         this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {restaurantId: this.restaurant.id, dishId: dishId})
       },
+      dateToRel(date) {
+        if (date) {
+          return moment(date).fromNow()
+        } else {
+          return ""
+        }
+      }
     },
     components: {
       Price,

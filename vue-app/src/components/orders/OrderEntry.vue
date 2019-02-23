@@ -3,17 +3,8 @@
     <div class="pull-right">
       <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
 
-        <div v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
-          <v-btn @click="editDishEntry()">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
-          </v-btn>
-
-          <v-btn color="error" @click="deleteDishEntry()">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </v-btn>
-        </div>
-
-        <div v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
+        <div
+            v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
           {{paymentStatus(orderEntry)}}
         </div>
 
@@ -33,15 +24,27 @@
     </div>
 
     <div>
-      <p class="dish-name">
-        {{dishEntry.dishName}} ( <price :data-price="dishEntry.price"/> )
-      </p>
+      <div class="dish-name">
+        {{dishEntry.dishName }} ( <price :data-price="dishEntry.price"/> )
+
+        <span v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
+          <v-btn flat icon @click="editDishEntry()">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </v-btn>
+
+          <v-btn flat icon @click="deleteDishEntry()">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </v-btn>
+        </span>
+      </div>
+
       <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
-        + {{sideDish.name}} (
-        <price :data-price="sideDish.price"/>
-        )
+        + {{sideDish.name}} ( <price :data-price="sideDish.price"/> )
       </p>
-      <p v-if="dishEntry.comments.length > 0" class="dish-comments">Additional comments: {{dishEntry.comments}}</p>
+
+      <p v-if="dishEntry.comments.length > 0" class="dish-comments">
+        Additional comments: {{dishEntry.comments}}
+      </p>
     </div>
   </div>
 </template>

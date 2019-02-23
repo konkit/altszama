@@ -1,54 +1,51 @@
 <template>
-  <div class="form-group">
-    <div>
-      <div v-if="chosenSideDishes.length > 0">
-        <div v-for="(sideDish, sdIndex) in chosenSideDishes" :key="sdIndex">
+  <div>
+    <div v-if="chosenSideDishes.length > 0">
+      <div v-for="(sideDish, sdIndex) in chosenSideDishes" :key="sdIndex">
+        <v-layout>
+          <div class="py-4 px-3">{{sdIndex + 1}}.</div>
 
-          <div class="input-group" v-if="sideDish.isNew === true">
+          <template v-if="sideDish.isNew === true">
             <v-text-field
                 label="New side dish name"
                 v-model="sideDish.newSideDishName"
-                @input="updateNewSideDishName(sdIndex, $event)"
-            />
+                @input="updateNewSideDishName(sdIndex, $event)">
+            </v-text-field>
 
             <MoneyInput
                 label="New side dish price"
                 :value="sideDish.newSideDishPrice"
-                @input="changeNewSideDishPrice(sdIndex, $event.target.value)"
-            >
+                @input="changeNewSideDishPrice(sdIndex, $event.target.value)">
             </MoneyInput>
 
-            <v-btn color="error" @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
+            <v-btn flat icon @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
 
             <v-btn flat @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</v-btn>
-          </div>
+          </template>
 
-          <div class="input-group" v-else>
+          <template v-else>
             <v-autocomplete
                 :items="sideDishesItems"
                 label="Side dish"
                 :value="sideDish.id"
-                @change="updateSideDishComboBox(sdIndex, $event)"
-            ></v-autocomplete>
+                @change="updateSideDishComboBox(sdIndex, $event)">
+            </v-autocomplete>
 
-            <v-btn color="error" @click="removeSideDish(sdIndex)">
+            <v-btn flat icon @click="removeSideDish(sdIndex)">
               <span class="fa fa-remove"></span>
             </v-btn>
 
             <v-btn flat @click="setAsNewSideDish(sdIndex)">
               Type your own side dish
             </v-btn>
-          </div>
-        </div>
+          </template>
+        </v-layout>
       </div>
-      <div v-else>
-        <p>No side dishes selected</p>
-      </div>
-
-      <v-btn color="success" @click="addSideDishEntry()">
-        Add side dish &nbsp; <i class="fa fa-plus"></i>
-      </v-btn>
     </div>
+
+    <v-btn flat @click="addSideDishEntry()">
+      <i class="fa fa-plus"></i> &nbsp; Add side dish
+    </v-btn>
   </div>
 </template>
 
@@ -64,6 +61,7 @@
         REMOVE_SIDE_DISH,
         NAMESPACE_MODIFY_ORDER_ENTRY
     } from "../../store/modules/ModifyOrderEntryState";
+    import MoneyInput from "../commons/MoneyInput";
 
     export default {
         name: 'side-dishes-input',
@@ -134,6 +132,7 @@
             }
         },
         components: {
+          MoneyInput,
             Price
         }
     }

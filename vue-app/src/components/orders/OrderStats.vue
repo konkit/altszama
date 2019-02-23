@@ -82,7 +82,7 @@
     <div class="row justify-content-center" v-if="isNotOrderedYet()">
       <div class="col">
         <p>
-          <b>Link to menu:</b>
+          <b>Link to menu:&nbsp;</b>
           <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
         </p>
       </div>
