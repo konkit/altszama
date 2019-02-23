@@ -12,9 +12,9 @@ export default {
       dishId: editedOrderEntry.dishId,
       newDish: editedOrderEntry.newDish,
       newDishName: editedOrderEntry.newDishName,
-      newDishPrice: Math.round(editedOrderEntry.newDishPrice * 100),
+      newDishPrice: editedOrderEntry.newDishPrice,
       additionalComments: editedOrderEntry.additionalComments,
-      sideDishes: editedOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, {newSideDishPrice: Math.round(sd.newSideDishPrice * 100)}))
+      sideDishes: editedOrderEntry.chosenSideDishes.map(sd => Object.assign(sd, {newSideDishPrice: sd.newSideDishPrice}))
     };
 
     return ApiConnector.makePost(action, formData)
@@ -30,9 +30,9 @@ export default {
       dishId: editedOrderEntry.dishId,
       newDish: editedOrderEntry.newDish,
       newDishName: editedOrderEntry.newDishName,
-      newDishPrice: Math.round(editedOrderEntry.newDishPrice * 100),
+      newDishPrice: editedOrderEntry.newDishPrice,
       additionalComments: editedOrderEntry.additionalComments,
-      sideDishes: editedOrderEntry.chosenSideDishes.map(sd => Object.assign({}, sd, {newSideDishPrice: Math.round(sd.newSideDishPrice * 100)}))
+      sideDishes: editedOrderEntry.chosenSideDishes.map(sd => Object.assign({}, sd, {newSideDishPrice: sd.newSideDishPrice}))
     };
 
     return ApiConnector.makePost(action, formData)
@@ -182,8 +182,8 @@ export default {
       orderDate: order.orderDate,
       timeOfOrder: order.timeOfOrder,
       decreaseInPercent: order.decreaseInPercent,
-      deliveryCostPerEverybody: Math.round(order.deliveryCostPerEverybody * 100),
-      deliveryCostPerDish: Math.round(order.deliveryCostPerDish * 100),
+      deliveryCostPerEverybody: order.deliveryCostPerEverybody,
+      deliveryCostPerDish: order.deliveryCostPerDish,
       paymentByCash: order.paymentByCash === true,
       paymentByBankTransfer: order.paymentByBankTransfer === true,
       bankTransferNumber: order.bankTransferNumber,
@@ -202,8 +202,8 @@ export default {
       orderDate: order.orderDate,
       timeOfOrder: order.timeOfOrder,
       decreaseInPercent: order.decreaseInPercent,
-      deliveryCostPerEverybody: Math.round(order.deliveryCostPerEverybody),
-      deliveryCostPerDish: Math.round(order.deliveryCostPerDish),
+      deliveryCostPerEverybody: order.deliveryCostPerEverybody,
+      deliveryCostPerDish: order.deliveryCostPerDish,
       paymentByCash: order.paymentByCash === true,
       paymentByBankTransfer: order.paymentByBankTransfer === true,
       bankTransferNumber: order.bankTransferNumber,

@@ -36,13 +36,13 @@
             placeholder="New dish name"
             id="newDishName"
             :value="newDishName"
-            @input="updateNewDishName($event.target.value)">
+            @input="updateNewDishName($event)">
         </v-text-field>
 
         <MoneyInput
             label="New dish price"
             :value="newDishPrice"
-            @input="updateNewDishPrice($event.target.value)"
+            @input="updateNewDishPrice($event)"
         >
         </MoneyInput>
 
@@ -58,7 +58,7 @@
       <v-text-field
           label="Additional Comments"
           :value="additionalComments"
-          @input="[UPDATE_ADDITIONAL_COMMENTS]($event.target.value)"
+          @input="[UPDATE_ADDITIONAL_COMMENTS]($event)"
       >
       </v-text-field>
     </v-layout>

@@ -84,7 +84,7 @@
       addSideDish () {
         const newSideDish = {
           name: this.newSideDishName,
-          price: Math.round(this.newSideDishPrice * 100)
+          price: this.newSideDishPrice
         };
 
         this.sideDishes.push(newSideDish)

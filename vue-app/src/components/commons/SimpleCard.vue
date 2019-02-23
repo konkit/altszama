@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="simple-card">
     <v-layout align-center justify-center>
       <v-flex xs10 xl8>
         <v-card>
@@ -21,4 +21,7 @@
 </script>
 
 <style scoped>
+  .simple-card {
+    max-width: 1500px;
+  }
 </style>

@@ -10,32 +10,33 @@
 
     <div v-if="isStateOrdering">
       <simple-card>
-        <div class="alert alert-warning">
-          Order is now locked, so no one should order anything else now.
-        </div>
+        <v-container>
+          <v-layout row>
+            <v-flex>
+              <v-alert :value="true" color="warning" icon="new_releases">
+                Order is now locked, so no one should order anything else now.
+              </v-alert>
+            </v-flex>
+          </v-layout>
 
-        <h4>Now please call:</h4>
-        <h4>tel. {{restaurantTelephone}}</h4>
-        <h4>make an order and then enter approximate delivery time and click "Order placed"</h4>
+          <v-layout row>
+            <v-flex xs12>
+              <p>Now please call: <b>tel. {{restaurantTelephone}}</b>, make an order and then enter approximate delivery time and click "Order placed"</p>
+            </v-flex>
+          </v-layout>
 
-        <form id="place-order-form">
-          <div class="form-group">
-            <masked-input
-                class="form-control"
-                type="text"
-                :value="approxTimeOfDelivery"
-                @input="updateApproxTimeOfDelivery($event.target.value)"
-                :mask="[/\d/,/\d/,':',/\d/,/\d/]"
-                :keepCharPositions="true"
-            />
-          </div>
-        </form>
+          <v-layout row>
+            <v-flex xs3>
+              <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)" label="Approximate time of delivery"></TimePicker>
+            </v-flex>
 
-        <v-btn color="success" @click="submitForm">
-          Order placed!
-          &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-        </v-btn>
-
+            <v-flex xs3>
+              <v-btn color="success" @click="submitForm">
+                Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-container>
       </simple-card>
 
       <simple-card>
@@ -92,12 +93,12 @@
                 <v-layout column>
 
                   <price-summary
-                    :orderDecreaseInPercent="orderDecreaseInPercent"
-                    :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
-                    :basePriceSum="basePriceSum"
-                    :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
-                    :allEatingPeopleCount="allEatingPeopleCount"
-                    :totalPrice="totalPrice"
+                      :orderDecreaseInPercent="orderDecreaseInPercent"
+                      :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
+                      :basePriceSum="basePriceSum"
+                      :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
+                      :allEatingPeopleCount="allEatingPeopleCount"
+                      :totalPrice="totalPrice"
                   >
                   </price-summary>
 
@@ -124,72 +125,76 @@
 </template>
 
 <script>
-    import BackButton2 from '../../components/commons/BackButton2.vue'
-    import ErrorsComponent from '../../components/commons/Errors.vue'
-    import MaskedInput from 'vue-text-mask'
-    import Price from '../../components/commons/PriceElement.vue'
-    import Navigation from '../../components/Navigation.vue'
-    import LoadingView from "../../components/commons/LoadingView";
-    import {
-        MAKE_AN_ORDER_ACTION,
-        FETCH_ORDER_VIEW_DATA_ACTION,
-        UPDATE_APPROX_TIME_OF_DELIVERY
-    } from "../../store/modules/OrderViewState"
-    import {mapState} from "vuex"
-    import SimpleCard from "../../components/commons/SimpleCard";
-    import PriceSummary from "../../components/orders/PriceSummary";
+  import BackButton2 from '../../components/commons/BackButton2.vue'
+  import ErrorsComponent from '../../components/commons/Errors.vue'
+  import MaskedInput from 'vue-text-mask'
+  import Price from '../../components/commons/PriceElement.vue'
+  import Navigation from '../../components/Navigation.vue'
+  import LoadingView from "../../components/commons/LoadingView";
+  import {
+    MAKE_AN_ORDER_ACTION,
+    FETCH_ORDER_VIEW_DATA_ACTION,
+    UPDATE_APPROX_TIME_OF_DELIVERY
+  } from "../../store/modules/OrderViewState"
+  import {mapState} from "vuex"
+  import SimpleCard from "../../components/commons/SimpleCard";
+  import PriceSummary from "../../components/orders/PriceSummary";
+  import TimePicker from "../../components/commons/TimePicker";
 
-    export default {
-        data() {
-            return {
-                orderId: this.$route.params.id,
-            }
-        },
-        mounted() {
-            this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
-        },
-        methods: {
-            submitForm() {
-                this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, {approxTimeOfDelivery: this.approxTimeOfDelivery});
+  export default {
+    data() {
+      return {
+        orderId: this.$route.params.id,
+        approxTimeOfDeliveryModal: false,
+        timeOfOrderModal: false
+      }
+    },
+    mounted() {
+      this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
+    },
+    methods: {
+      submitForm() {
+        this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, {approxTimeOfDelivery: this.approxTimeOfDelivery});
 
-                return false
-            },
-            updateApproxTimeOfDelivery() {
-                this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`)
-            }
-        },
-        computed: {
-            ...mapState("orderView", [
-                "orderState",
-                "orderDecreaseInPercent",
-                "orderDeliveryCostPerEverybody",
-                "orderDeliveryCostPerDish",
-                "restaurantName",
-                "restaurantTelephone",
-                "groupedEntries",
-                "allEatingPeopleCount",
-                "basePriceSum",
-                "totalPrice",
-                "approxTimeOfDelivery"
-            ]),
-            isStateOrdering() {
-                return this.orderState === 'ORDERING';
-            },
-            isStateNotOrdering() {
-                return this.orderState !== 'ORDERING';
-            }
-        },
-        components: {
-            PriceSummary,
-            SimpleCard,
-            LoadingView,
-            BackButton2,
-            ErrorsComponent,
-            MaskedInput,
-            Price,
-            Navigation,
-        }
+        return false
+      },
+      updateApproxTimeOfDelivery() {
+        this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`)
+      }
+    },
+    computed: {
+      ...mapState("orderView", [
+        "orderState",
+        "orderDecreaseInPercent",
+        "orderDeliveryCostPerEverybody",
+        "orderDeliveryCostPerDish",
+        "restaurantName",
+        "restaurantTelephone",
+        "groupedEntries",
+        "allEatingPeopleCount",
+        "basePriceSum",
+        "totalPrice",
+        "approxTimeOfDelivery"
+      ]),
+      isStateOrdering() {
+        return this.orderState === 'ORDERING';
+      },
+      isStateNotOrdering() {
+        return this.orderState !== 'ORDERING';
+      }
+    },
+    components: {
+      TimePicker,
+      PriceSummary,
+      SimpleCard,
+      LoadingView,
+      BackButton2,
+      ErrorsComponent,
+      MaskedInput,
+      Price,
+      Navigation,
     }
+  }
 
 </script>
 

@@ -35,41 +35,7 @@
               <v-layout row>
                 <v-flex xs4>
                   <h3>Order time</h3>
-
-                    <v-dialog
-                        ref="dialog"
-                        v-model="timeOfOrderModal"
-                        :return-value.sync="time"
-                        persistent
-                        lazy
-                        full-width
-                        width="290px"
-                    >
-                      <v-text-field
-                          class="short-input"
-                          slot="activator"
-                          :value="timeOfOrder"
-                          @input="updateTimeOfOrder($event)"
-                          label="Time of order"
-                          prepend-icon="access_time"
-
-                          readonly
-                      ></v-text-field>
-                      <v-time-picker
-                          v-if="timeOfOrderModal"
-                          :value="timeOfOrder"
-                          @input="updateTimeOfOrder($event)"
-                          format="24hr"
-                          full-width
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn flat color="primary" @click="timeOfOrderModal = false">Cancel</v-btn>
-                        <v-btn flat color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
-                      </v-time-picker>
-                    </v-dialog>
-
-
-
+                  <TimePicker :value="timeOfOrder" @input="updateTimeOfOrder($event)" label="Order time"></TimePicker>
                 </v-flex>
 
                 <v-flex xs4>
@@ -122,13 +88,13 @@
 
                   <div class="form-group" v-if="paymentByBankTransfer">
                     <label>Bank transfer number</label>
-                    <input
+                    <v-text-field
                         type="text"
                         id="bankTransferNumber"
                         name="bankTransferNumber"
                         class="form-control"
                         :value="bankTransferNumber"
-                        @change="updateBankTransferNumber($event.target.value)"
+                        @change="updateBankTransferNumber($event)"
                     />
                   </div>
 
@@ -144,13 +110,13 @@
 
                   <div class="form-group" v-if="paymentByBlik">
                     <label>BLIK phone number</label>
-                    <input
+                    <v-text-field
                         type="text"
                         id="blikPhoneNumber"
                         name="bankTransferNumber"
                         class="form-control"
                         :value="blikPhoneNumber"
-                        @change="updateBlikPhoneNumber($event.target.value)"
+                        @change="updateBlikPhoneNumber($event)"
                     />
                   </div>
                 </v-flex>
@@ -198,6 +164,7 @@
         NAMESPACE_MODIFY_ORDER_ENTRY
     } from "../../store/modules/ModifyOrderEntryState";
     import MoneyInput from "../../components/commons/MoneyInput";
+    import TimePicker from "../../components/commons/TimePicker";
 
     export default {
         name: 'order-create-form',
@@ -206,8 +173,7 @@
                 yesNoOptions: [
                     {text: 'Yes', value: true},
                     {text: 'No', value: false},
-                ],
-                timeOfOrderModal: false
+                ]
             }
         },
         created() {
@@ -301,13 +267,14 @@
             },
         },
         components: {
-            MoneyInput,
-            SimpleCard,
-            LoadingView,
-            BackButton2,
-            ErrorsComponent,
-            MaskedInput,
-            'v-select': VueSelect
+          TimePicker,
+          MoneyInput,
+          SimpleCard,
+          LoadingView,
+          BackButton2,
+          ErrorsComponent,
+          MaskedInput,
+          'v-select': VueSelect
         }
     }
 </script>

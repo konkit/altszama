@@ -11,41 +11,136 @@
 
       <template v-if="isOrderOwner()">
         <v-btn @click="edit">
-          <i class="fa fa-pencil" aria-hidden="true"></i>
+          <i class="fa fa-cog" aria-hidden="true"></i>
         </v-btn>
       </template>
     </v-toolbar>
 
     <v-content>
       <simple-card>
-        <div v-if="this.isOrdering() && this.isOrderOwner()" class="alert alert-warning">
-          <p><strong>The order is locked!</strong></p>
+        <v-container>
+          <v-layout row>
+            <v-flex xs12>
+              <v-alert  v-if="this.isOrdering() && this.isOrderOwner()" :value="true" color="warning" icon="new_releases">
+                <p><strong>The order is locked!</strong></p>
 
-          <p>
-            The order is locked in ordering state and the order entries are freezed.<br/>
-            If you are not ordering yet, click button to go back to created state.
-          </p>
+                <p>
+                  The order is locked in ordering state and the order entries are freezed.<br/>
+                  If you are not ordering yet, click button to go back to created state.
+                </p>
 
-          <p>
-            <v-btn color="success" @click="unlockOrder()">
-              Unlock&nbsp;&nbsp;<span class="fa fa-unlock"></span>
-            </v-btn>
+                <p>
+                  <v-btn color="success" @click="unlockOrder()">
+                    Unlock&nbsp;&nbsp;<span class="fa fa-unlock"></span>
+                  </v-btn>
 
-            <v-btn color="success" @click="placeOrder()">
-              Place order&nbsp;&nbsp;<span class="fa fa-arrow-right"></span>
-            </v-btn>
-          </p>
-        </div>
+                  <v-btn color="success" @click="placeOrder()">
+                    Place order&nbsp;&nbsp;<span class="fa fa-arrow-right"></span>
+                  </v-btn>
+                </p>
+              </v-alert>
+            </v-flex>
+          </v-layout>
 
-        <order-stats></order-stats>
+          <v-layout row>
+            <v-flex xs4>
+                <h3>Order data</h3>
 
-        <v-btn color="success" v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'" @click="placeOrder">
-          Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-        </v-btn>
+                <dt>Who will order?</dt>
+                <dd>{{ this.order.orderCreatorUsername }}</dd>
 
-        <v-btn color="success" v-if="this.orderState === 'ORDERED'" @click="setAsDelivered">
-          Mark as delivered&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-        </v-btn>
+                <dt>When?</dt>
+                <dd>{{ this.order.timeOfOrder }}</dd>
+
+                <dt>When it'll arrive?</dt>
+                <dd>{{ this.timeOfDeliveryOrNA() }}</dd>
+            </v-flex>
+
+            <v-flex xs4>
+              <price-summary
+                  :orderDecreaseInPercent="this.order.decreaseInPercent"
+                  :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
+                  :basePriceSum="this.baseOrderPrice"
+                  :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
+                  :allEatingPeopleCount="this.orderEntries.flatMap(e => e.dishEntries).length"
+                  :totalPrice="this.totalOrderPrice"
+              >
+              </price-summary>
+            </v-flex>
+
+            <v-flex xs4>
+              <h3>Payment</h3>
+
+              <p v-if="this.order.paymentByCash == true">
+                <b class="allowed">
+                  Payment by cash
+                  <span class="fa fa-check"></span>
+                </b>
+              </p>
+              <p v-if="this.order.paymentByCash == false">
+                <b class="not-allowed">
+                  Payment by cash
+                  <span class="fa fa-times"></span>
+                </b>
+              </p>
+
+              <p v-if="this.order.paymentByBankTransfer == true">
+                <b class="allowed">
+                  Payment by bank transfer
+                  <span class="fa fa-check"></span>
+                </b>
+              </p>
+              <p v-if="this.order.paymentByBankTransfer == false">
+                <b class="not-allowed">
+                  Payment by bank transfer
+                  <span class="fa fa-times"></span>
+                </b>
+              </p>
+
+              <dt v-if="order.paymentByBankTransfer">Bank transfer number</dt>
+              <dd v-if="order.paymentByBankTransfer">{{ order.bankTransferNumber }}</dd>
+
+
+              <p v-if="this.order.paymentByBlik == true">
+                <b class="allowed">
+                  Payment by BLIK
+                  <span class="fa fa-check"></span>
+                </b>
+              </p>
+              <p v-if="this.order.paymentByBlik == false">
+                <b class="not-allowed">
+                  Payment by BLIK
+                  <span class="fa fa-times"></span>
+                </b>
+              </p>
+
+              <dt v-if="order.paymentByBlik">BLIK phone number</dt>
+              <dd v-if="order.paymentByBlik">{{ order.blikPhoneNumber }}</dd>
+            </v-flex>
+          </v-layout>
+
+          <v-layout row>
+            <v-flex xs12 class="py-3">
+              <p>
+                <b>Link to menu:&nbsp;</b>
+                <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
+              </p>
+            </v-flex>
+          </v-layout>
+
+          <v-layout row>
+            <v-flex xs12>
+              <v-btn block color="success" v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'" @click="placeOrder">
+                Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </v-btn>
+
+              <v-btn block color="success" v-if="this.orderState === 'ORDERED'" @click="setAsDelivered">
+                Mark as delivered&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+
+        </v-container>
       </simple-card>
 
       <simple-card>
@@ -80,7 +175,7 @@
               <td>
                 <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
                   <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
-                    <v-divider v-if="dishEntryIndex > 0"></v-divider>
+                    <!--<v-divider v-if="dishEntryIndex > 0"></v-divider>-->
 
                     <edit-order-entry
                         :order-entry="orderEntry"
@@ -95,7 +190,10 @@
                         :order-entry="orderEntry"
                         :dish-entry="dishEntry"
                         :current-user-id="currentUserId"
-                        :key="dishEntry.id"></order-entry>
+                        :key="dishEntry.id">
+                    </order-entry>
+
+                    <v-divider></v-divider>
                   </template>
                 </template>
 
@@ -106,8 +204,6 @@
                     </v-btn>
                   </div>
                   <div v-if="isEntryCreating === true">
-                    <v-divider></v-divider>
-
                     <create-order-entry></create-order-entry>
                   </div>
                 </template>
@@ -135,7 +231,6 @@
   import CreateOrderEntry from '../../components/orders/CreateOrderEntry.vue'
   import EditOrderEntry from '../../components/orders/EditOrderEntry.vue'
   import OrderEntry from '../../components/orders/OrderEntry.vue'
-  import OrderStats from '../../components/orders/OrderStats.vue'
   import {mapState} from 'vuex'
   import {
     DELETE_DISH_ENTRY_ACTION,
@@ -235,7 +330,14 @@
       },
       edit() {
         router.push("/orders/" + this.orderId + '/edit')
-      }
+      },
+      timeOfDeliveryOrNA() {
+        if (this.order.timeOfDelivery != null) {
+          return this.order.timeOfDelivery
+        } else {
+          return "As ASAP as possible"
+        }
+      },
     },
     computed: {
       numberOfCurrentUserEntries() {
@@ -270,8 +372,7 @@
       OrderStateButtons,
       CreateOrderEntry,
       EditOrderEntry,
-      OrderEntry,
-      OrderStats
+      OrderEntry
     }
   }
 </script>
@@ -285,4 +386,13 @@
   .username {
     padding-top: 24px;
   }
+
+  .allowed {
+    color: green;
+  }
+
+  .not-allowed {
+    color: red;
+  }
+
 </style>
