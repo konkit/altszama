@@ -39,9 +39,9 @@
 </template>
 
 <script>
-    import LoadingView from "../../components/commons/LoadingView";
+    import LoadingView from "../commons/LoadingView";
     import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
-    import SimpleCard from "../../components/commons/SimpleCard";
+    import SimpleCard from "../commons/SimpleCard";
     import router from '../../router/index'
 
     export default {

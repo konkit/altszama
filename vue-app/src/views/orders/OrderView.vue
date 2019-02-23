@@ -125,21 +125,21 @@
 </template>
 
 <script>
-  import BackButton2 from '../../components/commons/BackButton2.vue'
-  import ErrorsComponent from '../../components/commons/Errors.vue'
+  import BackButton2 from '../commons/BackButton2.vue'
+  import ErrorsComponent from '../commons/Errors.vue'
   import MaskedInput from 'vue-text-mask'
-  import Price from '../../components/commons/PriceElement.vue'
-  import Navigation from '../../components/Navigation.vue'
-  import LoadingView from "../../components/commons/LoadingView";
+  import Price from '../commons/PriceElement.vue'
+  import Navigation from '../commons/Navigation.vue'
+  import LoadingView from "../commons/LoadingView";
   import {
     MAKE_AN_ORDER_ACTION,
     FETCH_ORDER_VIEW_DATA_ACTION,
     UPDATE_APPROX_TIME_OF_DELIVERY
   } from "../../store/modules/OrderViewState"
   import {mapState} from "vuex"
-  import SimpleCard from "../../components/commons/SimpleCard";
-  import PriceSummary from "../../components/orders/PriceSummary";
-  import TimePicker from "../../components/commons/TimePicker";
+  import SimpleCard from "../commons/SimpleCard";
+  import PriceSummary from "./components/PriceSummary";
+  import TimePicker from "../commons/TimePicker";
 
   export default {
     data() {

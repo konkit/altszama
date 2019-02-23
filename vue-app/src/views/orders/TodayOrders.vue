@@ -140,11 +140,11 @@
 
 <script>
     import ApiConnector from '../../lib/ApiConnector.js'
-    import LoadingView from "../../components/commons/LoadingView";
+    import LoadingView from "../commons/LoadingView";
     import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
     import {mapState} from "vuex"
-    import ErrorsComponent from '../../components/commons/Errors'
-    import SimpleCard from "../../components/commons/SimpleCard";
+    import ErrorsComponent from '../commons/Errors'
+    import SimpleCard from "../commons/SimpleCard";
     import router from '../../router/index'
 
 

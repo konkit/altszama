@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import Price from '../commons/PriceElement.vue'
+  import Price from '../../commons/PriceElement.vue'
   import {
     UPDATE_NEW_SIDE_DISH_NAME,
     UPDATE_NEW_SIDE_DISH_PRICE,
@@ -60,8 +60,8 @@
     ADD_SIDE_DISH_ACTION,
     REMOVE_SIDE_DISH,
     NAMESPACE_MODIFY_ORDER_ENTRY
-  } from "../../store/modules/ModifyOrderEntryState";
-  import MoneyInput from "../commons/MoneyInput";
+  } from "../../../store/modules/ModifyOrderEntryState";
+  import MoneyInput from "../../commons/MoneyInput";
 
   export default {
     name: 'side-dishes-input',

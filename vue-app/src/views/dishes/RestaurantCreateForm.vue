@@ -36,8 +36,8 @@
 </template>
 
 <script>
-  import BackButton2 from '../../components/commons/BackButton2'
-  import ErrorsComponent from '../../components/commons/Errors'
+  import BackButton2 from '../commons/BackButton2'
+  import ErrorsComponent from '../commons/Errors'
   import {mapState} from 'vuex'
   import {
     UPDATE_NAME,

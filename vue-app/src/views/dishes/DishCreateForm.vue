@@ -46,10 +46,10 @@
 </template>
 
 <script>
-  import BackButton2 from '../../components/commons/BackButton2.vue'
-  import ErrorsComponent from '../../components/commons/Errors.vue'
-  import Price from '../../components/commons/PriceElement.vue'
-  import SideDishes from '../../components/restaurants/SideDishes.vue'
+  import BackButton2 from '../commons/BackButton2.vue'
+  import ErrorsComponent from '../commons/Errors.vue'
+  import Price from '../commons/PriceElement.vue'
+  import SideDishes from './components/SideDishes.vue'
   import {mapMutations, mapState} from "vuex"
   import {
     UPDATE_NAME,
@@ -58,7 +58,7 @@
     INIT_ACTION,
     SAVE_DISH_ACTION
   } from "../../store/modules/CreateDishState"
-  import MoneyInput from "../../components/commons/MoneyInput";
+  import MoneyInput from "../commons/MoneyInput";
 
   export default {
     props: ['restaurantName'],

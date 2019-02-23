@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import ApiConnector from '../lib/ApiConnector'
+  import ApiConnector from '../../lib/ApiConnector'
 
   export default {
     name: 'navigation',

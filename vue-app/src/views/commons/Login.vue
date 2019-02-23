@@ -57,9 +57,9 @@
 </template>
 
 <script>
-import ApiConnector from '../lib/ApiConnector'
-import router from '../router'
-import GoogleLogin from '../lib/GoogleLogin.js'
+import ApiConnector from '../../lib/ApiConnector'
+import router from '../../router'
+import GoogleLogin from '../../lib/GoogleLogin.js'
 
 export default {
   data () {
@@ -95,7 +95,7 @@ export default {
 
 <style scoped>
   .lunch-bg-img {
-    background-image: url('./../assets/lunch2.png'); 
+    background-image: url('../../assets/lunch2.png');
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

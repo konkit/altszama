@@ -121,10 +121,10 @@
 </template>
 
 <script>
-  import BackButton2 from '../../components/commons/BackButton2'
-  import ErrorsComponent from '../../components/commons/Errors'
+  import BackButton2 from '../commons/BackButton2'
+  import ErrorsComponent from '../commons/Errors'
   import MaskedInput from 'vue-text-mask'
-  import LoadingView from "../../components/commons/LoadingView";
+  import LoadingView from "../commons/LoadingView";
   import VueSelect from 'vue-select'
   import {mapState} from "vuex"
   import {
@@ -141,14 +141,14 @@
     UPDATE_BLIK_PHONE_NUMBER,
     UPDATE_PAYMENT_BY_BLIK
   } from "../../store/modules/EditOrderState"
-  import SimpleCard from "../../components/commons/SimpleCard";
+  import SimpleCard from "../commons/SimpleCard";
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY
   } from "../../store/modules/ModifyOrderEntryState";
-  import MoneyInput from "../../components/commons/MoneyInput";
-  import TimePicker from "../../components/commons/TimePicker";
-  import OrderStateButtons from "../../components/orders/OrderStateButtons";
+  import MoneyInput from "../commons/MoneyInput";
+  import TimePicker from "../commons/TimePicker";
+  import OrderStateButtons from "./components/OrderStateButtons";
 
   const yesNoOptions = [
     {text: 'Yes', value: true},

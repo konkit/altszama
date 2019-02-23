@@ -48,11 +48,11 @@
 </template>
 
 <script>
-  import BackButton2 from '../../components/commons/BackButton2'
-  import ErrorsComponent from '../../components/commons/Errors'
-  import Price from '../../components/commons/PriceElement'
-  import SideDishes from '../../components/restaurants/SideDishes.vue'
-  import LoadingView from "../../components/commons/LoadingView";
+  import BackButton2 from '../commons/BackButton2'
+  import ErrorsComponent from '../commons/Errors'
+  import Price from '../commons/PriceElement'
+  import SideDishes from './components/SideDishes.vue'
+  import LoadingView from "../commons/LoadingView";
   import {mapState} from "vuex"
   import {
     INIT_EDIT_DISH_ACTION,
@@ -61,7 +61,7 @@
     UPDATE_NAME,
     UPDATE_PRICE
   } from "../../store/modules/EditDishState"
-  import MoneyInput from "../../components/commons/MoneyInput";
+  import MoneyInput from "../commons/MoneyInput";
 
   export default {
     data() {

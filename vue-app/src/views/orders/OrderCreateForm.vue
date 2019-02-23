@@ -138,10 +138,10 @@
 </template>
 
 <script>
-    import BackButton2 from '../../components/commons/BackButton2'
-    import ErrorsComponent from '../../components/commons/Errors'
+    import BackButton2 from '../commons/BackButton2'
+    import ErrorsComponent from '../commons/Errors'
     import MaskedInput from 'vue-text-mask'
-    import LoadingView from "../../components/commons/LoadingView";
+    import LoadingView from "../commons/LoadingView";
     import VueSelect from 'vue-select'
     import {
         INIT_CREATE_ORDER_ACTION,
@@ -158,13 +158,13 @@
 
     } from "../../store/modules/CreateOrderState";
     import {mapState} from "vuex"
-    import SimpleCard from "../../components/commons/SimpleCard";
+    import SimpleCard from "../commons/SimpleCard";
     import {
         CANCEL_DISH_ENTRY_MODIFICATION,
         NAMESPACE_MODIFY_ORDER_ENTRY
     } from "../../store/modules/ModifyOrderEntryState";
-    import MoneyInput from "../../components/commons/MoneyInput";
-    import TimePicker from "../../components/commons/TimePicker";
+    import MoneyInput from "../commons/MoneyInput";
+    import TimePicker from "../commons/TimePicker";
 
     export default {
         name: 'order-create-form',

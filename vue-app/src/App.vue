@@ -17,7 +17,7 @@
 
 <script>
 import Router from 'vue-router'
-import Navigation from './components/Navigation.vue'
+import Navigation from './views/commons/Navigation.vue'
 
 export default {
   name: 'app',

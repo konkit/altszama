@@ -37,10 +37,10 @@
 </template>
 
 <script>
-  import BackButton2 from '../../components/commons/BackButton2'
-  import ErrorsComponent from '../../components/commons/Errors'
+  import BackButton2 from '../commons/BackButton2'
+  import ErrorsComponent from '../commons/Errors'
 
-  import LoadingView from "../../components/commons/LoadingView";
+  import LoadingView from "../commons/LoadingView";
   import {mapMutations, mapState} from 'vuex'
   import {
     UPDATE_RESTAURANT_ACTION,

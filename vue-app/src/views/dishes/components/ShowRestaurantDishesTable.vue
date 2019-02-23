@@ -40,8 +40,8 @@
 </template>
 
 <script>
-  import Price from '../commons/PriceElement'
-  import {DELETE_DISH_ACTION} from "../../store/modules/ShowRestaurantState";
+  import Price from '../../commons/PriceElement'
+  import {DELETE_DISH_ACTION} from "../../../store/modules/ShowRestaurantState";
   import moment from "moment"
 
   export default {

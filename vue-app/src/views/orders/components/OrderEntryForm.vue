@@ -66,9 +66,9 @@
 </template>
 
 <script>
-  import ErrorsComponent from '../commons/Errors.vue'
-  import Spinner from '../commons/Spinner.vue'
-  import Price from '../commons/PriceElement.vue'
+  import ErrorsComponent from '../../commons/Errors.vue'
+  import Spinner from '../../commons/Spinner.vue'
+  import Price from '../../commons/PriceElement.vue'
   import moment from "moment"
 
   import OrderEntryForm from './OrderEntryForm.vue'
@@ -82,9 +82,9 @@
     UPDATE_ADDITIONAL_COMMENTS,
     SET_DISH_AS_NEW,
     SET_DISH_AS_EXISTING, CANCEL_DISH_ENTRY_MODIFICATION,
-  } from "../../store/modules/ModifyOrderEntryState";
+  } from "../../../store/modules/ModifyOrderEntryState";
   import {mapState, mapMutations} from "vuex"
-  import MoneyInput from "../commons/MoneyInput";
+  import MoneyInput from "../../commons/MoneyInput";
 
   export default {
     name: 'order-entry-form',

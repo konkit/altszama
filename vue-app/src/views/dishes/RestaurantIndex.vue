@@ -25,10 +25,10 @@
         <template slot="items" slot-scope="props">
           <tr @click="goToRestaurant(props.item.id)" :key="props.item.id" :data-href="'/orders/show/' + props.item.id"
               class="pointer">
-            <td>{{props.item.name}}</td>
-            <td>{{props.item.dishCount}}</td>
-            <td>{{props.item.lastCrawled}}</td>
-            <td>{{props.item.lastEdited}}</td>
+            <td>{{ props.item.name }}</td>
+            <td>{{ props.item.dishCount }}</td>
+            <td>{{ dateToTimeFromNow(props.item.lastCrawled) }}</td>
+            <td>{{ dateToTimeFromNow(props.item.lastEdited) }}</td>
           </tr>
         </template>
       </v-data-table>
@@ -42,10 +42,11 @@
 </template>
 
 <script>
-    import LoadingView from "../../components/commons/LoadingView";
+    import LoadingView from "../commons/LoadingView";
     import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
     import router from '../../router/index'
-    import SimpleCard from "../../components/commons/SimpleCard";
+    import SimpleCard from "../commons/SimpleCard";
+    import moment from "moment"
 
     export default {
         data() {
@@ -53,8 +54,8 @@
                 headers: [
                     { text: "Restaurant name", align: 'left' },
                     { text: "Dish count" },
-                    { text: "Last crawled" },
-                    { text: "Last manual modification" },
+                    { text: "Last auto-updated" },
+                    { text: "Last updated manually" },
                 ],
                 pagination: {
                     rowsPerPage: 20
@@ -70,6 +71,13 @@
             },
             goToCreateRestaurant() {
                 router.push("/restaurants/create")
+            },
+            dateToTimeFromNow(date) {
+              if (date) {
+                return moment(date).fromNow()
+              } else {
+                return ""
+              }
             }
         },
         computed: {

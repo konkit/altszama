@@ -9,11 +9,11 @@
         <v-spacer></v-spacer>
 
         <v-btn color="success" @click="submitForm">
-          Save order
+          Update order
         </v-btn>
 
         <v-btn @click="cancelEdit()">
-          Cancel
+          Cancel edit
         </v-btn>
       </div>
 
@@ -28,25 +28,24 @@
 </template>
 
 <script>
-    import ErrorsComponent from '../commons/Errors.vue'
-    import Spinner from '../commons/Spinner.vue'
-    import Price from '../commons/PriceElement.vue'
+    import ErrorsComponent from '../../commons/Errors.vue'
+    import Spinner from '../../commons/Spinner.vue'
+    import Price from '../../commons/PriceElement.vue'
 
     import OrderEntryForm from './OrderEntryForm.vue'
     import SideDishesInput from './SideDishesInput.vue'
-    import {NAMESPACE_SHOW_ORDER} from "../../store/modules/ShowOrderState";
-    import {
-        NAMESPACE_MODIFY_ORDER_ENTRY,
-        CANCEL_DISH_ENTRY_MODIFICATION,
-        SAVE_ORDER_ENTRY_ACTION,
-        SETUP_CREATE_ORDER_ENTRY_ACTION,
-        SET_ENTRY_LOADING_FALSE,
-        SET_ENTRY_LOADING_TRUE,
-    } from "../../store/modules/ModifyOrderEntryState";
     import {mapState} from "vuex"
+    import {
+        UPDATE_ORDER_ENTRY_ACTION,
+        CANCEL_DISH_ENTRY_MODIFICATION,
+        SETUP_EDIT_ORDER_ENTRY_ACTION,
+        SET_ENTRY_LOADING_TRUE,
+        NAMESPACE_MODIFY_ORDER_ENTRY
+    } from "../../../store/modules/ModifyOrderEntryState";
 
     export default {
-        name: 'create-order-entry',
+        name: 'edit-order-entry',
+        props: ['orderEntry', 'dishEntry'],
         data() {
             return {}
         },
@@ -54,14 +53,13 @@
             this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`)
         },
         mounted() {
-            this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SETUP_CREATE_ORDER_ENTRY_ACTION}`);
-            this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
+            this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SETUP_EDIT_ORDER_ENTRY_ACTION}`, {dishEntry: this.dishEntry})
         },
         methods: {
             submitForm(e) {
                 e.preventDefault();
 
-                this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SAVE_ORDER_ENTRY_ACTION}`);
+                this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ORDER_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id});
 
                 return false;
             },
@@ -72,18 +70,6 @@
         computed: {
             ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
                 "loadingEntry",
-
-                "orderId",
-                "dishId",
-                "additionalComments",
-                "newDish",
-                "newDishName",
-                "newDishPrice",
-                "chosenSideDishes",
-            ]),
-            ...mapState(NAMESPACE_SHOW_ORDER, [
-                "order",
-                "allDishesInRestaurant"
             ]),
         },
         components: {
@@ -94,6 +80,7 @@
             SideDishesInput
         }
     }
+
 </script>
 
 <style scoped>

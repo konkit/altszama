@@ -36,9 +36,9 @@
 </template>
 
 <script>
-    import SimpleCard from "../../components/commons/SimpleCard";
-    import Price from "../../components/commons/PriceElement"
-    import ErrorsComponent from '../../components/commons/Errors'
+    import SimpleCard from "../../commons/SimpleCard";
+    import Price from "../../commons/PriceElement"
+    import ErrorsComponent from '../../commons/Errors'
 
     export default {
         name: "PriceSummary",

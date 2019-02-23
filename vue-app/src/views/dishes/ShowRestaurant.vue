@@ -31,8 +31,8 @@
                     <p><b>Address : </b> {{this.restaurant.address}} </p>
                     <p><b>URL : </b> {{this.restaurant.url}} </p>
                     <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
-                    <p><b>Last crawled:</b> {{ dateToRel(this.restaurant.lastCrawled) }} </p>
-                    <p><b>Last edited:</b>  {{ dateToRel(this.restaurant.lastEdited) }} </p>
+                    <p><b>Last auto-updated:</b> {{ dateToRel(this.restaurant.lastCrawled) }} </p>
+                    <p><b>Last updated manually:</b>  {{ dateToRel(this.restaurant.lastEdited) }} </p>
                 </v-layout>
               </v-card-text>
             </v-card>
@@ -62,11 +62,11 @@
 </template>
 
 <script>
-  import ErrorsComponent from '../../components/commons/Errors'
-  import BackButton2 from '../../components/commons/BackButton2'
-  import Price from '../../components/commons/PriceElement'
-  import ShowRestaurantDishesTable from '../../components/restaurants/ShowRestaurantDishesTable'
-  import LoadingView from "../../components/commons/LoadingView";
+  import ErrorsComponent from '../commons/Errors'
+  import BackButton2 from '../commons/BackButton2'
+  import Price from '../commons/PriceElement'
+  import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable'
+  import LoadingView from "../commons/LoadingView";
   import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantState"
   import router from "../../router/index"
   import moment from "moment"

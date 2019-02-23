@@ -224,13 +224,13 @@
 </template>
 
 <script>
-  import BackButton2 from '../../components/commons/BackButton2.vue'
-  import Price from '../../components/commons/PriceElement.vue'
-  import LoadingView from '../../components/commons/LoadingView.vue'
-  import OrderStateButtons from '../../components/orders/OrderStateButtons.vue'
-  import CreateOrderEntry from '../../components/orders/CreateOrderEntry.vue'
-  import EditOrderEntry from '../../components/orders/EditOrderEntry.vue'
-  import OrderEntry from '../../components/orders/OrderEntry.vue'
+  import BackButton2 from '../commons/BackButton2.vue'
+  import Price from '../commons/PriceElement.vue'
+  import LoadingView from '../commons/LoadingView.vue'
+  import OrderStateButtons from './components/OrderStateButtons.vue'
+  import CreateOrderEntry from './components/CreateOrderEntry.vue'
+  import EditOrderEntry from './components/EditOrderEntry.vue'
+  import OrderEntry from './components/OrderEntry.vue'
   import {mapState} from 'vuex'
   import {
     DELETE_DISH_ENTRY_ACTION,
@@ -249,8 +249,8 @@
     NAMESPACE_MODIFY_ORDER_ENTRY,
   } from "../../store/modules/ModifyOrderEntryState";
   import router from '../../router/index'
-  import PriceSummary from "../../components/orders/PriceSummary";
-  import SimpleCard from "../../components/commons/SimpleCard";
+  import PriceSummary from "./components/PriceSummary";
+  import SimpleCard from "../commons/SimpleCard";
 
   export default {
     data() {

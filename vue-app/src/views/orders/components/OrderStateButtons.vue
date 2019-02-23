@@ -25,8 +25,8 @@
     SET_ORDER_AS_DELIVERED_ACTION,
     SET_ORDER_AS_REJECTED_ACTION,
     DELETE_ORDER_ACTION
-  } from "../../store/modules/ShowOrderState";
-  import router from '../../router/index'
+  } from "../../../store/modules/ShowOrderState";
+  import router from '../../../router'
 
   export default {
     name: 'order-state-buttons',

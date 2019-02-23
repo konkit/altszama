@@ -42,9 +42,9 @@
 </template>
 
 <script>
-    import ErrorsComponent from '../commons/Errors.vue'
-    import Price from '../commons/PriceElement.vue'
-    import MoneyInput from "../commons/MoneyInput";
+    import ErrorsComponent from '../../commons/Errors.vue'
+    import Price from '../../commons/PriceElement.vue'
+    import MoneyInput from "../../commons/MoneyInput";
 
     export default {
         props: [

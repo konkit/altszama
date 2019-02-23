@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import ErrorsComponent from "../commons/Errors"
+  import ErrorsComponent from "./Errors"
 
   export default {
     name: 'LoadingView',

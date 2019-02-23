@@ -50,14 +50,14 @@
 </template>
 
 <script>
-  import Price from '../commons/PriceElement.vue'
+  import Price from '../../commons/PriceElement.vue'
   import {
     CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
     MARK_ORDER_ENTRY_AS_PAID_ACTION,
     DELETE_DISH_ENTRY_ACTION,
     NAMESPACE_SHOW_ORDER
-  } from "../../store/modules/ShowOrderState";
-  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../store/modules/ModifyOrderEntryState";
+  } from "../../../store/modules/ShowOrderState";
+  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../../store/modules/ModifyOrderEntryState";
   import {mapState} from "vuex";
 
   export default {
