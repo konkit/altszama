@@ -1,41 +1,76 @@
 <template>
   <div>
-    <h4>Dishes</h4>
+    <v-list two-line>
+      <template v-for="(categoryEntry, i) in this.dishesByCategory">
+        <v-subheader>
+          <span v-if="categoryEntry.category">
+            Category: {{categoryEntry.category}}
+          </span>
+          <span v-else>
+            Uncategorized
+          </span>
+        </v-subheader>
 
-    <table class="table" v-for="(categoryEntry, i) in this.dishesByCategory" :key="i">
-      <thead class="thead">
-      <tr>
-        <th v-if="categoryEntry.category">
-          Category: {{categoryEntry.category}}
-        </th>
-        <th v-else>
-          Uncategorized
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="(dish, j) in categoryEntry.dishes" :key="j">
-        <td>
-          {{dish.name}} (<price :data-price="dish.price"></price>)
+        <v-list-tile v-for="(dish, j) in categoryEntry.dishes" :key="j">
+          <v-list-tile-content>
+            <v-list-tile-title>
+              {{dish.name}} (<price :data-price="dish.price"></price>)
+            </v-list-tile-title>
 
-          <v-chip text-color="blue" v-if="dish.lastCrawled != null">
-            auto-updated {{ dateToRel(dish.lastCrawled) }}
-          </v-chip>
-          <v-chip text-color="green" v-if="dish.lastCrawled == null">
-            updated manually
-          </v-chip>
+            <v-list-tile-sub-title>
+              <span v-if="dish.lastCrawled != null">
+                auto-updated {{ dateToRel(dish.lastCrawled) }}
+              </span>
 
-          <v-btn color="error" @click="deleteDish(dish.id)" class="pull-right">
-            Delete&nbsp;<span class="fa fa-times"/>
-          </v-btn>
+              <span v-if="dish.lastCrawled == null">
+                updated manually
+              </span>
+            </v-list-tile-sub-title>
+          </v-list-tile-content>
 
-          <v-btn :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'" class="pull-right">
-            Edit&nbsp;<span class="fa fa-pencil"/>
-          </v-btn>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+          <v-list-tile-action>
+            <span class="edit-buttons">
+              <v-btn flat icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </v-btn>
+
+              <v-btn flat icon @click="deleteDish(dish.id)">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </v-btn>
+            </span>
+          </v-list-tile-action>
+
+
+        </v-list-tile>
+
+
+        <!--<tbody>-->
+          <!--<tr v-for="(dish, j) in categoryEntry.dishes" :key="j">-->
+            <!--<td>-->
+              <!--{{dish.name}} (<price :data-price="dish.price"></price>)-->
+
+              <!--<v-chip text-color="blue" v-if="dish.lastCrawled != null">-->
+                <!--auto-updated {{ dateToRel(dish.lastCrawled) }}-->
+              <!--</v-chip>-->
+
+              <!--<v-chip text-color="green" v-if="dish.lastCrawled == null">-->
+                <!--updated manually-->
+              <!--</v-chip>-->
+
+              <!--<span class="edit-buttons">-->
+                <!--<v-btn flat icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">-->
+                  <!--<i class="fa fa-pencil" aria-hidden="true"></i>-->
+                <!--</v-btn>-->
+
+                <!--<v-btn flat icon @click="deleteDish(dish.id)">-->
+                  <!--<i class="fa fa-times" aria-hidden="true"></i>-->
+                <!--</v-btn>-->
+              <!--</span>-->
+            <!--</td>-->
+          <!--</tr>-->
+        <!--</tbody>-->
+      </template>
+    </v-list>
   </div>
 </template>
 
@@ -66,6 +101,8 @@
     },
     components: {
       Price,
+    },
+    computed: {
     }
   }
 </script>
@@ -73,5 +110,9 @@
 <style scoped>
   .table td {
     vertical-align: middle;
+  }
+
+  .edit-buttons {
+    margin-left: auto;
   }
 </style>

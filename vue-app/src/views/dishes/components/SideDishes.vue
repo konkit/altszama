@@ -5,7 +5,7 @@
     <div v-if="this.sideDishes.length > 0">
       <p v-for="sideDish in this.sideDishes" :key="sideDish.id">
         {{sideDish.name}}&nbsp;(<price :data-price="sideDish.price"/>)
-        <span @click="removeSideDish(sideDish.id)"><span class="fa fa-times"/></span>
+        <v-btn icon @click="removeSideDish(sideDish.id)"><span class="fa fa-times"/></v-btn>
       </p>
     </div>
     <div v-else>
@@ -13,7 +13,7 @@
     </div>
 
     <div v-if="this.sideDishFormVisible === false">
-      <v-btn @click="setSideDishFormVisible(true)">
+      <v-btn flat @click="setSideDishFormVisible(true)">
         Add side dish &nbsp; <i class="fa fa-plus"/>
       </v-btn>
     </div>
