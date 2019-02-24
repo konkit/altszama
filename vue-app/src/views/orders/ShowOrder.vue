@@ -149,7 +149,11 @@
 
           <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
             <div class="row">
-              <div class="user-name-col">{{username}}</div>
+              <div class="user-name-col username pa-2">
+                <div class="username-wrapper">
+                  {{username}}
+                </div>
+              </div>
 
               <div class="user-order-col">
                 <template v-if="isEntryCreating === false">
@@ -167,7 +171,7 @@
 
           <template v-for="(orderEntry, entryId) in this.orderEntries">
             <div class="row" :key="entryId">
-              <div class="user-name-col username">
+              <div class="user-name-col username pa-2">
                 <div class="username-wrapper">
                     {{orderEntry.username}}
                 </div>
@@ -176,43 +180,66 @@
               <div class="user-order-col">
                 <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
                   <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
-
-                    <edit-order-entry
-                        :order-entry="orderEntry"
-                        :dish-entry="dishEntry"
-                        :key="dishEntry.id">
-                    </edit-order-entry>
+                    <div class="pa-2">
+                      <edit-order-entry
+                          :order-entry="orderEntry"
+                          :dish-entry="dishEntry"
+                          :key="dishEntry.id">
+                      </edit-order-entry>
+                    </div>
 
                     <v-divider v-if="dishEntryIndex < orderEntry.dishEntries.length - 1"></v-divider>
                   </template>
                   <template v-else>
-                    <order-entry
-                        :order-entry="orderEntry"
-                        :dish-entry="dishEntry"
-                        :current-user-id="currentUserId"
-                        :key="dishEntry.id">
-                    </order-entry>
+                    <div class="pa-2">
+                      <order-entry
+                          :order-entry="orderEntry"
+                          :dish-entry="dishEntry"
+                          :current-user-id="currentUserId"
+                          :key="dishEntry.id">
+                      </order-entry>
+                    </div>
 
                     <v-divider></v-divider>
                   </template>
                 </template>
 
                 <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
-                  <div v-if="isEntryCreating === false" class="py-3">
+                  <div v-if="isEntryCreating === false" class="pa-2">
                     <v-btn color="success" @click="createEntry()">
                       Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
                     </v-btn>
                   </div>
-                  <div v-if="isEntryCreating === true">
+                  <div v-if="isEntryCreating === true" class="pa-2">
                     <create-order-entry></create-order-entry>
                   </div>
                 </template>
 
                 <v-divider></v-divider>
 
-                <div class="py-3">
+                <div class="pa-2">
                   <b>Cost for user: <price :data-price="orderEntry.finalPrice"/></b>
                 </div>
+              </div>
+
+              <div class="payment-status py-2 px-3" v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
+
+                  <template v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
+                    {{paymentStatus(orderEntry)}}
+                  </template>
+
+                  <template v-if="shouldShowMarkAsPaidButton(orderEntry)">
+                    <v-btn color="success" @click="markAsPaid(orderEntry.id)">
+                      <i class="fa fa-check" aria-hidden="true"></i>
+                    </v-btn>
+                  </template>
+
+                  <template v-if="shouldShowConfirmAsPaidButton(orderEntry)">
+                    <v-btn color="success" @click="confirmAsPaid(orderEntry.id)">
+                      <i class="fa fa-check" aria-hidden="true"></i>
+                    </v-btn>
+                  </template>
+
               </div>
             </div>
           </template>
@@ -337,6 +364,47 @@
           return "As ASAP as possible"
         }
       },
+      isOrderOwner() {
+        return this.order.orderCreatorId === this.currentUserId
+      },
+      isOrderEntryOwner(orderEntry) {
+        return orderEntry.userId === this.currentUserId
+      },
+      shouldShowMarkAsPaidButton(orderEntry) {
+        return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && (orderEntry.paymentStatus !== "MARKED" && orderEntry.paymentStatus !== "CONFIRMED") && this.isOrderOwner() === false)
+      },
+      shouldShowConfirmAsPaidButton(orderEntry) {
+        return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && orderEntry.paymentStatus !== "CONFIRMED" && this.isOrderOwner() === true)
+      },
+      paymentStatus(orderEntry) {
+        if (orderEntry.paymentStatus === "UNPAID") {
+          return "Unpaid"
+        } else if (orderEntry.paymentStatus === "MARKED") {
+          return "Marked as paid"
+        } else if (orderEntry.paymentStatus === "CONFIRMED") {
+          return "Payment confirmed"
+        } else {
+          return orderEntry.paymentStatus
+        }
+      },
+      confirmAsPaid(orderEntryId) {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
+      },
+      markAsPaid(orderEntryId) {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
+      },
+      editDishEntry() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {
+          orderEntryId: this.orderEntry.id,
+          dishEntryId: this.dishEntry.id
+        })
+      },
+      deleteDishEntry() {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
+          orderEntryId: this.orderEntry.id,
+          dishEntryId: this.dishEntry.id
+        });
+      },
     },
     computed: {
       numberOfCurrentUserEntries() {
@@ -385,16 +453,16 @@
   }
 
   .user-name-col {
-    width: 300px;
+    width: 200px;
+    min-width: 200px;
   }
 
   .user-order-col {
-    width: 100%;
+    min-width: 0;
   }
 
   .username-wrapper {
     height: 50px;
-    padding-top: 12px;
   }
 
   .allowed {
@@ -403,6 +471,11 @@
 
   .not-allowed {
     color: red;
+  }
+
+  .payment-status {
+    margin-left: auto;
+    white-space: nowrap;
   }
 
 </style>

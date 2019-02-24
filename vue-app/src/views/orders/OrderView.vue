@@ -67,9 +67,7 @@
                   </p>
 
                   <p class="side-dish-name" v-for="(sd, i) in eatingPersonEntry.sideDishes" :key="i">
-                    + {{sd.name}} (
-                    <price :data-price="sd.price"/>
-                    )
+                    + {{sd.name}} ( <price :data-price="sd.price"/> )
                   </p>
 
                   <p class="dish-comments" v-if="eatingPersonEntry.comments.length > 0">

@@ -1,51 +1,27 @@
 <template>
   <div class="wrapper">
-    <div class="pull-right">
-      <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
+    <div class="dish-name">
+      <div class="dish-name-text">{{dishEntry.dishName }}</div>
+      <div class="dish-price"> ( <price :data-price="dishEntry.price"/> )</div>
 
-        <div
-            v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
-          {{paymentStatus(orderEntry)}}
-        </div>
+      <span class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
+        <v-btn flat icon @click="editDishEntry()">
+          <i class="fa fa-pencil" aria-hidden="true"></i>
+        </v-btn>
 
-        <div v-if="shouldShowMarkAsPaidButton(orderEntry)">
-          <v-btn color="success" @click="markAsPaid(orderEntry.id)">
-            Mark as paid
-          </v-btn>
-        </div>
-
-        <div v-if="shouldShowConfirmAsPaidButton(orderEntry)">
-          <v-btn color="success" @click="confirmAsPaid(orderEntry.id)">
-            Confirm as paid
-          </v-btn>
-        </div>
-
-      </div>
+        <v-btn flat icon @click="deleteDishEntry()">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </v-btn>
+      </span>
     </div>
 
-    <div>
-      <div class="dish-name">
-        {{dishEntry.dishName }} ( <price :data-price="dishEntry.price"/> )
+    <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name py-2">
+      + {{sideDish.name}} ( <price :data-price="sideDish.price"/> )
+    </p>
 
-        <span v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
-          <v-btn flat icon @click="editDishEntry()">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
-          </v-btn>
-
-          <v-btn flat icon @click="deleteDishEntry()">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </v-btn>
-        </span>
-      </div>
-
-      <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name">
-        + {{sideDish.name}} ( <price :data-price="sideDish.price"/> )
-      </p>
-
-      <p v-if="dishEntry.comments.length > 0" class="dish-comments">
-        Additional comments: {{dishEntry.comments}}
-      </p>
-    </div>
+    <p v-if="dishEntry.comments.length > 0" class="dish-comments py-2">
+      Additional comments: {{dishEntry.comments}}
+    </p>
   </div>
 </template>
 
@@ -118,10 +94,28 @@
 </script>
 
 <style scoped>
-  p.dish-name {
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-top: 15px;
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .dish-name {
+    display: flex;
+    flex-direction: row;
+    min-width: 0;
+  }
+
+  .dish-name-text {
+    display: block;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dish-price {
+    white-space: nowrap;
+    padding-left: 5px;
   }
 
   p.side-dish-name {
@@ -138,8 +132,9 @@
     color: #444444;
   }
 
-  .wrapper {
-    min-height: 50px;
-    margin-bottom: 20px;
+  .edit-buttons {
+    width: 104px;
+    min-width: 104px;
+    margin-top: -15px;
   }
 </style>
