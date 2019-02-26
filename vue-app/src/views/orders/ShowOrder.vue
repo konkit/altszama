@@ -131,12 +131,12 @@
 
           <v-layout row>
             <v-flex xs12>
-              <v-btn block color="success" v-if="this.orderState === 'CREATED' || this.orderState === 'ORDERING'"
+              <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'CREATED' || this.orderState === 'ORDERING')"
                      @click="placeOrder">
                 Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
               </v-btn>
 
-              <v-btn block color="success" v-if="this.orderState === 'ORDERED'" @click="setAsDelivered">
+              <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'ORDERED')" @click="setAsDelivered">
                 Mark as delivered&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
               </v-btn>
             </v-flex>
@@ -242,6 +242,7 @@
 
               </div>
             </div>
+            <div class="bottom-space"></div>
           </template>
       </simple-card>
     </ViewWrapper>
@@ -476,6 +477,10 @@
   .payment-status {
     margin-left: auto;
     white-space: nowrap;
+  }
+
+  .bottom-space {
+    height: 30px;
   }
 
 </style>

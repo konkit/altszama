@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="wrapper">
     <div class="dish-name">
       <div class="dish-name-text">{{dishEntry.dishName }}</div>
@@ -14,7 +15,9 @@
         </v-btn>
       </span>
     </div>
+  </div>
 
+  <div class="side-dishes">
     <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name py-2">
       + {{sideDish.name}} ( <price :data-price="sideDish.price"/> )
     </p>
@@ -22,6 +25,7 @@
     <p v-if="dishEntry.comments.length > 0" class="dish-comments py-2">
       Additional comments: {{dishEntry.comments}}
     </p>
+  </div>
   </div>
 </template>
 
@@ -137,4 +141,8 @@
     min-width: 104px;
     margin-top: -15px;
   }
+
+  .side-dishes {
+    padding-left: 10px;
+   }
 </style>
