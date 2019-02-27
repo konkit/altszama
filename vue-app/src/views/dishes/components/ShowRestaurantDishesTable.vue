@@ -11,7 +11,7 @@
           </span>
         </v-subheader>
 
-        <v-list-tile v-for="(dish, j) in categoryEntry.dishes" :key="j">
+        <v-list-tile v-for="(dish, j) in categoryEntry.dishes">
           <v-list-tile-content>
             <v-list-tile-title>
               {{dish.name}} (<price :data-price="dish.price"></price>)
@@ -39,36 +39,7 @@
               </v-btn>
             </span>
           </v-list-tile-action>
-
-
         </v-list-tile>
-
-
-        <!--<tbody>-->
-          <!--<tr v-for="(dish, j) in categoryEntry.dishes" :key="j">-->
-            <!--<td>-->
-              <!--{{dish.name}} (<price :data-price="dish.price"></price>)-->
-
-              <!--<v-chip text-color="blue" v-if="dish.lastCrawled != null">-->
-                <!--auto-updated {{ dateToRel(dish.lastCrawled) }}-->
-              <!--</v-chip>-->
-
-              <!--<v-chip text-color="green" v-if="dish.lastCrawled == null">-->
-                <!--updated manually-->
-              <!--</v-chip>-->
-
-              <!--<span class="edit-buttons">-->
-                <!--<v-btn flat icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">-->
-                  <!--<i class="fa fa-pencil" aria-hidden="true"></i>-->
-                <!--</v-btn>-->
-
-                <!--<v-btn flat icon @click="deleteDish(dish.id)">-->
-                  <!--<i class="fa fa-times" aria-hidden="true"></i>-->
-                <!--</v-btn>-->
-              <!--</span>-->
-            <!--</td>-->
-          <!--</tr>-->
-        <!--</tbody>-->
       </template>
     </v-list>
   </div>

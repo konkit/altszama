@@ -67,7 +67,7 @@
     name: 'side-dishes-input',
     methods: {
       removeSideDish(sideDishIndex) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${REMOVE_SIDE_DISH}`, sideDishIndex);
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${REMOVE_SIDE_DISH}`, {sdIndex: sideDishIndex});
 
         this.$forceUpdate();
       },
@@ -103,6 +103,7 @@
         this.$forceUpdate();
       },
       updateSideDishComboBox(sdIndex, sideDishId) {
+        console.log("sideDishId", sideDishId)
         this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_SIDE_DISH_ACTION}`, {
           sdIndex: sdIndex,
           sideDishId: sideDishId
@@ -124,7 +125,7 @@
       },
       sideDishesItems() {
         return this.dishIdToSideDishesMap[this.dishId].map(entry => {
-          var price = entry.price.toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+          var price = (entry.price / 100.0).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
           var text = `${entry.name} (${price})`;
 
           return Object.assign({}, {text: text, value: entry.id})

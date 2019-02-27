@@ -11,8 +11,8 @@ data class Restaurant(
   @Id
   var id: String = ObjectId().toHexString(),
 
-  @NotNull
-  @Size(min = 1, message = "Restaurant name cannot be blank!")
+  @field:NotNull
+  @field:Size(min = 1, message = "Restaurant name cannot be blank!")
   var name: String = "",
 
   var telephone: String = "",

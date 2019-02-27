@@ -14,21 +14,25 @@
           <v-container>
             <v-layout row>
               <v-flex>
-                <v-alert :value="true" color="warning" icon="new_releases">
+                <v-alert :value="true" color="warning" icon="new_releases" outline>
                   Order is now locked, so no one should order anything else now.
                 </v-alert>
               </v-flex>
             </v-layout>
+          </v-container>
 
+          <v-container>
             <v-layout row>
               <v-flex xs12>
-                <p>Now please call: <b>tel. {{restaurantTelephone}}</b>, make an order and then enter approximate delivery time and click "Order placed"</p>
+                <p>Now please call: <b>tel. {{restaurantTelephone}}</b>, make an order and then enter approximate
+                  delivery time and click "Order placed"</p>
               </v-flex>
             </v-layout>
 
-            <v-layout row>
+            <v-layout row justify-space-around>
               <v-flex xs3>
-                <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)" label="Approximate time of delivery"></TimePicker>
+                <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
+                            label="Approximate time of delivery"></TimePicker>
               </v-flex>
 
               <v-flex xs3>
@@ -45,68 +49,50 @@
 
           <h4>Dishes:</h4>
 
-          <table class="table">
-            <thead>
-            <tr>
-              <th>Dish</th>
-              <th>Eaters (and their comments)</th>
-              <th class="price-column">Price</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="entry in groupedEntries" :key="entry.id">
-              <td>{{entry.eatingPeopleCount}}x {{entry.dish.name}} (
-                <price :data-price="entry.dish.price"></price>
-                )
-              </td>
+          <div class="grid-container">
+            <template v-for="entry in groupedEntries">
+              <div class="table-column">
+                {{entry.eatingPeopleCount}}x {{entry.dish.name}} (<price :data-price="entry.dish.price"></price>)
+              </div>
 
-              <td>
+              <div class="table-column">
                 <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
                   <p class="dish-name">
                     {{ eatingPersonEntry.username }}
                   </p>
 
                   <p class="side-dish-name" v-for="(sd, i) in eatingPersonEntry.sideDishes" :key="i">
-                    + {{sd.name}} ( <price :data-price="sd.price"/> )
+                    + {{sd.name}} (
+                    <price :data-price="sd.price"/>
+                    )
                   </p>
 
                   <p class="dish-comments" v-if="eatingPersonEntry.comments.length > 0">
                     Additional comments: {{ eatingPersonEntry.comments }}
                   </p>
                 </div>
-              </td>
-              <td>
+              </div>
+
+              <div class="table-column">
                 <price :data-price="entry.price"></price>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+              </div>
+            </template>
+          </div>
 
         </simple-card>
 
-        <v-container fluid>
-          <v-layout align-center justify-center>
-            <v-flex xs10 xl8>
-              <v-card>
-                <v-card-text>
-                  <v-layout column>
+        <simple-card>
 
-                    <price-summary
-                        :orderDecreaseInPercent="orderDecreaseInPercent"
-                        :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
-                        :basePriceSum="basePriceSum"
-                        :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
-                        :allEatingPeopleCount="allEatingPeopleCount"
-                        :totalPrice="totalPrice"
-                    >
-                    </price-summary>
-
-                  </v-layout>
-                </v-card-text>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-container>
+          <price-summary
+              :orderDecreaseInPercent="orderDecreaseInPercent"
+              :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
+              :basePriceSum="basePriceSum"
+              :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
+              :allEatingPeopleCount="allEatingPeopleCount"
+              :totalPrice="totalPrice"
+          >
+          </price-summary>
+        </simple-card>
 
         <div v-if="isStateNotOrdering">
           <navigation user-name="Tmp name"></navigation>
@@ -223,5 +209,14 @@
     margin-bottom: 0;
     font-size: 10pt;
     color: #444444;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 4fr 2fr 0.5fr;
+  }
+
+  .table-column {
+    margin-bottom: 10px;
   }
 </style>

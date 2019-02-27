@@ -27,8 +27,8 @@
                 class="pointer">
               <td>{{ props.item.name }}</td>
               <td>{{ props.item.dishCount }}</td>
-              <td>{{ dateToTimeFromNow(props.item.lastCrawled) }}</td>
-              <td>{{ dateToTimeFromNow(props.item.lastEdited) }}</td>
+              <td>{{ dateToRel(props.item.lastCrawled) }}</td>
+              <td>{{ dateToRel(props.item.lastEdited) }}</td>
             </tr>
           </template>
         </v-data-table>
@@ -75,7 +75,7 @@
       goToCreateRestaurant() {
         router.push("/restaurants/create")
       },
-      dateToTimeFromNow(date) {
+      dateToRel(date) {
         if (date) {
           return moment(date).fromNow()
         } else {
@@ -117,5 +117,9 @@
 
   .row {
     margin-top: 2rem;
+  }
+
+  th {
+    text-align: left;
   }
 </style>

@@ -1,19 +1,18 @@
 package altszama.dish.dto
 
 import altszama.dish.SideDish
-import altszama.restaurant.Restaurant
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.DBRef
-import java.time.Instant
 import javax.validation.constraints.NotNull
+import javax.validation.constraints.PositiveOrZero
+import javax.validation.constraints.Size
 
 
 data class DishCreateRequest(
-  @NotNull
+  @field:NotNull
+  @field:Size(min = 1, message = "Name cannot be blank!")
   var name: String = "",
 
-  @NotNull
+  @field:NotNull
+  @field:PositiveOrZero(message = "Price must not be negative")
   var price: Int = 0,
 
   var sideDishes: List<SideDish> = emptyList(),

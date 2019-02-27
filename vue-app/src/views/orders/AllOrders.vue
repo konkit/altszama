@@ -81,9 +81,11 @@
 </script>
 
 <style scoped>
-
-
   .pointer {
     cursor: pointer;
+  }
+
+  th {
+    text-align: left;
   }
 </style>

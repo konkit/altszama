@@ -2,15 +2,16 @@ package altszama.dish
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
-import javax.validation.constraints.NotNull
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.PositiveOrZero
 
 data class SideDish(
   @Id
   var id: String = ObjectId().toHexString(),
 
-  @NotNull
+  @field:NotBlank
   var name: String = "",
 
-  @NotNull
+  @field:PositiveOrZero
   var price: Int = 0
 )

@@ -153,6 +153,8 @@ export default {
   },
   actions: {
     [SETUP_CREATE_ORDER_ENTRY_ACTION] ({state, rootState}) {
+      this.commit('clearErrors');
+
       const orderId = rootState.showOrder.order.id;
 
       let dishId;
@@ -165,6 +167,8 @@ export default {
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_CREATED_ORDER_ENTRY}`, {orderId: orderId, dishId: dishId})
     },
     [SETUP_EDIT_ORDER_ENTRY_ACTION] ({state, rootState}, {dishEntry}) {
+      this.commit('clearErrors');
+
       const orderId = rootState.showOrder.order.id;
 
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_EDITED_ORDER_ENTRY}`, {orderId: orderId, dishEntry: dishEntry});
@@ -232,7 +236,7 @@ export default {
     },
     [UPDATE_SIDE_DISH_ACTION] ({state, rootState}, {sdIndex, sideDishId}) {
       const newSideDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId].find(sd => sd.id === sideDishId);
-      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH}`, newSideDish);
+      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH}`, {sdIndex: sdIndex, newValue: newSideDish});
     },
   }
 };

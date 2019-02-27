@@ -47,7 +47,7 @@
             <v-list-tile @click="goToOrder(order.id)" v-for="order in this.createdOrders">
               <v-list-tile-content>
                 <v-list-tile-title class="pointer">
-                  <b>{{order.restaurantName}}</b> (ordered by {{order.orderCreatorUsername}})
+                  <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -69,7 +69,7 @@
             <v-list-tile @click="goToOrder(order.id)" v-for="order in this.orderingOrders">
               <v-list-tile-content>
                 <v-list-tile-title class="pointer">
-                  <b>{{order.restaurantName}}</b> (ordered by {{order.orderCreatorUsername}})
+                  <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -91,7 +91,7 @@
             <v-list-tile @click="goToOrder(order.id)" v-for="order in this.orderedOrders">
               <v-list-tile-content>
                 <v-list-tile-title class="pointer">
-                  <b>{{order.restaurantName}}</b> (ordered by {{order.orderCreatorUsername}})
+                  <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -113,7 +113,7 @@
             <v-list-tile @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id">
               <v-list-tile-content>
                 <v-list-tile-title class="pointer">
-                  <b>{{order.restaurantName}}</b> (ordered by {{order.orderCreatorUsername}})
+                  <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>

@@ -18,11 +18,11 @@
       </template>
 
       <simple-card>
-        <v-container>
+        <v-container v-if="this.isOrdering() && this.isOrderOwner()">
           <v-layout row>
             <v-flex xs12>
-              <v-alert v-if="this.isOrdering() && this.isOrderOwner()" :value="true" color="warning"
-                       icon="new_releases">
+              <v-alert :value="true" color="warning"
+                       icon="new_releases" outline>
                 <p><strong>The order is locked!</strong></p>
 
                 <p>
@@ -42,7 +42,9 @@
               </v-alert>
             </v-flex>
           </v-layout>
+        </v-container>
 
+        <v-container>
           <v-layout row>
             <v-flex xs4>
               <h3>Order data</h3>
@@ -131,8 +133,7 @@
 
           <v-layout row>
             <v-flex xs12>
-              <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'CREATED' || this.orderState === 'ORDERING')"
-                     @click="placeOrder">
+              <v-btn block color="success" v-if="canShowPlaceOrderButton" @click="placeOrder" :disabled="isPlaceOrderButtonDisabled()">
                 Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
               </v-btn>
 
@@ -266,7 +267,10 @@
     SET_ORDER_AS_CREATED_ACTION,
     SET_ORDER_AS_ORDERED_ACTION,
     SET_ORDER_AS_DELIVERED_ACTION,
-    SET_ORDER_AS_REJECTED_ACTION, DELETE_ORDER_ACTION
+    SET_ORDER_AS_REJECTED_ACTION,
+    DELETE_ORDER_ACTION,
+    CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
+    MARK_ORDER_ENTRY_AS_PAID_ACTION
   } from "../../store/modules/ShowOrderState"
   import {
     SET_DISH_ENTRY_CREATING,
@@ -406,6 +410,12 @@
           dishEntryId: this.dishEntry.id
         });
       },
+      canShowPlaceOrderButton() {
+        return this.isOrderOwner() && (this.orderState === 'CREATED' || this.orderState === 'ORDERING')
+      },
+      isPlaceOrderButtonDisabled() {
+        return this.orderEntries.length === 0
+      }
     },
     computed: {
       numberOfCurrentUserEntries() {
