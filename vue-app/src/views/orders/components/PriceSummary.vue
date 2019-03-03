@@ -6,31 +6,33 @@
       Base price :
     </dt>
     <dd v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
-      <price :data-price="basePriceSum"/>
+      <b>
+        <price :data-price="basePriceSum"/>
+      </b>
     </dd>
 
     <dt v-if="orderDecreaseInPercent !== 0">
       Price decrease :
     </dt>
     <dd v-if="orderDecreaseInPercent !== 0">
-      - {{orderDecreaseInPercent}} %
+      <b>- {{orderDecreaseInPercent}} %</b>
     </dd>
 
     <dt v-if="orderDeliveryCostPerEverybody !== 0">
       Delivery :
     </dt>
     <dd v-if="orderDeliveryCostPerEverybody !== 0">
-      + <price :data-price="orderDeliveryCostPerEverybody"/>
+      <b>+ <price :data-price="orderDeliveryCostPerEverybody"/></b>
     </dd>
 
     <dt v-if="orderDeliveryCostPerDish !== 0">
       Delivery per dish:
     </dt>
     <dd v-if="orderDeliveryCostPerDish !== 0">
-      + <price :data-price="orderDeliveryCostPerDish"/> * {{allEatingPeopleCount}}
+      <b>+ <price :data-price="orderDeliveryCostPerDish"/> * {{allEatingPeopleCount}}</b>
     </dd>
 
-    <dt>Total:</dt>
+    <dt class="pt-3"><b>Total:</b></dt>
     <dd><b><price :data-price="totalPrice"/></b></dd>
   </div>
 </template>
@@ -59,5 +61,4 @@
 </script>
 
 <style scoped>
-
 </style>
