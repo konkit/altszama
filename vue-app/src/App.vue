@@ -1,17 +1,9 @@
 <template>
-  <div id="app">
     <v-app>
       <Navigation></Navigation>
 
       <router-view></router-view>
-
-      <v-footer app>
-        <div class="footer-info">
-          Please direct all your wishes and complaints to&nbsp;<a href="mailto:lukasztenerowicz+altszama@gmail.com">Łukasz Tenerowicz</a>
-        </div>
-      </v-footer>
     </v-app>
-  </div>
 </template>
 
 <script>
@@ -54,22 +46,4 @@
 </script>
 
 <style scoped>
-  #app {
-    min-height: 100%;
-  }
-
-  main {
-    min-height: 100%
-  }
-
-  footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  .footer-info {
-    justify-self: center;
-  }
-
 </style>
