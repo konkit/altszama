@@ -22,7 +22,8 @@ export default new Vuex.Store({
     loading: false,
     username: localStorage.getItem("username"),
     token: localStorage.getItem("token"),
-    errors: []
+    errors: [],
+    masterNavDrawerOpened: null,
   },
   mutations: {
     setLoadingTrue (state) {
@@ -65,6 +66,12 @@ export default new Vuex.Store({
     },
     clearErrors (state) {
       state.errors = []
+    },
+    setMasterNavigationDrawerOpened (state, value) {
+      state.masterNavDrawerOpened = value
+    },
+    toggleMasterNavigationDrawerOpened (state) {
+      state.masterNavDrawerOpened = !state.masterNavDrawerOpened
     }
   },
   modules: {

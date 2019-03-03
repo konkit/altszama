@@ -1,25 +1,18 @@
 <template>
-  <LoadingView>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 href="#/restaurants"></back-button2>
+  <ViewWrapper :title="`Restaurant ${restaurant.name}`" backpath="#/restaurants">
+    <template slot="toolbar-buttons">
 
-        <v-toolbar-title>
-          Restaurant {{this.restaurant.name}}
-        </v-toolbar-title>
+      <v-btn @click="editRestaurant">
+        Edit restaurant&nbsp;<span class="fa fa-pencil"/>
+      </v-btn>
 
-        <v-spacer></v-spacer>
+      <v-btn color="error" @click="deleteRestaurant">
+        Delete restaurant&nbsp;<span class="fa fa-times"/>
+      </v-btn>
+    </template>
 
-        <v-btn @click="editRestaurant">
-          Edit restaurant&nbsp;<span class="fa fa-pencil"/>
-        </v-btn>
-
-        <v-btn color="error" @click="deleteRestaurant">
-          Delete restaurant&nbsp;<span class="fa fa-times"/>
-        </v-btn>
-      </template>
-
-      <errors-component />
+    <LoadingView>
+      <errors-component/>
 
       <v-container fluid>
         <v-layout align-center justify-center>
@@ -27,12 +20,12 @@
             <v-card>
               <v-card-text>
                 <v-layout column>
-                    <p><b>Rating: </b> {{this.restaurant.rating}} </p>
-                    <p><b>Address : </b> {{this.restaurant.address}} </p>
-                    <p><b>URL : </b> {{this.restaurant.url}} </p>
-                    <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
-                    <p><b>Last auto-updated:</b> {{ dateToRel(this.restaurant.lastCrawled) }} </p>
-                    <p><b>Last updated manually:</b>  {{ dateToRel(this.restaurant.lastEdited) }} </p>
+                  <p><b>Rating: </b> {{this.restaurant.rating}} </p>
+                  <p><b>Address : </b> {{this.restaurant.address}} </p>
+                  <p><b>URL : </b> {{this.restaurant.url}} </p>
+                  <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
+                  <p><b>Last auto-updated:</b> {{ dateToRel(this.restaurant.lastCrawled) }} </p>
+                  <p><b>Last updated manually:</b> {{ dateToRel(this.restaurant.lastEdited) }} </p>
                 </v-layout>
               </v-card-text>
             </v-card>
@@ -46,10 +39,11 @@
             <v-card>
               <v-card-text>
                 <v-layout column>
-                  <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
+                  <show-restaurant-dishes-table :restaurant="this.restaurant"
+                                                :dishes-by-category="this.dishesByCategory"/>
                 </v-layout>
 
-                <v-btn fixed dark fab large bottom left color="green" @click="goToCreateDish()">
+                <v-btn fixed dark fab large bottom right color="green" @click="goToCreateDish()">
                   <v-icon>add</v-icon>
                 </v-btn>
               </v-card-text>
@@ -57,8 +51,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </ViewWrapper>
-  </LoadingView>
+    </LoadingView>
+  </ViewWrapper>
 </template>
 
 <script>
@@ -83,9 +77,12 @@
       this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
     },
     methods: {
-      deleteRestaurant (e) {
+      deleteRestaurant(e) {
         let errorsComponent = this.$refs.errorsComponent;
-        this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId, errorsComponent: errorsComponent});
+        this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
+          restaurantId: this.restaurantId,
+          errorsComponent: errorsComponent
+        });
       },
       goToCreateDish() {
         router.push("/restaurants/" + this.restaurantId + "/dishes/create")
@@ -94,8 +91,6 @@
         router.push("/restaurants/" + this.restaurantId + "/edit")
       },
       dateToRel(date) {
-        console.log("date: ", date);
-
         if (date) {
           return moment(date).fromNow()
         } else {
@@ -104,13 +99,13 @@
       }
     },
     computed: {
-      restaurant () {
+      restaurant() {
         return this.$store.state.showRestaurant.restaurant;
       },
-      dishes () {
+      dishes() {
         return this.$store.state.showRestaurant.dishes;
       },
-      dishesByCategory () {
+      dishesByCategory() {
         return this.$store.state.showRestaurant.dishesByCategory;
       },
     },

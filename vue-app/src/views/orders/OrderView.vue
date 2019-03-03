@@ -1,14 +1,6 @@
 <template>
-  <LoadingView>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 :href="'#/orders/show/' + orderId"></back-button2>
-
-        <v-toolbar-title>
-          Ordering from {{restaurantName}}
-        </v-toolbar-title>
-      </template>
-
+  <ViewWrapper :title="`Ordering from ${restaurantName}`" :backpath="`#/orders/show/${orderId}`">
+    <LoadingView>
       <div v-if="isStateOrdering">
         <simple-card>
           <v-container>
@@ -24,8 +16,10 @@
           <v-container>
             <v-layout row>
               <v-flex xs12>
-                <p>Now please call: <b>tel. {{restaurantTelephone}}</b>, make an order and then enter approximate
-                  delivery time and click "Order placed"</p>
+                <p>
+                  Now please call the restaurant <span v-if="restaurantTelephone">(<b>tel. {{restaurantTelephone}}</b>)</span>,
+                  make an order and then enter approximate delivery time and click "Order placed"
+                </p>
               </v-flex>
             </v-layout>
 
@@ -52,7 +46,9 @@
           <div class="grid-container">
             <template v-for="entry in groupedEntries">
               <div class="table-column">
-                {{entry.eatingPeopleCount}}x {{entry.dish.name}} (<price :data-price="entry.dish.price"></price>)
+                {{entry.eatingPeopleCount}}x {{entry.dish.name}} (
+                <price :data-price="entry.dish.price"></price>
+                )
               </div>
 
               <div class="table-column">
@@ -106,8 +102,8 @@
           </simple-card>
         </div>
       </div>
-    </ViewWrapper>
-  </LoadingView>
+    </LoadingView>
+  </ViewWrapper>
 </template>
 
 <script>
@@ -187,10 +183,6 @@
 </script>
 
 <style scoped>
-
-  .price-column {
-    min-width: 100px;
-  }
 
   p.dish-name {
     margin-top: 0;

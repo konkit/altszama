@@ -1,39 +1,28 @@
 <template>
-  <div>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 href="#/restaurants"></back-button2>
+  <ViewWrapper title="Create restaurant" backpath="#/restaurants">
+    <v-container fluid>
+      <v-layout align-center justify-center>
+        <v-flex xs10>
+          <v-card>
+            <v-card-text>
+              <errors-component/>
 
-        <v-toolbar-title>
-          Create restaurant
-        </v-toolbar-title>
-      </template>
-
-
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
-            <v-card>
-              <v-card-text>
-                <errors-component/>
-
-                  <v-form id="restaurantCreateForm">
-                    <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
-                    <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
-                    <v-text-field label="Rating" :value="rating" @input="updateRating($event)"></v-text-field>
-                    <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
-                    <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
-                  </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn color="primary" @click="submitForm">Create</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </ViewWrapper>
-  </div>
+              <v-form id="restaurantCreateForm">
+                <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
+                <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
+                <v-text-field label="Rating" :value="rating" @input="updateRating($event)"></v-text-field>
+                <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
+                <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="success" @click="submitForm">Create</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </ViewWrapper>
 </template>
 
 <script>
@@ -57,7 +46,6 @@
         this.$store.dispatch(`createRestaurant/${SAVE_RESTAURANT_ACTION}`)
       },
       updateName(newValue) {
-        console.log("newValue: ", newValue);
         this.$store.commit(`createRestaurant/${UPDATE_NAME}`, newValue);
       },
       updateUrl(newValue) {

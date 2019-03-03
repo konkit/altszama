@@ -1,12 +1,6 @@
 <template>
-  <LoadingView>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <v-toolbar-title>
-          Today orders
-        </v-toolbar-title>
-      </template>
-
+  <ViewWrapper title="Today orders">
+    <LoadingView>
       <simple-card>
         <div v-if="this.currentOrderEntries.length > 0">
           <v-list>
@@ -61,7 +55,7 @@
             </v-list-tile>
           </div>
 
-          <v-divider :inset="false" ></v-divider>
+          <v-divider :inset="false"></v-divider>
 
           <v-subheader>Ordering right now ({{ this.orderingOrders.length }})</v-subheader>
 
@@ -83,7 +77,7 @@
             </v-list-tile>
           </div>
 
-          <v-divider :inset="false" ></v-divider>
+          <v-divider :inset="false"></v-divider>
 
           <v-subheader>Ordered ({{ this.orderedOrders.length }})</v-subheader>
 
@@ -130,57 +124,57 @@
 
       </simple-card>
 
-      <v-btn fixed dark fab large bottom left color="green" @click="goToCreateOrder()">
+      <v-btn fixed dark fab large bottom right color="green" @click="goToCreateOrder()">
         <v-icon>add</v-icon>
       </v-btn>
-    </ViewWrapper>
-  </LoadingView>
+    </LoadingView>
+  </ViewWrapper>
 </template>
 
 <script>
-    import ApiConnector from '../../lib/ApiConnector.js'
-    import LoadingView from "../commons/LoadingView";
-    import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
-    import {mapState} from "vuex"
-    import ErrorsComponent from '../commons/Errors'
-    import SimpleCard from "../commons/SimpleCard";
-    import router from '../../router/index'
-    import ViewWrapper from "../commons/ViewWrapper";
+  import ApiConnector from '../../lib/ApiConnector.js'
+  import LoadingView from "../commons/LoadingView";
+  import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
+  import {mapState} from "vuex"
+  import ErrorsComponent from '../commons/Errors'
+  import SimpleCard from "../commons/SimpleCard";
+  import router from '../../router/index'
+  import ViewWrapper from "../commons/ViewWrapper";
 
 
-    export default {
-        mounted() {
-            ApiConnector.initializePushNotifications();
+  export default {
+    mounted() {
+      ApiConnector.initializePushNotifications();
 
-            let errorsComponent = this.$refs.errorsComponent;
+      let errorsComponent = this.$refs.errorsComponent;
 
-            this.$store.dispatch(`todayOrders/${FETCH_TODAY_ORDERS_ACTION}`, {errorsComponent: errorsComponent});
-        },
-        methods: {
-            goToOrder(selectedOrderId) {
-                router.push("/orders/show/" + selectedOrderId)
-            },
-            goToCreateOrder() {
-                router.push("/orders/create")
-            }
-        },
-        computed: {
-            ...mapState("todayOrders", [
-                "currentOrderEntries",
-                "createdOrders",
-                "orderingOrders",
-                "orderedOrders",
-                "deliveredOrders"
-            ])
-        },
-        components: {
-          ViewWrapper,
-            SimpleCard,
-            LoadingView,
-            ErrorsComponent,
-            SimpleCard
-        }
+      this.$store.dispatch(`todayOrders/${FETCH_TODAY_ORDERS_ACTION}`, {errorsComponent: errorsComponent});
+    },
+    methods: {
+      goToOrder(selectedOrderId) {
+        router.push("/orders/show/" + selectedOrderId)
+      },
+      goToCreateOrder() {
+        router.push("/orders/create")
+      }
+    },
+    computed: {
+      ...mapState("todayOrders", [
+        "currentOrderEntries",
+        "createdOrders",
+        "orderingOrders",
+        "orderedOrders",
+        "deliveredOrders"
+      ])
+    },
+    components: {
+      ViewWrapper,
+      SimpleCard,
+      LoadingView,
+      ErrorsComponent,
+      SimpleCard
     }
+  }
 </script>
 
 <style scoped>

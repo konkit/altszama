@@ -1,37 +1,43 @@
 <template>
-  <v-container fluid class="simple-card">
-    <v-layout align-center justify-center>
-      <v-flex xs10 xl8>
-        <v-card class="card-toolbar">
-          <v-toolbar flat>
-            <slot name="toolbar"></slot>
-          </v-toolbar>
+  <div>
+    <v-toolbar app>
+      <v-toolbar-side-icon v-if="shouldDisplayHamburger()" @click.stop="toggleMasterNavDrawerOpened()"></v-toolbar-side-icon>
 
-          <v-card-text>
-            <v-layout column>
-              <v-content>
-                <slot></slot>
-              </v-content>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      <back-button v-if="shouldDisplayBackButton()" :href="backpath"></back-button>
+
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <slot name="toolbar-buttons"></slot>
+    </v-toolbar>
+
+    <v-content>
+      <slot></slot>
+    </v-content>
+  </div>
 </template>
 
 <script>
+  import BackButton from "./BackButton2";
+
   export default {
-    name: "ViewWrapper"
+    name: "ViewWrapper",
+    components: {BackButton},
+    props: ['title', 'backpath'],
+    methods: {
+      shouldDisplayHamburger() {
+        return !this.backpath;
+      },
+      shouldDisplayBackButton() {
+        return this.backpath;
+      },
+      toggleMasterNavDrawerOpened() {
+        this.$store.commit("toggleMasterNavigationDrawerOpened");
+      }
+    }
   }
 </script>
 
 <style scoped>
-  .simple-card {
-    max-width: 1500px;
-  }
-
-  .card-toolbar {
-    margin-top: -88px;
-  }
 </style>

@@ -7,48 +7,37 @@
   </v-toolbar>
 
   <div  class="lunch-bg-img">
-    <div>
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-6 login-box">
-            <h1>Altszama</h1>
+    <v-container>
+      <v-layout justify-center>
+        <v-flex xs6 class="login-box">
+          <h1>Altszama</h1>
 
-            <p>Yes! Finally a place, which will help order your lovely foody-foody!</p>
+          <p>Yes! Finally a place, which will help order your lovely foody-foody!</p>
 
-            <p>The button below will use your business Google Account to log in</p>
+          <p>The button below will use your business Google Account to log in</p>
 
-            <div v-if="loginPending == true">
-              <v-btn color="success">Loggin in ... wait plox.</v-btn>
-            </div>
-
-            <div v-if="loginPending == false">
-              <v-btn color="success" type="submit" :disabled = "loginLoaded == false"  @click="googleSignIn">Login using Google</v-btn>
-            </div>
+          <div v-if="loginPending == true">
+            <v-btn color="success">Loggin in ... wait plox.</v-btn>
           </div>
-        </div>
-      </div>
 
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div>
-              <div v-for="(error, i) in errors" :key="i">
-                <v-alert color="error">
-                  <p>{{error}}</p>
-                </v-alert>
-              </div>
-            </div>
+          <div v-if="loginPending == false">
+            <v-btn color="success" type="submit" :disabled = "loginLoaded == false"  @click="googleSignIn">Login using Google</v-btn>
           </div>
-        </div>
-      </div>
-    </div>
+
+          <div v-for="(error, i) in errors" :key="i">
+            <v-alert color="error">
+              <p>{{error}}</p>
+            </v-alert>
+          </div>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
   </div>
 </template>
 
 <script>
 import ApiConnector from '../lib/ApiConnector'
-import router from '../router'
 import GoogleLogin from '../lib/GoogleLogin.js'
 
 export default {

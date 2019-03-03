@@ -58,7 +58,7 @@
       <v-text-field
           label="Additional Comments"
           :value="additionalComments"
-          @input="[UPDATE_ADDITIONAL_COMMENTS]($event)"
+          @input="updateAdditionalComments($event)"
       >
       </v-text-field>
     </v-layout>
@@ -105,9 +105,9 @@
       updateNewDishPrice(newValue) {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`, newValue)
       },
-      ...mapMutations(NAMESPACE_MODIFY_ORDER_ENTRY, [
-        UPDATE_ADDITIONAL_COMMENTS
-      ]),
+      updateAdditionalComments(newValue) {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ADDITIONAL_COMMENTS}`, newValue)
+      },
       cancelEdit() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
       },

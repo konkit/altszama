@@ -1,20 +1,12 @@
 <template>
-  <LoadingView>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 :href="'#/restaurants/show/' + restaurantId"></back-button2>
-
-        <v-toolbar-title>
-          Edit dish
-        </v-toolbar-title>
-      </template>
-
+  <ViewWrapper title="Edit dish" :backpath="`#/restaurants/show/${restaurantId}`">
+    <LoadingView>
       <v-container fluid>
         <v-layout align-center justify-center>
           <v-flex xs10>
             <v-card>
               <v-card-text>
-                <errors-component />
+                <errors-component/>
 
                 <input type="hidden" name="restaurant.id" :value="restaurantId"/>
                 <input type="hidden" name="id" :value="dishId"/>
@@ -43,8 +35,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </ViewWrapper>
-  </LoadingView>
+    </LoadingView>
+  </ViewWrapper>
 </template>
 
 <script>
@@ -75,14 +67,14 @@
       this.$store.dispatch(`editDish/${INIT_EDIT_DISH_ACTION}`, {restaurantId: this.restaurantId, dishId: this.dishId})
     },
     methods: {
-      submitForm () {
+      submitForm() {
         let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
         this.$store.dispatch(`editDish/${UPDATE_DISH_ACTION}`, {sideDishes: sideDishes});
 
         return false;
       },
-      addSideDish () {
+      addSideDish() {
         const newSideDish = {
           name: this.newSideDishName,
           price: this.newSideDishPrice
@@ -90,7 +82,7 @@
 
         this.sideDishes.push(newSideDish)
       },
-      removeSideDish (sideDishId) {
+      removeSideDish(sideDishId) {
         this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
       },
       updateName(newValue) {
@@ -125,7 +117,4 @@
 </script>
 
 <style scoped>
-  .row {
-    margin-top: 2rem;
-  }
 </style>

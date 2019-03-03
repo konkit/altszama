@@ -106,7 +106,7 @@ export default {
       state.orderId = orderId;
       state.dishId = dishEntry.dishId;
       state.dishEntryId = dishEntry.id;
-      state.additionalComments = dishEntry.additionalComments;
+      state.additionalComments = dishEntry.comments;
       state.newDish = false;
       state.newDishName = "";
       state.newDishPrice = 0;

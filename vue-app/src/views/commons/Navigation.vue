@@ -1,33 +1,62 @@
 <template>
   <div v-if="shouldDisplayNavigation()">
-    <v-toolbar extended flat>
-      <v-toolbar-title>
-        <i class="fa fa-cutlery" aria-hidden="true"></i> Alt Szama
-      </v-toolbar-title>
+    <v-navigation-drawer app :value="masterNavDrawerOpened" @input="setMasterNavDrawerOpened($event)">
 
-      <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat @click="goToPath('/orders')">Today's orders</v-btn>
-        <v-btn flat @click="goToPath('/all_orders')">All orders</v-btn>
-        <v-btn flat @click="goToPath('/restaurants')">Restaurants and dishes</v-btn>
-      </v-toolbar-items>
+      <v-toolbar flat class="transparent">
+        <v-list class="pa-0">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <i class="fa fa-cutlery" aria-hidden="true"></i>
+            </v-list-tile-avatar>
 
-
-      <v-spacer></v-spacer>
-
-
-      <v-menu :nudge-width="100">
-        <v-toolbar-title slot="activator">
-          <span>Hi {{this.username}}!</span>
-          <v-icon>arrow_drop_down</v-icon>
-        </v-toolbar-title>
-
-        <v-list>
-          <v-list-tile @click="logout">
-            <v-list-tile-title>Logout</v-list-tile-title>
+            <v-list-tile-content>
+              Alt Szama
+            </v-list-tile-content>
           </v-list-tile>
         </v-list>
-      </v-menu>
-    </v-toolbar>
+      </v-toolbar>
+
+      <v-divider></v-divider>
+
+      <v-list>
+        <v-list-tile @click="goToPath('/orders')">
+          <v-list-tile-content>
+            <v-list-tile-title>Today's orders</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="goToPath('/all_orders')">
+          <v-list-tile-content>
+            <v-list-tile-title>All orders</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="goToPath('/restaurants')">
+          <v-list-tile-content>
+            <v-list-tile-title>Restaurants and dishes</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+
+      <v-divider></v-divider>
+
+      <div>
+        <div>
+          <v-list>
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-list-tile-title><b>Hi {{this.username}}!</b></v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile @click="logout">
+              <v-list-tile-title>Logout</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </div>
+      </div>
+
+    </v-navigation-drawer>
   </div>
 </template>
 
@@ -37,21 +66,27 @@
   export default {
     name: 'navigation',
     computed: {
-      username () {
+      username() {
         return this.$store.state.username;
+      },
+      masterNavDrawerOpened() {
+        return this.$store.state.masterNavDrawerOpened
       }
     },
     methods: {
-      shouldDisplayNavigation () {
+      shouldDisplayNavigation() {
         return this.$route.name !== "Login"
       },
-      logout () {
+      logout() {
         ApiConnector.logout();
       },
       goToPath(path) {
         this.$router.push(path)
+      },
+      setMasterNavDrawerOpened(newValue) {
+        this.$store.commit("setMasterNavigationDrawerOpened", newValue);
       }
-    }
+    },
   }
 </script>
 

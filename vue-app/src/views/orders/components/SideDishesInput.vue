@@ -103,7 +103,6 @@
         this.$forceUpdate();
       },
       updateSideDishComboBox(sdIndex, sideDishId) {
-        console.log("sideDishId", sideDishId)
         this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_SIDE_DISH_ACTION}`, {
           sdIndex: sdIndex,
           sideDishId: sideDishId

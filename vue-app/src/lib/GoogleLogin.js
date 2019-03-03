@@ -53,8 +53,6 @@ function initClient () {
     client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID
   };
 
-  console.log("ENV: ", process.env)
-
   return new Promise((resolve, reject) => {
     window.gapi.load('auth2', () => {
       window.gapi.auth2.init(googleConfig)

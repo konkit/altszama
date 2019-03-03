@@ -1,12 +1,6 @@
 <template>
-  <LoadingView>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <v-toolbar-title>
-          Restaurants
-        </v-toolbar-title>
-      </template>
-
+  <ViewWrapper title="Restaurants">
+    <LoadingView>
       <simple-card>
         <v-data-table
             class="table table-hover"
@@ -33,14 +27,14 @@
           </template>
         </v-data-table>
 
-        <v-btn fixed dark fab large bottom left color="green" @click="goToCreateRestaurant()">
+        <v-btn fixed dark fab large bottom right color="green" @click="goToCreateRestaurant()">
           <v-icon>add</v-icon>
         </v-btn>
 
       </simple-card>
 
-    </ViewWrapper>
-  </LoadingView>
+    </LoadingView>
+  </ViewWrapper>
 </template>
 
 <script>
@@ -113,10 +107,6 @@
 <style scoped>
   .pointer {
     cursor: pointer;
-  }
-
-  .row {
-    margin-top: 2rem;
   }
 
   th {

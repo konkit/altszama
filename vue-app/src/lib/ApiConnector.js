@@ -3,13 +3,10 @@ import store from '../store'
 import router from '../router'
 import GoogleLogin from './GoogleLogin.js'
 
-var currentDomain = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
-var backendUrl = process.env.VUE_APP_BACKEND_URL || currentDomain;
+const currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+const backendUrl = process.env.VUE_APP_BACKEND_URL || currentDomain;
 
-var pushNotificationEnabled = false;
-
-
-console.log("ENV: ", process.env)
+let pushNotificationEnabled = false;
 
 export default {
   getPushNotificationEnabled: () => pushNotificationEnabled,

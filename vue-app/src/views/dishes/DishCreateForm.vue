@@ -1,48 +1,38 @@
 <template>
-  <div>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 :href="getBackUrl()"></back-button2>
+  <ViewWrapper :title="`Create dish`" :backpath="getBackUrl()">
+    <v-container fluid>
+      <v-layout align-center justify-center>
+        <v-flex xs10>
+          <v-card>
+            <v-card-text>
+              <errors-component/>
 
-        <v-toolbar-title>
-          Create dish in restaurant {{restaurantName}}
-        </v-toolbar-title>
-      </template>
+              <input type="hidden" name="restaurant.id" :value="restaurantId"/>
 
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
-            <v-card>
-              <v-card-text>
-                <errors-component />
+              <v-text-field label="Name" :value="name" @input="updateName($event)" required=""></v-text-field>
 
-                <input type="hidden" name="restaurant.id" :value="restaurantId"/>
+              <MoneyInput label="Price" :value="price" @input="updatePrice($event)"></MoneyInput>
 
-                <v-text-field label="Name" :value="name" @input="updateName($event)" required=""></v-text-field>
+              <v-combobox
+                  :items="categories"
+                  label="Category"
+                  :value="category"
+                  @input="updateCategory($event)"
+              ></v-combobox>
 
-                <MoneyInput label="Price" :value="price" @input="updatePrice($event)"></MoneyInput>
+              <div>
+                <side-dishes ref="sideDishesElement"></side-dishes>
+              </div>
+            </v-card-text>
 
-                <v-combobox
-                    :items="categories"
-                    label="Category"
-                    :value="category"
-                    @input="updateCategory($event)"
-                ></v-combobox>
-
-                <div>
-                  <side-dishes ref="sideDishesElement"></side-dishes>
-                </div>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn color="primary" @click="submitForm">Create</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </ViewWrapper>
-  </div>
+            <v-card-actions>
+              <v-btn color="primary" @click="submitForm">Create</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </ViewWrapper>
 </template>
 
 <script>
@@ -50,7 +40,7 @@
   import ErrorsComponent from '../commons/Errors.vue'
   import Price from '../commons/PriceElement.vue'
   import SideDishes from './components/SideDishes.vue'
-  import {mapMutations, mapState} from "vuex"
+  import {mapState} from "vuex"
   import {
     UPDATE_NAME,
     UPDATE_PRICE,
@@ -72,14 +62,14 @@
       this.$store.dispatch(`createDish/${INIT_ACTION}`, {restaurantId: this.restaurantId})
     },
     methods: {
-      submitForm () {
+      submitForm() {
         let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
-        this.$store.dispatch(`createDish/${SAVE_DISH_ACTION}`, { sideDishes: sideDishes, backUrl: this.getBackUrl() });
+        this.$store.dispatch(`createDish/${SAVE_DISH_ACTION}`, {sideDishes: sideDishes, backUrl: this.getBackUrl()});
 
         return false;
       },
-      getBackUrl () {
+      getBackUrl() {
         if (typeof this.$route.query.addingToOrderId !== "undefined" && this.$route.query.addingToOrderId.length > 0) {
           return "/orders/" + this.$route.query.addingToOrderId + "/create_entry"
         } else {
@@ -87,7 +77,6 @@
         }
       },
       updateName(newValue) {
-        console.log("newValue", newValue);
         this.$store.commit(`createDish/${UPDATE_NAME}`, newValue)
       },
       updatePrice(newValue) {

@@ -1,14 +1,6 @@
 <template>
-  <LoadingView>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 :href="'#/orders/show/' + orderId"></back-button2>
-
-        <v-toolbar-title>
-          Edit order from {{restaurantName}}
-        </v-toolbar-title>
-      </template>
-
+  <ViewWrapper :title="`Edit order from ${restaurantName}`" :backpath="`#/orders/show/${orderId}`">
+    <LoadingView>
       <simple-card>
         <order-state-buttons></order-state-buttons>
       </simple-card>
@@ -82,8 +74,8 @@
           </div>
         </div>
       </simple-card>
-    </ViewWrapper>
-  </LoadingView>
+    </LoadingView>
+  </ViewWrapper>
 </template>
 
 <script>

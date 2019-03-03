@@ -1,20 +1,12 @@
 <template>
-  <LoadingView>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 :href="'#/restaurants/show/' + this.restaurantId"></back-button2>
-
-        <v-toolbar-title>
-          Edit restaurant {{name}}
-        </v-toolbar-title>
-      </template>
-
+  <ViewWrapper :title="`Edit restaurant ${name}`" :backpath="`#/restaurants/show/${this.restaurantId}`">
+    <LoadingView>
       <v-container fluid>
         <v-layout align-center justify-center>
           <v-flex xs10>
             <v-card>
               <v-card-text>
-                <errors-component />
+                <errors-component/>
 
                 <v-form id="restaurantCreateForm">
                   <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
@@ -32,8 +24,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </ViewWrapper>
-  </LoadingView>
+    </LoadingView>
+  </ViewWrapper>
 </template>
 
 <script>

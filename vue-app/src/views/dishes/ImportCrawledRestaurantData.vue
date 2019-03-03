@@ -1,41 +1,31 @@
 <template>
-  <div>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 href="#/restaurants"></back-button2>
+  <ViewWrapper title="Import restaurant from JSON" backpath="#/restaurants">
+    <v-container fluid>
+      <v-layout align-center justify-center>
+        <v-flex xs10>
+          <v-card>
+            <v-card-text>
+              <errors-component/>
 
-        <v-toolbar-title>
-          Import restaurant from JSON
-        </v-toolbar-title>
-      </template>
+              <v-layout>
+                <a href="/static/example.json" download>Download JSON template</a>
+              </v-layout>
 
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
-            <v-card>
-              <v-card-text>
-                <errors-component />
+              <v-layout>
+                Upload file:
 
-                <v-layout>
-                  <a href="/static/example.json" download>Download JSON template</a>
-                </v-layout>
+                <fileupload :target="this.getUploadUrl()" action="POST" @progress="progress" @start="startUpload"
+                            @finish="finishUpload"></fileupload>
 
-                <v-layout>
-                  Upload file:
+                <p>Status: {{uploadState}}</p>
+              </v-layout>
 
-                  <fileupload :target="this.getUploadUrl()" action="POST" @progress="progress" @start="startUpload"
-                              @finish="finishUpload"></fileupload>
-
-                  <p>Status: {{uploadState}}</p>
-                </v-layout>
-
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </ViewWrapper>
-  </div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </ViewWrapper>
 </template>
 
 <script>

@@ -18,7 +18,7 @@ import './assets/main-styles.css'
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 
-if (typeof process.env.VUE_APP_SENTRY_URL !== "undefined") {
+if (process.env.VUE_APP_SENTRY_URL) {
   Raven
     .config(process.env.VUE_APP_SENTRY_URL)
     .addPlugin(RavenVue, Vue)
@@ -26,12 +26,18 @@ if (typeof process.env.VUE_APP_SENTRY_URL !== "undefined") {
 
 }
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.config.errorHandler = (err, vm, info) => {
   console.error(err, vm, info);
-  if (typeof process.env.VUE_APP_SENTRY_URL !== "undefined") {
-    Raven.captureException(err)
+  if (process.env.VUE_APP_SENTRY_URL) {
+    const options = {
+      extra: {
+        state: JSON.stringify(store.state)
+      }
+    };
+
+    Raven.captureException(err, options)
   }
 };
 
@@ -51,4 +57,4 @@ new Vue({
   store,
   template: '<App/>',
   components: { App }
-})
+});

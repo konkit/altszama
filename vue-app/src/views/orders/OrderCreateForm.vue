@@ -1,250 +1,242 @@
 <template>
-  <LoadingView>
-    <ViewWrapper>
-      <template slot="toolbar">
-        <back-button2 href="#/orders"></back-button2>
-
-        <v-toolbar-title>
-          Create new order
-        </v-toolbar-title>
-      </template>
-
+  <ViewWrapper title="Create new order" backpath="#/orders">
+    <LoadingView>
       <simple-card>
         <div v-if="this.restaurantsList.length === 0">
           <p>There are no restaurants, please create one first</p>
         </div>
 
         <div v-if="this.restaurantsList.length > 0">
-            <errors-component/>
+          <errors-component/>
 
-            <v-container grid-list-md>
-              <v-layout row wrap>
-                <v-flex xs12>
-                  <v-autocomplete
-                      :items="restaurantsList"
-                      item-text="name"
-                      item-value="id"
-                      label="Restaurant"
-                      :value="this.restaurantsList.find(r => restaurantId == r.id)"
-                      @input="updateRestaurantId($event)"
-                  >
-                  </v-autocomplete>
-                </v-flex>
-              </v-layout>
+          <v-container grid-list-md>
+            <v-layout row wrap>
+              <v-flex xs12>
+                <v-autocomplete
+                    :items="restaurantsList"
+                    item-text="name"
+                    item-value="id"
+                    label="Restaurant"
+                    :value="this.restaurantsList.find(r => restaurantId == r.id)"
+                    @input="updateRestaurantId($event)"
+                >
+                </v-autocomplete>
+              </v-flex>
+            </v-layout>
 
-              <v-layout row>
-                <v-flex xs4>
-                  <h3>Order time</h3>
-                  <TimePicker :value="timeOfOrder" @input="updateTimeOfOrder($event)" label="Order time"></TimePicker>
-                </v-flex>
+            <v-layout row>
+              <v-flex xs4>
+                <h3>Order time</h3>
+                <TimePicker :value="timeOfOrder" @input="updateTimeOfOrder($event)" label="Order time"></TimePicker>
+              </v-flex>
 
-                <v-flex xs4>
-                  <h3>Price change</h3>
+              <v-flex xs4>
+                <h3>Price change</h3>
 
-                  <v-text-field
-                      class="percent-input"
-                      label="Price decrease (in percent)"
-                      suffix="%"
-                      :value="decreaseInPercent"
-                      @input="updateDecreaseInPercent($event)"></v-text-field>
+                <v-text-field
+                    class="percent-input"
+                    label="Price decrease (in percent)"
+                    suffix="%"
+                    :value="decreaseInPercent"
+                    @input="updateDecreaseInPercent($event)"></v-text-field>
 
-                  <MoneyInput
-                      class="short-input"
-                      label="Delivery cost (total)"
-                      :value="deliveryCostPerEverybody"
-                      @input="updateDeliveryCostPerEverybody($event)">
-                  </MoneyInput>
+                <MoneyInput
+                    class="short-input"
+                    label="Delivery cost (total)"
+                    :value="deliveryCostPerEverybody"
+                    @input="updateDeliveryCostPerEverybody($event)">
+                </MoneyInput>
 
-                  <MoneyInput
-                      class="short-input"
-                      label="Delivery cost (per dish)"
-                      :value="deliveryCostPerDish"
-                      @input="updateDeliveryCostPerDish($event)">
-                  </MoneyInput>
-                </v-flex>
+                <MoneyInput
+                    class="short-input"
+                    label="Delivery cost (per dish)"
+                    :value="deliveryCostPerDish"
+                    @input="updateDeliveryCostPerDish($event)">
+                </MoneyInput>
+              </v-flex>
 
-                <v-flex xs4>
-                  <h3>Payment</h3>
+              <v-flex xs4>
+                <h3>Payment</h3>
 
-                  <v-switch v-model="paymentByCash" label="Payment by cash"></v-switch>
+                <v-switch v-model="paymentByCash" label="Payment by cash"></v-switch>
 
-                  <v-switch v-model="paymentByBankTransfer" label="Payment by bank transfer"></v-switch>
+                <v-switch v-model="paymentByBankTransfer" label="Payment by bank transfer"></v-switch>
 
-                  <v-text-field
-                      v-if="paymentByBankTransfer"
-                      label="Bank transfer number"
-                      :value="bankTransferNumber"
-                      @change="updateBankTransferNumber($event)">
-                  </v-text-field>
+                <v-text-field
+                    v-if="paymentByBankTransfer"
+                    label="Bank transfer number"
+                    :value="bankTransferNumber"
+                    @change="updateBankTransferNumber($event)">
+                </v-text-field>
 
-                  <v-switch v-model="paymentByBlik" label="Payment by BLIK"></v-switch>
+                <v-switch v-model="paymentByBlik" label="Payment by BLIK"></v-switch>
 
-                  <v-text-field
-                      v-if="paymentByBlik"
-                      label="BLIK phone number"
-                      :value="blikPhoneNumber"
-                      @change="updateBlikPhoneNumber($event)">
-                  </v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
+                <v-text-field
+                    v-if="paymentByBlik"
+                    label="BLIK phone number"
+                    :value="blikPhoneNumber"
+                    @change="updateBlikPhoneNumber($event)">
+                </v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
 
-            <div class="row justify-content-center">
-              <div class="col">
-                <v-btn color="success" block @click="submitForm">
-                  Create
-                </v-btn>
-              </div>
+          <div class="row justify-content-center">
+            <div class="col">
+              <v-btn color="success" block @click="submitForm">
+                Create
+              </v-btn>
             </div>
+          </div>
         </div>
 
       </simple-card>
-    </ViewWrapper>
-  </LoadingView>
+    </LoadingView>
+  </ViewWrapper>
 </template>
 
 <script>
-    import BackButton2 from '../commons/BackButton2'
-    import ErrorsComponent from '../commons/Errors'
-    import MaskedInput from 'vue-text-mask'
-    import LoadingView from "../commons/LoadingView";
-    import VueSelect from 'vue-select'
-    import {
-        INIT_CREATE_ORDER_ACTION,
-        UPDATE_BANK_TRANSFER_NUMBER,
-        UPDATE_PAYMENT_BY_BANK_TRANSFER,
-        UPDATE_PAYMENT_BY_CASH,
-        UPDATE_DELIVERY_COST_PER_DISH,
-        UPDATE_DELIVERY_COST_PER_EVERYBODY,
-        UPDATE_DECREASE_IN_PERCENT,
-        UPDATE_TIME_OF_ORDER,
-        UPDATE_ORDER_DATE,
-        UPDATE_RESTAURANT_ID,
-        SAVE_ORDER_ACTION, UPDATE_BLIK_PHONE_NUMBER, UPDATE_PAYMENT_BY_BLIK,
+  import BackButton2 from '../commons/BackButton2'
+  import ErrorsComponent from '../commons/Errors'
+  import MaskedInput from 'vue-text-mask'
+  import LoadingView from "../commons/LoadingView";
+  import VueSelect from 'vue-select'
+  import {
+    INIT_CREATE_ORDER_ACTION,
+    UPDATE_BANK_TRANSFER_NUMBER,
+    UPDATE_PAYMENT_BY_BANK_TRANSFER,
+    UPDATE_PAYMENT_BY_CASH,
+    UPDATE_DELIVERY_COST_PER_DISH,
+    UPDATE_DELIVERY_COST_PER_EVERYBODY,
+    UPDATE_DECREASE_IN_PERCENT,
+    UPDATE_TIME_OF_ORDER,
+    UPDATE_ORDER_DATE,
+    UPDATE_RESTAURANT_ID,
+    SAVE_ORDER_ACTION, UPDATE_BLIK_PHONE_NUMBER, UPDATE_PAYMENT_BY_BLIK,
 
-    } from "../../store/modules/CreateOrderState";
-    import {mapState} from "vuex"
-    import SimpleCard from "../commons/SimpleCard";
-    import {
-        CANCEL_DISH_ENTRY_MODIFICATION,
-        NAMESPACE_MODIFY_ORDER_ENTRY
-    } from "../../store/modules/ModifyOrderEntryState";
-    import MoneyInput from "../commons/MoneyInput";
-    import TimePicker from "../commons/TimePicker";
-    import ViewWrapper from "../commons/ViewWrapper";
+  } from "../../store/modules/CreateOrderState";
+  import {mapState} from "vuex"
+  import SimpleCard from "../commons/SimpleCard";
+  import {
+    CANCEL_DISH_ENTRY_MODIFICATION,
+    NAMESPACE_MODIFY_ORDER_ENTRY
+  } from "../../store/modules/ModifyOrderEntryState";
+  import MoneyInput from "../commons/MoneyInput";
+  import TimePicker from "../commons/TimePicker";
+  import ViewWrapper from "../commons/ViewWrapper";
 
-    export default {
-        name: 'order-create-form',
-        data() {
-            return {
-                yesNoOptions: [
-                    {text: 'Yes', value: true},
-                    {text: 'No', value: false},
-                ]
-            }
-        },
-        created() {
-            this.$store.commit('setLoadingTrue')
-        },
-        mounted() {
-            this.$store.dispatch(`createOrder/${INIT_CREATE_ORDER_ACTION}`);
-        },
-        methods: {
-            updateRestaurantId(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_RESTAURANT_ID}`, newValue);
-            },
-            updateOrderDate(newOrderDate) {
-                this.$store.commit(`createOrder/${UPDATE_ORDER_DATE}`, newOrderDate);
-            },
-            updateTimeOfOrder(newTimeOfOrder) {
-                this.$store.commit(`createOrder/${UPDATE_TIME_OF_ORDER}`, newTimeOfOrder);
-            },
-            updateDecreaseInPercent(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_DECREASE_IN_PERCENT}`, newValue);
-            },
-            updateDeliveryCostPerEverybody(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_DELIVERY_COST_PER_EVERYBODY}`, newValue);
-            },
-            updateDeliveryCostPerDish(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_DELIVERY_COST_PER_DISH}`, newValue);
-            },
-            updatePaymentByCash(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_CASH}`, newValue);
-            },
-            updatePaymentByBankTransfer(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_BANK_TRANSFER}`, newValue);
-            },
-            updateBankTransferNumber(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
-            },
-            updatePaymentByBlik(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_BLIK}`, newValue);
-            },
-            updateBlikPhoneNumber(newValue) {
-                this.$store.commit(`createOrder/${UPDATE_BLIK_PHONE_NUMBER}`, newValue);
-            },
-            submitForm(e) {
-                e.preventDefault();
-                this.$store.dispatch(`createOrder/${SAVE_ORDER_ACTION}`);
+  export default {
+    name: 'order-create-form',
+    data() {
+      return {
+        yesNoOptions: [
+          {text: 'Yes', value: true},
+          {text: 'No', value: false},
+        ]
+      }
+    },
+    created() {
+      this.$store.commit('setLoadingTrue')
+    },
+    mounted() {
+      this.$store.dispatch(`createOrder/${INIT_CREATE_ORDER_ACTION}`);
+    },
+    methods: {
+      updateRestaurantId(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_RESTAURANT_ID}`, newValue);
+      },
+      updateOrderDate(newOrderDate) {
+        this.$store.commit(`createOrder/${UPDATE_ORDER_DATE}`, newOrderDate);
+      },
+      updateTimeOfOrder(newTimeOfOrder) {
+        this.$store.commit(`createOrder/${UPDATE_TIME_OF_ORDER}`, newTimeOfOrder);
+      },
+      updateDecreaseInPercent(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_DECREASE_IN_PERCENT}`, newValue);
+      },
+      updateDeliveryCostPerEverybody(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_DELIVERY_COST_PER_EVERYBODY}`, newValue);
+      },
+      updateDeliveryCostPerDish(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_DELIVERY_COST_PER_DISH}`, newValue);
+      },
+      updatePaymentByCash(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_CASH}`, newValue);
+      },
+      updatePaymentByBankTransfer(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_BANK_TRANSFER}`, newValue);
+      },
+      updateBankTransferNumber(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
+      },
+      updatePaymentByBlik(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_BLIK}`, newValue);
+      },
+      updateBlikPhoneNumber(newValue) {
+        this.$store.commit(`createOrder/${UPDATE_BLIK_PHONE_NUMBER}`, newValue);
+      },
+      submitForm(e) {
+        e.preventDefault();
+        this.$store.dispatch(`createOrder/${SAVE_ORDER_ACTION}`);
 
-                return false;
-            },
-            cancelEdit() {
-                this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
-            },
+        return false;
+      },
+      cancelEdit() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
+      },
+    },
+    computed: {
+      loading() {
+        return this.$store.state.loading;
+      },
+      ...mapState("createOrder", [
+        "restaurantsList",
+        "restaurantId",
+        "orderDate",
+        "timeOfOrder",
+        "decreaseInPercent",
+        "deliveryCostPerEverybody",
+        "deliveryCostPerDish",
+        "bankTransferNumber",
+        "blikPhoneNumber"
+      ]),
+      paymentByCash: {
+        get() {
+          return this.$store.state.createOrder.paymentByCash;
         },
-        computed: {
-            loading() {
-                return this.$store.state.loading;
-            },
-            ...mapState("createOrder", [
-                "restaurantsList",
-                "restaurantId",
-                "orderDate",
-                "timeOfOrder",
-                "decreaseInPercent",
-                "deliveryCostPerEverybody",
-                "deliveryCostPerDish",
-                "bankTransferNumber",
-                "blikPhoneNumber"
-            ]),
-            paymentByCash: {
-                get() {
-                    return this.$store.state.createOrder.paymentByCash;
-                },
-                set(newValue) {
-                    this.updatePaymentByCash(newValue)
-                }
-            },
-            paymentByBankTransfer: {
-                get() {
-                    return this.$store.state.createOrder.paymentByBankTransfer;
-                },
-                set(newValue) {
-                    this.updatePaymentByBankTransfer(newValue)
-                }
-            },
-            paymentByBlik: {
-                get() {
-                    return this.$store.state.createOrder.paymentByBlik;
-                },
-                set(newValue) {
-                    this.updatePaymentByBlik(newValue)
-                }
-            },
-        },
-        components: {
-          ViewWrapper,
-          TimePicker,
-          MoneyInput,
-          SimpleCard,
-          LoadingView,
-          BackButton2,
-          ErrorsComponent,
-          MaskedInput,
-          'v-select': VueSelect
+        set(newValue) {
+          this.updatePaymentByCash(newValue)
         }
+      },
+      paymentByBankTransfer: {
+        get() {
+          return this.$store.state.createOrder.paymentByBankTransfer;
+        },
+        set(newValue) {
+          this.updatePaymentByBankTransfer(newValue)
+        }
+      },
+      paymentByBlik: {
+        get() {
+          return this.$store.state.createOrder.paymentByBlik;
+        },
+        set(newValue) {
+          this.updatePaymentByBlik(newValue)
+        }
+      },
+    },
+    components: {
+      ViewWrapper,
+      TimePicker,
+      MoneyInput,
+      SimpleCard,
+      LoadingView,
+      BackButton2,
+      ErrorsComponent,
+      MaskedInput,
+      'v-select': VueSelect
     }
+  }
 </script>
 
 <style scoped>
