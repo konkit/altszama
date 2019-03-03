@@ -126,7 +126,7 @@
 
           <v-layout row>
             <v-flex xs12>
-              <v-btn block color="success" v-if="canShowPlaceOrderButton" @click="placeOrder"
+              <v-btn block color="success" v-if="canShowPlaceOrderButton()" @click="placeOrder"
                      :disabled="isPlaceOrderButtonDisabled()">
                 Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
               </v-btn>

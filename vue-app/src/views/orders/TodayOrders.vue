@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Today orders">
+  <ViewWrapper title="Today's orders">
     <LoadingView>
       <simple-card>
         <div v-if="this.currentOrderEntries.length > 0">

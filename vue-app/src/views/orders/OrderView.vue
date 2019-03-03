@@ -45,31 +45,30 @@
 
           <div class="grid-container">
             <template v-for="entry in groupedEntries">
-              <div class="table-column">
-                {{entry.eatingPeopleCount}}x {{entry.dish.name}} (
-                <price :data-price="entry.dish.price"></price>
-                )
+              <div class="table-column pt-3">
+                {{entry.eatingPeopleCount}}x {{entry.dish.name}}
+                <span class="price-wrapper">(<price :data-price="entry.dish.price"></price>)</span>
               </div>
 
-              <div class="table-column">
+              <div class="table-column pt-3">
                 <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
                   <p class="dish-name">
-                    {{ eatingPersonEntry.username }}
+                    {{i + 1}}. {{ eatingPersonEntry.username }}
                   </p>
 
-                  <p class="side-dish-name" v-for="(sd, i) in eatingPersonEntry.sideDishes" :key="i">
+                  <p class="side-dish-name pl-3" v-for="(sd, j) in eatingPersonEntry.sideDishes" :key="j">
                     + {{sd.name}} (
                     <price :data-price="sd.price"/>
                     )
                   </p>
 
-                  <p class="dish-comments" v-if="eatingPersonEntry.comments.length > 0">
+                  <p class="dish-comments pl-3" v-if="eatingPersonEntry.comments.length > 0">
                     Additional comments: {{ eatingPersonEntry.comments }}
                   </p>
                 </div>
               </div>
 
-              <div class="table-column">
+              <div class="table-column pt-3">
                 <price :data-price="entry.price"></price>
               </div>
             </template>
@@ -184,6 +183,10 @@
 
 <style scoped>
 
+  .price-wrapper {
+    white-space: nowrap;
+  }
+
   p.dish-name {
     margin-top: 0;
     margin-bottom: 0;
@@ -201,14 +204,17 @@
     margin-bottom: 0;
     font-size: 10pt;
     color: #444444;
+
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .grid-container {
     display: grid;
-    grid-template-columns: 4fr 2fr 0.5fr;
+    grid-template-columns: 2fr minmax(0, 2fr) 100px;
   }
 
   .table-column {
-    margin-bottom: 10px;
   }
 </style>

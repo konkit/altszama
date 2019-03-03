@@ -10,7 +10,9 @@
 
       <v-spacer></v-spacer>
 
-      <slot name="toolbar-buttons"></slot>
+      <template v-if="!loading">
+        <slot name="toolbar-buttons"></slot>
+      </template>
     </v-toolbar>
 
     <v-content class="view-content">
@@ -46,7 +48,12 @@
       toggleMasterNavDrawerOpened() {
         this.$store.commit("toggleMasterNavigationDrawerOpened");
       }
-    }
+    },
+    computed: {
+      loading() {
+        return this.$store.state.loading;
+      }
+    },
   }
 </script>
 

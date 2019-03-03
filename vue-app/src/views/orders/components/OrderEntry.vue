@@ -134,6 +134,9 @@
     margin-bottom: 0;
     font-size: 10pt;
     color: #444444;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .edit-buttons {
