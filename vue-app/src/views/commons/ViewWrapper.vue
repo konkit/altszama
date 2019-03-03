@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="view-wrapper">
     <v-toolbar app>
       <v-toolbar-side-icon v-if="shouldDisplayHamburger()"
                            @click.stop="toggleMasterNavDrawerOpened()"></v-toolbar-side-icon>
@@ -13,8 +13,10 @@
       <slot name="toolbar-buttons"></slot>
     </v-toolbar>
 
-    <v-content>
-      <slot></slot>
+    <v-content class="view-content">
+      <div class="content-class">
+        <slot></slot>
+      </div>
 
 
       <v-footer height="auto">
@@ -57,5 +59,17 @@
 
   .footer-info {
     justify-self: center;
+  }
+
+  .view-wrapper {
+    height: 100%;
+  }
+
+  .view-content {
+    height: 100%;
+  }
+
+  .content-class {
+    min-height: 100%;
   }
 </style>
