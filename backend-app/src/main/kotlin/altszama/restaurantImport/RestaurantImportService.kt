@@ -23,7 +23,8 @@ class RestaurantImportService {
   fun createFromJson(restaurantData: RestaurantImportJson) {
     val now = Instant.now()
 
-    val restaurant = restaurantRepository.findByName(restaurantData.name) ?: restaurantRepository.findByUrl(restaurantData.url) ?: Restaurant()
+    val restaurant = restaurantRepository.findByName(restaurantData.name)
+        ?: restaurantRepository.findByUrl(restaurantData.url) ?: Restaurant()
 
     val updatedRestaurant = restaurant.copy(
         name = restaurantData.name,
@@ -35,21 +36,23 @@ class RestaurantImportService {
 
     restaurantRepository.save(updatedRestaurant)
 
-    dishRepository.deleteAllByRestaurantIdAndLastEditedIsNull(restaurant.id);
+    if (restaurantData.dishes.isNotEmpty()) {
+      dishRepository.deleteAllByRestaurantIdAndLastEditedIsNull(restaurant.id);
 
-    restaurantData.dishes.forEach { dishData ->
-      val dish = dishRepository.findByRestaurantIdAndName(restaurant.id, dishData.name).firstOrNull()
-          ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
+      restaurantData.dishes.forEach { dishData ->
+        val dish = dishRepository.findByRestaurantIdAndName(restaurant.id, dishData.name).firstOrNull()
+            ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
 
-      val sideDishes = getUpdatedSideDishes(dishData, dish)
+        val sideDishes = getUpdatedSideDishes(dishData, dish)
 
-      val updatedDish = dish.copy(
-          price = priceStringToCents(dishData.price),
-          sideDishes = sideDishes,
-          lastCrawled = now
-      )
+        val updatedDish = dish.copy(
+            price = priceStringToCents(dishData.price),
+            sideDishes = sideDishes,
+            lastCrawled = now
+        )
 
-      dishRepository.save(updatedDish)
+        dishRepository.save(updatedDish)
+      }
     }
   }
 

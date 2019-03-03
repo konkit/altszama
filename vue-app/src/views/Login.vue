@@ -10,7 +10,7 @@
     <v-container>
       <v-layout justify-center>
         <v-flex xs6 class="login-box">
-          <h1>Altszama</h1>
+          <h1>Alt Szama</h1>
 
           <p>Yes! Finally a place, which will help order your lovely foody-foody!</p>
 
