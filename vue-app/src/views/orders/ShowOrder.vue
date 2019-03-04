@@ -37,21 +37,27 @@
         </v-container>
 
         <v-container>
-          <v-layout row>
-            <v-flex xs4>
+          <v-layout>
+            <v-flex xs12 sm4>
               <h3>Order data</h3>
 
-              <dt>Who will order?</dt>
-              <dd><b>{{ this.order.orderCreatorUsername }}</b></dd>
+              <div class="py-1">
+                <div>Who will order?</div>
+                <div><b>{{ this.order.orderCreatorUsername }}</b></div>
+              </div>
 
-              <dt>When?</dt>
-              <dd><b>{{ this.order.timeOfOrder }}</b></dd>
+              <div class="py-1">
+                <div>When?</div>
+                <div><b>{{ this.order.timeOfOrder }}</b></div>
+              </div>
 
-              <dt>When it'll arrive?</dt>
-              <dd><b>{{ this.timeOfDeliveryOrNA() }}</b></dd>
+              <div class="py-1">
+                <div>When it'll arrive?</div>
+                <div><b>{{ this.timeOfDeliveryOrNA() }}</b></div>
+              </div>
             </v-flex>
 
-            <v-flex xs4>
+            <v-flex xs12 sm4>
               <price-summary
                   :orderDecreaseInPercent="this.order.decreaseInPercent"
                   :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
@@ -63,7 +69,7 @@
               </price-summary>
             </v-flex>
 
-            <v-flex xs4>
+            <v-flex xs12 sm4>
               <h3>Payment</h3>
 
               <div v-if="this.order.paymentByCash == true" class="payment-entry">
@@ -221,24 +227,31 @@
             </div>
 
             <div class="payment-status py-2 px-3" v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
-
-              <template
-                  v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
+              <template v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
                 {{paymentStatus(orderEntry)}}
               </template>
 
               <template v-if="shouldShowMarkAsPaidButton(orderEntry)">
-                <v-btn icon color="success" @click="markAsPaid(orderEntry.id)">
-                  <i class="fa fa-check" aria-hidden="true"></i>
-                </v-btn>
+                <v-tooltip bottom>
+                  <template slot="activator">
+                    <v-btn icon color="success" @click="markAsPaid(orderEntry.id)">
+                      <i class="fa fa-check" aria-hidden="true"></i>
+                    </v-btn>
+                  </template>
+                  <span>Mark as paid</span>
+                </v-tooltip>
               </template>
 
               <template v-if="shouldShowConfirmAsPaidButton(orderEntry)">
-                <v-btn icon color="success" @click="confirmAsPaid(orderEntry.id)">
-                  <i class="fa fa-check" aria-hidden="true"></i>
-                </v-btn>
+                <v-tooltip bottom>
+                  <template slot="activator">
+                    <v-btn icon color="success" @click="confirmAsPaid(orderEntry.id)">
+                      <i class="fa fa-check" aria-hidden="true"></i>
+                    </v-btn>
+                  </template>
+                  <span>Confirm as paid</span>
+                </v-tooltip>
               </template>
-
             </div>
           </div>
           <div class="bottom-space"></div>

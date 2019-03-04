@@ -46,7 +46,7 @@ class OrderControllerDataService {
   }
 
   fun getAllOrdersData(): AllOrdersResponse {
-    return AllOrdersResponse.fromOrderList(orderRepository.findAll())
+    return AllOrdersResponse.fromOrderList(orderRepository.findAll().asReversed())
   }
 
   fun getShowData(orderId: String): ShowResponse {

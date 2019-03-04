@@ -2,63 +2,75 @@
   <div>
     <h3>Price summary</h3>
 
-    <dt v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
-      Base price :
-    </dt>
-    <dd v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
-      <b>
-        <price :data-price="basePriceSum"/>
-      </b>
-    </dd>
+    <div class="grid-container">
+      <div class="pt-2" v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
+        Base price :
+      </div>
 
-    <dt v-if="orderDecreaseInPercent !== 0">
-      Price decrease :
-    </dt>
-    <dd v-if="orderDecreaseInPercent !== 0">
-      <b>- {{orderDecreaseInPercent}} %</b>
-    </dd>
+      <div class="pt-2" v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
+        <b><price :data-price="basePriceSum"/></b>
+      </div>
 
-    <dt v-if="orderDeliveryCostPerEverybody !== 0">
-      Delivery :
-    </dt>
-    <dd v-if="orderDeliveryCostPerEverybody !== 0">
-      <b>+ <price :data-price="orderDeliveryCostPerEverybody"/></b>
-    </dd>
 
-    <dt v-if="orderDeliveryCostPerDish !== 0">
-      Delivery per dish:
-    </dt>
-    <dd v-if="orderDeliveryCostPerDish !== 0">
-      <b>+ <price :data-price="orderDeliveryCostPerDish"/> * {{allEatingPeopleCount}}</b>
-    </dd>
+      <div class="pt-2" v-if="orderDecreaseInPercent !== 0">
+        Price decrease :
+      </div>
 
-    <dt class="pt-3"><b>Total:</b></dt>
-    <dd><b><price :data-price="totalPrice"/></b></dd>
+      <div class="pt-2" v-if="orderDecreaseInPercent !== 0">
+        <b>- {{orderDecreaseInPercent}} %</b>
+      </div>
+
+
+      <div class="pt-2" v-if="orderDeliveryCostPerEverybody !== 0">
+        Delivery :
+      </div>
+
+      <div class="pt-2" v-if="orderDeliveryCostPerEverybody !== 0">
+        <b>+ <price :data-price="orderDeliveryCostPerEverybody"/></b>
+      </div>
+
+
+      <div class="pt-2" v-if="orderDeliveryCostPerDish !== 0">
+        Delivery per dish:
+      </div>
+
+      <div class="pt-2" v-if="orderDeliveryCostPerDish !== 0">
+        <b>+ <price :data-price="orderDeliveryCostPerDish"/> * {{allEatingPeopleCount}}</b>
+      </div>
+
+    </div>
+
+    <div class="pt-3"><b>Total:</b></div>
+    <div><b><price :data-price="totalPrice"/></b></div>
   </div>
 </template>
 
 <script>
-    import SimpleCard from "../../commons/SimpleCard";
-    import Price from "../../commons/PriceElement"
-    import ErrorsComponent from '../../commons/Errors'
+  import SimpleCard from "../../commons/SimpleCard";
+  import Price from "../../commons/PriceElement"
+  import ErrorsComponent from '../../commons/Errors'
 
-    export default {
-        name: "PriceSummary",
-        props: [
-            "orderDecreaseInPercent",
-            "orderDeliveryCostPerEverybody",
-            "basePriceSum",
-            "orderDeliveryCostPerDish",
-            "allEatingPeopleCount",
-            "totalPrice"
-        ],
-        components: {
-            SimpleCard,
-            Price,
-            ErrorsComponent
-        }
+  export default {
+    name: "PriceSummary",
+    props: [
+      "orderDecreaseInPercent",
+      "orderDeliveryCostPerEverybody",
+      "basePriceSum",
+      "orderDeliveryCostPerDish",
+      "allEatingPeopleCount",
+      "totalPrice"
+    ],
+    components: {
+      SimpleCard,
+      Price,
+      ErrorsComponent
     }
+  }
 </script>
 
 <style scoped>
+  .grid-container {
+    display: grid;
+    grid-template-columns: 125px 1fr;
+  }
 </style>

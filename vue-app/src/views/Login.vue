@@ -9,7 +9,7 @@
   <div  class="lunch-bg-img">
     <v-container>
       <v-layout justify-center>
-        <v-flex xs6 class="login-box">
+        <v-flex xs12 sm8 lg6 class="login-box">
           <h1>Alt Szama</h1>
 
           <p>Yes! Finally a place, which will help order your lovely foody-foody!</p>

@@ -82,7 +82,7 @@
       return parseInt(str[0]) * 100
     }
 
-    return parseInt(str[0]) * 100 + parseInt(str[1]);
+    return parseInt(str[0].trim()) * 100 + parseInt(str[1].trim().substr(0, 2));
   }
 </script>
 

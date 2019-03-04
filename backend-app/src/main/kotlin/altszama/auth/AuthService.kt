@@ -23,7 +23,7 @@ class AuthService(envVarConfig: SecretsConfig) {
 
     val userId = auth.principal as String
 
-    return userRepository.findById(userId).get()
+    return userRepository.findById(userId).orElseThrow { UnauthorizedException() }
   }
 
   @Throws(JwtException::class)

@@ -28,6 +28,6 @@ class OrderNotOrderedYetValidator : ConstraintValidator<OrderNotOrderedYet, Stri
   override fun isValid(orderId: String?, context: ConstraintValidatorContext): Boolean {
     return orderRepository.findById(orderId!!)
         .map { order -> order.orderState == OrderState.CREATED }
-        .orElse(false)
+        .orElse(true)
   }
 }
