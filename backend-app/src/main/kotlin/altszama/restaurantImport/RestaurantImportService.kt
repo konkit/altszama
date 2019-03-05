@@ -37,11 +37,18 @@ class RestaurantImportService {
     restaurantRepository.save(updatedRestaurant)
 
     if (restaurantData.dishes.isNotEmpty()) {
-      dishRepository.deleteAllByRestaurantIdAndLastEditedIsNull(restaurant.id);
+      val currentDishes = dishRepository.findByRestaurantId(restaurant.id)
+
+      val dishesToRemove = currentDishes.toMutableList()
 
       restaurantData.dishes.forEach { dishData ->
-        val dish = dishRepository.findByRestaurantIdAndName(restaurant.id, dishData.name).firstOrNull()
-            ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
+        val dishFromExistingList = currentDishes.firstOrNull { dish -> dish.name == dishData.name }
+
+        if (dishFromExistingList != null) {
+          dishesToRemove.remove(dishFromExistingList)
+        }
+
+        val dish = dishFromExistingList ?: Dish(restaurant = restaurant, name = dishData.name, category = dishData.category ?: "")
 
         val sideDishes = getUpdatedSideDishes(dishData, dish)
 
@@ -53,6 +60,10 @@ class RestaurantImportService {
 
         dishRepository.save(updatedDish)
       }
+
+      dishesToRemove
+          .filter { dish -> dish.lastEdited == null }
+          .forEach { dish -> dishRepository.delete(dish) }
     }
   }
 
