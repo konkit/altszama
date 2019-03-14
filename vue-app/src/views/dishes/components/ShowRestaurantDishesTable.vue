@@ -11,24 +11,25 @@
           </span>
         </v-subheader>
 
-        <v-list-tile v-for="(dish, j) in categoryEntry.dishes">
-          <v-list-tile-content>
-            <v-list-tile-title>
-              {{dish.name}} (<price :data-price="dish.price"></price>)
-            </v-list-tile-title>
+        <template v-for="(dish, j) in categoryEntry.dishes">
+          <v-list-tile >
+            <v-list-tile-content>
+              <v-list-tile-title>
+                {{dish.name}} (<price :data-price="dish.price"></price>)
+              </v-list-tile-title>
 
-            <v-list-tile-sub-title>
+              <v-list-tile-sub-title>
               <span v-if="dish.lastCrawled != null">
                 auto-updated {{ dateToRel(dish.lastCrawled) }}
               </span>
 
-              <span v-if="dish.lastCrawled == null">
+                <span v-if="dish.lastCrawled == null">
                 updated manually
               </span>
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
+              </v-list-tile-sub-title>
+            </v-list-tile-content>
 
-          <v-list-tile-action>
+            <v-list-tile-action>
             <span class="edit-buttons">
               <v-btn flat icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -38,8 +39,9 @@
                 <i class="fa fa-times" aria-hidden="true"></i>
               </v-btn>
             </span>
-          </v-list-tile-action>
-        </v-list-tile>
+            </v-list-tile-action>
+          </v-list-tile>
+        </template>
       </template>
     </v-list>
   </div>
@@ -59,7 +61,7 @@
       }
     },
     methods: {
-      deleteDish (dishId) {
+      deleteDish(dishId) {
         this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {restaurantId: this.restaurant.id, dishId: dishId})
       },
       dateToRel(date) {
@@ -73,8 +75,7 @@
     components: {
       Price,
     },
-    computed: {
-    }
+    computed: {}
   }
 </script>
 
