@@ -27,10 +27,14 @@
           </template>
         </v-data-table>
 
-        <v-btn fixed dark fab large bottom right color="green" @click="goToCreateRestaurant()">
-          <v-icon>add</v-icon>
-        </v-btn>
-
+        <v-tooltip left>
+          <template slot="activator">
+            <v-btn fixed dark fab large bottom right color="green" @click="goToCreateRestaurant()">
+              <v-icon>add</v-icon>
+            </v-btn>
+          </template>
+          <span>Create new restaurant</span>
+        </v-tooltip>
       </simple-card>
 
     </LoadingView>

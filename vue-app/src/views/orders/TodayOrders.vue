@@ -26,7 +26,7 @@
         </div>
         <div v-else>
           <div>
-            <p>You haven't ordered anything today yet.</p>
+            <span>You haven't ordered anything today yet.</span>
           </div>
         </div>
       </simple-card>
@@ -124,9 +124,14 @@
 
       </simple-card>
 
-      <v-btn fixed dark fab large bottom right color="green" @click="goToCreateOrder()">
-        <v-icon>add</v-icon>
-      </v-btn>
+      <v-tooltip left>
+        <template slot="activator">
+          <v-btn fixed dark fab large bottom right color="green" @click="goToCreateOrder()">
+            <v-icon>add</v-icon>
+          </v-btn>
+        </template>
+        <span>Create new order</span>
+      </v-tooltip>
     </LoadingView>
   </ViewWrapper>
 </template>

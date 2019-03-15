@@ -43,9 +43,14 @@
                                                 :dishes-by-category="this.dishesByCategory"/>
                 </v-layout>
 
-                <v-btn fixed dark fab large bottom right color="green" @click="goToCreateDish()">
-                  <v-icon>add</v-icon>
-                </v-btn>
+                <v-tooltip left>
+                  <template slot="activator">
+                    <v-btn fixed dark fab large bottom right color="green" @click="goToCreateDish()">
+                      <v-icon>add</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Create new dish</span>
+                </v-tooltip>
               </v-card-text>
             </v-card>
           </v-flex>
