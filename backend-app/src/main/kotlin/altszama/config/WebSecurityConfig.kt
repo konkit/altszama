@@ -26,7 +26,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
       "/", "/home", "/login*", "/signin/**", "/signup/**", "/register/**", "/static/**", "/manifest.*.json",
       "/sw.js", "/webjars/**", "/restaurantImport/**", "/restaurantImportFromPayload/**", "/auth/**", "/__webpack_hmr",
       "/static2/index.html", "/static/index.html", "/index.html", "/service-worker.js", "/notification/**",
-      "/custom-service-worker.js", "/app.js"
+      "/custom-service-worker.js", "/app.js", "/favicon.ico"
     )
 
     httpSecurity

@@ -26,7 +26,7 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn color="primary" @click="submitForm">Create</v-btn>
+              <v-btn block color="success" @click="submitForm">Create</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>

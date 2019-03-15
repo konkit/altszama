@@ -18,7 +18,7 @@
 
               </v-card-text>
               <v-card-actions>
-                <v-btn color="primary" @click="submitForm">Update</v-btn>
+                <v-btn block color="success" @click="submitForm">Update</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>

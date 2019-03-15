@@ -22,7 +22,7 @@
                 <v-layout column>
                   <p><b>Rating: </b> {{this.restaurant.rating}} </p>
                   <p><b>Address : </b> {{this.restaurant.address}} </p>
-                  <p><b>URL : </b> {{this.restaurant.url}} </p>
+                  <p><b>URL : </b> <a :href="this.restaurant.url">{{this.restaurant.url}}</a></p>
                   <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
                   <p><b>Last auto-updated:</b> {{ dateToRel(this.restaurant.lastCrawled) }} </p>
                   <p><b>Last updated manually:</b> {{ dateToRel(this.restaurant.lastEdited) }} </p>

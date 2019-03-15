@@ -148,27 +148,27 @@
       </simple-card>
 
       <simple-card>
-        <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
-          <div class="row">
-            <div class="user-name-col username pa-2">
-              <div class="username-wrapper">
-                {{username}}
-              </div>
-            </div>
+        <!--<template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">-->
+          <!--<div class="row">-->
+            <!--<div class="user-name-col username pa-2">-->
+              <!--<div class="username-wrapper">-->
+                <!--{{username}}-->
+              <!--</div>-->
+            <!--</div>-->
 
-            <div class="user-order-col">
-              <template v-if="isEntryCreating === false">
-                <v-btn color="success" @click="createEntry()">
-                  Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                </v-btn>
-              </template>
+            <!--<div class="user-order-col">-->
+              <!--<template v-if="isEntryCreating === false">-->
+                <!--<v-btn color="success" @click="createEntry()">-->
+                  <!--Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>-->
+                <!--</v-btn>-->
+              <!--</template>-->
 
-              <template v-if="isEntryCreating === true">
-                <create-order-entry></create-order-entry>
-              </template>
-            </div>
-          </div>
-        </template>
+              <!--<template v-if="isEntryCreating === true">-->
+                <!--<create-order-entry></create-order-entry>-->
+              <!--</template>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</template>-->
 
         <template v-for="(orderEntry, entryId) in this.orderEntries">
           <div class="row" :key="entryId">
@@ -255,6 +255,28 @@
             </div>
           </div>
           <div class="bottom-space"></div>
+        </template>
+
+        <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
+          <div class="row">
+            <div class="user-name-col username pa-2">
+              <div class="username-wrapper">
+                {{username}}
+              </div>
+            </div>
+
+            <div class="user-order-col">
+              <template v-if="isEntryCreating === false">
+                <v-btn color="success" @click="createEntry()">
+                  Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                </v-btn>
+              </template>
+
+              <template v-if="isEntryCreating === true">
+                <create-order-entry></create-order-entry>
+              </template>
+            </div>
+          </div>
         </template>
       </simple-card>
     </LoadingView>
