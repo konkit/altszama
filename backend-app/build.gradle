@@ -117,27 +117,29 @@ tasks {
     args = ["install"]
   }
 
-  task "copyVueToBuild"(type: Copy) {
-    dependsOn()
-    from("../vue-app/dist")
-    into("build/resources/main/public")
-  }
-
-  task "copyVueToOut"(type: Copy) {
-    dependsOn()
-    from("../vue-app/dist")
-    into("out/production/resources/public/")
-  }
-
   task "vueRunBuild"(type: NpmTask) {
     dependsOn(vueNpmInstall)
     setWorkingDir(file("../vue-app/"))
 
     if (project.hasProperty("staging")) {
       args = ["run", "build-staging"]
+    } else if (project.hasProperty("development")) {
+      args = ["run", "build-dev"]
     } else {
       args = ["run", "build"]
     }
+  }
+
+  task "copyVueToBuild"(type: Copy) {
+    dependsOn(vueRunBuild)
+    from("../vue-app/dist")
+    into("build/resources/main/public")
+  }
+
+  task "copyVueToOut"(type: Copy) {
+    dependsOn(vueRunBuild)
+    from("../vue-app/dist")
+    into("out/production/resources/public/")
   }
 
   task("vueProd") {

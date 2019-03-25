@@ -6,7 +6,7 @@
 
       <back-button v-if="shouldDisplayBackButton()" :href="backpath"></back-button>
 
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title>{{ titleText() }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -39,6 +39,13 @@
     components: {BackButton},
     props: ['title', 'backpath'],
     methods: {
+      titleText() {
+        if (this.loading) {
+          return "Loading ..."
+        } else {
+          return this.title;
+        }
+      },
       shouldDisplayHamburger() {
         return !this.backpath;
       },

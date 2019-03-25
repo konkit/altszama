@@ -63,7 +63,7 @@
                   :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
                   :basePriceSum="this.baseOrderPrice"
                   :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
-                  :allEatingPeopleCount="this.orderEntries.flatMap(e => e.dishEntries).length"
+                  :allEatingPeopleCount="allEatingPeopleCount()"
                   :totalPrice="this.totalOrderPrice"
               >
               </price-summary>
@@ -293,6 +293,7 @@
   import PriceSummary from "./components/PriceSummary";
   import SimpleCard from "../commons/SimpleCard";
   import ViewWrapper from "../commons/ViewWrapper";
+  import CustomPolyfills from "../../lib/CustomPolyfills";
 
   export default {
     data() {
@@ -305,11 +306,7 @@
     },
     methods: {
       title() {
-        if (this.loading) {
-          return "Loading order ..."
-        } else {
-          return `[${this.order.orderState}] Order from ${this.order.restaurantName} (${this.order.orderDate})`
-        }
+        return `[${this.order.orderState}] Order from ${this.order.restaurantName} (${this.order.orderDate})`
       },
       fetchOrder() {
         this.$store.commit('setLoadingTrue');
@@ -435,6 +432,9 @@
       },
       isPlaceOrderButtonDisabled() {
         return this.orderEntries.length === 0
+      },
+      allEatingPeopleCount() {
+        return CustomPolyfills.flatMap(this.orderEntries, e => e.dishEntries).length;
       }
     },
     computed: {

@@ -70,6 +70,7 @@
   import Spinner from '../../commons/Spinner.vue'
   import Price from '../../commons/PriceElement.vue'
   import moment from "moment"
+  import CustomPolyfills from "../../../lib/CustomPolyfills"
 
   import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
@@ -127,9 +128,10 @@
         "chosenSideDishes",
       ]),
       allDishesAtOnce() {
-        return this.allDishesByCategory.flatMap(categoryData => {
-          let dishes = categoryData.dishes.flatMap(dish => {
-            var price = (dish.price / 100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+        return CustomPolyfills.flatMap(this.allDishesByCategory, categoryData => {
+          let dishes = CustomPolyfills.flatMap(categoryData.dishes, dish => {
+            const price = (dish.price / 100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+
             let updateDesc = "";
             if (dish.lastCrawled) {
               updateDesc = `auto-updated ${dateToRel(dish.lastCrawled)}`
