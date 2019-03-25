@@ -1,7 +1,7 @@
 <template>
   <ViewWrapper :title="title()" backpath="#/orders/">
     <template slot="toolbar-buttons">
-      <template v-if="isOrderOwner()">
+      <template v-if="!loading && isOrderOwner()">
         <v-btn @click="edit">
           <i class="fa fa-cog" aria-hidden="true"></i>
         </v-btn>
@@ -148,28 +148,6 @@
       </simple-card>
 
       <simple-card>
-        <!--<template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">-->
-          <!--<div class="row">-->
-            <!--<div class="user-name-col username pa-2">-->
-              <!--<div class="username-wrapper">-->
-                <!--{{username}}-->
-              <!--</div>-->
-            <!--</div>-->
-
-            <!--<div class="user-order-col">-->
-              <!--<template v-if="isEntryCreating === false">-->
-                <!--<v-btn color="success" @click="createEntry()">-->
-                  <!--Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</v-btn>-->
-              <!--</template>-->
-
-              <!--<template v-if="isEntryCreating === true">-->
-                <!--<create-order-entry></create-order-entry>-->
-              <!--</template>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</template>-->
-
         <template v-for="(orderEntry, entryId) in this.orderEntries">
           <div class="row" :key="entryId">
             <div class="user-name-col username pa-2">
@@ -327,7 +305,11 @@
     },
     methods: {
       title() {
-        return `[${this.order.orderState}] Order from ${this.order.restaurantName} (${this.order.orderDate})`
+        if (this.loading) {
+          return "Loading order ..."
+        } else {
+          return `[${this.order.orderState}] Order from ${this.order.restaurantName} (${this.order.orderDate})`
+        }
       },
       fetchOrder() {
         this.$store.commit('setLoadingTrue');
@@ -477,7 +459,10 @@
         "isEntryEdited",
         "orderEntryId",
         "dishEntryId",
-      ])
+      ]),
+      loading() {
+        return this.$store.state.loading;
+      }
     },
     components: {
       ViewWrapper,
