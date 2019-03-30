@@ -55,6 +55,8 @@ export default {
         .then(response => {
           this.commit(`editRestaurant/${INIT_DATA}`, Object.assign(response, {restaurantId: restaurantId}));
           this.commit('setLoadingFalse')
+
+          document.title = `Edit restaurant ${context.state.name} | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

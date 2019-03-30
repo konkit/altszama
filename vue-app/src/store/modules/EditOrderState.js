@@ -95,6 +95,8 @@ export default {
 
           this.commit(`editOrder/${INIT_DATA}`, responseWithOrderId);
           this.commit('setLoadingFalse')
+
+          document.title = `Edit order from ${context.state.restaurantName} | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

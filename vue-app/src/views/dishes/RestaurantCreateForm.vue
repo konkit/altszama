@@ -35,7 +35,8 @@
     UPDATE_RATING,
     UPDATE_TELEPHONE,
     UPDATE_ADDRESS,
-    SAVE_RESTAURANT_ACTION
+    SAVE_RESTAURANT_ACTION,
+    INIT_CREATE_RESTAURANT_ACTION
   } from "../../store/modules/CreateRestaurantState"
   import ViewWrapper from "../commons/ViewWrapper";
 
@@ -60,6 +61,9 @@
       updateAddress(newValue) {
         this.$store.commit(`createRestaurant/${UPDATE_ADDRESS}`, newValue);
       },
+    },
+    mounted() {
+      this.$store.dispatch(`createRestaurant/${INIT_CREATE_RESTAURANT_ACTION}`);
     },
     computed: {
       ...mapState('createRestaurant', [

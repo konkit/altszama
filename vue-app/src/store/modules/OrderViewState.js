@@ -47,6 +47,8 @@ export default {
           state.totalPrice = responseObj.totalPrice;
 
           this.commit('setLoadingFalse')
+
+          document.title = `Ordering from ${state.restaurantName} | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

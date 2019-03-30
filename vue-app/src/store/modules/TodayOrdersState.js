@@ -23,11 +23,12 @@ export default {
     }
   },
   actions: {
-    [FETCH_TODAY_ORDERS_ACTION] ({state}, payload) {
+    [FETCH_TODAY_ORDERS_ACTION] () {
       OrdersApiConnector.fetchTodaysOrders()
         .then(todayOrdersData => {
           this.commit(`todayOrders/${SET_TODAY_ORDERS_LIST}`, todayOrdersData);
           this.commit('setLoadingFalse');
+          document.title = `Today orders | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

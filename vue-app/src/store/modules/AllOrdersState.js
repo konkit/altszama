@@ -19,7 +19,9 @@ export default {
       OrdersApiConnector.fetchAllOrders()
         .then(allOrdersList => {
           this.commit(`allOrders/${SET_ALL_ORDERS_LIST}`, allOrdersList);
-          this.commit('setLoadingFalse')
+          this.commit('setLoadingFalse');
+
+          document.title = `All orders | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }

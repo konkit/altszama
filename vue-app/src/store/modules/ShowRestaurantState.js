@@ -26,7 +26,9 @@ export default {
       DishesApiConnector.getShowRestaurantData(restaurantId)
         .then(response => {
           this.commit(`showRestaurant/${INIT_RESTAURANT_DATA}`, response);
-          this.commit('setLoadingFalse')
+          this.commit('setLoadingFalse');
+
+          document.title = `Restaurant ${context.state.restaurant.name} | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

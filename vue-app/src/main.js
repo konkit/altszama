@@ -11,6 +11,11 @@ import './plugins/vuetify'
 Vue.use(VueResource);
 Vue.use(VueNumeric);
 
+router.beforeEach((to, from, next) => {
+  document.title = "Alt Szama";
+  next()
+});
+
 // CSS libs
 import 'font-awesome/css/font-awesome.css';
 import './assets/main-styles.css'

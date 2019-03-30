@@ -39,7 +39,10 @@ export default {
   actions: {
     [INIT_ACTION] (context, {restaurantId}) {
       DishesApiConnector.getDishCreateData(restaurantId)
-        .then(response => this.commit(`createDish/${INIT_DATA}`, Object.assign(response.data, {restaurantId: restaurantId})))
+        .then(response => {
+          this.commit(`createDish/${INIT_DATA}`, Object.assign(response.data, {restaurantId: restaurantId}))
+          document.title = `Create new dish | Alt Szama`
+        })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [SAVE_DISH_ACTION] ({state}, {sideDishes, backUrl}) {

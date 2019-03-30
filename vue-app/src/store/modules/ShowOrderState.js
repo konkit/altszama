@@ -56,6 +56,7 @@ export default {
         .then(showOrderData => {
           this.commit(`${NAMESPACE_SHOW_ORDER}/${LOAD_SHOW_ORDER_DATA}`, showOrderData);
           this.commit('setLoadingFalse')
+          document.title = `Order from ${state.order.restaurantName} (${state.order.orderDate}) | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

@@ -51,6 +51,8 @@ export default {
         .then(dishData => {
           this.commit(`editDish/${INIT_DATA}`, Object.assign(dishData, {restaurantId: restaurantId, dishId: dishId}));
           this.commit('setLoadingFalse')
+
+          document.title = `Edit dish | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

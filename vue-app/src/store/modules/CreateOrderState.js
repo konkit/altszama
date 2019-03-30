@@ -91,6 +91,7 @@ export default {
         .then(response => {
           this.commit(`createOrder/${INIT_DATA}`, response);
           this.commit('setLoadingFalse')
+          document.title = `Create new order | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

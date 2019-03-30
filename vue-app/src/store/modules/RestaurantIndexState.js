@@ -22,6 +22,8 @@ export default {
         .then(response => {
           this.commit(`restaurantIndex/${LOAD_RESTAURANTS}`, response);
           this.commit('setLoadingFalse')
+
+          document.title = `Restaurants | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }

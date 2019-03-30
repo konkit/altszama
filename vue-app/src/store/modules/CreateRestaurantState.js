@@ -1,4 +1,3 @@
-import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 
@@ -8,6 +7,7 @@ export const UPDATE_RATING = "UPDATE_RATING";
 export const UPDATE_TELEPHONE = "UPDATE_TELEPHONE";
 export const UPDATE_ADDRESS = "UPDATE_ADDRESS";
 
+export const INIT_CREATE_RESTAURANT_ACTION = "INIT_CREATE_RESTAURANT_ACTION";
 export const SAVE_RESTAURANT_ACTION = "SAVE_RESTAURANT_ACTION";
 
 export default {
@@ -38,6 +38,9 @@ export default {
     },
   },
   actions: {
+    [INIT_CREATE_RESTAURANT_ACTION] () {
+        document.title = `Create restaurant | Alt Szama`
+    },
     [SAVE_RESTAURANT_ACTION] ({state}) {
       const restaurant = {
         name: state.name,
