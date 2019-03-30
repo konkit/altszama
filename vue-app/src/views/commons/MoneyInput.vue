@@ -72,17 +72,29 @@
       return 0;
     }
 
-    let str = a.split(",")
+    let str = a.split(",");
 
-    if (str.length == 0) {
+    if (str.length === 0) {
       return 0;
     }
 
-    if (str.length == 1) {
+    if (str.length === 1) {
       return parseInt(str[0]) * 100
     }
 
-    return parseInt(str[0].trim()) * 100 + parseInt(str[1].trim().substr(0, 2));
+    const wholePart = parseInt(str[0].trim() * 100);
+
+    const fractionPartString = str[1].trim();
+    let fractionPart = 0;
+    if (fractionPartString.length === 0) {
+      fractionPart = 0;
+    } else if (fractionPartString.length === 1) {
+      fractionPart = parseInt(fractionPartString) * 10
+    } else {
+      fractionPart = parseInt(str[1].trim().substr(0, 2));
+    }
+
+    return wholePart + fractionPart;
   }
 </script>
 
