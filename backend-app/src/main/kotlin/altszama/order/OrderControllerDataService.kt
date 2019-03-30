@@ -6,6 +6,7 @@ import altszama.order.dto.*
 import altszama.orderEntry.OrderEntryRepository
 import altszama.orderEntry.OrderEntryService
 import altszama.restaurant.RestaurantRepository
+import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.PathVariable
@@ -72,7 +73,15 @@ class OrderControllerDataService {
   }
 
   fun getCreateData(): CreateResponse {
-    return CreateResponse(restaurantRepository.findAll())
+    val currentUser = authService.currentUser()
+
+    val ordersByUser: List<Order> = orderRepository.findTop10ByOrderCreatorOrderByOrderDateDesc(currentUser)
+    val lastOrderMade: Order? = ordersByUser.sortedByDescending { order -> ObjectId(order.id).timestamp }.firstOrNull()
+
+    val blikPhoneNumber = lastOrderMade?.blikPhoneNumber ?: ""
+    val bankTransferNumber = lastOrderMade?.bankTransferNumber ?: ""
+
+    return CreateResponse(restaurantRepository.findAll(), blikPhoneNumber = blikPhoneNumber, bankTransferNumber = bankTransferNumber)
   }
 
   fun getEditData(@PathVariable orderId: String): EditResponse {

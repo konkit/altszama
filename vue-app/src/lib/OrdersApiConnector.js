@@ -106,6 +106,20 @@ export default {
             restaurantId = response.data.restaurantsList[0].id;
           }
 
+          let bankTransferNumber = "";
+          let paymentByBankTransfer = false;
+          if (response.data.bankTransferNumber) {
+            paymentByBankTransfer = true;
+            bankTransferNumber = response.data.bankTransferNumber;
+          }
+
+          let blikPhoneNumber = "";
+          let paymentByBlik = false;
+          if (response.data.blikPhoneNumber) {
+            paymentByBlik = true;
+            blikPhoneNumber = response.data.blikPhoneNumber;
+          }
+
           return {
             restaurantsList: response.data.restaurantsList,
             order: {
@@ -117,10 +131,10 @@ export default {
               deliveryCostPerEverybody: 0,
               deliveryCostPerDish: 0,
               paymentByCash: true,
-              paymentByBankTransfer: false,
-              bankTransferNumber: '',
-              paymentByBlik: false,
-              blikPhoneNumber: ''
+              paymentByBankTransfer: paymentByBankTransfer,
+              bankTransferNumber: bankTransferNumber,
+              paymentByBlik: paymentByBlik,
+              blikPhoneNumber: blikPhoneNumber
             }
           }
         });
