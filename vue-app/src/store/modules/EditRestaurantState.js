@@ -62,6 +62,7 @@ export default {
     },
     [UPDATE_RESTAURANT_ACTION] ({state}) {
       const restaurant = {
+        id: state.restaurantId,
         name: state.name,
         url: state.url,
         rating: state.rating,
