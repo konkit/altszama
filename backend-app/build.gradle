@@ -142,10 +142,49 @@ tasks {
     into("out/production/resources/public/")
   }
 
+  tasks.register("setBuildVersion") {
+    setGroup("version")
+
+    doLast {
+      def versionPropsFile = file('version.properties')
+
+      if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        version = "${versionProps['VERSION_MAJOR']}.${versionProps['VERSION_MINOR']}.${versionProps['VERSION_PATCH']}"
+      } else {
+        throw new GradleException("Could not read version.properties!")
+      }
+    }
+  }
+
+  tasks.register("incrementBuildVersion") {
+    setGroup("version")
+
+    doLast {
+      def versionPropsFile = file('version.properties')
+
+      if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def code = versionProps['VERSION_PATCH'].toInteger() + 1
+
+        versionProps['VERSION_PATCH'] = code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+      } else {
+        throw new GradleException("Could not read version.properties!")
+      }
+    }
+  }
+
   task("vueProd") {
     setGroup("altszama")
 
-    dependsOn(vueRunBuild, copyVueToBuild, copyVueToOut) // .onlyIf { !project.hasProperty('staging') }
+    dependsOn(setBuildVersion, vueRunBuild, copyVueToBuild, copyVueToOut) // .onlyIf { !project.hasProperty('staging') }
   }
 
   "processResources" {

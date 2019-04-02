@@ -54,7 +54,7 @@ export default {
       DishesApiConnector.getRestaurantEditData(restaurantId)
         .then(response => {
           this.commit(`editRestaurant/${INIT_DATA}`, Object.assign(response, {restaurantId: restaurantId}));
-          this.commit('setLoadingFalse')
+          this.commit('setLoadingFalse');
 
           document.title = `Edit restaurant ${context.state.name} | Alt Szama`
         })
