@@ -140,8 +140,8 @@
 
         return false
       },
-      updateApproxTimeOfDelivery() {
-        this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`)
+      updateApproxTimeOfDelivery(newValue) {
+        this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`, newValue)
       }
     },
     computed: {

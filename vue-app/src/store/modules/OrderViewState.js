@@ -27,7 +27,7 @@ export default {
       state.allOrdersList = newValue
     },
     [UPDATE_APPROX_TIME_OF_DELIVERY] (state, newValue) {
-      state.allOrdersList = newValue
+      state.approxTimeOfDelivery = newValue
     }
   },
   actions: {
