@@ -52,8 +52,16 @@ class RestaurantImportService {
 
         val sideDishes = getUpdatedSideDishes(dishData, dish)
 
+        val parsedPrice = priceStringToCents(dishData.price)
+
+        val newPrice = if (parsedPrice == 0 && dish.price != 0) {
+          dish.price
+        } else {
+          parsedPrice
+        }
+
         val updatedDish = dish.copy(
-            price = priceStringToCents(dishData.price),
+            price = newPrice,
             sideDishes = sideDishes,
             lastCrawled = now
         )
