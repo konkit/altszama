@@ -36,6 +36,7 @@
             placeholder="New dish name"
             id="newDishName"
             :value="newDishName"
+            class="pr-2"
             @input="updateNewDishName($event)">
         </v-text-field>
 
