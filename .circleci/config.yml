@@ -56,6 +56,9 @@ jobs:
     machine:
       enabled: true
     steps:
+    - run:
+        name: debug info
+        command: pwd && ls -lR .
     - add_ssh_keys
     - run:
         name: known_hosts sadness
