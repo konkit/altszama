@@ -37,7 +37,7 @@ jobs:
         name: Build JAR
         command: |
           cd ./backend-app
-          ./gradlew --PbuildVersion=$CIRCLE_WORKFLOW_ID --console=plain clean build vueProd bootJar -Pproduction
+          ./gradlew --console=plain clean build vueProd bootJar -Pproduction -PbuildVersion=$CIRCLE_WORKFLOW_ID
           cd ../
 
     - save_cache:
