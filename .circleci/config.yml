@@ -54,9 +54,11 @@ jobs:
         path: backend-app/build/libs
 
     - add_ssh_keys
+
     - run:
         name: known_hosts sadness
         command: ssh-keyscan -H $SITE_SSH_HOST >> ~/.ssh/known_hosts
+
     - run:
         name: scp files
         command: scp -r backend-app/build/libs "$SITE_SSH_USER@$SITE_SSH_HOST:/var/app/altszama/releases/"
