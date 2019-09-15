@@ -43,6 +43,10 @@ compileTestKotlin {
   }
 }
 
+node {
+  download = true
+}
+
 jar {
   manifest {
     attributes "Main-Class": "altszama.ApplicationKt"

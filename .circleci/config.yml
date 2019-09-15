@@ -7,7 +7,6 @@ jobs:
 
     docker:
     - image: circleci/openjdk:8u212-stretch
-    - image: circleci/node:9.9.0
 
     steps:
     - checkout
@@ -37,7 +36,10 @@ jobs:
     - run:
         name: Build JAR
         command: |
-          cd ./backend-app/ && ./gradlew --debug clean build vueProd bootJar
+          cd app/backend-app
+          ./gradlew incrementBuildVersion
+          ./gradlew --console=plain --rerun-tasks clean build vueProd bootJar -Pproduction
+          cd ../../
 
     - save_cache:
         paths:
