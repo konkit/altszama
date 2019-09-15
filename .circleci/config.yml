@@ -54,17 +54,39 @@ jobs:
         path: backend-app/build/libs
 
     - add_ssh_keys
+    - run:
+        name: known_hosts sadness
+        command: ssh-keyscan -H $SITE_SSH_HOST >> ~/.ssh/known_hosts
+    - run:
+        name: scp files
+        command: scp -r backend-app/build/libs "$SITE_SSH_USER@$SITE_SSH_HOST:/var/app/altszama/releases/"
+  deploy:
+    machine:
+      enabled: true
+    steps:
+    - add_ssh_keys
 
     - run:
         name: known_hosts sadness
         command: ssh-keyscan -H $SITE_SSH_HOST >> ~/.ssh/known_hosts
 
     - run:
-        name: scp files
-        command: scp -r backend-app/build/libs "$SITE_SSH_USER@$SITE_SSH_HOST:/var/app/altszama/releases/"
+        name: Replace linked jar to run
+        command: |
+          ssh $SITE_SSH_USER@$SITE_SSH_HOST "cd /var/app/altszama && rm altszama.jar && ln -s releases/libs/altszama-$CIRCLE_WORKFLOW_ID.jar altszama.jar && ls -al"
 
+    - run:
+        name: Restart app
+        command: |
+          ssh $SITE_SSH_USER@$SITE_SSH_HOST "$RESTART_APP_COMMAND"
 workflows:
   version: 2
-  build:
+  build-and-deploy:
     jobs:
     - build
+    - deploy:
+        requires:
+        - build
+        filters:
+          branches:
+            only: master
