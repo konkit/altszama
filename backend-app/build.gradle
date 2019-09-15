@@ -151,37 +151,20 @@ tasks {
     setGroup("version")
 
     doLast {
-      def versionPropsFile = file('version.properties')
-
-      if (versionPropsFile.canRead()) {
-        Properties versionProps = new Properties()
-
-        versionProps.load(new FileInputStream(versionPropsFile))
-
-        version = "${versionProps['VERSION_MAJOR']}.${versionProps['VERSION_MINOR']}.${versionProps['VERSION_PATCH']}"
+      if (project.hasProperty('buildVersion')) {
+        project.version = project.buildVersion
       } else {
-        throw new GradleException("Could not read version.properties!")
-      }
-    }
-  }
+        def versionPropsFile = file('version.properties')
 
-  tasks.register("incrementBuildVersion") {
-    setGroup("version")
+        if (versionPropsFile.canRead()) {
+          Properties versionProps = new Properties()
 
-    doLast {
-      def versionPropsFile = file('version.properties')
+          versionProps.load(new FileInputStream(versionPropsFile))
 
-      if (versionPropsFile.canRead()) {
-        Properties versionProps = new Properties()
-
-        versionProps.load(new FileInputStream(versionPropsFile))
-
-        def code = versionProps['VERSION_PATCH'].toInteger() + 1
-
-        versionProps['VERSION_PATCH'] = code.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
-      } else {
-        throw new GradleException("Could not read version.properties!")
+          version = "${versionProps['VERSION_MAJOR']}.${versionProps['VERSION_MINOR']}.${versionProps['VERSION_PATCH']}"
+        } else {
+          throw new GradleException("Could not read version.properties!")
+        }
       }
     }
   }

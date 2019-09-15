@@ -37,8 +37,7 @@ jobs:
         name: Build JAR
         command: |
           cd ./backend-app
-          ./gradlew incrementBuildVersion
-          ./gradlew --console=plain --rerun-tasks clean build vueProd bootJar -Pproduction
+          ./gradlew --PbuildVersion=$CIRCLE_WORKFLOW_ID --console=plain clean build vueProd bootJar -Pproduction
           cd ../
 
     - save_cache:
@@ -53,8 +52,25 @@ jobs:
 
     - store_artifacts:
         path: backend-app/build/libs
+  deploy:
+    machine:
+      enabled: true
+    steps:
+    - add_ssh_keys
+    - run:
+        name: known_hosts sadness
+        command: ssh-keyscan -H $SITE_SSH_HOST >> ~/.ssh/known_hosts
+    - run:
+        name: scp files
+        command: scp -r backend-app/build/libs "$SITE_SSH_USER@$SITE_SSH_HOST:/var/app/altszama/releases/"
 workflows:
   version: 2
-  workflow:
+  build-and-deploy:
     jobs:
     - build
+    - deploy:
+        requires:
+        - build
+        filters:
+          branches:
+            only: master
