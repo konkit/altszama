@@ -52,13 +52,7 @@ jobs:
 
     - store_artifacts:
         path: backend-app/build/libs
-  deploy:
-    machine:
-      enabled: true
-    steps:
-    - run:
-        name: debug info
-        command: pwd && ls -lR .
+
     - add_ssh_keys
     - run:
         name: known_hosts sadness
@@ -66,14 +60,9 @@ jobs:
     - run:
         name: scp files
         command: scp -r backend-app/build/libs "$SITE_SSH_USER@$SITE_SSH_HOST:/var/app/altszama/releases/"
+
 workflows:
   version: 2
-  build-and-deploy:
+  build:
     jobs:
     - build
-    - deploy:
-        requires:
-        - build
-        filters:
-          branches:
-            only: master
