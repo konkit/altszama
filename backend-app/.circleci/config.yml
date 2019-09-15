@@ -1,0 +1,57 @@
+version: 2
+jobs:
+  build:
+    environment:
+      _JAVA_OPTIONS: "-Xmx3g"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+
+    docker:
+    - image: circleci/openjdk:11.0.3-jdk-stretch
+
+    steps:
+    - checkout
+
+    - restore_cache:
+        key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+    - restore_cache:
+        key: v1-gradle-cache-{{ checksum "build.gradle" }}
+
+    - run:
+        name: Fill application-production.properties
+        command: |
+          echo "altszama.gcmServerKey=$GCM_SERVER_KEY" > app/backend-app/src/main/resources/application-production.properties
+          echo "altszama.databaseName=$DATABASE_NAME" >> app/backend-app/src/main/resources/application-production.properties
+          echo "altszama.googleClientId=$GOOGLE_CLIENT_ID" >> app/backend-app/src/main/resources/application-production.properties
+          echo "altszama.googleClientSecret=$GOOGLE_CLIENT_SECRET" >> app/backend-app/src/main/resources/application-production.properties
+
+    - run:
+        name: Fill .env.production.local
+        command: |
+          echo "VUE_APP_BACKEND_URL=$VUE_APP_BACKEND_URL" > app/vue-app/.env.production.local
+          echo "VUE_APP_GCM_SENDER_ID=$VUE_APP_GCM_SENDER_ID" >> app/vue-app/.env.production.local
+          echo "VUE_APP_GOOGLE_CLIENT_ID=$VUE_APP_GOOGLE_CLIENT_ID" >> app/vue-app/.env.production.local
+          echo "VUE_APP_SENTRY_URL=$VUE_APP_SENTRY_URL" >> app/vue-app/.env.production.local
+
+    - run:
+        name: Build JAR
+        command: |
+          ./gradlew clean build vueProd bootJar
+
+    - save_cache:
+        paths:
+        - ~/.gradle/wrapper
+        key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+    - save_cache:
+        paths:
+        - ~/.gradle/caches
+        key: v1-gradle-cache-{{ checksum "build.gradle" }}
+
+    - store_artifacts:
+        path: build/libs
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - build
