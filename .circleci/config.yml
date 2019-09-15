@@ -20,20 +20,20 @@ jobs:
     - run:
         name: Fill application-production.properties
         command: |
-          touch app/backend-app/src/main/resources/application-production.properties
-          echo "altszama.gcmServerKey=$GCM_SERVER_KEY" > app/backend-app/src/main/resources/application-production.properties
-          echo "altszama.databaseName=$DATABASE_NAME" >> app/backend-app/src/main/resources/application-production.properties
-          echo "altszama.googleClientId=$GOOGLE_CLIENT_ID" >> app/backend-app/src/main/resources/application-production.properties
-          echo "altszama.googleClientSecret=$GOOGLE_CLIENT_SECRET" >> app/backend-app/src/main/resources/application-production.properties
+          touch ./app/backend-app/src/main/resources/application-production.properties
+          echo "altszama.gcmServerKey=$GCM_SERVER_KEY" > ./app/backend-app/src/main/resources/application-production.properties
+          echo "altszama.databaseName=$DATABASE_NAME" >> ./app/backend-app/src/main/resources/application-production.properties
+          echo "altszama.googleClientId=$GOOGLE_CLIENT_ID" >> ./app/backend-app/src/main/resources/application-production.properties
+          echo "altszama.googleClientSecret=$GOOGLE_CLIENT_SECRET" >> ./app/backend-app/src/main/resources/application-production.properties
 
     - run:
         name: Fill .env.production.local
         command: |
-          touch app/vue-app/.env.production.local
-          echo "VUE_APP_BACKEND_URL=$VUE_APP_BACKEND_URL" > app/vue-app/.env.production.local
-          echo "VUE_APP_GCM_SENDER_ID=$VUE_APP_GCM_SENDER_ID" >> app/vue-app/.env.production.local
-          echo "VUE_APP_GOOGLE_CLIENT_ID=$VUE_APP_GOOGLE_CLIENT_ID" >> app/vue-app/.env.production.local
-          echo "VUE_APP_SENTRY_URL=$VUE_APP_SENTRY_URL" >> app/vue-app/.env.production.local
+          touch ./app/vue-app/.env.production.local
+          echo "VUE_APP_BACKEND_URL=$VUE_APP_BACKEND_URL" > ./app/vue-app/.env.production.local
+          echo "VUE_APP_GCM_SENDER_ID=$VUE_APP_GCM_SENDER_ID" >> ./app/vue-app/.env.production.local
+          echo "VUE_APP_GOOGLE_CLIENT_ID=$VUE_APP_GOOGLE_CLIENT_ID" >> ./app/vue-app/.env.production.local
+          echo "VUE_APP_SENTRY_URL=$VUE_APP_SENTRY_URL" >> ./app/vue-app/.env.production.local
 
     - run:
         name: Build JAR
