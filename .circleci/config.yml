@@ -36,7 +36,7 @@ jobs:
     - run:
         name: Build JAR
         command: |
-          ./gradlew clean build vueProd bootJar
+          ./backend-app/gradlew clean build vueProd bootJar
 
     - save_cache:
         paths:
