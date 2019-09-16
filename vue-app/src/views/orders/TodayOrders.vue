@@ -9,16 +9,16 @@
             <template v-for="orderEntry in currentOrderEntries">
               <template v-for="dishEntry in orderEntry.dishEntries">
 
-                <v-list-tile @click="goToOrder(orderEntry.orderId)">
-                  <v-list-tile-content :key="dishEntry.id">
-                    <v-list-tile-title class="pointer">
+                <v-list-item @click="goToOrder(orderEntry.orderId)">
+                  <v-list-item-content :key="dishEntry.id">
+                    <v-list-item-title class="pointer">
                       <b>{{dishEntry.dish.name}}</b>
                       from
                       <b>{{dishEntry.restaurantName}}</b>
                       (STATUS: {{orderEntry.orderState}})
-                    </v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
 
               </template>
             </template>
@@ -38,21 +38,21 @@
           <v-subheader>Not ordered yet ({{ this.createdOrders.length }})</v-subheader>
 
           <div v-if="this.createdOrders.length > 0">
-            <v-list-tile @click="goToOrder(order.id)" v-for="order in this.createdOrders">
-              <v-list-tile-content>
-                <v-list-tile-title class="pointer">
+            <v-list-item @click="goToOrder(order.id)" v-for="order in this.createdOrders">
+              <v-list-item-content>
+                <v-list-item-title class="pointer">
                   <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </div>
 
           <div v-else>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>No orders</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>No orders</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </div>
 
           <v-divider :inset="false"></v-divider>
@@ -60,21 +60,21 @@
           <v-subheader>Ordering right now ({{ this.orderingOrders.length }})</v-subheader>
 
           <div v-if="this.orderingOrders.length > 0">
-            <v-list-tile @click="goToOrder(order.id)" v-for="order in this.orderingOrders">
-              <v-list-tile-content>
-                <v-list-tile-title class="pointer">
+            <v-list-item @click="goToOrder(order.id)" v-for="order in this.orderingOrders">
+              <v-list-item-content>
+                <v-list-item-title class="pointer">
                   <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </div>
 
           <div v-else>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>No orders</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>No orders</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </div>
 
           <v-divider :inset="false"></v-divider>
@@ -82,21 +82,21 @@
           <v-subheader>Ordered ({{ this.orderedOrders.length }})</v-subheader>
 
           <div v-if="this.orderedOrders.length > 0">
-            <v-list-tile @click="goToOrder(order.id)" v-for="order in this.orderedOrders">
-              <v-list-tile-content>
-                <v-list-tile-title class="pointer">
+            <v-list-item @click="goToOrder(order.id)" v-for="order in this.orderedOrders">
+              <v-list-item-content>
+                <v-list-item-title class="pointer">
                   <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </div>
 
           <div v-else>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>No orders</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>No orders</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </div>
 
           <v-divider :inset="false"></v-divider>
@@ -104,21 +104,21 @@
           <v-subheader>Delivered ({{ this.deliveredOrders.length }})</v-subheader>
 
           <div v-if="this.deliveredOrders.length > 0">
-            <v-list-tile @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id">
-              <v-list-tile-content>
-                <v-list-tile-title class="pointer">
+            <v-list-item @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id">
+              <v-list-item-content>
+                <v-list-item-title class="pointer">
                   <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </div>
 
           <div v-else>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>No orders</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>No orders</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </div>
         </v-list>
 

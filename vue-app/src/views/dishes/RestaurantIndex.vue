@@ -8,7 +8,7 @@
             :headers="headers"
             :loading="false"
             :pagination.sync="pagination">
-          <template slot="headers" slot-scope="props">
+          <template slot="header" slot-scope="props">
             <tr>
               <th v-for="header in props.headers" :key="header.text">
                 {{ header.text }}
@@ -16,7 +16,7 @@
             </tr>
           </template>
 
-          <template slot="items" slot-scope="props">
+          <template slot="item" slot-scope="props">
             <tr @click="goToRestaurant(props.item.id)" :key="props.item.id" :data-href="'/orders/show/' + props.item.id"
                 class="pointer">
               <td>{{ props.item.name }}</td>

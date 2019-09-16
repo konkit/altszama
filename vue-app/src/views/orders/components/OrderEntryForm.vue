@@ -16,14 +16,14 @@
 
           <template slot="item" slot-scope="data">
             <template v-if="typeof data.item !== 'object'">
-              <v-list-tile-content v-text="data.item"></v-list-tile-content>
+              <v-list-item-content v-text="data.item"></v-list-item-content>
             </template>
 
             <template v-else>
-              <v-list-tile-content>
-                <v-list-tile-title v-html="data.item.text"></v-list-tile-title>
-                <v-list-tile-sub-title v-html="data.item.subtitle"></v-list-tile-sub-title>
-              </v-list-tile-content>
+              <v-list-item-content>
+                <v-list-item-title v-html="data.item.text"></v-list-item-title>
+                <v-list-item-sub-title v-html="data.item.subtitle"></v-list-item-sub-title>
+              </v-list-item-content>
             </template>
           </template>
         </v-autocomplete>

@@ -147,16 +147,17 @@
         </v-container>
       </simple-card>
 
-      <simple-card>
-        <template v-for="(orderEntry, entryId) in this.orderEntries">
-          <div class="row" :key="entryId">
-            <div class="user-name-col username pa-2">
-              <div class="username-wrapper">
-                {{orderEntry.username}}
+      <template v-for="(orderEntry, entryId) in this.orderEntries">
+        <simple-card>
+          <div :key="entryId">
+            <div class="pa-2">
+              <div class="">
+                <b>{{orderEntry.username}}</b>
               </div>
             </div>
 
-            <div class="user-order-col">
+            <div class="">
+
               <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
                 <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
                   <div class="pa-2">
@@ -175,7 +176,8 @@
                         :order-entry="orderEntry"
                         :dish-entry="dishEntry"
                         :current-user-id="currentUserId"
-                        :key="dishEntry.id">
+                        :key="dishEntry.id"
+                        :index="dishEntryIndex + 1">
                     </order-entry>
                   </div>
 
@@ -205,7 +207,8 @@
             </div>
 
             <div class="payment-status py-2 px-3" v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
-              <template v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
+              <template
+                  v-if="(isOrderEntryOwner(orderEntry) || isOrderOwner(order)) && (order.orderState === 'ORDERED' || order.orderState === 'DELIVERED')">
                 {{paymentStatus(orderEntry)}}
               </template>
 
@@ -233,9 +236,11 @@
             </div>
           </div>
           <div class="bottom-space"></div>
-        </template>
+        </simple-card>
+      </template>
 
-        <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
+      <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
+        <simple-card>
           <div class="row">
             <div class="user-name-col username pa-2">
               <div class="username-wrapper">
@@ -255,8 +260,9 @@
               </template>
             </div>
           </div>
-        </template>
-      </simple-card>
+        </simple-card>
+      </template>
+
     </LoadingView>
   </ViewWrapper>
 </template>

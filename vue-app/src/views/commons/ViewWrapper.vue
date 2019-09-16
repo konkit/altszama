@@ -1,8 +1,8 @@
 <template>
   <div class="view-wrapper">
-    <v-toolbar app>
-      <v-toolbar-side-icon v-if="shouldDisplayHamburger()"
-                           @click.stop="toggleMasterNavDrawerOpened()"></v-toolbar-side-icon>
+    <v-app-bar app>
+      <v-app-bar-nav-icon v-if="shouldDisplayHamburger()"
+                           @click.stop="toggleMasterNavDrawerOpened()"></v-app-bar-nav-icon>
 
       <back-button v-if="shouldDisplayBackButton()" :href="backpath"></back-button>
 
@@ -13,7 +13,7 @@
       <template v-if="!loading">
         <slot name="toolbar-buttons"></slot>
       </template>
-    </v-toolbar>
+    </v-app-bar>
 
     <v-content class="view-content">
       <div class="content-class">

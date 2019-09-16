@@ -2,7 +2,7 @@
   <div>
   <div class="wrapper">
     <div class="dish-name">
-      <div class="dish-name-text">{{dishEntry.dishName }}</div>
+      <div class="dish-name-text">{{index}}. {{dishEntry.dishName }}</div>
       <div class="dish-price"> ( <price :data-price="dishEntry.price"/> )</div>
 
       <span class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
@@ -42,7 +42,7 @@
 
   export default {
     name: 'order-entry',
-    props: ['orderEntry', 'dishEntry', 'currentUserId'],
+    props: ['index', 'orderEntry', 'dishEntry', 'currentUserId'],
     methods: {
       isOrderOwner() {
         return this.order.orderCreatorId === this.currentUserId

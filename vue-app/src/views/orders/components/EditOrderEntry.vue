@@ -45,7 +45,7 @@
 
   export default {
     name: 'edit-order-entry',
-    props: ['orderEntry', 'dishEntry'],
+    props: ['index', 'orderEntry', 'dishEntry'],
     data() {
       return {}
     },
