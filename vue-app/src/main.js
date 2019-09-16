@@ -6,7 +6,7 @@ import router from './router'
 import store from './store'
 import VueResource from 'vue-resource'
 import VueNumeric from 'vue-numeric'
-import './plugins/vuetify'
+import vuetify from './plugins/vuetify';
 
 Vue.use(VueResource);
 Vue.use(VueNumeric);
@@ -60,6 +60,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  vuetify,
   template: '<App/>',
   components: { App }
 });
