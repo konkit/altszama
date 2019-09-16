@@ -2,59 +2,53 @@
   <div v-if="shouldDisplayNavigation()">
     <v-navigation-drawer app :value="masterNavDrawerOpened" @input="setMasterNavDrawerOpened($event)">
 
-      <v-toolbar flat class="transparent">
-        <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <i class="fa fa-cutlery" aria-hidden="true"></i>
-            </v-list-tile-avatar>
-
-            <v-list-tile-content>
-              Alt Szama
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
-
-      <v-divider></v-divider>
-
       <v-list>
-        <v-list-tile @click="goToPath('/orders')">
-          <v-list-tile-content>
-            <v-list-tile-title>Today's orders</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <v-list-item link>
+          <v-list-item-icon>
+            <v-icon>fa fa-cutlery</v-icon>
+          </v-list-item-icon>
 
-        <v-list-tile @click="goToPath('/all_orders')">
-          <v-list-tile-content>
-            <v-list-tile-title>All orders</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile @click="goToPath('/restaurants')">
-          <v-list-tile-content>
-            <v-list-tile-title>Restaurants and dishes</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          <v-list-item-content>
+            <v-list-item-title>Alt Szama</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
 
       <v-divider></v-divider>
 
-      <div>
-        <div>
-          <v-list>
-            <v-list-tile avatar>
-              <v-list-tile-content>
-                <v-list-tile-title><b>Hi {{this.username}}!</b></v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+      <v-list>
+        <v-list-item @click="goToPath('/orders')">
+          <v-list-item-content>
+            <v-list-item-title>Today's orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
-            <v-list-tile @click="logout">
-              <v-list-tile-title>Logout</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </div>
-      </div>
+        <v-list-item @click="goToPath('/all_orders')">
+          <v-list-item-content>
+            <v-list-item-title>All orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="goToPath('/restaurants')">
+          <v-list-item-content>
+            <v-list-item-title>Restaurants and dishes</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
+      <v-divider></v-divider>
+
+      <v-list>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title><b>Hi {{this.username}}!</b></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="logout">
+          <v-list-item-title>Logout</v-list-item-title>
+        </v-list-item>
+      </v-list>
 
     </v-navigation-drawer>
   </div>
