@@ -1,47 +1,54 @@
 <template>
   <div>
-  <div class="wrapper">
-    <div class="dish-name">
-      <div class="dish-name-text">{{index}}. {{dishEntry.dishName }}</div>
-      <div class="dish-price"> ( <price :data-price="dishEntry.price"/> )</div>
+    <div class="dish-name-and-edit-buttons">
+      <div class="dish-name-text">
+        {{ dishEntry.dishName }}
+      </div>
 
-      <span class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
-        <v-btn flat icon @click="editDishEntry()">
+      <div class="dish-price">
+        (
+          <price :data-price="dishEntry.price"/>
+        )
+      </div>
+
+      <div class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
+        <v-btn text icon @click="editDishEntry()">
           <i class="fa fa-pencil" aria-hidden="true"></i>
         </v-btn>
 
-        <v-btn flat icon @click="deleteDishEntry()">
+        <v-btn text icon @click="deleteDishEntry()">
           <i class="fa fa-times" aria-hidden="true"></i>
         </v-btn>
-      </span>
+      </div>
     </div>
-  </div>
 
-  <div class="side-dishes">
-    <p v-for="sideDish in dishEntry.sideDishes" class="side-dish-name py-2">
-      + {{sideDish.name}} ( <price :data-price="sideDish.price"/> )
-    </p>
+    <div class="side-dishes">
+      <div v-for="sideDish in dishEntry.sideDishes" class="side-dish-name py-2">
+        + {{sideDish.name}} (
+        <price :data-price="sideDish.price"/>
+        )
+      </div>
 
-    <p v-if="dishEntry.comments.length > 0" class="dish-comments py-2">
-      Additional comments: {{dishEntry.comments}}
-    </p>
-  </div>
+      <div v-if="dishEntry.comments.length > 0" class="dish-comments py-2">
+        Additional comments: {{dishEntry.comments}}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  import Price from '../../commons/PriceElement.vue'
+  import Price from '../../../commons/PriceElement.vue'
   import {
     CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
     MARK_ORDER_ENTRY_AS_PAID_ACTION,
     DELETE_DISH_ENTRY_ACTION,
     NAMESPACE_SHOW_ORDER
-  } from "../../../store/modules/ShowOrderState";
-  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../../store/modules/ModifyOrderEntryState";
+  } from "../../../../store/modules/ShowOrderState";
+  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../../../store/modules/ModifyOrderEntryState";
   import {mapState} from "vuex";
 
   export default {
-    name: 'order-entry',
+    name: 'show-order-entry',
     props: ['index', 'orderEntry', 'dishEntry', 'currentUserId'],
     methods: {
       isOrderOwner() {
@@ -98,15 +105,11 @@
 </script>
 
 <style scoped>
-  .wrapper {
+  .dish-name-and-edit-buttons {
     display: flex;
     flex-direction: row;
-  }
 
-  .dish-name {
-    display: flex;
-    flex-direction: row;
-    min-width: 0;
+    line-height: 36px;
   }
 
   .dish-name-text {
@@ -140,12 +143,10 @@
   }
 
   .edit-buttons {
-    width: 104px;
-    min-width: 104px;
-    margin-top: -15px;
+
   }
 
   .side-dishes {
     padding-left: 10px;
-   }
+  }
 </style>

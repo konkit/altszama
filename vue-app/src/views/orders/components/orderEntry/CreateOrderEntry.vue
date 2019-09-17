@@ -9,7 +9,7 @@
         <v-spacer></v-spacer>
 
         <v-btn color="success" @click="submitForm">
-          Save order
+          Submit
         </v-btn>
 
         <v-btn @click="cancelEdit()">
@@ -28,13 +28,13 @@
 </template>
 
 <script>
-  import ErrorsComponent from '../../commons/Errors.vue'
-  import Spinner from '../../commons/Spinner.vue'
-  import Price from '../../commons/PriceElement.vue'
+  import ErrorsComponent from '../../../commons/Errors.vue'
+  import Spinner from '../../../commons/Spinner.vue'
+  import Price from '../../../commons/PriceElement.vue'
 
   import OrderEntryForm from './OrderEntryForm.vue'
-  import SideDishesInput from './SideDishesInput.vue'
-  import {NAMESPACE_SHOW_ORDER} from "../../../store/modules/ShowOrderState";
+  import SideDishesInput from '../SideDishesInput.vue'
+  import {NAMESPACE_SHOW_ORDER} from "../../../../store/modules/ShowOrderState";
   import {
     NAMESPACE_MODIFY_ORDER_ENTRY,
     CANCEL_DISH_ENTRY_MODIFICATION,
@@ -42,7 +42,7 @@
     SETUP_CREATE_ORDER_ENTRY_ACTION,
     SET_ENTRY_LOADING_FALSE,
     SET_ENTRY_LOADING_TRUE,
-  } from "../../../store/modules/ModifyOrderEntryState";
+  } from "../../../../store/modules/ModifyOrderEntryState";
   import {mapState} from "vuex"
 
   export default {

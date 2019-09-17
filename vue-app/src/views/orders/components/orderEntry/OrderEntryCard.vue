@@ -1,0 +1,146 @@
+<template>
+  <v-card :key="entryId">
+      <v-card-text>
+        <b>{{orderEntry.username}}</b>
+
+        <PaymentStatus :order="order" :order-entry="orderEntry"
+                       :current-user-id="currentUserId"></PaymentStatus>
+
+
+        <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
+
+          <div class="dish-entry-wrapper">
+            <div class="dish-entry-index">
+              {{dishEntryIndex + 1}}.
+            </div>
+
+            <div class="dish-entry-content">
+              <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+                <edit-order-entry
+                    :order-entry="orderEntry"
+                    :dish-entry="dishEntry"
+                    :key="dishEntry.id">
+                </edit-order-entry>
+
+              </template>
+              <template v-else>
+                <show-order-entry
+                    :order-entry="orderEntry"
+                    :dish-entry="dishEntry"
+                    :current-user-id="currentUserId"
+                    :key="dishEntry.id"
+                    :index="dishEntryIndex + 1">
+                </show-order-entry>
+
+              </template>
+            </div>
+          </div>
+
+        </template>
+
+        <div class="dish-entry-wrapper" v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+          <div class="dish-entry-index">
+            {{orderEntry.dishEntries.length + 1}}.
+          </div>
+
+          <div class="dish-entry-content">
+
+            <div v-if="isEntryCreating === false">
+              <v-btn text color="success" @click="createEntry()">
+                Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+              </v-btn>
+            </div>
+            <div v-if="isEntryCreating === true">
+              <create-order-entry></create-order-entry>
+            </div>
+          </div>
+        </div>
+
+        <!--<v-divider></v-divider>-->
+
+        <div>
+          <b>Cost for user:
+            <price :data-price="orderEntry.finalPrice"/>
+          </b>
+        </div>
+
+      </v-card-text>
+
+
+  </v-card>
+</template>
+
+<script>
+  import Price from '../../../commons/PriceElement.vue'
+  import CreateOrderEntry from './CreateOrderEntry.vue'
+  import EditOrderEntry from './EditOrderEntry.vue'
+  import ShowOrderEntry from './ShowOrderEntry.vue'
+  import {mapState} from 'vuex'
+  import {
+    NAMESPACE_MODIFY_ORDER_ENTRY,
+    SET_DISH_ENTRY_CREATING,
+  } from "../../../../store/modules/ModifyOrderEntryState";
+  import PriceSummary from "../PriceSummary";
+  import SimpleCard from "../../../commons/SimpleCard";
+  import ViewWrapper from "../../../commons/ViewWrapper";
+  import PaymentStatus from "../PaymentStatus";
+
+  export default {
+    name: "OrderEntryCard",
+    props: ["order", "orderEntry", "entryId", "currentUserId"],
+    methods: {
+      isOrderEntryOwner(orderEntry) {
+        return orderEntry.userId === this.currentUserId
+      },
+      paymentStatus(orderEntry) {
+        if (orderEntry.paymentStatus === "UNPAID") {
+          return "Unpaid"
+        } else if (orderEntry.paymentStatus === "MARKED") {
+          return "Marked as paid"
+        } else if (orderEntry.paymentStatus === "CONFIRMED") {
+          return "Payment confirmed"
+        } else {
+          return orderEntry.paymentStatus
+        }
+      },
+      createEntry() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
+      },
+    },
+    computed: {
+      ...mapState('modifyOrderEntry', [
+        "isEntryCreating",
+        "isEntryEdited",
+        "orderEntryId",
+        "dishEntryId",
+      ])
+    },
+    components: {
+      PaymentStatus,
+      ViewWrapper,
+      SimpleCard,
+      PriceSummary,
+      Price,
+      CreateOrderEntry,
+      EditOrderEntry,
+      ShowOrderEntry
+    }
+  }
+</script>
+
+<style scoped>
+  .dish-entry-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .dish-entry-index {
+    min-width: 18px;
+    height: 36px;
+    line-height: 36px;
+  }
+
+  .dish-entry-content {
+
+  }
+</style>
