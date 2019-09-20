@@ -86,7 +86,7 @@
   import PaymentStatus from "../PaymentStatus";
 
   export default {
-    name: "OrderEntryCard",
+    name: "OrderEntriesCard",
     props: ["order", "orderEntry", "entryId", "currentUserId"],
     methods: {
       isOrderEntryOwner(orderEntry) {
