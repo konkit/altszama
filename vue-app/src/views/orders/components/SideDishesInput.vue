@@ -31,11 +31,11 @@
                 @change="updateSideDishComboBox(sdIndex, $event)">
             </v-autocomplete>
 
-            <v-btn flat icon @click="removeSideDish(sdIndex)">
+            <v-btn text icon @click="removeSideDish(sdIndex)">
               <span class="fa fa-remove"></span>
             </v-btn>
 
-            <v-btn flat @click="setAsNewSideDish(sdIndex)">
+            <v-btn text @click="setAsNewSideDish(sdIndex)">
               Type your own side dish
             </v-btn>
           </template>
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <v-btn flat @click="addSideDishEntry()">
+    <v-btn text @click="addSideDishEntry()">
       <i class="fa fa-plus"></i> &nbsp; Add side dish
     </v-btn>
   </div>

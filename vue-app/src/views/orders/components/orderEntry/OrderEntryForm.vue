@@ -1,6 +1,19 @@
 <template>
   <div>
+    <!--<v-btn-toggle model="newDish123">-->
+      <!--<v-btn text>-->
+        <!--Type your own dish-->
+      <!--</v-btn>-->
+
+      <!--<v-btn text>-->
+        <!--Select dish from the list-->
+      <!--</v-btn>-->
+    <!--</v-btn-toggle>-->
+
     <template v-if="!newDish">
+      <v-btn text disabled>Select dish from list &nbsp;</v-btn>
+      <v-btn text @click="setDishAsNew()">Type your own dish! &nbsp;</v-btn>
+
       <v-autocomplete
           :items="allDishesAtOnce"
           label="Dish"
@@ -26,10 +39,13 @@
           </template>
         </template>
       </v-autocomplete>
-      <v-btn flat @click="setDishAsNew()">Type your own dish! &nbsp;</v-btn>
+
     </template>
 
     <template v-if="newDish">
+      <v-btn text @click="setDishAsExisting()">Select dish from list &nbsp;</v-btn>
+      <v-btn text disabled>Type your own dish! &nbsp;</v-btn>
+
       <v-text-field
           type="text"
           placeholder="New dish name"
@@ -45,8 +61,6 @@
           @input="updateNewDishPrice($event)"
       >
       </MoneyInput>
-
-      <v-btn flat @click="setDishAsExisting()">Select dish from list &nbsp;</v-btn>
     </template>
 
     <p>Side dishes:</p>
@@ -86,6 +100,11 @@
 
   export default {
     name: 'order-entry-form',
+    data: function() {
+      return {
+        newDish123: 1
+      }
+    },
     methods: {
       setDishAsNew() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_NEW}`)

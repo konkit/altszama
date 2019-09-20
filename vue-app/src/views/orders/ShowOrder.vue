@@ -1,5 +1,6 @@
 <template>
   <ViewWrapper :title="title()" backpath="#/orders/">
+
     <template slot="toolbar-buttons">
       <template v-if="!loading && isOrderOwner()">
         <v-btn @click="edit">
@@ -8,11 +9,10 @@
       </template>
     </template>
 
-    <v-container>
-
-      <LoadingView>
-        <simple-card>
-          <v-container v-if="this.isOrdering() && this.isOrderOwner()">
+    <LoadingView>
+      <v-card v-if="this.isOrdering() && this.isOrderOwner()">
+        <v-card-text>
+          <v-container>
             <v-layout row>
               <v-flex xs12>
                 <v-alert :value="true" color="warning"
@@ -37,152 +37,114 @@
               </v-flex>
             </v-layout>
           </v-container>
+        </v-card-text>
+      </v-card>
 
-          <v-container>
-            <v-layout>
-              <v-flex xs12 sm4>
-                <h3>Order data</h3>
 
-                <div class="py-1">
-                  <div>Who will order?</div>
-                  <div><b>{{ this.order.orderCreatorUsername }}</b></div>
-                </div>
+      <v-card>
+        <v-card-text>
+          <div class="py-2">
+            <b>Menu:&nbsp;</b>
+            <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
+          </div>
 
-                <div class="py-1">
-                  <div>When?</div>
-                  <div><b>{{ this.order.timeOfOrder }}</b></div>
-                </div>
-
-                <div class="py-1">
-                  <div>When it'll arrive?</div>
-                  <div><b>{{ this.timeOfDeliveryOrNA() }}</b></div>
-                </div>
-              </v-flex>
-
-              <v-flex xs12 sm4>
-                <price-summary
-                    :orderDecreaseInPercent="this.order.decreaseInPercent"
-                    :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
-                    :basePriceSum="this.baseOrderPrice"
-                    :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
-                    :allEatingPeopleCount="allEatingPeopleCount()"
-                    :totalPrice="this.totalOrderPrice"
-                >
-                </price-summary>
-              </v-flex>
-
-              <v-flex xs12 sm4>
-                <h3>Payment</h3>
-
-                <div v-if="this.order.paymentByCash == true" class="payment-entry">
-                  <b class="allowed">
-                    Payment by cash <span class="fa fa-check"></span>
-                  </b>
-                </div>
-                <div v-if="this.order.paymentByCash == false" class="payment-entry">
-                  <b class="not-allowed">
-                    Payment by cash <span class="fa fa-times"></span>
-                  </b>
-                </div>
-
-                <div v-if="this.order.paymentByBankTransfer == true" class="payment-entry">
-                  <div>
-                    <b class="allowed">
-                      Payment by bank transfer <span class="fa fa-check"></span>
-                    </b>
-                  </div>
-
-                  <div v-if="order.paymentByBankTransfer">
-                    {{ order.bankTransferNumber }}
-                  </div>
-                </div>
-                <div v-if="this.order.paymentByBankTransfer == false" class="payment-entry">
-                  <b class="not-allowed">
-                    Payment by bank transfer <span class="fa fa-times"></span>
-                  </b>
-                </div>
-
-                <div v-if="this.order.paymentByBlik == true" class="payment-entry">
-                  <div>
-                    <b class="allowed">
-                      Payment by BLIK <span class="fa fa-check"></span>
-                    </b>
-                  </div>
-
-                  <div v-if="order.paymentByBlik">
-                    {{ order.blikPhoneNumber }}
-                  </div>
-                </div>
-                <div v-if="this.order.paymentByBlik == false" class="payment-entry">
-                  <p>
-                    <b class="not-allowed">
-                      Payment by BLIK <span class="fa fa-times"></span>
-                    </b>
-                  </p>
-                </div>
-              </v-flex>
-            </v-layout>
-
-            <v-layout row>
-              <v-flex xs12 class="py-3">
-                <p>
-                  <b>Link to menu:&nbsp;</b>
-                  <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
-                </p>
-              </v-flex>
-            </v-layout>
-
-            <v-layout row>
-              <v-flex xs12>
-                <v-btn block color="success" v-if="canShowPlaceOrderButton()" @click="placeOrder"
-                       :disabled="isPlaceOrderButtonDisabled()">
-                  Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-                </v-btn>
-
-                <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'ORDERED')"
-                       @click="setAsDelivered">
-                  Mark as delivered&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-                </v-btn>
-              </v-flex>
-            </v-layout>
-
-          </v-container>
-        </simple-card>
-
-        <template v-for="(orderEntry, entryId) in this.orderEntries">
-          <OrderEntryCard :order="order" :order-entry="orderEntry" :entry-id="entryId"
-                          :current-user-id="currentUserId"></OrderEntryCard>
-        </template>
-
-        <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
-          <v-card>
-            <div :key="entryId">
-              <v-card-text>
-                <div>
-                  <b>{{username}}</b>
-                </div>
-
-                <div class="user-order-col">
-                  <template v-if="isEntryCreating === false">
-                    <v-btn color="success" @click="createEntry()">
-                      Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                    </v-btn>
-                  </template>
-
-                  <template v-if="isEntryCreating === true">
-                    <create-order-entry></create-order-entry>
-                  </template>
-                </div>
-              </v-card-text>
+          <div class="order-data py-2">
+            <div>
+              Who will order? <b>{{ this.order.orderCreatorUsername }}</b>
             </div>
-          </v-card>
+
+            <div>
+              When? <b>{{ this.order.timeOfOrder }}</b>
+            </div>
+
+            <div>
+              When it'll arrive? <b>{{ this.timeOfDeliveryOrNA() }}</b>
+            </div>
+          </div>
+
+          <div class="py-2">
+          <price-summary
+              :orderDecreaseInPercent="this.order.decreaseInPercent"
+              :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
+              :basePriceSum="this.baseOrderPrice"
+              :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
+              :allEatingPeopleCount="allEatingPeopleCount()"
+              :totalPrice="this.totalOrderPrice"
+          >
+          </price-summary>
+          </div>
+
+          <div class="py-2">
+            <span v-if="this.order.paymentByCash == true" class="payment-entry">
+              <v-chip color="green" text-color="white">
+                Payment by cash &nbsp; <span class="fa fa-check"></span>
+              </v-chip>
+            </span>
+            <span v-if="this.order.paymentByCash == false" class="payment-entry">
+              <v-chip color="red" text-color="white">
+                Payment by cash &nbsp; <span class="fa fa-times"></span>
+              </v-chip>
+            </span>
+
+            <span v-if="this.order.paymentByBankTransfer == true" class="payment-entry">
+              <v-chip color="green" text-color="white">
+                Payment by bank transfer &nbsp; <span class="fa fa-check"></span>
+              </v-chip>
+            </span>
+            <span v-if="this.order.paymentByBankTransfer == false" class="payment-entry">
+              <v-chip color="red" text-color="white">
+                Payment by bank transfer &nbsp; <span class="fa fa-times"></span>
+              </v-chip>
+            </span>
+
+            <span v-if="this.order.paymentByBlik == true" class="payment-entry">
+              <v-chip color="green" text-color="white">
+                Payment by BLIK &nbsp; <span class="fa fa-check"></span>
+              </v-chip>
+            </span>
+            <span v-if="this.order.paymentByBlik == false" class="payment-entry">
+              <v-chip color="red" text-color="white">
+                Payment by BLIK &nbsp; <span class="fa fa-times"></span>
+              </v-chip>
+            </span>
+
+            <div v-if="order.paymentByBankTransfer">
+              Bank transfer number: {{ order.bankTransferNumber }}
+            </div>
+
+            <div v-if="order.paymentByBankTransfer">
+              BLIK phone number: {{ order.blikPhoneNumber }}
+            </div>
+          </div>
 
 
-        </template>
+          <v-btn block color="success" v-if="canShowPlaceOrderButton()" @click="placeOrder"
+                 :disabled="isPlaceOrderButtonDisabled()">
+            Place order&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </v-btn>
 
-      </LoadingView>
+          <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'ORDERED')"
+                 @click="setAsDelivered">
+            Mark as delivered&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </v-btn>
 
-    </v-container>
+        </v-card-text>
+      </v-card>
+
+      <template v-for="(orderEntry, entryId) in this.orderEntries">
+        <OrderEntryCard :order="order"
+                        :order-entry="orderEntry"
+                        :entry-id="entryId"
+                        :current-user-id="currentUserId">
+        </OrderEntryCard>
+      </template>
+
+      <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
+        <new-order-entry-card :is-entry-creating="isEntryCreating" :username="username"></new-order-entry-card>
+      </template>
+
+    </LoadingView>
+
   </ViewWrapper>
 </template>
 
@@ -219,6 +181,7 @@
   import CustomPolyfills from "../../lib/CustomPolyfills";
   import PaymentStatus from "./components/PaymentStatus";
   import OrderEntryCard from "./components/orderEntry/OrderEntryCard";
+  import NewOrderEntryCard from "./components/orderEntry/NewOrderEntryCard";
 
   export default {
     data() {
@@ -359,6 +322,7 @@
       }
     },
     components: {
+      NewOrderEntryCard,
       OrderEntryCard,
       PaymentStatus,
       ViewWrapper,

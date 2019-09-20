@@ -125,8 +125,8 @@
       </simple-card>
 
       <v-tooltip left>
-        <template slot="activator">
-          <v-btn fixed dark fab large bottom right color="green" @click="goToCreateOrder()">
+        <template v-slot:activator="{ on }">
+          <v-btn fixed dark fab large bottom right color="green" @click="goToCreateOrder()" v-on="on">
             <v-icon>add</v-icon>
           </v-btn>
         </template>

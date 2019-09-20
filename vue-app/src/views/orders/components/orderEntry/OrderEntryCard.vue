@@ -46,7 +46,7 @@
           <div class="dish-entry-content">
 
             <div v-if="isEntryCreating === false">
-              <v-btn text color="success" @click="createEntry()">
+              <v-btn text @click="createEntry()">
                 Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
               </v-btn>
             </div>
