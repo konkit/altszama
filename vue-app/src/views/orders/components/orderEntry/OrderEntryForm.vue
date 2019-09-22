@@ -1,19 +1,16 @@
 <template>
   <div>
-    <!--<v-btn-toggle model="newDish123">-->
-      <!--<v-btn text>-->
-        <!--Type your own dish-->
-      <!--</v-btn>-->
+    <v-btn-toggle :value="newDish" mandatory @change="onDishTypeToggle($event)">
+      <v-btn text :value="false">
+        Select dish from the list
+      </v-btn>
 
-      <!--<v-btn text>-->
-        <!--Select dish from the list-->
-      <!--</v-btn>-->
-    <!--</v-btn-toggle>-->
+      <v-btn text :value="true">
+        Type your own dish
+      </v-btn>
+    </v-btn-toggle>
 
     <template v-if="!newDish">
-      <v-btn text disabled>Select dish from list &nbsp;</v-btn>
-      <v-btn text @click="setDishAsNew()">Type your own dish! &nbsp;</v-btn>
-
       <v-autocomplete
           :items="allDishesAtOnce"
           label="Dish"
@@ -43,9 +40,6 @@
     </template>
 
     <template v-if="newDish">
-      <v-btn text @click="setDishAsExisting()">Select dish from list &nbsp;</v-btn>
-      <v-btn text disabled>Type your own dish! &nbsp;</v-btn>
-
       <v-text-field
           type="text"
           placeholder="New dish name"
@@ -84,7 +78,7 @@
   import CustomPolyfills from "../../../../lib/CustomPolyfills"
 
   import OrderEntryForm from './OrderEntryForm.vue'
-  import SideDishesInput from '../SideDishesInput.vue'
+  import SideDishesInput from './SideDishesInput.vue'
   import {
     UPDATE_DISH_ID,
     CLEAR_EDITED_SIDE_DISHES,
@@ -100,7 +94,7 @@
 
   export default {
     name: 'order-entry-form',
-    data: function() {
+    data: function () {
       return {
         newDish123: 1
       }
@@ -128,6 +122,17 @@
       cancelEdit() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
       },
+      onDishTypeToggle(e) {
+        console.log("onDishTypeToggle: ", e);
+
+        if (e === true) {
+          this.setDishAsNew()
+        } else if (e === false) {
+          this.setDishAsExisting()
+        } else {
+          console.warn("Dish type toggle returned wrong value")
+        }
+      }
 
     },
     computed: {

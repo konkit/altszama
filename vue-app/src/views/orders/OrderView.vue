@@ -14,6 +14,12 @@
                 <p>
                   Order is now locked, so no one should order anything else now.
                 </p>
+
+                <template v-slot:actions>
+                  <v-btn text color="primary" @click="unlockOrder()">
+                    Unlock &nbsp; <span class="fa fa-unlock"></span>
+                  </v-btn>
+                </template>
               </v-banner>
             </v-col>
           </v-row>
@@ -163,6 +169,13 @@
   import PriceSummary from "./components/PriceSummary";
   import TimePicker from "../commons/TimePicker";
   import ViewWrapper from "../commons/ViewWrapper";
+  import {
+    UNLOCK_ORDER_ACTION,
+    FETCH_ORDER_DATA_ACTION,
+    NAMESPACE_SHOW_ORDER,
+    SET_ORDER_AS_DELIVERED_ACTION,
+  } from "../../store/modules/ShowOrderState"
+  import router from '../../router/index'
 
   export default {
     data() {
@@ -183,7 +196,11 @@
       },
       updateApproxTimeOfDelivery(newValue) {
         this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`, newValue)
-      }
+      },
+      unlockOrder() {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
+          .then(() => router.push("/orders/show/" + this.orderId))
+      },
     },
     computed: {
       ...mapState("orderView", [

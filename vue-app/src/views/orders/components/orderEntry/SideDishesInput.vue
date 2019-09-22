@@ -2,9 +2,18 @@
   <div>
     <div v-if="chosenSideDishes.length > 0">
       <div v-for="(sideDish, sdIndex) in chosenSideDishes" :key="sdIndex">
+        <v-btn-toggle :value="sideDish.isNew" mandatory @change="onSideDishTypeToggle(sdIndex, $event)">
+          <v-btn text :value="false">
+            Select side dish from the list
+          </v-btn>
+
+          <v-btn text :value="true">
+            Type your own side dish
+          </v-btn>
+        </v-btn-toggle>
+
         <v-layout>
           <div class="py-4 px-3">{{sdIndex + 1}}.</div>
-
           <template v-if="sideDish.isNew === true">
             <v-text-field
                 label="New side dish name"
@@ -19,8 +28,6 @@
             </MoneyInput>
 
             <v-btn flat icon @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
-
-            <v-btn flat @click="setAsExistingSideDish(sdIndex)">Select side dish from the list</v-btn>
           </template>
 
           <template v-else>
@@ -34,10 +41,6 @@
             <v-btn text icon @click="removeSideDish(sdIndex)">
               <span class="fa fa-remove"></span>
             </v-btn>
-
-            <v-btn text @click="setAsNewSideDish(sdIndex)">
-              Type your own side dish
-            </v-btn>
           </template>
         </v-layout>
       </div>
@@ -50,7 +53,7 @@
 </template>
 
 <script>
-  import Price from '../../commons/PriceElement.vue'
+  import Price from '../../../commons/PriceElement.vue'
   import {
     UPDATE_NEW_SIDE_DISH_NAME,
     UPDATE_NEW_SIDE_DISH_PRICE,
@@ -60,8 +63,8 @@
     ADD_SIDE_DISH_ACTION,
     REMOVE_SIDE_DISH,
     NAMESPACE_MODIFY_ORDER_ENTRY
-  } from "../../../store/modules/ModifyOrderEntryState";
-  import MoneyInput from "../../commons/MoneyInput";
+  } from "../../../../store/modules/ModifyOrderEntryState";
+  import MoneyInput from "../../../commons/MoneyInput";
 
   export default {
     name: 'side-dishes-input',
@@ -110,6 +113,17 @@
 
         this.$forceUpdate();
       },
+      onSideDishTypeToggle(sdIndex, e) {
+        console.log("onSideDishTypeToggle: ", e);
+
+        if (e === true) {
+          this.setAsNewSideDish(sdIndex)
+        } else if (e === false) {
+          this.setAsExistingSideDish(sdIndex)
+        } else {
+          console.warn("Side dish type toggle returned wrong value")
+        }
+      }
 
     },
     computed: {

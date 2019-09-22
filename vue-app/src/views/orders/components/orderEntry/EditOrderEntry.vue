@@ -33,7 +33,7 @@
   import Price from '../../../commons/PriceElement.vue'
 
   import OrderEntryForm from './OrderEntryForm.vue'
-  import SideDishesInput from '../SideDishesInput.vue'
+  import SideDishesInput from './SideDishesInput.vue'
   import {mapState} from "vuex"
   import {
     UPDATE_ORDER_ENTRY_ACTION,

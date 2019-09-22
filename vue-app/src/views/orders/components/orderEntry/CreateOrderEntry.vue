@@ -33,7 +33,7 @@
   import Price from '../../../commons/PriceElement.vue'
 
   import OrderEntryForm from './OrderEntryForm.vue'
-  import SideDishesInput from '../SideDishesInput.vue'
+  import SideDishesInput from './SideDishesInput.vue'
   import {NAMESPACE_SHOW_ORDER} from "../../../../store/modules/ShowOrderState";
   import {
     NAMESPACE_MODIFY_ORDER_ENTRY,
