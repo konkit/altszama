@@ -12,7 +12,7 @@
     <LoadingView>
       <v-container v-if="this.isOrdering() && this.isOrderOwner()">
         <v-row>
-          <v-col cols="xs12">
+          <v-col :cols="12">
             <OrderLockedWarning :order-id="this.orderId">
             </OrderLockedWarning>
           </v-col>
@@ -21,58 +21,62 @@
 
       <v-container>
         <v-row>
-          <v-col cols="xs12">
-            <v-card>
-              <v-card-text>
-                <v-row>
-                  <v-col>
-                    <div class="py-2 px-4">
-                      <b>See menu at &nbsp;</b> <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
-                    </div>
-                  </v-col>
-                </v-row>
+          <v-col :cols="12" :md="4">
+            <v-card class="asdf-card">
+              <v-card-title>Order details</v-card-title>
+              <OrderDataSummary :order="order"></OrderDataSummary>
+            </v-card>
+          </v-col>
 
-                <v-row>
-                  <v-col>
-                    <OrderDataSummary :order="order"></OrderDataSummary>
-                  </v-col>
+          <v-col :cols="12" :md="4">
+            <v-card class="asdf-card">
+              <v-card-title>Price summary</v-card-title>
 
-                  <v-col>
-                    <price-summary
-                        :orderDecreaseInPercent="this.order.decreaseInPercent"
-                        :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
-                        :basePriceSum="this.baseOrderPrice"
-                        :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
-                        :allEatingPeopleCount="allEatingPeopleCount()"
-                        :totalPrice="this.totalOrderPrice"
-                    ></price-summary>
-                  </v-col>
+              <price-summary
+                  :orderDecreaseInPercent="this.order.decreaseInPercent"
+                  :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
+                  :basePriceSum="this.baseOrderPrice"
+                  :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
+                  :allEatingPeopleCount="allEatingPeopleCount()"
+                  :totalPrice="this.totalOrderPrice"
+              ></price-summary>
+            </v-card>
+          </v-col>
 
-                  <v-col>
-                    <PaymentOptionsSummary :order="order"></PaymentOptionsSummary>
-                  </v-col>
-                </v-row>
+          <v-col :cols="12" :md="4">
+            <v-card class="asdf-card">
+              <v-card-title>
+                Payment options
+              </v-card-title>
 
-                <v-btn block color="success" v-if="canShowPlaceOrderButton()" @click="placeOrder"
-                       :disabled="isPlaceOrderButtonDisabled()">
-                  Place order &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                </v-btn>
-
-                <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'ORDERED')"
-                       @click="setAsDelivered">
-                  Mark as delivered &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                </v-btn>
-
-              </v-card-text>
+              <PaymentOptionsSummary :order="order"></PaymentOptionsSummary>
             </v-card>
           </v-col>
         </v-row>
-      </v-container>
 
-      <template v-for="(orderEntry, entryId) in this.orderEntries">
-        <v-container>
+        <v-row>
+          <v-col>
+            <div class="py-2 px-4">
+              <b>See menu at &nbsp;</b> <a target="_blank"
+                                           :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
+            </div>
+          </v-col>
+          <v-col>
+            <v-btn block color="success" v-if="canShowPlaceOrderButton()" @click="placeOrder"
+                   :disabled="isPlaceOrderButtonDisabled()">
+              Place order &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </v-btn>
+
+            <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'ORDERED')"
+                   @click="setAsDelivered">
+              Mark as delivered &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <template v-for="(orderEntry, entryId) in this.orderEntries">
           <v-row>
-            <v-col cols="xs12">
+            <v-col>
               <OrderEntriesCard :order="order"
                                 :order-entry="orderEntry"
                                 :entry-id="entryId"
@@ -80,18 +84,17 @@
               </OrderEntriesCard>
             </v-col>
           </v-row>
-        </v-container>
-      </template>
+        </template>
 
-      <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
-        <v-container>
+        <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
           <v-row>
-            <v-col cols="xs12">
+            <v-col>
               <new-order-entry-card :is-entry-creating="isEntryCreating" :username="username"></new-order-entry-card>
             </v-col>
           </v-row>
-        </v-container>
-      </template>
+        </template>
+
+      </v-container>
 
     </LoadingView>
 
@@ -219,4 +222,7 @@
 </script>
 
 <style scoped>
+  .asdf-card {
+    min-height: 300px;
+  }
 </style>

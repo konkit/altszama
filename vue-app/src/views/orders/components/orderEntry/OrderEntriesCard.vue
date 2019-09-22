@@ -8,68 +8,73 @@
       <PaymentStatus :order="order" :order-entry="orderEntry"
                      :current-user-id="currentUserId"></PaymentStatus>
 
+      <v-list>
+        <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
+          <v-list-item>
 
-      <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
+            <v-list-item-content class="index-element">
+              {{dishEntryIndex + 1}}.
+            </v-list-item-content>
 
-        <div class="dish-entry-wrapper">
-          <div class="dish-entry-index">
-            {{dishEntryIndex + 1}}.
-          </div>
+            <v-list-item-content>
+              <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+                <edit-order-entry
+                    :order-entry="orderEntry"
+                    :dish-entry="dishEntry"
+                    :key="dishEntry.id">
+                </edit-order-entry>
 
-          <div class="dish-entry-content">
-            <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
-              <edit-order-entry
-                  :order-entry="orderEntry"
-                  :dish-entry="dishEntry"
-                  :key="dishEntry.id">
-              </edit-order-entry>
+              </template>
+              <template v-else>
+                <show-order-entry
+                    :order-entry="orderEntry"
+                    :dish-entry="dishEntry"
+                    :current-user-id="currentUserId"
+                    :key="dishEntry.id"
+                    :index="dishEntryIndex + 1">
+                </show-order-entry>
+              </template>
+            </v-list-item-content>
+          </v-list-item>
 
-            </template>
-            <template v-else>
-              <show-order-entry
-                  :order-entry="orderEntry"
-                  :dish-entry="dishEntry"
-                  :current-user-id="currentUserId"
-                  :key="dishEntry.id"
-                  :index="dishEntryIndex + 1">
-              </show-order-entry>
+          <v-divider></v-divider>
 
-            </template>
-          </div>
-        </div>
+        </template>
 
-      </template>
 
-      <div class="dish-entry-wrapper"
-           v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
-        <div class="dish-entry-index">
-          {{orderEntry.dishEntries.length + 1}}.
-        </div>
+        <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
 
-        <div class="dish-entry-content">
+          <v-list-item>
 
-          <div v-if="isEntryCreating === false">
-            <v-btn text @click="createEntry()">
-              Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-            </v-btn>
-          </div>
-          <div v-if="isEntryCreating === true">
-            <create-order-entry></create-order-entry>
-          </div>
-        </div>
-      </div>
+            <v-list-item-content class="index-element">
+              {{orderEntry.dishEntries.length + 1}}.
+            </v-list-item-content>
 
-      <!--<v-divider></v-divider>-->
+            <v-list-item-content>
+              <div v-if="isEntryCreating === false">
+                <v-btn text @click="createEntry()">
+                  Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                </v-btn>
+              </div>
+              <div v-if="isEntryCreating === true">
+                <create-order-entry></create-order-entry>
+              </div>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
 
-      <div>
-        <b>Cost for user:
-          <price :data-price="orderEntry.finalPrice"/>
-        </b>
-      </div>
+        <v-divider></v-divider>
 
+        <v-list-item>
+          <v-list-item-content>
+            <b>Cost for user:
+              <price :data-price="orderEntry.finalPrice"/>
+            </b>
+          </v-list-item-content>
+        </v-list-item>
+
+      </v-list>
     </v-card-text>
-
-
   </v-card>
 </template>
 
@@ -132,6 +137,11 @@
 </script>
 
 <style scoped>
+  .index-element {
+    min-width: 20px;
+    flex-grow: 0;
+  }
+
   .dish-entry-wrapper {
     display: flex;
     flex-direction: row;
