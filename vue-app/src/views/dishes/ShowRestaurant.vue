@@ -14,9 +14,9 @@
     <LoadingView>
       <errors-component/>
 
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
+      <v-container>
+        <v-row>
+          <v-col cols="xs12">
             <v-card>
               <v-card-text>
                 <v-layout column>
@@ -29,18 +29,15 @@
                 </v-layout>
               </v-card-text>
             </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+          </v-col>
+        </v-row>
 
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
+        <v-row>
+          <v-col cols="xs12">
             <v-card>
               <v-card-text>
                 <v-layout column>
-                  <show-restaurant-dishes-table :restaurant="this.restaurant"
-                                                :dishes-by-category="this.dishesByCategory"/>
+                  <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
                 </v-layout>
 
                 <v-tooltip left>
@@ -53,8 +50,8 @@
                 </v-tooltip>
               </v-card-text>
             </v-card>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-container>
     </LoadingView>
   </ViewWrapper>

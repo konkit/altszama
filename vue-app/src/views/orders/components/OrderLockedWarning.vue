@@ -1,29 +1,51 @@
 <template>
-      <v-container>
-        <v-layout row>
-          <v-flex xs12>
-            <v-alert :value="true" color="warning"
-                     icon="new_releases" outline>
-              <p><strong>The order is locked!</strong></p>
 
-              <p>
-                The order is locked in ordering state and the order entries are freezed.<br/>
-                If you are not ordering yet, click button to go back to created state.
-              </p>
+  <v-banner>
+    <v-icon
+        slot="icon"
+        color="warning"
+        size="36"
+    >
+      mdi-lock-alert
+    </v-icon>
 
-              <p>
-                <v-btn color="success" @click="unlockOrder()">
-                  Unlock&nbsp;&nbsp;<span class="fa fa-unlock"></span>
-                </v-btn>
+    <p><strong>The order is locked!</strong></p>
 
-                <v-btn color="success" @click="placeOrder()">
-                  Place order&nbsp;&nbsp;<span class="fa fa-arrow-right"></span>
-                </v-btn>
-              </p>
-            </v-alert>
-          </v-flex>
-        </v-layout>
-      </v-container>
+    <p>
+      The order is locked in ordering state and the order entries are freezed.<br/>
+      If you are not ordering yet, click button to go back to created state.
+    </p>
+
+    <template v-slot:actions>
+      <v-btn text color="primary" @click="unlockOrder()">
+        Unlock &nbsp; <span class="fa fa-unlock"></span>
+      </v-btn>
+      <v-btn text color="primary" @click="placeOrder()">
+        Place order &nbsp; <span class="fa fa-arrow-right"></span>
+      </v-btn>
+    </template>
+  </v-banner>
+
+        <!--<v-alert :value="true" color="warning"-->
+                 <!--icon="new_releases" outline>-->
+          <!--<p><strong>The order is locked!</strong></p>-->
+
+          <!--<p>-->
+            <!--The order is locked in ordering state and the order entries are freezed.<br/>-->
+            <!--If you are not ordering yet, click button to go back to created state.-->
+          <!--</p>-->
+
+          <!--<p>-->
+            <!--<v-btn color="success" @click="unlockOrder()">-->
+              <!--Unlock&nbsp;&nbsp;<span class="fa fa-unlock"></span>-->
+            <!--</v-btn>-->
+
+            <!--<v-btn color="success" @click="placeOrder()">-->
+              <!--Place order&nbsp;&nbsp;<span class="fa fa-arrow-right"></span>-->
+            <!--</v-btn>-->
+          <!--</p>-->
+        <!--</v-alert>-->
+
 </template>
 
 <script>

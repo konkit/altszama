@@ -1,106 +1,147 @@
 <template>
   <ViewWrapper :title="`Ordering from ${restaurantName}`" :backpath="`#/orders/show/${orderId}`">
     <LoadingView>
-      <div v-if="isStateOrdering">
-        <simple-card>
-          <v-container>
-            <v-layout row>
-              <v-flex>
-                <v-alert :value="true" color="warning" icon="new_releases" outline>
-                  Order is now locked, so no one should order anything else now.
-                </v-alert>
-              </v-flex>
-            </v-layout>
-          </v-container>
 
-          <v-container>
-            <v-layout row>
-              <v-flex xs12>
+      <template v-if="isStateOrdering">
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <v-banner>
+                <v-icon slot="icon" color="warning" size="36">mdi-lock-alert</v-icon>
+
+                <p><strong>The order is locked!</strong></p>
+
                 <p>
-                  Now please call the restaurant <span v-if="restaurantTelephone">(<b>tel. {{restaurantTelephone}}</b>)</span>,
-                  make an order and then enter approximate delivery time and click "Order placed"
+                  Order is now locked, so no one should order anything else now.
                 </p>
-              </v-flex>
-            </v-layout>
+              </v-banner>
+            </v-col>
+          </v-row>
+        </v-container>
 
-            <v-layout row justify-space-around>
-              <v-flex xs3>
-                <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
-                            label="Approximate time of delivery"></TimePicker>
-              </v-flex>
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <v-card>
+                <v-card-text>
 
-              <v-flex xs3>
-                <v-btn color="success" @click="submitForm">
-                  Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </simple-card>
+                  <v-row>
+                    <v-col cols="xs12">
+                      <p>
+                        Now please call the restaurant <span
+                          v-if="restaurantTelephone">(<b>tel. {{restaurantTelephone}}</b>)</span>,
+                        make an order and then enter approximate delivery time and click "Order placed"
+                      </p>
+                    </v-col>
+                  </v-row>
 
-        <simple-card>
-          <errors-component/>
+                  <v-row class="justify-space-around">
+                    <v-col cols="3">
+                      <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
+                                  label="Approximate time of delivery"></TimePicker>
+                    </v-col>
 
-          <h4>Dishes:</h4>
+                    <v-col cols="3">
+                      <v-btn color="success" @click="submitForm">
+                        Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
 
-          <div class="grid-container">
-            <template v-for="entry in groupedEntries">
-              <div class="table-column pt-3">
-                {{entry.eatingPeopleCount}}x {{entry.dish.name}}
-                <span class="price-wrapper">(<price :data-price="entry.dish.price"></price>)</span>
-              </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
 
-              <div class="table-column pt-3">
-                <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
-                  <p class="dish-name">
-                    {{i + 1}}. {{ eatingPersonEntry.username }}
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <v-card>
+                <v-card-title>
+                  Dishes:
+                </v-card-title>
+
+                <v-card-text>
+                  <errors-component/>
+
+                  <div class="grid-container">
+                    <template v-for="entry in groupedEntries">
+                      <div class="table-column pt-3">
+                        {{entry.eatingPeopleCount}}x {{entry.dish.name}}
+                        <span class="price-wrapper">(<price :data-price="entry.dish.price"></price>)</span>
+                      </div>
+
+                      <div class="table-column pt-3">
+                        <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
+                          <p class="dish-name">
+                            {{i + 1}}. {{ eatingPersonEntry.username }}
+                          </p>
+
+                          <p class="side-dish-name pl-3" v-for="(sd, j) in eatingPersonEntry.sideDishes" :key="j">
+                            + {{sd.name}} (
+                            <price :data-price="sd.price"/>
+                            )
+                          </p>
+
+                          <p class="dish-comments pl-3" v-if="eatingPersonEntry.comments.length > 0">
+                            Additional comments: {{ eatingPersonEntry.comments }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="table-column pt-3">
+                        <price :data-price="entry.price"></price>
+                      </div>
+                    </template>
+                  </div>
+
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <v-card>
+                <v-card-text>
+
+                  <price-summary
+                      :orderDecreaseInPercent="orderDecreaseInPercent"
+                      :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
+                      :basePriceSum="basePriceSum"
+                      :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
+                      :allEatingPeopleCount="allEatingPeopleCount"
+                      :totalPrice="totalPrice"
+                  >
+                  </price-summary>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
+
+      <template v-if="isStateNotOrdering">
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <v-card>
+                <v-card-text>
+                  <h1>Ordering from {{restaurantName}}</h1>
+                  <h4>Sorry, the order is empty</h4>
+                  <p>
+                    <back-button :href="'#/orders/show/' + orderId"></back-button>
                   </p>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
 
-                  <p class="side-dish-name pl-3" v-for="(sd, j) in eatingPersonEntry.sideDishes" :key="j">
-                    + {{sd.name}} (
-                    <price :data-price="sd.price"/>
-                    )
-                  </p>
-
-                  <p class="dish-comments pl-3" v-if="eatingPersonEntry.comments.length > 0">
-                    Additional comments: {{ eatingPersonEntry.comments }}
-                  </p>
-                </div>
-              </div>
-
-              <div class="table-column pt-3">
-                <price :data-price="entry.price"></price>
-              </div>
-            </template>
-          </div>
-
-        </simple-card>
-
-        <simple-card>
-
-          <price-summary
-              :orderDecreaseInPercent="orderDecreaseInPercent"
-              :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
-              :basePriceSum="basePriceSum"
-              :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
-              :allEatingPeopleCount="allEatingPeopleCount"
-              :totalPrice="totalPrice"
-          >
-          </price-summary>
-        </simple-card>
-
-        <div v-if="isStateNotOrdering">
-          <navigation user-name="Tmp name"></navigation>
-
-          <simple-card>
-            <h1>Ordering from {{restaurantName}}</h1>
-            <h4>Sorry, the order is empty</h4>
-            <p>
-              <back-button :href="'#/orders/show/' + orderId"></back-button>
-            </p>
-          </simple-card>
-        </div>
-      </div>
     </LoadingView>
   </ViewWrapper>
 </template>

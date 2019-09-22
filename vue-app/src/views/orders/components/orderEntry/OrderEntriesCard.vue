@@ -1,70 +1,73 @@
 <template>
   <v-card :key="entryId">
-      <v-card-text>
-        <b>{{orderEntry.username}}</b>
+    <v-card-title>
+      {{orderEntry.username}}
+    </v-card-title>
 
-        <PaymentStatus :order="order" :order-entry="orderEntry"
-                       :current-user-id="currentUserId"></PaymentStatus>
+    <v-card-text>
+      <PaymentStatus :order="order" :order-entry="orderEntry"
+                     :current-user-id="currentUserId"></PaymentStatus>
 
 
-        <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
+      <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
 
-          <div class="dish-entry-wrapper">
-            <div class="dish-entry-index">
-              {{dishEntryIndex + 1}}.
-            </div>
-
-            <div class="dish-entry-content">
-              <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
-                <edit-order-entry
-                    :order-entry="orderEntry"
-                    :dish-entry="dishEntry"
-                    :key="dishEntry.id">
-                </edit-order-entry>
-
-              </template>
-              <template v-else>
-                <show-order-entry
-                    :order-entry="orderEntry"
-                    :dish-entry="dishEntry"
-                    :current-user-id="currentUserId"
-                    :key="dishEntry.id"
-                    :index="dishEntryIndex + 1">
-                </show-order-entry>
-
-              </template>
-            </div>
-          </div>
-
-        </template>
-
-        <div class="dish-entry-wrapper" v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+        <div class="dish-entry-wrapper">
           <div class="dish-entry-index">
-            {{orderEntry.dishEntries.length + 1}}.
+            {{dishEntryIndex + 1}}.
           </div>
 
           <div class="dish-entry-content">
+            <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+              <edit-order-entry
+                  :order-entry="orderEntry"
+                  :dish-entry="dishEntry"
+                  :key="dishEntry.id">
+              </edit-order-entry>
 
-            <div v-if="isEntryCreating === false">
-              <v-btn text @click="createEntry()">
-                Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-              </v-btn>
-            </div>
-            <div v-if="isEntryCreating === true">
-              <create-order-entry></create-order-entry>
-            </div>
+            </template>
+            <template v-else>
+              <show-order-entry
+                  :order-entry="orderEntry"
+                  :dish-entry="dishEntry"
+                  :current-user-id="currentUserId"
+                  :key="dishEntry.id"
+                  :index="dishEntryIndex + 1">
+              </show-order-entry>
+
+            </template>
           </div>
         </div>
 
-        <!--<v-divider></v-divider>-->
+      </template>
 
-        <div>
-          <b>Cost for user:
-            <price :data-price="orderEntry.finalPrice"/>
-          </b>
+      <div class="dish-entry-wrapper"
+           v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
+        <div class="dish-entry-index">
+          {{orderEntry.dishEntries.length + 1}}.
         </div>
 
-      </v-card-text>
+        <div class="dish-entry-content">
+
+          <div v-if="isEntryCreating === false">
+            <v-btn text @click="createEntry()">
+              Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+            </v-btn>
+          </div>
+          <div v-if="isEntryCreating === true">
+            <create-order-entry></create-order-entry>
+          </div>
+        </div>
+      </div>
+
+      <!--<v-divider></v-divider>-->
+
+      <div>
+        <b>Cost for user:
+          <price :data-price="orderEntry.finalPrice"/>
+        </b>
+      </div>
+
+    </v-card-text>
 
 
   </v-card>

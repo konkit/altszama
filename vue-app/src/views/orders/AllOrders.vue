@@ -1,34 +1,44 @@
 <template>
   <ViewWrapper title="All orders">
-      <LoadingView>
-        <simple-card>
-          <v-data-table
-              class="table table-hover"
-              :items="allOrdersList"
-              :headers="headers"
-              :loading="false"
-              :pagination.sync="pagination">
+    <LoadingView>
+      <v-container>
+        <v-row>
+          <v-col cols="xs12">
 
-            <template slot="header" slot-scope="props">
-              <tr>
-                <th v-for="header in props.headers" :key="header.text">
-                  {{ header.text }}
-                </th>
-              </tr>
-            </template>
+            <v-card>
+              <v-card-text>
+                <v-data-table
+                    class="table table-hover"
+                    :items="allOrdersList"
+                    :headers="headers"
+                    :loading="false"
+                    :pagination.sync="pagination">
 
-            <template slot="item" slot-scope="props">
-              <tr @click="goToOrder(props.item.id)" :key="props.item.id" :data-href="'/orders/show/' + props.item.id"
-                  class="pointer">
-                <td>{{props.item.orderDate}}</td>
-                <td>{{props.item.restaurantName}}</td>
-                <td>{{props.item.orderState}}</td>
-                <td>{{props.item.orderCreatorUsername}}</td>
-              </tr>
-            </template>
-          </v-data-table>
-        </simple-card>
-      </LoadingView>
+                  <template slot="header" slot-scope="props">
+                    <tr>
+                      <th v-for="header in props.headers" :key="header.text">
+                        {{ header.text }}
+                      </th>
+                    </tr>
+                  </template>
+
+                  <template slot="item" slot-scope="props">
+                    <tr @click="goToOrder(props.item.id)" :key="props.item.id"
+                        :data-href="'/orders/show/' + props.item.id"
+                        class="pointer">
+                      <td>{{props.item.orderDate}}</td>
+                      <td>{{props.item.restaurantName}}</td>
+                      <td>{{props.item.orderState}}</td>
+                      <td>{{props.item.orderCreatorUsername}}</td>
+                    </tr>
+                  </template>
+                </v-data-table>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </LoadingView>
   </ViewWrapper>
 </template>
 

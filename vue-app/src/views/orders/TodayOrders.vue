@@ -1,7 +1,14 @@
 <template>
   <ViewWrapper title="Today's orders">
     <LoadingView>
-      <simple-card>
+      <!--<simple-card>-->
+
+      <v-container>
+        <v-row>
+          <v-col cols="xs12">
+            <v-card>
+              <v-card-text>
+
         <div v-if="this.currentOrderEntries.length > 0">
           <v-list>
             <v-subheader>Your orders today:</v-subheader>
@@ -29,9 +36,19 @@
             <span>You haven't ordered anything today yet.</span>
           </div>
         </div>
-      </simple-card>
+      <!--</simple-card>-->
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
 
-      <simple-card>
+
+      <v-container>
+        <v-row>
+          <v-col cols="xs12">
+            <v-card>
+              <v-card-text>
         <errors-component/>
 
         <v-list>
@@ -122,7 +139,12 @@
           </div>
         </v-list>
 
-      </simple-card>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+
 
       <v-tooltip left>
         <template v-slot:activator="{ on }">
@@ -185,19 +207,5 @@
 <style scoped>
   .pointer {
     cursor: pointer;
-  }
-
-  .row {
-    margin-top: 2rem;
-  }
-
-  .lunch-bg-img {
-    background-image: url('../../assets/lunch-bw.png');
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-position: 0% 72%;
-    /* min-height: 300px; */
   }
 </style>

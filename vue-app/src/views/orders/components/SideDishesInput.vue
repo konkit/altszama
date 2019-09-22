@@ -44,7 +44,7 @@
     </div>
 
     <v-btn text @click="addSideDishEntry()">
-      <i class="fa fa-plus"></i> &nbsp; Add side dish
+       Add side dish &nbsp; <i class="fa fa-plus"></i>
     </v-btn>
   </div>
 </template>

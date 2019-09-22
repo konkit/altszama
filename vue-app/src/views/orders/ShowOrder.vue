@@ -10,59 +10,83 @@
     </template>
 
     <LoadingView>
-      <OrderLockedWarning :order-id="this.orderId" v-if="this.isOrdering() && this.isOrderOwner()">
-      </OrderLockedWarning>
+      <v-container v-if="this.isOrdering() && this.isOrderOwner()">
+        <v-row>
+          <v-col cols="xs12">
+            <OrderLockedWarning :order-id="this.orderId">
+            </OrderLockedWarning>
+          </v-col>
+        </v-row>
+      </v-container>
 
-      <v-card>
-        <v-card-text>
-          <div class="py-2">
-            <b>Menu:&nbsp;</b>
-            <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
-          </div>
+      <v-container>
+        <v-row>
+          <v-col cols="xs12">
+            <v-card>
+              <v-card-text>
+                <div class="py-2">
+                  <b>Menu:&nbsp;</b>
+                  <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
+                </div>
 
-          <div class="order-data py-2">
-            <OrderDataSummary :order="order"></OrderDataSummary>
-          </div>
+                <div class="order-data py-2">
+                  <OrderDataSummary :order="order"></OrderDataSummary>
+                </div>
 
-          <div class="py-2">
-            <price-summary
-                :orderDecreaseInPercent="this.order.decreaseInPercent"
-                :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
-                :basePriceSum="this.baseOrderPrice"
-                :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
-                :allEatingPeopleCount="allEatingPeopleCount()"
-                :totalPrice="this.totalOrderPrice"
-            >
-            </price-summary>
-          </div>
+                <div class="py-2">
+                  <price-summary
+                      :orderDecreaseInPercent="this.order.decreaseInPercent"
+                      :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
+                      :basePriceSum="this.baseOrderPrice"
+                      :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
+                      :allEatingPeopleCount="allEatingPeopleCount()"
+                      :totalPrice="this.totalOrderPrice"
+                  >
+                  </price-summary>
+                </div>
 
-          <div class="py-2">
-            <PaymentOptionsSummary :order="order"></PaymentOptionsSummary>
-          </div>
+                <div class="py-2">
+                  <PaymentOptionsSummary :order="order"></PaymentOptionsSummary>
+                </div>
 
-          <v-btn block color="success" v-if="canShowPlaceOrderButton()" @click="placeOrder"
-                 :disabled="isPlaceOrderButtonDisabled()">
-            Place order &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
-          </v-btn>
+                <v-btn block color="success" v-if="canShowPlaceOrderButton()" @click="placeOrder"
+                       :disabled="isPlaceOrderButtonDisabled()">
+                  Place order &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </v-btn>
 
-          <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'ORDERED')"
-                 @click="setAsDelivered">
-            Mark as delivered &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
-          </v-btn>
+                <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'ORDERED')"
+                       @click="setAsDelivered">
+                  Mark as delivered &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </v-btn>
 
-        </v-card-text>
-      </v-card>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
 
       <template v-for="(orderEntry, entryId) in this.orderEntries">
-        <OrderEntriesCard :order="order"
-                        :order-entry="orderEntry"
-                        :entry-id="entryId"
-                        :current-user-id="currentUserId">
-        </OrderEntriesCard>
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <OrderEntriesCard :order="order"
+                                :order-entry="orderEntry"
+                                :entry-id="entryId"
+                                :current-user-id="currentUserId">
+              </OrderEntriesCard>
+            </v-col>
+          </v-row>
+        </v-container>
       </template>
 
       <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
-        <new-order-entry-card :is-entry-creating="isEntryCreating" :username="username"></new-order-entry-card>
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <new-order-entry-card :is-entry-creating="isEntryCreating" :username="username"></new-order-entry-card>
+            </v-col>
+          </v-row>
+        </v-container>
       </template>
 
     </LoadingView>
