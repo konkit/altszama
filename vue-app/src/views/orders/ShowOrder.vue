@@ -24,30 +24,34 @@
           <v-col cols="xs12">
             <v-card>
               <v-card-text>
-                <div class="py-2">
-                  <b>Menu:&nbsp;</b>
-                  <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
-                </div>
+                <v-row>
+                  <v-col>
+                    <div class="py-2 px-4">
+                      <b>See menu at &nbsp;</b> <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
+                    </div>
+                  </v-col>
+                </v-row>
 
-                <div class="order-data py-2">
-                  <OrderDataSummary :order="order"></OrderDataSummary>
-                </div>
+                <v-row>
+                  <v-col>
+                    <OrderDataSummary :order="order"></OrderDataSummary>
+                  </v-col>
 
-                <div class="py-2">
-                  <price-summary
-                      :orderDecreaseInPercent="this.order.decreaseInPercent"
-                      :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
-                      :basePriceSum="this.baseOrderPrice"
-                      :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
-                      :allEatingPeopleCount="allEatingPeopleCount()"
-                      :totalPrice="this.totalOrderPrice"
-                  >
-                  </price-summary>
-                </div>
+                  <v-col>
+                    <price-summary
+                        :orderDecreaseInPercent="this.order.decreaseInPercent"
+                        :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
+                        :basePriceSum="this.baseOrderPrice"
+                        :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
+                        :allEatingPeopleCount="allEatingPeopleCount()"
+                        :totalPrice="this.totalOrderPrice"
+                    ></price-summary>
+                  </v-col>
 
-                <div class="py-2">
-                  <PaymentOptionsSummary :order="order"></PaymentOptionsSummary>
-                </div>
+                  <v-col>
+                    <PaymentOptionsSummary :order="order"></PaymentOptionsSummary>
+                  </v-col>
+                </v-row>
 
                 <v-btn block color="success" v-if="canShowPlaceOrderButton()" @click="placeOrder"
                        :disabled="isPlaceOrderButtonDisabled()">

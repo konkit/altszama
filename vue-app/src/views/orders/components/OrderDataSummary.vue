@@ -1,15 +1,44 @@
 <template>
   <div>
-    <div class="grid-container">
-      <div>Who will order?</div>
-      <div><b>{{ this.order.orderCreatorUsername }}</b></div>
+    <v-list dense>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>
+            Who will order?
+          </v-list-item-title>
+        </v-list-item-content>
 
-      <div>When?</div>
-      <div><b>{{ this.order.timeOfOrder }}</b></div>
+        <v-list-item-content>
+          <!--<v-list-item-title>-->
+            {{ this.order.orderCreatorUsername }}
+          <!--</v-list-item-title>-->
+        </v-list-item-content>
+      </v-list-item>
 
-      <div>When it'll arrive?</div>
-      <div><b>{{ this.timeOfDeliveryOrNA() }}</b></div>
-    </div>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>When?</v-list-item-title>
+        </v-list-item-content>
+
+        <v-list-item-content>
+          <!--<v-list-item-title>-->
+            {{ this.order.timeOfOrder }}
+          <!--</v-list-item-title>-->
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>When it'll arrive?</v-list-item-title>
+        </v-list-item-content>
+
+        <v-list-item-content>
+          <!--<v-list-item-title>-->
+          {{ this.timeOfDeliveryOrNA() }}
+          <!--</v-list-item-title>-->
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
