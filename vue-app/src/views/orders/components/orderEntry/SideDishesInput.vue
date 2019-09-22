@@ -1,54 +1,75 @@
 <template>
   <div>
-    <div v-if="chosenSideDishes.length > 0">
-      <div v-for="(sideDish, sdIndex) in chosenSideDishes" :key="sdIndex">
-        <v-btn-toggle :value="sideDish.isNew" mandatory @change="onSideDishTypeToggle(sdIndex, $event)">
-          <v-btn text :value="false">
-            Select side dish from the list
-          </v-btn>
+    <v-list dense>
+      <div v-if="chosenSideDishes.length > 0">
+        <div v-for="(sideDish, sdIndex) in chosenSideDishes" :key="sdIndex">
+          <v-list-item>
+            <v-list-item-content class="index-element">
+              <div>
+                {{sdIndex + 1}}.
+              </div>
+            </v-list-item-content>
 
-          <v-btn text :value="true">
-            Type your own side dish
-          </v-btn>
-        </v-btn-toggle>
+            <v-list-item-content>
+              <v-btn-toggle :value="sideDish.isNew" mandatory @change="onSideDishTypeToggle(sdIndex, $event)">
+                <v-btn text :value="false">
+                  Select side dish from the list
+                </v-btn>
 
-        <v-layout>
-          <div class="py-4 px-3">{{sdIndex + 1}}.</div>
-          <template v-if="sideDish.isNew === true">
-            <v-text-field
-                label="New side dish name"
-                v-model="sideDish.newSideDishName"
-                @input="updateNewSideDishName(sdIndex, $event)">
-            </v-text-field>
+                <v-btn text :value="true">
+                  Type your own side dish
+                </v-btn>
+              </v-btn-toggle>
 
-            <MoneyInput
-                label="New side dish price"
-                :value="sideDish.newSideDishPrice"
-                @input="changeNewSideDishPrice(sdIndex, $event)">
-            </MoneyInput>
+              <v-layout>
+                <template v-if="sideDish.isNew === true">
+                  <v-text-field
+                      label="New side dish name"
+                      v-model="sideDish.newSideDishName"
+                      @input="updateNewSideDishName(sdIndex, $event)">
+                  </v-text-field>
 
-            <v-btn flat icon @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
-          </template>
+                  <MoneyInput
+                      label="New side dish price"
+                      :value="sideDish.newSideDishPrice"
+                      @input="changeNewSideDishPrice(sdIndex, $event)">
+                  </MoneyInput>
 
-          <template v-else>
-            <v-autocomplete
-                :items="sideDishesItems"
-                label="Side dish"
-                :value="sideDish.id"
-                @change="updateSideDishComboBox(sdIndex, $event)">
-            </v-autocomplete>
+                  <v-btn flat icon @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
+                </template>
 
-            <v-btn text icon @click="removeSideDish(sdIndex)">
-              <span class="fa fa-remove"></span>
-            </v-btn>
-          </template>
-        </v-layout>
+                <template v-else>
+                  <v-autocomplete
+                      :items="sideDishesItems"
+                      label="Side dish"
+                      :value="sideDish.id"
+                      @change="updateSideDishComboBox(sdIndex, $event)">
+                  </v-autocomplete>
+
+                  <v-btn text icon @click="removeSideDish(sdIndex)">
+                    <span class="fa fa-remove"></span>
+                  </v-btn>
+                </template>
+              </v-layout>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
       </div>
-    </div>
 
-    <v-btn text @click="addSideDishEntry()">
-       Add side dish &nbsp; <i class="fa fa-plus"></i>
-    </v-btn>
+      <v-list-item>
+        <v-list-item-content class="index-element new-sidedish-item">
+          {{chosenSideDishes.length + 1}}.
+        </v-list-item-content>
+
+        <v-list-item-content>
+          <div>
+          <v-btn text @click="addSideDishEntry()">
+            Add side dish &nbsp; <i class="fa fa-plus"></i>
+          </v-btn>
+          </div>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
@@ -152,3 +173,20 @@
   }
 
 </script>
+
+<style scoped>
+  .index-element {
+    padding-top: 28px;
+    min-width: 20px;
+    flex-grow: 0;
+    align-self: flex-start;
+  }
+
+  .index-element div {
+    padding-top: 16px;
+  }
+
+  .index-element.new-sidedish-item {
+    padding-top: 18px;
+  }
+</style>

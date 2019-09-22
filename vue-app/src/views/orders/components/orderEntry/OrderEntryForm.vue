@@ -57,7 +57,7 @@
       </MoneyInput>
     </template>
 
-    <p>Side dishes:</p>
+    <subheader>Side dishes:</subheader>
 
     <side-dishes-input></side-dishes-input>
 

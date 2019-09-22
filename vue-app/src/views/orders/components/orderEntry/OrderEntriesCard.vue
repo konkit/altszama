@@ -8,12 +8,14 @@
       <PaymentStatus :order="order" :order-entry="orderEntry"
                      :current-user-id="currentUserId"></PaymentStatus>
 
-      <v-list>
+      <v-list dense>
         <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
           <v-list-item>
 
             <v-list-item-content class="index-element">
-              {{dishEntryIndex + 1}}.
+              <div class="py-4">
+                {{dishEntryIndex + 1}}.
+              </div>
             </v-list-item-content>
 
             <v-list-item-content>
@@ -41,13 +43,14 @@
 
         </template>
 
-
         <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
 
           <v-list-item>
 
             <v-list-item-content class="index-element">
-              {{orderEntry.dishEntries.length + 1}}.
+              <div class="py-4">
+                {{orderEntry.dishEntries.length + 1}}.
+              </div>
             </v-list-item-content>
 
             <v-list-item-content>
@@ -140,6 +143,7 @@
   .index-element {
     min-width: 20px;
     flex-grow: 0;
+    align-self: flex-start;
   }
 
   .dish-entry-wrapper {
