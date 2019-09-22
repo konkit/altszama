@@ -1,10 +1,10 @@
 <template>
   <v-card>
-    <v-card-text>
-      <div>
-        <b>{{username}}</b>
-      </div>
+    <v-card-title>
+      {{username}}
+    </v-card-title>
 
+    <v-card-text>
       <div class="user-order-col">
         <template v-if="isEntryCreating === false">
           <v-btn color="success" @click="createEntry()">

@@ -1,13 +1,15 @@
 <template>
-  <div class="grid-container">
-    <div>Who will order?</div>
-    <div><b>{{ this.order.orderCreatorUsername }}</b></div>
+  <div>
+    <div class="grid-container">
+      <div>Who will order?</div>
+      <div><b>{{ this.order.orderCreatorUsername }}</b></div>
 
-    <div>When?</div>
-    <div><b>{{ this.order.timeOfOrder }}</b></div>
+      <div>When?</div>
+      <div><b>{{ this.order.timeOfOrder }}</b></div>
 
-    <div>When it'll arrive?</div>
-    <div><b>{{ this.timeOfDeliveryOrNA() }}</b></div>
+      <div>When it'll arrive?</div>
+      <div><b>{{ this.timeOfDeliveryOrNA() }}</b></div>
+    </div>
   </div>
 </template>
 
