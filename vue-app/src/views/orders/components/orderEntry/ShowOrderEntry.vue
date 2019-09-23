@@ -54,41 +54,6 @@
         </v-list-item>
       </template>
     </v-list>
-
-
-    <!--<div class="dish-name-and-edit-buttons">-->
-    <!--<div class="dish-name-text">-->
-    <!--{{ dishEntry.dishName }}-->
-    <!--</div>-->
-
-    <!--<div class="dish-price">-->
-    <!--(-->
-    <!--<price :data-price="dishEntry.price"/>-->
-    <!--)-->
-    <!--</div>-->
-
-    <!--<div class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">-->
-    <!--<v-btn text icon @click="editDishEntry()">-->
-    <!--<i class="fa fa-pencil" aria-hidden="true"></i>-->
-    <!--</v-btn>-->
-
-    <!--<v-btn text icon @click="deleteDishEntry()">-->
-    <!--<i class="fa fa-times" aria-hidden="true"></i>-->
-    <!--</v-btn>-->
-    <!--</div>-->
-    <!--</div>-->
-
-    <!--<div class="side-dishes">-->
-    <!--<div v-for="sideDish in dishEntry.sideDishes" class="side-dish-name py-2">-->
-    <!--+ {{sideDish.name}} (-->
-    <!--<price :data-price="sideDish.price"/>-->
-    <!--)-->
-    <!--</div>-->
-
-    <!--<div v-if="dishEntry.comments.length > 0" class="dish-comments py-2">-->
-    <!--Additional comments: {{dishEntry.comments}}-->
-    <!--</div>-->
-    <!--</div>-->
   </div>
 </template>
 
@@ -200,25 +165,11 @@
     white-space: nowrap;
   }
 
-  p.dish-comments {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 10pt;
-    color: #444444;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   .show-order-entry-wrapper {
     max-width: 100%;
   }
 
   .edit-buttons {
     min-width: 72px;
-  }
-
-  .side-dishes {
-    padding-left: 10px;
   }
 </style>
