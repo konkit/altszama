@@ -1,38 +1,94 @@
 <template>
-  <div>
-    <div class="dish-name-and-edit-buttons">
-      <div class="dish-name-text">
-        {{ dishEntry.dishName }}
-      </div>
+  <div class="show-order-entry-wrapper">
+    <v-list>
+      <v-list-item>
+        <v-list-item-content>
+          <div class="dish-name-and-edit-buttons">
+            <div class="dish-name-text">
+              {{ dishEntry.dishName }}
+            </div>
 
-      <div class="dish-price">
-        (
-          <price :data-price="dishEntry.price"/>
-        )
-      </div>
+            <div class="dish-price">
+              (
+              <price :data-price="dishEntry.price"/>
+              )
+            </div>
 
-      <div class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
-        <v-btn text icon @click="editDishEntry()">
-          <i class="fa fa-pencil" aria-hidden="true"></i>
-        </v-btn>
+            <div class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
+              <v-btn text icon @click="editDishEntry()">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </v-btn>
 
-        <v-btn text icon @click="deleteDishEntry()">
-          <i class="fa fa-times" aria-hidden="true"></i>
-        </v-btn>
-      </div>
-    </div>
+              <v-btn text icon @click="deleteDishEntry()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </v-btn>
+            </div>
+          </div>
+        </v-list-item-content>
+      </v-list-item>
 
-    <div class="side-dishes">
-      <div v-for="sideDish in dishEntry.sideDishes" class="side-dish-name py-2">
-        + {{sideDish.name}} (
-        <price :data-price="sideDish.price"/>
-        )
-      </div>
+      <template v-for="sideDish in dishEntry.sideDishes">
+        <v-list-item>
+          <v-list-item-content>
+            <div class="side-dish-name-and-price">
+              <div class="side-dish-name">
+                + {{sideDish.name}}
+              </div>
 
-      <div v-if="dishEntry.comments.length > 0" class="dish-comments py-2">
-        Additional comments: {{dishEntry.comments}}
-      </div>
-    </div>
+              <div class="side-dish-price"> &nbsp; (
+                <price :data-price="sideDish.price"/>
+                )
+              </div>
+            </div>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+
+      <template v-if="dishEntry.comments.length > 0">
+        <v-list-item>
+          <v-list-item-content>
+            <div class="dish-comments py-2">
+              Additional comments: {{dishEntry.comments}}
+            </div>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+    </v-list>
+
+
+    <!--<div class="dish-name-and-edit-buttons">-->
+    <!--<div class="dish-name-text">-->
+    <!--{{ dishEntry.dishName }}-->
+    <!--</div>-->
+
+    <!--<div class="dish-price">-->
+    <!--(-->
+    <!--<price :data-price="dishEntry.price"/>-->
+    <!--)-->
+    <!--</div>-->
+
+    <!--<div class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">-->
+    <!--<v-btn text icon @click="editDishEntry()">-->
+    <!--<i class="fa fa-pencil" aria-hidden="true"></i>-->
+    <!--</v-btn>-->
+
+    <!--<v-btn text icon @click="deleteDishEntry()">-->
+    <!--<i class="fa fa-times" aria-hidden="true"></i>-->
+    <!--</v-btn>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="side-dishes">-->
+    <!--<div v-for="sideDish in dishEntry.sideDishes" class="side-dish-name py-2">-->
+    <!--+ {{sideDish.name}} (-->
+    <!--<price :data-price="sideDish.price"/>-->
+    <!--)-->
+    <!--</div>-->
+
+    <!--<div v-if="dishEntry.comments.length > 0" class="dish-comments py-2">-->
+    <!--Additional comments: {{dishEntry.comments}}-->
+    <!--</div>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -108,7 +164,7 @@
   .dish-name-and-edit-buttons {
     display: flex;
     flex-direction: row;
-
+    max-width: 100%;
     line-height: 36px;
   }
 
@@ -125,11 +181,23 @@
     padding-left: 5px;
   }
 
-  p.side-dish-name {
+  .side-dish-name-and-price {
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .side-dish-name {
     margin-top: 0;
     margin-bottom: 0;
-    font-size: 10pt;
-    color: #555555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .side-dish-price {
+    white-space: nowrap;
   }
 
   p.dish-comments {
@@ -142,8 +210,12 @@
     text-overflow: ellipsis;
   }
 
-  .edit-buttons {
+  .show-order-entry-wrapper {
+    max-width: 100%;
+  }
 
+  .edit-buttons {
+    min-width: 72px;
   }
 
   .side-dishes {

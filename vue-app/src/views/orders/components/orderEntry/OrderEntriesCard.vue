@@ -13,9 +13,16 @@
           <v-list-item>
 
             <v-list-item-content class="index-element">
-              <div class="py-4">
-                {{dishEntryIndex + 1}}.
+              <div style="padding-top: 8px;">
+                <div style="min-height: 40px;">
+                  <div style="padding-top: 8px">
+                    <div style="line-height: 36px;">
+                      {{dishEntryIndex + 1}}.
+                    </div>
+                  </div>
+                </div>
               </div>
+
             </v-list-item-content>
 
             <v-list-item-content>
