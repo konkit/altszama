@@ -5,7 +5,7 @@
       <template v-if="isStateOrdering">
         <v-container>
           <v-row>
-            <v-col cols="xs12">
+            <v-col cols="12">
               <v-banner>
                 <v-icon slot="icon" color="warning" size="36">mdi-lock-alert</v-icon>
 
@@ -27,36 +27,70 @@
 
         <v-container>
           <v-row>
-            <v-col cols="xs12">
-              <v-card>
+            <v-col cols="8">
+              <v-card height="100%">
+                <v-card-title>Call the place!</v-card-title>
+
                 <v-card-text>
 
                   <v-row>
-                    <v-col cols="xs12">
+                    <v-col>
                       <p>
-                        Now please call the restaurant <span
-                          v-if="restaurantTelephone">(<b>tel. {{restaurantTelephone}}</b>)</span>,
-                        make an order and then enter approximate delivery time and click "Order placed"
+                        Now please call the restaurant, make an order and then enter approximate delivery time
+                        and click "Order placed"
                       </p>
                     </v-col>
                   </v-row>
 
+                  <v-row>
+                    <v-col v-if="restaurantTelephone.length > 0" class="align-center">
+                        <b>tel. {{restaurantTelephone}}</b>
+                    </v-col>
+                    <v-col v-else class="align-center">
+                        <b>Telephone number not specified, sorry :/</b>
+                    </v-col>
+                  </v-row>
+
                   <v-row class="justify-space-around">
-                    <v-col cols="3">
+                    <v-col class="align-center align-self-center" :align-self="align">
+                      <div class=" delivery-time-wrapper" >
+
                       <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
                                   label="Approximate time of delivery"></TimePicker>
+                      </div>
                     </v-col>
 
-                    <v-col cols="3">
-                      <v-btn color="success" @click="submitForm">
-                        Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-                      </v-btn>
+                    <v-col class="align-center align-self-center" :align-self="center">
+                        <v-btn color="success" @click="submitForm">
+                          Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </v-btn>
                     </v-col>
                   </v-row>
 
                 </v-card-text>
               </v-card>
             </v-col>
+
+            <v-col cols="4">
+              <v-card>
+                <v-card-title>Cost summary</v-card-title>
+
+                <v-card-text>
+                  <price-summary
+                      :orderDecreaseInPercent="orderDecreaseInPercent"
+                      :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
+                      :basePriceSum="basePriceSum"
+                      :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
+                      :allEatingPeopleCount="allEatingPeopleCount"
+                      :totalPrice="totalPrice"
+                  >
+                  </price-summary>
+                </v-card-text>
+
+
+              </v-card>
+            </v-col>
+
           </v-row>
         </v-container>
 
@@ -102,27 +136,6 @@
                     </template>
                   </div>
 
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-
-        <v-container>
-          <v-row>
-            <v-col cols="xs12">
-              <v-card>
-                <v-card-text>
-
-                  <price-summary
-                      :orderDecreaseInPercent="orderDecreaseInPercent"
-                      :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
-                      :basePriceSum="basePriceSum"
-                      :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
-                      :allEatingPeopleCount="allEatingPeopleCount"
-                      :totalPrice="totalPrice"
-                  >
-                  </price-summary>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -274,5 +287,13 @@
   }
 
   .table-column {
+  }
+
+  .align-center {
+    text-align: center;
+  }
+
+  .delivery-time-wrapper {
+    display: inline-block;
   }
 </style>
