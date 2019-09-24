@@ -46,7 +46,9 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-divider></v-divider>
+          <template v-if="dishEntryIndex < orderEntry.dishEntries.length - 1">
+            <v-divider class="dishes-divider"></v-divider>
+          </template>
 
         </template>
 
@@ -72,19 +74,16 @@
             </v-list-item-content>
           </v-list-item>
         </template>
-
-        <v-divider></v-divider>
-
-        <v-list-item>
-          <v-list-item-content>
-            <b>Cost for user:
-              <price :data-price="orderEntry.finalPrice"/>
-            </b>
-          </v-list-item-content>
-        </v-list-item>
-
       </v-list>
     </v-card-text>
+
+    <v-card-actions>
+      <span class="px-2">
+        <b>Cost for user:
+          <price :data-price="orderEntry.finalPrice"/>
+        </b>
+      </span>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -166,5 +165,10 @@
 
   .dish-entry-content {
 
+  }
+
+  .dishes-divider {
+    margin-left: 54px;
+    max-width: calc(100% - 54px);
   }
 </style>
