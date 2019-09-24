@@ -34,7 +34,7 @@
       <v-list-item v-if="order.paymentByBankTransfer">
         <v-list-item-content>
           <div class="px-3">
-            {{ order.bankTransferNumber }}
+            {{ formatBankAccountNr(order.bankTransferNumber) }}
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -57,7 +57,7 @@
       <v-list-item v-if="order.paymentByBankTransfer">
         <v-list-item-content>
           <div class="px-3">
-            {{ order.blikPhoneNumber }}
+            {{ formatBlikPhoneNumber(order.blikPhoneNumber) }}
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -74,17 +74,43 @@
     props: [
       "order",
     ],
-    methods: {},
+    methods: {
+      formatBankAccountNr: (unformattedInput) => {
+        if (unformattedInput) {
+          var input = unformattedInput.trim();
+
+          if (input.length === 26) {
+            var result = input.slice(0, 2) + " ";
+
+            for(var i=2; i<input.length; i+=4) {
+              result += input.slice(i, i+4) + " "
+            }
+
+            return result;
+          }
+        }
+
+        return unformattedInput;
+      },
+      formatBlikPhoneNumber: (unformattedInput) => {
+        if (unformattedInput) {
+          var input = unformattedInput.trim();
+
+          if (input.length >= 9) {
+            return `${input.slice(0, input.length -6)} ${input.slice(input.length-6, input.length-3)} ${input.slice(input.length-3, input.length)}`
+          }
+        }
+
+        return unformattedInput;
+      }
+    },
     components: {
       Price,
       ErrorsComponent
     }
   }
+
 </script>
 
 <style scoped>
-  .grid-container {
-    display: grid;
-    grid-template-columns: 125px 1fr;
-  }
 </style>

@@ -45,9 +45,7 @@
 
           <v-col :cols="12" :md="4">
             <v-card class="asdf-card">
-              <v-card-title>
-                Payment options
-              </v-card-title>
+              <v-card-title>Payment options</v-card-title>
 
               <PaymentOptionsSummary :order="order"></PaymentOptionsSummary>
             </v-card>
