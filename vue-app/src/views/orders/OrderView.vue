@@ -44,26 +44,26 @@
 
                   <v-row>
                     <v-col v-if="restaurantTelephone.length > 0" class="align-center">
-                        <b>tel. {{restaurantTelephone}}</b>
+                      <b>tel. {{restaurantTelephone}}</b>
                     </v-col>
                     <v-col v-else class="align-center">
-                        <b>Telephone number not specified, sorry :/</b>
+                      <b>Telephone number not specified, sorry :/</b>
                     </v-col>
                   </v-row>
 
                   <v-row class="justify-space-around">
                     <v-col class="align-center align-self-center" :align-self="align">
-                      <div class=" delivery-time-wrapper" >
+                      <div class=" delivery-time-wrapper">
 
-                      <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
-                                  label="Approximate time of delivery"></TimePicker>
+                        <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
+                                    label="Approximate time of delivery"></TimePicker>
                       </div>
                     </v-col>
 
                     <v-col class="align-center align-self-center" :align-self="center">
-                        <v-btn color="success" @click="submitForm">
-                          Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-                        </v-btn>
+                      <v-btn color="success" @click="submitForm">
+                        Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+                      </v-btn>
                     </v-col>
                   </v-row>
 
@@ -105,37 +105,53 @@
                 <v-card-text>
                   <errors-component/>
 
-                  <div class="grid-container">
+                  <v-list dense>
                     <template v-for="entry in groupedEntries">
-                      <div class="table-column pt-3">
-                        {{entry.eatingPeopleCount}}x {{entry.dish.name}}
-                        <span class="price-wrapper">(<price :data-price="entry.dish.price"></price>)</span>
-                      </div>
+                      <v-list-item>
+                        <v-list-content class="body-1">
+                          <b>{{entry.eatingPeopleCount}}x</b> {{entry.dish.name}}
+                        </v-list-content>
+                      </v-list-item>
 
-                      <div class="table-column pt-3">
-                        <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
-                          <p class="dish-name">
-                            {{i + 1}}. {{ eatingPersonEntry.username }}
-                          </p>
+                      <v-list dense class="px-8 no-y-padding" v-if="entry.eatingPeopleEntries.length > 0">
 
-                          <p class="side-dish-name pl-3" v-for="(sd, j) in eatingPersonEntry.sideDishes" :key="j">
-                            + {{sd.name}} (
-                            <price :data-price="sd.price"/>
-                            )
-                          </p>
+                        <template v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries">
+                          <v-list-item>
+                            <v-list-content>
+                              {{i + 1}}. {{ eatingPersonEntry.username }}
+                            </v-list-content>
+                          </v-list-item>
 
-                          <p class="dish-comments pl-3" v-if="eatingPersonEntry.comments.length > 0">
-                            Additional comments: {{ eatingPersonEntry.comments }}
-                          </p>
-                        </div>
-                      </div>
+                          <v-list dense class="px-8 no-y-padding"
+                                  v-if="eatingPersonEntry.sideDishes.length > 0 || eatingPersonEntry.comments.length > 0">
 
-                      <div class="table-column pt-3">
-                        <price :data-price="entry.price"></price>
-                      </div>
+                            <template v-if="eatingPersonEntry.comments.length > 0">
+                              <v-subheader>Additional comments:</v-subheader>
+
+                              <v-list-item>
+                                <v-list-content>
+                                  {{ eatingPersonEntry.comments }}
+                                </v-list-content>
+                              </v-list-item>
+
+                            </template>
+
+                            <template v-if="eatingPersonEntry.sideDishes.length > 0">
+                              <v-subheader>Side dishes:</v-subheader>
+
+                              <template v-for="(sd, j) in eatingPersonEntry.sideDishes">
+                                <v-list-item>
+                                  <v-list-content>
+                                    {{sd.name}}
+                                  </v-list-content>
+                                </v-list-item>
+                              </template>
+                            </template>
+                          </v-list>
+                        </template>
+                      </v-list>
                     </template>
-                  </div>
-
+                  </v-list>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -295,5 +311,10 @@
 
   .delivery-time-wrapper {
     display: inline-block;
+  }
+
+  .no-y-padding {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 </style>
