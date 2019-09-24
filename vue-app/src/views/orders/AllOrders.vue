@@ -45,7 +45,6 @@
 <script>
   import LoadingView from "../commons/LoadingView";
   import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
-  import SimpleCard from "../commons/SimpleCard";
   import router from '../../router/index'
   import ViewWrapper from "../commons/ViewWrapper";
 
@@ -79,7 +78,6 @@
     },
     components: {
       ViewWrapper,
-      SimpleCard,
       LoadingView,
     },
   }

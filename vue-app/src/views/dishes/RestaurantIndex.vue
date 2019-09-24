@@ -56,7 +56,6 @@
   import LoadingView from "../commons/LoadingView";
   import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
   import router from '../../router/index'
-  import SimpleCard from "../commons/SimpleCard";
   import moment from "moment"
   import ViewWrapper from "../commons/ViewWrapper";
 
@@ -113,7 +112,6 @@
     },
     components: {
       ViewWrapper,
-      SimpleCard,
       LoadingView,
     }
   }

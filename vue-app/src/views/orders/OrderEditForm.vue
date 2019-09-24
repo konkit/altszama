@@ -1,79 +1,88 @@
 <template>
   <ViewWrapper :title="`Edit order from ${restaurantName}`" :backpath="`#/orders/show/${orderId}`">
     <LoadingView>
-      <simple-card>
-        <order-state-buttons></order-state-buttons>
-      </simple-card>
-
-      <simple-card>
+      <v-container>
         <errors-component/>
 
-        <v-container grid-list-md>
-          <v-layout row>
-            <v-flex xs4>
-              <h3>Order time</h3>
-              <TimePicker :value="timeOfOrder" @input="updateTimeOfOrder($event)" label="Order time"></TimePicker>
-            </v-flex>
+        <v-row>
+          <v-col>
+            <order-state-buttons></order-state-buttons>
+          </v-col>
+        </v-row>
 
-            <v-flex xs4>
-              <h3>Price change</h3>
+        <v-row>
+          <v-col>
+            <v-card>
+              <v-card-text>
+                <v-row>
+                  <v-col>
+                    <h3>Order time</h3>
+                    <TimePicker :value="timeOfOrder" @input="updateTimeOfOrder($event)" label="Order time"></TimePicker>
+                  </v-col>
 
-              <v-text-field
-                  class="percent-input"
-                  label="Price decrease (in percent)"
-                  suffix="%"
-                  :value="decreaseInPercent"
-                  @input="updateDecreaseInPercent($event)"></v-text-field>
+                  <v-col>
+                    <h3>Price change</h3>
 
-              <MoneyInput
-                  class="short-input"
-                  label="Delivery cost (total)"
-                  :value="deliveryCostPerEverybody"
-                  @input="updateDeliveryCostPerEverybody($event)">
-              </MoneyInput>
+                    <v-text-field
+                        class="percent-input"
+                        label="Price decrease (in percent)"
+                        suffix="%"
+                        :value="decreaseInPercent"
+                        @input="updateDecreaseInPercent($event)"></v-text-field>
 
-              <MoneyInput
-                  class="short-input"
-                  label="Delivery cost (per dish)"
-                  :value="deliveryCostPerDish"
-                  @input="updateDeliveryCostPerDish($event)">
-              </MoneyInput>
-            </v-flex>
+                    <MoneyInput
+                        class="short-input"
+                        label="Delivery cost (total)"
+                        :value="deliveryCostPerEverybody"
+                        @input="updateDeliveryCostPerEverybody($event)">
+                    </MoneyInput>
 
-            <v-flex xs4>
-              <h3>Payment</h3>
+                    <MoneyInput
+                        class="short-input"
+                        label="Delivery cost (per dish)"
+                        :value="deliveryCostPerDish"
+                        @input="updateDeliveryCostPerDish($event)">
+                    </MoneyInput>
+                  </v-col>
 
-              <v-switch v-model="paymentByCash" label="Payment by cash"></v-switch>
+                  <v-col>
+                    <h3>Payment</h3>
 
-              <v-switch v-model="paymentByBankTransfer" label="Payment by bank transfer"></v-switch>
+                    <v-switch v-model="paymentByCash" label="Payment by cash"></v-switch>
 
-              <v-text-field
-                  v-if="paymentByBankTransfer"
-                  label="Bank transfer number"
-                  :value="bankTransferNumber"
-                  @change="updateBankTransferNumber($event)"
-              />
+                    <v-switch v-model="paymentByBankTransfer" label="Payment by bank transfer"></v-switch>
 
-              <v-switch v-model="paymentByBlik" label="Payment by BLIK"></v-switch>
+                    <v-text-field
+                        v-if="paymentByBankTransfer"
+                        label="Bank transfer number"
+                        :value="bankTransferNumber"
+                        @change="updateBankTransferNumber($event)"
+                    />
 
-              <v-text-field
-                  v-if="paymentByBlik"
-                  label="BLIK phone number"
-                  :value="blikPhoneNumber"
-                  @change="updateBlikPhoneNumber($event)"
-              />
-            </v-flex>
-          </v-layout>
-        </v-container>
+                    <v-switch v-model="paymentByBlik" label="Payment by BLIK"></v-switch>
 
-        <div class="row justify-content-center">
-          <div class="col">
-            <v-btn color="success" block @click="submitForm">
-              Update
-            </v-btn>
-          </div>
-        </div>
-      </simple-card>
+                    <v-text-field
+                        v-if="paymentByBlik"
+                        label="BLIK phone number"
+                        :value="blikPhoneNumber"
+                        @change="updateBlikPhoneNumber($event)"
+                    />
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col>
+                    <v-btn color="success" block @click="submitForm">
+                      Update
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
+      </v-container>
     </LoadingView>
   </ViewWrapper>
 </template>
@@ -99,7 +108,6 @@
     UPDATE_BLIK_PHONE_NUMBER,
     UPDATE_PAYMENT_BY_BLIK
   } from "../../store/modules/EditOrderState"
-  import SimpleCard from "../commons/SimpleCard";
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY
@@ -211,7 +219,6 @@
       OrderStateButtons,
       TimePicker,
       MoneyInput,
-      SimpleCard,
       LoadingView,
       BackButton2,
       ErrorsComponent,
@@ -222,10 +229,6 @@
 </script>
 
 <style scoped>
-  .row {
-    margin-top: 2rem;
-  }
-
   .percent-input {
     width: 150px;
   }

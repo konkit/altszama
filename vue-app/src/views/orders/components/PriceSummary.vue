@@ -55,7 +55,6 @@
 </template>
 
 <script>
-  import SimpleCard from "../../commons/SimpleCard";
   import Price from "../../commons/PriceElement"
   import ErrorsComponent from '../../commons/Errors'
 
@@ -70,7 +69,6 @@
       "totalPrice"
     ],
     components: {
-      SimpleCard,
       Price,
       ErrorsComponent
     }

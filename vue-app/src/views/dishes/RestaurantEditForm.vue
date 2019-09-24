@@ -1,13 +1,13 @@
 <template>
   <ViewWrapper :title="`Edit restaurant ${name}`" :backpath="`#/restaurants/show/${this.restaurantId}`">
     <LoadingView>
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
+      <v-container>
+        <errors-component/>
+
+        <v-row>
+          <v-col>
             <v-card>
               <v-card-text>
-                <errors-component/>
-
                 <v-form id="restaurantCreateForm">
                   <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
                   <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
@@ -21,8 +21,8 @@
                 <v-btn block color="success" @click="submitForm">Update</v-btn>
               </v-card-actions>
             </v-card>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-container>
     </LoadingView>
   </ViewWrapper>

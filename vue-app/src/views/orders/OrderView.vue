@@ -146,7 +146,6 @@
     UPDATE_APPROX_TIME_OF_DELIVERY
   } from "../../store/modules/OrderViewState"
   import {mapState} from "vuex"
-  import SimpleCard from "../commons/SimpleCard";
   import PriceSummary from "./components/PriceSummary";
   import TimePicker from "../commons/TimePicker";
   import ViewWrapper from "../commons/ViewWrapper";
@@ -210,7 +209,6 @@
       ViewWrapper,
       TimePicker,
       PriceSummary,
-      SimpleCard,
       LoadingView,
       BackButton2,
       ErrorsComponent,

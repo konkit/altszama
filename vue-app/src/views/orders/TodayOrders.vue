@@ -169,7 +169,6 @@
   import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
   import {mapState} from "vuex"
   import ErrorsComponent from '../commons/Errors'
-  import SimpleCard from "../commons/SimpleCard";
   import router from '../../router/index'
   import ViewWrapper from "../commons/ViewWrapper";
 
@@ -201,10 +200,8 @@
     },
     components: {
       ViewWrapper,
-      SimpleCard,
       LoadingView,
       ErrorsComponent,
-      SimpleCard
     }
   }
 </script>

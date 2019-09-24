@@ -118,7 +118,6 @@
   } from "../../store/modules/ShowOrderState"
   import router from '../../router/index'
   import PriceSummary from "./components/PriceSummary";
-  import SimpleCard from "../commons/SimpleCard";
   import ViewWrapper from "../commons/ViewWrapper";
   import CustomPolyfills from "../../lib/CustomPolyfills";
   import PaymentStatus from "./components/PaymentStatus";
@@ -208,7 +207,6 @@
       OrderEntriesCard,
       PaymentStatus,
       ViewWrapper,
-      SimpleCard,
       PriceSummary,
       BackButton2,
       Price,

@@ -98,7 +98,6 @@
     SET_DISH_ENTRY_CREATING,
   } from "../../../../store/modules/ModifyOrderEntryState";
   import PriceSummary from "../PriceSummary";
-  import SimpleCard from "../../../commons/SimpleCard";
   import ViewWrapper from "../../../commons/ViewWrapper";
   import PaymentStatus from "../PaymentStatus";
 
@@ -135,7 +134,6 @@
     components: {
       PaymentStatus,
       ViewWrapper,
-      SimpleCard,
       PriceSummary,
       Price,
       CreateOrderEntry,
@@ -150,21 +148,6 @@
     min-width: 20px;
     flex-grow: 0;
     align-self: flex-start;
-  }
-
-  .dish-entry-wrapper {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .dish-entry-index {
-    min-width: 18px;
-    height: 36px;
-    line-height: 36px;
-  }
-
-  .dish-entry-content {
-
   }
 
   .dishes-divider {

@@ -1,12 +1,12 @@
 <template>
   <ViewWrapper :title="`Create dish`" :backpath="getBackUrl()">
-    <v-container fluid>
-      <v-layout align-center justify-center>
-        <v-flex xs10>
+    <v-container>
+      <errors-component/>
+
+      <v-row>
+        <v-col>
           <v-card>
             <v-card-text>
-              <errors-component/>
-
               <input type="hidden" name="restaurant.id" :value="restaurantId"/>
 
               <v-text-field label="Name" :value="name" @input="updateName($event)" required=""></v-text-field>
@@ -29,8 +29,8 @@
               <v-btn block color="success" @click="submitForm">Create</v-btn>
             </v-card-actions>
           </v-card>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </v-container>
   </ViewWrapper>
 </template>
