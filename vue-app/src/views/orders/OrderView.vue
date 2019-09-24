@@ -103,55 +103,7 @@
                 </v-card-title>
 
                 <v-card-text>
-                  <errors-component/>
-
-                  <v-list dense>
-                    <template v-for="entry in groupedEntries">
-                      <v-list-item>
-                        <v-list-content class="body-1">
-                          <b>{{entry.eatingPeopleCount}}x</b> {{entry.dish.name}}
-                        </v-list-content>
-                      </v-list-item>
-
-                      <v-list dense class="px-8 no-y-padding" v-if="entry.eatingPeopleEntries.length > 0">
-
-                        <template v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries">
-                          <v-list-item>
-                            <v-list-content>
-                              {{i + 1}}. {{ eatingPersonEntry.username }}
-                            </v-list-content>
-                          </v-list-item>
-
-                          <v-list dense class="px-8 no-y-padding"
-                                  v-if="eatingPersonEntry.sideDishes.length > 0 || eatingPersonEntry.comments.length > 0">
-
-                            <template v-if="eatingPersonEntry.comments.length > 0">
-                              <v-subheader>Additional comments:</v-subheader>
-
-                              <v-list-item>
-                                <v-list-content>
-                                  {{ eatingPersonEntry.comments }}
-                                </v-list-content>
-                              </v-list-item>
-
-                            </template>
-
-                            <template v-if="eatingPersonEntry.sideDishes.length > 0">
-                              <v-subheader>Side dishes:</v-subheader>
-
-                              <template v-for="(sd, j) in eatingPersonEntry.sideDishes">
-                                <v-list-item>
-                                  <v-list-content>
-                                    {{sd.name}}
-                                  </v-list-content>
-                                </v-list-item>
-                              </template>
-                            </template>
-                          </v-list>
-                        </template>
-                      </v-list>
-                    </template>
-                  </v-list>
+                  <UserOrders :groupedEntries="groupedEntries"></UserOrders>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -205,6 +157,7 @@
     SET_ORDER_AS_DELIVERED_ACTION,
   } from "../../store/modules/ShowOrderState"
   import router from '../../router/index'
+  import UserOrders from "./components/orderView/UserOrders";
 
   export default {
     data() {
@@ -253,6 +206,7 @@
       }
     },
     components: {
+      UserOrders,
       ViewWrapper,
       TimePicker,
       PriceSummary,
