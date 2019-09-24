@@ -31,9 +31,9 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item>
+      <v-list-item v-if="order.paymentByBankTransfer">
         <v-list-item-content>
-          <div class="px-3" v-if="order.paymentByBankTransfer">
+          <div class="px-3">
             {{ order.bankTransferNumber }}
           </div>
         </v-list-item-content>
@@ -54,9 +54,9 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item>
+      <v-list-item v-if="order.paymentByBankTransfer">
         <v-list-item-content>
-          <div class="px-3" v-if="order.paymentByBankTransfer">
+          <div class="px-3">
             {{ order.blikPhoneNumber }}
           </div>
         </v-list-item-content>
