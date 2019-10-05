@@ -57,7 +57,7 @@
                 <errors-component/>
 
                 <v-list>
-                  <div v-if="this.ordersList.length > 0">
+                  <template v-if="this.ordersList.length > 0">
                     <v-list-item @click="goToOrder(order.id)" v-for="order in this.ordersList">
                       <v-list-item-content>
                         <v-list-item-title class="pointer">
@@ -94,7 +94,14 @@
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
-                  </div>
+                  </template>
+                  <template v-if="this.ordersList.length === 0">
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title>No orders</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                  </template>
                 </v-list>
               </v-card-text>
             </v-card>
