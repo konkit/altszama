@@ -19,6 +19,7 @@ router.beforeEach((to, from, next) => {
 // CSS libs
 import 'font-awesome/css/font-awesome.css';
 import './assets/main-styles.css'
+import './assets/global-styles.css'
 
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
