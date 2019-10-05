@@ -79,12 +79,9 @@ dependencies {
   compile("org.springframework.security:spring-security-web")
 
   // Web push notifications
-  compile("de.bytefish.fcmjava:fcmjava-core:2.1")
-  compile("de.bytefish.fcmjava:fcmjava-client:2.1")
-
-  // For cryptographic operations
+  compile("nl.martijndwars:web-push:5.0.2")
   compile("org.bouncycastle:bcprov-jdk15on:1.54")
-  compile("nl.martijndwars:web-push:3.0.0")
+
 
   // Jackson
   compile("com.fasterxml.jackson.module:jackson-module-parameter-names")

@@ -1,77 +1,81 @@
 <template>
   <div>
-    <v-layout>
-      <template v-if="!newDish">
-        <v-autocomplete
-            :items="allDishesAtOnce"
-            label="Dish"
-            :value="dishId"
-            @change="updateDishId($event)"
-            item-text="text"
-            item-value="value"
-        >
-          <template slot="selection" slot-scope="data">
-            {{ data.item.text }}
+    <v-btn-toggle :value="newDish" mandatory @change="onDishTypeToggle($event)">
+      <v-btn text :value="false">
+        Select dish from the list
+      </v-btn>
+
+      <v-btn text :value="true">
+        Type your own dish
+      </v-btn>
+    </v-btn-toggle>
+
+    <template v-if="!newDish">
+      <v-autocomplete
+          :items="allDishesAtOnce"
+          label="Dish"
+          :value="dishId"
+          @change="updateDishId($event)"
+          item-text="text"
+          item-value="value"
+      >
+        <template slot="selection" slot-scope="data">
+          {{ data.item.text }}
+        </template>
+
+        <template slot="item" slot-scope="data">
+          <template v-if="typeof data.item !== 'object'">
+            <v-list-item-content v-text="data.item"></v-list-item-content>
           </template>
 
-          <template slot="item" slot-scope="data">
-            <template v-if="typeof data.item !== 'object'">
-              <v-list-tile-content v-text="data.item"></v-list-tile-content>
-            </template>
-
-            <template v-else>
-              <v-list-tile-content>
-                <v-list-tile-title v-html="data.item.text"></v-list-tile-title>
-                <v-list-tile-sub-title v-html="data.item.subtitle"></v-list-tile-sub-title>
-              </v-list-tile-content>
-            </template>
+          <template v-else>
+            <v-list-item-content>
+              <v-list-item-title v-html="data.item.text"></v-list-item-title>
+              <v-list-item-sub-title v-html="data.item.subtitle"></v-list-item-sub-title>
+            </v-list-item-content>
           </template>
-        </v-autocomplete>
-        <v-btn flat @click="setDishAsNew()">Type your own dish! &nbsp;</v-btn>
-      </template>
+        </template>
+      </v-autocomplete>
 
-      <template v-if="newDish">
-        <v-text-field
-            type="text"
-            placeholder="New dish name"
-            id="newDishName"
-            :value="newDishName"
-            class="pr-2"
-            @input="updateNewDishName($event)">
-        </v-text-field>
+    </template>
 
-        <MoneyInput
-            label="New dish price"
-            :value="newDishPrice"
-            @input="updateNewDishPrice($event)"
-        >
-        </MoneyInput>
+    <template v-if="newDish">
+      <v-text-field
+          type="text"
+          placeholder="New dish name"
+          id="newDishName"
+          :value="newDishName"
+          class="pr-2"
+          @input="updateNewDishName($event)">
+      </v-text-field>
 
-        <v-btn flat @click="setDishAsExisting()">Select dish from list &nbsp;</v-btn>
-      </template>
-    </v-layout>
+      <MoneyInput
+          label="New dish price"
+          :value="newDishPrice"
+          @input="updateNewDishPrice($event)"
+      >
+      </MoneyInput>
+    </template>
 
-    <p>Side dishes:</p>
+    <subheader>Side dishes:</subheader>
 
     <side-dishes-input></side-dishes-input>
 
-    <v-layout>
-      <v-text-field
-          label="Additional Comments"
-          :value="additionalComments"
-          @input="updateAdditionalComments($event)"
-      >
-      </v-text-field>
-    </v-layout>
+    <v-text-field
+        label="Additional Comments"
+        :value="additionalComments"
+        @input="updateAdditionalComments($event)"
+    >
+    </v-text-field>
   </div>
 </template>
 
 <script>
-  import ErrorsComponent from '../../commons/Errors.vue'
-  import Spinner from '../../commons/Spinner.vue'
-  import Price from '../../commons/PriceElement.vue'
+  import ErrorsComponent from '../../../commons/Errors.vue'
+  import Spinner from '../../../commons/Spinner.vue'
+  import Price from '../../../commons/PriceElement.vue'
   import moment from "moment"
-  import CustomPolyfills from "../../../lib/CustomPolyfills"
+  import CustomPolyfills from "../../../../lib/CustomPolyfills"
 
   import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
@@ -84,12 +88,17 @@
     UPDATE_ADDITIONAL_COMMENTS,
     SET_DISH_AS_NEW,
     SET_DISH_AS_EXISTING, CANCEL_DISH_ENTRY_MODIFICATION,
-  } from "../../../store/modules/ModifyOrderEntryState";
+  } from "../../../../store/modules/ModifyOrderEntryState";
   import {mapState, mapMutations} from "vuex"
-  import MoneyInput from "../../commons/MoneyInput";
+  import MoneyInput from "../../../commons/MoneyInput";
 
   export default {
     name: 'order-entry-form',
+    data: function () {
+      return {
+        newDish123: 1
+      }
+    },
     methods: {
       setDishAsNew() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_NEW}`)
@@ -113,6 +122,17 @@
       cancelEdit() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
       },
+      onDishTypeToggle(e) {
+        console.log("onDishTypeToggle: ", e);
+
+        if (e === true) {
+          this.setDishAsNew()
+        } else if (e === false) {
+          this.setDishAsExisting()
+        } else {
+          console.warn("Dish type toggle returned wrong value")
+        }
+      }
 
     },
     computed: {

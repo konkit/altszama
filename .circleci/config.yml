@@ -20,18 +20,20 @@ jobs:
     - run:
         name: Fill application-production.properties
         command: |
-          echo "altszama.gcmServerKey=$GCM_SERVER_KEY" > ./backend-app/src/main/resources/application-production.properties
           echo "altszama.databaseName=$DATABASE_NAME" >> ./backend-app/src/main/resources/application-production.properties
           echo "altszama.googleClientId=$GOOGLE_CLIENT_ID" >> ./backend-app/src/main/resources/application-production.properties
           echo "altszama.googleClientSecret=$GOOGLE_CLIENT_SECRET" >> ./backend-app/src/main/resources/application-production.properties
+          echo "altszama.vapidPublicKey=$VAPID_PUBLIC_KEY" >> ./backend-app/src/main/resources/application-production.properties
+          echo "altszama.vapidPrivateKey=$VAPID_PRIVATE_KEY" >> ./backend-app/src/main/resources/application-production.properties
+          echo "altszama.vapidSubject=$VAPID_SUBJECT" >> ./backend-app/src/main/resources/application-production.properties
 
     - run:
         name: Fill .env.production.local
         command: |
           echo "VUE_APP_BACKEND_URL=$VUE_APP_BACKEND_URL" > ./vue-app/.env.production.local
-          echo "VUE_APP_GCM_SENDER_ID=$VUE_APP_GCM_SENDER_ID" >> ./vue-app/.env.production.local
           echo "VUE_APP_GOOGLE_CLIENT_ID=$VUE_APP_GOOGLE_CLIENT_ID" >> ./vue-app/.env.production.local
           echo "VUE_APP_SENTRY_URL=$VUE_APP_SENTRY_URL" >> ./vue-app/.env.production.local
+          echo "VUE_APP_VAPID_PUBLIC_KEY=$VUE_APP_VAPID_PUBLIC_KEY" >> ./vue-app/.env.production.local
 
     - run:
         name: Build JAR

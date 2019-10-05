@@ -1,52 +1,60 @@
 <template>
   <div>
-    <h3>Price summary</h3>
+    <v-list dense>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Base price :</v-list-item-title>
+        </v-list-item-content>
 
-    <div class="grid-container">
-      <div class="pt-2" v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
-        Base price :
-      </div>
+        <v-list-item-content>
+          <price :data-price="basePriceSum"/>
+        </v-list-item-content>
+      </v-list-item>
 
-      <div class="pt-2" v-if="orderDecreaseInPercent !== 0 || orderDeliveryCostPerEverybody !== 0">
-        <b><price :data-price="basePriceSum"/></b>
-      </div>
+      <v-list-item class="item-dense">
+        <v-list-item-content>
+          <v-list-item-title>Price decrease :</v-list-item-title>
+        </v-list-item-content>
 
+        <v-list-item-content>
+          <span class="unbreakable">- {{orderDecreaseInPercent}} %</span>
+        </v-list-item-content>
+      </v-list-item>
 
-      <div class="pt-2" v-if="orderDecreaseInPercent !== 0">
-        Price decrease :
-      </div>
+      <v-list-item class="item-dense">
+        <v-list-item-content>
+          <v-list-item-title>Delivery :</v-list-item-title>
+        </v-list-item-content>
 
-      <div class="pt-2" v-if="orderDecreaseInPercent !== 0">
-        <b>- {{orderDecreaseInPercent}} %</b>
-      </div>
+        <v-list-item-content>
+          <span class="unbreakable">+ <price :data-price="orderDeliveryCostPerEverybody"/></span>
+        </v-list-item-content>
+      </v-list-item>
 
+      <v-list-item class="item-dense">
+        <v-list-item-content >
+          <v-list-item-title>Delivery per dish:</v-list-item-title>
+        </v-list-item-content>
 
-      <div class="pt-2" v-if="orderDeliveryCostPerEverybody !== 0">
-        Delivery :
-      </div>
+        <v-list-item-content>
+          <span class="unbreakable">+ <price :data-price="orderDeliveryCostPerDish"/> * {{allEatingPeopleCount}}</span>
+        </v-list-item-content>
+      </v-list-item>
 
-      <div class="pt-2" v-if="orderDeliveryCostPerEverybody !== 0">
-        <b>+ <price :data-price="orderDeliveryCostPerEverybody"/></b>
-      </div>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Total:</v-list-item-title>
+        </v-list-item-content>
 
-
-      <div class="pt-2" v-if="orderDeliveryCostPerDish !== 0">
-        Delivery per dish:
-      </div>
-
-      <div class="pt-2" v-if="orderDeliveryCostPerDish !== 0">
-        <b>+ <price :data-price="orderDeliveryCostPerDish"/> * {{allEatingPeopleCount}}</b>
-      </div>
-
-    </div>
-
-    <div class="pt-3"><b>Total:</b></div>
-    <div><b><price :data-price="totalPrice"/></b></div>
+        <v-list-item-content>
+          <price :data-price="totalPrice"/>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
 <script>
-  import SimpleCard from "../../commons/SimpleCard";
   import Price from "../../commons/PriceElement"
   import ErrorsComponent from '../../commons/Errors'
 
@@ -61,7 +69,6 @@
       "totalPrice"
     ],
     components: {
-      SimpleCard,
       Price,
       ErrorsComponent
     }
@@ -72,5 +79,18 @@
   .grid-container {
     display: grid;
     grid-template-columns: 125px 1fr;
+  }
+
+  /*.item-dense {*/
+    /*min-height: 16px !important;*/
+  /*}*/
+
+  /*.item-dense .v-list-item__content {*/
+    /*padding-top: 0px !important;*/
+    /*padding-bottom: 0px !important;*/
+  /*}*/
+
+  .unbreakable {
+    word-break: keep-all;
   }
 </style>

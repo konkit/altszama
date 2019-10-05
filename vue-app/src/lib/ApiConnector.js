@@ -5,6 +5,7 @@ import GoogleLogin from './GoogleLogin.js'
 
 const currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
 const backendUrl = process.env.VUE_APP_BACKEND_URL || currentDomain;
+const vapidPublicKey = process.env.VUE_APP_VAPID_PUBLIC_KEY;
 
 let pushNotificationEnabled = false;
 
@@ -113,11 +114,21 @@ export default {
       });
   },
 
-  subscribe: () => {
+  subscribe () {
     return navigator.serviceWorker.ready
       .then(serviceWorkerRegistration => {
-        serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
-          .then(subscription => this.sendSubscriptionToServer(subscription))
+        let subscribePayload = {
+          userVisibleOnly: true,
+          applicationServerKey: vapidPublicKey
+        };
+
+        console.log("Subscribe payload: ", subscribePayload);
+
+        serviceWorkerRegistration.pushManager.subscribe(subscribePayload)
+          .then(subscription => {
+            console.log("Subscription: ", subscription)
+            this.sendSubscriptionToServer(subscription)
+          })
           .catch(e => {
             if (Notification.permission === 'denied') {
               console.warn('Permission for Notifications was denied');
@@ -132,13 +143,18 @@ export default {
     const key = subscription.getKey ? subscription.getKey('p256dh') : '';
     const auth = subscription.getKey ? subscription.getKey('auth') : '';
 
+    console.log("key: ", key);
+    console.log("auth: ", auth);
+
     const subscribeData = JSON.stringify({
       endpoint: subscription.endpoint,
       p256dhKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : '',
       authKey: auth ? btoa(String.fromCharCode.apply(null, new Uint8Array(auth))) : ''
     });
 
-    const url = this.getBackendUrl() + '/notification/subscribe';
+    const url = '/notification/subscribe';
+
+    console.log("url: ", url);
 
     return this.makePost(url, subscribeData);
   },

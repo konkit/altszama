@@ -1,41 +1,52 @@
 <template>
   <ViewWrapper title="Restaurants">
     <LoadingView>
-      <simple-card>
-        <v-data-table
-            class="table table-hover"
-            :items="restaurantsEntries"
-            :headers="headers"
-            :loading="false"
-            :pagination.sync="pagination">
-          <template slot="headers" slot-scope="props">
-            <tr>
-              <th v-for="header in props.headers" :key="header.text">
-                {{ header.text }}
-              </th>
-            </tr>
-          </template>
+      <v-container>
+        <v-row>
+          <v-col cols="xs12">
+            <v-card>
+              <v-card-text>
 
-          <template slot="items" slot-scope="props">
-            <tr @click="goToRestaurant(props.item.id)" :key="props.item.id" :data-href="'/orders/show/' + props.item.id"
-                class="pointer">
-              <td>{{ props.item.name }}</td>
-              <td>{{ props.item.dishCount }}</td>
-              <td>{{ dateToRel(props.item.lastCrawled) }}</td>
-              <td>{{ dateToRel(props.item.lastEdited) }}</td>
-            </tr>
-          </template>
-        </v-data-table>
+                <v-data-table
+                    class="table table-hover"
+                    :items="restaurantsEntries"
+                    :headers="headers"
+                    :loading="false"
+                    :pagination.sync="pagination">
+                  <template slot="header" slot-scope="props">
+                    <tr>
+                      <th v-for="header in props.headers" :key="header.text">
+                        {{ header.text }}
+                      </th>
+                    </tr>
+                  </template>
 
-        <v-tooltip left>
-          <template slot="activator">
-            <v-btn fixed dark fab large bottom right color="green" @click="goToCreateRestaurant()">
-              <v-icon>add</v-icon>
-            </v-btn>
-          </template>
-          <span>Create new restaurant</span>
-        </v-tooltip>
-      </simple-card>
+                  <template slot="item" slot-scope="props">
+                    <tr @click="goToRestaurant(props.item.id)" :key="props.item.id"
+                        :data-href="'/orders/show/' + props.item.id"
+                        class="pointer">
+                      <td>{{ props.item.name }}</td>
+                      <td>{{ props.item.dishCount }}</td>
+                      <td>{{ dateToRel(props.item.lastCrawled) }}</td>
+                      <td>{{ dateToRel(props.item.lastEdited) }}</td>
+                    </tr>
+                  </template>
+                </v-data-table>
+
+                <v-tooltip left>
+                  <template slot="activator">
+                    <v-btn fixed dark fab large bottom right color="green" @click="goToCreateRestaurant()">
+                      <v-icon>add</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Create new restaurant</span>
+                </v-tooltip>
+
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
 
     </LoadingView>
   </ViewWrapper>
@@ -45,7 +56,6 @@
   import LoadingView from "../commons/LoadingView";
   import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
   import router from '../../router/index'
-  import SimpleCard from "../commons/SimpleCard";
   import moment from "moment"
   import ViewWrapper from "../commons/ViewWrapper";
 
@@ -102,7 +112,6 @@
     },
     components: {
       ViewWrapper,
-      SimpleCard,
       LoadingView,
     }
   }

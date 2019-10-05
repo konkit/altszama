@@ -1,13 +1,13 @@
 <template>
   <ViewWrapper title="Edit dish" :backpath="`#/restaurants/show/${restaurantId}`">
     <LoadingView>
-      <v-container fluid>
-        <v-layout align-center justify-center>
-          <v-flex xs10>
+      <v-container>
+        <errors-component/>
+
+        <v-row>
+          <v-col>
             <v-card>
               <v-card-text>
-                <errors-component/>
-
                 <input type="hidden" name="restaurant.id" :value="restaurantId"/>
                 <input type="hidden" name="id" :value="dishId"/>
 
@@ -32,8 +32,8 @@
                 <v-btn block color="success" @click="submitForm">Update</v-btn>
               </v-card-actions>
             </v-card>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-container>
     </LoadingView>
   </ViewWrapper>

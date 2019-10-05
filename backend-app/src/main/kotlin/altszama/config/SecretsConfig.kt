@@ -16,7 +16,13 @@ open class SecretsConfig {
     @Value("\${altszama.databaseName}")
     lateinit var databaseName: String
 
-    @Value("\${altszama.gcmServerKey}")
-    lateinit var gcmServerKey: String
+    @Value("\${altszama.vapidPrivateKey}")
+    lateinit var vapidPrivateKey: String
+
+    @Value("\${altszama.vapidPublicKey}")
+    lateinit var vapidPublicKey: String
+
+    @Value("\${altszama.vapidSubject}")
+    lateinit var vapidSubject: String
 
 }

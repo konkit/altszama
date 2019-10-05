@@ -1,132 +1,159 @@
 <template>
   <ViewWrapper title="Today's orders">
     <LoadingView>
-      <simple-card>
-        <div v-if="this.currentOrderEntries.length > 0">
-          <v-list>
-            <v-subheader>Your orders today:</v-subheader>
+      <v-container>
+        <v-row>
+          <v-col cols="xs12">
+            <v-card>
+              <v-card-title>
+                Your orders today:
+              </v-card-title>
 
-            <template v-for="orderEntry in currentOrderEntries">
-              <template v-for="dishEntry in orderEntry.dishEntries">
+              <v-card-text>
 
-                <v-list-tile @click="goToOrder(orderEntry.orderId)">
-                  <v-list-tile-content :key="dishEntry.id">
-                    <v-list-tile-title class="pointer">
-                      <b>{{dishEntry.dish.name}}</b>
-                      from
-                      <b>{{dishEntry.restaurantName}}</b>
-                      (STATUS: {{orderEntry.orderState}})
-                    </v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
+                <div v-if="this.currentOrderEntries.length > 0">
+                  <v-list>
+                    <template v-for="orderEntry in currentOrderEntries">
+                      <template v-for="dishEntry in orderEntry.dishEntries">
 
-              </template>
-            </template>
-          </v-list>
-        </div>
-        <div v-else>
-          <div>
-            <span>You haven't ordered anything today yet.</span>
-          </div>
-        </div>
-      </simple-card>
+                        <v-list-item @click="goToOrder(orderEntry.orderId)">
+                          <v-list-item-content :key="dishEntry.id">
+                            <v-list-item-title class="pointer">
+                              <b>{{dishEntry.dish.name}}</b>
+                              from
+                              <b>{{dishEntry.restaurantName}}</b>
+                              (STATUS: {{orderEntry.orderState}})
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
 
-      <simple-card>
-        <errors-component/>
+                      </template>
+                    </template>
+                  </v-list>
+                </div>
 
-        <v-list>
-          <v-subheader>Not ordered yet ({{ this.createdOrders.length }})</v-subheader>
+                <div v-else>
+                  <div>
+                    <span>You haven't ordered anything today yet.</span>
+                  </div>
+                </div>
 
-          <div v-if="this.createdOrders.length > 0">
-            <v-list-tile @click="goToOrder(order.id)" v-for="order in this.createdOrders">
-              <v-list-tile-content>
-                <v-list-tile-title class="pointer">
-                  <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
 
-          <div v-else>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>No orders</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </div>
 
-          <v-divider :inset="false"></v-divider>
+      <v-container>
+        <v-row>
+          <v-col cols="xs12">
+            <v-card>
+              <v-card-title>
+                Orders:
+              </v-card-title>
 
-          <v-subheader>Ordering right now ({{ this.orderingOrders.length }})</v-subheader>
+              <v-card-text>
+                <errors-component/>
 
-          <div v-if="this.orderingOrders.length > 0">
-            <v-list-tile @click="goToOrder(order.id)" v-for="order in this.orderingOrders">
-              <v-list-tile-content>
-                <v-list-tile-title class="pointer">
-                  <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </div>
+                <v-list>
+                  <v-subheader>Not ordered yet ({{ this.createdOrders.length }})</v-subheader>
 
-          <div v-else>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>No orders</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </div>
+                  <div v-if="this.createdOrders.length > 0">
+                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.createdOrders">
+                      <v-list-item-content>
+                        <v-list-item-title class="pointer">
+                          <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
 
-          <v-divider :inset="false"></v-divider>
+                  <div v-else>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>No orders</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
 
-          <v-subheader>Ordered ({{ this.orderedOrders.length }})</v-subheader>
+                  <v-divider :inset="false"></v-divider>
 
-          <div v-if="this.orderedOrders.length > 0">
-            <v-list-tile @click="goToOrder(order.id)" v-for="order in this.orderedOrders">
-              <v-list-tile-content>
-                <v-list-tile-title class="pointer">
-                  <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </div>
+                  <v-subheader>Ordering right now ({{ this.orderingOrders.length }})</v-subheader>
 
-          <div v-else>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>No orders</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </div>
+                  <div v-if="this.orderingOrders.length > 0">
+                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.orderingOrders">
+                      <v-list-item-content>
+                        <v-list-item-title class="pointer">
+                          <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
 
-          <v-divider :inset="false"></v-divider>
+                  <div v-else>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>No orders</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
 
-          <v-subheader>Delivered ({{ this.deliveredOrders.length }})</v-subheader>
+                  <v-divider :inset="false"></v-divider>
 
-          <div v-if="this.deliveredOrders.length > 0">
-            <v-list-tile @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id">
-              <v-list-tile-content>
-                <v-list-tile-title class="pointer">
-                  <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </div>
+                  <v-subheader>Ordered ({{ this.orderedOrders.length }})</v-subheader>
 
-          <div v-else>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>No orders</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </div>
-        </v-list>
+                  <div v-if="this.orderedOrders.length > 0">
+                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.orderedOrders">
+                      <v-list-item-content>
+                        <v-list-item-title class="pointer">
+                          <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
 
-      </simple-card>
+                  <div v-else>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>No orders</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
+
+                  <v-divider :inset="false"></v-divider>
+
+                  <v-subheader>Delivered ({{ this.deliveredOrders.length }})</v-subheader>
+
+                  <div v-if="this.deliveredOrders.length > 0">
+                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id">
+                      <v-list-item-content>
+                        <v-list-item-title class="pointer">
+                          <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
+
+                  <div v-else>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>No orders</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
+                </v-list>
+
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+
 
       <v-tooltip left>
-        <template slot="activator">
-          <v-btn fixed dark fab large bottom right color="green" @click="goToCreateOrder()">
+        <template v-slot:activator="{ on }">
+          <v-btn fixed dark fab large bottom right color="green" @click="goToCreateOrder()" v-on="on">
             <v-icon>add</v-icon>
           </v-btn>
         </template>
@@ -142,7 +169,6 @@
   import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
   import {mapState} from "vuex"
   import ErrorsComponent from '../commons/Errors'
-  import SimpleCard from "../commons/SimpleCard";
   import router from '../../router/index'
   import ViewWrapper from "../commons/ViewWrapper";
 
@@ -174,10 +200,8 @@
     },
     components: {
       ViewWrapper,
-      SimpleCard,
       LoadingView,
       ErrorsComponent,
-      SimpleCard
     }
   }
 </script>
@@ -185,19 +209,5 @@
 <style scoped>
   .pointer {
     cursor: pointer;
-  }
-
-  .row {
-    margin-top: 2rem;
-  }
-
-  .lunch-bg-img {
-    background-image: url('../../assets/lunch-bw.png');
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-position: 0% 72%;
-    /* min-height: 300px; */
   }
 </style>

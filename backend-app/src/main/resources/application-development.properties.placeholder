@@ -1,4 +1,6 @@
-altszama.gcmServerKey=
 altszama.databaseName=
 altszama.googleClientId=
 altszama.googleClientSecret=
+altszama.vapidPublicKey=
+altszama.vapidPrivateKey=
+altszama.vapidSubject=

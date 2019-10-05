@@ -1,106 +1,134 @@
 <template>
   <ViewWrapper :title="`Ordering from ${restaurantName}`" :backpath="`#/orders/show/${orderId}`">
     <LoadingView>
-      <div v-if="isStateOrdering">
-        <simple-card>
-          <v-container>
-            <v-layout row>
-              <v-flex>
-                <v-alert :value="true" color="warning" icon="new_releases" outline>
-                  Order is now locked, so no one should order anything else now.
-                </v-alert>
-              </v-flex>
-            </v-layout>
-          </v-container>
 
-          <v-container>
-            <v-layout row>
-              <v-flex xs12>
+      <template v-if="isStateOrdering">
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-banner>
+                <v-icon slot="icon" color="warning" size="36">mdi-lock-alert</v-icon>
+
+                <p><strong>The order is locked!</strong></p>
+
                 <p>
-                  Now please call the restaurant <span v-if="restaurantTelephone">(<b>tel. {{restaurantTelephone}}</b>)</span>,
-                  make an order and then enter approximate delivery time and click "Order placed"
+                  Order is now locked, so no one should order anything else now.
                 </p>
-              </v-flex>
-            </v-layout>
 
-            <v-layout row justify-space-around>
-              <v-flex xs3>
-                <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
-                            label="Approximate time of delivery"></TimePicker>
-              </v-flex>
+                <template v-slot:actions>
+                  <v-btn text color="primary" @click="unlockOrder()">
+                    Unlock &nbsp; <span class="fa fa-unlock"></span>
+                  </v-btn>
+                </template>
+              </v-banner>
+            </v-col>
+          </v-row>
+        </v-container>
 
-              <v-flex xs3>
-                <v-btn color="success" @click="submitForm">
-                  Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </simple-card>
+        <v-container>
+          <v-row>
+            <v-col cols="8">
+              <v-card height="100%">
+                <v-card-title>Call the place!</v-card-title>
 
-        <simple-card>
-          <errors-component/>
+                <v-card-text>
 
-          <h4>Dishes:</h4>
+                  <v-row>
+                    <v-col>
+                      <p>
+                        Now please call the restaurant, make an order and then enter approximate delivery time
+                        and click "Order placed"
+                      </p>
+                    </v-col>
+                  </v-row>
 
-          <div class="grid-container">
-            <template v-for="entry in groupedEntries">
-              <div class="table-column pt-3">
-                {{entry.eatingPeopleCount}}x {{entry.dish.name}}
-                <span class="price-wrapper">(<price :data-price="entry.dish.price"></price>)</span>
-              </div>
+                  <v-row>
+                    <v-col v-if="restaurantTelephone.length > 0" class="align-center">
+                      <b>tel. {{restaurantTelephone}}</b>
+                    </v-col>
+                    <v-col v-else class="align-center">
+                      <b>Telephone number not specified, sorry :/</b>
+                    </v-col>
+                  </v-row>
 
-              <div class="table-column pt-3">
-                <div v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries" :key="i">
-                  <p class="dish-name">
-                    {{i + 1}}. {{ eatingPersonEntry.username }}
+                  <v-row class="justify-space-around">
+                    <v-col class="align-center align-self-center" :align-self="align">
+                      <div class=" delivery-time-wrapper">
+
+                        <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
+                                    label="Approximate time of delivery"></TimePicker>
+                      </div>
+                    </v-col>
+
+                    <v-col class="align-center align-self-center" :align-self="center">
+                      <v-btn color="success" @click="submitForm">
+                        Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+
+                </v-card-text>
+              </v-card>
+            </v-col>
+
+            <v-col cols="4">
+              <v-card>
+                <v-card-title>Cost summary</v-card-title>
+
+                <v-card-text>
+                  <price-summary
+                      :orderDecreaseInPercent="orderDecreaseInPercent"
+                      :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
+                      :basePriceSum="basePriceSum"
+                      :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
+                      :allEatingPeopleCount="allEatingPeopleCount"
+                      :totalPrice="totalPrice"
+                  >
+                  </price-summary>
+                </v-card-text>
+
+
+              </v-card>
+            </v-col>
+
+          </v-row>
+        </v-container>
+
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <v-card>
+                <v-card-title>
+                  Dishes:
+                </v-card-title>
+
+                <v-card-text>
+                  <UserOrders :groupedEntries="groupedEntries"></UserOrders>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
+
+      <template v-if="isStateNotOrdering">
+        <v-container>
+          <v-row>
+            <v-col cols="xs12">
+              <v-card>
+                <v-card-text>
+                  <h1>Ordering from {{restaurantName}}</h1>
+                  <h4>Sorry, the order is empty</h4>
+                  <p>
+                    <back-button :href="'#/orders/show/' + orderId"></back-button>
                   </p>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
 
-                  <p class="side-dish-name pl-3" v-for="(sd, j) in eatingPersonEntry.sideDishes" :key="j">
-                    + {{sd.name}} (
-                    <price :data-price="sd.price"/>
-                    )
-                  </p>
-
-                  <p class="dish-comments pl-3" v-if="eatingPersonEntry.comments.length > 0">
-                    Additional comments: {{ eatingPersonEntry.comments }}
-                  </p>
-                </div>
-              </div>
-
-              <div class="table-column pt-3">
-                <price :data-price="entry.price"></price>
-              </div>
-            </template>
-          </div>
-
-        </simple-card>
-
-        <simple-card>
-
-          <price-summary
-              :orderDecreaseInPercent="orderDecreaseInPercent"
-              :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
-              :basePriceSum="basePriceSum"
-              :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
-              :allEatingPeopleCount="allEatingPeopleCount"
-              :totalPrice="totalPrice"
-          >
-          </price-summary>
-        </simple-card>
-
-        <div v-if="isStateNotOrdering">
-          <navigation user-name="Tmp name"></navigation>
-
-          <simple-card>
-            <h1>Ordering from {{restaurantName}}</h1>
-            <h4>Sorry, the order is empty</h4>
-            <p>
-              <back-button :href="'#/orders/show/' + orderId"></back-button>
-            </p>
-          </simple-card>
-        </div>
-      </div>
     </LoadingView>
   </ViewWrapper>
 </template>
@@ -118,10 +146,17 @@
     UPDATE_APPROX_TIME_OF_DELIVERY
   } from "../../store/modules/OrderViewState"
   import {mapState} from "vuex"
-  import SimpleCard from "../commons/SimpleCard";
   import PriceSummary from "./components/PriceSummary";
   import TimePicker from "../commons/TimePicker";
   import ViewWrapper from "../commons/ViewWrapper";
+  import {
+    UNLOCK_ORDER_ACTION,
+    FETCH_ORDER_DATA_ACTION,
+    NAMESPACE_SHOW_ORDER,
+    SET_ORDER_AS_DELIVERED_ACTION,
+  } from "../../store/modules/ShowOrderState"
+  import router from '../../router/index'
+  import UserOrders from "./components/orderView/UserOrders";
 
   export default {
     data() {
@@ -142,7 +177,11 @@
       },
       updateApproxTimeOfDelivery(newValue) {
         this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`, newValue)
-      }
+      },
+      unlockOrder() {
+        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
+          .then(() => router.push("/orders/show/" + this.orderId))
+      },
     },
     computed: {
       ...mapState("orderView", [
@@ -166,10 +205,10 @@
       }
     },
     components: {
+      UserOrders,
       ViewWrapper,
       TimePicker,
       PriceSummary,
-      SimpleCard,
       LoadingView,
       BackButton2,
       ErrorsComponent,
@@ -216,5 +255,18 @@
   }
 
   .table-column {
+  }
+
+  .align-center {
+    text-align: center;
+  }
+
+  .delivery-time-wrapper {
+    display: inline-block;
+  }
+
+  .no-y-padding {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 </style>

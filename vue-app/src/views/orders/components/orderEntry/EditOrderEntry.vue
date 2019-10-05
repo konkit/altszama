@@ -9,11 +9,11 @@
         <v-spacer></v-spacer>
 
         <v-btn color="success" @click="submitForm">
-          Update order
+          Submit
         </v-btn>
 
         <v-btn @click="cancelEdit()">
-          Cancel edit
+          Cancel
         </v-btn>
       </div>
 
@@ -28,9 +28,9 @@
 </template>
 
 <script>
-  import ErrorsComponent from '../../commons/Errors.vue'
-  import Spinner from '../../commons/Spinner.vue'
-  import Price from '../../commons/PriceElement.vue'
+  import ErrorsComponent from '../../../commons/Errors.vue'
+  import Spinner from '../../../commons/Spinner.vue'
+  import Price from '../../../commons/PriceElement.vue'
 
   import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
@@ -41,11 +41,11 @@
     SETUP_EDIT_ORDER_ENTRY_ACTION,
     SET_ENTRY_LOADING_TRUE,
     NAMESPACE_MODIFY_ORDER_ENTRY
-  } from "../../../store/modules/ModifyOrderEntryState";
+  } from "../../../../store/modules/ModifyOrderEntryState";
 
   export default {
     name: 'edit-order-entry',
-    props: ['orderEntry', 'dishEntry'],
+    props: ['index', 'orderEntry', 'dishEntry'],
     data() {
       return {}
     },

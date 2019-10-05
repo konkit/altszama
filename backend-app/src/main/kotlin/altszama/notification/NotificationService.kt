@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class NotificationService(secretsConfig: SecretsConfig) {
+class NotificationService(val secretsConfig: SecretsConfig) {
 
   private val logger: Logger = LoggerFactory.getLogger(NotificationService::class.java)
 
@@ -24,23 +24,19 @@ class NotificationService(secretsConfig: SecretsConfig) {
   @Autowired
   private lateinit var orderEntryRepository: OrderEntryRepository
 
-  private var serverKey: String = secretsConfig.gcmServerKey
-
-  private val TTL = 255
-
 
   fun notificateOrdered(order: Order, eta: String) {
-    logger.info(String.format("Order %s ordered", order.id))
+    logger.info(String.format("Sending push notification about order %s being ordered", order.id))
     sendMessage(findInvolvedUsers(order), String.format("Your order from %s is ordered, ETA: %s.", order.restaurant.name, eta))
   }
 
   fun notificateDelivered(order: Order) {
-    logger.info(String.format("Order %s delivered", order.id))
+    logger.info(String.format("Sending push notification about order %s being delivered", order.id))
     sendMessage(findInvolvedUsers(order), String.format("Your order from %s is delivered.", order.restaurant.name))
   }
 
   fun notificateRejected(order: Order) {
-    logger.info(String.format("Order %s rejected", order.id))
+    logger.info(String.format("Sending push notification about order %s being rejected", order.id))
     sendMessage(findInvolvedUsers(order), String.format("Your order from %s is rejected.", order.restaurant.name))
   }
 
@@ -55,38 +51,25 @@ class NotificationService(secretsConfig: SecretsConfig) {
 
   private fun sendPushMessage(sub: PushNotifSubscription, payload: ByteArray) {
     try {
-      val notification: Notification
-      val pushService: PushService
+      val notification = Notification(
+        sub.endpoint,
+        sub.getUserPublicKey(),
+        sub.getAuthKeyAsBytes(),
+        payload
+      )
 
-      if (useGcm(sub.endpoint)) {
-        notification = Notification(
-          sub.endpoint,
-          sub.getUserPublicKey(),
-          sub.getAuthKeyAsBytes(),
-          payload,
-          TTL
-        )
+      val pushService = PushService(
+              this.secretsConfig.vapidPublicKey,
+              this.secretsConfig.vapidPrivateKey, 
+              this.secretsConfig.vapidSubject
+      )
 
-        pushService = PushService(serverKey)
-      } else {
-        notification = Notification(
-          sub.endpoint,
-          sub.getUserPublicKey(),
-          sub.getAuthKeyAsBytes(),
-          payload
-        )
+      val result = pushService.send(notification)
 
-        pushService = PushService()
-      }
-
-      pushService.send(notification)
+      logger.info("Push Notification response : ${result}")
     } catch (e: Exception) {
       throw RuntimeException("Error sending notification", e)
     }
-  }
-
-  private fun useGcm(endpoint: String): Boolean {
-    return endpoint.indexOf("https://android.googleapis.com/gcm/send") == 0
   }
 
   private fun findInvolvedUsers(order: Order): List<User> {
