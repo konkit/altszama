@@ -70,10 +70,7 @@ export default {
       .then(response => {
         return {
           currentOrderEntries: response.data.currentOrderEntries,
-          createdOrders: response.data.createdOrders,
-          orderingOrders: response.data.orderingOrders,
-          orderedOrders: response.data.orderedOrders,
-          deliveredOrders: response.data.deliveredOrders
+          ordersList: response.data.ordersList
         }
       })
   },

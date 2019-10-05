@@ -8,18 +8,12 @@ export default {
   namespaced: true,
   state: {
     currentOrderEntries: [],
-    createdOrders: [],
-    orderingOrders: [],
-    orderedOrders: [],
-    deliveredOrders: []
+    ordersList: [],
   },
   mutations: {
     [SET_TODAY_ORDERS_LIST] (state, payload) {
       state.currentOrderEntries = payload.currentOrderEntries;
-      state.createdOrders = payload.createdOrders;
-      state.orderingOrders = payload.orderingOrders;
-      state.orderedOrders = payload.orderedOrders;
-      state.deliveredOrders = payload.deliveredOrders;
+      state.ordersList = payload.ordersList;
     }
   },
   actions: {

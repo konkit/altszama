@@ -57,93 +57,45 @@
                 <errors-component/>
 
                 <v-list>
-                  <v-subheader>Not ordered yet ({{ this.createdOrders.length }})</v-subheader>
-
-                  <div v-if="this.createdOrders.length > 0">
-                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.createdOrders">
+                  <div v-if="this.ordersList.length > 0">
+                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.ordersList">
                       <v-list-item-content>
                         <v-list-item-title class="pointer">
-                          <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
+                          <div class="wide-order-status" v-if="$vuetify.breakpoint.mdAndUp">
+                            <div>
+                              <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
+                            </div>
+
+                            <div class="orderState" :class="{ matchingState: order.orderState === 'CREATED' }">
+                              CREATED
+                            </div>
+
+                            <div class="orderState" :class="{ matchingState: order.orderState === 'ORDERING' }">
+                              ORDERING RIGHT NOW
+                            </div>
+
+                            <div class="orderState" :class="{ matchingState: order.orderState === 'ORDERED' }">
+                              ORDERED
+                            </div>
+
+                            <div class="orderState" :class="{ matchingState: order.orderState === 'DELIVERED' }">
+                              DELIVERED
+                            </div>
+                          </div>
+
+                          <div class="thin-order-status" v-if="$vuetify.breakpoint.smAndDown">
+                            <div>
+                              <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
+                            </div>
+                            <div>
+                              Status: {{order.orderState}}
+                            </div>
+                          </div>
                         </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </div>
-
-                  <div v-else>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title>No orders</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </div>
-
-                  <v-divider :inset="false"></v-divider>
-
-                  <v-subheader>Ordering right now ({{ this.orderingOrders.length }})</v-subheader>
-
-                  <div v-if="this.orderingOrders.length > 0">
-                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.orderingOrders">
-                      <v-list-item-content>
-                        <v-list-item-title class="pointer">
-                          <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </div>
-
-                  <div v-else>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title>No orders</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </div>
-
-                  <v-divider :inset="false"></v-divider>
-
-                  <v-subheader>Ordered ({{ this.orderedOrders.length }})</v-subheader>
-
-                  <div v-if="this.orderedOrders.length > 0">
-                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.orderedOrders">
-                      <v-list-item-content>
-                        <v-list-item-title class="pointer">
-                          <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </div>
-
-                  <div v-else>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title>No orders</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </div>
-
-                  <v-divider :inset="false"></v-divider>
-
-                  <v-subheader>Delivered ({{ this.deliveredOrders.length }})</v-subheader>
-
-                  <div v-if="this.deliveredOrders.length > 0">
-                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.deliveredOrders" :key="order.id">
-                      <v-list-item-content>
-                        <v-list-item-title class="pointer">
-                          <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </div>
-
-                  <div v-else>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title>No orders</v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                   </div>
                 </v-list>
-
               </v-card-text>
             </v-card>
           </v-col>
@@ -192,6 +144,7 @@
     computed: {
       ...mapState("todayOrders", [
         "currentOrderEntries",
+        "ordersList",
         "createdOrders",
         "orderingOrders",
         "orderedOrders",
@@ -209,5 +162,21 @@
 <style scoped>
   .pointer {
     cursor: pointer;
+  }
+
+  .wide-order-status {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .orderState {
+    color: #B2B2B2;
+  }
+
+  .matchingState {
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: 900;
+
   }
 </style>

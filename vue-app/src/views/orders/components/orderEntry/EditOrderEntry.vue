@@ -3,7 +3,7 @@
     <template v-if="this.loadingEntry === false">
       <errors-component/>
 
-      <div>
+      <div class="form-wrapper">
         <order-entry-form></order-entry-form>
 
         <v-spacer></v-spacer>
@@ -84,4 +84,7 @@
 </script>
 
 <style scoped>
+  .form-wrapper {
+    padding-top: 9px;
+  }
 </style>

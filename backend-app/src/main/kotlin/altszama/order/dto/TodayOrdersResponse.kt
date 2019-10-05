@@ -12,10 +12,6 @@ import java.time.LocalTime
 
 data class TodayOrdersResponse(
     val ordersList: List<OrderDto>,
-    val createdOrders: List<OrderDto>,
-    val orderingOrders: List<OrderDto>,
-    val orderedOrders: List<OrderDto>,
-    val deliveredOrders: List<OrderDto>,
     val currentOrderEntries: List<OrderEntryDto>
 ) {
 
@@ -86,21 +82,11 @@ data class TodayOrdersResponse(
     fun create(todaysOrders: List<Order>, usersOrderEntries: List<OrderEntry>): TodayOrdersResponse {
       val todayOrderDtos = todaysOrders.map { order -> fromOrder(order) }
 
-      val orderTypeToOrder = todayOrderDtos
-          .groupBy { orderDto -> orderDto.orderState }
-
       val currentOrderEntries = usersOrderEntries
           .filter { orderEntry -> todaysOrders.any { order -> order.id == orderEntry.order.id } }
           .map { orderEntry -> fromOrderEntry(orderEntry) }
 
-      return TodayOrdersResponse(
-          todayOrderDtos,
-          orderTypeToOrder[OrderState.CREATED] ?: emptyList(),
-          orderTypeToOrder[OrderState.ORDERING] ?: emptyList(),
-          orderTypeToOrder[OrderState.ORDERED] ?: emptyList(),
-          orderTypeToOrder[OrderState.DELIVERED] ?: emptyList(),
-          currentOrderEntries
-      )
+      return TodayOrdersResponse(todayOrderDtos, currentOrderEntries)
     }
   }
 }
