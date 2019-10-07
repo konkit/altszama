@@ -18,7 +18,7 @@
                 {{dish.name}} (<price :data-price="dish.price"></price>)
               </v-list-item-title>
 
-              <v-list-item-sub-title>
+              <v-list-item-subtitle>
               <span v-if="dish.lastCrawled != null">
                 auto-updated {{ dateToRel(dish.lastCrawled) }}
               </span>
@@ -26,16 +26,16 @@
                 <span v-if="dish.lastCrawled == null">
                 updated manually
               </span>
-              </v-list-item-sub-title>
+              </v-list-item-subtitle>
             </v-list-item-content>
 
             <v-list-item-action>
             <span class="edit-buttons">
-              <v-btn flat icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">
+              <v-btn text icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </v-btn>
 
-              <v-btn flat icon @click="deleteDish(dish.id)">
+              <v-btn text icon @click="deleteDish(dish.id)">
                 <i class="fa fa-times" aria-hidden="true"></i>
               </v-btn>
             </span>

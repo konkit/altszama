@@ -5,18 +5,20 @@
       :return-value.sync="time"
       @update:returnValue="inputEvent($event)"
       persistent
-      lazy
-      full-width
       width="290px"
   >
-    <v-text-field
-        slot="activator"
-        v-model="time"
-        :label="label"
-        prepend-icon="access_time"
-        readonly
-        class="time-input"
-    ></v-text-field>
+    <template v-slot:activator="{ on }">
+      <v-text-field
+          v-on="on"
+          v-model="time"
+          :label="label"
+          prepend-icon="access_time"
+          readonly
+          class="time-input"
+      ></v-text-field>
+    </template>
+
+
     <v-time-picker
         v-if="modal2"
         v-model="time"
@@ -24,8 +26,8 @@
         format="24hr"
     >
       <v-spacer></v-spacer>
-      <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
-      <v-btn flat color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
+      <v-btn text color="primary" @click="modal2 = false">Cancel</v-btn>
+      <v-btn text color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
     </v-time-picker>
   </v-dialog>
 </template>

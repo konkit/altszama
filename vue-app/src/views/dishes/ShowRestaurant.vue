@@ -41,8 +41,8 @@
                 </v-layout>
 
                 <v-tooltip left>
-                  <template slot="activator">
-                    <v-btn fixed dark fab large bottom right color="green" @click="goToCreateDish()">
+                  <template v-slot:activator="{ on }">
+                    <v-btn fixed dark fab large bottom right color="green" @click="goToCreateDish()" v-on="on">
                       <v-icon>add</v-icon>
                     </v-btn>
                   </template>

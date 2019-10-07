@@ -35,7 +35,7 @@
                       @input="changeNewSideDishPrice(sdIndex, $event)">
                   </MoneyInput>
 
-                  <v-btn flat icon @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
+                  <v-btn text icon @click="removeSideDish(sdIndex)"><span class="fa fa-remove"></span></v-btn>
                 </template>
 
                 <template v-else>

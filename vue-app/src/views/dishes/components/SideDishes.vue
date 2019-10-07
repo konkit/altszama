@@ -13,7 +13,7 @@
     </div>
 
     <div v-if="this.sideDishFormVisible === false">
-      <v-btn flat @click="setSideDishFormVisible(true)">
+      <v-btn text @click="setSideDishFormVisible(true)">
         Add side dish &nbsp; <i class="fa fa-plus"/>
       </v-btn>
     </div>

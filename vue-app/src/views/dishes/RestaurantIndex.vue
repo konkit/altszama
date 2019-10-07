@@ -34,8 +34,8 @@
                 </v-data-table>
 
                 <v-tooltip left>
-                  <template slot="activator">
-                    <v-btn fixed dark fab large bottom right color="green" @click="goToCreateRestaurant()">
+                  <template v-slot:activator="{ on }">
+                    <v-btn fixed dark fab large bottom right color="green" @click="goToCreateRestaurant()" v-on="on">
                       <v-icon>add</v-icon>
                     </v-btn>
                   </template>
