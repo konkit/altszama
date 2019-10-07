@@ -3,7 +3,7 @@
       ref="dialog"
       v-model="modal2"
       :return-value.sync="time"
-      @update:returnValue="inputEvent($event)"
+      @update:return-value="inputEvent($event)"
       persistent
       width="290px"
   >
