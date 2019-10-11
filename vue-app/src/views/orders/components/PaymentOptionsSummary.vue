@@ -33,7 +33,7 @@
 
       <v-list-item v-if="order.paymentByBankTransfer">
         <v-list-item-content>
-          <div class="px-3">
+          <div class="px-3 user-selectable">
             {{ formatBankAccountNr(order.bankTransferNumber) }}
           </div>
         </v-list-item-content>
@@ -56,7 +56,7 @@
 
       <v-list-item v-if="order.paymentByBankTransfer">
         <v-list-item-content>
-          <div class="px-3">
+          <div class="px-3 user-selectable">
             {{ formatBlikPhoneNumber(order.blikPhoneNumber) }}
           </div>
         </v-list-item-content>
@@ -113,4 +113,7 @@
 </script>
 
 <style scoped>
+  .user-selectable {
+    user-select: text;
+  }
 </style>
