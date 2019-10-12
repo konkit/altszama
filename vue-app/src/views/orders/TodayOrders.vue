@@ -62,24 +62,26 @@
                       <v-list-item-content>
                         <v-list-item-title class="pointer">
                           <div class="wide-order-status" v-if="$vuetify.breakpoint.mdAndUp">
-                            <div>
+                            <div class="order-data-wrapper">
                               <b>{{order.restaurantName}}</b> (created by {{order.orderCreatorUsername}})
                             </div>
 
-                            <div class="orderState" :class="{ matchingState: order.orderState === 'CREATED' }">
-                              CREATED
-                            </div>
+                            <div class="order-state-wrapper">
+                              <div class="orderState" :class="{ matchingState: order.orderState === 'CREATED' }">
+                                CREATED
+                              </div>
 
-                            <div class="orderState" :class="{ matchingState: order.orderState === 'ORDERING' }">
-                              ORDERING RIGHT NOW
-                            </div>
+                              <div class="orderState" :class="{ matchingState: order.orderState === 'ORDERING' }">
+                                ORDERING RIGHT NOW
+                              </div>
 
-                            <div class="orderState" :class="{ matchingState: order.orderState === 'ORDERED' }">
-                              ORDERED
-                            </div>
+                              <div class="orderState" :class="{ matchingState: order.orderState === 'ORDERED' }">
+                                ORDERED
+                              </div>
 
-                            <div class="orderState" :class="{ matchingState: order.orderState === 'DELIVERED' }">
-                              DELIVERED
+                              <div class="orderState" :class="{ matchingState: order.orderState === 'DELIVERED' }">
+                                DELIVERED
+                              </div>
                             </div>
                           </div>
 
@@ -96,11 +98,11 @@
                     </v-list-item>
                   </template>
                   <template v-if="this.ordersList.length === 0">
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title>No orders</v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>No orders</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
                   </template>
                 </v-list>
               </v-card-text>
@@ -171,11 +173,7 @@
     cursor: pointer;
   }
 
-  .wide-order-status {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+
 
   .orderState {
     color: #B2B2B2;
@@ -184,6 +182,26 @@
   .matchingState {
     color: rgba(0, 0, 0, 0.87);
     font-weight: 900;
+  }
 
+  .wide-order-status {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .order-data-wrapper {
+    padding-right: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .order-state-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin-left: auto;
+    min-width: 28rem;
+    max-width: 28rem;
   }
 </style>
