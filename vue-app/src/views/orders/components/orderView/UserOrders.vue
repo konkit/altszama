@@ -120,5 +120,4 @@
     margin-left: 16px;
     max-width: calc(100% - 16px);
   }
-
 </style>
