@@ -70,6 +70,7 @@
       },
       shouldShowQRCodeButton(orderEntry) {
         return this.isOrderEntryOwner(orderEntry) &&
+          this.order.paymentByBankTransfer === true &&
           (this.order.orderState === 'ORDERED' || this.order.orderState === 'DELIVERED')
       },
       confirmAsPaid(orderEntryId) {
