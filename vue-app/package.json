@@ -12,6 +12,7 @@
   "dependencies": {
     "font-awesome": "^4.7.0",
     "moment": "^2.24.0",
+    "qrcode.vue": "^1.7.0",
     "raven-js": "^3.27.2",
     "sass-loader": "^7.0.0",
     "vue": "^2.6.10",

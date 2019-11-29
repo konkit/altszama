@@ -68,6 +68,7 @@
 <script>
   import Price from "../../commons/PriceElement"
   import ErrorsComponent from '../../commons/Errors'
+  import BankTransferQRCode from "./orderEntry/BankTransferQRCode";
 
   export default {
     name: "PaymentOptionsSummary",
@@ -105,6 +106,7 @@
       }
     },
     components: {
+      BankTransferQRCode,
       Price,
       ErrorsComponent
     }

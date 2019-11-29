@@ -6,7 +6,7 @@
 
     <v-card-text>
       <PaymentStatus :order="order" :order-entry="orderEntry"
-                     :current-user-id="currentUserId"></PaymentStatus>
+                     :current-user-id="currentUserId" :cost-for-user="orderEntry.finalPrice"></PaymentStatus>
 
       <v-list dense>
         <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">

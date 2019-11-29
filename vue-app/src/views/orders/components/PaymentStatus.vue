@@ -19,6 +19,10 @@
         <i class="fa fa-check" aria-hidden="true"></i>
       </v-btn>
     </template>
+
+    <template v-if="shouldShowQRCodeButton(orderEntry)">
+      <BankTransferQRCode :order="order" :userOrderAmount="costForUser"></BankTransferQRCode>
+    </template>
   </div>
 </template>
 
@@ -42,9 +46,11 @@
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY,
   } from "../../../store/modules/ModifyOrderEntryState";
+  import BankTransferQRCode from "./orderEntry/BankTransferQRCode";
 
   export default {
-    props: ["order", "orderEntry", "currentUserId"],
+    components: {BankTransferQRCode},
+    props: ["order", "orderEntry", "currentUserId", "costForUser"],
     name: "PaymentStatus",
     methods: {
       isOrderOwner() {
@@ -61,6 +67,10 @@
       },
       shouldShowConfirmAsPaidButton(orderEntry) {
         return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && orderEntry.paymentStatus !== "CONFIRMED" && this.isOrderOwner() === true)
+      },
+      shouldShowQRCodeButton(orderEntry) {
+        return this.isOrderEntryOwner(orderEntry) &&
+          (this.order.orderState === 'ORDERED' || this.order.orderState === 'DELIVERED')
       },
       confirmAsPaid(orderEntryId) {
         this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
