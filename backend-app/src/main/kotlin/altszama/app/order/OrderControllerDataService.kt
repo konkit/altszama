@@ -1,0 +1,90 @@
+package altszama.app.order
+
+import altszama.app.auth.AuthService
+import altszama.app.dish.DishService
+import altszama.app.order.dto.*
+import altszama.app.orderEntry.OrderEntryRepository
+import altszama.app.orderEntry.OrderEntryService
+import altszama.app.restaurant.RestaurantRepository
+import org.bson.types.ObjectId
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.PathVariable
+import java.time.LocalDate
+
+@Service
+class OrderControllerDataService {
+
+  @Autowired
+  private lateinit var orderService: OrderService
+
+  @Autowired
+  private lateinit var orderRepository: OrderRepository
+
+  @Autowired
+  private lateinit var orderEntryRepository: OrderEntryRepository
+
+  @Autowired
+  private lateinit var orderEntryService: OrderEntryService
+
+  @Autowired
+  private lateinit var restaurantRepository: RestaurantRepository
+
+  @Autowired
+  private lateinit var dishService: DishService
+
+  @Autowired
+  private lateinit var authService: AuthService
+
+
+  fun getIndexData(): TodayOrdersResponse {
+    val currentUser = authService.currentUser()
+
+    val todaysOrders = orderRepository.findByOrderDate(LocalDate.now())
+    val usersOrderEntries = orderEntryRepository.findByUser(currentUser)
+
+    return TodayOrdersResponse.create(todaysOrders, usersOrderEntries)
+  }
+
+  fun getAllOrdersData(): AllOrdersResponse {
+    return AllOrdersResponse.fromOrderList(orderRepository.findAll().asReversed())
+  }
+
+  fun getShowData(orderId: String): ShowResponse {
+    val currentUserId = authService.currentUser().id
+
+    val order = orderRepository.findById(orderId).get()
+    val entries = orderEntryRepository.findByOrderId(orderId)
+
+    val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
+
+    val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
+
+    return ShowResponse.create(order, entries, currentUserId, allDishesInRestaurant, dishIdToSideDishesMap)
+  }
+
+  fun getOrderViewData(orderId: String): OrderViewResponse {
+    orderService.setAsOrdering(orderId)
+
+    val order = orderRepository.findById(orderId).get()
+    val entries = orderEntryRepository.findByOrderId(orderId)
+
+    return OrderViewResponse.create(order, entries)
+  }
+
+  fun getCreateData(): CreateResponse {
+    val currentUser = authService.currentUser()
+
+    val ordersByUser: List<Order> = orderRepository.findTop10ByOrderCreatorOrderByOrderDateDesc(currentUser)
+    val lastOrderMade: Order? = ordersByUser.sortedByDescending { order -> ObjectId(order.id).timestamp }.firstOrNull()
+
+    val blikPhoneNumber = lastOrderMade?.blikPhoneNumber ?: ""
+    val bankTransferNumber = lastOrderMade?.bankTransferNumber ?: ""
+
+    return CreateResponse(restaurantRepository.findAll(), blikPhoneNumber = blikPhoneNumber, bankTransferNumber = bankTransferNumber)
+  }
+
+  fun getEditData(@PathVariable orderId: String): EditResponse {
+    return EditResponse.create(orderRepository.findById(orderId).get())
+  }
+}

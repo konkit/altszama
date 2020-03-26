@@ -1,6 +1,6 @@
 package altszama.config;
 
-import altszama.auth.TokenAuthFilter;
+import altszama.app.auth.TokenAuthFilter;
 import com.google.common.collect.ImmutableList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
