@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@RequestMapping("/api")
 class AuthController(envVarConfig: SecretsConfig) {
 
   private val logger = LoggerFactory.getLogger(AuthController::class.java)

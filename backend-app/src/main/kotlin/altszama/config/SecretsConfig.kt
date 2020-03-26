@@ -7,22 +7,28 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 open class SecretsConfig {
 
-    @Value("\${altszama.googleClientId}")
+    @Value("#{environment.GOOGLE_CLIENT_ID}")
     lateinit var googleClientId: String
 
-    @Value("\${altszama.googleClientSecret}")
+    @Value("#{environment.GOOGLE_CLIENT_SECRET}")
     lateinit var googleClientSecret: String
 
-    @Value("\${altszama.databaseName}")
+    @Value("#{environment.DATABASE_NAME}")
     lateinit var databaseName: String
 
-    @Value("\${altszama.vapidPrivateKey}")
+    @Value("#{environment.DATABASE_HOST}")
+    lateinit var databaseHost: String
+
+    @Value("#{environment.DATABASE_PORT}")
+    lateinit var databasePort: String
+
+    @Value("#{environment.VAPID_PRIVATE_KEY}")
     lateinit var vapidPrivateKey: String
 
-    @Value("\${altszama.vapidPublicKey}")
+    @Value("#{environment.VAPID_PUBLIC_KEY}")
     lateinit var vapidPublicKey: String
 
-    @Value("\${altszama.vapidSubject}")
+    @Value("#{environment.VAPID_SUBJECT}")
     lateinit var vapidSubject: String
 
 }

@@ -21,54 +21,72 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
-  override fun configure(httpSecurity: HttpSecurity) {
-    val permittedPaths = arrayOf(
-      "/", "/home", "/login*", "/signin/**", "/signup/**", "/register/**", "/static/**", "/manifest.*.json",
-      "/sw.js", "/webjars/**", "/restaurantImport/**", "/restaurantImportFromPayload/**", "/auth/**", "/__webpack_hmr",
-      "/static2/index.html", "/static/index.html", "/index.html", "/service-worker.js", "/notification/**",
-      "/custom-service-worker.js", "/app.js", "/favicon.ico"
-    )
+    override fun configure(httpSecurity: HttpSecurity) {
+        val permittedPaths = arrayOf(
+                "/api/",
+                "/api/home",
+                "/api/login*",
+                "/api/signin/**",
+                "/api/signup/**",
+                "/api/register/**",
+                "/api/static/**",
+                "/api/manifest.*.json",
+                "/api/sw.js",
+                "/api/webjars/**",
+                "/api/restaurantImport/**",
+                "/api/restaurantImportFromPayload/**",
+                "/api/auth/**",
+                "/api/__webpack_hmr",
+                "/api/static2/index.html",
+                "/api/static/index.html",
+                "/api/index.html",
+                "/api/service-worker.js",
+                "/api/notification/**",
+                "/api/custom-service-worker.js",
+                "/api/app.js",
+                "/api/favicon.ico"
+        )
 
-    httpSecurity
-      .csrf().disable()
-      .cors().and()
-      .authorizeRequests()
-        .antMatchers(*permittedPaths).permitAll()
-        .anyRequest().authenticated()
-        .and()
-      .exceptionHandling()
-        .authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)).and()
-      .logout().permitAll().and()
-        .addFilterBefore(jwtAuthenticationTokenFilter(), BasicAuthenticationFilter::class.java)
-  }
+        httpSecurity
+                .csrf().disable()
+                .cors().and()
+                .authorizeRequests()
+                .antMatchers(*permittedPaths).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)).and()
+                .logout().permitAll().and()
+                .addFilterBefore(jwtAuthenticationTokenFilter(), BasicAuthenticationFilter::class.java)
+    }
 
-  @Bean
-  fun jwtAuthenticationTokenFilter(): TokenAuthFilter {
-    return TokenAuthFilter()
-  }
+    @Bean
+    fun jwtAuthenticationTokenFilter(): TokenAuthFilter {
+        return TokenAuthFilter()
+    }
 
-  @Bean
-  fun encoder(): PasswordEncoder {
-    return BCryptPasswordEncoder(11)
-  }
+    @Bean
+    fun encoder(): PasswordEncoder {
+        return BCryptPasswordEncoder(11)
+    }
 
-  @Bean
-  fun corsConfigurationSource(): CorsConfigurationSource {
-    val configuration = CorsConfiguration()
-    configuration.allowedOrigins = ImmutableList.of("*")
-    configuration.allowedMethods = ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = ImmutableList.of("*")
+        configuration.allowedMethods = ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
 
-    // setAllowCredentials(true) is important, otherwise:
-    // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
-    configuration.allowCredentials = true
+        // setAllowCredentials(true) is important, otherwise:
+        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+        configuration.allowCredentials = true
 
-    // setAllowedHeaders is important! Without it, OPTIONS preflight request
-    // will fail with 403 Invalid CORS request
-    configuration.allowedHeaders = ImmutableList.of("Authorization", "Cache-Control", "Content-Type")
+        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+        // will fail with 403 Invalid CORS request
+        configuration.allowedHeaders = ImmutableList.of("Authorization", "Cache-Control", "Content-Type")
 
-    val source = UrlBasedCorsConfigurationSource()
-    source.registerCorsConfiguration("/**", configuration)
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
 
-    return source
-  }
+        return source
+    }
 }

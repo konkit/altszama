@@ -1,7 +1,7 @@
 buildscript {
   ext {
-    kotlinVersion = '1.2.41'
-    springBootVersion = '2.0.2.RELEASE'
+    kotlinVersion = '1.3.71'
+    springBootVersion = '2.1.0.RELEASE'
   }
 
   repositories {
@@ -15,8 +15,12 @@ buildscript {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-    classpath("com.moowork.gradle:gradle-node-plugin:1.2.0")
+//    classpath("com.moowork.gradle:gradle-node-plugin:1.2.0")
   }
+}
+
+plugins {
+  id 'com.google.cloud.tools.jib' version '2.1.0'
 }
 
 apply plugin: 'java'
@@ -25,7 +29,7 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.moowork.node'
+//apply plugin: 'com.moowork.node'
 
 group = 'altszama'
 version = '0.0.1-SNAPSHOT'
@@ -43,10 +47,10 @@ compileTestKotlin {
   }
 }
 
-node {
-  version = '8.4.0'
-  download = true
-}
+//node {
+//  version = '8.4.0'
+//  download = true
+//}
 
 jar {
   manifest {
@@ -104,45 +108,41 @@ dependencies {
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('org.springframework.security:spring-security-test')
 
-  testImplementation(
-          'org.junit.jupiter:junit-jupiter-api:5.1.0'
-  )
-  testRuntimeOnly(
-          'org.junit.jupiter:junit-jupiter-engine:5.1.0'
-  )
+  testImplementation('org.junit.jupiter:junit-jupiter-api:5.1.0')
+  testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.1.0')
 }
 
 tasks {
 
-  task "vueNpmInstall"(type: NpmTask) {
-    setWorkingDir(file("../vue-app/"))
-    args = ["install"]
-  }
-
-  task "vueRunBuild"(type: NpmTask) {
-    dependsOn(vueNpmInstall)
-    setWorkingDir(file("../vue-app/"))
-
-    if (project.hasProperty("staging")) {
-      args = ["run", "build-staging"]
-    } else if (project.hasProperty("development")) {
-      args = ["run", "build-dev"]
-    } else {
-      args = ["run", "build"]
-    }
-  }
-
-  task "copyVueToBuild"(type: Copy) {
-    dependsOn(vueRunBuild)
-    from("../vue-app/dist")
-    into("build/resources/main/public")
-  }
-
-  task "copyVueToOut"(type: Copy) {
-    dependsOn(vueRunBuild)
-    from("../vue-app/dist")
-    into("out/production/resources/public/")
-  }
+//  task "vueNpmInstall"(type: NpmTask) {
+//    setWorkingDir(file("../vue-app/"))
+//    args = ["install"]
+//  }
+//
+//  task "vueRunBuild"(type: NpmTask) {
+//    dependsOn(vueNpmInstall)
+//    setWorkingDir(file("../vue-app/"))
+//
+//    if (project.hasProperty("staging")) {
+//      args = ["run", "build-staging"]
+//    } else if (project.hasProperty("development")) {
+//      args = ["run", "build-dev"]
+//    } else {
+//      args = ["run", "build"]
+//    }
+//  }
+//
+//  task "copyVueToBuild"(type: Copy) {
+//    dependsOn(vueRunBuild)
+//    from("../vue-app/dist")
+//    into("build/resources/main/public")
+//  }
+//
+//  task "copyVueToOut"(type: Copy) {
+//    dependsOn(vueRunBuild)
+//    from("../vue-app/dist")
+//    into("out/production/resources/public/")
+//  }
 
   tasks.register("setBuildVersion") {
     setGroup("version")
@@ -166,18 +166,18 @@ tasks {
     }
   }
 
-  task("vueProd") {
-    setGroup("altszama")
-
-    dependsOn(setBuildVersion, vueRunBuild, copyVueToBuild, copyVueToOut) // .onlyIf { !project.hasProperty('staging') }
-  }
-
-  "processResources" {
-    dependsOn(vueProd)
-  }
-
-  task "runVueDevServer"(type: NpmTask) {
-    setWorkingDir(file("../vue-app/"))
-    args = ["run", "dev"]
-  }
+//  task("vueProd") {
+//    setGroup("altszama")
+//
+//    dependsOn(setBuildVersion, vueRunBuild, copyVueToBuild, copyVueToOut) // .onlyIf { !project.hasProperty('staging') }
+//  }
+//
+//  "processResources" {
+//    dependsOn(vueProd)
+//  }
+//
+//  task "runVueDevServer"(type: NpmTask) {
+//    setWorkingDir(file("../vue-app/"))
+//    args = ["run", "dev"]
+//  }
 }

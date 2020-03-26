@@ -25,9 +25,7 @@ export default {
   },
 
   createRestaurant (restaurant) {
-    const action = "/restaurants/save";
-
-    return ApiConnector.makePost(action, restaurant)
+    return ApiConnector.makePost("/restaurants/save", restaurant)
       .then(response => router.push("/restaurants"))
   },
 
@@ -46,8 +44,6 @@ export default {
   },
 
   editRestaurant (restaurantId, restaurant) {
-    const action = "/restaurants/update";
-
     let formData = {
       "restaurant.id": restaurantId,
       id: restaurant.id,
@@ -58,7 +54,7 @@ export default {
       url: restaurant.url
     };
 
-    return ApiConnector.makePost(action, formData)
+    return ApiConnector.makePost("/restaurants/update", formData)
       .then(response => router.push("/restaurants/show/" + restaurantId))
   },
 
