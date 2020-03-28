@@ -15,7 +15,6 @@ buildscript {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-//    classpath("com.moowork.gradle:gradle-node-plugin:1.2.0")
   }
 }
 
@@ -29,7 +28,6 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-//apply plugin: 'com.moowork.node'
 
 group = 'altszama'
 version = '0.0.1-SNAPSHOT'
@@ -46,11 +44,6 @@ compileTestKotlin {
     jvmTarget = "1.8"
   }
 }
-
-//node {
-//  version = '8.4.0'
-//  download = true
-//}
 
 jar {
   manifest {
@@ -113,37 +106,6 @@ dependencies {
 }
 
 tasks {
-
-//  task "vueNpmInstall"(type: NpmTask) {
-//    setWorkingDir(file("../vue-app/"))
-//    args = ["install"]
-//  }
-//
-//  task "vueRunBuild"(type: NpmTask) {
-//    dependsOn(vueNpmInstall)
-//    setWorkingDir(file("../vue-app/"))
-//
-//    if (project.hasProperty("staging")) {
-//      args = ["run", "build-staging"]
-//    } else if (project.hasProperty("development")) {
-//      args = ["run", "build-dev"]
-//    } else {
-//      args = ["run", "build"]
-//    }
-//  }
-//
-//  task "copyVueToBuild"(type: Copy) {
-//    dependsOn(vueRunBuild)
-//    from("../vue-app/dist")
-//    into("build/resources/main/public")
-//  }
-//
-//  task "copyVueToOut"(type: Copy) {
-//    dependsOn(vueRunBuild)
-//    from("../vue-app/dist")
-//    into("out/production/resources/public/")
-//  }
-
   tasks.register("setBuildVersion") {
     setGroup("version")
 
@@ -165,19 +127,4 @@ tasks {
       }
     }
   }
-
-//  task("vueProd") {
-//    setGroup("altszama")
-//
-//    dependsOn(setBuildVersion, vueRunBuild, copyVueToBuild, copyVueToOut) // .onlyIf { !project.hasProperty('staging') }
-//  }
-//
-//  "processResources" {
-//    dependsOn(vueProd)
-//  }
-//
-//  task "runVueDevServer"(type: NpmTask) {
-//    setWorkingDir(file("../vue-app/"))
-//    args = ["run", "dev"]
-//  }
 }
