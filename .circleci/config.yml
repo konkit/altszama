@@ -25,17 +25,16 @@ jobs:
           echo "VUE_APP_SENTRY_URL=$VUE_APP_SENTRY_URL" >> ./vue-app/.env.production.local
           echo "VUE_APP_VAPID_PUBLIC_KEY=$VUE_APP_VAPID_PUBLIC_KEY" >> ./vue-app/.env.production.local
 
-    - run: |
-        echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USER --password-stdin
-
     - run:
         name: Dockerize backend app
         command: |
           cd ./backend-app
-          ./gradlew --console=plain clean build jibDockerbuild -Dimage=konkit/altszama:$CIRCLE_BUILD_NUM
+          ./gradlew --console=plain clean build jib -Djib.to.image=$DOCKER_REGISTRY_URL/konkit/altszama:$CIRCLE_BUILD_NUM -Djib.to.auth.username=$DOCKER_REGISTRY_USER -Djib.to.auth.password=$DOCKER_REGISTRY_PASS
           cd ../
 
     - run: docker push konkit/altszama:$CIRCLE_BUILD_NUM
+
+    - run: echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USER --password-stdin
 
     - run:
         name: Dockerize frontend app
