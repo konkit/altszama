@@ -69,9 +69,9 @@ jobs:
         command: ssh-keyscan -H $SITE_SSH_HOST >> ~/.ssh/known_hosts
 
     - run:
-        name: Replace linked jar to run
+        name: Do the upgrade
         command: |
-          ssh $SITE_SSH_USER@$SITE_SSH_HOST "cd /var/app/altszama && docker-compose down && docker-compose up -d"
+          ssh $SITE_SSH_USER@$SITE_SSH_HOST "cd /var/app/altszama && /bin/bash update_version.sh $CIRCLE_BUILD_NUM && docker-compose down && docker-compose up -d"
 
     # - run:
     #     name: Restart app
