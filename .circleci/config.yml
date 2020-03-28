@@ -44,7 +44,7 @@ jobs:
           docker build . -t konkit/altszama-frontend:$CIRCLE_BUILD_NUM
           cd ../
 
-    - run: konkit/altszama-frontend:$CIRCLE_BUILD_NUM
+    - run: docker push $DOCKER_REGISTRY_URL/konkit/altszama-frontend:$CIRCLE_BUILD_NUM
 
     - save_cache:
         paths:
