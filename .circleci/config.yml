@@ -26,7 +26,7 @@ jobs:
           echo "VUE_APP_VAPID_PUBLIC_KEY=$VUE_APP_VAPID_PUBLIC_KEY" >> ./vue-app/.env.production.local
 
     - run: |
-        echo "$DOCKER_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_USER --password-stdin
+        echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USER --password-stdin
 
     - run:
         name: Dockerize backend app
