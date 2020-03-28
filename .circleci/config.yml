@@ -32,7 +32,7 @@ jobs:
         name: Dockerize backend app
         command: |
           cd ./backend-app
-          ./gradlew --console=plain clean build jib:build -Dimage=konkit/altszama:$CIRCLE_BUILD_NUM
+          ./gradlew --console=plain clean build jibDockerbuild -Dimage=konkit/altszama:$CIRCLE_BUILD_NUM
           cd ../
 
     - run: docker push konkit/altszama:$CIRCLE_BUILD_NUM
