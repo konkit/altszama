@@ -41,8 +41,10 @@ jobs:
         name: Dockerize frontend app
         command: |
           cd ./vue-app
-          docker build . -t konkit/altszama-frontend:$CIRCLE_BUILD_NUM
+          docker build . -t konkit/altszama-frontend
           cd ../
+
+    - run: docker tag konkit/altszama-frontend $DOCKER_REGISTRY_URL/konkit/altszama-frontend:$CIRCLE_BUILD_NUM
 
     - run: docker push konkit/altszama-frontend:$CIRCLE_BUILD_NUM
 
