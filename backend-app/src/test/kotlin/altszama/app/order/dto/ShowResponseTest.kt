@@ -1,14 +1,14 @@
 package altszama.app.order.dto
 
-import altszama.auth.User
-import altszama.dish.Dish
-import altszama.dish.SideDish
-import altszama.dish.dto.DishDto
-import altszama.order.Order
-import altszama.orderEntry.DishEntry
-import altszama.orderEntry.OrderEntry
-import altszama.orderEntry.OrderEntryPaymentStatus
-import altszama.restaurant.Restaurant
+import altszama.app.auth.User
+import altszama.app.dish.Dish
+import altszama.app.dish.SideDish
+import altszama.app.dish.dto.DishDto
+import altszama.app.order.Order
+import altszama.app.orderEntry.DishEntry
+import altszama.app.orderEntry.OrderEntry
+import altszama.app.orderEntry.OrderEntryPaymentStatus
+import altszama.app.restaurant.Restaurant
 import org.bson.types.ObjectId
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.*
