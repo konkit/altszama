@@ -29,10 +29,10 @@ jobs:
         name: Dockerize backend app
         command: |
           cd ./backend-app
-          ./gradlew --console=plain clean build jib -Djib.to.image=$DOCKER_REGISTRY_URL/konkit/altszama:$CIRCLE_BUILD_NUM -Djib.to.auth.username=$DOCKER_REGISTRY_USER -Djib.to.auth.password=$DOCKER_REGISTRY_PASS
+          ./gradlew --console=plain clean build jib -Djib.to.image=$DOCKER_REGISTRY_URL/konkit/altszama:$CIRCLE_WORKFLOW_ID -Djib.to.auth.username=$DOCKER_REGISTRY_USER -Djib.to.auth.password=$DOCKER_REGISTRY_PASS
           cd ../
 
-    # - run: docker push konkit/altszama:$CIRCLE_BUILD_NUM
+    # - run: docker push konkit/altszama:$CIRCLE_WORKFLOW_ID
     - setup_remote_docker
 
     - run: echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USER --password-stdin
@@ -44,9 +44,9 @@ jobs:
           docker build . -t konkit/altszama-frontend
           cd ../
 
-    - run: docker tag konkit/altszama-frontend $DOCKER_REGISTRY_URL/konkit/altszama-frontend:$CIRCLE_BUILD_NUM
+    - run: docker tag konkit/altszama-frontend $DOCKER_REGISTRY_URL/konkit/altszama-frontend:$CIRCLE_WORKFLOW_ID
 
-    - run: docker push $DOCKER_REGISTRY_URL/konkit/altszama-frontend:$CIRCLE_BUILD_NUM
+    - run: docker push $DOCKER_REGISTRY_URL/konkit/altszama-frontend:$CIRCLE_WORKFLOW_ID
 
     - save_cache:
         paths:
@@ -71,7 +71,7 @@ jobs:
     - run:
         name: Do the upgrade
         command: |
-          ssh $SITE_SSH_USER@$SITE_SSH_HOST "cd /var/app/altszama && /bin/bash update_version.sh $CIRCLE_BUILD_NUM && docker-compose down && docker-compose up -d"
+          ssh $SITE_SSH_USER@$SITE_SSH_HOST "cd /var/app/altszama && /bin/bash update_version.sh $CIRCLE_WORKFLOW_ID && docker-compose down && docker-compose up -d"
 
     # - run:
     #     name: Restart app
