@@ -32,7 +32,7 @@ jobs:
           ./gradlew --console=plain clean build jib -Djib.to.image=$DOCKER_REGISTRY_URL/konkit/altszama:$CIRCLE_BUILD_NUM -Djib.to.auth.username=$DOCKER_REGISTRY_USER -Djib.to.auth.password=$DOCKER_REGISTRY_PASS
           cd ../
 
-    - run: docker push konkit/altszama:$CIRCLE_BUILD_NUM
+    # - run: docker push konkit/altszama:$CIRCLE_BUILD_NUM
 
     - run: echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USER --password-stdin
 
