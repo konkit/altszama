@@ -104,22 +104,6 @@
   import ErrorsComponent from '../commons/Errors'
   import LoadingView from "../commons/LoadingView";
   import {
-    INIT_CREATE_ORDER_ACTION,
-    SAVE_ORDER_ACTION,
-    UPDATE_BANK_TRANSFER_NUMBER,
-    UPDATE_BLIK_PHONE_NUMBER,
-    UPDATE_DECREASE_IN_PERCENT,
-    UPDATE_DELIVERY_COST_PER_DISH,
-    UPDATE_DELIVERY_COST_PER_EVERYBODY,
-    UPDATE_ORDER_DATE,
-    UPDATE_PAYMENT_BY_BANK_TRANSFER,
-    UPDATE_PAYMENT_BY_BLIK,
-    UPDATE_PAYMENT_BY_CASH,
-    UPDATE_RESTAURANT_ID,
-    UPDATE_TIME_OF_ORDER,
-  } from "../../store/modules/CreateOrderState";
-  import {mapState} from "vuex"
-  import {
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY
   } from "../../store/modules/ModifyOrderEntryState";
@@ -128,47 +112,14 @@
   import ViewWrapper from "../commons/ViewWrapper";
   import Vue from "vue";
   import Component from "vue-class-component";
+  import ApiConnector from "../../lib/ApiConnector";
+  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
 
   @Component({
     computed: {
       loading() {
         return this.$store.state.loading;
-      },
-      ...mapState("createOrder", [
-        "restaurantsList",
-        "restaurantId",
-        "orderDate",
-        "timeOfOrder",
-        "decreaseInPercent",
-        "deliveryCostPerEverybody",
-        "deliveryCostPerDish",
-        "bankTransferNumber",
-        "blikPhoneNumber"
-      ]),
-      paymentByCash: {
-        get() {
-          return this.$store.state.createOrder.paymentByCash;
-        },
-        set(newValue) {
-          this.updatePaymentByCash(newValue)
-        }
-      },
-      paymentByBankTransfer: {
-        get() {
-          return this.$store.state.createOrder.paymentByBankTransfer;
-        },
-        set(newValue) {
-          this.updatePaymentByBankTransfer(newValue)
-        }
-      },
-      paymentByBlik: {
-        get() {
-          return this.$store.state.createOrder.paymentByBlik;
-        },
-        set(newValue) {
-          this.updatePaymentByBlik(newValue)
-        }
       },
     },
     components: {
@@ -180,66 +131,111 @@
     }
   })
   export default class OrderCreateForm extends Vue {
-    yesNoOptions = [
-      {text: 'Yes', value: true},
-      {text: 'No', value: false},
-    ];
+    restaurantsList = [];
+
+    // Order
+    restaurantId = 0;
+    orderDate = "";
+    timeOfOrder = "";
+    decreaseInPercent = "";
+    deliveryCostPerEverybody = "";
+    deliveryCostPerDish = "";
+    paymentByCash = true;
+    paymentByBankTransfer = false;
+    bankTransferNumber = "";
+    paymentByBlik = false;
+    blikPhoneNumber = "";
 
     created() {
       this.$store.commit('setLoadingTrue')
     }
 
     mounted() {
-      this.$store.dispatch(`createOrder/${INIT_CREATE_ORDER_ACTION}`);
+      OrdersApiConnector.getOrderCreateData()
+        .then(response => {
+          this.restaurantsList = response.restaurantsList;
+
+          this.restaurantId = response.order.restaurantId;
+          this.orderDate = response.order.orderDate;
+          this.timeOfOrder = response.order.timeOfOrder;
+          this.decreaseInPercent = response.order.decreaseInPercent;
+          this.deliveryCostPerEverybody = response.order.deliveryCostPerEverybody;
+          this.deliveryCostPerDish = response.order.deliveryCostPerDish;
+          this.paymentByCash = response.order.paymentByCash;
+          this.paymentByBankTransfer = response.order.paymentByBankTransfer ;
+          this.bankTransferNumber = response.order.bankTransferNumber;
+          this.paymentByBlik = response.order.paymentByBlik ;
+          this.blikPhoneNumber = response.order.blikPhoneNumber;
+          
+          this.$store.commit('setLoadingFalse');
+          document.title = `Create new order | Alt Szama`
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     }
 
     updateRestaurantId(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_RESTAURANT_ID}`, newValue);
+      this.restaurantId = newValue;
     }
 
-    updateOrderDate(newOrderDate) {
-      this.$store.commit(`createOrder/${UPDATE_ORDER_DATE}`, newOrderDate);
+    updateOrderDate(newValue) {
+      this.orderDate = newValue;
     }
 
-    updateTimeOfOrder(newTimeOfOrder) {
-      this.$store.commit(`createOrder/${UPDATE_TIME_OF_ORDER}`, newTimeOfOrder);
+    updateTimeOfOrder(newValue) {
+      this.timeOfOrder = newValue
     }
 
     updateDecreaseInPercent(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_DECREASE_IN_PERCENT}`, newValue);
+      this.decreaseInPercent = newValue;
     }
 
     updateDeliveryCostPerEverybody(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_DELIVERY_COST_PER_EVERYBODY}`, newValue);
+      this.deliveryCostPerEverybody = newValue;
     }
 
     updateDeliveryCostPerDish(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_DELIVERY_COST_PER_DISH}`, newValue);
+      this.deliveryCostPerDish = newValue;
     }
 
     updatePaymentByCash(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_CASH}`, newValue);
+      this.paymentByCash = newValue;
     }
 
     updatePaymentByBankTransfer(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_BANK_TRANSFER}`, newValue);
+      this.paymentByBankTransfer = newValue;
     }
 
     updateBankTransferNumber(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
+      this.bankTransferNumber = newValue;
     }
 
     updatePaymentByBlik(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_PAYMENT_BY_BLIK}`, newValue);
+      this.paymentByBlik = newValue;
     }
 
     updateBlikPhoneNumber(newValue) {
-      this.$store.commit(`createOrder/${UPDATE_BLIK_PHONE_NUMBER}`, newValue);
+      this.blikPhoneNumber = newValue;
     }
 
     submitForm(e) {
       e.preventDefault();
-      this.$store.dispatch(`createOrder/${SAVE_ORDER_ACTION}`);
+
+      const order = {
+        restaurantId: this.restaurantId,
+        orderDate: this.orderDate,
+        timeOfOrder: this.timeOfOrder,
+        decreaseInPercent: this.decreaseInPercent,
+        deliveryCostPerEverybody: this.deliveryCostPerEverybody,
+        deliveryCostPerDish: this.deliveryCostPerDish,
+        paymentByCash: this.paymentByCash,
+        paymentByBankTransfer: this.paymentByBankTransfer,
+        bankTransferNumber: this.bankTransferNumber,
+        paymentByBlik: this.paymentByBlik,
+        blikPhoneNumber: this.blikPhoneNumber
+      };
+
+      OrdersApiConnector.createOrder(order)
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false;
     }
@@ -248,6 +244,9 @@
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
     }
 
+    get loading() {
+      return this.$store.state.loading;
+    }
 
   }
 </script>

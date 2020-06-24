@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import ShowOrderState from './modules/ShowOrderState'
-import CreateOrderState from "./modules/CreateOrderState";
 import EditOrderState from "./modules/EditOrderState";
 import OrderViewState from "./modules/OrderViewState";
 import TodayOrdersState from "./modules/TodayOrdersState";
@@ -71,8 +70,6 @@ export default new Vuex.Store({
   modules: {
     // Orders
     showOrder: ShowOrderState,
-    createOrder: CreateOrderState,
-    editOrder: EditOrderState,
     orderView: OrderViewState,
     todayOrders: TodayOrdersState,
     modifyOrderEntry: ModifyOrderEntryState,
