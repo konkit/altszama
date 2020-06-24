@@ -4,7 +4,9 @@
 
     <div v-if="this.sideDishes.length > 0">
       <p v-for="sideDish in this.sideDishes" :key="sideDish.id">
-        {{sideDish.name}}&nbsp;(<price :data-price="sideDish.price"/>)
+        {{sideDish.name}}&nbsp;(
+        <price :data-price="sideDish.price"/>
+        )
         <v-btn icon @click="removeSideDish(sideDish.id)"><span class="fa fa-times"/></v-btn>
       </p>
     </div>
@@ -20,8 +22,8 @@
 
     <div v-if="this.sideDishFormVisible === true">
       <v-text-field
-        label="New Side dish name"
-        v-model="newSideDishName">
+          label="New Side dish name"
+          v-model="newSideDishName">
       </v-text-field>
 
       <MoneyInput
@@ -41,50 +43,55 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import Price from '../../commons/PriceElement.vue'
   import MoneyInput from "../../commons/MoneyInput";
+  import Vue from "vue";
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
 
-  export default {
-        props: [
-            'initialSideDishes'
-        ],
-        data() {
-            return {
-                sideDishes: this.initialSideDishes || [],
-
-                newSideDishName: '',
-                newSideDishPrice: '',
-                sideDishFormVisible: false
-            }
-        },
-        methods: {
-            addSideDish() {
-                var newSideDish = {
-                    name: this.newSideDishName,
-                    price: this.newSideDishPrice
-                }
-
-                this.sideDishes.push(newSideDish)
-                this.setSideDishFormVisible(false);
-            },
-            removeSideDish(sideDishId) {
-                this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
-            },
-            setSideDishFormVisible(isVisible) {
-                this.sideDishFormVisible = isVisible;
-            },
-            getSideDishes() {
-                return this.sideDishes
-            },
-            setSideDishes(sideDishes) {
-                this.sideDishes = sideDishes
-            },
-
-        },
-        components: {
-            MoneyInput,
-            Price
-        }
+  @Component({
+    components: {
+      MoneyInput,
+      Price
     }
+  })
+  export default class SideDishes extends Vue {
+    @Prop() initialSideDishes;
+
+    sideDishes = [];
+    newSideDishName = '';
+    newSideDishPrice = '';
+    sideDishFormVisible = false;
+
+    mounted() {
+      this.sideDishes = this.initialSideDishes || [];
+    }
+
+    addSideDish() {
+      var newSideDish = {
+        name: this.newSideDishName,
+        price: this.newSideDishPrice
+      };
+
+      this.sideDishes.push(newSideDish)
+      this.setSideDishFormVisible(false);
+    }
+
+    removeSideDish(sideDishId) {
+      this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
+    }
+
+    setSideDishFormVisible(isVisible) {
+      this.sideDishFormVisible = isVisible;
+    }
+
+    getSideDishes() {
+      return this.sideDishes
+    }
+
+    setSideDishes(sideDishes) {
+      this.sideDishes = sideDishes
+    }
+  }
 </script>

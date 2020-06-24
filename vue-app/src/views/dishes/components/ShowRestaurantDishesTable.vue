@@ -15,7 +15,9 @@
           <v-list-item :key="'item-' + j">
             <v-list-item-content>
               <v-list-item-title>
-                {{dish.name}} (<price :data-price="dish.price"></price>)
+                {{dish.name}} (
+                <price :data-price="dish.price"></price>
+                )
               </v-list-item-title>
 
               <v-list-item-subtitle>
@@ -47,35 +49,37 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import Price from '../../commons/PriceElement'
   import {DELETE_DISH_ACTION} from "../../../store/modules/ShowRestaurantState";
   import moment from "moment"
+  import Vue from 'vue'
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
 
-  export default {
-    name: "show-restaurant-dishes-table",
-    props: ["restaurant", "dishesByCategory"],
-    data() {
-      return {
-        sideDishesShown: false
-      }
-    },
-    methods: {
-      deleteDish(dishId) {
-        this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {restaurantId: this.restaurant.id, dishId: dishId})
-      },
-      dateToRel(date) {
-        if (date) {
-          return moment(date).fromNow()
-        } else {
-          return ""
-        }
-      }
-    },
+  @Component({
     components: {
       Price,
     },
-    computed: {}
+  })
+  export default class ShowRestaurantDishesTable extends Vue {
+    @Prop() restaurant;
+    @Prop() dishesByCategory;
+
+    sideDishesShown: false;
+
+    deleteDish(dishId) {
+      this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {restaurantId: this.restaurant.id, dishId: dishId})
+    }
+
+    dateToRel(date) {
+      if (date) {
+        return moment(date).fromNow()
+      } else {
+        return ""
+      }
+    }
+
   }
 </script>
 

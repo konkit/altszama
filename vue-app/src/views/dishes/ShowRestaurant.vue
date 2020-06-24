@@ -37,7 +37,8 @@
             <v-card>
               <v-card-text>
                 <v-layout column>
-                  <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
+                  <show-restaurant-dishes-table :restaurant="this.restaurant"
+                                                :dishes-by-category="this.dishesByCategory"/>
                 </v-layout>
 
                 <v-tooltip left>
@@ -57,7 +58,7 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import ErrorsComponent from '../commons/Errors'
   import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable'
   import LoadingView from "../commons/LoadingView";
@@ -65,56 +66,63 @@
   import router from "../../router/index"
   import moment from "moment"
   import ViewWrapper from "../commons/ViewWrapper";
+  import Component from "vue-class-component";
+  import Vue from 'vue';
 
-  export default {
-    name: 'show-restaurant',
-    data() {
-      return {
-        restaurantId: this.$route.params.id,
-      }
-    },
-    mounted() {
-      this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
-    },
-    methods: {
-      deleteRestaurant() {
-        let errorsComponent = this.$refs.errorsComponent;
-        this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
-          restaurantId: this.restaurantId,
-          errorsComponent: errorsComponent
-        });
-      },
-      goToCreateDish() {
-        router.push("/restaurants/" + this.restaurantId + "/dishes/create")
-      },
-      editRestaurant() {
-        router.push("/restaurants/" + this.restaurantId + "/edit")
-      },
-      dateToRel(date) {
-        if (date) {
-          return moment(date).fromNow()
-        } else {
-          return ""
-        }
-      }
-    },
-    computed: {
-      restaurant() {
-        return this.$store.state.showRestaurant.restaurant;
-      },
-      dishes() {
-        return this.$store.state.showRestaurant.dishes;
-      },
-      dishesByCategory() {
-        return this.$store.state.showRestaurant.dishesByCategory;
-      },
-    },
+  @Component({
     components: {
       ViewWrapper,
       LoadingView,
       ErrorsComponent,
       ShowRestaurantDishesTable
     }
+  })
+  export default class ShowRestaurant extends Vue {
+    restaurantId = '';
+
+    mounted() {
+      this.restaurantId = this.$route.params.id;
+
+      this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
+    }
+
+    get restaurant() {
+      return this.$store.state.showRestaurant.restaurant;
+    }
+
+    get dishes() {
+      return this.$store.state.showRestaurant.dishes;
+    }
+
+    get dishesByCategory() {
+      return this.$store.state.showRestaurant.dishesByCategory;
+    }
+
+    deleteRestaurant() {
+      let errorsComponent = this.$refs.errorsComponent;
+      this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
+        restaurantId: this.restaurantId,
+        errorsComponent: errorsComponent
+      });
+    }
+
+    goToCreateDish() {
+      router.push("/restaurants/" + this.restaurantId + "/dishes/create")
+    }
+
+    editRestaurant() {
+      router.push("/restaurants/" + this.restaurantId + "/edit")
+    }
+
+    dateToRel(date) {
+      if (date) {
+        return moment(date).fromNow()
+      } else {
+        return ""
+      }
+    }
+
+
   }
 
 </script>

@@ -7,7 +7,6 @@ import CreateOrderState from "./modules/CreateOrderState";
 import EditOrderState from "./modules/EditOrderState";
 import OrderViewState from "./modules/OrderViewState";
 import TodayOrdersState from "./modules/TodayOrdersState";
-import RestaurantIndexState from "./modules/RestaurantIndexState";
 import ShowRestaurantState from "./modules/ShowRestaurantState";
 import ModifyOrderEntryState from "./modules/ModifyOrderEntryState";
 
@@ -78,10 +77,9 @@ export default new Vuex.Store({
     editOrder: EditOrderState,
     orderView: OrderViewState,
     todayOrders: TodayOrdersState,
+    modifyOrderEntry: ModifyOrderEntryState,
 
     // Dishes
-    restaurantIndex: RestaurantIndexState,
     showRestaurant: ShowRestaurantState,
-    modifyOrderEntry: ModifyOrderEntryState
   }
 })
