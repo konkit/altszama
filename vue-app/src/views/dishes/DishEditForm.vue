@@ -47,20 +47,27 @@
   import ViewWrapper from "../commons/ViewWrapper";
   import ApiConnector from "../../lib/ApiConnector";
   import DishesApiConnector from "../../lib/DishesApiConnector";
+  import Component from 'vue-class-component'
+  import Vue from "vue"
 
-  export default {
-    data() {
-      return {
-        restaurantId: this.$route.params.id,
-        dishId: this.$route.params.dishId,
-        name: "",
-        price: 0,
-        category: "",
-        categories: [],
-        initialSideDishes: [],
-        initialDish: [],
-      }
-    },
+  @Component({
+    components: {
+      ViewWrapper,
+      MoneyInput,
+      LoadingView,
+      ErrorsComponent,
+      SideDishes
+    }
+  })
+  export default class DishEditForm extends Vue {
+    restaurantId = this.$route.params.id;
+    dishId = this.$route.params.dishId;
+    name = "";
+    price = 0;
+    category = "";
+    categories = [];
+    initialSideDishes = [];
+
     mounted() {
       DishesApiConnector.getDishEditData(this.restaurantId, this.dishId)
         .then(dishData => {
@@ -77,56 +84,53 @@
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
 
-    },
-    methods: {
-      submitForm() {
-        let dish = {
-          name: this.name,
-          price: this.price,
-          category: this.category
-        };
-        let sideDishes = this.$refs.sideDishesElement.getSideDishes();
+    }
 
-        const dishObj = {
-          id: this.dishId,
-          name: dish.name,
-          price: dish.price,
-          category: dish.category,
-          sideDishes: sideDishes
-        };
+    submitForm() {
+      let dish = {
+        name: this.name,
+        price: this.price,
+        category: this.category
+      };
+      let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
-        DishesApiConnector.editDish(this.restaurantId, dishObj)
-          .catch(errResponse => ApiConnector.handleError(errResponse))
+      const dishObj = {
+        id: this.dishId,
+        name: dish.name,
+        price: dish.price,
+        category: dish.category,
+        sideDishes: sideDishes
+      };
 
-        return false;
-      },
-      addSideDish() {
-        const newSideDish = {
-          name: this.newSideDishName,
-          price: this.newSideDishPrice
-        };
+      DishesApiConnector.editDish(this.restaurantId, dishObj)
+        .catch(errResponse => ApiConnector.handleError(errResponse))
 
-        this.sideDishes.push(newSideDish)
-      },
-      removeSideDish(sideDishId) {
-        this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
-      },
-      updateName(newValue) {
-        this.name = newValue;
-      },
-      updatePrice(newValue) {
-        this.price = newValue
-      },
-      updateCategory(newValue) {
-        this.category = newValue;
-      }
-    },
-    components: {
-      ViewWrapper,
-      MoneyInput,
-      LoadingView,
-      ErrorsComponent,
-      SideDishes
+      return false;
+    }
+
+    addSideDish() {
+      const newSideDish = {
+        name: this.newSideDishName,
+        price: this.newSideDishPrice
+      };
+
+      this.sideDishes.push(newSideDish)
+    }
+
+    removeSideDish(sideDishId) {
+      this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
+    }
+
+    updateName(newValue) {
+      this.name = newValue;
+    }
+
+    updatePrice(newValue) {
+      this.price = newValue
+    }
+
+    updateCategory(newValue) {
+      this.category = newValue;
     }
   }
 </script>
