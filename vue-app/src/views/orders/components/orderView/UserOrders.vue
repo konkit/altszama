@@ -4,13 +4,13 @@
 
     <v-list dense>
       <template v-for="(entry, entryIndex) in groupedEntries">
-        <v-list-item :key="entryIndex">
+        <v-list-item :key="'list-' + entryIndex">
           <v-list-item-content class="body-1">
             <span><b>{{entry.eatingPeopleCount}}x</b> {{entry.dish.name}}</span>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list dense class="px-8 no-y-padding" v-if="entry.eatingPeopleEntries.length > 0" :key="entryIndex">
+        <v-list dense class="px-8 no-y-padding" v-if="entry.eatingPeopleEntries.length > 0" :key="'second-list-' + entryIndex">
 
           <template v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries">
             <v-list-item :key="i">
@@ -71,7 +71,7 @@
         </v-list>
 
         <template v-if="entryIndex < groupedEntries.length - 1">
-          <v-divider class="custom-margin-divider" :key="entryIndex"></v-divider>
+          <v-divider class="custom-margin-divider" :key="'divider-' + entryIndex"></v-divider>
         </template>
       </template>
     </v-list>

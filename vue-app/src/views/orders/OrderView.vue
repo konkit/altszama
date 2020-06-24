@@ -133,13 +133,8 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import LoadingView from "../commons/LoadingView";
-  import {
-    FETCH_ORDER_VIEW_DATA_ACTION,
-    MAKE_AN_ORDER_ACTION,
-    UPDATE_APPROX_TIME_OF_DELIVERY
-  } from "../../store/modules/OrderViewState"
   import {mapState} from "vuex"
   import PriceSummary from "./components/PriceSummary";
   import TimePicker from "../commons/TimePicker";
@@ -147,32 +142,12 @@
   import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../store/modules/ShowOrderState"
   import router from '../../router/index'
   import UserOrders from "./components/orderView/UserOrders";
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import OrdersApiConnector from "../../lib/OrdersApiConnector";
+  import ApiConnector from "../../lib/ApiConnector";
 
-  export default {
-    data() {
-      return {
-        orderId: this.$route.params.id,
-        approxTimeOfDeliveryModal: false,
-        timeOfOrderModal: false
-      }
-    },
-    mounted() {
-      this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
-    },
-    methods: {
-      submitForm() {
-        this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, {approxTimeOfDelivery: this.approxTimeOfDelivery});
-
-        return false
-      },
-      updateApproxTimeOfDelivery(newValue) {
-        this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`, newValue)
-      },
-      unlockOrder() {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
-          .then(() => router.push("/orders/show/" + this.orderId))
-      },
-    },
+  @Component({
     computed: {
       ...mapState("orderView", [
         "orderState",
@@ -200,6 +175,66 @@
       TimePicker,
       PriceSummary,
       LoadingView,
+    }
+  })
+  export default class OrderView extends Vue {
+    orderId = "";
+    approxTimeOfDeliveryModal = false;
+    timeOfOrderModal = false;
+
+    orderState = "";
+    orderDecreaseInPercent = 0;
+    orderDeliveryCostPerEverybody = 0;
+    orderDeliveryCostPerDish = 0;
+    restaurantName = "";
+    restaurantTelephone = "";
+    groupedEntries = [];
+    allEatingPeopleCount = 0;
+    basePriceSum = 0;
+    totalPrice = 0;
+    approxTimeOfDelivery = "12:00";
+
+    mounted() {
+      this.orderId = this.$route.params.id;
+      // this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
+
+      OrdersApiConnector.fetchOrderView(this.orderId)
+        .then(responseObj => {
+          this.orderState = responseObj.orderState;
+          this.orderDecreaseInPercent = responseObj.orderDecreaseInPercent;
+          this.orderDeliveryCostPerEverybody = responseObj.orderDeliveryCostPerEverybody;
+          this.orderDeliveryCostPerDish = responseObj.orderDeliveryCostPerDish;
+          this.restaurantName = responseObj.restaurantName;
+          this.restaurantTelephone = responseObj.restaurantTelephone;
+          this.groupedEntries = responseObj.groupedEntries;
+          this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
+          this.basePriceSum = responseObj.basePriceSum;
+          this.totalPrice = responseObj.totalPrice;
+
+          this.$store.commit('setLoadingFalse');
+
+          document.title = `Ordering from ${this.restaurantName} | Alt Szama`
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    }
+
+    submitForm() {
+      // this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, {approxTimeOfDelivery: this.approxTimeOfDelivery});
+
+      OrdersApiConnector.makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery})
+        .catch(errResponse => ApiConnector.handleError(errResponse));
+
+      return false
+    }
+
+    updateApproxTimeOfDelivery(newValue) {
+      // this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`, newValue)
+      this.approxTimeOfDelivery = newValue;
+    }
+
+    unlockOrder() {
+      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
+        .then(() => router.push("/orders/show/" + this.orderId))
     }
   }
 
