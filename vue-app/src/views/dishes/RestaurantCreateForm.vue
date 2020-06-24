@@ -25,57 +25,65 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import ErrorsComponent from '../commons/Errors'
-  import {mapState} from 'vuex'
-  import {
-    UPDATE_NAME,
-    UPDATE_URL,
-    UPDATE_RATING,
-    UPDATE_TELEPHONE,
-    UPDATE_ADDRESS,
-    SAVE_RESTAURANT_ACTION,
-    INIT_CREATE_RESTAURANT_ACTION
-  } from "../../store/modules/CreateRestaurantState"
   import ViewWrapper from "../commons/ViewWrapper";
+  import Vue from "vue";
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
+  import DishesApiConnector from "../../lib/DishesApiConnector";
+  import ApiConnector from "../../lib/ApiConnector";
 
-  export default {
-    props: ['restaurantName'],
-    methods: {
-      submitForm () {
-        this.$store.dispatch(`createRestaurant/${SAVE_RESTAURANT_ACTION}`)
-      },
-      updateName(newValue) {
-        this.$store.commit(`createRestaurant/${UPDATE_NAME}`, newValue);
-      },
-      updateUrl(newValue) {
-        this.$store.commit(`createRestaurant/${UPDATE_URL}`, newValue);
-      },
-      updateRating(newValue) {
-        this.$store.commit(`createRestaurant/${UPDATE_RATING}`, newValue);
-      },
-      updateTelephone(newValue) {
-        this.$store.commit(`createRestaurant/${UPDATE_TELEPHONE}`, newValue);
-      },
-      updateAddress(newValue) {
-        this.$store.commit(`createRestaurant/${UPDATE_ADDRESS}`, newValue);
-      },
-    },
-    mounted() {
-      this.$store.dispatch(`createRestaurant/${INIT_CREATE_RESTAURANT_ACTION}`);
-    },
-    computed: {
-      ...mapState('createRestaurant', [
-        'name',
-        'url',
-        'rating',
-        'telephone',
-        'address'
-      ]),
-    },
+  @Component({
     components: {
       ViewWrapper,
       ErrorsComponent,
+    }
+  })
+  export default class RestaurantCreateForm extends Vue {
+    @Prop() restaurantName: string;
+
+    name: string = '';
+    url: string = '';
+    rating: string = '';
+    telephone: string = '';
+    address: string = '';
+
+    mounted() {
+      document.title = `Create restaurant | Alt Szama`
+    }
+
+    submitForm() {
+      const restaurant = {
+        name: this.name,
+        url: this.url,
+        rating: this.rating,
+        telephone: this.telephone,
+        address: this.address,
+      };
+
+      DishesApiConnector.createRestaurant(restaurant)
+        .catch(errResponse => ApiConnector.handleError(errResponse));
+    }
+
+    updateName(newValue) {
+      this.name = newValue;
+    }
+
+    updateUrl(newValue) {
+      this.url = newValue;
+    }
+
+    updateRating(newValue) {
+      this.rating = newValue;
+    }
+
+    updateTelephone(newValue) {
+      this.telephone = newValue;
+    }
+
+    updateAddress(newValue) {
+      this.address = newValue;
     }
   }
 </script>

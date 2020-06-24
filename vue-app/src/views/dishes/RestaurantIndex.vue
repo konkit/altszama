@@ -52,67 +52,80 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import LoadingView from "../commons/LoadingView";
-  import {FETCH_ALL_RESTAURANTS} from "../../store/modules/RestaurantIndexState"
   import router from '../../router/index'
   import moment from "moment"
   import ViewWrapper from "../commons/ViewWrapper";
+  import Component from "vue-class-component";
+  import Vue from "vue";
+  import DishesApiConnector from "../../lib/DishesApiConnector";
+  import ApiConnector from "../../lib/ApiConnector";
 
-  export default {
-    data() {
-      return {
-        headers: [
-          {text: "Restaurant name", align: 'left'},
-          {text: "Dish count"},
-          {text: "Last auto-updated"},
-          {text: "Last updated manually"},
-        ],
-        pagination: {
-          rowsPerPage: 20
-        },
-      }
-    },
-    mounted() {
-      this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
-    },
-    methods: {
-      goToRestaurant(restaurantId) {
-        router.push("/restaurants/show/" + restaurantId)
-      },
-      goToCreateRestaurant() {
-        router.push("/restaurants/create")
-      },
-      dateToRel(date) {
-        if (date) {
-          return moment(date).fromNow()
-        } else {
-          return ""
-        }
-      }
-    },
-    computed: {
-      restaurants() {
-        return this.$store.state.restaurantIndex.restaurants;
-      },
-      restaurantToDishesMap() {
-        return this.$store.state.restaurantIndex.restaurantToDishesMap;
-      },
-      restaurantsEntries() {
-        return this.$store.state.restaurantIndex.restaurants.map(e => {
-          return {
-            "id": e.id,
-            "name": e.name,
-            "dishCount": e.dishCount,
-            "lastCrawled": e.lastCrawled,
-            "lastEdited": e.lastEdited
-          }
-        })
-      }
-    },
+  @Component({
     components: {
       ViewWrapper,
       LoadingView,
+    }
+  })
+  export default class RestaurantIndex extends Vue {
+    headers = [
+      {text: "Restaurant name", align: 'left'},
+      {text: "Dish count"},
+      {text: "Last auto-updated"},
+      {text: "Last updated manually"}
+    ];
+
+    pagination = {
+      rowsPerPage: 20
+    }
+
+    restaurants = [];
+    restaurantsEntries = [];
+    restaurantToDishesMap = {};
+
+
+    mounted() {
+      // this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
+
+      DishesApiConnector.getRestaurants()
+        .then(payload => {
+          // this.$store.commit(`restaurantIndex/${LOAD_RESTAURANTS}`, response);
+          this.restaurants = payload.restaurants;
+          this.restaurantToDishesMap = payload.restaurantToDishesMap;
+          this.restaurantsEntries = this.restaurants.map(r => this.mapToRestaurantEntry(r));
+
+          this.$store.commit('setLoadingFalse');
+
+          document.title = `Restaurants | Alt Szama`
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    }
+
+    goToRestaurant(restaurantId) {
+      router.push("/restaurants/show/" + restaurantId)
+    }
+
+    goToCreateRestaurant() {
+      router.push("/restaurants/create")
+    }
+
+    dateToRel(date) {
+      if (date) {
+        return moment(date).fromNow()
+      } else {
+        return ""
+      }
+    }
+
+    private mapToRestaurantEntry(restaurant) {
+        return {
+          "id": restaurant.id,
+          "name": restaurant.name,
+          "dishCount": restaurant.dishCount,
+          "lastCrawled": restaurant.lastCrawled,
+          "lastEdited": restaurant.lastEdited
+        }
     }
   }
 </script>

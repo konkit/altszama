@@ -9,8 +9,6 @@ import OrderViewState from "./modules/OrderViewState";
 import TodayOrdersState from "./modules/TodayOrdersState";
 import RestaurantIndexState from "./modules/RestaurantIndexState";
 import ShowRestaurantState from "./modules/ShowRestaurantState";
-import CreateRestaurantState from "./modules/CreateRestaurantState";
-import EditRestaurantState from "./modules/EditRestaurantState";
 import ModifyOrderEntryState from "./modules/ModifyOrderEntryState";
 
 Vue.use(Vuex);
@@ -84,8 +82,6 @@ export default new Vuex.Store({
     // Dishes
     restaurantIndex: RestaurantIndexState,
     showRestaurant: ShowRestaurantState,
-    createRestaurant: CreateRestaurantState,
-    editRestaurant: EditRestaurantState,
     modifyOrderEntry: ModifyOrderEntryState
   }
 })

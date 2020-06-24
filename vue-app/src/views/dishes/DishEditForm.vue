@@ -39,7 +39,7 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import ErrorsComponent from '../commons/Errors'
   import SideDishes from './components/SideDishes.vue'
   import LoadingView from "../commons/LoadingView";

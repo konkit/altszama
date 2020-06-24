@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Edit restaurant ${name}`" :backpath="`#/restaurants/show/${this.restaurantId}`">
+  <ViewWrapper :title="`Edit restaurant ${initialName}`" :backpath="`#/restaurants/show/${this.restaurantId}`">
     <LoadingView>
       <v-container>
         <errors-component/>
@@ -28,67 +28,88 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import ErrorsComponent from '../commons/Errors'
 
   import LoadingView from "../commons/LoadingView";
-  import {mapState} from 'vuex'
-  import {
-    UPDATE_RESTAURANT_ACTION,
-    INIT_EDIT_RESTAURANT_ACTION,
-    UPDATE_ADDRESS,
-    UPDATE_TELEPHONE,
-    UPDATE_RATING,
-    UPDATE_URL,
-    UPDATE_NAME
-  } from "../../store/modules/EditRestaurantState"
   import ViewWrapper from "../commons/ViewWrapper";
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import DishesApiConnector from "../../lib/DishesApiConnector";
+  import ApiConnector from "../../lib/ApiConnector";
 
-  export default {
-    data() {
-      return {
-        restaurantId: this.$route.params.id,
-      }
-    },
-    mounted() {
-      this.$store.dispatch(`editRestaurant/${INIT_EDIT_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
-    },
-    methods: {
-      submitForm () {
-        this.$store.dispatch(`editRestaurant/${UPDATE_RESTAURANT_ACTION}`);
-
-        return false;
-      },
-      updateName(newValue) {
-        this.$store.commit(`editRestaurant/${UPDATE_NAME}`, newValue);
-      },
-      updateUrl(newValue) {
-        this.$store.commit(`editRestaurant/${UPDATE_URL}`, newValue);
-      },
-      updateRating(newValue) {
-        this.$store.commit(`editRestaurant/${UPDATE_RATING}`, newValue);
-      },
-      updateTelephone(newValue) {
-        this.$store.commit(`editRestaurant/${UPDATE_TELEPHONE}`, newValue);
-      },
-      updateAddress(newValue) {
-        this.$store.commit(`editRestaurant/${UPDATE_ADDRESS}`, newValue);
-      },
-    },
-    computed: {
-      ...mapState('editRestaurant', [
-        'name',
-        'url',
-        'rating',
-        'telephone',
-        'address'
-      ]),
-    },
+  @Component({
     components: {
       ViewWrapper,
       LoadingView,
       ErrorsComponent,
     }
+  })
+  export default class RestaurantEditForm extends Vue {
+    restaurantId = '';
+    initialName = '';
+
+    name = '';
+    url = '';
+    rating = '';
+    telephone = '';
+    address = '';
+
+    mounted() {
+      this.restaurantId = this.$route.params.id;
+
+      DishesApiConnector.getRestaurantEditData(this.restaurantId)
+        .then(payload => {
+          this.name = payload.name;
+          this.url = payload.url;
+          this.rating = payload.rating;
+          this.telephone = payload.telephone;
+          this.address = payload.address;
+          this.$store.commit('setLoadingFalse');
+
+          this.initialName = payload.name;
+
+          document.title = `Edit restaurant ${this.initialName} | Alt Szama`
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    }
+
+    submitForm() {
+      const restaurant = {
+        id: this.restaurantId,
+        name: this.name,
+        url: this.url,
+        rating: this.rating,
+        telephone: this.telephone,
+        address: this.address,
+      };
+
+      DishesApiConnector.editRestaurant(this.restaurantId, restaurant)
+        .catch(errResponse => ApiConnector.handleError(errResponse));
+
+      return false;
+    }
+
+    updateName(newValue) {
+      this.name = newValue;
+    }
+
+    updateUrl(newValue) {
+      this.url = newValue;
+    }
+
+    updateRating(newValue) {
+      this.rating = newValue;
+    }
+
+    updateTelephone(newValue) {
+      this.telephone = newValue;
+    }
+
+    updateAddress(newValue) {
+      this.address = newValue;
+    }
+
   }
 </script>
 
