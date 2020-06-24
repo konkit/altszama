@@ -124,31 +124,18 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import ApiConnector from '../../lib/ApiConnector'
   import LoadingView from "../commons/LoadingView";
-  import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
   import {mapState} from "vuex"
   import ErrorsComponent from '../commons/Errors'
   import router from '../../router/index'
   import ViewWrapper from "../commons/ViewWrapper";
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
-  export default {
-    mounted() {
-      ApiConnector.initializePushNotifications();
-
-      let errorsComponent = this.$refs.errorsComponent;
-
-      this.$store.dispatch(`todayOrders/${FETCH_TODAY_ORDERS_ACTION}`, {errorsComponent: errorsComponent});
-    },
-    methods: {
-      goToOrder(selectedOrderId) {
-        router.push("/orders/show/" + selectedOrderId)
-      },
-      goToCreateOrder() {
-        router.push("/orders/create")
-      }
-    },
+  @Component({
     computed: {
       ...mapState("todayOrders", [
         "currentOrderEntries",
@@ -164,6 +151,33 @@
       LoadingView,
       ErrorsComponent,
     }
+  })
+  export default class TodayOrders extends Vue {
+    currentOrderEntries = [];
+    ordersList = [];
+
+    mounted() {
+      ApiConnector.initializePushNotifications();
+
+      OrdersApiConnector.fetchTodaysOrders()
+        .then(todayOrdersData => {
+          this.currentOrderEntries = todayOrdersData.currentOrderEntries;
+          this.ordersList = todayOrdersData.ordersList;
+
+          this.$store.commit('setLoadingFalse');
+          document.title = `Today orders | Alt Szama`
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    }
+
+    goToOrder(selectedOrderId) {
+      router.push("/orders/show/" + selectedOrderId)
+    }
+
+    goToCreateOrder() {
+      router.push("/orders/create")
+    }
+
   }
 </script>
 
@@ -171,8 +185,6 @@
   .pointer {
     cursor: pointer;
   }
-
-
 
   .orderState {
     color: #B2B2B2;
