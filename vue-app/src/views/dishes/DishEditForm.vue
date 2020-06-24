@@ -43,32 +43,60 @@
   import ErrorsComponent from '../commons/Errors'
   import SideDishes from './components/SideDishes.vue'
   import LoadingView from "../commons/LoadingView";
-  import {mapState} from "vuex"
-  import {
-    INIT_EDIT_DISH_ACTION,
-    UPDATE_CATEGORY,
-    UPDATE_DISH_ACTION,
-    UPDATE_NAME,
-    UPDATE_PRICE
-  } from "../../store/modules/EditDishState"
   import MoneyInput from "../commons/MoneyInput";
   import ViewWrapper from "../commons/ViewWrapper";
+  import ApiConnector from "../../lib/ApiConnector";
+  import DishesApiConnector from "../../lib/DishesApiConnector";
 
   export default {
     data() {
       return {
         restaurantId: this.$route.params.id,
         dishId: this.$route.params.dishId,
+        name: "",
+        price: 0,
+        category: "",
+        categories: [],
+        initialSideDishes: [],
+        initialDish: [],
       }
     },
     mounted() {
-      this.$store.dispatch(`editDish/${INIT_EDIT_DISH_ACTION}`, {restaurantId: this.restaurantId, dishId: this.dishId})
+      DishesApiConnector.getDishEditData(this.restaurantId, this.dishId)
+        .then(dishData => {
+          this.$store.commit('setLoadingFalse');
+
+          this.name = dishData.name;
+          this.price = dishData.price;
+          this.category = dishData.category;
+
+          this.initialSideDishes = dishData.initialSideDishes;
+          this.categories = dishData.categories;
+
+          document.title = `Edit dish | Alt Szama`
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+
     },
     methods: {
       submitForm() {
+        let dish = {
+          name: this.name,
+          price: this.price,
+          category: this.category
+        };
         let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
-        this.$store.dispatch(`editDish/${UPDATE_DISH_ACTION}`, {sideDishes: sideDishes});
+        const dishObj = {
+          id: this.dishId,
+          name: dish.name,
+          price: dish.price,
+          category: dish.category,
+          sideDishes: sideDishes
+        };
+
+        DishesApiConnector.editDish(this.restaurantId, dishObj)
+          .catch(errResponse => ApiConnector.handleError(errResponse))
 
         return false;
       },
@@ -84,23 +112,14 @@
         this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
       },
       updateName(newValue) {
-        this.$store.commit(`editDish/${UPDATE_NAME}`, newValue)
+        this.name = newValue;
       },
       updatePrice(newValue) {
-        this.$store.commit(`editDish/${UPDATE_PRICE}`, newValue)
+        this.price = newValue
       },
       updateCategory(newValue) {
-        this.$store.commit(`editDish/${UPDATE_CATEGORY}`, newValue)
+        this.category = newValue;
       }
-    },
-    computed: {
-      ...mapState("editDish", [
-        'categories',
-        'initialSideDishes',
-        'name',
-        'price',
-        'category'
-      ])
     },
     components: {
       ViewWrapper,

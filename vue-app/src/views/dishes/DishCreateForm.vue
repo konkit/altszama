@@ -36,16 +36,10 @@
 </template>
 
 <script>
+  import DishesApiConnector from "../../lib/DishesApiConnector"
+  import ApiConnector from "../../lib/ApiConnector"
   import ErrorsComponent from '../commons/Errors.vue'
   import SideDishes from './components/SideDishes.vue'
-  import {mapState} from "vuex"
-  import {
-    UPDATE_NAME,
-    UPDATE_PRICE,
-    UPDATE_CATEGORY,
-    INIT_ACTION,
-    SAVE_DISH_ACTION
-  } from "../../store/modules/CreateDishState"
   import MoneyInput from "../commons/MoneyInput";
   import ViewWrapper from "../commons/ViewWrapper";
 
@@ -54,43 +48,54 @@
     data() {
       return {
         restaurantId: this.$route.params.id,
+        name: "",
+        price: 0,
+        category: "",
       }
     },
     mounted() {
-      this.$store.dispatch(`createDish/${INIT_ACTION}`, {restaurantId: this.restaurantId})
+      DishesApiConnector.getDishCreateData(this.restaurantId)
+        .then(response => {
+          this.restaurantId = response.restaurantId;
+          this.categories = response.categories;
+          document.title = `Create new dish | Alt Szama`
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     methods: {
       submitForm() {
         let sideDishes = this.$refs.sideDishesElement.getSideDishes();
 
-        this.$store.dispatch(`createDish/${SAVE_DISH_ACTION}`, {sideDishes: sideDishes, backUrl: this.getBackUrl()});
+        const dishPayload = {
+          "restaurant.id": this.restaurantId,
+          name: this.name,
+          price: this.price,
+          category: this.category,
+          sideDishes: sideDishes
+        };
+
+        DishesApiConnector.createDish(this.restaurantId, dishPayload)
+          .then(() => this.$router.push(this.getBackUrl()))
+          .catch(errResponse => ApiConnector.handleError(errResponse));
 
         return false;
       },
       getBackUrl() {
         if (typeof this.$route.query.addingToOrderId !== "undefined" && this.$route.query.addingToOrderId.length > 0) {
-          return `#/orders/${this.$route.query.addingToOrderId}/create_entry`
+          return `/orders/${this.$route.query.addingToOrderId}/create_entry`
         } else {
-          return `#/restaurants/show/${this.restaurantId}`
+          return `/restaurants/show/${this.restaurantId}`
         }
       },
       updateName(newValue) {
-        this.$store.commit(`createDish/${UPDATE_NAME}`, newValue)
+        this.name = newValue;
       },
       updatePrice(newValue) {
-        this.$store.commit(`createDish/${UPDATE_PRICE}`, newValue)
+        this.price = newValue;
       },
       updateCategory(newValue) {
-        this.$store.commit(`createDish/${UPDATE_CATEGORY}`, newValue)
+        this.category = newValue;
       }
-    },
-    computed: {
-      ...mapState("createDish", [
-        'categories',
-        'name',
-        'price',
-        'category'
-      ])
     },
     components: {
       ViewWrapper,

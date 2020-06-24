@@ -2,7 +2,7 @@
   <div>
     <v-list two-line>
       <template v-for="(categoryEntry, i) in this.dishesByCategory">
-        <v-subheader :key="i">
+        <v-subheader :key="'category-' + i">
           <span v-if="categoryEntry.category">
             Category: {{categoryEntry.category}}
           </span>
@@ -12,7 +12,7 @@
         </v-subheader>
 
         <template v-for="(dish, j) in categoryEntry.dishes">
-          <v-list-item :key="j">
+          <v-list-item :key="'item-' + j">
             <v-list-item-content>
               <v-list-item-title>
                 {{dish.name}} (<price :data-price="dish.price"></price>)
