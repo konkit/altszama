@@ -36,9 +36,7 @@
 </template>
 
 <script>
-  import BackButton2 from '../commons/BackButton2.vue'
   import ErrorsComponent from '../commons/Errors.vue'
-  import Price from '../commons/PriceElement.vue'
   import SideDishes from './components/SideDishes.vue'
   import {mapState} from "vuex"
   import {
@@ -97,9 +95,7 @@
     components: {
       ViewWrapper,
       MoneyInput,
-      BackButton2,
       ErrorsComponent,
-      Price,
       SideDishes
     }
   }

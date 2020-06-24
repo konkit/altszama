@@ -59,8 +59,6 @@
 
 <script>
   import ErrorsComponent from '../commons/Errors'
-  import BackButton2 from '../commons/BackButton2'
-  import Price from '../commons/PriceElement'
   import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable'
   import LoadingView from "../commons/LoadingView";
   import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantState"
@@ -79,7 +77,7 @@
       this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
     },
     methods: {
-      deleteRestaurant(e) {
+      deleteRestaurant() {
         let errorsComponent = this.$refs.errorsComponent;
         this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
           restaurantId: this.restaurantId,
@@ -114,8 +112,6 @@
     components: {
       ViewWrapper,
       LoadingView,
-      BackButton2,
-      Price,
       ErrorsComponent,
       ShowRestaurantDishesTable
     }

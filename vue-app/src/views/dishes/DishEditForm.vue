@@ -40,9 +40,7 @@
 </template>
 
 <script>
-  import BackButton2 from '../commons/BackButton2'
   import ErrorsComponent from '../commons/Errors'
-  import Price from '../commons/PriceElement'
   import SideDishes from './components/SideDishes.vue'
   import LoadingView from "../commons/LoadingView";
   import {mapState} from "vuex"
@@ -108,9 +106,7 @@
       ViewWrapper,
       MoneyInput,
       LoadingView,
-      BackButton2,
       ErrorsComponent,
-      Price,
       SideDishes
     }
   }

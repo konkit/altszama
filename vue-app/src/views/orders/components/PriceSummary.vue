@@ -56,7 +56,6 @@
 
 <script>
   import Price from "../../commons/PriceElement"
-  import ErrorsComponent from '../../commons/Errors'
 
   export default {
     name: "PriceSummary",
@@ -70,7 +69,6 @@
     ],
     components: {
       Price,
-      ErrorsComponent
     }
   }
 </script>

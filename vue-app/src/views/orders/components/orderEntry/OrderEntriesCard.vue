@@ -10,7 +10,7 @@
 
       <v-list dense>
         <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
-          <v-list-item>
+          <v-list-item :key="dishEntryIndex">
 
             <v-list-item-content class="index-element">
               <div style="padding-top: 8px;">
@@ -47,7 +47,7 @@
           </v-list-item>
 
           <template v-if="dishEntryIndex < orderEntry.dishEntries.length - 1">
-            <v-divider class="dishes-divider"></v-divider>
+            <v-divider  :key="dishEntryIndex" class="dishes-divider"></v-divider>
           </template>
 
         </template>
@@ -97,8 +97,6 @@
     NAMESPACE_MODIFY_ORDER_ENTRY,
     SET_DISH_ENTRY_CREATING,
   } from "../../../../store/modules/ModifyOrderEntryState";
-  import PriceSummary from "../PriceSummary";
-  import ViewWrapper from "../../../commons/ViewWrapper";
   import PaymentStatus from "../PaymentStatus";
 
   export default {
@@ -133,8 +131,6 @@
     },
     components: {
       PaymentStatus,
-      ViewWrapper,
-      PriceSummary,
       Price,
       CreateOrderEntry,
       EditOrderEntry,

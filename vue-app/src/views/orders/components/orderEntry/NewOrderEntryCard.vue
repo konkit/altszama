@@ -22,21 +22,8 @@
 
 <script>
   import {
-    DELETE_DISH_ENTRY_ACTION,
-    UNLOCK_ORDER_ACTION,
-    FETCH_ORDER_DATA_ACTION,
-    NAMESPACE_SHOW_ORDER,
-    SET_ORDER_AS_CREATED_ACTION,
-    SET_ORDER_AS_ORDERED_ACTION,
-    SET_ORDER_AS_DELIVERED_ACTION,
-    SET_ORDER_AS_REJECTED_ACTION,
-    DELETE_ORDER_ACTION,
-  } from "../../../../store/modules/ShowOrderState"
-  import {
-    SET_DISH_ENTRY_CREATING,
-    SET_DISH_ENTRY_EDITING,
-    CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY,
+    SET_DISH_ENTRY_CREATING,
   } from "../../../../store/modules/ModifyOrderEntryState";
   import CreateOrderEntry from "./CreateOrderEntry";
 

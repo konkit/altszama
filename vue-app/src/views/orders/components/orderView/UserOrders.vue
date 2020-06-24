@@ -4,16 +4,16 @@
 
     <v-list dense>
       <template v-for="(entry, entryIndex) in groupedEntries">
-        <v-list-item>
+        <v-list-item :key="entryIndex">
           <v-list-item-content class="body-1">
             <span><b>{{entry.eatingPeopleCount}}x</b> {{entry.dish.name}}</span>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list dense class="px-8 no-y-padding" v-if="entry.eatingPeopleEntries.length > 0">
+        <v-list dense class="px-8 no-y-padding" v-if="entry.eatingPeopleEntries.length > 0" :key="entryIndex">
 
           <template v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries">
-            <v-list-item>
+            <v-list-item :key="i">
               <v-list-item-content>
                 <div class="user-row">
                   <div class="username">
@@ -38,14 +38,14 @@
                         <v-subheader>Side dishes:</v-subheader>
 
                         <template v-for="(sd, j) in eatingPersonEntry.sideDishes">
-                          <v-list-item>
+                          <v-list-item :key="j">
                             <v-list-item-content>
                               {{sd.name}}
                             </v-list-item-content>
                           </v-list-item>
 
                           <template v-if="j < eatingPersonEntry.sideDishes.length - 1">
-                            <v-divider class="custom-margin-divider"></v-divider>
+                            <v-divider class="custom-margin-divider" :key="j"></v-divider>
                           </template>
                         </template>
                       </template>
@@ -64,14 +64,14 @@
             </v-list-item>
 
             <template v-if="i < entry.eatingPeopleEntries.length - 1">
-              <v-divider class="custom-margin-divider"></v-divider>
+              <v-divider class="custom-margin-divider"  :key="i"></v-divider>
             </template>
 
           </template>
         </v-list>
 
         <template v-if="entryIndex < groupedEntries.length - 1">
-          <v-divider class="custom-margin-divider"></v-divider>
+          <v-divider class="custom-margin-divider" :key="entryIndex"></v-divider>
         </template>
       </template>
     </v-list>

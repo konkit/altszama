@@ -88,25 +88,22 @@
 </template>
 
 <script>
-  import BackButton2 from '../commons/BackButton2'
   import ErrorsComponent from '../commons/Errors'
-  import MaskedInput from 'vue-text-mask'
   import LoadingView from "../commons/LoadingView";
-  import VueSelect from 'vue-select'
   import {mapState} from "vuex"
   import {
+    INIT_EDIT_ORDER_ACTION,
     UPDATE_BANK_TRANSFER_NUMBER,
-    UPDATE_PAYMENT_BY_BANK_TRANSFER,
-    UPDATE_PAYMENT_BY_CASH,
+    UPDATE_BLIK_PHONE_NUMBER,
+    UPDATE_DECREASE_IN_PERCENT,
     UPDATE_DELIVERY_COST_PER_DISH,
     UPDATE_DELIVERY_COST_PER_EVERYBODY,
-    UPDATE_DECREASE_IN_PERCENT,
-    UPDATE_TIME_OF_ORDER,
-    UPDATE_ORDER_DATE,
-    INIT_EDIT_ORDER_ACTION,
     UPDATE_ORDER_ACTION,
-    UPDATE_BLIK_PHONE_NUMBER,
-    UPDATE_PAYMENT_BY_BLIK
+    UPDATE_ORDER_DATE,
+    UPDATE_PAYMENT_BY_BANK_TRANSFER,
+    UPDATE_PAYMENT_BY_BLIK,
+    UPDATE_PAYMENT_BY_CASH,
+    UPDATE_TIME_OF_ORDER
   } from "../../store/modules/EditOrderState"
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
@@ -220,10 +217,7 @@
       TimePicker,
       MoneyInput,
       LoadingView,
-      BackButton2,
       ErrorsComponent,
-      MaskedInput,
-      'v-select': VueSelect
     }
   }
 </script>

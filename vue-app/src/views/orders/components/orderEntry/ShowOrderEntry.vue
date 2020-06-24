@@ -27,8 +27,8 @@
         </v-list-item-content>
       </v-list-item>
 
-      <template v-for="sideDish in dishEntry.sideDishes">
-        <v-list-item>
+      <template v-for="(sideDish, i) in dishEntry.sideDishes">
+        <v-list-item :key="i">
           <v-list-item-content>
             <div class="side-dish-name-and-price">
               <div class="side-dish-name">

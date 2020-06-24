@@ -13,10 +13,10 @@
 
                 <div v-if="this.currentOrderEntries.length > 0">
                   <v-list>
-                    <template v-for="orderEntry in currentOrderEntries">
-                      <template v-for="dishEntry in orderEntry.dishEntries">
+                    <template v-for="(orderEntry, i) in currentOrderEntries">
+                      <template v-for="(dishEntry, j) in orderEntry.dishEntries">
 
-                        <v-list-item @click="goToOrder(orderEntry.orderId)">
+                        <v-list-item @click="goToOrder(orderEntry.orderId)" :key="i*j">
                           <v-list-item-content :key="dishEntry.id">
                             <v-list-item-title class="pointer">
                               <b>{{dishEntry.dish.name}}</b>
@@ -58,7 +58,7 @@
 
                 <v-list>
                   <template v-if="this.ordersList.length > 0">
-                    <v-list-item @click="goToOrder(order.id)" v-for="order in this.ordersList">
+                    <v-list-item @click="goToOrder(order.id)" v-for="(order, i) in this.ordersList" :key="i">
                       <v-list-item-content>
                         <v-list-item-title class="pointer">
                           <div class="wide-order-status" v-if="$vuetify.breakpoint.mdAndUp">
@@ -125,14 +125,13 @@
 </template>
 
 <script>
-  import ApiConnector from '../../lib/ApiConnector.js'
+  import ApiConnector from '../../lib/ApiConnector'
   import LoadingView from "../commons/LoadingView";
   import {FETCH_TODAY_ORDERS_ACTION} from "../../store/modules/TodayOrdersState"
   import {mapState} from "vuex"
   import ErrorsComponent from '../commons/Errors'
   import router from '../../router/index'
   import ViewWrapper from "../commons/ViewWrapper";
-
 
   export default {
     mounted() {

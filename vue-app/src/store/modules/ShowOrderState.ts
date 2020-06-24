@@ -61,7 +61,7 @@ export default {
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
 
-    [UNLOCK_ORDER_ACTION] ({state}, {}) {
+    [UNLOCK_ORDER_ACTION] ({state}) {
       OrdersApiConnector.setOrderAsCreated(state.order.id)
         .then(() => {
           this.commit('setLoadingTrue');

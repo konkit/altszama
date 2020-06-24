@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import store from '../store'
 import router from '../router'
-import GoogleLogin from './GoogleLogin.js'
+import GoogleLogin from './GoogleLogin'
 
 const currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
 const backendUrl = process.env.VUE_APP_BACKEND_URL || currentDomain;

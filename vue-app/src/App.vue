@@ -1,32 +1,47 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <Navigation></Navigation>
+
+    <router-view></router-view>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+  import Navigation from './views/commons/Navigation.vue'
+  import ApiConnector from "./lib/ApiConnector";
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+  export default {
+    name: 'app',
+    data: () => ({
+      drawer: null
+    }),
+    computed: {
+      username() {
+        return this.$store.state.username;
+      },
+      masterNavDrawerOpened() {
+        return this.$store.state.masterNavDrawerOpened
+      }
+    },
+    methods: {
+      shouldDisplayNavigation() {
+        return this.$route.name !== "Login"
+      },
+      logout() {
+        ApiConnector.logout();
+      },
+      goToPath(path) {
+        this.$router.push(path)
+      },
+      setMasterNavDrawerOpened(newValue) {
+        this.$store.commit("setMasterNavigationDrawerOpened", newValue);
+      }
+    },
+    components: {
+      Navigation,
     }
   }
-}
+</script>
+
+<style scoped>
 </style>

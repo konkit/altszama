@@ -38,7 +38,7 @@
 
 <script>
 import ApiConnector from '../lib/ApiConnector'
-import GoogleLogin from '../lib/GoogleLogin.js'
+import GoogleLogin from '../lib/GoogleLogin'
 
 export default {
   data () {

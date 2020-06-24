@@ -134,27 +134,17 @@
 </template>
 
 <script>
-  import BackButton2 from '../commons/BackButton2.vue'
-  import ErrorsComponent from '../commons/Errors.vue'
-  import MaskedInput from 'vue-text-mask'
-  import Price from '../commons/PriceElement.vue'
-  import Navigation from '../commons/Navigation.vue'
   import LoadingView from "../commons/LoadingView";
   import {
-    MAKE_AN_ORDER_ACTION,
     FETCH_ORDER_VIEW_DATA_ACTION,
+    MAKE_AN_ORDER_ACTION,
     UPDATE_APPROX_TIME_OF_DELIVERY
   } from "../../store/modules/OrderViewState"
   import {mapState} from "vuex"
   import PriceSummary from "./components/PriceSummary";
   import TimePicker from "../commons/TimePicker";
   import ViewWrapper from "../commons/ViewWrapper";
-  import {
-    UNLOCK_ORDER_ACTION,
-    FETCH_ORDER_DATA_ACTION,
-    NAMESPACE_SHOW_ORDER,
-    SET_ORDER_AS_DELIVERED_ACTION,
-  } from "../../store/modules/ShowOrderState"
+  import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../store/modules/ShowOrderState"
   import router from '../../router/index'
   import UserOrders from "./components/orderView/UserOrders";
 
@@ -210,11 +200,6 @@
       TimePicker,
       PriceSummary,
       LoadingView,
-      BackButton2,
-      ErrorsComponent,
-      MaskedInput,
-      Price,
-      Navigation,
     }
   }
 

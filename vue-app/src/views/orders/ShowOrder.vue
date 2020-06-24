@@ -73,7 +73,7 @@
         </v-row>
 
         <template v-for="(orderEntry, entryId) in this.orderEntries">
-          <v-row>
+          <v-row :key="entryId">
             <v-col>
               <OrderEntriesCard :order="order"
                                 :order-entry="orderEntry"
@@ -100,25 +100,18 @@
 </template>
 
 <script>
-  import BackButton2 from '../commons/BackButton2.vue'
-  import Price from '../commons/PriceElement.vue'
   import LoadingView from '../commons/LoadingView.vue'
-  import OrderStateButtons from './components/OrderStateButtons.vue'
-  import CreateOrderEntry from './components/orderEntry/CreateOrderEntry.vue'
-  import EditOrderEntry from './components/orderEntry/EditOrderEntry.vue'
-  import ShowOrderEntry from './components/orderEntry/ShowOrderEntry.vue'
   import {mapState} from 'vuex'
   import {
-    UNLOCK_ORDER_ACTION,
     FETCH_ORDER_DATA_ACTION,
     NAMESPACE_SHOW_ORDER,
     SET_ORDER_AS_DELIVERED_ACTION,
+    UNLOCK_ORDER_ACTION,
   } from "../../store/modules/ShowOrderState"
   import router from '../../router/index'
   import PriceSummary from "./components/PriceSummary";
   import ViewWrapper from "../commons/ViewWrapper";
   import CustomPolyfills from "../../lib/CustomPolyfills";
-  import PaymentStatus from "./components/PaymentStatus";
   import OrderEntriesCard from "./components/orderEntry/OrderEntriesCard";
   import NewOrderEntryCard from "./components/orderEntry/NewOrderEntryCard";
   import OrderDataSummary from "./components/OrderDataSummary";
@@ -203,16 +196,9 @@
       OrderDataSummary,
       NewOrderEntryCard,
       OrderEntriesCard,
-      PaymentStatus,
       ViewWrapper,
       PriceSummary,
-      BackButton2,
-      Price,
       LoadingView,
-      OrderStateButtons,
-      CreateOrderEntry,
-      EditOrderEntry,
-      ShowOrderEntry
     }
   }
 </script>

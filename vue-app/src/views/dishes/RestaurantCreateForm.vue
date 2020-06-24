@@ -26,7 +26,6 @@
 </template>
 
 <script>
-  import BackButton2 from '../commons/BackButton2'
   import ErrorsComponent from '../commons/Errors'
   import {mapState} from 'vuex'
   import {
@@ -76,7 +75,6 @@
     },
     components: {
       ViewWrapper,
-      BackButton2,
       ErrorsComponent,
     }
   }

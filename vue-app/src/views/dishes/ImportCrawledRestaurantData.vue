@@ -29,9 +29,8 @@
 </template>
 
 <script>
-  import ApiConnector from '../../lib/ApiConnector.js'
+  import ApiConnector from '../../lib/ApiConnector'
   import FileUpload from 'vue-simple-upload/dist/FileUpload'
-  import BackButton2 from '../commons/BackButton2'
   import ViewWrapper from "../commons/ViewWrapper";
 
   export default {
@@ -62,7 +61,6 @@
     components: {
       ViewWrapper,
       'fileupload': FileUpload,
-      BackButton2,
     },
   }
 </script>

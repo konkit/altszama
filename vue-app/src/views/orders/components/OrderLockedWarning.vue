@@ -30,12 +30,7 @@
 
 <script>
   import router from '../../../router/index'
-  import {
-    UNLOCK_ORDER_ACTION,
-    FETCH_ORDER_DATA_ACTION,
-    NAMESPACE_SHOW_ORDER,
-    SET_ORDER_AS_DELIVERED_ACTION,
-  } from "../../../store/modules/ShowOrderState"
+  import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../../store/modules/ShowOrderState"
 
   export default {
     name: "OrderLockedWarning",

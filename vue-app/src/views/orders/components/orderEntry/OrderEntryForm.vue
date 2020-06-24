@@ -71,25 +71,21 @@
 </template>
 
 <script>
-  import ErrorsComponent from '../../../commons/Errors.vue'
-  import Spinner from '../../../commons/Spinner.vue'
-  import Price from '../../../commons/PriceElement.vue'
   import moment from "moment"
   import CustomPolyfills from "../../../../lib/CustomPolyfills"
-
-  import OrderEntryForm from './OrderEntryForm.vue'
   import SideDishesInput from './SideDishesInput.vue'
   import {
-    UPDATE_DISH_ID,
+    CANCEL_DISH_ENTRY_MODIFICATION,
     CLEAR_EDITED_SIDE_DISHES,
+    NAMESPACE_MODIFY_ORDER_ENTRY,
+    SET_DISH_AS_EXISTING,
+    SET_DISH_AS_NEW,
+    UPDATE_ADDITIONAL_COMMENTS,
+    UPDATE_DISH_ID,
     UPDATE_NEW_DISH_NAME,
     UPDATE_NEW_DISH_PRICE,
-    NAMESPACE_MODIFY_ORDER_ENTRY,
-    UPDATE_ADDITIONAL_COMMENTS,
-    SET_DISH_AS_NEW,
-    SET_DISH_AS_EXISTING, CANCEL_DISH_ENTRY_MODIFICATION,
   } from "../../../../store/modules/ModifyOrderEntryState";
-  import {mapState, mapMutations} from "vuex"
+  import {mapState} from "vuex"
   import MoneyInput from "../../../commons/MoneyInput";
 
   export default {
@@ -173,10 +169,6 @@
     },
     components: {
       MoneyInput,
-      ErrorsComponent,
-      Price,
-      Spinner,
-      OrderEntryForm,
       SideDishesInput
     }
   }

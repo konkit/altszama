@@ -74,16 +74,15 @@
 </template>
 
 <script>
-  import Price from '../../../commons/PriceElement.vue'
   import {
-    UPDATE_NEW_SIDE_DISH_NAME,
-    UPDATE_NEW_SIDE_DISH_PRICE,
-    UPDATE_SIDE_DISH_ACTION,
+    ADD_SIDE_DISH_ACTION,
+    NAMESPACE_MODIFY_ORDER_ENTRY,
+    REMOVE_SIDE_DISH,
     SET_SIDE_DISH_AS_EXISTING,
     SET_SIDE_DISH_AS_NEW,
-    ADD_SIDE_DISH_ACTION,
-    REMOVE_SIDE_DISH,
-    NAMESPACE_MODIFY_ORDER_ENTRY
+    UPDATE_NEW_SIDE_DISH_NAME,
+    UPDATE_NEW_SIDE_DISH_PRICE,
+    UPDATE_SIDE_DISH_ACTION
   } from "../../../../store/modules/ModifyOrderEntryState";
   import MoneyInput from "../../../commons/MoneyInput";
 
@@ -168,7 +167,6 @@
     },
     components: {
       MoneyInput,
-      Price
     }
   }
 

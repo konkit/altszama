@@ -29,11 +29,10 @@
 </template>
 
 <script>
-  import BackButton2 from '../commons/BackButton2'
   import ErrorsComponent from '../commons/Errors'
 
   import LoadingView from "../commons/LoadingView";
-  import {mapMutations, mapState} from 'vuex'
+  import {mapState} from 'vuex'
   import {
     UPDATE_RESTAURANT_ACTION,
     INIT_EDIT_RESTAURANT_ACTION,
@@ -88,7 +87,6 @@
     components: {
       ViewWrapper,
       LoadingView,
-      BackButton2,
       ErrorsComponent,
     }
   }

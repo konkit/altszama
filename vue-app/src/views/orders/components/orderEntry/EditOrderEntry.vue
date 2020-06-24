@@ -30,17 +30,15 @@
 <script>
   import ErrorsComponent from '../../../commons/Errors.vue'
   import Spinner from '../../../commons/Spinner.vue'
-  import Price from '../../../commons/PriceElement.vue'
 
   import OrderEntryForm from './OrderEntryForm.vue'
-  import SideDishesInput from './SideDishesInput.vue'
   import {mapState} from "vuex"
   import {
-    UPDATE_ORDER_ENTRY_ACTION,
     CANCEL_DISH_ENTRY_MODIFICATION,
-    SETUP_EDIT_ORDER_ENTRY_ACTION,
+    NAMESPACE_MODIFY_ORDER_ENTRY,
     SET_ENTRY_LOADING_TRUE,
-    NAMESPACE_MODIFY_ORDER_ENTRY
+    SETUP_EDIT_ORDER_ENTRY_ACTION,
+    UPDATE_ORDER_ENTRY_ACTION
   } from "../../../../store/modules/ModifyOrderEntryState";
 
   export default {
@@ -74,10 +72,8 @@
     },
     components: {
       ErrorsComponent,
-      Price,
       Spinner,
       OrderEntryForm,
-      SideDishesInput
     }
   }
 
