@@ -87,7 +87,7 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import ErrorsComponent from '../commons/Errors'
   import LoadingView from "../commons/LoadingView";
   import {mapState} from "vuex"
@@ -113,65 +113,15 @@
   import TimePicker from "../commons/TimePicker";
   import OrderStateButtons from "./components/OrderStateButtons";
   import ViewWrapper from "../commons/ViewWrapper";
+  import Vue from "vue";
+  import Component from "vue-class-component";
 
   const yesNoOptions = [
     {text: 'Yes', value: true},
     {text: 'No', value: false},
   ];
 
-  export default {
-    name: 'order-edit-form',
-    data() {
-      return {
-        orderId: this.$route.params.id,
-        yesNoOptions: yesNoOptions,
-      }
-    },
-    mounted() {
-      this.$store.dispatch(`editOrder/${INIT_EDIT_ORDER_ACTION}`, {orderId: this.orderId})
-    },
-    methods: {
-      submitForm(e) {
-        e.preventDefault();
-
-        this.$store.dispatch(`editOrder/${UPDATE_ORDER_ACTION}`);
-
-        return false;
-      },
-      updateOrderDate(newOrderDate) {
-        this.$store.commit(`editOrder/${UPDATE_ORDER_DATE}`, newOrderDate);
-      },
-      updateTimeOfOrder(newTimeOfOrder) {
-        this.$store.commit(`editOrder/${UPDATE_TIME_OF_ORDER}`, newTimeOfOrder);
-      },
-      updateDecreaseInPercent(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_DECREASE_IN_PERCENT}`, newValue);
-      },
-      updateDeliveryCostPerEverybody(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_DELIVERY_COST_PER_EVERYBODY}`, newValue);
-      },
-      updateDeliveryCostPerDish(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_DELIVERY_COST_PER_DISH}`, newValue);
-      },
-      updatePaymentByCash(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_PAYMENT_BY_CASH}`, newValue);
-      },
-      updatePaymentByBankTransfer(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_PAYMENT_BY_BANK_TRANSFER}`, newValue);
-      },
-      updateBankTransferNumber(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
-      },
-      updatePaymentByBlik(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_PAYMENT_BY_BLIK}`, newValue);
-      },
-      updateBlikPhoneNumber(newValue) {
-        this.$store.commit(`editOrder/${UPDATE_BLIK_PHONE_NUMBER}`, newValue);
-      },
-      cancelEdit() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
-      }
-    },
+  @Component({
     computed: {
       loading() {
         return this.$store.state.loading;
@@ -218,6 +168,67 @@
       MoneyInput,
       LoadingView,
       ErrorsComponent,
+    }
+  })
+  export default class OrderEditForm extends Vue {
+    orderId = "";
+    yesNoOptions = yesNoOptions;
+
+    mounted() {
+      this.orderId = this.$route.params.id;
+      this.$store.dispatch(`editOrder/${INIT_EDIT_ORDER_ACTION}`, {orderId: this.orderId})
+    }
+
+    submitForm(e) {
+      e.preventDefault();
+
+      this.$store.dispatch(`editOrder/${UPDATE_ORDER_ACTION}`);
+
+      return false;
+    }
+
+    updateOrderDate(newOrderDate) {
+      this.$store.commit(`editOrder/${UPDATE_ORDER_DATE}`, newOrderDate);
+    }
+
+    updateTimeOfOrder(newTimeOfOrder) {
+      this.$store.commit(`editOrder/${UPDATE_TIME_OF_ORDER}`, newTimeOfOrder);
+    }
+
+    updateDecreaseInPercent(newValue) {
+      this.$store.commit(`editOrder/${UPDATE_DECREASE_IN_PERCENT}`, newValue);
+    }
+
+    updateDeliveryCostPerEverybody(newValue) {
+      this.$store.commit(`editOrder/${UPDATE_DELIVERY_COST_PER_EVERYBODY}`, newValue);
+    }
+
+    updateDeliveryCostPerDish(newValue) {
+      this.$store.commit(`editOrder/${UPDATE_DELIVERY_COST_PER_DISH}`, newValue);
+    }
+
+    updatePaymentByCash(newValue) {
+      this.$store.commit(`editOrder/${UPDATE_PAYMENT_BY_CASH}`, newValue);
+    }
+
+    updatePaymentByBankTransfer(newValue) {
+      this.$store.commit(`editOrder/${UPDATE_PAYMENT_BY_BANK_TRANSFER}`, newValue);
+    }
+
+    updateBankTransferNumber(newValue) {
+      this.$store.commit(`editOrder/${UPDATE_BANK_TRANSFER_NUMBER}`, newValue);
+    }
+
+    updatePaymentByBlik(newValue) {
+      this.$store.commit(`editOrder/${UPDATE_PAYMENT_BY_BLIK}`, newValue);
+    }
+
+    updateBlikPhoneNumber(newValue) {
+      this.$store.commit(`editOrder/${UPDATE_BLIK_PHONE_NUMBER}`, newValue);
+    }
+
+    cancelEdit() {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
     }
   }
 </script>

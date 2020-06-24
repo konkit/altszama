@@ -42,44 +42,49 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import LoadingView from "../commons/LoadingView";
-  import {FETCH_ALL_ORDERS} from "../../store/modules/AllOrdersState";
   import router from '../../router/index'
   import ViewWrapper from "../commons/ViewWrapper";
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import ApiConnector from "../../lib/ApiConnector";
+  import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
-  export default {
-    data() {
-      return {
-        headers: [
-          {text: 'Date', align: 'left', value: 'date'},
-          {text: 'Restaurant', value: 'restaurant'},
-          {text: 'Status', value: 'status'},
-          {text: 'Order creator', value: 'orderCreator'},
-        ],
-        pagination: {
-          rowsPerPage: 10
-        },
-      }
-    },
-    mounted() {
-      this.$store.dispatch(`allOrders/${FETCH_ALL_ORDERS}`)
-    },
-    computed: {
-      allOrdersList() {
-        return this.$store.state.allOrders.allOrdersList;
-      },
-    },
-    methods: {
-      goToOrder(selectedOrderId) {
-        router.push("/orders/show/" + selectedOrderId)
-      },
-
-    },
+  @Component({
     components: {
       ViewWrapper,
       LoadingView,
     },
+  })
+  export default class AllOrders extends Vue {
+    allOrdersList = [];
+
+    headers = [
+      { text: 'Date', align: 'left', value: 'date' },
+      { text: 'Restaurant', value: 'restaurant' },
+      { text: 'Status', value: 'status' },
+      { text: 'Order creator', value: 'orderCreator' },
+      ];
+
+    pagination = {
+      rowsPerPage: 10
+    };
+
+    mounted() {
+      OrdersApiConnector.fetchAllOrders()
+        .then(allOrdersList => {
+          this.allOrdersList = allOrdersList;
+          this.$store.commit('setLoadingFalse');
+
+          document.title = `All orders | Alt Szama`
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse))
+    }
+
+    goToOrder(selectedOrderId) {
+      router.push("/orders/show/" + selectedOrderId)
+    }
   }
 </script>
 
