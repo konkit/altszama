@@ -1,19 +1,108 @@
 import ApiConnector from "./ApiConnector";
 import router from '../router/index'
 
+export interface IndexResponse {
+  restaurants: RestaurantInfo[];
+}
+
+export interface RestaurantInfo {
+  id: string,
+  name: string,
+  lastCrawled: number,
+  lastEdited: number,
+  dishCount: number,
+}
+
+export interface ShowResponse {
+  restaurant: Restaurant,
+  dishes: DishDto[],
+  dishesByCategory: Map<String, DishDto[]>
+}
+
+export interface Restaurant {
+  id: string,
+  name: string,
+  telephone: string,
+  address: string,
+  url: string,
+  lastCrawled?: number,
+  lastEdited?: number,
+}
+
+export interface RestaurantSaveRequest {
+  name: string,
+  telephone: string,
+  address: string,
+  url: string,
+}
+
+export interface EditRestaurantResponse {
+  id: string,
+  name: string,
+  address: string,
+  telephone: string,
+  url: string
+}
+
+export interface RestaurantUpdateRequest {
+  id: string,
+  name: string,
+  telephone: string
+  address: string,
+  url: string,
+}
+
+export interface DishDto {
+  id: string,
+  name: string,
+  price: number,
+  sideDishes: SideDish[],
+  category: string,
+  lastCrawled?: number,
+}
+
+export interface DishCreateResponse {
+  categories: string[]
+}
+
+export interface DishCreateRequest {
+  name: string,
+  price: number,
+  sideDishes: SideDish[],
+  category: string,
+}
+
+export interface SideDish {
+  id: string,
+  name: string,
+  price: Int,
+}
+
+export interface EditDishResponse {
+  dish: DishDto,
+  categories: string[]
+}
+
+export interface DishUpdateRequest {
+  id: string,
+  name: string,
+  price: Int,
+  sideDishes: SideDish[],
+  category: string
+}
+
 export default {
 
-  getRestaurants () {
+  getRestaurants (): Promise<IndexResponse> {
     return ApiConnector.makeGet("/restaurants.json")
       .then(response => {
         return {
           restaurants: response.data.restaurants,
-          restaurantToDishesMap: response.data.restaurantToDishesMap
         }
       })
   },
 
-  getShowRestaurantData (restaurantId) {
+  getShowRestaurantData (restaurantId): Promise<ShowResponse> {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/show.json")
         .then(response => {
           return {
@@ -24,12 +113,12 @@ export default {
         })
   },
 
-  createRestaurant (restaurant) {
+  createRestaurant (restaurant: RestaurantSaveRequest) {
     return ApiConnector.makePost("/restaurants/save", restaurant)
-      .then(response => router.push("/restaurants"))
+      .then(() => router.push("/restaurants"))
   },
 
-  getRestaurantEditData (restaurantId) {
+  getRestaurantEditData (restaurantId): Promise<EditRestaurantResponse> {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/edit.json")
       .then(response => {
         return {
@@ -43,7 +132,7 @@ export default {
       })
   },
 
-  editRestaurant (restaurantId, restaurant) {
+  editRestaurant (restaurantId, restaurant: RestaurantUpdateRequest) {
     let formData = {
       "restaurant.id": restaurantId,
       id: restaurant.id,
@@ -62,30 +151,21 @@ export default {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/delete")
   },
 
-  getDishCreateData (restaurantId) {
+  getDishCreateData (restaurantId): Promise<DishCreateResponse> {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/create.json")
   },
 
-  createDish (restaurantId, formData) {
+  createDish (restaurantId, formData: DishCreateRequest) {
     const action = "/restaurants/" + restaurantId + "/dishes/save";
 
     return ApiConnector.makePost(action, formData)
   },
 
-  getDishEditData (restaurantId, dishId) {
+  getDishEditData (restaurantId, dishId): Promise<EditDishResponse> {
     return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/" + dishId + "/edit.json")
-      .then(response => {
-        return {
-          name: response.data.dish.name,
-          price: response.data.dish.price,
-          category: response.data.dish.category,
-          initialSideDishes: response.data.dish.sideDishes,
-          categories: response.data.categories,
-        }
-      })
   },
 
-  editDish (restaurantId, dishObj) {
+  editDish (restaurantId, dishObj: DishUpdateRequest) {
     const formData = {
       "restaurant.id": restaurantId,
       id: dishObj.id,

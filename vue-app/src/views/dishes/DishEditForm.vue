@@ -71,14 +71,14 @@
     mounted() {
       DishesApiConnector.getDishEditData(this.restaurantId, this.dishId)
         .then(dishData => {
-          this.$store.commit('setLoadingFalse');
+          this.name = dishData.dish.name;
+          this.price = dishData.dish.price;
+          this.category = dishData.dish.category;
 
-          this.name = dishData.name;
-          this.price = dishData.price;
-          this.category = dishData.category;
-
-          this.initialSideDishes = dishData.initialSideDishes;
+          this.initialSideDishes = dishData.dish.sideDishes;
           this.categories = dishData.categories;
+
+          this.$store.commit('setLoadingFalse');
 
           document.title = `Edit dish | Alt Szama`
         })
@@ -92,7 +92,8 @@
         price: this.price,
         category: this.category
       };
-      let sideDishes = this.$refs.sideDishesElement.getSideDishes();
+      let sideDishesElement: SideDishes = this.$refs.sideDishesElement;
+      let sideDishes = sideDishesElement.getSideDishes();
 
       const dishObj = {
         id: this.dishId,
@@ -108,18 +109,18 @@
       return false;
     }
 
-    addSideDish() {
-      const newSideDish = {
-        name: this.newSideDishName,
-        price: this.newSideDishPrice
-      };
+    // addSideDish() {
+    //   const newSideDish = {
+    //     name: this.newSideDishName,
+    //     price: this.newSideDishPrice
+    //   };
+    //
+    //   this.sideDishes.push(newSideDish)
+    // }
 
-      this.sideDishes.push(newSideDish)
-    }
-
-    removeSideDish(sideDishId) {
-      this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
-    }
+    // removeSideDish(sideDishId) {
+    //   this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
+    // }
 
     updateName(newValue) {
       this.name = newValue;

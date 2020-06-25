@@ -11,7 +11,6 @@
                 <v-form id="restaurantCreateForm">
                   <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
                   <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
-                  <v-text-field label="Rating" :value="rating" @input="updateRating($event)"></v-text-field>
                   <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
                   <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
                 </v-form>
@@ -51,7 +50,6 @@
 
     name = '';
     url = '';
-    rating = '';
     telephone = '';
     address = '';
 
@@ -62,7 +60,6 @@
         .then(payload => {
           this.name = payload.name;
           this.url = payload.url;
-          this.rating = payload.rating;
           this.telephone = payload.telephone;
           this.address = payload.address;
           this.$store.commit('setLoadingFalse');
@@ -79,7 +76,6 @@
         id: this.restaurantId,
         name: this.name,
         url: this.url,
-        rating: this.rating,
         telephone: this.telephone,
         address: this.address,
       };
@@ -96,10 +92,6 @@
 
     updateUrl(newValue) {
       this.url = newValue;
-    }
-
-    updateRating(newValue) {
-      this.rating = newValue;
     }
 
     updateTelephone(newValue) {

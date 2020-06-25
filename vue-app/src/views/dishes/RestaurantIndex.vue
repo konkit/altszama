@@ -82,17 +82,11 @@
 
     restaurants = [];
     restaurantsEntries = [];
-    restaurantToDishesMap = {};
-
 
     mounted() {
-      // this.$store.dispatch(`restaurantIndex/${FETCH_ALL_RESTAURANTS}`)
-
       DishesApiConnector.getRestaurants()
         .then(payload => {
-          // this.$store.commit(`restaurantIndex/${LOAD_RESTAURANTS}`, response);
           this.restaurants = payload.restaurants;
-          this.restaurantToDishesMap = payload.restaurantToDishesMap;
           this.restaurantsEntries = this.restaurants.map(r => this.mapToRestaurantEntry(r));
 
           this.$store.commit('setLoadingFalse');

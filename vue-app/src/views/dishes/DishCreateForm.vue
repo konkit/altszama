@@ -66,7 +66,6 @@
     mounted() {
       DishesApiConnector.getDishCreateData(this.restaurantId)
         .then(response => {
-          this.restaurantId = response.restaurantId;
           this.categories = response.categories;
           document.title = `Create new dish | Alt Szama`
         })
@@ -74,7 +73,8 @@
     }
 
     submitForm() {
-      let sideDishes = this.$refs.sideDishesElement.getSideDishes();
+      let sideDishesElement: SideDishes = this.$refs.sideDishesElement;
+      let sideDishes = sideDishesElement.getSideDishes();
 
       const dishPayload = {
         "restaurant.id": this.restaurantId,
