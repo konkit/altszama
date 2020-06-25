@@ -1,6 +1,15 @@
 import ApiConnector from "./ApiConnector";
 
 import router from '../router/index'
+import {DishDto, Restaurant, SideDish} from "@/lib/DishesApiConnector";
+import {
+  CreateOrderData,
+  CreateOrderResponse,
+  OrderDto,
+  OrderSaveRequest, OrderUpdateRequest,
+  OrderViewResponse,
+  TodayOrdersResponse
+} from "@/lib/model";
 
 export default {
 
@@ -58,14 +67,14 @@ export default {
       })
   },
 
-  fetchAllOrders () {
+  fetchAllOrders (): Promise<OrderDto[]> {
     return ApiConnector.makeGet("/orders/all.json")
       .then(response => {
           return response.data.allOrdersList;
       })
   },
 
-  fetchTodaysOrders () {
+  fetchTodaysOrders (): Promise<TodayOrdersResponse> {
     return ApiConnector.makeGet("/orders/today.json")
       .then(response => {
         return {
@@ -75,7 +84,7 @@ export default {
       })
   },
 
-  fetchOrderView (orderId) {
+  fetchOrderView (orderId): Promise<OrderViewResponse> {
     return ApiConnector.makeGet("/orders/" + orderId + "/order_view.json")
         .then(response => {
           return {
@@ -93,8 +102,10 @@ export default {
         })
   },
 
-  getOrderCreateData () {
-    return ApiConnector.makeGet("/orders/create.json")
+  getOrderCreateData (): Promise<CreateOrderData> {
+    const createResponse: Promise<CreateOrderResponse> = ApiConnector.makeGet("/orders/create.json")
+
+    return createResponse
         .then(response => {
           let restaurantId;
           if( response.data.restaurant != null) {
@@ -187,7 +198,7 @@ export default {
     return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid')
   },
 
-  createOrder (order) {
+  createOrder (order: OrderSaveRequest) {
     let formData = {
       restaurantId: order.restaurantId,
       orderDate: order.orderDate,
@@ -206,7 +217,7 @@ export default {
       .then(response => router.push("/orders/"))
   },
 
-  editOrder (orderId, order) {
+  editOrder (orderId, order: OrderUpdateRequest) {
     let formData = {
       orderId: orderId,
       restaurantId: order.restaurantId,

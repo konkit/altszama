@@ -134,12 +134,12 @@
     restaurantsList = [];
 
     // Order
-    restaurantId = 0;
+    restaurantId = "";
     orderDate = "";
-    timeOfOrder = "";
-    decreaseInPercent = "";
-    deliveryCostPerEverybody = "";
-    deliveryCostPerDish = "";
+    timeOfOrder = 0;
+    decreaseInPercent = 0;
+    deliveryCostPerEverybody = 0;
+    deliveryCostPerDish = 0;
     paymentByCash = true;
     paymentByBankTransfer = false;
     bankTransferNumber = "";
@@ -220,7 +220,7 @@
     submitForm(e) {
       e.preventDefault();
 
-      const order = {
+      const order: OrderSaveRequest = {
         restaurantId: this.restaurantId,
         orderDate: this.orderDate,
         timeOfOrder: this.timeOfOrder,

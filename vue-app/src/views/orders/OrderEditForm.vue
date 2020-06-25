@@ -119,13 +119,13 @@
 
     // Order
     orderId = 0;
-    restaurantId = 0;
+    restaurantId = "";
     restaurantName = "";
     orderDate = "";
-    timeOfOrder = "";
-    decreaseInPercent = "";
-    deliveryCostPerEverybody = "";
-    deliveryCostPerDish = "";
+    timeOfOrder = 0;
+    decreaseInPercent = 0;
+    deliveryCostPerEverybody = 0;
+    deliveryCostPerDish = 0;
     paymentByCash = true;
     paymentByBankTransfer = false;
     bankTransferNumber = "";
