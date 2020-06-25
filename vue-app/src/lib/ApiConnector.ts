@@ -56,6 +56,11 @@ export default {
     return Vue.http.post(backendUrl + relPath, formData, headersWithToken(this.token))
   },
 
+  makeDelete (relPath) {
+    this.token = store.state.token;
+    return Vue.http.delete(backendUrl + relPath, headersWithToken(this.token))
+  },
+
   handleError (errorResponse) {
     if (errorResponse.status === 401) {
       const fullRoutePath = router.currentRoute.fullPath;

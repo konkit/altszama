@@ -44,7 +44,10 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 "/api/notification/**",
                 "/api/custom-service-worker.js",
                 "/api/app.js",
-                "/api/favicon.ico"
+                "/api/favicon.ico",
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html"
         )
 
         httpSecurity

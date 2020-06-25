@@ -171,23 +171,23 @@ export default {
   },
 
   setOrderAsCreated (orderId) {
-    return ApiConnector.makeGet('/orders/' + orderId + '/set_as_created')
+    return ApiConnector.makePost('/orders/' + orderId + '/set_as_created')
   },
 
   setOrderAsOrdered (orderId) {
-    return ApiConnector.makeGet('/orders/' + orderId + '/set_back_as_ordered')
+    return ApiConnector.makePost('/orders/' + orderId + '/set_back_as_ordered')
   },
 
   setOrderAsDelivered (orderId) {
-    return ApiConnector.makeGet('/orders/' + orderId + '/set_as_delivered')
+    return ApiConnector.makePost('/orders/' + orderId + '/set_as_delivered')
   },
 
   setOrderAsRejected (orderId) {
-    return ApiConnector.makeGet('/orders/' + orderId + '/set_as_rejected')
+    return ApiConnector.makePost('/orders/' + orderId + '/set_as_rejected')
   },
 
   deleteOrder (orderId) {
-    return ApiConnector.makeGet('/orders/' + orderId + '/delete')
+    return ApiConnector.makeDelete('/orders/' + orderId + '/delete')
   },
 
   markOrderEntryAsPaid (orderEntryId) {
