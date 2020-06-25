@@ -32,6 +32,7 @@
   import Component from "vue-class-component";
   import DishesApiConnector from "../../lib/DishesApiConnector";
   import ApiConnector from "../../lib/ApiConnector";
+  import router from '../../router/index'
 
   @Component({
     components: {
@@ -59,7 +60,9 @@
         address: this.address,
       };
 
-      DishesApiConnector.createRestaurant(restaurant)
+      const connector = new DishesApiConnector();
+      connector.createRestaurant(restaurant)
+        .then(() => router.push("/restaurants"))
         .catch(errResponse => ApiConnector.handleError(errResponse));
     }
 

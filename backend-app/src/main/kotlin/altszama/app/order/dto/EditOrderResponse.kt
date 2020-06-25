@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class EditResponse(val order: OrderDto) {
+data class EditOrderResponse(val order: OrderDto) {
 
   companion object {
 
@@ -31,7 +31,7 @@ data class EditResponse(val order: OrderDto) {
         val blikPhoneNumber: String
     )
 
-    fun create(order: Order): EditResponse {
+    fun create(order: Order): EditOrderResponse {
       val ordedDto = OrderDto(
           order.id,
           order.restaurant.id,
@@ -52,7 +52,7 @@ data class EditResponse(val order: OrderDto) {
           order.blikPhoneNumber
       )
 
-      return EditResponse(ordedDto)
+      return EditOrderResponse(ordedDto)
     }
   }
 }

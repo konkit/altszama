@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class CreateResponse(
+data class CreateOrderResponse(
     val restaurantsList: List<Restaurant>,
     val orderDate: LocalDate = LocalDate.now(),
 

@@ -49,6 +49,9 @@
   import DishesApiConnector from "../../lib/DishesApiConnector";
   import Component from 'vue-class-component'
   import Vue from "vue"
+  import router from '../../router/index'
+
+  const connector = new DishesApiConnector();
 
   @Component({
     components: {
@@ -60,8 +63,8 @@
     }
   })
   export default class DishEditForm extends Vue {
-    restaurantId = this.$route.params.id;
-    dishId = this.$route.params.dishId;
+    restaurantId = "";
+    dishId = "";
     name = "";
     price = 0;
     category = "";
@@ -69,7 +72,11 @@
     initialSideDishes = [];
 
     mounted() {
-      DishesApiConnector.getDishEditData(this.restaurantId, this.dishId)
+      this.restaurantId = this.$route.params.id;
+      this.dishId = this.$route.params.dishId;
+
+      const connector = new DishesApiConnector();
+      connector.getDishEditData(this.restaurantId, this.dishId)
         .then(dishData => {
           this.name = dishData.dish.name;
           this.price = dishData.dish.price;
@@ -103,8 +110,9 @@
         sideDishes: sideDishes
       };
 
-      DishesApiConnector.editDish(this.restaurantId, dishObj)
-        .catch(errResponse => ApiConnector.handleError(errResponse))
+      connector.editDish(this.restaurantId, dishObj)
+        .then(() => router.push("/restaurants/show/" + this.restaurantId))
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false;
     }

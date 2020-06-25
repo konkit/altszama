@@ -29,7 +29,7 @@ class OrderController {
   }
 
   @GetMapping("/orders/{orderId}/show.json")
-  fun show(@PathVariable orderId: String): ShowResponse {
+  fun show(@PathVariable orderId: String): ShowOrderResponse {
     return orderControllerDataService.getShowData(orderId)
   }
 
@@ -39,7 +39,7 @@ class OrderController {
   }
 
   @GetMapping("/orders/create.json")
-  fun create(): CreateResponse {
+  fun create(): CreateOrderResponse {
     return orderControllerDataService.getCreateData()
   }
 
@@ -50,11 +50,11 @@ class OrderController {
   }
 
   @GetMapping("/orders/{orderId}/edit.json")
-  fun edit(@PathVariable orderId: String): EditResponse {
+  fun edit(@PathVariable orderId: String): EditOrderResponse {
     return orderControllerDataService.getEditData(orderId)
   }
 
-  @PostMapping("/orders/update")
+  @PutMapping("/orders/update")
   fun update(@RequestBody @Valid orderUpdateRequest: OrderUpdateRequest): ResponseEntity<String> {
     orderService.updateOrder(orderUpdateRequest)
     return ResponseEntity(HttpStatus.OK)
@@ -66,37 +66,37 @@ class OrderController {
     return ResponseEntity(HttpStatus.OK)
   }
 
-  @PostMapping("/orders/{orderId}/set_as_created")
+  @PutMapping("/orders/{orderId}/set_as_created")
   fun setAsCreated(@PathVariable orderId: String): ResponseEntity<String> {
     orderService.setAsCreated(orderId)
     return ResponseEntity(HttpStatus.OK)
   }
 
-  @PostMapping("/orders/{orderId}/set_as_ordering")
+  @PutMapping("/orders/{orderId}/set_as_ordering")
   fun setAsOrdering(@PathVariable orderId: String): ResponseEntity<String> {
     orderService.setAsOrdering(orderId)
     return ResponseEntity(HttpStatus.OK)
   }
 
-  @PostMapping("/orders/{orderId}/set_as_ordered")
+  @PutMapping("/orders/{orderId}/set_as_ordered")
   fun setAsOrdered(@PathVariable orderId: String, @RequestBody requestResponse: SetAsOrderedResponse): ResponseEntity<String> {
     orderService.setAsOrdered(orderId, requestResponse.approxTimeOfDelivery)
     return ResponseEntity(HttpStatus.OK)
   }
 
-  @PostMapping("/orders/{orderId}/set_back_as_ordered")
+  @PutMapping("/orders/{orderId}/set_back_as_ordered")
   fun setAsOrdered(@PathVariable orderId: String): ResponseEntity<String> {
     orderService.setBackAsOrdered(orderId)
     return ResponseEntity(HttpStatus.OK)
   }
 
-  @PostMapping("/orders/{orderId}/set_as_delivered")
+  @PutMapping("/orders/{orderId}/set_as_delivered")
   fun setAsDelivered(@PathVariable orderId: String): ResponseEntity<String> {
     orderService.setAsDelivered(orderId)
     return ResponseEntity(HttpStatus.OK)
   }
 
-  @PostMapping("/orders/{orderId}/set_as_rejected")
+  @PutMapping("/orders/{orderId}/set_as_rejected")
   fun setAsRejected(@PathVariable orderId: String): ResponseEntity<String> {
     orderService.setAsRejected(orderId)
     return ResponseEntity(HttpStatus.OK)

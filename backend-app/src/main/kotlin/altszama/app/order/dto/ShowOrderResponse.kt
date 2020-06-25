@@ -9,17 +9,11 @@ import altszama.app.order.OrderState
 import altszama.app.orderEntry.DishEntry
 import altszama.app.orderEntry.OrderEntry
 import altszama.app.orderEntry.OrderEntryPaymentStatus
-import altszama.app.restaurant.Restaurant
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.DBRef
 import org.springframework.format.annotation.DateTimeFormat
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
-import javax.validation.constraints.NotNull
 
-data class ShowResponse(
+data class ShowOrderResponse(
     val order: OrderDto,
     val orderEntries: List<ParticipantsOrderEntry>,
     val currentUserId: String,
@@ -76,7 +70,7 @@ data class ShowResponse(
                entries: List<OrderEntry>,
                currentUserId: String,
                allDishesInRestaurant: List<Dish>,
-               dishIdToSideDishesMap: Map<String, List<SideDish>>): ShowResponse {
+               dishIdToSideDishesMap: Map<String, List<SideDish>>): ShowOrderResponse {
       val orderEntriesByUser: Map<User, List<OrderEntry>> = entries.groupBy { e -> e.user }
 
       val usersCount = orderEntriesByUser.keys.size
@@ -95,7 +89,7 @@ data class ShowResponse(
       val baseOrderPrice = Order.getBasePrice(entries)
       val totalOrderPrice = Order.getTotalPrice(order, entries)
 
-      return ShowResponse(
+      return ShowOrderResponse(
           fromOrder(order),
           participantsUserEntries,
           currentUserId,

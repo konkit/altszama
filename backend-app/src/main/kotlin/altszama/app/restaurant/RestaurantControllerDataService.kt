@@ -2,10 +2,10 @@ package altszama.app.restaurant
 
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishDto
-import altszama.app.restaurant.dto.EditResponse
+import altszama.app.restaurant.dto.EditRestaurantResponse
 import altszama.app.restaurant.dto.IndexResponse
 import altszama.app.restaurant.dto.RestaurantInfo
-import altszama.app.restaurant.dto.ShowResponse
+import altszama.app.restaurant.dto.ShowRestaurantResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -26,18 +26,18 @@ class RestaurantControllerDataService {
     return IndexResponse(restaurantInfoList)
   }
 
-  fun getShowData(restaurantId: String): ShowResponse {
+  fun getShowData(restaurantId: String): ShowRestaurantResponse {
     val restaurant = restaurantService.findById(restaurantId).get()
     val dishes = dishService.findByRestaurantId(restaurant.id).map { dish -> DishDto.fromDish(dish) }
     val dishesByCategory: Map<String, List<DishDto>> = dishes.groupBy { dish -> dish.category }
 
-    return ShowResponse(restaurant, dishes, dishesByCategory)
+    return ShowRestaurantResponse(restaurant, dishes, dishesByCategory)
   }
 
-  fun getEditRestaurantData(restaurantId: String): EditResponse {
+  fun getEditRestaurantData(restaurantId: String): EditRestaurantResponse {
     val restaurant = restaurantService.findById(restaurantId).get()
 
-    return EditResponse(
+    return EditRestaurantResponse(
       restaurant.id,
       restaurant.name,
       restaurant.address,

@@ -1,84 +1,146 @@
 import ApiConnector from "./ApiConnector";
 import router from '../router/index'
-import {EditRestaurantResponse, IndexResponse, RestaurantSaveRequest, ShowResponse} from "@/lib/model";
+import {
+  DishControllerApi, DishCreateRequest,
+  DishDto, DishUpdateRequest, EditDishResponse,
+  EditRestaurantResponse,
+  IndexResponse,
+  RestaurantControllerApi,
+  RestaurantSaveRequest, RestaurantUpdateRequest,
+  ShowRestaurantResponse
+} from "../frontend-client/api"
+import {Configuration} from "@/frontend-client";
+import store from "@/store";
 
+function headersWithToken() {
+  return { headers: {'Authorization': 'Bearer ' + store.state.token } }
+}
 
+export default class DishesApiConnector {
 
-export default {
+  private static createRestaurantApi () {
+    const currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+    const backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
 
-  getRestaurants (): Promise<IndexResponse> {
-    return ApiConnector.makeGet("/restaurants.json")
+    const configuration = new Configuration({
+      basePath: backendUrl,
+      accessToken: store.state.token || ""
+    });
+    return new RestaurantControllerApi(configuration);
+  }
+
+  private static createDishApi() {
+    const currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+    const backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
+
+    const configuration = new Configuration({
+      basePath: backendUrl,
+      accessToken: store.state.token || ""
+    });
+    return new DishControllerApi(configuration);
+  }
+
+  getRestaurants(): Promise<IndexResponse> {
+    const api = DishesApiConnector.createRestaurantApi();
+
+    return api.indexRestaurants(headersWithToken())
       .then(response => {
         return {
-          restaurants: response.data.restaurants,
+          restaurants: response.restaurants,
         }
       })
-  },
+  }
 
-  getShowRestaurantData (restaurantId): Promise<ShowResponse> {
-    return ApiConnector.makeGet("/restaurants/" + restaurantId + "/show.json")
-        .then(response => {
-          return {
-            restaurant: response.data.restaurant,
-            dishes: response.data.dishes,
-            dishesByCategory: convertToMapEntries(response.data.dishesByCategory)
-          }
-        })
-  },
+  getShowRestaurantData (restaurantId: string) {
+    const api = DishesApiConnector.createRestaurantApi();
+
+    return api.showRestaurant(restaurantId, headersWithToken())
+        // .then(response => {
+        //   return {
+        //     restaurant: response.restaurant,
+        //     dishes: response.dishes,
+        //     dishesByCategory: convertToMapEntries(response.dishesByCategory!)
+        //   }
+        // })
+  }
 
   createRestaurant (restaurant: RestaurantSaveRequest) {
-    return ApiConnector.makePost("/restaurants/save", restaurant)
-      .then(() => router.push("/restaurants"))
-  },
+    const api = DishesApiConnector.createRestaurantApi();
 
-  getRestaurantEditData (restaurantId): Promise<EditRestaurantResponse> {
-    return ApiConnector.makeGet("/restaurants/" + restaurantId + "/edit.json")
-      .then(response => {
-        return {
-          id: response.data.id,
-          url: response.data.url,
-          name: response.data.name,
-          rating: response.data.rating,
-          telephone: response.data.telephone,
-          address: response.data.address
-        }
-      })
-  },
+    return api.saveRestaurant(restaurant, headersWithToken())
 
-  editRestaurant (restaurantId, restaurant: RestaurantUpdateRequest) {
+    // return ApiConnector.makePost("/restaurants/save", restaurant)
+    //   .then(() => router.push("/restaurants"))
+  }
+
+  getRestaurantEditData (restaurantId: string): Promise<EditRestaurantResponse> {
+    const api = DishesApiConnector.createRestaurantApi();
+
+    return api.editRestaurant(restaurantId, headersWithToken())
+
+    // return ApiConnector.makeGet("/restaurants/" + restaurantId + "/edit.json")
+    //   .then(response => {
+    //     return {
+    //       id: response.data.id,
+    //       url: response.data.url,
+    //       name: response.data.name,
+    //       rating: response.data.rating,
+    //       telephone: response.data.telephone,
+    //       address: response.data.address
+    //     }
+    //   })
+  }
+
+  editRestaurant (restaurantId: string, restaurant: RestaurantUpdateRequest) {
     let formData = {
       "restaurant.id": restaurantId,
       id: restaurant.id,
       name: restaurant.name,
-      rating: restaurant.rating,
       telephone: restaurant.telephone,
       address: restaurant.address,
       url: restaurant.url
     };
 
-    return ApiConnector.makePost("/restaurants/update", formData)
-      .then(response => router.push("/restaurants/show/" + restaurantId))
-  },
+    const api = DishesApiConnector.createRestaurantApi();
 
-  deleteRestaurant (restaurantId) {
-    return ApiConnector.makeGet("/restaurants/" + restaurantId + "/delete")
-  },
+    return api.updateRestaurant(restaurant, headersWithToken())
 
-  getDishCreateData (restaurantId): Promise<DishCreateResponse> {
-    return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/create.json")
-  },
+    // return ApiConnector.makePost("/restaurants/update", formData)
+    //   .then(response => router.push("/restaurants/show/" + restaurantId))
+  }
 
-  createDish (restaurantId, formData: DishCreateRequest) {
-    const action = "/restaurants/" + restaurantId + "/dishes/save";
+  deleteRestaurant (restaurantId: string) {
+    // return ApiConnector.makeGet("/restaurants/" + restaurantId + "/delete")
 
-    return ApiConnector.makePost(action, formData)
-  },
+    const api = DishesApiConnector.createRestaurantApi();
 
-  getDishEditData (restaurantId, dishId): Promise<EditDishResponse> {
-    return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/" + dishId + "/edit.json")
-  },
+    return api.deleteRestaurant(restaurantId, headersWithToken())
+  }
 
-  editDish (restaurantId, dishObj: DishUpdateRequest) {
+  getDishCreateData (restaurantId: string) {
+    // return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/create.json")
+    const api = DishesApiConnector.createDishApi();
+    return api.createDish(restaurantId, headersWithToken())
+  }
+
+  createDish (restaurantId: string, formData: DishCreateRequest) {
+    // const action = "/restaurants/" + restaurantId + "/dishes/save";
+    //
+    // return ApiConnector.makePost(action, formData)
+
+    const api = DishesApiConnector.createDishApi();
+    return api.saveDish(restaurantId, formData, headersWithToken())
+  }
+
+  getDishEditData (restaurantId: string, dishId: string): Promise<EditDishResponse> {
+    // return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/" + dishId + "/edit.json")
+
+    const api = DishesApiConnector.createDishApi();
+    return api.editDish(restaurantId, dishId, headersWithToken())
+
+  }
+
+  editDish (restaurantId: string, dishObj: DishUpdateRequest) {
     const formData = {
       "restaurant.id": restaurantId,
       id: dishObj.id,
@@ -88,18 +150,23 @@ export default {
       sideDishes: dishObj.sideDishes
     };
 
-    return ApiConnector.makePost("/restaurants/" + restaurantId + "/dishes/update", formData)
-      .then(response => router.push("/restaurants/show/" + restaurantId))
-  },
+    // return ApiConnector.makePost("/restaurants/" + restaurantId + "/dishes/update", formData)
+    //   .then(response => router.push("/restaurants/show/" + restaurantId))
 
-  deleteDish (restaurantId, dishId) {
-    return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/" + dishId + "/delete")
-  },
+    const api = DishesApiConnector.createDishApi();
+    return api.updateDish(restaurantId, dishObj, headersWithToken())
+  }
+
+  deleteDish (restaurantId: string, dishId: string) {
+    // return ApiConnector.makeGet("/restaurants/" + restaurantId + "/dishes/" + dishId + "/delete")
+    const api = DishesApiConnector.createDishApi();
+    return api.deleteDish(dishId, headersWithToken())
+  }
 
 
 }
 
-function convertToMapEntries(dishesMap) {
+function convertToMapEntries(dishesMap:  { [key: string]: Array<DishDto>; }) {
   let result = [];
 
   for (const key of Object.keys(dishesMap)) {

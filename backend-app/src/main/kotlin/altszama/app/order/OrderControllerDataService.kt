@@ -50,7 +50,7 @@ class OrderControllerDataService {
     return AllOrdersResponse.fromOrderList(orderRepository.findAll().asReversed())
   }
 
-  fun getShowData(orderId: String): ShowResponse {
+  fun getShowData(orderId: String): ShowOrderResponse {
     val currentUserId = authService.currentUser().id
 
     val order = orderRepository.findById(orderId).get()
@@ -60,7 +60,7 @@ class OrderControllerDataService {
 
     val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
 
-    return ShowResponse.create(order, entries, currentUserId, allDishesInRestaurant, dishIdToSideDishesMap)
+    return ShowOrderResponse.create(order, entries, currentUserId, allDishesInRestaurant, dishIdToSideDishesMap)
   }
 
   fun getOrderViewData(orderId: String): OrderViewResponse {
@@ -72,7 +72,7 @@ class OrderControllerDataService {
     return OrderViewResponse.create(order, entries)
   }
 
-  fun getCreateData(): CreateResponse {
+  fun getCreateData(): CreateOrderResponse {
     val currentUser = authService.currentUser()
 
     val ordersByUser: List<Order> = orderRepository.findTop10ByOrderCreatorOrderByOrderDateDesc(currentUser)
@@ -81,10 +81,10 @@ class OrderControllerDataService {
     val blikPhoneNumber = lastOrderMade?.blikPhoneNumber ?: ""
     val bankTransferNumber = lastOrderMade?.bankTransferNumber ?: ""
 
-    return CreateResponse(restaurantRepository.findAll(), blikPhoneNumber = blikPhoneNumber, bankTransferNumber = bankTransferNumber)
+    return CreateOrderResponse(restaurantRepository.findAll(), blikPhoneNumber = blikPhoneNumber, bankTransferNumber = bankTransferNumber)
   }
 
-  fun getEditData(@PathVariable orderId: String): EditResponse {
-    return EditResponse.create(orderRepository.findById(orderId).get())
+  fun getEditData(@PathVariable orderId: String): EditOrderResponse {
+    return EditOrderResponse.create(orderRepository.findById(orderId).get())
   }
 }

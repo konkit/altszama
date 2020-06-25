@@ -14,7 +14,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.*
 import java.time.LocalDate
 
-class ShowResponseTest {
+class ShowOrderResponseTest {
 
     private val orderCreator = User("orderCreator", "password", "mail@mail.com")
 
@@ -45,17 +45,17 @@ class ShowResponseTest {
 
         val entriesInThisOrder = listOf(orderEntry1)
 
-        val actual = ShowResponse.create(order, entriesInThisOrder, orderCreator.id, allDishesInRestaurant, dishIdToSideDishesMap)
+        val actual = ShowOrderResponse.create(order, entriesInThisOrder, orderCreator.id, allDishesInRestaurant, dishIdToSideDishesMap)
 
-        val expected = ShowResponse(
-                ShowResponse.fromOrder(order),
+        val expected = ShowOrderResponse(
+                ShowOrderResponse.fromOrder(order),
                 listOf(
-                        ShowResponse.Companion.ParticipantsOrderEntry(
+                        ShowOrderResponse.Companion.ParticipantsOrderEntry(
                                 orderEntry1.id,
                                 user1.id,
                                 user1.username,
                                 listOf(
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry1.id,
                                                 dish1.id,
                                                 dish1.name,
@@ -100,7 +100,7 @@ class ShowResponseTest {
 
         val entriesInThisOrder = listOf(orderEntry1, orderEntry2)
 
-        val actual = ShowResponse.create(
+        val actual = ShowOrderResponse.create(
                 order,
                 entriesInThisOrder,
                 orderCreator.id,
@@ -108,15 +108,15 @@ class ShowResponseTest {
                 dishIdToSideDishesMap
         )
 
-        val expected = ShowResponse(
-                ShowResponse.fromOrder(order),
+        val expected = ShowOrderResponse(
+                ShowOrderResponse.fromOrder(order),
                 listOf(
-                        ShowResponse.Companion.ParticipantsOrderEntry(
+                        ShowOrderResponse.Companion.ParticipantsOrderEntry(
                                 orderEntry1.id,
                                 user1.id,
                                 user1.username,
                                 listOf(
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry1.id,
                                                 dish1.id,
                                                 dish1.name,
@@ -124,7 +124,7 @@ class ShowResponseTest {
                                                 dish1.price,
                                                 ""
                                         ),
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry2.id,
                                                 dish2.id,
                                                 dish2.name,
@@ -136,12 +136,12 @@ class ShowResponseTest {
                                 dish1.price + dish2.price + 500,
                                 OrderEntryPaymentStatus.UNPAID
                         ),
-                        ShowResponse.Companion.ParticipantsOrderEntry(
+                        ShowOrderResponse.Companion.ParticipantsOrderEntry(
                                 orderEntry2.id,
                                 user2.id,
                                 user2.username,
                                 listOf(
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry3.id,
                                                 dish3.id,
                                                 dish3.name,
@@ -149,7 +149,7 @@ class ShowResponseTest {
                                                 dish3.price,
                                                 ""
                                         ),
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry4.id,
                                                 dish4.id,
                                                 dish4.name,
@@ -194,7 +194,7 @@ class ShowResponseTest {
 
         val entriesInThisOrder = listOf(orderEntry1, orderEntry2)
 
-        val actual = ShowResponse.create(
+        val actual = ShowOrderResponse.create(
                 order,
                 entriesInThisOrder,
                 orderCreator.id,
@@ -202,15 +202,15 @@ class ShowResponseTest {
                 dishIdToSideDishesMap
         )
 
-        val expected = ShowResponse(
-                ShowResponse.fromOrder(order),
+        val expected = ShowOrderResponse(
+                ShowOrderResponse.fromOrder(order),
                 listOf(
-                        ShowResponse.Companion.ParticipantsOrderEntry(
+                        ShowOrderResponse.Companion.ParticipantsOrderEntry(
                                 orderEntry1.id,
                                 user1.id,
                                 user1.username,
                                 listOf(
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry1.id,
                                                 dish1.id,
                                                 dish1.name,
@@ -218,7 +218,7 @@ class ShowResponseTest {
                                                 dish1.price,
                                                 ""
                                         ),
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry2.id,
                                                 dish2.id,
                                                 dish2.name,
@@ -230,12 +230,12 @@ class ShowResponseTest {
                                 dish1.price + dish2.price + 200,
                                 OrderEntryPaymentStatus.UNPAID
                         ),
-                        ShowResponse.Companion.ParticipantsOrderEntry(
+                        ShowOrderResponse.Companion.ParticipantsOrderEntry(
                                 orderEntry2.id,
                                 user2.id,
                                 user2.username,
                                 listOf(
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry3.id,
                                                 dish3.id,
                                                 dish3.name,
@@ -243,7 +243,7 @@ class ShowResponseTest {
                                                 dish3.price,
                                                 ""
                                         ),
-                                        ShowResponse.Companion.ParticipantsDishEntry(
+                                        ShowOrderResponse.Companion.ParticipantsDishEntry(
                                                 dishEntry4.id,
                                                 dish4.id,
                                                 dish4.name,

@@ -36,6 +36,9 @@
   import Component from "vue-class-component";
   import DishesApiConnector from "../../lib/DishesApiConnector";
   import ApiConnector from "../../lib/ApiConnector";
+  import router from '../../router/index'
+
+  const connector = new DishesApiConnector();
 
   @Component({
     components: {
@@ -56,7 +59,8 @@
     mounted() {
       this.restaurantId = this.$route.params.id;
 
-      DishesApiConnector.getRestaurantEditData(this.restaurantId)
+      const connector = new DishesApiConnector();
+      connector.getRestaurantEditData(this.restaurantId)
         .then(payload => {
           this.name = payload.name;
           this.url = payload.url;
@@ -80,7 +84,8 @@
         address: this.address,
       };
 
-      DishesApiConnector.editRestaurant(this.restaurantId, restaurant)
+      connector.editRestaurant(this.restaurantId, restaurant)
+        .then(() => router.push("/restaurants/show/" + this.restaurantId))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false;

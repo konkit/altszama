@@ -46,6 +46,8 @@
   import Component from 'vue-class-component'
   import {Prop} from "vue-property-decorator";
 
+  const connector = new DishesApiConnector();
+
   @Component({
     components: {
       ViewWrapper,
@@ -57,14 +59,16 @@
   export default class DishCreateForm extends Vue {
     @Prop(String) restaurantName: string;
 
-    restaurantId = this.$route.params.id;
+    restaurantId = "";
     name = "";
     price = 0;
     category = "";
     categories = [];
 
     mounted() {
-      DishesApiConnector.getDishCreateData(this.restaurantId)
+      this.restaurantId = this.$route.params.id;
+
+      connector.getDishCreateData(this.restaurantId)
         .then(response => {
           this.categories = response.categories;
           document.title = `Create new dish | Alt Szama`
@@ -84,7 +88,7 @@
         sideDishes: sideDishes
       };
 
-      DishesApiConnector.createDish(this.restaurantId, dishPayload)
+      connector.createDish(this.restaurantId, dishPayload)
         .then(() => this.$router.push(this.getBackUrl()))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 

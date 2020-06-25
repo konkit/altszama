@@ -1,11 +1,9 @@
 package altszama.app.dish
 
-import altszama.app.dish.dto.CreateResponse
-import altszama.app.dish.dto.EditResponse
+import altszama.app.dish.dto.CreateDishResponse
+import altszama.app.dish.dto.EditDishResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
 
 @Service
 class DishControllerDataService {
@@ -13,18 +11,15 @@ class DishControllerDataService {
   @Autowired
   private lateinit var dishService: DishService
 
-
-  @RequestMapping("/restaurants/{restaurantId}/dishes/create.json")
-  fun getCreateData(@PathVariable restaurantId: String): CreateResponse {
+  fun getCreateData(restaurantId: String): CreateDishResponse {
     val categories = dishService.allCategories(restaurantId)
-    return CreateResponse(categories)
+    return CreateDishResponse(categories)
   }
 
-  @RequestMapping("/restaurants/{restaurantId}/dishes/{dishId}/edit.json")
-  fun getEditData(@PathVariable restaurantId: String, @PathVariable dishId: String): EditResponse {
+  fun getEditData(restaurantId: String, dishId: String): EditDishResponse {
     val dish = dishService.findById(dishId).get()
     val categories = dishService.allCategories(restaurantId)
 
-    return EditResponse.create(dish, categories)
+    return EditDishResponse.create(dish, categories)
   }
 }

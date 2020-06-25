@@ -1,17 +1,17 @@
 <template>
   <div>
     <v-list two-line>
-      <template v-for="(categoryEntry, i) in this.dishesByCategory">
-        <v-subheader :key="'category-' + i">
-          <span v-if="categoryEntry.category">
-            Category: {{categoryEntry.category}}
+      <template v-for="[category, dishes] in Object.entries(this.dishesByCategory)">
+        <v-subheader :key="category">
+          <span v-if="category">
+            Category: {{category}}
           </span>
           <span v-else>
             Uncategorized
           </span>
         </v-subheader>
 
-        <template v-for="(dish, j) in categoryEntry.dishes">
+        <template v-for="(dish, j) in dishes">
           <v-list-item :key="'item-' + j">
             <v-list-item-content>
               <v-list-item-title>
@@ -67,6 +67,10 @@
     @Prop() dishesByCategory;
 
     sideDishesShown: false;
+
+    mounted() {
+      console.log("Dishes by category: ", this.dishesByCategory)
+    }
 
     deleteDish(dishId) {
       this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {restaurantId: this.restaurant.id, dishId: dishId})
