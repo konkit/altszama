@@ -179,7 +179,7 @@ export default {
                 newDishPrice: state.newDishPrice,
                 chosenSideDishes: state.chosenSideDishes
             };
-            OrdersApiConnector.saveOrderEntry(orderId, orderEntryToSave)
+            new OrdersApiConnector().saveOrderEntry(orderId, orderEntryToSave)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.commit(NAMESPACE_MODIFY_ORDER_ENTRY + "/" + CANCEL_DISH_ENTRY_MODIFICATION, {});
@@ -202,7 +202,7 @@ export default {
                 newDishPrice: state.newDishPrice,
                 chosenSideDishes: state.chosenSideDishes
             };
-            OrdersApiConnector.updateOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
+            new OrdersApiConnector().updateOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.commit(NAMESPACE_MODIFY_ORDER_ENTRY + "/" + CANCEL_DISH_ENTRY_MODIFICATION, {});

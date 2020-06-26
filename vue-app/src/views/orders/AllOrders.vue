@@ -11,8 +11,7 @@
                     class="table table-hover"
                     :items="allOrdersList"
                     :headers="headers"
-                    :loading="false"
-                    :pagination.sync="pagination">
+                    :loading="false">
 
                   <template slot="header" slot-scope="props">
                     <tr>
@@ -67,14 +66,10 @@
       { text: 'Order creator', value: 'orderCreator' },
       ];
 
-    pagination = {
-      rowsPerPage: 10
-    };
-
     mounted() {
-      OrdersApiConnector.fetchAllOrders()
+      new OrdersApiConnector().fetchAllOrders()
         .then(allOrdersList => {
-          this.allOrdersList = allOrdersList;
+          this.allOrdersList = allOrdersList.allOrdersList;
           this.$store.commit('setLoadingFalse');
 
           document.title = `All orders | Alt Szama`

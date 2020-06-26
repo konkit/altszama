@@ -11,8 +11,7 @@
                     class="table table-hover"
                     :items="restaurantsEntries"
                     :headers="headers"
-                    :loading="false"
-                    :pagination.sync="pagination">
+                    :loading="false">
                   <template slot="header" slot-scope="props">
                     <tr>
                       <th v-for="header in props.headers" :key="header.text">
@@ -75,10 +74,6 @@
       {text: "Last auto-updated"},
       {text: "Last updated manually"}
     ];
-
-    pagination = {
-      rowsPerPage: 20
-    }
 
     restaurants = [];
     restaurantsEntries = [];

@@ -1,13 +1,14 @@
-import ApiConnector from "./ApiConnector";
-import router from '../router/index'
 import {
-  DishControllerApi, DishCreateRequest,
-  DishDto, DishUpdateRequest, EditDishResponse,
+  DishControllerApi,
+  DishCreateRequest,
+  DishDto,
+  DishUpdateRequest,
+  EditDishResponse,
   EditRestaurantResponse,
   IndexResponse,
   RestaurantControllerApi,
-  RestaurantSaveRequest, RestaurantUpdateRequest,
-  ShowRestaurantResponse
+  RestaurantSaveRequest,
+  RestaurantUpdateRequest
 } from "../frontend-client/api"
 import {Configuration} from "@/frontend-client";
 import store from "@/store";
@@ -18,26 +19,22 @@ function headersWithToken() {
 
 export default class DishesApiConnector {
 
-  private static createRestaurantApi () {
+  private static createConfiguration() {
     const currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
     const backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
 
-    const configuration = new Configuration({
+    return new Configuration({
       basePath: backendUrl,
       accessToken: store.state.token || ""
     });
-    return new RestaurantControllerApi(configuration);
+  }
+
+  private static createRestaurantApi () {
+    return new RestaurantControllerApi(this.createConfiguration());
   }
 
   private static createDishApi() {
-    const currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
-    const backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
-
-    const configuration = new Configuration({
-      basePath: backendUrl,
-      accessToken: store.state.token || ""
-    });
-    return new DishControllerApi(configuration);
+    return new DishControllerApi(this.createConfiguration());
   }
 
   getRestaurants(): Promise<IndexResponse> {

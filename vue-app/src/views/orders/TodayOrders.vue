@@ -127,7 +127,6 @@
 <script lang="ts">
   import ApiConnector from '../../lib/ApiConnector'
   import LoadingView from "../commons/LoadingView";
-  import {mapState} from "vuex"
   import ErrorsComponent from '../commons/Errors'
   import router from '../../router/index'
   import ViewWrapper from "../commons/ViewWrapper";
@@ -136,16 +135,6 @@
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
 
   @Component({
-    computed: {
-      ...mapState("todayOrders", [
-        "currentOrderEntries",
-        "ordersList",
-        "createdOrders",
-        "orderingOrders",
-        "orderedOrders",
-        "deliveredOrders"
-      ])
-    },
     components: {
       ViewWrapper,
       LoadingView,
@@ -159,7 +148,7 @@
     mounted() {
       ApiConnector.initializePushNotifications();
 
-      OrdersApiConnector.fetchTodaysOrders()
+      new OrdersApiConnector().fetchTodaysOrders()
         .then(todayOrdersData => {
           this.currentOrderEntries = todayOrdersData.currentOrderEntries;
           this.ordersList = todayOrdersData.ordersList;
@@ -170,7 +159,7 @@
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
 
-    goToOrder(selectedOrderId) {
+    goToOrder(selectedOrderId: string) {
       router.push("/orders/show/" + selectedOrderId)
     }
 

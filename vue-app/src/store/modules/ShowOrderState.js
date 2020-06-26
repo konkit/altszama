@@ -49,7 +49,7 @@ export default {
             var _this = this;
             var state = _a.state;
             var orderId = payload.orderId;
-            OrdersApiConnector
+            new OrdersApiConnector()
                 .fetchOrder(orderId)
                 .then(function (showOrderData) {
                 _this.commit(NAMESPACE_SHOW_ORDER + "/" + LOAD_SHOW_ORDER_DATA, showOrderData);
@@ -61,7 +61,7 @@ export default {
         _b[UNLOCK_ORDER_ACTION] = function (_a) {
             var _this = this;
             var state = _a.state;
-            OrdersApiConnector.setOrderAsCreated(state.order.id)
+            new OrdersApiConnector().setOrderAsCreated(state.order.id)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
@@ -72,7 +72,7 @@ export default {
             var _this = this;
             var state = _a.state;
             var orderEntryId = _b.orderEntryId, dishEntryId = _b.dishEntryId;
-            OrdersApiConnector.deleteDishEntry(orderEntryId, dishEntryId)
+            new OrdersApiConnector().deleteDishEntry(orderEntryId, dishEntryId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
@@ -83,7 +83,7 @@ export default {
             var _this = this;
             var state = _a.state;
             var orderEntryId = _b.orderEntryId;
-            OrdersApiConnector.confirmOrderEntryAsPaid(orderEntryId)
+            new OrdersApiConnector().confirmOrderEntryAsPaid(orderEntryId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
@@ -94,7 +94,7 @@ export default {
             var _this = this;
             var state = _a.state;
             var orderEntryId = _b.orderEntryId;
-            OrdersApiConnector.markOrderEntryAsPaid(orderEntryId)
+            new OrdersApiConnector().markOrderEntryAsPaid(orderEntryId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
@@ -105,7 +105,7 @@ export default {
             var _this = this;
             var state = _a.state;
             var orderId = _b.orderId;
-            OrdersApiConnector.setOrderAsCreated(orderId)
+            new OrdersApiConnector().setOrderAsCreated(orderId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
@@ -116,7 +116,7 @@ export default {
             var _this = this;
             var state = _a.state;
             var orderId = _b.orderId;
-            OrdersApiConnector.setOrderAsOrdered(orderId)
+            new OrdersApiConnector().setOrderAsOrdered(orderId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
@@ -127,7 +127,7 @@ export default {
             var _this = this;
             var state = _a.state;
             var orderId = _b.orderId;
-            OrdersApiConnector.setOrderAsDelivered(orderId)
+            new OrdersApiConnector().setOrderAsDelivered(orderId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
@@ -138,7 +138,7 @@ export default {
             var _this = this;
             var state = _a.state;
             var orderId = _b.orderId;
-            OrdersApiConnector.setOrderAsRejected(orderId)
+            new OrdersApiConnector().setOrderAsRejected(orderId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
@@ -148,7 +148,7 @@ export default {
         _b[DELETE_ORDER_ACTION] = function (_a, _b) {
             var state = _a.state;
             var orderId = _b.orderId;
-            OrdersApiConnector.deleteOrder(orderId)
+            new OrdersApiConnector().deleteOrder(orderId)
                 .then(function () { return router.push('/orders'); })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },

@@ -198,7 +198,7 @@
       this.orderId = this.$route.params.id;
       // this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
 
-      OrdersApiConnector.fetchOrderView(this.orderId)
+      new OrdersApiConnector().fetchOrderView(this.orderId)
         .then(responseObj => {
           this.orderState = responseObj.orderState;
           this.orderDecreaseInPercent = responseObj.orderDecreaseInPercent;
@@ -221,7 +221,7 @@
     submitForm() {
       // this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, {approxTimeOfDelivery: this.approxTimeOfDelivery});
 
-      OrdersApiConnector.makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery})
+      new OrdersApiConnector().makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery})
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false

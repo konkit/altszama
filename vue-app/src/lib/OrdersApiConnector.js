@@ -1,7 +1,25 @@
 import ApiConnector from "./ApiConnector";
 import router from '../router/index';
-export default {
-    saveOrderEntry: function (orderId, editedOrderEntry) {
+import store from "@/store";
+import { Configuration, OrderControllerApi } from "@/frontend-client";
+function headersWithToken() {
+    return { headers: { 'Authorization': 'Bearer ' + store.state.token } };
+}
+var OrdersApiConnector = /** @class */ (function () {
+    function OrdersApiConnector() {
+    }
+    OrdersApiConnector.prototype.createConfiguration = function () {
+        var currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+        var backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
+        return new Configuration({
+            basePath: backendUrl,
+            accessToken: store.state.token || ""
+        });
+    };
+    OrdersApiConnector.prototype.createOrderApi = function () {
+        return new OrderControllerApi(this.createConfiguration());
+    };
+    OrdersApiConnector.prototype.saveOrderEntry = function (orderId, editedOrderEntry) {
         var action = "/order_entries/save";
         var formData = {
             orderId: orderId,
@@ -13,8 +31,8 @@ export default {
             sideDishes: editedOrderEntry.chosenSideDishes.map(function (sd) { return Object.assign(sd, { newSideDishPrice: sd.newSideDishPrice }); })
         };
         return ApiConnector.makePost(action, formData);
-    },
-    updateOrderEntry: function (orderId, orderEntryId, editedOrderEntry) {
+    };
+    OrdersApiConnector.prototype.updateOrderEntry = function (orderId, orderEntryId, editedOrderEntry) {
         var action = "/order_entries/update";
         var formData = {
             id: orderEntryId,
@@ -28,86 +46,90 @@ export default {
             sideDishes: editedOrderEntry.chosenSideDishes.map(function (sd) { return Object.assign({}, sd, { newSideDishPrice: sd.newSideDishPrice }); })
         };
         return ApiConnector.makePost(action, formData);
-    },
-    deleteDishEntry: function (orderEntryId, dishEntryId) {
+    };
+    OrdersApiConnector.prototype.deleteDishEntry = function (orderEntryId, dishEntryId) {
         return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete');
-    },
-    fetchOrder: function (orderId) {
-        return ApiConnector.makeGet("/orders/" + orderId + "/show.json")
-            .then(function (response) {
-            return {
-                order: response.data.order,
-                orderEntries: response.data.orderEntries,
-                currentUserId: response.data.currentUserId,
-                allDishesInRestaurant: response.data.allDishesInRestaurant,
-                allDishesByCategory: convertToMapEntries(response.data.allDishesByCategory),
-                dishIdToSideDishesMap: response.data.dishIdToSideDishesMap,
-                totalOrderPrice: response.data.totalOrderPrice,
-                baseOrderPrice: response.data.baseOrderPrice
-            };
-        });
-    },
-    fetchAllOrders: function () {
-        return ApiConnector.makeGet("/orders/all.json")
-            .then(function (response) {
-            return response.data.allOrdersList;
-        });
-    },
-    fetchTodaysOrders: function () {
-        return ApiConnector.makeGet("/orders/today.json")
-            .then(function (response) {
-            return {
-                currentOrderEntries: response.data.currentOrderEntries,
-                ordersList: response.data.ordersList
-            };
-        });
-    },
-    fetchOrderView: function (orderId) {
-        return ApiConnector.makeGet("/orders/" + orderId + "/order_view.json")
-            .then(function (response) {
-            return {
-                orderState: response.data.orderState,
-                orderDecreaseInPercent: response.data.orderDecreaseInPercent,
-                orderDeliveryCostPerEverybody: response.data.orderDeliveryCostPerEverybody,
-                orderDeliveryCostPerDish: response.data.orderDeliveryCostPerDish,
-                restaurantName: response.data.restaurantName,
-                restaurantTelephone: response.data.restaurantTelephone,
-                groupedEntries: response.data.groupedEntries,
-                allEatingPeopleCount: response.data.allEatingPeopleCount,
-                basePriceSum: response.data.basePriceSum,
-                totalPrice: response.data.totalPrice
-            };
-        });
-    },
-    getOrderCreateData: function () {
-        var createResponse = ApiConnector.makeGet("/orders/create.json");
+    };
+    OrdersApiConnector.prototype.fetchOrder = function (orderId) {
+        // return ApiConnector.makeGet("/orders/" + orderId + "/show.json")
+        //   .then(response => {
+        //     return {
+        //       order: response.data.order,
+        //       orderEntries: response.data.orderEntries,
+        //       currentUserId: response.data.currentUserId,
+        //       allDishesInRestaurant: response.data.allDishesInRestaurant,
+        //       allDishesByCategory: convertToMapEntries(response.data.allDishesByCategory),
+        //       dishIdToSideDishesMap: response.data.dishIdToSideDishesMap,
+        //       totalOrderPrice: response.data.totalOrderPrice,
+        //       baseOrderPrice: response.data.baseOrderPrice
+        //     };
+        //   })
+        return this.createOrderApi().show(orderId, headersWithToken());
+    };
+    OrdersApiConnector.prototype.fetchAllOrders = function () {
+        // return ApiConnector.makeGet("/orders/all.json")
+        //   .then(response => {
+        //       return response.data.allOrdersList;
+        //   })
+        return this.createOrderApi().allOrders(headersWithToken());
+    };
+    OrdersApiConnector.prototype.fetchTodaysOrders = function () {
+        // return ApiConnector.makeGet("/orders/today.json")
+        //   .then(response => {
+        //     return {
+        //       currentOrderEntries: response.data.currentOrderEntries,
+        //       ordersList: response.data.ordersList
+        //     }
+        //   })
+        return this.createOrderApi().todayOrders(headersWithToken());
+    };
+    OrdersApiConnector.prototype.fetchOrderView = function (orderId) {
+        // return ApiConnector.makeGet("/orders/" + orderId + "/order_view.json")
+        //     .then(response => {
+        //       return {
+        //         orderState: response.data.orderState,
+        //         orderDecreaseInPercent: response.data.orderDecreaseInPercent,
+        //         orderDeliveryCostPerEverybody: response.data.orderDeliveryCostPerEverybody,
+        //         orderDeliveryCostPerDish: response.data.orderDeliveryCostPerDish,
+        //         restaurantName: response.data.restaurantName,
+        //         restaurantTelephone: response.data.restaurantTelephone,
+        //         groupedEntries: response.data.groupedEntries,
+        //         allEatingPeopleCount: response.data.allEatingPeopleCount,
+        //         basePriceSum: response.data.basePriceSum,
+        //         totalPrice: response.data.totalPrice
+        //       }
+        //     })
+        return this.createOrderApi().orderViewJson(orderId, headersWithToken());
+    };
+    OrdersApiConnector.prototype.getOrderCreateData = function () {
+        var createResponse = this.createOrderApi().create(headersWithToken());
         return createResponse
             .then(function (response) {
             var restaurantId;
-            if (response.data.restaurant != null) {
-                restaurantId = response.data.restaurant.id;
+            if (response.restaurant != null) {
+                restaurantId = response.restaurant.id;
             }
-            else if (response.data.restaurantsList.length > 0) {
-                restaurantId = response.data.restaurantsList[0].id;
+            else if (response.restaurantsList.length > 0) {
+                restaurantId = response.restaurantsList[0].id;
             }
             var bankTransferNumber = "";
             var paymentByBankTransfer = false;
-            if (response.data.bankTransferNumber) {
+            if (response.bankTransferNumber) {
                 paymentByBankTransfer = true;
-                bankTransferNumber = response.data.bankTransferNumber;
+                bankTransferNumber = response.bankTransferNumber;
             }
             var blikPhoneNumber = "";
             var paymentByBlik = false;
-            if (response.data.blikPhoneNumber) {
+            if (response.blikPhoneNumber) {
                 paymentByBlik = true;
-                blikPhoneNumber = response.data.blikPhoneNumber;
+                blikPhoneNumber = response.blikPhoneNumber;
             }
             return {
-                restaurantsList: response.data.restaurantsList,
+                restaurantsList: response.restaurantsList,
                 order: {
                     restaurantId: restaurantId,
-                    orderDate: response.data.orderDate,
-                    timeOfOrder: response.data.timeOfOrder,
+                    orderDate: response.orderDate,
+                    timeOfOrder: response.timeOfOrder,
                     decreaseInPercent: 0,
                     deliveryCostPerEverybody: 0,
                     deliveryCostPerDish: 0,
@@ -119,85 +141,90 @@ export default {
                 }
             };
         });
-    },
-    getOrderEditData: function (orderId) {
-        return ApiConnector.makeGet("/orders/" + orderId + "/edit.json")
-            .then(function (response) {
-            return {
-                order: {
-                    restaurantId: response.data.order.restaurantId,
-                    restaurantName: response.data.order.restaurantName,
-                    orderDate: response.data.order.orderDate,
-                    timeOfOrder: response.data.order.timeOfOrder,
-                    decreaseInPercent: response.data.order.decreaseInPercent,
-                    deliveryCostPerEverybody: response.data.order.deliveryCostPerEverybody,
-                    deliveryCostPerDish: response.data.order.deliveryCostPerDish,
-                    paymentByCash: response.data.order.paymentByCash,
-                    paymentByBankTransfer: response.data.order.paymentByBankTransfer,
-                    bankTransferNumber: response.data.order.bankTransferNumber,
-                    paymentByBlik: response.data.order.paymentByBlik,
-                    blikPhoneNumber: response.data.order.blikPhoneNumber
-                }
-            };
-        });
-    },
-    setOrderAsCreated: function (orderId) {
+    };
+    OrdersApiConnector.prototype.getOrderEditData = function (orderId) {
+        // return ApiConnector.makeGet("/orders/" + orderId + "/edit.json")
+        //     .then(response => {
+        //       return {
+        //         order: {
+        //           restaurantId: response.data.order.restaurantId,
+        //           restaurantName: response.data.order.restaurantName,
+        //           orderDate: response.data.order.orderDate,
+        //           timeOfOrder: response.data.order.timeOfOrder,
+        //           decreaseInPercent: response.data.order.decreaseInPercent,
+        //           deliveryCostPerEverybody: response.data.order.deliveryCostPerEverybody,
+        //           deliveryCostPerDish: response.data.order.deliveryCostPerDish,
+        //           paymentByCash: response.data.order.paymentByCash,
+        //           paymentByBankTransfer: response.data.order.paymentByBankTransfer,
+        //           bankTransferNumber: response.data.order.bankTransferNumber,
+        //           paymentByBlik: response.data.order.paymentByBlik,
+        //           blikPhoneNumber: response.data.order.blikPhoneNumber
+        //         }
+        //       }
+        //     })
+        return this.createOrderApi().edit(orderId, headersWithToken());
+    };
+    OrdersApiConnector.prototype.setOrderAsCreated = function (orderId) {
         return ApiConnector.makePost('/orders/' + orderId + '/set_as_created');
-    },
-    setOrderAsOrdered: function (orderId) {
+    };
+    OrdersApiConnector.prototype.setOrderAsOrdered = function (orderId) {
         return ApiConnector.makePost('/orders/' + orderId + '/set_back_as_ordered');
-    },
-    setOrderAsDelivered: function (orderId) {
+    };
+    OrdersApiConnector.prototype.setOrderAsDelivered = function (orderId) {
         return ApiConnector.makePost('/orders/' + orderId + '/set_as_delivered');
-    },
-    setOrderAsRejected: function (orderId) {
+    };
+    OrdersApiConnector.prototype.setOrderAsRejected = function (orderId) {
         return ApiConnector.makePost('/orders/' + orderId + '/set_as_rejected');
-    },
-    deleteOrder: function (orderId) {
+    };
+    OrdersApiConnector.prototype.deleteOrder = function (orderId) {
         return ApiConnector.makeDelete('/orders/' + orderId + '/delete');
-    },
-    markOrderEntryAsPaid: function (orderEntryId) {
+    };
+    OrdersApiConnector.prototype.markOrderEntryAsPaid = function (orderEntryId) {
         return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/mark_as_paid');
-    },
-    confirmOrderEntryAsPaid: function (orderEntryId) {
+    };
+    OrdersApiConnector.prototype.confirmOrderEntryAsPaid = function (orderEntryId) {
         return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid');
-    },
-    createOrder: function (order) {
-        var formData = {
-            restaurantId: order.restaurantId,
-            orderDate: order.orderDate,
-            timeOfOrder: order.timeOfOrder,
-            decreaseInPercent: order.decreaseInPercent,
-            deliveryCostPerEverybody: order.deliveryCostPerEverybody,
-            deliveryCostPerDish: order.deliveryCostPerDish,
-            paymentByCash: order.paymentByCash === true,
-            paymentByBankTransfer: order.paymentByBankTransfer === true,
-            bankTransferNumber: order.bankTransferNumber,
-            paymentByBlik: order.paymentByBlik === true,
-            blikPhoneNumber: order.blikPhoneNumber
-        };
-        return ApiConnector.makePost("/orders/save", formData)
-            .then(function (response) { return router.push("/orders/"); });
-    },
-    editOrder: function (orderId, order) {
-        var formData = {
-            orderId: orderId,
-            restaurantId: order.restaurantId,
-            orderDate: order.orderDate,
-            timeOfOrder: order.timeOfOrder,
-            decreaseInPercent: order.decreaseInPercent,
-            deliveryCostPerEverybody: order.deliveryCostPerEverybody,
-            deliveryCostPerDish: order.deliveryCostPerDish,
-            paymentByCash: order.paymentByCash === true,
-            paymentByBankTransfer: order.paymentByBankTransfer === true,
-            bankTransferNumber: order.bankTransferNumber,
-            paymentByBlik: order.paymentByBlik === true,
-            blikPhoneNumber: order.blikPhoneNumber
-        };
-        return ApiConnector.makePost("/orders/update", formData)
-            .then(function (response) { return router.push("/orders/show/" + orderId); });
-    },
-    makeAnOrder: function (orderId, _a) {
+    };
+    OrdersApiConnector.prototype.createOrder = function (order) {
+        // let formData = {
+        //   restaurantId: order.restaurantId,
+        //   orderDate: order.orderDate,
+        //   timeOfOrder: order.timeOfOrder,
+        //   decreaseInPercent: order.decreaseInPercent,
+        //   deliveryCostPerEverybody: order.deliveryCostPerEverybody,
+        //   deliveryCostPerDish: order.deliveryCostPerDish,
+        //   paymentByCash: order.paymentByCash === true,
+        //   paymentByBankTransfer: order.paymentByBankTransfer === true,
+        //   bankTransferNumber: order.bankTransferNumber,
+        //   paymentByBlik: order.paymentByBlik === true,
+        //   blikPhoneNumber: order.blikPhoneNumber
+        // };
+        //
+        // return ApiConnector.makePost("/orders/save", formData)
+        //   .then(response => router.push("/orders/"))
+        return this.createOrderApi().save(order, headersWithToken());
+    };
+    OrdersApiConnector.prototype.editOrder = function (order) {
+        // let formData = {
+        //   orderId: orderId,
+        //   restaurantId: order.restaurantId,
+        //   orderDate: order.orderDate,
+        //   timeOfOrder: order.timeOfOrder,
+        //   decreaseInPercent: order.decreaseInPercent,
+        //   deliveryCostPerEverybody: order.deliveryCostPerEverybody,
+        //   deliveryCostPerDish: order.deliveryCostPerDish,
+        //   paymentByCash: order.paymentByCash === true,
+        //   paymentByBankTransfer: order.paymentByBankTransfer === true,
+        //   bankTransferNumber: order.bankTransferNumber,
+        //   paymentByBlik: order.paymentByBlik === true,
+        //   blikPhoneNumber: order.blikPhoneNumber
+        // };
+        //
+        // return ApiConnector.makePost("/orders/update", formData)
+        //   .then(response => router.push("/orders/show/" + orderId))
+        return this.createOrderApi().update(order);
+    };
+    OrdersApiConnector.prototype.makeAnOrder = function (orderId, _a) {
         var approxTimeOfDelivery = _a.approxTimeOfDelivery;
         var action = '/orders/' + orderId + '/set_as_ordered';
         var formData = {
@@ -205,8 +232,10 @@ export default {
         };
         return ApiConnector.makePost(action, formData)
             .then(function (response) { return router.push("/orders/show/" + orderId); });
-    }
-};
+    };
+    return OrdersApiConnector;
+}());
+export default OrdersApiConnector;
 function convertToMapEntries(dishesMap) {
     var result = [];
     for (var _i = 0, _a = Object.keys(dishesMap); _i < _a.length; _i++) {

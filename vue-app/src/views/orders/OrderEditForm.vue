@@ -136,7 +136,7 @@
       this.orderId = this.$route.params.id;
       // this.$store.dispatch(`editOrder/${INIT_EDIT_ORDER_ACTION}`, {orderId: this.orderId})
 
-      OrdersApiConnector.getOrderEditData(this.orderId)
+      new OrdersApiConnector().getOrderEditData(this.orderId)
         .then(response => {
           this.orderId = response.orderId;
 
@@ -177,7 +177,7 @@
         blikPhoneNumber: this.blikPhoneNumber || ""
       };
 
-      OrdersApiConnector.editOrder(order.orderId, order)
+      new OrdersApiConnector().editOrder(order)
         .then(() => {
           this.$store.commit('setLoadingTrue');
           this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});

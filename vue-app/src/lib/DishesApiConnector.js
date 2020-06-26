@@ -7,23 +7,19 @@ function headersWithToken() {
 var DishesApiConnector = /** @class */ (function () {
     function DishesApiConnector() {
     }
-    DishesApiConnector.createRestaurantApi = function () {
+    DishesApiConnector.createConfiguration = function () {
         var currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
         var backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
-        var configuration = new Configuration({
+        return new Configuration({
             basePath: backendUrl,
             accessToken: store.state.token || ""
         });
-        return new RestaurantControllerApi(configuration);
+    };
+    DishesApiConnector.createRestaurantApi = function () {
+        return new RestaurantControllerApi(this.createConfiguration());
     };
     DishesApiConnector.createDishApi = function () {
-        var currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
-        var backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
-        var configuration = new Configuration({
-            basePath: backendUrl,
-            accessToken: store.state.token || ""
-        });
-        return new DishControllerApi(configuration);
+        return new DishControllerApi(this.createConfiguration());
     };
     DishesApiConnector.prototype.getRestaurants = function () {
         var api = DishesApiConnector.createRestaurantApi();

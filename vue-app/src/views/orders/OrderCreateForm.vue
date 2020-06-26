@@ -101,6 +101,7 @@
 </template>
 
 <script lang="ts">
+  import router from '../../router/index'
   import ErrorsComponent from '../commons/Errors'
   import LoadingView from "../commons/LoadingView";
   import {
@@ -114,7 +115,6 @@
   import Component from "vue-class-component";
   import ApiConnector from "../../lib/ApiConnector";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
-
 
   @Component({
     computed: {
@@ -151,7 +151,7 @@
     }
 
     mounted() {
-      OrdersApiConnector.getOrderCreateData()
+      new OrdersApiConnector().getOrderCreateData()
         .then(response => {
           this.restaurantsList = response.restaurantsList;
 
@@ -220,7 +220,7 @@
     submitForm(e) {
       e.preventDefault();
 
-      const order: OrderSaveRequest = {
+      const order = {
         restaurantId: this.restaurantId,
         orderDate: this.orderDate,
         timeOfOrder: this.timeOfOrder,
@@ -234,7 +234,8 @@
         blikPhoneNumber: this.blikPhoneNumber
       };
 
-      OrdersApiConnector.createOrder(order)
+      new OrdersApiConnector().createOrder(order)
+        .then(() => router.push("/orders/"))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false;
