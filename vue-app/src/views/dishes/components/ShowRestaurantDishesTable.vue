@@ -51,7 +51,7 @@
 
 <script lang="ts">
   import Price from '../../commons/PriceElement'
-  import {DELETE_DISH_ACTION} from "../../../store/modules/ShowRestaurantState";
+  import {DELETE_DISH_ACTION} from "../../../store/modules/ShowRestaurantModule";
   import moment from "moment"
   import Vue from 'vue'
   import {Prop} from "vue-property-decorator";

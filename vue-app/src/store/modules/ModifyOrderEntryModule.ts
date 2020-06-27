@@ -1,7 +1,9 @@
 import Vue from "vue";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "./ShowOrderState";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "./ShowOrderModule";
+import {Module} from "vuex";
+import {RootState} from "@/store";
 
 export const NAMESPACE_MODIFY_ORDER_ENTRY = "modifyOrderEntry";
 
@@ -41,24 +43,45 @@ export const UPDATE_SIDE_DISH_ACTION = "UPDATE_SIDE_DISH_ACTION";
 export const SAVE_ORDER_ENTRY_ACTION = "SAVE_ORDER_ENTRY_ACTION";
 export const UPDATE_ORDER_ENTRY_ACTION = "UPDATE_ORDER_ENTRY_ACTION";
 
-export default {
+
+interface ModifyOrderEntryState {
+  loadingEntry: false,
+
+  isEntryCreating: false,
+  isEntryEdited: false,
+  orderEntryId: "",
+  dishEntryId: "",
+
+  orderId: '',
+  dishId: '',
+  additionalComments: '',
+  newDish: false,
+  newDishName: "",
+  newDishPrice: "",
+  chosenSideDishes: []
+}
+
+const modifyOrderEntryState: ModifyOrderEntryState = {
+  loadingEntry: false,
+
+  isEntryCreating: false,
+  isEntryEdited: false,
+  orderEntryId: "",
+  dishEntryId: "",
+
+  orderId: '',
+  dishId: '',
+  additionalComments: '',
+  newDish: false,
+  newDishName: "",
+  newDishPrice: "",
+  chosenSideDishes: [],
+};
+
+export const modifyOrderEntryModule: Module<ModifyOrderEntryState, RootState> = {
   namespaced: true,
-  state: {
-    loadingEntry: false,
 
-    isEntryCreating: false,
-    isEntryEdited: false,
-    orderEntryId: "",
-    dishEntryId: "",
-
-    orderId: '',
-    dishId: '',
-    additionalComments: '',
-    newDish: false,
-    newDishName: "",
-    newDishPrice: "",
-    chosenSideDishes: []
-  },
+  state: modifyOrderEntryState,
   mutations: {
     [SET_ENTRY_LOADING_TRUE] (state) {
       state.loadingEntry = true;
@@ -174,7 +197,7 @@ export default {
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_EDITED_ORDER_ENTRY}`, {orderId: orderId, dishEntry: dishEntry});
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
     },
-    [SAVE_ORDER_ENTRY_ACTION] ({state}) {
+    [SAVE_ORDER_ENTRY_ACTION] ({state, rootState}) {
       const orderId = state.orderId;
 
       const orderEntryToSave = {
@@ -188,7 +211,7 @@ export default {
         chosenSideDishes: state.chosenSideDishes
       };
 
-      new OrdersApiConnector().saveOrderEntry(orderId, orderEntryToSave)
+      new OrdersApiConnector(rootState).saveOrderEntry(orderId, orderEntryToSave)
         .then(() => {
           this.commit('setLoadingTrue');
           this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
@@ -209,7 +232,7 @@ export default {
         chosenSideDishes: state.chosenSideDishes
       };
 
-      new OrdersApiConnector().updateOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
+      new OrdersApiConnector(rootState).updateOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
         .then(() => {
           this.commit('setLoadingTrue');
           this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
@@ -238,5 +261,5 @@ export default {
       const newSideDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId].find(sd => sd.id === sideDishId);
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH}`, {sdIndex: sdIndex, newValue: newSideDish});
     },
-  }
+  },
 };

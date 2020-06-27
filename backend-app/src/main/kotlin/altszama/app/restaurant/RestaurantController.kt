@@ -31,7 +31,7 @@ class RestaurantController {
   @PostMapping("/restaurants/save")
   fun saveRestaurant(@Valid @RequestBody saveRequest: RestaurantSaveRequest): ResponseEntity<String> {
     restaurantService.createRestaurant(saveRequest)
-    return ResponseEntity(HttpStatus.CREATED)
+    return ResponseEntity("{}", HttpStatus.CREATED)
   }
 
   @GetMapping("/restaurants/{restaurantId}/edit.json")
@@ -48,6 +48,6 @@ class RestaurantController {
   @DeleteMapping("/restaurants/{restaurantId}/delete")
   fun deleteRestaurant(@PathVariable restaurantId: String): ResponseEntity<String> {
     restaurantService.deleteRestaurant(restaurantId)
-    return ResponseEntity(HttpStatus.CREATED)
+    return ResponseEntity("{}", HttpStatus.CREATED)
   }
 }

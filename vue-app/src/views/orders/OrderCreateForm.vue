@@ -107,7 +107,7 @@
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY
-  } from "../../store/modules/ModifyOrderEntryState";
+  } from "../../store/modules/ModifyOrderEntryModule";
   import MoneyInput from "../commons/MoneyInput";
   import TimePicker from "../commons/TimePicker";
   import ViewWrapper from "../commons/ViewWrapper";
@@ -146,12 +146,16 @@
     paymentByBlik = false;
     blikPhoneNumber = "";
 
+    connector: OrdersApiConnector;
+
     created() {
       this.$store.commit('setLoadingTrue')
     }
 
     mounted() {
-      new OrdersApiConnector().getOrderCreateData()
+      this.connector = new OrdersApiConnector(this.$store);
+
+      this.connector.getOrderCreateData()
         .then(response => {
           this.restaurantsList = response.restaurantsList;
 
@@ -234,7 +238,7 @@
         blikPhoneNumber: this.blikPhoneNumber
       };
 
-      new OrdersApiConnector().createOrder(order)
+      this.connector.createOrder(order)
         .then(() => router.push("/orders/"))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 

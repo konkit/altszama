@@ -28,20 +28,22 @@
 
 </template>
 
-<script>
+<script lang="ts">
   import router from '../../../router/index'
-  import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../../store/modules/ShowOrderState"
+  import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../../store/modules/ShowOrderModule"
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
 
-  export default {
-    name: "OrderLockedWarning",
-    props: ["orderId"],
-    methods: {
-      placeOrder() {
-        router.push("/orders/" + this.orderId + "/order_view")
-      },
-      unlockOrder() {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
-      },
+  @Component({})
+  export default class OrderLockedWarning extends Vue {
+    @Prop() orderId;
+
+    placeOrder() {
+      router.push("/orders/" + this.orderId + "/order_view")
+    }
+
+    unlockOrder() {
+      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
     }
   }
 </script>

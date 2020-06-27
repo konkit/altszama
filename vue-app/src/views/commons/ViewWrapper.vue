@@ -15,7 +15,7 @@
       </template>
     </v-app-bar>
 
-    <v-content class="view-content">
+    <v-main class="view-content">
       <div class="content-class">
         <slot></slot>
       </div>
@@ -27,7 +27,7 @@
         </div>
       </v-footer>
 
-    </v-content>
+    </v-main>
   </div>
 </template>
 

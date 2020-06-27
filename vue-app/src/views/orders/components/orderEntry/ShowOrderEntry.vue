@@ -57,70 +57,82 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import Price from '../../../commons/PriceElement.vue'
   import {
     CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
-    MARK_ORDER_ENTRY_AS_PAID_ACTION,
     DELETE_DISH_ENTRY_ACTION,
+    MARK_ORDER_ENTRY_AS_PAID_ACTION,
     NAMESPACE_SHOW_ORDER
-  } from "../../../../store/modules/ShowOrderState";
-  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../../../store/modules/ModifyOrderEntryState";
-  import {mapState} from "vuex";
+  } from "../../../../store/modules/ShowOrderModule";
+  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../../../store/modules/ModifyOrderEntryModule";
+  import Component from "vue-class-component";
+  import {Prop} from "vue-property-decorator";
+  import Vue from "vue";
 
-  export default {
-    name: 'show-order-entry',
-    props: ['index', 'orderEntry', 'dishEntry', 'currentUserId'],
-    methods: {
-      isOrderOwner() {
-        return this.order.orderCreatorId === this.currentUserId
-      },
-      isOrderEntryOwner(orderEntry) {
-        return orderEntry.userId === this.currentUserId
-      },
-      shouldShowMarkAsPaidButton(orderEntry) {
-        return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && (orderEntry.paymentStatus !== "MARKED" && orderEntry.paymentStatus !== "CONFIRMED") && this.isOrderOwner() === false)
-      },
-      shouldShowConfirmAsPaidButton(orderEntry) {
-        return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && orderEntry.paymentStatus !== "CONFIRMED" && this.isOrderOwner() === true)
-      },
-      paymentStatus(orderEntry) {
-        if (orderEntry.paymentStatus === "UNPAID") {
-          return "Unpaid"
-        } else if (orderEntry.paymentStatus === "MARKED") {
-          return "Marked as paid"
-        } else if (orderEntry.paymentStatus === "CONFIRMED") {
-          return "Payment confirmed"
-        } else {
-          return orderEntry.paymentStatus
-        }
-      },
-      confirmAsPaid(orderEntryId) {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
-      },
-      markAsPaid(orderEntryId) {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
-      },
-      editDishEntry() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {
-          orderEntryId: this.orderEntry.id,
-          dishEntryId: this.dishEntry.id
-        })
-      },
-      deleteDishEntry() {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
-          orderEntryId: this.orderEntry.id,
-          dishEntryId: this.dishEntry.id
-        });
-      },
-    },
-    computed: {
-      ...mapState(NAMESPACE_SHOW_ORDER, [
-        "order"
-      ])
-    },
+  @Component({
     components: {
       Price
+    }
+  })
+  export default class ShowOrderEntry extends Vue {
+    @Prop() index;
+    @Prop() orderEntry;
+    @Prop() dishEntry;
+    @Prop() currentUserId;
+
+    get order() {
+      return this.$store.state.showOrder.order;
+    }
+
+    isOrderOwner() {
+      return this.order.orderCreatorId === this.currentUserId
+    }
+
+    isOrderEntryOwner(orderEntry) {
+      return orderEntry.userId === this.currentUserId
+    }
+
+    shouldShowMarkAsPaidButton(orderEntry) {
+      return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && (orderEntry.paymentStatus !== "MARKED" && orderEntry.paymentStatus !== "CONFIRMED") && this.isOrderOwner() === false)
+    }
+
+    shouldShowConfirmAsPaidButton(orderEntry) {
+      return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && orderEntry.paymentStatus !== "CONFIRMED" && this.isOrderOwner() === true)
+    }
+
+    paymentStatus(orderEntry) {
+      if (orderEntry.paymentStatus === "UNPAID") {
+        return "Unpaid"
+      } else if (orderEntry.paymentStatus === "MARKED") {
+        return "Marked as paid"
+      } else if (orderEntry.paymentStatus === "CONFIRMED") {
+        return "Payment confirmed"
+      } else {
+        return orderEntry.paymentStatus
+      }
+    }
+
+    confirmAsPaid(orderEntryId) {
+      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
+    }
+
+    markAsPaid(orderEntryId) {
+      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
+    }
+
+    editDishEntry() {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {
+        orderEntryId: this.orderEntry.id,
+        dishEntryId: this.dishEntry.id
+      })
+    }
+
+    deleteDishEntry() {
+      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
+        orderEntryId: this.orderEntry.id,
+        dishEntryId: this.dishEntry.id
+      });
     }
   }
 </script>

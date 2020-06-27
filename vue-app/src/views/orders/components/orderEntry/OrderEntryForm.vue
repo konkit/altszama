@@ -24,8 +24,8 @@
         </template>
 
         <template slot="item" slot-scope="data">
-          <template v-if="typeof data.item !== 'object'">
-            <v-list-item-content v-text="data.item"></v-list-item-content>
+          <template v-if="typeof data.item.category !== 'undefined'">
+            <v-list-item-content v-text="data.item.category"></v-list-item-content>
           </template>
 
           <template v-else>
@@ -57,7 +57,7 @@
       </MoneyInput>
     </template>
 
-    <subheader>Side dishes:</subheader>
+    <v-subheader>Side dishes:</v-subheader>
 
     <side-dishes-input></side-dishes-input>
 
@@ -70,7 +70,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import moment from "moment"
   import CustomPolyfills from "../../../../lib/CustomPolyfills"
   import SideDishesInput from './SideDishesInput.vue'
@@ -84,92 +84,126 @@
     UPDATE_DISH_ID,
     UPDATE_NEW_DISH_NAME,
     UPDATE_NEW_DISH_PRICE,
-  } from "../../../../store/modules/ModifyOrderEntryState";
-  import {mapState} from "vuex"
+  } from "../../../../store/modules/ModifyOrderEntryModule";
   import MoneyInput from "../../../commons/MoneyInput";
+  import Vue from "vue";
+  import Component from "vue-class-component";
 
-  export default {
-    name: 'order-entry-form',
-    data: function () {
-      return {
-        newDish123: 1
-      }
-    },
-    methods: {
-      setDishAsNew() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_NEW}`)
-      },
-      setDishAsExisting() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`)
-      },
-      updateDishId(newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`, newValue);
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CLEAR_EDITED_SIDE_DISHES}`)
-      },
-      updateNewDishName(newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_NAME}`, newValue)
-      },
-      updateNewDishPrice(newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`, newValue)
-      },
-      updateAdditionalComments(newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ADDITIONAL_COMMENTS}`, newValue)
-      },
-      cancelEdit() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
-      },
-      onDishTypeToggle(e) {
-        console.log("onDishTypeToggle: ", e);
-
-        if (e === true) {
-          this.setDishAsNew()
-        } else if (e === false) {
-          this.setDishAsExisting()
-        } else {
-          console.warn("Dish type toggle returned wrong value")
-        }
-      }
-
-    },
-    computed: {
-      ...mapState("showOrder", [
-        "allDishesByCategory"
-      ]),
-      ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
-        "orderId",
-        "dishId",
-        "additionalComments",
-        "newDish",
-        "newDishName",
-        "newDishPrice",
-        "chosenSideDishes",
-      ]),
-      allDishesAtOnce() {
-        return CustomPolyfills.flatMap(this.allDishesByCategory, categoryData => {
-          let dishes = CustomPolyfills.flatMap(categoryData.dishes, dish => {
-            const price = (dish.price / 100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
-
-            let updateDesc = "";
-            if (dish.lastCrawled) {
-              updateDesc = `auto-updated ${dateToRel(dish.lastCrawled)}`
-            }
-
-            return Object.assign({}, {
-              text: `${dish.name}`,
-              value: dish.id,
-              subtitle: `Price: ${price}, ${updateDesc}`
-            })
-          });
-
-          dishes.unshift({"header": `Category: ${categoryData.category}`});
-
-          return dishes
-        })
-      }
-    },
+  @Component({
     components: {
       MoneyInput,
       SideDishesInput
+    }
+  })
+  export default class OrderEntryForm extends Vue {
+    setDishAsNew() {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_NEW}`)
+    }
+
+    setDishAsExisting() {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`)
+    }
+
+    updateDishId(newValue) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`, newValue);
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CLEAR_EDITED_SIDE_DISHES}`)
+    }
+
+    updateNewDishName(newValue) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_NAME}`, newValue)
+    }
+
+    updateNewDishPrice(newValue) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`, newValue)
+    }
+
+    updateAdditionalComments(newValue) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ADDITIONAL_COMMENTS}`, newValue)
+    }
+
+    cancelEdit() {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
+    }
+
+    onDishTypeToggle(e) {
+      console.log("onDishTypeToggle: ", e);
+
+      if (e === true) {
+        this.setDishAsNew()
+      } else if (e === false) {
+        this.setDishAsExisting()
+      } else {
+        console.warn("Dish type toggle returned wrong value")
+      }
+    }
+
+    get allDishesByCategory() {
+      return this.$store.state.showOrder.allDishesByCategory;
+    }
+
+    get orderId() {
+      return this.$store.state.modifyOrderEntry.orderId;
+    }
+
+    get dishId() {
+      return this.$store.state.modifyOrderEntry.dishId;
+    }
+
+    get additionalComments() {
+      return this.$store.state.modifyOrderEntry.additionalComments;
+    }
+
+    get newDish() {
+      return this.$store.state.modifyOrderEntry.newDish;
+    }
+
+    get newDishName() {
+      return this.$store.state.modifyOrderEntry.newDishName;
+    }
+
+    get newDishPrice() {
+      return this.$store.state.modifyOrderEntry.newDishPrice;
+    }
+
+    get chosenSideDishes() {
+      return this.$store.state.modifyOrderEntry.chosenSideDishes;
+    }
+
+    get allDishesAtOnce() {
+      let dishByCategoryMap = new Map(Object.entries(this.allDishesByCategory));
+
+      console.log("dishByCategoryMap", dishByCategoryMap);
+
+      let result = CustomPolyfills.flatMap(dishByCategoryMap, ([dishesFromCat, category]) => {
+        console.log("categoryData", [dishesFromCat, category]);
+
+        let dishes = CustomPolyfills.flatMap(dishesFromCat, ([, dish]) => {
+          console.log("dish: ", dish)
+
+          const price = (dish.price / 100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+
+          let updateDesc = "";
+          if (dish.lastCrawled) {
+            updateDesc = `auto-updated ${dateToRel(dish.lastCrawled)}`
+          }
+
+          return Object.assign({}, {
+            text: `${dish.name}`,
+            value: dish.id,
+            subtitle: `Price: ${price}, ${updateDesc}`
+          })
+        });
+
+        console.log("Dishes: ", dishes);
+
+        dishes.unshift({"header": `Category: ${category}`});
+
+        return dishes
+      });
+
+      console.log("Result: ", result);
+
+      return result;
     }
   }
 

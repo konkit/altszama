@@ -78,10 +78,13 @@
   </div>
 </template>
 
-<script>
-  export default {
-    props: ['groupedEntries'],
-    name: "UserOrders"
+<script lang="ts">
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
+
+  @Component({})
+  export default class UserOrders extends Vue {
+    @Prop() groupedEntries;
   }
 </script>
 

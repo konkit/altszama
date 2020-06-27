@@ -48,7 +48,11 @@
     telephone: string = '';
     address: string = '';
 
+    connector: DishesApiConnector;
+
     mounted() {
+      this.connector = new DishesApiConnector(this.$store);
+
       document.title = `Create restaurant | Alt Szama`
     }
 
@@ -60,8 +64,7 @@
         address: this.address,
       };
 
-      const connector = new DishesApiConnector();
-      connector.createRestaurant(restaurant)
+      this.connector.createRestaurant(restaurant)
         .then(() => router.push("/restaurants"))
         .catch(errResponse => ApiConnector.handleError(errResponse));
     }

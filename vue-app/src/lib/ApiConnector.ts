@@ -46,22 +46,9 @@ export default {
     })
   },
 
-  makeGet (relPath) {
-    this.token = store.state.token;
-    return Vue.http.get(backendUrl + relPath, headersWithToken(this.token))
-  },
-
-  makePost (relPath, formData) {
-    this.token = store.state.token;
-    return Vue.http.post(backendUrl + relPath, formData, headersWithToken(this.token))
-  },
-
-  makeDelete (relPath) {
-    this.token = store.state.token;
-    return Vue.http.delete(backendUrl + relPath, headersWithToken(this.token))
-  },
-
   handleError (errorResponse) {
+    console.log(errorResponse)
+
     if (errorResponse.status === 401) {
       const fullRoutePath = router.currentRoute.fullPath;
 
@@ -161,7 +148,7 @@ export default {
 
     console.log("url: ", url);
 
-    return this.makePost(url, subscribeData);
+    return Vue.http.post(backendUrl + url, subscribeData, headersWithToken(store.state.token))
   },
 
   logout () {

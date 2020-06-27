@@ -40,19 +40,8 @@ export default {
             });
         });
     },
-    makeGet: function (relPath) {
-        this.token = store.state.token;
-        return Vue.http.get(backendUrl + relPath, headersWithToken(this.token));
-    },
-    makePost: function (relPath, formData) {
-        this.token = store.state.token;
-        return Vue.http.post(backendUrl + relPath, formData, headersWithToken(this.token));
-    },
-    makeDelete: function (relPath) {
-        this.token = store.state.token;
-        return Vue.http.delete(backendUrl + relPath, headersWithToken(this.token));
-    },
     handleError: function (errorResponse) {
+        console.log(errorResponse);
         if (errorResponse.status === 401) {
             var fullRoutePath_1 = router.currentRoute.fullPath;
             store.commit("logoutUser");
@@ -140,7 +129,7 @@ export default {
         });
         var url = '/notification/subscribe';
         console.log("url: ", url);
-        return this.makePost(url, subscribeData);
+        return Vue.http.post(backendUrl + url, subscribeData, headersWithToken(store.state.token));
     },
     logout: function () {
         doLogout();

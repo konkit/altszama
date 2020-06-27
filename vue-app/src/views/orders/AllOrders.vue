@@ -66,8 +66,12 @@
       { text: 'Order creator', value: 'orderCreator' },
       ];
 
+    connector: OrdersApiConnector;
+
     mounted() {
-      new OrdersApiConnector().fetchAllOrders()
+      this.connector = new OrdersApiConnector(this.$store);
+
+      this.connector.fetchAllOrders()
         .then(allOrdersList => {
           this.allOrdersList = allOrdersList.allOrdersList;
           this.$store.commit('setLoadingFalse');

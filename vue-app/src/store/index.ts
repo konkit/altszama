@@ -1,19 +1,27 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import ShowOrderState from './modules/ShowOrderState'
-import ShowRestaurantState from "./modules/ShowRestaurantState";
-import ModifyOrderEntryState from "./modules/ModifyOrderEntryState";
+import {showOrderModule} from './modules/ShowOrderModule'
+import {showRestaurantModule} from "./modules/ShowRestaurantModule";
+import {modifyOrderEntryModule} from "./modules/ModifyOrderEntryModule";
 
 Vue.use(Vuex);
+
+export interface RootState {
+  loading: boolean,
+  username: string,
+  token: string,
+  errors: string[],
+  masterNavDrawerOpened: boolean,
+}
 
 export default new Vuex.Store({
   state: {
     loading: false,
-    username: localStorage.getItem("username"),
-    token: localStorage.getItem("token"),
+    username: localStorage.getItem("username") || "",
+    token: localStorage.getItem("token") || "",
     errors: [],
-    masterNavDrawerOpened: null,
+    masterNavDrawerOpened: false,
   },
   mutations: {
     setLoadingTrue (state) {
@@ -66,10 +74,10 @@ export default new Vuex.Store({
   },
   modules: {
     // Orders
-    showOrder: ShowOrderState,
-    modifyOrderEntry: ModifyOrderEntryState,
+    showOrder: showOrderModule,
+    modifyOrderEntry: modifyOrderEntryModule,
 
     // Dishes
-    showRestaurant: ShowRestaurantState,
+    showRestaurant: showRestaurantModule,
   }
 })

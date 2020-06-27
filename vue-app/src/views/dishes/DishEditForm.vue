@@ -51,8 +51,6 @@
   import Vue from "vue"
   import router from '../../router/index'
 
-  const connector = new DishesApiConnector();
-
   @Component({
     components: {
       ViewWrapper,
@@ -71,12 +69,14 @@
     categories = [];
     initialSideDishes = [];
 
+    connector: DishesApiConnector;
+
     mounted() {
       this.restaurantId = this.$route.params.id;
       this.dishId = this.$route.params.dishId;
+      this.connector = new DishesApiConnector(this.$store);
 
-      const connector = new DishesApiConnector();
-      connector.getDishEditData(this.restaurantId, this.dishId)
+      this.connector.getDishEditData(this.restaurantId, this.dishId)
         .then(dishData => {
           this.name = dishData.dish.name;
           this.price = dishData.dish.price;
@@ -110,7 +110,7 @@
         sideDishes: sideDishes
       };
 
-      connector.editDish(this.restaurantId, dishObj)
+      this.connector.editDish(this.restaurantId, dishObj)
         .then(() => router.push("/restaurants/show/" + this.restaurantId))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 

@@ -78,10 +78,12 @@
     restaurants = [];
     restaurantsEntries = [];
 
-    mounted() {
-      const connector = new DishesApiConnector();
+    connector: DishesApiConnector;
 
-      connector.getRestaurants()
+    mounted() {
+      this.connector = new DishesApiConnector(this.$store);
+
+      this.connector.getRestaurants()
         .then(payload => {
           this.restaurants = payload.restaurants;
           this.restaurantsEntries = this.restaurants.map(r => this.mapToRestaurantEntry(r));

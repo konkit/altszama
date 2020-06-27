@@ -20,24 +20,28 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
   import {
     NAMESPACE_MODIFY_ORDER_ENTRY,
     SET_DISH_ENTRY_CREATING,
-  } from "../../../../store/modules/ModifyOrderEntryState";
+  } from "../../../../store/modules/ModifyOrderEntryModule";
   import CreateOrderEntry from "./CreateOrderEntry";
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import {Prop} from "vue-property-decorator";
 
-  export default {
-    name: "NewOrderEntryCard",
-    props: ["username", "isEntryCreating"],
-    methods: {
-      createEntry() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
-      },
-    },
+  @Component({
     components: {
       CreateOrderEntry
     }
+  })
+  export default class NewOrderEntryCard extends Vue {
+    @Prop() username;
+    @Prop() isEntryCreating;
+
+    createEntry() {
+        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
+      }
   }
 </script>
 

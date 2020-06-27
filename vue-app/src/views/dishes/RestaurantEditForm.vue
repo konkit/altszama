@@ -38,8 +38,6 @@
   import ApiConnector from "../../lib/ApiConnector";
   import router from '../../router/index'
 
-  const connector = new DishesApiConnector();
-
   @Component({
     components: {
       ViewWrapper,
@@ -56,11 +54,13 @@
     telephone = '';
     address = '';
 
+    connector: DishesApiConnector;
+
     mounted() {
       this.restaurantId = this.$route.params.id;
+      this.connector = new DishesApiConnector(this.$store);
 
-      const connector = new DishesApiConnector();
-      connector.getRestaurantEditData(this.restaurantId)
+      this.connector.getRestaurantEditData(this.restaurantId)
         .then(payload => {
           this.name = payload.name;
           this.url = payload.url;
@@ -84,7 +84,7 @@
         address: this.address,
       };
 
-      connector.editRestaurant(this.restaurantId, restaurant)
+      this.connector.editRestaurant(this.restaurantId, restaurant)
         .then(() => router.push("/restaurants/show/" + this.restaurantId))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 

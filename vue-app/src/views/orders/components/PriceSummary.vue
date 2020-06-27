@@ -56,20 +56,20 @@
 
 <script>
   import Price from "../../commons/PriceElement"
+  import Vue from "vue";
 
-  export default {
-    name: "PriceSummary",
-    props: [
-      "orderDecreaseInPercent",
-      "orderDeliveryCostPerEverybody",
-      "basePriceSum",
-      "orderDeliveryCostPerDish",
-      "allEatingPeopleCount",
-      "totalPrice"
-    ],
+  @Component({
     components: {
       Price,
     }
+  })
+  export default class PriceSummary extends Vue {
+    @Prop() orderDecreaseInPercent;
+    @Prop() orderDeliveryCostPerEverybody;
+    @Prop() basePriceSum;
+    @Prop() orderDeliveryCostPerDish;
+    @Prop() allEatingPeopleCount;
+    @Prop() totalPrice;
   }
 </script>
 

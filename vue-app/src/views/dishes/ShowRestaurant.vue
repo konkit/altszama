@@ -62,7 +62,7 @@
   import ErrorsComponent from '../commons/Errors'
   import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable'
   import LoadingView from "../commons/LoadingView";
-  import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantState"
+  import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantModule"
   import router from "../../router/index"
   import moment from "moment"
   import ViewWrapper from "../commons/ViewWrapper";

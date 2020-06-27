@@ -27,53 +27,56 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import ErrorsComponent from '../../../commons/Errors.vue'
   import Spinner from '../../../commons/Spinner.vue'
 
   import OrderEntryForm from './OrderEntryForm.vue'
-  import {mapState} from "vuex"
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY,
     SET_ENTRY_LOADING_TRUE,
     SETUP_EDIT_ORDER_ENTRY_ACTION,
     UPDATE_ORDER_ENTRY_ACTION
-  } from "../../../../store/modules/ModifyOrderEntryState";
+  } from "../../../../store/modules/ModifyOrderEntryModule";
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import {Prop} from "vue-property-decorator";
 
-  export default {
-    name: 'edit-order-entry',
-    props: ['index', 'orderEntry', 'dishEntry'],
-    data() {
-      return {}
-    },
-    created() {
-      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`)
-    },
-    mounted() {
-      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SETUP_EDIT_ORDER_ENTRY_ACTION}`, {dishEntry: this.dishEntry})
-    },
-    methods: {
-      submitForm(e) {
-        e.preventDefault();
-
-        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ORDER_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id});
-
-        return false;
-      },
-      cancelEdit() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
-      },
-    },
-    computed: {
-      ...mapState(NAMESPACE_MODIFY_ORDER_ENTRY, [
-        "loadingEntry",
-      ]),
-    },
+  @Component({
     components: {
       ErrorsComponent,
       Spinner,
       OrderEntryForm,
+    }
+  })
+  export default class EditOrderEntry extends Vue {
+    @Prop() index;
+    @Prop() orderEntry;
+    @Prop() dishEntry;
+
+    created() {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`)
+    }
+
+    mounted() {
+      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SETUP_EDIT_ORDER_ENTRY_ACTION}`, {dishEntry: this.dishEntry})
+    }
+
+    submitForm(e) {
+      e.preventDefault();
+
+      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ORDER_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id});
+
+      return false;
+    }
+
+    cancelEdit() {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
+    }
+
+    get loadingEntry() {
+      return this.$store.state.modifyOrderEntry.loadingEntry;
     }
   }
 

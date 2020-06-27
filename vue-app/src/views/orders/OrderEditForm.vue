@@ -93,7 +93,7 @@
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY
-  } from "../../store/modules/ModifyOrderEntryState";
+  } from "../../store/modules/ModifyOrderEntryModule";
   import MoneyInput from "../commons/MoneyInput";
   import TimePicker from "../commons/TimePicker";
   import OrderStateButtons from "./components/OrderStateButtons";
@@ -102,7 +102,7 @@
   import Component from "vue-class-component";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import ApiConnector from "../../lib/ApiConnector";
-  import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "../../store/modules/ShowOrderState";
+  import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "../../store/modules/ShowOrderModule";
 
   @Component({
     components: {
@@ -131,12 +131,16 @@
     bankTransferNumber = "";
     paymentByBlik = false;
     blikPhoneNumber = "";
+
+    connector: OrdersApiConnector;
     
     mounted() {
       this.orderId = this.$route.params.id;
       // this.$store.dispatch(`editOrder/${INIT_EDIT_ORDER_ACTION}`, {orderId: this.orderId})
 
-      new OrdersApiConnector().getOrderEditData(this.orderId)
+      this.connector = new OrdersApiConnector(this.$store);
+
+      this.connector.getOrderEditData(this.orderId)
         .then(response => {
           this.orderId = response.orderId;
 
@@ -177,7 +181,7 @@
         blikPhoneNumber: this.blikPhoneNumber || ""
       };
 
-      new OrdersApiConnector().editOrder(order)
+      this.connector.editOrder(order)
         .then(() => {
           this.$store.commit('setLoadingTrue');
           this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});

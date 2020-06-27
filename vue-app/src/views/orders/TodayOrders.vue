@@ -145,10 +145,14 @@
     currentOrderEntries = [];
     ordersList = [];
 
+    connector: OrdersApiConnector;
+
     mounted() {
       ApiConnector.initializePushNotifications();
 
-      new OrdersApiConnector().fetchTodaysOrders()
+      this.connector = new OrdersApiConnector(this.$store);
+
+      this.connector.fetchTodaysOrders()
         .then(todayOrdersData => {
           this.currentOrderEntries = todayOrdersData.currentOrderEntries;
           this.ordersList = todayOrdersData.ordersList;

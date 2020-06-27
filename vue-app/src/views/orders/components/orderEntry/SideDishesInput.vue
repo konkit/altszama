@@ -63,9 +63,9 @@
 
         <v-list-item-content>
           <div>
-          <v-btn text @click="addSideDishEntry()">
-            Add side dish &nbsp; <i class="fa fa-plus"></i>
-          </v-btn>
+            <v-btn text @click="addSideDishEntry()">
+              Add side dish &nbsp; <i class="fa fa-plus"></i>
+            </v-btn>
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -73,7 +73,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import {
     ADD_SIDE_DISH_ACTION,
     NAMESPACE_MODIFY_ORDER_ENTRY,
@@ -83,90 +83,99 @@
     UPDATE_NEW_SIDE_DISH_NAME,
     UPDATE_NEW_SIDE_DISH_PRICE,
     UPDATE_SIDE_DISH_ACTION
-  } from "../../../../store/modules/ModifyOrderEntryState";
+  } from "../../../../store/modules/ModifyOrderEntryModule";
   import MoneyInput from "../../../commons/MoneyInput";
+  import Vue from "vue";
+  import Component from "vue-class-component";
 
-  export default {
-    name: 'side-dishes-input',
-    methods: {
-      removeSideDish(sideDishIndex) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${REMOVE_SIDE_DISH}`, {sdIndex: sideDishIndex});
-
-        this.$forceUpdate();
-      },
-      addSideDishEntry() {
-        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${ADD_SIDE_DISH_ACTION}`);
-
-        this.$forceUpdate();
-      },
-      setAsNewSideDish(sdIndex) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_NEW}`, {sdIndex: sdIndex});
-
-        this.$forceUpdate();
-      },
-      setAsExistingSideDish(sdIndex) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_EXISTING}`, {sdIndex: sdIndex});
-
-        this.$forceUpdate();
-      },
-      updateNewSideDishName(sdIndex, newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_NAME}`, {
-          sdIndex: sdIndex,
-          newValue: newValue
-        });
-
-        this.$forceUpdate();
-      },
-      changeNewSideDishPrice(sdIndex, newValue) {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_PRICE}`, {
-          sdIndex: sdIndex,
-          newValue: newValue
-        });
-
-        this.$forceUpdate();
-      },
-      updateSideDishComboBox(sdIndex, sideDishId) {
-        this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_SIDE_DISH_ACTION}`, {
-          sdIndex: sdIndex,
-          sideDishId: sideDishId
-        });
-
-        this.$forceUpdate();
-      },
-      onSideDishTypeToggle(sdIndex, e) {
-        console.log("onSideDishTypeToggle: ", e);
-
-        if (e === true) {
-          this.setAsNewSideDish(sdIndex)
-        } else if (e === false) {
-          this.setAsExistingSideDish(sdIndex)
-        } else {
-          console.warn("Side dish type toggle returned wrong value")
-        }
-      }
-
-    },
-    computed: {
-      dishId() {
-        return this.$store.state.modifyOrderEntry.dishId;
-      },
-      dishIdToSideDishesMap() {
-        return this.$store.state.showOrder.dishIdToSideDishesMap;
-      },
-      chosenSideDishes() {
-        return this.$store.state.modifyOrderEntry.chosenSideDishes;
-      },
-      sideDishesItems() {
-        return this.dishIdToSideDishesMap[this.dishId].map(entry => {
-          var price = (entry.price / 100.0).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
-          var text = `${entry.name} (${price})`;
-
-          return Object.assign({}, {text: text, value: entry.id})
-        })
-      }
-    },
+  @Component({
     components: {
       MoneyInput,
+    }
+  })
+  export default class SideDishesInput extends Vue {
+    removeSideDish(sideDishIndex) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${REMOVE_SIDE_DISH}`, {sdIndex: sideDishIndex});
+
+      this.$forceUpdate();
+    }
+
+    addSideDishEntry() {
+      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${ADD_SIDE_DISH_ACTION}`);
+
+      this.$forceUpdate();
+    }
+
+    setAsNewSideDish(sdIndex) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_NEW}`, {sdIndex: sdIndex});
+
+      this.$forceUpdate();
+    }
+
+    setAsExistingSideDish(sdIndex) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_EXISTING}`, {sdIndex: sdIndex});
+
+      this.$forceUpdate();
+    }
+
+    updateNewSideDishName(sdIndex, newValue) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_NAME}`, {
+        sdIndex: sdIndex,
+        newValue: newValue
+      });
+
+      this.$forceUpdate();
+    }
+
+    changeNewSideDishPrice(sdIndex, newValue) {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_PRICE}`, {
+        sdIndex: sdIndex,
+        newValue: newValue
+      });
+
+      this.$forceUpdate();
+    }
+
+    updateSideDishComboBox(sdIndex, sideDishId) {
+      this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_SIDE_DISH_ACTION}`, {
+        sdIndex: sdIndex,
+        sideDishId: sideDishId
+      });
+
+      this.$forceUpdate();
+    }
+
+    onSideDishTypeToggle(sdIndex, e) {
+      console.log("onSideDishTypeToggle: ", e);
+
+      if (e === true) {
+        this.setAsNewSideDish(sdIndex)
+      } else if (e === false) {
+        this.setAsExistingSideDish(sdIndex)
+      } else {
+        console.warn("Side dish type toggle returned wrong value")
+      }
+    }
+
+    get dishId() {
+      return this.$store.state.modifyOrderEntry.dishId;
+    }
+
+    get dishIdToSideDishesMap() {
+      return this.$store.state.showOrder.dishIdToSideDishesMap;
+    }
+
+    get chosenSideDishes() {
+      return this.$store.state.modifyOrderEntry.chosenSideDishes;
+    }
+
+    get sideDishesItems() {
+      return this.dishIdToSideDishesMap[this.dishId].map(entry => {
+        var price = (entry.price / 100.0).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
+        var text = `${entry.name} (${price})`;
+
+        return Object.assign({}, {text: text, value: entry.id})
+      })
     }
   }
 

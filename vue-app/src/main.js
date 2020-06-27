@@ -7,8 +7,10 @@ import store from './store';
 import VueResource from 'vue-resource';
 import VueNumeric from 'vue-numeric';
 import vuetify from './plugins/vuetify';
+import Vuex from "vuex";
 Vue.use(VueResource);
 Vue.use(VueNumeric);
+Vue.use(Vuex);
 router.beforeEach(function (to, from, next) {
     document.title = "Alt Szama";
     next();

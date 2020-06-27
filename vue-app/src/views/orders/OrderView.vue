@@ -139,7 +139,7 @@
   import PriceSummary from "./components/PriceSummary";
   import TimePicker from "../commons/TimePicker";
   import ViewWrapper from "../commons/ViewWrapper";
-  import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../store/modules/ShowOrderState"
+  import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../store/modules/ShowOrderModule"
   import router from '../../router/index'
   import UserOrders from "./components/orderView/UserOrders";
   import Vue from "vue";
@@ -194,11 +194,14 @@
     totalPrice = 0;
     approxTimeOfDelivery = "12:00";
 
+    connector: OrdersApiConnector;
+
     mounted() {
       this.orderId = this.$route.params.id;
+      this.connector = new OrdersApiConnector(this.$store);
       // this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
 
-      new OrdersApiConnector().fetchOrderView(this.orderId)
+      this.connector.fetchOrderView(this.orderId)
         .then(responseObj => {
           this.orderState = responseObj.orderState;
           this.orderDecreaseInPercent = responseObj.orderDecreaseInPercent;
@@ -221,7 +224,7 @@
     submitForm() {
       // this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, {approxTimeOfDelivery: this.approxTimeOfDelivery});
 
-      new OrdersApiConnector().makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery})
+      this.connector.makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery})
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false

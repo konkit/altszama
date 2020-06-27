@@ -47,7 +47,7 @@
           </v-list-item>
 
           <template v-if="dishEntryIndex < orderEntry.dishEntries.length - 1">
-            <v-divider  :key="dishEntryIndex" class="dishes-divider"></v-divider>
+            <v-divider :key="dishEntryIndex" class="dishes-divider"></v-divider>
           </template>
 
         </template>
@@ -87,7 +87,7 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
   import Price from '../../../commons/PriceElement.vue'
   import CreateOrderEntry from './CreateOrderEntry.vue'
   import EditOrderEntry from './EditOrderEntry.vue'
@@ -96,45 +96,61 @@
   import {
     NAMESPACE_MODIFY_ORDER_ENTRY,
     SET_DISH_ENTRY_CREATING,
-  } from "../../../../store/modules/ModifyOrderEntryState";
+  } from "../../../../store/modules/ModifyOrderEntryModule";
   import PaymentStatus from "../PaymentStatus";
+  import Vue from "vue";
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
 
-  export default {
-    name: "OrderEntriesCard",
-    props: ["order", "orderEntry", "entryId", "currentUserId"],
-    methods: {
-      isOrderEntryOwner(orderEntry) {
-        return orderEntry.userId === this.currentUserId
-      },
-      paymentStatus(orderEntry) {
-        if (orderEntry.paymentStatus === "UNPAID") {
-          return "Unpaid"
-        } else if (orderEntry.paymentStatus === "MARKED") {
-          return "Marked as paid"
-        } else if (orderEntry.paymentStatus === "CONFIRMED") {
-          return "Payment confirmed"
-        } else {
-          return orderEntry.paymentStatus
-        }
-      },
-      createEntry() {
-        this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
-      },
-    },
-    computed: {
-      ...mapState('modifyOrderEntry', [
-        "isEntryCreating",
-        "isEntryEdited",
-        "orderEntryId",
-        "dishEntryId",
-      ])
-    },
+  @Component({
     components: {
       PaymentStatus,
       Price,
       CreateOrderEntry,
       EditOrderEntry,
       ShowOrderEntry
+    }
+  })
+  export default class OrderEntriesCard extends Vue {
+    @Prop() order;
+    @Prop() orderEntry;
+    @Prop() entryId;
+    @Prop() currentUserId;
+
+    isOrderEntryOwner(orderEntry) {
+      return orderEntry.userId === this.currentUserId
+    }
+
+    paymentStatus(orderEntry) {
+      if (orderEntry.paymentStatus === "UNPAID") {
+        return "Unpaid"
+      } else if (orderEntry.paymentStatus === "MARKED") {
+        return "Marked as paid"
+      } else if (orderEntry.paymentStatus === "CONFIRMED") {
+        return "Payment confirmed"
+      } else {
+        return orderEntry.paymentStatus
+      }
+    }
+
+    createEntry() {
+      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
+    }
+
+    get isEntryCreating() {
+      return this.$store.state.modifyOrderEntry.isEntryCreating;
+    }
+
+    get isEntryEdited() {
+      return this.$store.state.modifyOrderEntry.isEntryEdited;
+    }
+
+    get orderEntryId() {
+      return this.$store.state.modifyOrderEntry.orderEntryId;
+    }
+
+    get dishEntryId() {
+      return this.$store.state.modifyOrderEntry.dishEntryId;
     }
   }
 </script>

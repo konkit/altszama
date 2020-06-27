@@ -99,7 +99,7 @@
   </ViewWrapper>
 </template>
 
-<script>
+<script lang="ts">
   import LoadingView from '../commons/LoadingView.vue'
   import {mapState} from 'vuex'
   import {
@@ -107,7 +107,7 @@
     NAMESPACE_SHOW_ORDER,
     SET_ORDER_AS_DELIVERED_ACTION,
     UNLOCK_ORDER_ACTION,
-  } from "../../store/modules/ShowOrderState"
+  } from "../../store/modules/ShowOrderModule"
   import router from '../../router/index'
   import PriceSummary from "./components/PriceSummary";
   import ViewWrapper from "../commons/ViewWrapper";
@@ -117,59 +117,11 @@
   import OrderDataSummary from "./components/OrderDataSummary";
   import PaymentOptionsSummary from "./components/PaymentOptionsSummary";
   import OrderLockedWarning from "./components/OrderLockedWarning";
+  import Component from "vue-class-component";
+  import Vue from "vue";
 
-  export default {
-    data() {
-      return {
-        orderId: this.$route.params.id,
-      }
-    },
-    mounted() {
-      this.fetchOrder()
-    },
-    methods: {
-      title() {
-        return `[${this.order.orderState}] Order from ${this.order.restaurantName} (${this.order.orderDate})`
-      },
-      fetchOrder() {
-        this.$store.commit('setLoadingTrue');
-        return this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
-      },
-      isOrdering() {
-        return this.order.orderState === 'ORDERING';
-      },
-      isOrderOwner() {
-        return this.order.orderCreatorId === this.currentUserId
-      },
-      placeOrder() {
-        router.push("/orders/" + this.orderId + "/order_view")
-      },
-      unlockOrder() {
-        this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
-      },
-      setAsDelivered() {
-        return this.$store.dispatch(`showOrder/${SET_ORDER_AS_DELIVERED_ACTION}`, {orderId: this.orderId});
-      },
-      edit() {
-        router.push("/orders/" + this.orderId + '/edit')
-      },
-      canShowPlaceOrderButton() {
-        return this.isOrderOwner() && (this.orderState === 'CREATED' || this.orderState === 'ORDERING')
-      },
-      isPlaceOrderButtonDisabled() {
-        return this.orderEntries.length === 0
-      },
-      allEatingPeopleCount() {
-        return CustomPolyfills.flatMap(this.orderEntries, e => e.dishEntries).length;
-      }
-    },
+  @Component({
     computed: {
-      numberOfCurrentUserEntries() {
-        return this.orderEntries.filter(e => e.userId === this.currentUserId).length;
-      },
-      orderState() {
-        return this.$store.state.showOrder.order.orderState;
-      },
       ...mapState({
         username: state => state.username,
       }),
@@ -199,6 +151,67 @@
       ViewWrapper,
       PriceSummary,
       LoadingView,
+    }
+  })
+  export default class ShowOrder extends Vue {
+    orderId;
+
+    mounted() {
+      this.orderId = this.$route.params.id;
+      this.fetchOrder()
+    }
+
+    title() {
+      return `[${this.order.orderState}] Order from ${this.order.restaurantName} (${this.order.orderDate})`
+    }
+
+    fetchOrder() {
+      this.$store.commit('setLoadingTrue');
+      return this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
+    }
+
+    isOrdering() {
+      return this.order.orderState === 'ORDERING';
+    }
+
+    isOrderOwner() {
+      return this.order.orderCreatorId === this.currentUserId
+    }
+
+    placeOrder() {
+      router.push("/orders/" + this.orderId + "/order_view")
+    }
+
+    unlockOrder() {
+      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
+    }
+
+    setAsDelivered() {
+      return this.$store.dispatch(`showOrder/${SET_ORDER_AS_DELIVERED_ACTION}`, {orderId: this.orderId});
+    }
+
+    edit() {
+      router.push("/orders/" + this.orderId + '/edit')
+    }
+
+    canShowPlaceOrderButton() {
+      return this.isOrderOwner() && (this.orderState === 'CREATED' || this.orderState === 'ORDERING')
+    }
+
+    isPlaceOrderButtonDisabled() {
+      return this.orderEntries.length === 0
+    }
+
+    allEatingPeopleCount() {
+      return CustomPolyfills.flatMap(this.orderEntries, e => e.dishEntries).length;
+    }
+
+    get numberOfCurrentUserEntries() {
+      return this.orderEntries.filter(e => e.userId === this.currentUserId).length;
+    }
+
+    get orderState() {
+      return this.$store.state.showOrder.order.orderState;
     }
   }
 </script>

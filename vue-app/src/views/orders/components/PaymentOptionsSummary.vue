@@ -65,44 +65,43 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from "vue";
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
 
-  export default {
-    name: "PaymentOptionsSummary",
-    props: [
-      "order",
-    ],
-    methods: {
-      formatBankAccountNr: (unformattedInput) => {
-        if (unformattedInput) {
-          var input = unformattedInput.trim();
+  @Component({})
+  export default class PaymentOptionsSummary extends Vue {
+    @Prop() order;
 
-          if (input.length === 26) {
-            var result = input.slice(0, 2) + " ";
+    formatBankAccountNr(unformattedInput) {
+      if (unformattedInput) {
+        var input = unformattedInput.trim();
 
-            for(var i=2; i<input.length; i+=4) {
-              result += input.slice(i, i+4) + " "
-            }
+        if (input.length === 26) {
+          var result = input.slice(0, 2) + " ";
 
-            return result;
+          for (var i = 2; i < input.length; i += 4) {
+            result += input.slice(i, i + 4) + " "
           }
+
+          return result;
         }
-
-        return unformattedInput;
-      },
-      formatBlikPhoneNumber: (unformattedInput) => {
-        if (unformattedInput) {
-          var input = unformattedInput.trim();
-
-          if (input.length >= 9) {
-            return `${input.slice(0, input.length -6)} ${input.slice(input.length-6, input.length-3)} ${input.slice(input.length-3, input.length)}`
-          }
-        }
-
-        return unformattedInput;
       }
-    },
-    components: {
+
+      return unformattedInput;
+    }
+
+    formatBlikPhoneNumber(unformattedInput) {
+      if (unformattedInput) {
+        var input = unformattedInput.trim();
+
+        if (input.length >= 9) {
+          return `${input.slice(0, input.length - 6)} ${input.slice(input.length - 6, input.length - 3)} ${input.slice(input.length - 3, input.length)}`
+        }
+      }
+
+      return unformattedInput;
     }
   }
 

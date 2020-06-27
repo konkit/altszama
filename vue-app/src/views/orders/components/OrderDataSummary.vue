@@ -10,7 +10,7 @@
 
         <v-list-item-content>
           <!--<v-list-item-title>-->
-            {{ this.order.orderCreatorUsername }}
+          {{ this.order.orderCreatorUsername }}
           <!--</v-list-item-title>-->
         </v-list-item-content>
       </v-list-item>
@@ -22,7 +22,7 @@
 
         <v-list-item-content>
           <!--<v-list-item-title>-->
-            {{ this.order.timeOfOrder }}
+          {{ this.order.timeOfOrder }}
           <!--</v-list-item-title>-->
         </v-list-item-content>
       </v-list-item>
@@ -42,22 +42,19 @@
   </div>
 </template>
 
-<script>
-  export default {
-    name: "OrderDataSummary",
-    props: [
-      "order",
-    ],
-    methods: {
-      timeOfDeliveryOrNA() {
-        if (this.order.timeOfDelivery != null) {
-          return this.order.timeOfDelivery
-        } else {
-          return "As ASAP as possible"
-        }
-      },
-    },
-    components: {
+<script lang="ts">
+  import Vue from "vue";
+  import {Prop} from "vue-property-decorator";
+
+  export default class OrderDataSummary extends Vue {
+    @Prop() order;
+
+    timeOfDeliveryOrNA() {
+      if (this.order.timeOfDelivery != null) {
+        return this.order.timeOfDelivery
+      } else {
+        return "As ASAP as possible"
+      }
     }
   }
 </script>

@@ -1,16 +1,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import ShowOrderState from './modules/ShowOrderState';
-import ShowRestaurantState from "./modules/ShowRestaurantState";
+import { showOrderModule } from './modules/ShowOrderModule';
+import { showRestaurantModule } from "./modules/ShowRestaurantModule";
 import ModifyOrderEntryState from "./modules/ModifyOrderEntryState";
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         loading: false,
-        username: localStorage.getItem("username"),
-        token: localStorage.getItem("token"),
+        username: localStorage.getItem("username") || "",
+        token: localStorage.getItem("token") || "",
         errors: [],
-        masterNavDrawerOpened: null,
+        masterNavDrawerOpened: false,
     },
     mutations: {
         setLoadingTrue: function (state) {
@@ -66,10 +66,10 @@ export default new Vuex.Store({
     },
     modules: {
         // Orders
-        showOrder: ShowOrderState,
+        showOrder: showOrderModule,
         modifyOrderEntry: ModifyOrderEntryState,
         // Dishes
-        showRestaurant: ShowRestaurantState,
+        showRestaurant: showRestaurantModule,
     }
 });
 //# sourceMappingURL=index.js.map
