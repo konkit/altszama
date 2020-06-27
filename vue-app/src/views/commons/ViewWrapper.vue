@@ -2,7 +2,7 @@
   <div class="view-wrapper">
     <v-app-bar app>
       <v-app-bar-nav-icon v-if="shouldDisplayHamburger()"
-                           @click.stop="toggleMasterNavDrawerOpened()"></v-app-bar-nav-icon>
+                          @click.stop="toggleMasterNavDrawerOpened()"></v-app-bar-nav-icon>
 
       <back-button v-if="shouldDisplayBackButton()" :href="backpath"></back-button>
 
@@ -23,7 +23,8 @@
 
       <v-footer height="auto">
         <div class="footer-info pa-4">
-          Please direct all your wishes and complaints to&nbsp;<a href="mailto:lukasztenerowicz+altszama@gmail.com">Łukasz Tenerowicz</a>
+          Please direct all your wishes and complaints to&nbsp;<a href="mailto:lukasztenerowicz+altszama@gmail.com">Łukasz
+          Tenerowicz</a>
         </div>
       </v-footer>
 
@@ -31,36 +32,42 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import BackButton from "./BackButton2";
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import {Prop} from "vue-property-decorator";
 
-  export default {
-    name: "ViewWrapper",
+  @Component({
     components: {BackButton},
-    props: ['title', 'backpath'],
-    methods: {
-      titleText() {
-        if (this.loading) {
-          return "Loading ..."
-        } else {
-          return this.title;
-        }
-      },
-      shouldDisplayHamburger() {
-        return !this.backpath;
-      },
-      shouldDisplayBackButton() {
-        return this.backpath;
-      },
-      toggleMasterNavDrawerOpened() {
-        this.$store.commit("toggleMasterNavigationDrawerOpened");
+  })
+  export default class ViewWrapper extends Vue {
+    @Prop() title;
+    @Prop() backpath;
+
+    titleText() {
+      if (this.loading) {
+        return "Loading ..."
+      } else {
+        return this.title;
       }
-    },
-    computed: {
-      loading() {
-        return this.$store.state.loading;
-      }
-    },
+    }
+
+    shouldDisplayHamburger() {
+      return !this.backpath;
+    }
+
+    shouldDisplayBackButton() {
+      return this.backpath;
+    }
+
+    toggleMasterNavDrawerOpened() {
+      this.$store.commit("toggleMasterNavigationDrawerOpened");
+    }
+
+    get loading() {
+      return this.$store.state.loading;
+    }
   }
 </script>
 

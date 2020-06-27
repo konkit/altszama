@@ -8,42 +8,12 @@
   </v-text-field>
 </template>
 
-<script>
-  export default {
-    name: "MoneyInput",
-    props: {
-      label: {
-        type: String,
-        default: "Price"
-      },
-      value: {
-        type: Number
-      },
-      currency: {
-        type: String,
-        default: "zł"
-      }
-    },
-    data() {
-      return {
-        stringValue: "",
-        newStringValue: "",
-      }
-    },
-    mounted() {
-      const newValue = calcNewValue(this.value, this.currency);
+<script lang="ts">
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import {Prop} from "vue-property-decorator";
 
-      this.stringValue = newValue;
-      this.newStringValue = newValue;
-    },
-    methods: {
-      onInput(event) {
-        this.newStringValue = event;
-      },
-      onBlur() {
-        this.$emit("input", fromString(this.newStringValue))
-      }
-    },
+  @Component({
     watch: {
       value(newVal) {
         const newValue = calcNewValue(newVal, this.currency);
@@ -51,6 +21,29 @@
         this.stringValue = newValue;
         this.newStringValue = newValue;
       }
+    }
+  })
+  export default class MoneyInput extends Vue {
+    @Prop() label: string = "Price";
+    @Prop() value: number;
+    @Prop() currency: string = "zł";
+
+    private stringValue: "";
+    private newStringValue: "";
+
+    mounted() {
+      const newValue = calcNewValue(this.value, this.currency);
+
+      this.stringValue = newValue;
+      this.newStringValue = newValue;
+    }
+
+    onInput(event) {
+      this.newStringValue = event;
+    }
+
+    onBlur() {
+      this.$emit("input", fromString(this.newStringValue))
     }
   }
 

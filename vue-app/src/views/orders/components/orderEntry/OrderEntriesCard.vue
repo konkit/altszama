@@ -92,7 +92,6 @@
   import CreateOrderEntry from './CreateOrderEntry.vue'
   import EditOrderEntry from './EditOrderEntry.vue'
   import ShowOrderEntry from './ShowOrderEntry.vue'
-  import {mapState} from 'vuex'
   import {
     NAMESPACE_MODIFY_ORDER_ENTRY,
     SET_DISH_ENTRY_CREATING,

@@ -29,6 +29,7 @@
   } from "../../../store/modules/ShowOrderModule";
   import router from '../../../router'
   import Component from "vue-class-component";
+  import Vue from "vue";
 
   @Component({})
   export default class OrderStateButtons extends Vue {

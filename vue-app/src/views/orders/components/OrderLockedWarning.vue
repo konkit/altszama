@@ -33,6 +33,7 @@
   import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../../store/modules/ShowOrderModule"
   import {Prop} from "vue-property-decorator";
   import Component from "vue-class-component";
+  import Vue from "vue";
 
   @Component({})
   export default class OrderLockedWarning extends Vue {

@@ -4,14 +4,17 @@
   </v-btn>
 </template>
 
-<script>
-  export default {
-    name: 'back-button',
-    props: ['href'],
-    methods: {
-      followLink  () {
-        location = this.href
-      }
+<script lang="ts">
+  import Vue from "vue";
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
+
+  @Component({})
+  export default class BackButton extends Vue {
+    @Prop() href: string;
+
+    followLink() {
+      location = this.href;
     }
   }
 </script>

@@ -10,18 +10,18 @@
   </v-container>
 </template>
 
-<script>
-  export default {
-    name: 'errors-component',
-    methods: {
-      close (errorIndex) {
+<script lang="ts">
+  import Vue from "vue";
+  import Component from "vue-class-component";
+
+  @Component({})
+  export default class ErrorsComponent extends Vue {
+      close(errorIndex) {
         this.$store.commit("clearErrorAtIndex", errorIndex)
       }
-    },
-    computed: {
-      errors() {
+
+      get errors() {
         return this.$store.state.errors;
       }
-    }
   }
 </script>

@@ -54,33 +54,36 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import ApiConnector from '../../lib/ApiConnector'
+  import Vue from "vue";
+  import Component from "vue-class-component";
 
-  export default {
-    name: 'navigation',
-    computed: {
-      username() {
-        return this.$store.state.username;
-      },
-      masterNavDrawerOpened() {
-        return this.$store.state.masterNavDrawerOpened
-      }
-    },
-    methods: {
-      shouldDisplayNavigation() {
-        return this.$route.name !== "Login"
-      },
-      logout() {
-        ApiConnector.logout();
-      },
-      goToPath(path) {
-        this.$router.push(path)
-      },
-      setMasterNavDrawerOpened(newValue) {
-        this.$store.commit("setMasterNavigationDrawerOpened", newValue);
-      }
-    },
+  @Component({})
+  export default class Navigation extends Vue {
+    get username() {
+      return this.$store.state.username;
+    }
+
+    get masterNavDrawerOpened() {
+      return this.$store.state.masterNavDrawerOpened
+    }
+
+    shouldDisplayNavigation() {
+      return this.$route.name !== "Login"
+    }
+
+    logout(): void {
+      ApiConnector.logout();
+    }
+
+    goToPath(path) {
+      this.$router.push(path)
+    }
+
+    setMasterNavDrawerOpened(newValue) {
+      this.$store.commit("setMasterNavigationDrawerOpened", newValue);
+    }
   }
 </script>
 

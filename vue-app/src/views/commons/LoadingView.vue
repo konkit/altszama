@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="loading === true">
-      <errors-component />
+      <errors-component/>
 
       <div class="loader">Loading ....</div>
     </div>
@@ -12,23 +12,26 @@
   </div>
 </template>
 
-<script>
-  import ErrorsComponent from "./Errors"
+<script lang="ts">
+  import ErrorsComponent from "./Errors";
+  import Vue from "vue";
+  import Component from "vue-class-component";
 
-  export default {
-    name: 'LoadingView',
-    created() {
-      this.$store.commit('clearErrors');
-      this.$store.commit('setLoadingTrue');
-    },
-    computed: {
-      loading() {
-        return this.$store.state.loading;
-      }
-    },
+  @Component({
     components: {
       ErrorsComponent
     }
+  })
+  export default class LoadingView extends Vue {
+    created() {
+      this.$store.commit('clearErrors');
+      this.$store.commit('setLoadingTrue');
+    }
+
+    get loading() {
+      return this.$store.state.loading;
+    }
+
   }
 </script>
 

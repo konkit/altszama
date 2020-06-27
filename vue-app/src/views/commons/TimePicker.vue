@@ -32,28 +32,31 @@
   </v-dialog>
 </template>
 
-<script>
-  export default {
-    name: "TimePicker",
-    props: ["value", "label"],
-    data() {
-      return {
-        time: null,
-        modal2: false
-      }
-    },
-    mounted() {
-      this.time = this.value
-    },
-    methods: {
-      inputEvent(event) {
-        this.$emit("input", event)
-      },
-    },
+<script lang="ts">
+  import Vue from "vue";
+  import {Prop} from "vue-property-decorator";
+  import Component from "vue-class-component";
+
+  @Component({
     watch: {
       value(newVal) {
         this.time = newVal;
       }
+    }
+  })
+  export default class TimePicker extends Vue {
+    @Prop() value;
+    @Prop() label;
+
+    time = null;
+    modal2 = false;
+
+    mounted() {
+      this.time = this.value
+    }
+
+    inputEvent(event) {
+      this.$emit("input", event)
     }
   }
 </script>

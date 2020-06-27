@@ -2,9 +2,12 @@
   <div class="loader">Loading ....</div>
 </template>
 
-<script>
-  export default {
-    name: 'spinner'
+<script lang="ts">
+  import Component from "vue-class-component";
+  import Vue from "vue";
+
+  @Component({})
+  export default class Spinner extends Vue {
   }
 </script>
 

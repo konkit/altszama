@@ -54,9 +54,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import Price from "../../commons/PriceElement"
   import Vue from "vue";
+  import Component from "vue-class-component";
+  import {Prop} from "vue-property-decorator";
 
   @Component({
     components: {
