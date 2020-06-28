@@ -148,10 +148,11 @@ export var modifyOrderEntryModule = {
         _b[SETUP_CREATE_ORDER_ENTRY_ACTION] = function (_a) {
             var state = _a.state, rootState = _a.rootState;
             this.commit('clearErrors');
-            var orderId = rootState.showOrder.order.id;
+            var showOrderState = rootState.showOrder;
+            var orderId = showOrderState.order.id;
             var dishId;
-            if (rootState.showOrder.allDishesInRestaurant.length > 0) {
-                dishId = rootState.showOrder.allDishesInRestaurant[0].id;
+            if (showOrderState.allDishesInRestaurant.length > 0) {
+                dishId = showOrderState.allDishesInRestaurant[0].id;
             }
             else {
                 dishId = null;
@@ -162,7 +163,8 @@ export var modifyOrderEntryModule = {
             var state = _a.state, rootState = _a.rootState;
             var dishEntry = _b.dishEntry;
             this.commit('clearErrors');
-            var orderId = rootState.showOrder.order.id;
+            var showOrderState = rootState.showOrder;
+            var orderId = showOrderState.order.id;
             this.commit(NAMESPACE_MODIFY_ORDER_ENTRY + "/" + SET_INITIAL_EDITED_ORDER_ENTRY, { orderId: orderId, dishEntry: dishEntry });
             this.commit(NAMESPACE_MODIFY_ORDER_ENTRY + "/" + SET_ENTRY_LOADING_FALSE);
         },
@@ -184,7 +186,7 @@ export var modifyOrderEntryModule = {
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.commit(NAMESPACE_MODIFY_ORDER_ENTRY + "/" + CANCEL_DISH_ENTRY_MODIFICATION, {});
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: orderId });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, orderId);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
@@ -207,30 +209,34 @@ export var modifyOrderEntryModule = {
                 .then(function () {
                 _this.commit('setLoadingTrue');
                 _this.commit(NAMESPACE_MODIFY_ORDER_ENTRY + "/" + CANCEL_DISH_ENTRY_MODIFICATION, {});
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: orderId });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, orderId);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
         _b[ADD_SIDE_DISH_ACTION] = function (_a) {
             var state = _a.state, rootState = _a.rootState;
-            var sideDishesForGivenDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId];
-            var sideDishToAdd = {};
+            var showOrderState = rootState.showOrder;
+            var sideDishesForGivenDish = showOrderState.dishIdToSideDishesMap[state.dishId];
+            var sideDishToAdd; // = {};
             if (sideDishesForGivenDish && sideDishesForGivenDish.length > 0) {
-                sideDishToAdd = Object.assign({}, sideDishesForGivenDish[0]);
-                sideDishToAdd.isNew = false;
+                // sideDishToAdd = Object.assign({}, sideDishesForGivenDish[0]);
+                // sideDishToAdd.isNew = false
+                sideDishToAdd = { isNew: false, newSideDishName: "", newSideDishPrice: 0 };
             }
             else {
-                sideDishToAdd = {};
-                sideDishToAdd.isNew = true;
+                // sideDishToAdd = {};
+                // sideDishToAdd.isNew = true
+                sideDishToAdd = { isNew: false, newSideDishName: "", newSideDishPrice: 0 };
             }
-            sideDishToAdd.newSideDishName = "";
-            sideDishToAdd.newSideDishPrice = 0;
+            // sideDishToAdd.newSideDishName = "";
+            // sideDishToAdd.newSideDishPrice = 0;
             this.commit(NAMESPACE_MODIFY_ORDER_ENTRY + "/" + ADD_SIDE_DISH, sideDishToAdd);
         },
         _b[UPDATE_SIDE_DISH_ACTION] = function (_a, _b) {
             var state = _a.state, rootState = _a.rootState;
             var sdIndex = _b.sdIndex, sideDishId = _b.sideDishId;
-            var newSideDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId].find(function (sd) { return sd.id === sideDishId; });
+            var showOrderState = rootState.showOrder;
+            var newSideDish = showOrderState.dishIdToSideDishesMap[state.dishId].find(function (sd) { return sd.id === sideDishId; });
             this.commit(NAMESPACE_MODIFY_ORDER_ENTRY + "/" + SET_SIDE_DISH, { sdIndex: sdIndex, newValue: newSideDish });
         },
         _b),

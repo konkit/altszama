@@ -3,7 +3,7 @@ import ApiConnector from "../../lib/ApiConnector";
 import router from '../../router/index'
 import {Module} from "vuex";
 import {RootState} from "@/store";
-import {DishDto, ShowOrderResponse} from "@/frontend-client";
+import {DishDto, ShowOrderDto, ShowOrderResponse, SideDish} from "@/frontend-client";
 
 export const NAMESPACE_SHOW_ORDER = "showOrder";
 
@@ -19,36 +19,41 @@ export const SET_ORDER_AS_DELIVERED_ACTION = "SET_ORDER_AS_DELIVERED_ACTION";
 export const SET_ORDER_AS_REJECTED_ACTION = "SET_ORDER_AS_REJECTED_ACTION";
 export const DELETE_ORDER_ACTION = "DELETE_ORDER_ACTION";
 
-interface ShowOrderState {
-  order: {
-    restaurant: {
-      name: string
-    },
-    orderState: string,
-    orderCreator: object
-  },
+export interface ShowOrderState {
+  order: ShowOrderDto,
   orderEntries: object[],
   currentUserId: string,
   allDishesInRestaurant: object[],
   allDishesByCategory: {[category: string]: DishDto[]},
-  dishIdToSideDishesMap: object[],
+  dishIdToSideDishesMap: {[key: string]: SideDish[]},
   totalOrderPrice: number,
   baseOrderPrice: number,
 }
 
 const showOrderState: ShowOrderState = {
   order: {
-    restaurant: {
-      name: ""
-    },
-    orderState: "",
-    orderCreator: {}
+    id: "",
+    restaurantId: "",
+    restaurantName: "",
+    restaurantUrl: "",
+    orderCreatorId: "",
+    orderCreatorUsername: "",
+    orderDate: "",
+    orderState: ShowOrderDto.OrderStateEnum.CREATED,
+    decreaseInPercent: 0,
+    deliveryCostPerDish: 0,
+    deliveryCostPerEverybody: 0,
+    paymentByCash: false,
+    paymentByBankTransfer: false,
+    paymentByBlik: false,
+    bankTransferNumber: "",
+    blikPhoneNumber: "",
   },
   orderEntries: [],
   currentUserId: '',
   allDishesInRestaurant: [],
   allDishesByCategory: {},
-  dishIdToSideDishesMap: [],
+  dishIdToSideDishesMap: {},
   totalOrderPrice: 0,
   baseOrderPrice: 0,
 };
@@ -73,9 +78,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
   },
 
   actions: {
-    [FETCH_ORDER_DATA_ACTION] ({state, rootState}, payload) {
-      const orderId = payload.orderId;
-
+    [FETCH_ORDER_DATA_ACTION] ({state, rootState}, orderId) {
       new OrdersApiConnector(rootState)
         .fetchOrder(orderId)
         .then(showOrderData => {
@@ -90,7 +93,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       new OrdersApiConnector(rootState).setOrderAsCreated(state.order.id)
         .then(() => {
           this.commit('setLoadingTrue');
-          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, state.order.id)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -98,7 +101,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       new OrdersApiConnector(rootState).deleteDishEntry(orderEntryId, dishEntryId)
         .then(() => {
           this.commit('setLoadingTrue');
-          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, state.order.id)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -106,7 +109,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       new OrdersApiConnector(rootState).confirmOrderEntryAsPaid(orderEntryId)
         .then(() => {
           this.commit('setLoadingTrue');
-          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, state.order.id)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -114,7 +117,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       new OrdersApiConnector(rootState).markOrderEntryAsPaid(orderEntryId)
           .then(() => {
             this.commit('setLoadingTrue');
-            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, state.order.id)
           })
           .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -122,7 +125,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       new OrdersApiConnector(rootState).setOrderAsCreated(orderId)
           .then(() => {
             this.commit('setLoadingTrue');
-            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, state.order.id)
           })
           .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -130,7 +133,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       new OrdersApiConnector(rootState).setOrderAsOrdered(orderId)
           .then(() => {
             this.commit('setLoadingTrue');
-            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, state.order.id)
           })
           .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -138,7 +141,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       new OrdersApiConnector(rootState).setOrderAsDelivered(orderId)
           .then(() => {
             this.commit('setLoadingTrue');
-            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, state.order.id)
           })
           .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -146,7 +149,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       new OrdersApiConnector(rootState).setOrderAsRejected(orderId)
           .then(() => {
             this.commit('setLoadingTrue');
-            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: state.order.id})
+            this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, state.order.id)
           })
           .catch(errResponse => ApiConnector.handleError(errResponse))
     },

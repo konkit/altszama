@@ -1,9 +1,10 @@
 import Vue from "vue";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "./ShowOrderModule";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER, ShowOrderState} from "./ShowOrderModule";
 import {Module} from "vuex";
 import {RootState} from "@/store";
+import {SideDishData} from "@/frontend-client";
 
 export const NAMESPACE_MODIFY_ORDER_ENTRY = "modifyOrderEntry";
 
@@ -58,7 +59,7 @@ interface ModifyOrderEntryState {
   newDish: boolean,
   newDishName: string,
   newDishPrice: number,
-  chosenSideDishes: []
+  chosenSideDishes: SideDishData[]
 }
 
 const modifyOrderEntryState: ModifyOrderEntryState = {
@@ -149,7 +150,7 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState, RootState> = 
       state.newDishPrice = newValue;
     },
 
-    [ADD_SIDE_DISH] (state, sideDishToAdd) {
+    [ADD_SIDE_DISH] (state, sideDishToAdd: SideDishToAdd) {
       state.chosenSideDishes.push(sideDishToAdd);
     },
     [SET_SIDE_DISH] (state, {sdIndex, newValue}) {
@@ -178,11 +179,13 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState, RootState> = 
     [SETUP_CREATE_ORDER_ENTRY_ACTION] ({state, rootState}) {
       this.commit('clearErrors');
 
-      const orderId = rootState.showOrder.order.id;
+      const showOrderState = rootState.showOrder as ShowOrderState;
+
+      const orderId = showOrderState.order.id;
 
       let dishId;
-      if (rootState.showOrder.allDishesInRestaurant.length > 0) {
-        dishId = rootState.showOrder.allDishesInRestaurant[0].id;
+      if (showOrderState.allDishesInRestaurant.length > 0) {
+        dishId = showOrderState.allDishesInRestaurant[0].id;
       } else {
         dishId = null
       }
@@ -192,7 +195,9 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState, RootState> = 
     [SETUP_EDIT_ORDER_ENTRY_ACTION] ({state, rootState}, {dishEntry}) {
       this.commit('clearErrors');
 
-      const orderId = rootState.showOrder.order.id;
+      const showOrderState = rootState.showOrder as ShowOrderState;
+
+      const orderId = showOrderState.order.id;
 
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_EDITED_ORDER_ENTRY}`, {orderId: orderId, dishEntry: dishEntry});
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
@@ -215,7 +220,7 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState, RootState> = 
         .then(() => {
           this.commit('setLoadingTrue');
           this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
-          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, orderId)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -236,29 +241,37 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState, RootState> = 
         .then(() => {
           this.commit('setLoadingTrue');
           this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
-          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: orderId})
+          this.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, orderId)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
     [ADD_SIDE_DISH_ACTION] ({state, rootState}) {
-      const sideDishesForGivenDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId];
-      let sideDishToAdd = {};
+      const showOrderState = rootState.showOrder as ShowOrderState;
+
+      const sideDishesForGivenDish = showOrderState.dishIdToSideDishesMap[state.dishId];
+      let sideDishToAdd: SideDishData; // = {};
 
       if (sideDishesForGivenDish && sideDishesForGivenDish.length > 0) {
-        sideDishToAdd = Object.assign({}, sideDishesForGivenDish[0]);
-        sideDishToAdd.isNew = false
+        // sideDishToAdd = Object.assign({}, sideDishesForGivenDish[0]);
+        // sideDishToAdd.isNew = false
+
+        sideDishToAdd = {isNew: false, newSideDishName: "", newSideDishPrice: 0}
       } else {
-        sideDishToAdd = {};
-        sideDishToAdd.isNew = true
+        // sideDishToAdd = {};
+        // sideDishToAdd.isNew = true
+
+        sideDishToAdd = {isNew: false, newSideDishName: "", newSideDishPrice: 0}
       }
 
-      sideDishToAdd.newSideDishName = "";
-      sideDishToAdd.newSideDishPrice = 0;
+      // sideDishToAdd.newSideDishName = "";
+      // sideDishToAdd.newSideDishPrice = 0;
 
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${ADD_SIDE_DISH}`, sideDishToAdd);
     },
     [UPDATE_SIDE_DISH_ACTION] ({state, rootState}, {sdIndex, sideDishId}) {
-      const newSideDish = rootState.showOrder.dishIdToSideDishesMap[state.dishId].find(sd => sd.id === sideDishId);
+      const showOrderState = rootState.showOrder as ShowOrderState;
+
+      const newSideDish = showOrderState.dishIdToSideDishesMap[state.dishId].find(sd => sd.id === sideDishId);
       this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH}`, {sdIndex: sdIndex, newValue: newSideDish});
     },
   },

@@ -12,12 +12,23 @@ import {
   OrderUpdateRequest,
   OrderViewResponse,
   SetAsOrderedResponse,
-  ShowOrderResponse
+  ShowOrderResponse, SideDishData
 } from "@/frontend-client";
 import LocalConfiguration from "./LocalConfiguration"
 
 function headersWithToken() {
   return { headers: {'Authorization': 'Bearer ' + store.state.token } }
+}
+
+export interface OrderEntryToModify {
+  orderId: string,
+  dishId: string,
+  dishEntryId: string,
+  additionalComments: string,
+  newDish: boolean,
+  newDishName: string,
+  newDishPrice: number,
+  chosenSideDishes: SideDishData[]
 }
 
 export default class OrdersApiConnector {
@@ -34,7 +45,7 @@ export default class OrdersApiConnector {
     this.orderEntryApi = new OrderEntryControllerApi((this.configuration));
   }
 
-  saveOrderEntry (orderId: string, editedOrderEntry) {
+  saveOrderEntry (orderId: string, editedOrderEntry: OrderEntryToModify) {
     let formData: OrderEntrySaveRequest = {
       orderId: orderId,
       dishId: editedOrderEntry.dishId,
@@ -48,7 +59,7 @@ export default class OrdersApiConnector {
     return this.orderEntryApi.save1(formData, headersWithToken());
   }
 
-  updateOrderEntry (orderId: string, orderEntryId: string, editedOrderEntry) {
+  updateOrderEntry (orderId: string, orderEntryId: string, editedOrderEntry: OrderEntryToModify) {
     let formData: OrderEntryUpdateRequest = {
       id: orderEntryId,
       orderId: orderId,
@@ -91,13 +102,7 @@ export default class OrdersApiConnector {
 
     return createResponse
         .then(response => {
-          let restaurantId;
-          if( response.restaurant != null) {
-            restaurantId = response.restaurant.id
-          } else if (response.restaurantsList.length > 0) {
-            restaurantId = response.restaurantsList[0].id;
-          }
-
+          let restaurantId = response.restaurantsList[0].id;
           let bankTransferNumber = "";
           let paymentByBankTransfer = false;
           if (response.bankTransferNumber) {
@@ -141,7 +146,7 @@ export default class OrdersApiConnector {
   }
 
   setOrderAsOrdered (orderId: string) {
-    return this.orderApi.setAsOrdered(orderId, headersWithToken())
+    return this.orderApi.setBackAsOrdered(orderId, headersWithToken())
   }
 
   setOrderAsDelivered (orderId: string) {
@@ -173,7 +178,7 @@ export default class OrdersApiConnector {
   }
 
   makeAnOrder (orderId: string, formData: SetAsOrderedResponse) {
-    return this.orderApi.setAsOrdered1(formData, orderId, headersWithToken())
+    return this.orderApi.setAsOrdered(formData, orderId, headersWithToken())
       .then(() => router.push("/orders/show/" + orderId));
   }
 }

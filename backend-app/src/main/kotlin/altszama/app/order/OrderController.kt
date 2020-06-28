@@ -85,7 +85,7 @@ class OrderController {
   }
 
   @PutMapping("/orders/{orderId}/set_back_as_ordered")
-  fun setAsOrdered(@PathVariable orderId: String): ResponseEntity<String> {
+  fun setBackAsOrdered(@PathVariable orderId: String): ResponseEntity<String> {
     orderService.setBackAsOrdered(orderId)
     return ResponseEntity("{}", HttpStatus.OK)
   }

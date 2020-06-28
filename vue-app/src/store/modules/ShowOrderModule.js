@@ -2,6 +2,7 @@ var _a, _b;
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import router from '../../router/index';
+import { ShowOrderDto } from "@/frontend-client";
 export var NAMESPACE_SHOW_ORDER = "showOrder";
 export var LOAD_SHOW_ORDER_DATA = "LOAD_SHOW_ORDER_DATA";
 export var FETCH_ORDER_DATA_ACTION = "FETCH_ORDER_DATA_ACTION";
@@ -16,17 +17,28 @@ export var SET_ORDER_AS_REJECTED_ACTION = "SET_ORDER_AS_REJECTED_ACTION";
 export var DELETE_ORDER_ACTION = "DELETE_ORDER_ACTION";
 var showOrderState = {
     order: {
-        restaurant: {
-            name: ""
-        },
-        orderState: "",
-        orderCreator: {}
+        id: "",
+        restaurantId: "",
+        restaurantName: "",
+        restaurantUrl: "",
+        orderCreatorId: "",
+        orderCreatorUsername: "",
+        orderDate: "",
+        orderState: ShowOrderDto.OrderStateEnum.CREATED,
+        decreaseInPercent: 0,
+        deliveryCostPerDish: 0,
+        deliveryCostPerEverybody: 0,
+        paymentByCash: false,
+        paymentByBankTransfer: false,
+        paymentByBlik: false,
+        bankTransferNumber: "",
+        blikPhoneNumber: "",
     },
     orderEntries: [],
     currentUserId: '',
     allDishesInRestaurant: [],
     allDishesByCategory: {},
-    dishIdToSideDishesMap: [],
+    dishIdToSideDishesMap: {},
     totalOrderPrice: 0,
     baseOrderPrice: 0,
 };
@@ -46,10 +58,9 @@ export var showOrderModule = {
         },
         _a),
     actions: (_b = {},
-        _b[FETCH_ORDER_DATA_ACTION] = function (_a, payload) {
+        _b[FETCH_ORDER_DATA_ACTION] = function (_a, orderId) {
             var _this = this;
             var state = _a.state, rootState = _a.rootState;
-            var orderId = payload.orderId;
             new OrdersApiConnector(rootState)
                 .fetchOrder(orderId)
                 .then(function (showOrderData) {
@@ -65,7 +76,7 @@ export var showOrderModule = {
             new OrdersApiConnector(rootState).setOrderAsCreated(state.order.id)
                 .then(function () {
                 _this.commit('setLoadingTrue');
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, state.order.id);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
@@ -76,7 +87,7 @@ export var showOrderModule = {
             new OrdersApiConnector(rootState).deleteDishEntry(orderEntryId, dishEntryId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, state.order.id);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
@@ -87,7 +98,7 @@ export var showOrderModule = {
             new OrdersApiConnector(rootState).confirmOrderEntryAsPaid(orderEntryId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, state.order.id);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
@@ -98,7 +109,7 @@ export var showOrderModule = {
             new OrdersApiConnector(rootState).markOrderEntryAsPaid(orderEntryId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, state.order.id);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
@@ -109,7 +120,7 @@ export var showOrderModule = {
             new OrdersApiConnector(rootState).setOrderAsCreated(orderId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, state.order.id);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
@@ -120,7 +131,7 @@ export var showOrderModule = {
             new OrdersApiConnector(rootState).setOrderAsOrdered(orderId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, state.order.id);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
@@ -131,7 +142,7 @@ export var showOrderModule = {
             new OrdersApiConnector(rootState).setOrderAsDelivered(orderId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, state.order.id);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
@@ -142,7 +153,7 @@ export var showOrderModule = {
             new OrdersApiConnector(rootState).setOrderAsRejected(orderId)
                 .then(function () {
                 _this.commit('setLoadingTrue');
-                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, { orderId: state.order.id });
+                _this.dispatch(NAMESPACE_SHOW_ORDER + "/" + FETCH_ORDER_DATA_ACTION, state.order.id);
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },

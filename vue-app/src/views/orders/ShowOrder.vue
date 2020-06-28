@@ -145,7 +145,7 @@
 
     fetchOrder() {
       this.$store.commit('setLoadingTrue');
-      return this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
+      return this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, this.orderId);
     }
 
     isOrdering() {

@@ -133,7 +133,7 @@
   import Vue from "vue";
   import Component from "vue-class-component";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
-  import {OrderDto, OrderEntryDto} from "../../frontend-client";
+  import {OrderEntryDto, TodayOrderDto} from "../../frontend-client";
   import {RootState} from "../../store";
 
   @Component({
@@ -145,7 +145,7 @@
   })
   export default class TodayOrders extends Vue {
     currentOrderEntries: OrderEntryDto[] = [];
-    ordersList: OrderDto[] = [];
+    ordersList: TodayOrderDto[] = [];
 
     connector: OrdersApiConnector;
 

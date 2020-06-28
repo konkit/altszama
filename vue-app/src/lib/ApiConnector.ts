@@ -46,8 +46,8 @@ export default {
     })
   },
 
-  handleError (errorResponse) {
-    console.log(errorResponse)
+  handleError (errorResponse: any) {
+    console.log(errorResponse);
 
     if (errorResponse.status === 401) {
       const fullRoutePath = router.currentRoute.fullPath;

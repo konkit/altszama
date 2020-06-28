@@ -59,13 +59,7 @@ var OrdersApiConnector = /** @class */ (function () {
         var createResponse = this.orderApi.create(headersWithToken());
         return createResponse
             .then(function (response) {
-            var restaurantId;
-            if (response.restaurant != null) {
-                restaurantId = response.restaurant.id;
-            }
-            else if (response.restaurantsList.length > 0) {
-                restaurantId = response.restaurantsList[0].id;
-            }
+            var restaurantId = response.restaurantsList[0].id;
             var bankTransferNumber = "";
             var paymentByBankTransfer = false;
             if (response.bankTransferNumber) {
@@ -103,7 +97,7 @@ var OrdersApiConnector = /** @class */ (function () {
         return this.orderApi.setAsCreated(orderId, headersWithToken());
     };
     OrdersApiConnector.prototype.setOrderAsOrdered = function (orderId) {
-        return this.orderApi.setAsOrdered(orderId, headersWithToken());
+        return this.orderApi.setBackAsOrdered(orderId, headersWithToken());
     };
     OrdersApiConnector.prototype.setOrderAsDelivered = function (orderId) {
         return this.orderApi.setAsDelivered(orderId, headersWithToken());
@@ -127,7 +121,7 @@ var OrdersApiConnector = /** @class */ (function () {
         return this.orderApi.update(order, headersWithToken());
     };
     OrdersApiConnector.prototype.makeAnOrder = function (orderId, formData) {
-        return this.orderApi.setAsOrdered1(formData, orderId, headersWithToken())
+        return this.orderApi.setAsOrdered(formData, orderId, headersWithToken())
             .then(function () { return router.push("/orders/show/" + orderId); });
     };
     return OrdersApiConnector;

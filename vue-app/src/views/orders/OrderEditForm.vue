@@ -104,6 +104,7 @@
   import ApiConnector from "../../lib/ApiConnector";
   import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "../../store/modules/ShowOrderModule";
   import {OrderUpdateRequest} from "../../frontend-client";
+  import {RootState} from "../../store";
 
   @Component({
     components: {
@@ -138,7 +139,7 @@
       this.orderId = this.$route.params.id;
       // this.$store.dispatch(`editOrder/${INIT_EDIT_ORDER_ACTION}`, {orderId: this.orderId})
 
-      this.connector = new OrdersApiConnector(this.$store);
+      this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
       this.connector.getOrderEditData(this.orderId)
         .then(response => {
@@ -154,7 +155,6 @@
           this.paymentByBlik = response.order.paymentByBlik ;
           this.blikPhoneNumber = response.order.blikPhoneNumber || "";
 
-          // this.commit(`editOrder/${INIT_DATA}`, responseWithOrderId);
           this.$store.commit('setLoadingFalse');
 
           document.title = `Edit order from ${response.order.restaurantName} | Alt Szama`
@@ -184,7 +184,7 @@
         .then(() => {
           this.$store.commit('setLoadingTrue');
           this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
-          this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
+          this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, this.orderId);
           this.$router.push("/orders/show/" + this.orderId)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
