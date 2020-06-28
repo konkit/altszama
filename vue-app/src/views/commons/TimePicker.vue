@@ -56,6 +56,7 @@
     }
 
     inputEvent(event) {
+      console.log("event: ", event)
       this.$emit("input", event)
     }
   }

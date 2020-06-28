@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { showOrderModule } from './modules/ShowOrderModule';
 import { showRestaurantModule } from "./modules/ShowRestaurantModule";
-import ModifyOrderEntryState from "./modules/ModifyOrderEntryState";
+import { modifyOrderEntryModule } from "./modules/ModifyOrderEntryModule";
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
@@ -47,7 +47,11 @@ export default new Vuex.Store({
             else if (typeof error == 'object' && typeof error.body.messages !== "undefined") {
                 error.body.messages.forEach(function (errorStr) { return state.errors.push(errorStr); });
             }
+            else if (typeof error == 'object' && typeof error.statusText !== "undefined") {
+                state.errors.push(error.statusText);
+            }
             else {
+                console.log("Error: ", error);
                 state.errors.push(error);
             }
         },
@@ -67,7 +71,7 @@ export default new Vuex.Store({
     modules: {
         // Orders
         showOrder: showOrderModule,
-        modifyOrderEntry: ModifyOrderEntryState,
+        modifyOrderEntry: modifyOrderEntryModule,
         // Dishes
         showRestaurant: showRestaurantModule,
     }

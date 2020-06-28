@@ -1,5 +1,5 @@
 <template>
-  <v-card :key="entryId">
+  <v-card :key="'entryId-' + entryId">
     <v-card-title>
       {{orderEntry.username}}
     </v-card-title>
@@ -10,7 +10,7 @@
 
       <v-list dense>
         <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
-          <v-list-item :key="dishEntryIndex">
+          <v-list-item :key="'dishEntry-' + dishEntryIndex">
 
             <v-list-item-content class="index-element">
               <div style="padding-top: 8px;">
@@ -30,7 +30,7 @@
                 <edit-order-entry
                     :order-entry="orderEntry"
                     :dish-entry="dishEntry"
-                    :key="dishEntry.id">
+                    :key="'edit-order-entry-' + dishEntry.id">
                 </edit-order-entry>
 
               </template>
@@ -39,7 +39,7 @@
                     :order-entry="orderEntry"
                     :dish-entry="dishEntry"
                     :current-user-id="currentUserId"
-                    :key="dishEntry.id"
+                    :key="'show-order-entry-' + dishEntry.id"
                     :index="dishEntryIndex + 1">
                 </show-order-entry>
               </template>
@@ -47,7 +47,7 @@
           </v-list-item>
 
           <template v-if="dishEntryIndex < orderEntry.dishEntries.length - 1">
-            <v-divider :key="dishEntryIndex" class="dishes-divider"></v-divider>
+            <v-divider :key="'dish-entry-divider' + dishEntryIndex" class="dishes-divider"></v-divider>
           </template>
 
         </template>

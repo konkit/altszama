@@ -13,7 +13,6 @@ var OrdersApiConnector = /** @class */ (function () {
         this.orderEntryApi = new OrderEntryControllerApi((this.configuration));
     }
     OrdersApiConnector.prototype.saveOrderEntry = function (orderId, editedOrderEntry) {
-        var action = "/order_entries/save";
         var formData = {
             orderId: orderId,
             dishId: editedOrderEntry.dishId,
@@ -23,10 +22,9 @@ var OrdersApiConnector = /** @class */ (function () {
             additionalComments: editedOrderEntry.additionalComments,
             sideDishes: editedOrderEntry.chosenSideDishes.map(function (sd) { return Object.assign(sd, { newSideDishPrice: sd.newSideDishPrice }); })
         };
-        return this.orderEntryApi.save1(formData);
+        return this.orderEntryApi.save1(formData, headersWithToken());
     };
     OrdersApiConnector.prototype.updateOrderEntry = function (orderId, orderEntryId, editedOrderEntry) {
-        var action = "/order_entries/update";
         var formData = {
             id: orderEntryId,
             orderId: orderId,
@@ -39,11 +37,11 @@ var OrdersApiConnector = /** @class */ (function () {
             sideDishes: editedOrderEntry.chosenSideDishes.map(function (sd) { return Object.assign({}, sd, { newSideDishPrice: sd.newSideDishPrice }); })
         };
         // return ApiConnector.makePost(action, formData)
-        return this.orderEntryApi.update1(formData);
+        return this.orderEntryApi.update1(formData, headersWithToken());
     };
     OrdersApiConnector.prototype.deleteDishEntry = function (orderEntryId, dishEntryId) {
         // return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
-        return this.orderEntryApi.delete1(orderEntryId, dishEntryId);
+        return this.orderEntryApi.delete1(orderEntryId, dishEntryId, headersWithToken());
     };
     OrdersApiConnector.prototype.fetchOrder = function (orderId) {
         return this.orderApi.show(orderId, headersWithToken());
@@ -102,49 +100,35 @@ var OrdersApiConnector = /** @class */ (function () {
         return this.orderApi.edit(orderId, headersWithToken());
     };
     OrdersApiConnector.prototype.setOrderAsCreated = function (orderId) {
-        // return ApiConnector.makePost('/orders/' + orderId + '/set_as_created')
-        return this.orderApi.setAsCreated(orderId);
+        return this.orderApi.setAsCreated(orderId, headersWithToken());
     };
     OrdersApiConnector.prototype.setOrderAsOrdered = function (orderId) {
-        // return ApiConnector.makePost('/orders/' + orderId + '/set_back_as_ordered')
-        return this.orderApi.setAsOrdered(orderId);
+        return this.orderApi.setAsOrdered(orderId, headersWithToken());
     };
     OrdersApiConnector.prototype.setOrderAsDelivered = function (orderId) {
-        // return ApiConnector.makePost('/orders/' + orderId + '/set_as_delivered')
-        return this.orderApi.setAsDelivered(orderId);
+        return this.orderApi.setAsDelivered(orderId, headersWithToken());
     };
     OrdersApiConnector.prototype.setOrderAsRejected = function (orderId) {
-        // return ApiConnector.makePost('/orders/' + orderId + '/set_as_rejected')
-        return this.orderApi.setAsRejected(orderId);
+        return this.orderApi.setAsRejected(orderId, headersWithToken());
     };
     OrdersApiConnector.prototype.deleteOrder = function (orderId) {
-        // return ApiConnector.makeDelete('/orders/' + orderId + '/delete')
-        return this.orderApi._delete(orderId);
+        return this.orderApi._delete(orderId, headersWithToken());
     };
     OrdersApiConnector.prototype.markOrderEntryAsPaid = function (orderEntryId) {
-        // return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/mark_as_paid')
-        return this.orderEntryApi.setAsMarkedAsPaid(orderEntryId);
+        return this.orderEntryApi.setAsMarkedAsPaid(orderEntryId, headersWithToken());
     };
     OrdersApiConnector.prototype.confirmOrderEntryAsPaid = function (orderEntryId) {
-        // return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid')
-        return this.orderEntryApi.setAsConfirmedAsPaid(orderEntryId);
+        return this.orderEntryApi.setAsConfirmedAsPaid(orderEntryId, headersWithToken());
     };
     OrdersApiConnector.prototype.createOrder = function (order) {
         return this.orderApi.save(order, headersWithToken());
     };
     OrdersApiConnector.prototype.editOrder = function (order) {
-        return this.orderApi.update(order);
+        return this.orderApi.update(order, headersWithToken());
     };
-    OrdersApiConnector.prototype.makeAnOrder = function (orderId, _a) {
-        var approxTimeOfDelivery = _a.approxTimeOfDelivery;
-        var action = '/orders/' + orderId + '/set_as_ordered';
-        var formData = {
-            approxTimeOfDelivery: approxTimeOfDelivery.toString()
-        };
-        return this.orderApi.setAsOrdered1(orderId, formData)
+    OrdersApiConnector.prototype.makeAnOrder = function (orderId, formData) {
+        return this.orderApi.setAsOrdered1(formData, orderId, headersWithToken())
             .then(function () { return router.push("/orders/show/" + orderId); });
-        // return ApiConnector.makePost(action, formData)
-        //     .then(() => router.push("/orders/show/" + orderId))
     };
     return OrdersApiConnector;
 }());

@@ -88,7 +88,7 @@ export interface AllOrdersResponse {
      * @type {Array<OrderDto>}
      * @memberof AllOrdersResponse
      */
-    allOrdersList?: Array<OrderDto>;
+    allOrdersList: Array<OrderDto>;
 }
 /**
  * 
@@ -101,7 +101,7 @@ export interface CreateDishResponse {
      * @type {Array<string>}
      * @memberof CreateDishResponse
      */
-    categories?: Array<string>;
+    categories: Array<string>;
 }
 /**
  * 
@@ -114,31 +114,31 @@ export interface CreateOrderResponse {
      * @type {Array<Restaurant>}
      * @memberof CreateOrderResponse
      */
-    restaurantsList?: Array<Restaurant>;
+    restaurantsList: Array<Restaurant>;
     /**
      * 
      * @type {string}
      * @memberof CreateOrderResponse
      */
-    orderDate?: string;
-    /**
-     * 
-     * @type {LocalTime}
-     * @memberof CreateOrderResponse
-     */
-    timeOfOrder?: LocalTime;
+    orderDate: string;
     /**
      * 
      * @type {string}
      * @memberof CreateOrderResponse
      */
-    bankTransferNumber?: string;
+    timeOfOrder: string;
     /**
      * 
      * @type {string}
      * @memberof CreateOrderResponse
      */
-    blikPhoneNumber?: string;
+    bankTransferNumber: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateOrderResponse
+     */
+    blikPhoneNumber: string;
 }
 /**
  * 
@@ -163,13 +163,13 @@ export interface DishCreateRequest {
      * @type {Array<SideDish>}
      * @memberof DishCreateRequest
      */
-    sideDishes?: Array<SideDish>;
+    sideDishes: Array<SideDish>;
     /**
      * 
      * @type {string}
      * @memberof DishCreateRequest
      */
-    category?: string;
+    category: string;
 }
 /**
  * 
@@ -182,37 +182,37 @@ export interface DishDto {
      * @type {string}
      * @memberof DishDto
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof DishDto
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {number}
      * @memberof DishDto
      */
-    price?: number;
+    price: number;
     /**
      * 
      * @type {Array<SideDish>}
      * @memberof DishDto
      */
-    sideDishes?: Array<SideDish>;
+    sideDishes: Array<SideDish>;
     /**
      * 
      * @type {string}
      * @memberof DishDto
      */
-    category?: string;
+    category: string;
     /**
      * 
-     * @type {number}
+     * @type {Date}
      * @memberof DishDto
      */
-    lastCrawled?: number;
+    lastCrawled?: Date;
 }
 /**
  * 
@@ -225,31 +225,31 @@ export interface DishEntryDto {
      * @type {string}
      * @memberof DishEntryDto
      */
-    restaurantName?: string;
+    restaurantName: string;
     /**
      * 
      * @type {DishDto}
      * @memberof DishEntryDto
      */
-    dish?: DishDto;
+    dish: DishDto;
     /**
      * 
      * @type {Array<SideDish>}
      * @memberof DishEntryDto
      */
-    chosenSideDishes?: Array<SideDish>;
+    chosenSideDishes: Array<SideDish>;
     /**
      * 
      * @type {string}
      * @memberof DishEntryDto
      */
-    additionalComments?: string;
+    additionalComments: string;
     /**
      * 
      * @type {string}
      * @memberof DishEntryDto
      */
-    id?: string;
+    id: string;
 }
 /**
  * 
@@ -262,7 +262,7 @@ export interface DishUpdateRequest {
      * @type {string}
      * @memberof DishUpdateRequest
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
@@ -274,19 +274,19 @@ export interface DishUpdateRequest {
      * @type {number}
      * @memberof DishUpdateRequest
      */
-    price?: number;
+    price: number;
     /**
      * 
      * @type {Array<SideDish>}
      * @memberof DishUpdateRequest
      */
-    sideDishes?: Array<SideDish>;
+    sideDishes: Array<SideDish>;
     /**
      * 
      * @type {string}
      * @memberof DishUpdateRequest
      */
-    category?: string;
+    category: string;
 }
 /**
  * 
@@ -299,19 +299,19 @@ export interface EatingPersonEntry {
      * @type {string}
      * @memberof EatingPersonEntry
      */
-    username?: string;
+    username: string;
     /**
      * 
      * @type {string}
      * @memberof EatingPersonEntry
      */
-    comments?: string;
+    comments: string;
     /**
      * 
      * @type {Array<SideDish>}
      * @memberof EatingPersonEntry
      */
-    sideDishes?: Array<SideDish>;
+    sideDishes: Array<SideDish>;
 }
 /**
  * 
@@ -324,13 +324,13 @@ export interface EditDishResponse {
      * @type {DishDto}
      * @memberof EditDishResponse
      */
-    dish?: DishDto;
+    dish: DishDto;
     /**
      * 
      * @type {Array<string>}
      * @memberof EditDishResponse
      */
-    categories?: Array<string>;
+    categories: Array<string>;
 }
 /**
  * 
@@ -343,7 +343,7 @@ export interface EditOrderResponse {
      * @type {OrderDto}
      * @memberof EditOrderResponse
      */
-    order?: OrderDto;
+    order: OrderDto;
 }
 /**
  * 
@@ -356,31 +356,31 @@ export interface EditRestaurantResponse {
      * @type {string}
      * @memberof EditRestaurantResponse
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof EditRestaurantResponse
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof EditRestaurantResponse
      */
-    address?: string;
+    address: string;
     /**
      * 
      * @type {string}
      * @memberof EditRestaurantResponse
      */
-    telephone?: string;
+    telephone: string;
     /**
      * 
      * @type {string}
      * @memberof EditRestaurantResponse
      */
-    url?: string;
+    url: string;
 }
 /**
  * 
@@ -393,7 +393,7 @@ export interface ErrorResult {
      * @type {Array<string>}
      * @memberof ErrorResult
      */
-    messages?: Array<string>;
+    messages: Array<string>;
 }
 /**
  * 
@@ -406,25 +406,25 @@ export interface GroupedOrderEntry {
      * @type {DishDto}
      * @memberof GroupedOrderEntry
      */
-    dish?: DishDto;
+    dish: DishDto;
     /**
      * 
      * @type {number}
      * @memberof GroupedOrderEntry
      */
-    price?: number;
+    price: number;
     /**
      * 
      * @type {number}
      * @memberof GroupedOrderEntry
      */
-    eatingPeopleCount?: number;
+    eatingPeopleCount: number;
     /**
      * 
      * @type {Array<EatingPersonEntry>}
      * @memberof GroupedOrderEntry
      */
-    eatingPeopleEntries?: Array<EatingPersonEntry>;
+    eatingPeopleEntries: Array<EatingPersonEntry>;
 }
 /**
  * 
@@ -437,7 +437,7 @@ export interface IndexResponse {
      * @type {Array<RestaurantInfo>}
      * @memberof IndexResponse
      */
-    restaurants?: Array<RestaurantInfo>;
+    restaurants: Array<RestaurantInfo>;
 }
 /**
  * 
@@ -481,43 +481,37 @@ export interface OrderDto {
      * @type {string}
      * @memberof OrderDto
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof OrderDto
      */
-    restaurantId?: string;
+    restaurantId: string;
     /**
      * 
      * @type {string}
      * @memberof OrderDto
      */
-    restaurantName?: string;
+    restaurantName: string;
     /**
      * 
      * @type {string}
      * @memberof OrderDto
      */
-    restaurantUrl?: string;
+    orderCreatorId: string;
     /**
      * 
      * @type {string}
      * @memberof OrderDto
      */
-    orderCreatorId?: string;
+    orderCreatorUsername: string;
     /**
      * 
      * @type {string}
      * @memberof OrderDto
      */
-    orderCreatorUsername?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderDto
-     */
-    orderDate?: string;
+    orderDate: string;
     /**
      * 
      * @type {LocalTime}
@@ -535,55 +529,43 @@ export interface OrderDto {
      * @type {string}
      * @memberof OrderDto
      */
-    orderState?: OrderDto.OrderStateEnum;
+    orderState: OrderDto.OrderStateEnum;
     /**
      * 
      * @type {number}
      * @memberof OrderDto
      */
-    decreaseInPercent?: number;
+    decreaseInPercent: number;
     /**
      * 
      * @type {number}
      * @memberof OrderDto
      */
-    deliveryCostPerEverybody?: number;
+    deliveryCostPerEverybody: number;
     /**
      * 
      * @type {number}
      * @memberof OrderDto
      */
-    deliveryCostPerDish?: number;
+    deliveryCostPerDish: number;
     /**
      * 
      * @type {boolean}
      * @memberof OrderDto
      */
-    paymentByCash?: boolean;
+    paymentByCash: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof OrderDto
      */
-    paymentByBankTransfer?: boolean;
+    paymentByBankTransfer: boolean;
     /**
      * 
      * @type {string}
      * @memberof OrderDto
      */
-    bankTransferNumber?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrderDto
-     */
-    paymentByBlik?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderDto
-     */
-    blikPhoneNumber?: string;
+    bankTransferNumber: string;
 }
 
 /**
@@ -614,37 +596,37 @@ export interface OrderEntryDto {
      * @type {string}
      * @memberof OrderEntryDto
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof OrderEntryDto
      */
-    orderId?: string;
+    orderId: string;
     /**
      * 
      * @type {string}
      * @memberof OrderEntryDto
      */
-    orderState?: OrderEntryDto.OrderStateEnum;
+    orderState: OrderEntryDto.OrderStateEnum;
     /**
      * 
      * @type {Array<DishEntryDto>}
      * @memberof OrderEntryDto
      */
-    dishEntries?: Array<DishEntryDto>;
+    dishEntries: Array<DishEntryDto>;
     /**
      * 
      * @type {string}
      * @memberof OrderEntryDto
      */
-    paymentStatus?: OrderEntryDto.PaymentStatusEnum;
+    paymentStatus: OrderEntryDto.PaymentStatusEnum;
     /**
      * 
      * @type {string}
      * @memberof OrderEntryDto
      */
-    created?: string;
+    created: string;
 }
 
 /**
@@ -684,7 +666,7 @@ export interface OrderEntrySaveRequest {
      * @type {string}
      * @memberof OrderEntrySaveRequest
      */
-    orderId?: string;
+    orderId: string;
     /**
      * 
      * @type {string}
@@ -696,7 +678,7 @@ export interface OrderEntrySaveRequest {
      * @type {string}
      * @memberof OrderEntrySaveRequest
      */
-    additionalComments?: string;
+    additionalComments: string;
     /**
      * 
      * @type {boolean}
@@ -720,7 +702,7 @@ export interface OrderEntrySaveRequest {
      * @type {Array<SideDishData>}
      * @memberof OrderEntrySaveRequest
      */
-    sideDishes?: Array<SideDishData>;
+    sideDishes: Array<SideDishData>;
 }
 /**
  * 
@@ -757,7 +739,7 @@ export interface OrderEntryUpdateRequest {
      * @type {string}
      * @memberof OrderEntryUpdateRequest
      */
-    additionalComments?: string;
+    additionalComments: string;
     /**
      * 
      * @type {boolean}
@@ -781,7 +763,7 @@ export interface OrderEntryUpdateRequest {
      * @type {Array<SideDishData>}
      * @memberof OrderEntryUpdateRequest
      */
-    sideDishes?: Array<SideDishData>;
+    sideDishes: Array<SideDishData>;
 }
 /**
  * 
@@ -812,49 +794,49 @@ export interface OrderSaveRequest {
      * @type {number}
      * @memberof OrderSaveRequest
      */
-    decreaseInPercent?: number;
+    decreaseInPercent: number;
     /**
      * 
      * @type {number}
      * @memberof OrderSaveRequest
      */
-    deliveryCostPerEverybody?: number;
+    deliveryCostPerEverybody: number;
     /**
      * 
      * @type {number}
      * @memberof OrderSaveRequest
      */
-    deliveryCostPerDish?: number;
+    deliveryCostPerDish: number;
     /**
      * 
      * @type {boolean}
      * @memberof OrderSaveRequest
      */
-    paymentByCash?: boolean;
+    paymentByCash: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof OrderSaveRequest
      */
-    paymentByBankTransfer?: boolean;
+    paymentByBankTransfer: boolean;
     /**
      * 
      * @type {string}
      * @memberof OrderSaveRequest
      */
-    bankTransferNumber?: string;
+    bankTransferNumber: string;
     /**
      * 
      * @type {boolean}
      * @memberof OrderSaveRequest
      */
-    paymentByBlik?: boolean;
+    paymentByBlik: boolean;
     /**
      * 
      * @type {string}
      * @memberof OrderSaveRequest
      */
-    blikPhoneNumber?: string;
+    blikPhoneNumber: string;
 }
 /**
  * 
@@ -876,58 +858,58 @@ export interface OrderUpdateRequest {
     orderDate?: string;
     /**
      * 
-     * @type {LocalTime}
+     * @type {string}
      * @memberof OrderUpdateRequest
      */
-    timeOfOrder?: LocalTime;
+    timeOfOrder?: string;
     /**
      * 
      * @type {number}
      * @memberof OrderUpdateRequest
      */
-    decreaseInPercent?: number;
+    decreaseInPercent: number;
     /**
      * 
      * @type {number}
      * @memberof OrderUpdateRequest
      */
-    deliveryCostPerEverybody?: number;
+    deliveryCostPerEverybody: number;
     /**
      * 
      * @type {number}
      * @memberof OrderUpdateRequest
      */
-    deliveryCostPerDish?: number;
+    deliveryCostPerDish: number;
     /**
      * 
      * @type {boolean}
      * @memberof OrderUpdateRequest
      */
-    paymentByCash?: boolean;
+    paymentByCash: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof OrderUpdateRequest
      */
-    paymentByBankTransfer?: boolean;
+    paymentByBankTransfer: boolean;
     /**
      * 
      * @type {string}
      * @memberof OrderUpdateRequest
      */
-    bankTransferNumber?: string;
+    bankTransferNumber: string;
     /**
      * 
      * @type {boolean}
      * @memberof OrderUpdateRequest
      */
-    paymentByBlik?: boolean;
+    paymentByBlik: boolean;
     /**
      * 
      * @type {string}
      * @memberof OrderUpdateRequest
      */
-    blikPhoneNumber?: string;
+    blikPhoneNumber: string;
 }
 /**
  * 
@@ -940,61 +922,61 @@ export interface OrderViewResponse {
      * @type {string}
      * @memberof OrderViewResponse
      */
-    orderState?: OrderViewResponse.OrderStateEnum;
+    orderState: OrderViewResponse.OrderStateEnum;
     /**
      * 
      * @type {number}
      * @memberof OrderViewResponse
      */
-    orderDecreaseInPercent?: number;
+    orderDecreaseInPercent: number;
     /**
      * 
      * @type {number}
      * @memberof OrderViewResponse
      */
-    orderDeliveryCostPerEverybody?: number;
+    orderDeliveryCostPerEverybody: number;
     /**
      * 
      * @type {number}
      * @memberof OrderViewResponse
      */
-    orderDeliveryCostPerDish?: number;
+    orderDeliveryCostPerDish: number;
     /**
      * 
      * @type {string}
      * @memberof OrderViewResponse
      */
-    restaurantName?: string;
+    restaurantName: string;
     /**
      * 
      * @type {string}
      * @memberof OrderViewResponse
      */
-    restaurantTelephone?: string;
+    restaurantTelephone: string;
     /**
      * 
      * @type {Array<GroupedOrderEntry>}
      * @memberof OrderViewResponse
      */
-    groupedEntries?: Array<GroupedOrderEntry>;
+    groupedEntries: Array<GroupedOrderEntry>;
     /**
      * 
      * @type {number}
      * @memberof OrderViewResponse
      */
-    allEatingPeopleCount?: number;
+    allEatingPeopleCount: number;
     /**
      * 
      * @type {number}
      * @memberof OrderViewResponse
      */
-    basePriceSum?: number;
+    basePriceSum: number;
     /**
      * 
      * @type {number}
      * @memberof OrderViewResponse
      */
-    totalPrice?: number;
+    totalPrice: number;
 }
 
 /**
@@ -1025,37 +1007,37 @@ export interface ParticipantsDishEntry {
      * @type {string}
      * @memberof ParticipantsDishEntry
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ParticipantsDishEntry
      */
-    dishId?: string;
+    dishId: string;
     /**
      * 
      * @type {string}
      * @memberof ParticipantsDishEntry
      */
-    dishName?: string;
+    dishName: string;
     /**
      * 
      * @type {Array<SideDish>}
      * @memberof ParticipantsDishEntry
      */
-    sideDishes?: Array<SideDish>;
+    sideDishes: Array<SideDish>;
     /**
      * 
      * @type {number}
      * @memberof ParticipantsDishEntry
      */
-    price?: number;
+    price: number;
     /**
      * 
      * @type {string}
      * @memberof ParticipantsDishEntry
      */
-    comments?: string;
+    comments: string;
 }
 /**
  * 
@@ -1068,37 +1050,37 @@ export interface ParticipantsOrderEntry {
      * @type {string}
      * @memberof ParticipantsOrderEntry
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ParticipantsOrderEntry
      */
-    userId?: string;
+    userId: string;
     /**
      * 
      * @type {string}
      * @memberof ParticipantsOrderEntry
      */
-    username?: string;
+    username: string;
     /**
      * 
      * @type {Array<ParticipantsDishEntry>}
      * @memberof ParticipantsOrderEntry
      */
-    dishEntries?: Array<ParticipantsDishEntry>;
+    dishEntries: Array<ParticipantsDishEntry>;
     /**
      * 
      * @type {number}
      * @memberof ParticipantsOrderEntry
      */
-    finalPrice?: number;
+    finalPrice: number;
     /**
      * 
      * @type {string}
      * @memberof ParticipantsOrderEntry
      */
-    paymentStatus?: ParticipantsOrderEntry.PaymentStatusEnum;
+    paymentStatus: ParticipantsOrderEntry.PaymentStatusEnum;
 }
 
 /**
@@ -1127,7 +1109,7 @@ export interface Restaurant {
      * @type {string}
      * @memberof Restaurant
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
@@ -1139,31 +1121,31 @@ export interface Restaurant {
      * @type {string}
      * @memberof Restaurant
      */
-    telephone?: string;
+    telephone: string;
     /**
      * 
      * @type {string}
      * @memberof Restaurant
      */
-    address?: string;
+    address: string;
     /**
      * 
      * @type {string}
      * @memberof Restaurant
      */
-    url?: string;
+    url: string;
     /**
      * 
-     * @type {number}
+     * @type {Date}
      * @memberof Restaurant
      */
-    lastCrawled?: number;
+    lastCrawled?: Date;
     /**
      * 
-     * @type {number}
+     * @type {Date}
      * @memberof Restaurant
      */
-    lastEdited?: number;
+    lastEdited?: Date;
 }
 /**
  * 
@@ -1176,31 +1158,31 @@ export interface RestaurantInfo {
      * @type {string}
      * @memberof RestaurantInfo
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof RestaurantInfo
      */
-    name?: string;
+    name: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof RestaurantInfo
+     */
+    lastCrawled?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof RestaurantInfo
+     */
+    lastEdited?: Date;
     /**
      * 
      * @type {number}
      * @memberof RestaurantInfo
      */
-    lastCrawled?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof RestaurantInfo
-     */
-    lastEdited?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof RestaurantInfo
-     */
-    dishCount?: number;
+    dishCount: number;
 }
 /**
  * 
@@ -1219,19 +1201,19 @@ export interface RestaurantSaveRequest {
      * @type {string}
      * @memberof RestaurantSaveRequest
      */
-    telephone?: string;
+    telephone: string;
     /**
      * 
      * @type {string}
      * @memberof RestaurantSaveRequest
      */
-    address?: string;
+    address: string;
     /**
      * 
      * @type {string}
      * @memberof RestaurantSaveRequest
      */
-    url?: string;
+    url: string;
 }
 /**
  * 
@@ -1244,7 +1226,7 @@ export interface RestaurantUpdateRequest {
      * @type {string}
      * @memberof RestaurantUpdateRequest
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
@@ -1256,19 +1238,19 @@ export interface RestaurantUpdateRequest {
      * @type {string}
      * @memberof RestaurantUpdateRequest
      */
-    telephone?: string;
+    telephone: string;
     /**
      * 
      * @type {string}
      * @memberof RestaurantUpdateRequest
      */
-    address?: string;
+    address: string;
     /**
      * 
      * @type {string}
      * @memberof RestaurantUpdateRequest
      */
-    url?: string;
+    url: string;
 }
 /**
  * 
@@ -1294,49 +1276,49 @@ export interface ShowOrderResponse {
      * @type {OrderDto}
      * @memberof ShowOrderResponse
      */
-    order?: OrderDto;
+    order: OrderDto;
     /**
      * 
      * @type {Array<ParticipantsOrderEntry>}
      * @memberof ShowOrderResponse
      */
-    orderEntries?: Array<ParticipantsOrderEntry>;
+    orderEntries: Array<ParticipantsOrderEntry>;
     /**
      * 
      * @type {string}
      * @memberof ShowOrderResponse
      */
-    currentUserId?: string;
+    currentUserId: string;
     /**
      * 
      * @type {Array<DishDto>}
      * @memberof ShowOrderResponse
      */
-    allDishesInRestaurant?: Array<DishDto>;
+    allDishesInRestaurant: Array<DishDto>;
     /**
      * 
      * @type {{ [key: string]: Array<DishDto>; }}
      * @memberof ShowOrderResponse
      */
-    allDishesByCategory?: { [key: string]: Array<DishDto>; };
+    allDishesByCategory: { [key: string]: Array<DishDto>; };
     /**
      * 
      * @type {{ [key: string]: Array<SideDish>; }}
      * @memberof ShowOrderResponse
      */
-    dishIdToSideDishesMap?: { [key: string]: Array<SideDish>; };
+    dishIdToSideDishesMap: { [key: string]: Array<SideDish>; };
     /**
      * 
      * @type {number}
      * @memberof ShowOrderResponse
      */
-    baseOrderPrice?: number;
+    baseOrderPrice: number;
     /**
      * 
      * @type {number}
      * @memberof ShowOrderResponse
      */
-    totalOrderPrice?: number;
+    totalOrderPrice: number;
 }
 /**
  * 
@@ -1349,19 +1331,19 @@ export interface ShowRestaurantResponse {
      * @type {Restaurant}
      * @memberof ShowRestaurantResponse
      */
-    restaurant?: Restaurant;
+    restaurant: Restaurant;
     /**
      * 
      * @type {Array<DishDto>}
      * @memberof ShowRestaurantResponse
      */
-    dishes?: Array<DishDto>;
+    dishes: Array<DishDto>;
     /**
      * 
      * @type {{ [key: string]: Array<DishDto>; }}
      * @memberof ShowRestaurantResponse
      */
-    dishesByCategory?: { [key: string]: Array<DishDto>; };
+    dishesByCategory: { [key: string]: Array<DishDto>; };
 }
 /**
  * 
@@ -1374,7 +1356,7 @@ export interface SideDish {
      * @type {string}
      * @memberof SideDish
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
@@ -1386,7 +1368,7 @@ export interface SideDish {
      * @type {number}
      * @memberof SideDish
      */
-    price?: number;
+    price: number;
 }
 /**
  * 
@@ -1394,6 +1376,12 @@ export interface SideDish {
  * @interface SideDishData
  */
 export interface SideDishData {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SideDishData
+     */
+    isNew?: boolean;
     /**
      * 
      * @type {string}
@@ -1411,13 +1399,7 @@ export interface SideDishData {
      * @type {string}
      * @memberof SideDishData
      */
-    id?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SideDishData
-     */
-    _new?: boolean;
+    id: string;
 }
 /**
  * 
@@ -1430,13 +1412,13 @@ export interface TodayOrdersResponse {
      * @type {Array<OrderDto>}
      * @memberof TodayOrdersResponse
      */
-    ordersList?: Array<OrderDto>;
+    ordersList: Array<OrderDto>;
     /**
      * 
      * @type {Array<OrderEntryDto>}
      * @memberof TodayOrdersResponse
      */
-    currentOrderEntries?: Array<OrderEntryDto>;
+    currentOrderEntries: Array<OrderEntryDto>;
 }
 /**
  * DishControllerApi - fetch parameter creator
@@ -1570,12 +1552,16 @@ export const DishControllerApiFetchParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @param {DishCreateRequest} body 
          * @param {string} restaurantId 
-         * @param {DishCreateRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveDish(restaurantId: string, body?: DishCreateRequest, options: any = {}): FetchArgs {
+        saveDish(body: DishCreateRequest, restaurantId: string, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling saveDish.');
+            }
             // verify required parameter 'restaurantId' is not null or undefined
             if (restaurantId === null || restaurantId === undefined) {
                 throw new RequiredError('restaurantId','Required parameter restaurantId was null or undefined when calling saveDish.');
@@ -1603,12 +1589,16 @@ export const DishControllerApiFetchParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @param {DishUpdateRequest} body 
          * @param {string} restaurantId 
-         * @param {DishUpdateRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDish(restaurantId: string, body?: DishUpdateRequest, options: any = {}): FetchArgs {
+        updateDish(body: DishUpdateRequest, restaurantId: string, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling updateDish.');
+            }
             // verify required parameter 'restaurantId' is not null or undefined
             if (restaurantId === null || restaurantId === undefined) {
                 throw new RequiredError('restaurantId','Required parameter restaurantId was null or undefined when calling updateDish.');
@@ -1719,13 +1709,13 @@ export const DishControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {DishCreateRequest} body 
          * @param {string} restaurantId 
-         * @param {DishCreateRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveDish(restaurantId: string, body?: DishCreateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
-            const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).saveDish(restaurantId, body, options);
+        saveDish(body: DishCreateRequest, restaurantId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+            const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).saveDish(body, restaurantId, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1738,13 +1728,13 @@ export const DishControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {DishUpdateRequest} body 
          * @param {string} restaurantId 
-         * @param {DishUpdateRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDish(restaurantId: string, body?: DishUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
-            const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).updateDish(restaurantId, body, options);
+        updateDish(body: DishUpdateRequest, restaurantId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+            const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).updateDish(body, restaurantId, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1804,23 +1794,23 @@ export const DishControllerApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @param {DishCreateRequest} body 
          * @param {string} restaurantId 
-         * @param {DishCreateRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveDish(restaurantId: string, body?: DishCreateRequest, options?: any) {
-            return DishControllerApiFp(configuration).saveDish(restaurantId, body, options)(fetch, basePath);
+        saveDish(body: DishCreateRequest, restaurantId: string, options?: any) {
+            return DishControllerApiFp(configuration).saveDish(body, restaurantId, options)(fetch, basePath);
         },
         /**
          * 
+         * @param {DishUpdateRequest} body 
          * @param {string} restaurantId 
-         * @param {DishUpdateRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDish(restaurantId: string, body?: DishUpdateRequest, options?: any) {
-            return DishControllerApiFp(configuration).updateDish(restaurantId, body, options)(fetch, basePath);
+        updateDish(body: DishUpdateRequest, restaurantId: string, options?: any) {
+            return DishControllerApiFp(configuration).updateDish(body, restaurantId, options)(fetch, basePath);
         },
     };
 };
@@ -1880,26 +1870,26 @@ export class DishControllerApi extends BaseAPI {
 
     /**
      * 
+     * @param {DishCreateRequest} body 
      * @param {string} restaurantId 
-     * @param {DishCreateRequest} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DishControllerApi
      */
-    public saveDish(restaurantId: string, body?: DishCreateRequest, options?: any) {
-        return DishControllerApiFp(this.configuration).saveDish(restaurantId, body, options)(this.fetch, this.basePath);
+    public saveDish(body: DishCreateRequest, restaurantId: string, options?: any) {
+        return DishControllerApiFp(this.configuration).saveDish(body, restaurantId, options)(this.fetch, this.basePath);
     }
 
     /**
      * 
+     * @param {DishUpdateRequest} body 
      * @param {string} restaurantId 
-     * @param {DishUpdateRequest} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DishControllerApi
      */
-    public updateDish(restaurantId: string, body?: DishUpdateRequest, options?: any) {
-        return DishControllerApiFp(this.configuration).updateDish(restaurantId, body, options)(this.fetch, this.basePath);
+    public updateDish(body: DishUpdateRequest, restaurantId: string, options?: any) {
+        return DishControllerApiFp(this.configuration).updateDish(body, restaurantId, options)(this.fetch, this.basePath);
     }
 
 }
@@ -2039,11 +2029,15 @@ export const OrderControllerApiFetchParamCreator = function (configuration?: Con
         },
         /**
          * 
-         * @param {OrderSaveRequest} [body] 
+         * @param {OrderSaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        save(body?: OrderSaveRequest, options: any = {}): FetchArgs {
+        save(body: OrderSaveRequest, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling save.');
+            }
             const localVarPath = `/api/orders/save`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -2150,12 +2144,16 @@ export const OrderControllerApiFetchParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @param {SetAsOrderedResponse} body 
          * @param {string} orderId 
-         * @param {SetAsOrderedResponse} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setAsOrdered1(orderId: string, body?: SetAsOrderedResponse, options: any = {}): FetchArgs {
+        setAsOrdered1(body: SetAsOrderedResponse, orderId: string, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling setAsOrdered1.');
+            }
             // verify required parameter 'orderId' is not null or undefined
             if (orderId === null || orderId === undefined) {
                 throw new RequiredError('orderId','Required parameter orderId was null or undefined when calling setAsOrdered1.');
@@ -2289,11 +2287,15 @@ export const OrderControllerApiFetchParamCreator = function (configuration?: Con
         },
         /**
          * 
-         * @param {OrderUpdateRequest} [body] 
+         * @param {OrderUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(body?: OrderUpdateRequest, options: any = {}): FetchArgs {
+        update(body: OrderUpdateRequest, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling update.');
+            }
             const localVarPath = `/api/orders/update`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -2413,11 +2415,11 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {OrderSaveRequest} [body] 
+         * @param {OrderSaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        save(body?: OrderSaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+        save(body: OrderSaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).save(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2485,13 +2487,13 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {SetAsOrderedResponse} body 
          * @param {string} orderId 
-         * @param {SetAsOrderedResponse} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setAsOrdered1(orderId: string, body?: SetAsOrderedResponse, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
-            const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsOrdered1(orderId, body, options);
+        setAsOrdered1(body: SetAsOrderedResponse, orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+            const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsOrdered1(body, orderId, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2575,11 +2577,11 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {OrderUpdateRequest} [body] 
+         * @param {OrderUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(body?: OrderUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+        update(body: OrderUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).update(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2645,11 +2647,11 @@ export const OrderControllerApiFactory = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {OrderSaveRequest} [body] 
+         * @param {OrderSaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        save(body?: OrderSaveRequest, options?: any) {
+        save(body: OrderSaveRequest, options?: any) {
             return OrderControllerApiFp(configuration).save(body, options)(fetch, basePath);
         },
         /**
@@ -2681,13 +2683,13 @@ export const OrderControllerApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {SetAsOrderedResponse} body 
          * @param {string} orderId 
-         * @param {SetAsOrderedResponse} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setAsOrdered1(orderId: string, body?: SetAsOrderedResponse, options?: any) {
-            return OrderControllerApiFp(configuration).setAsOrdered1(orderId, body, options)(fetch, basePath);
+        setAsOrdered1(body: SetAsOrderedResponse, orderId: string, options?: any) {
+            return OrderControllerApiFp(configuration).setAsOrdered1(body, orderId, options)(fetch, basePath);
         },
         /**
          * 
@@ -2726,11 +2728,11 @@ export const OrderControllerApiFactory = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {OrderUpdateRequest} [body] 
+         * @param {OrderUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(body?: OrderUpdateRequest, options?: any) {
+        update(body: OrderUpdateRequest, options?: any) {
             return OrderControllerApiFp(configuration).update(body, options)(fetch, basePath);
         },
     };
@@ -2798,12 +2800,12 @@ export class OrderControllerApi extends BaseAPI {
 
     /**
      * 
-     * @param {OrderSaveRequest} [body] 
+     * @param {OrderSaveRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderControllerApi
      */
-    public save(body?: OrderSaveRequest, options?: any) {
+    public save(body: OrderSaveRequest, options?: any) {
         return OrderControllerApiFp(this.configuration).save(body, options)(this.fetch, this.basePath);
     }
 
@@ -2842,14 +2844,14 @@ export class OrderControllerApi extends BaseAPI {
 
     /**
      * 
+     * @param {SetAsOrderedResponse} body 
      * @param {string} orderId 
-     * @param {SetAsOrderedResponse} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderControllerApi
      */
-    public setAsOrdered1(orderId: string, body?: SetAsOrderedResponse, options?: any) {
-        return OrderControllerApiFp(this.configuration).setAsOrdered1(orderId, body, options)(this.fetch, this.basePath);
+    public setAsOrdered1(body: SetAsOrderedResponse, orderId: string, options?: any) {
+        return OrderControllerApiFp(this.configuration).setAsOrdered1(body, orderId, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -2897,12 +2899,12 @@ export class OrderControllerApi extends BaseAPI {
 
     /**
      * 
-     * @param {OrderUpdateRequest} [body] 
+     * @param {OrderUpdateRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderControllerApi
      */
-    public update(body?: OrderUpdateRequest, options?: any) {
+    public update(body: OrderUpdateRequest, options?: any) {
         return OrderControllerApiFp(this.configuration).update(body, options)(this.fetch, this.basePath);
     }
 
@@ -2949,11 +2951,15 @@ export const OrderEntryControllerApiFetchParamCreator = function (configuration?
         },
         /**
          * 
-         * @param {OrderEntrySaveRequest} [body] 
+         * @param {OrderEntrySaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        save1(body?: OrderEntrySaveRequest, options: any = {}): FetchArgs {
+        save1(body: OrderEntrySaveRequest, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling save1.');
+            }
             const localVarPath = `/api/order_entries/save`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -3032,11 +3038,15 @@ export const OrderEntryControllerApiFetchParamCreator = function (configuration?
         },
         /**
          * 
-         * @param {OrderEntryUpdateRequest} [body] 
+         * @param {OrderEntryUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update1(body?: OrderEntryUpdateRequest, options: any = {}): FetchArgs {
+        update1(body: OrderEntryUpdateRequest, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling update1.');
+            }
             const localVarPath = `/api/order_entries/update`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -3087,11 +3097,11 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
         },
         /**
          * 
-         * @param {OrderEntrySaveRequest} [body] 
+         * @param {OrderEntrySaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        save1(body?: OrderEntrySaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+        save1(body: OrderEntrySaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).save1(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -3141,11 +3151,11 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
         },
         /**
          * 
-         * @param {OrderEntryUpdateRequest} [body] 
+         * @param {OrderEntryUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update1(body?: OrderEntryUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+        update1(body: OrderEntryUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).update1(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -3178,11 +3188,11 @@ export const OrderEntryControllerApiFactory = function (configuration?: Configur
         },
         /**
          * 
-         * @param {OrderEntrySaveRequest} [body] 
+         * @param {OrderEntrySaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        save1(body?: OrderEntrySaveRequest, options?: any) {
+        save1(body: OrderEntrySaveRequest, options?: any) {
             return OrderEntryControllerApiFp(configuration).save1(body, options)(fetch, basePath);
         },
         /**
@@ -3205,11 +3215,11 @@ export const OrderEntryControllerApiFactory = function (configuration?: Configur
         },
         /**
          * 
-         * @param {OrderEntryUpdateRequest} [body] 
+         * @param {OrderEntryUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update1(body?: OrderEntryUpdateRequest, options?: any) {
+        update1(body: OrderEntryUpdateRequest, options?: any) {
             return OrderEntryControllerApiFp(configuration).update1(body, options)(fetch, basePath);
         },
     };
@@ -3236,12 +3246,12 @@ export class OrderEntryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @param {OrderEntrySaveRequest} [body] 
+     * @param {OrderEntrySaveRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderEntryControllerApi
      */
-    public save1(body?: OrderEntrySaveRequest, options?: any) {
+    public save1(body: OrderEntrySaveRequest, options?: any) {
         return OrderEntryControllerApiFp(this.configuration).save1(body, options)(this.fetch, this.basePath);
     }
 
@@ -3269,12 +3279,12 @@ export class OrderEntryControllerApi extends BaseAPI {
 
     /**
      * 
-     * @param {OrderEntryUpdateRequest} [body] 
+     * @param {OrderEntryUpdateRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderEntryControllerApi
      */
-    public update1(body?: OrderEntryUpdateRequest, options?: any) {
+    public update1(body: OrderEntryUpdateRequest, options?: any) {
         return OrderEntryControllerApiFp(this.configuration).update1(body, options)(this.fetch, this.basePath);
     }
 
@@ -3365,11 +3375,15 @@ export const RestaurantControllerApiFetchParamCreator = function (configuration?
         },
         /**
          * 
-         * @param {RestaurantSaveRequest} [body] 
+         * @param {RestaurantSaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveRestaurant(body?: RestaurantSaveRequest, options: any = {}): FetchArgs {
+        saveRestaurant(body: RestaurantSaveRequest, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling saveRestaurant.');
+            }
             const localVarPath = `/api/restaurants/save`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -3420,11 +3434,15 @@ export const RestaurantControllerApiFetchParamCreator = function (configuration?
         },
         /**
          * 
-         * @param {RestaurantUpdateRequest} [body] 
+         * @param {RestaurantUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateRestaurant(body?: RestaurantUpdateRequest, options: any = {}): FetchArgs {
+        updateRestaurant(body: RestaurantUpdateRequest, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling updateRestaurant.');
+            }
             const localVarPath = `/api/restaurants/update`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -3509,11 +3527,11 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
         },
         /**
          * 
-         * @param {RestaurantSaveRequest} [body] 
+         * @param {RestaurantSaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveRestaurant(body?: RestaurantSaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+        saveRestaurant(body: RestaurantSaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).saveRestaurant(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -3545,11 +3563,11 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
         },
         /**
          * 
-         * @param {RestaurantUpdateRequest} [body] 
+         * @param {RestaurantUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateRestaurant(body?: RestaurantUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+        updateRestaurant(body: RestaurantUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).updateRestaurant(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -3598,11 +3616,11 @@ export const RestaurantControllerApiFactory = function (configuration?: Configur
         },
         /**
          * 
-         * @param {RestaurantSaveRequest} [body] 
+         * @param {RestaurantSaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveRestaurant(body?: RestaurantSaveRequest, options?: any) {
+        saveRestaurant(body: RestaurantSaveRequest, options?: any) {
             return RestaurantControllerApiFp(configuration).saveRestaurant(body, options)(fetch, basePath);
         },
         /**
@@ -3616,11 +3634,11 @@ export const RestaurantControllerApiFactory = function (configuration?: Configur
         },
         /**
          * 
-         * @param {RestaurantUpdateRequest} [body] 
+         * @param {RestaurantUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateRestaurant(body?: RestaurantUpdateRequest, options?: any) {
+        updateRestaurant(body: RestaurantUpdateRequest, options?: any) {
             return RestaurantControllerApiFp(configuration).updateRestaurant(body, options)(fetch, basePath);
         },
     };
@@ -3667,12 +3685,12 @@ export class RestaurantControllerApi extends BaseAPI {
 
     /**
      * 
-     * @param {RestaurantSaveRequest} [body] 
+     * @param {RestaurantSaveRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestaurantControllerApi
      */
-    public saveRestaurant(body?: RestaurantSaveRequest, options?: any) {
+    public saveRestaurant(body: RestaurantSaveRequest, options?: any) {
         return RestaurantControllerApiFp(this.configuration).saveRestaurant(body, options)(this.fetch, this.basePath);
     }
 
@@ -3689,12 +3707,12 @@ export class RestaurantControllerApi extends BaseAPI {
 
     /**
      * 
-     * @param {RestaurantUpdateRequest} [body] 
+     * @param {RestaurantUpdateRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestaurantControllerApi
      */
-    public updateRestaurant(body?: RestaurantUpdateRequest, options?: any) {
+    public updateRestaurant(body: RestaurantUpdateRequest, options?: any) {
         return RestaurantControllerApiFp(this.configuration).updateRestaurant(body, options)(this.fetch, this.basePath);
     }
 

@@ -102,7 +102,7 @@
 
 <script lang="ts">
   import router from '../../router/index'
-  import ErrorsComponent from '../commons/Errors'
+  import ErrorsComponent from '../commons/ErrorsComponent'
   import LoadingView from "../commons/LoadingView";
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
@@ -115,6 +115,8 @@
   import Component from "vue-class-component";
   import ApiConnector from "../../lib/ApiConnector";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
+  import {RootState} from "../../store";
+  import {OrderSaveRequest} from "../../frontend-client";
 
   @Component({
     computed: {
@@ -136,7 +138,7 @@
     // Order
     restaurantId = "";
     orderDate = "";
-    timeOfOrder = 0;
+    timeOfOrder = "";
     decreaseInPercent = 0;
     deliveryCostPerEverybody = 0;
     deliveryCostPerDish = 0;
@@ -153,7 +155,7 @@
     }
 
     mounted() {
-      this.connector = new OrdersApiConnector(this.$store);
+      this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
       this.connector.getOrderCreateData()
         .then(response => {
@@ -224,7 +226,7 @@
     submitForm(e) {
       e.preventDefault();
 
-      const order = {
+      const order: OrderSaveRequest = {
         restaurantId: this.restaurantId,
         orderDate: this.orderDate,
         timeOfOrder: this.timeOfOrder,

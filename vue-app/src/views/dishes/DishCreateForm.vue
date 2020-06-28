@@ -38,7 +38,7 @@
 <script lang="ts">
   import DishesApiConnector from "../../lib/DishesApiConnector"
   import ApiConnector from "../../lib/ApiConnector"
-  import ErrorsComponent from '../commons/Errors.vue'
+  import ErrorsComponent from '../commons/ErrorsComponent.vue'
   import SideDishes from './components/SideDishes.vue'
   import MoneyInput from "../commons/MoneyInput";
   import ViewWrapper from "../commons/ViewWrapper";

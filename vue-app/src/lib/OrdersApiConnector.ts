@@ -35,8 +35,6 @@ export default class OrdersApiConnector {
   }
 
   saveOrderEntry (orderId: string, editedOrderEntry) {
-    const action = "/order_entries/save";
-
     let formData: OrderEntrySaveRequest = {
       orderId: orderId,
       dishId: editedOrderEntry.dishId,
@@ -51,8 +49,6 @@ export default class OrdersApiConnector {
   }
 
   updateOrderEntry (orderId: string, orderEntryId: string, editedOrderEntry) {
-    const action = "/order_entries/update";
-
     let formData: OrderEntryUpdateRequest = {
       id: orderEntryId,
       orderId: orderId,
@@ -141,38 +137,30 @@ export default class OrdersApiConnector {
   }
 
   setOrderAsCreated (orderId: string) {
-    // return ApiConnector.makePost('/orders/' + orderId + '/set_as_created')
-
     return this.orderApi.setAsCreated(orderId, headersWithToken());
   }
 
   setOrderAsOrdered (orderId: string) {
-    // return ApiConnector.makePost('/orders/' + orderId + '/set_back_as_ordered')
     return this.orderApi.setAsOrdered(orderId, headersWithToken())
   }
 
   setOrderAsDelivered (orderId: string) {
-    // return ApiConnector.makePost('/orders/' + orderId + '/set_as_delivered')
     return this.orderApi.setAsDelivered(orderId, headersWithToken())
   }
 
   setOrderAsRejected (orderId: string) {
-    // return ApiConnector.makePost('/orders/' + orderId + '/set_as_rejected')
     return this.orderApi.setAsRejected(orderId, headersWithToken());
   }
 
   deleteOrder (orderId: string) {
-    // return ApiConnector.makeDelete('/orders/' + orderId + '/delete')
     return this.orderApi._delete(orderId, headersWithToken())
   }
 
   markOrderEntryAsPaid (orderEntryId: string) {
-    // return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/mark_as_paid')
     return this.orderEntryApi.setAsMarkedAsPaid(orderEntryId, headersWithToken())
   }
 
   confirmOrderEntryAsPaid (orderEntryId: string) {
-    // return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/confirm_as_paid')
     return this.orderEntryApi.setAsConfirmedAsPaid(orderEntryId, headersWithToken())
   }
 
@@ -184,17 +172,8 @@ export default class OrdersApiConnector {
     return this.orderApi.update(order, headersWithToken())
   }
 
-  makeAnOrder (orderId: string, {approxTimeOfDelivery}) {
-    let action = '/orders/' + orderId + '/set_as_ordered';
-
-    let formData: SetAsOrderedResponse = {
-      approxTimeOfDelivery: approxTimeOfDelivery.toString()
-    };
-
-    return this.orderApi.setAsOrdered1(orderId, formData, headersWithToken())
+  makeAnOrder (orderId: string, formData: SetAsOrderedResponse) {
+    return this.orderApi.setAsOrdered1(formData, orderId, headersWithToken())
       .then(() => router.push("/orders/show/" + orderId));
-
-    // return ApiConnector.makePost(action, formData)
-    //     .then(() => router.push("/orders/show/" + orderId))
   }
 }

@@ -9,7 +9,7 @@
       <i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Back to ordered
     </v-btn>
 
-    <v-btn color="error" @click="setAsRejected">
+    <v-btn color="error" @click="setAsRejected()">
       Mark as rejected&nbsp;<i class="fa fa-ban" aria-hidden="true"></i>
     </v-btn>
 

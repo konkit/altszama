@@ -2,6 +2,8 @@
   <ViewWrapper :title="`Ordering from ${restaurantName}`" :backpath="`#/orders/show/${orderId}`">
     <LoadingView>
 
+      <errors-component/>
+
       <template v-if="isStateOrdering">
         <v-container>
           <v-row>
@@ -52,7 +54,7 @@
                   </v-row>
 
                   <v-row class="justify-space-around">
-                    <v-col class="align-center align-self-center" :align-self="align">
+                    <v-col class="align-center align-self-center">
                       <div class=" delivery-time-wrapper">
 
                         <TimePicker :value="approxTimeOfDelivery" @input="updateApproxTimeOfDelivery($event)"
@@ -60,7 +62,7 @@
                       </div>
                     </v-col>
 
-                    <v-col class="align-center align-self-center" :align-self="center">
+                    <v-col class="align-center align-self-center">
                       <v-btn color="success" @click="submitForm">
                         Order placed! &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>
                       </v-btn>
@@ -135,52 +137,31 @@
 
 <script lang="ts">
   import LoadingView from "../commons/LoadingView";
-  import {mapState} from "vuex"
   import PriceSummary from "./components/PriceSummary";
   import TimePicker from "../commons/TimePicker";
   import ViewWrapper from "../commons/ViewWrapper";
-  import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION,} from "../../store/modules/ShowOrderModule"
+  import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION} from "../../store/modules/ShowOrderModule"
   import router from '../../router/index'
   import UserOrders from "./components/orderView/UserOrders";
   import Vue from "vue";
   import Component from "vue-class-component";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import ApiConnector from "../../lib/ApiConnector";
+  import ErrorsComponent from "../../../src/views/commons/ErrorsComponent"
+  import {RootState} from "../../store";
 
   @Component({
-    computed: {
-      ...mapState("orderView", [
-        "orderState",
-        "orderDecreaseInPercent",
-        "orderDeliveryCostPerEverybody",
-        "orderDeliveryCostPerDish",
-        "restaurantName",
-        "restaurantTelephone",
-        "groupedEntries",
-        "allEatingPeopleCount",
-        "basePriceSum",
-        "totalPrice",
-        "approxTimeOfDelivery"
-      ]),
-      isStateOrdering() {
-        return this.orderState === 'ORDERING';
-      },
-      isStateNotOrdering() {
-        return this.orderState !== 'ORDERING';
-      }
-    },
     components: {
       UserOrders,
       ViewWrapper,
       TimePicker,
       PriceSummary,
       LoadingView,
+      ErrorsComponent
     }
   })
   export default class OrderView extends Vue {
     orderId = "";
-    approxTimeOfDeliveryModal = false;
-    timeOfOrderModal = false;
 
     orderState = "";
     orderDecreaseInPercent = 0;
@@ -198,12 +179,11 @@
 
     mounted() {
       this.orderId = this.$route.params.id;
-      this.connector = new OrdersApiConnector(this.$store);
-      // this.$store.dispatch(`orderView/${FETCH_ORDER_VIEW_DATA_ACTION}`, {orderId: this.orderId});
+      this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
       this.connector.fetchOrderView(this.orderId)
         .then(responseObj => {
-          this.orderState = responseObj.orderState;
+          this.orderState = responseObj.orderState.toString();
           this.orderDecreaseInPercent = responseObj.orderDecreaseInPercent;
           this.orderDeliveryCostPerEverybody = responseObj.orderDeliveryCostPerEverybody;
           this.orderDeliveryCostPerDish = responseObj.orderDeliveryCostPerDish;
@@ -222,22 +202,27 @@
     }
 
     submitForm() {
-      // this.$store.dispatch(`orderView/${MAKE_AN_ORDER_ACTION}`, {approxTimeOfDelivery: this.approxTimeOfDelivery});
-
-      this.connector.makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery})
+      this.connector.makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery.toString()})
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false
     }
 
     updateApproxTimeOfDelivery(newValue) {
-      // this.$store.commit(`orderView/${UPDATE_APPROX_TIME_OF_DELIVERY}`, newValue)
       this.approxTimeOfDelivery = newValue;
     }
 
     unlockOrder() {
       this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {orderId: this.orderId})
         .then(() => router.push("/orders/show/" + this.orderId))
+    }
+
+    get isStateOrdering() {
+      return this.orderState === 'ORDERING';
+    }
+
+    get isStateNotOrdering() {
+      return this.orderState !== 'ORDERING';
     }
   }
 

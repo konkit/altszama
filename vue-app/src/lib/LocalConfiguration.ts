@@ -1,6 +1,5 @@
 import {Configuration} from "@/frontend-client";
-import store, {RootState} from "@/store";
-import {Store} from "vuex";
+import {RootState} from "@/store";
 
 export default class LocalConfiguration {
 

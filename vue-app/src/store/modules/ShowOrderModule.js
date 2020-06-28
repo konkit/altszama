@@ -25,7 +25,7 @@ var showOrderState = {
     orderEntries: [],
     currentUserId: '',
     allDishesInRestaurant: [],
-    allDishesByCategory: [],
+    allDishesByCategory: {},
     dishIdToSideDishesMap: [],
     totalOrderPrice: 0,
     baseOrderPrice: 0,
@@ -147,7 +147,7 @@ export var showOrderModule = {
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },
         _b[DELETE_ORDER_ACTION] = function (_a, _b) {
-            var state = _a.state, rootState = _a.rootState;
+            var rootState = _a.rootState;
             var orderId = _b.orderId;
             new OrdersApiConnector(rootState).deleteOrder(orderId)
                 .then(function () { return router.push('/orders'); })

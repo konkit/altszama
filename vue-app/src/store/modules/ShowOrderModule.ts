@@ -1,9 +1,8 @@
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import router from '../../router/index'
-import Vuex, {Module} from "vuex";
+import {Module} from "vuex";
 import {RootState} from "@/store";
-import {ShowRestaurantState} from "@/store/modules/ShowRestaurantModule";
 import {DishDto, ShowOrderResponse} from "@/frontend-client";
 
 export const NAMESPACE_SHOW_ORDER = "showOrder";
@@ -151,7 +150,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
           })
           .catch(errResponse => ApiConnector.handleError(errResponse))
     },
-    [DELETE_ORDER_ACTION] ({state, rootState}, {orderId}) {
+    [DELETE_ORDER_ACTION] ({rootState}, {orderId}) {
       new OrdersApiConnector(rootState).deleteOrder(orderId)
         .then(() => router.push('/orders'))
         .catch(errResponse => ApiConnector.handleError(errResponse))

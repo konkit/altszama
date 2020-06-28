@@ -11,28 +11,19 @@
 <script lang="ts">
   import Vue from "vue";
   import Component from "vue-class-component";
-  import {Prop} from "vue-property-decorator";
+  import {Prop, Watch} from "vue-property-decorator";
 
-  @Component({
-    watch: {
-      value(newVal) {
-        const newValue = calcNewValue(newVal, this.currency);
-
-        this.stringValue = newValue;
-        this.newStringValue = newValue;
-      }
-    }
-  })
+  @Component({})
   export default class MoneyInput extends Vue {
-    @Prop() label: string = "Price";
+    @Prop({default: "Price"}) label: string;
     @Prop() value: number;
-    @Prop() currency: string = "zł";
+    @Prop({default: "zł"}) currency: string;
 
-    private stringValue: "";
-    private newStringValue: "";
+    stringValue: string = "";
+    newStringValue: string = "";
 
     mounted() {
-      const newValue = calcNewValue(this.value, this.currency);
+      const newValue = this.calcNewValue(this.value, this.currency);
 
       this.stringValue = newValue;
       this.newStringValue = newValue;
@@ -45,19 +36,27 @@
     onBlur() {
       this.$emit("input", fromString(this.newStringValue))
     }
-  }
 
-  function calcNewValue(newVal, currency) {
-    let newValue = 0;
+    @Watch('value')
+    onPropertyChanged(newVal) {
+      const newValue = this.calcNewValue(newVal, this.currency);
 
-    if (newVal) {
-      newValue = newVal;
+      this.stringValue = newValue;
+      this.newStringValue = newValue;
     }
 
-    let wholePart = Math.floor(newValue / 100);
-    let fractionPart = ("0" + (newValue % 100)).slice(-2);
+    private calcNewValue(newVal, currency): string {
+      let newValue = 0;
 
-    return `${wholePart},${fractionPart} ${currency}`
+      if (newVal) {
+        newValue = newVal;
+      }
+
+      let wholePart = Math.floor(newValue / 100);
+      let fractionPart = ("0" + (newValue % 100)).slice(-2);
+
+      return `${wholePart},${fractionPart} ${currency}`
+    }
   }
 
   function fromString(a) {

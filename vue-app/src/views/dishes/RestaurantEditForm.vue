@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/Errors'
+  import ErrorsComponent from '../commons/ErrorsComponent'
 
   import LoadingView from "../commons/LoadingView";
   import ViewWrapper from "../commons/ViewWrapper";

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../../../commons/Errors.vue'
+  import ErrorsComponent from '../../../commons/ErrorsComponent.vue'
   import Spinner from '../../../commons/Spinner.vue'
 
   import OrderEntryForm from './OrderEntryForm.vue'

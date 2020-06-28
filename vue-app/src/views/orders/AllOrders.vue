@@ -49,6 +49,7 @@
   import Component from "vue-class-component";
   import ApiConnector from "../../lib/ApiConnector";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
+  import {RootState} from "../../store";
 
   @Component({
     components: {
@@ -69,7 +70,7 @@
     connector: OrdersApiConnector;
 
     mounted() {
-      this.connector = new OrdersApiConnector(this.$store);
+      this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
       this.connector.fetchAllOrders()
         .then(allOrdersList => {

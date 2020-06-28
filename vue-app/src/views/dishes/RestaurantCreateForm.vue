@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/Errors'
+  import ErrorsComponent from '../commons/ErrorsComponent'
   import ViewWrapper from "../commons/ViewWrapper";
   import Vue from "vue";
   import {Prop} from "vue-property-decorator";

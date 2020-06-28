@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/Errors'
+  import ErrorsComponent from '../commons/ErrorsComponent'
   import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable'
   import LoadingView from "../commons/LoadingView";
   import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantModule"

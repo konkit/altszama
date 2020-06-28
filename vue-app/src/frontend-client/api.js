@@ -273,13 +273,17 @@ export var DishControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
+         * @param {DishCreateRequest} body
          * @param {string} restaurantId
-         * @param {DishCreateRequest} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveDish: function (restaurantId, body, options) {
+        saveDish: function (body, restaurantId, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling saveDish.');
+            }
             // verify required parameter 'restaurantId' is not null or undefined
             if (restaurantId === null || restaurantId === undefined) {
                 throw new RequiredError('restaurantId', 'Required parameter restaurantId was null or undefined when calling saveDish.');
@@ -304,13 +308,17 @@ export var DishControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
+         * @param {DishUpdateRequest} body
          * @param {string} restaurantId
-         * @param {DishUpdateRequest} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDish: function (restaurantId, body, options) {
+        updateDish: function (body, restaurantId, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling updateDish.');
+            }
             // verify required parameter 'restaurantId' is not null or undefined
             if (restaurantId === null || restaurantId === undefined) {
                 throw new RequiredError('restaurantId', 'Required parameter restaurantId was null or undefined when calling updateDish.');
@@ -429,13 +437,13 @@ export var DishControllerApiFp = function (configuration) {
         },
         /**
          *
+         * @param {DishCreateRequest} body
          * @param {string} restaurantId
-         * @param {DishCreateRequest} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveDish: function (restaurantId, body, options) {
-            var localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).saveDish(restaurantId, body, options);
+        saveDish: function (body, restaurantId, options) {
+            var localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).saveDish(body, restaurantId, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -451,13 +459,13 @@ export var DishControllerApiFp = function (configuration) {
         },
         /**
          *
+         * @param {DishUpdateRequest} body
          * @param {string} restaurantId
-         * @param {DishUpdateRequest} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDish: function (restaurantId, body, options) {
-            var localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).updateDish(restaurantId, body, options);
+        updateDish: function (body, restaurantId, options) {
+            var localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).updateDish(body, restaurantId, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -519,23 +527,23 @@ export var DishControllerApiFactory = function (configuration, fetch, basePath) 
         },
         /**
          *
+         * @param {DishCreateRequest} body
          * @param {string} restaurantId
-         * @param {DishCreateRequest} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        saveDish: function (restaurantId, body, options) {
-            return DishControllerApiFp(configuration).saveDish(restaurantId, body, options)(fetch, basePath);
+        saveDish: function (body, restaurantId, options) {
+            return DishControllerApiFp(configuration).saveDish(body, restaurantId, options)(fetch, basePath);
         },
         /**
          *
+         * @param {DishUpdateRequest} body
          * @param {string} restaurantId
-         * @param {DishUpdateRequest} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDish: function (restaurantId, body, options) {
-            return DishControllerApiFp(configuration).updateDish(restaurantId, body, options)(fetch, basePath);
+        updateDish: function (body, restaurantId, options) {
+            return DishControllerApiFp(configuration).updateDish(body, restaurantId, options)(fetch, basePath);
         },
     };
 };
@@ -594,25 +602,25 @@ var DishControllerApi = /** @class */ (function (_super) {
     };
     /**
      *
+     * @param {DishCreateRequest} body
      * @param {string} restaurantId
-     * @param {DishCreateRequest} [body]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DishControllerApi
      */
-    DishControllerApi.prototype.saveDish = function (restaurantId, body, options) {
-        return DishControllerApiFp(this.configuration).saveDish(restaurantId, body, options)(this.fetch, this.basePath);
+    DishControllerApi.prototype.saveDish = function (body, restaurantId, options) {
+        return DishControllerApiFp(this.configuration).saveDish(body, restaurantId, options)(this.fetch, this.basePath);
     };
     /**
      *
+     * @param {DishUpdateRequest} body
      * @param {string} restaurantId
-     * @param {DishUpdateRequest} [body]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DishControllerApi
      */
-    DishControllerApi.prototype.updateDish = function (restaurantId, body, options) {
-        return DishControllerApiFp(this.configuration).updateDish(restaurantId, body, options)(this.fetch, this.basePath);
+    DishControllerApi.prototype.updateDish = function (body, restaurantId, options) {
+        return DishControllerApiFp(this.configuration).updateDish(body, restaurantId, options)(this.fetch, this.basePath);
     };
     return DishControllerApi;
 }(BaseAPI));
@@ -748,12 +756,16 @@ export var OrderControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {OrderSaveRequest} [body]
+         * @param {OrderSaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         save: function (body, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling save.');
+            }
             var localVarPath = "/api/orders/save";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -854,13 +866,17 @@ export var OrderControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
+         * @param {SetAsOrderedResponse} body
          * @param {string} orderId
-         * @param {SetAsOrderedResponse} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setAsOrdered1: function (orderId, body, options) {
+        setAsOrdered1: function (body, orderId, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling setAsOrdered1.');
+            }
             // verify required parameter 'orderId' is not null or undefined
             if (orderId === null || orderId === undefined) {
                 throw new RequiredError('orderId', 'Required parameter orderId was null or undefined when calling setAsOrdered1.');
@@ -987,12 +1003,16 @@ export var OrderControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {OrderUpdateRequest} [body]
+         * @param {OrderUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         update: function (body, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling update.');
+            }
             var localVarPath = "/api/orders/update";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -1123,7 +1143,7 @@ export var OrderControllerApiFp = function (configuration) {
         },
         /**
          *
-         * @param {OrderSaveRequest} [body]
+         * @param {OrderSaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1207,13 +1227,13 @@ export var OrderControllerApiFp = function (configuration) {
         },
         /**
          *
+         * @param {SetAsOrderedResponse} body
          * @param {string} orderId
-         * @param {SetAsOrderedResponse} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setAsOrdered1: function (orderId, body, options) {
-            var localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsOrdered1(orderId, body, options);
+        setAsOrdered1: function (body, orderId, options) {
+            var localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsOrdered1(body, orderId, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -1312,7 +1332,7 @@ export var OrderControllerApiFp = function (configuration) {
         },
         /**
          *
-         * @param {OrderUpdateRequest} [body]
+         * @param {OrderUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1384,7 +1404,7 @@ export var OrderControllerApiFactory = function (configuration, fetch, basePath)
         },
         /**
          *
-         * @param {OrderSaveRequest} [body]
+         * @param {OrderSaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1420,13 +1440,13 @@ export var OrderControllerApiFactory = function (configuration, fetch, basePath)
         },
         /**
          *
+         * @param {SetAsOrderedResponse} body
          * @param {string} orderId
-         * @param {SetAsOrderedResponse} [body]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setAsOrdered1: function (orderId, body, options) {
-            return OrderControllerApiFp(configuration).setAsOrdered1(orderId, body, options)(fetch, basePath);
+        setAsOrdered1: function (body, orderId, options) {
+            return OrderControllerApiFp(configuration).setAsOrdered1(body, orderId, options)(fetch, basePath);
         },
         /**
          *
@@ -1465,7 +1485,7 @@ export var OrderControllerApiFactory = function (configuration, fetch, basePath)
         },
         /**
          *
-         * @param {OrderUpdateRequest} [body]
+         * @param {OrderUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1535,7 +1555,7 @@ var OrderControllerApi = /** @class */ (function (_super) {
     };
     /**
      *
-     * @param {OrderSaveRequest} [body]
+     * @param {OrderSaveRequest} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderControllerApi
@@ -1575,14 +1595,14 @@ var OrderControllerApi = /** @class */ (function (_super) {
     };
     /**
      *
+     * @param {SetAsOrderedResponse} body
      * @param {string} orderId
-     * @param {SetAsOrderedResponse} [body]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderControllerApi
      */
-    OrderControllerApi.prototype.setAsOrdered1 = function (orderId, body, options) {
-        return OrderControllerApiFp(this.configuration).setAsOrdered1(orderId, body, options)(this.fetch, this.basePath);
+    OrderControllerApi.prototype.setAsOrdered1 = function (body, orderId, options) {
+        return OrderControllerApiFp(this.configuration).setAsOrdered1(body, orderId, options)(this.fetch, this.basePath);
     };
     /**
      *
@@ -1625,7 +1645,7 @@ var OrderControllerApi = /** @class */ (function (_super) {
     };
     /**
      *
-     * @param {OrderUpdateRequest} [body]
+     * @param {OrderUpdateRequest} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderControllerApi
@@ -1677,12 +1697,16 @@ export var OrderEntryControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {OrderEntrySaveRequest} [body]
+         * @param {OrderEntrySaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         save1: function (body, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling save1.');
+            }
             var localVarPath = "/api/order_entries/save";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -1756,12 +1780,16 @@ export var OrderEntryControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {OrderEntryUpdateRequest} [body]
+         * @param {OrderEntryUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         update1: function (body, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling update1.');
+            }
             var localVarPath = "/api/order_entries/update";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -1811,7 +1839,7 @@ export var OrderEntryControllerApiFp = function (configuration) {
         },
         /**
          *
-         * @param {OrderEntrySaveRequest} [body]
+         * @param {OrderEntrySaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1874,7 +1902,7 @@ export var OrderEntryControllerApiFp = function (configuration) {
         },
         /**
          *
-         * @param {OrderEntryUpdateRequest} [body]
+         * @param {OrderEntryUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1913,7 +1941,7 @@ export var OrderEntryControllerApiFactory = function (configuration, fetch, base
         },
         /**
          *
-         * @param {OrderEntrySaveRequest} [body]
+         * @param {OrderEntrySaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1940,7 +1968,7 @@ export var OrderEntryControllerApiFactory = function (configuration, fetch, base
         },
         /**
          *
-         * @param {OrderEntryUpdateRequest} [body]
+         * @param {OrderEntryUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1973,7 +2001,7 @@ var OrderEntryControllerApi = /** @class */ (function (_super) {
     };
     /**
      *
-     * @param {OrderEntrySaveRequest} [body]
+     * @param {OrderEntrySaveRequest} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderEntryControllerApi
@@ -2003,7 +2031,7 @@ var OrderEntryControllerApi = /** @class */ (function (_super) {
     };
     /**
      *
-     * @param {OrderEntryUpdateRequest} [body]
+     * @param {OrderEntryUpdateRequest} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrderEntryControllerApi
@@ -2097,12 +2125,16 @@ export var RestaurantControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {RestaurantSaveRequest} [body]
+         * @param {RestaurantSaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         saveRestaurant: function (body, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling saveRestaurant.');
+            }
             var localVarPath = "/api/restaurants/save";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -2149,12 +2181,16 @@ export var RestaurantControllerApiFetchParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {RestaurantUpdateRequest} [body]
+         * @param {RestaurantUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         updateRestaurant: function (body, options) {
             if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling updateRestaurant.');
+            }
             var localVarPath = "/api/restaurants/update";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -2244,7 +2280,7 @@ export var RestaurantControllerApiFp = function (configuration) {
         },
         /**
          *
-         * @param {RestaurantSaveRequest} [body]
+         * @param {RestaurantSaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2286,7 +2322,7 @@ export var RestaurantControllerApiFp = function (configuration) {
         },
         /**
          *
-         * @param {RestaurantUpdateRequest} [body]
+         * @param {RestaurantUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2341,7 +2377,7 @@ export var RestaurantControllerApiFactory = function (configuration, fetch, base
         },
         /**
          *
-         * @param {RestaurantSaveRequest} [body]
+         * @param {RestaurantSaveRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2359,7 +2395,7 @@ export var RestaurantControllerApiFactory = function (configuration, fetch, base
         },
         /**
          *
-         * @param {RestaurantUpdateRequest} [body]
+         * @param {RestaurantUpdateRequest} body
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2410,7 +2446,7 @@ var RestaurantControllerApi = /** @class */ (function (_super) {
     };
     /**
      *
-     * @param {RestaurantSaveRequest} [body]
+     * @param {RestaurantSaveRequest} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestaurantControllerApi
@@ -2430,7 +2466,7 @@ var RestaurantControllerApi = /** @class */ (function (_super) {
     };
     /**
      *
-     * @param {RestaurantUpdateRequest} [body]
+     * @param {RestaurantUpdateRequest} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestaurantControllerApi

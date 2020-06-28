@@ -127,12 +127,14 @@
 <script lang="ts">
   import ApiConnector from '../../lib/ApiConnector'
   import LoadingView from "../commons/LoadingView";
-  import ErrorsComponent from '../commons/Errors'
+  import ErrorsComponent from '../commons/ErrorsComponent'
   import router from '../../router/index'
   import ViewWrapper from "../commons/ViewWrapper";
   import Vue from "vue";
   import Component from "vue-class-component";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
+  import {OrderDto, OrderEntryDto} from "../../frontend-client";
+  import {RootState} from "../../store";
 
   @Component({
     components: {
@@ -142,15 +144,15 @@
     }
   })
   export default class TodayOrders extends Vue {
-    currentOrderEntries = [];
-    ordersList = [];
+    currentOrderEntries: OrderEntryDto[] = [];
+    ordersList: OrderDto[] = [];
 
     connector: OrdersApiConnector;
 
     mounted() {
       ApiConnector.initializePushNotifications();
 
-      this.connector = new OrdersApiConnector(this.$store);
+      this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
       this.connector.fetchTodaysOrders()
         .then(todayOrdersData => {

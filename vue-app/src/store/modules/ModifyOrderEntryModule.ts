@@ -45,19 +45,19 @@ export const UPDATE_ORDER_ENTRY_ACTION = "UPDATE_ORDER_ENTRY_ACTION";
 
 
 interface ModifyOrderEntryState {
-  loadingEntry: false,
+  loadingEntry: boolean,
 
-  isEntryCreating: false,
-  isEntryEdited: false,
-  orderEntryId: "",
-  dishEntryId: "",
+  isEntryCreating: boolean,
+  isEntryEdited: boolean,
+  orderEntryId: string,
+  dishEntryId: string,
 
-  orderId: '',
-  dishId: '',
-  additionalComments: '',
-  newDish: false,
-  newDishName: "",
-  newDishPrice: "",
+  orderId: string,
+  dishId: string,
+  additionalComments: string,
+  newDish: boolean,
+  newDishName: string,
+  newDishPrice: number,
   chosenSideDishes: []
 }
 
@@ -74,7 +74,7 @@ const modifyOrderEntryState: ModifyOrderEntryState = {
   additionalComments: '',
   newDish: false,
   newDishName: "",
-  newDishPrice: "",
+  newDishPrice: 0,
   chosenSideDishes: [],
 };
 

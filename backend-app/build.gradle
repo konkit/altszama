@@ -99,7 +99,8 @@ dependencies {
   compile("org.jetbrains.kotlin:kotlin-reflect")
   compile("org.funktionale:funktionale-all:1.2")
 
-  compile 'org.springdoc:springdoc-openapi-ui:1.2.32'
+  compile 'org.springdoc:springdoc-openapi-ui:1.4.2'
+  compile 'org.springdoc:springdoc-openapi-kotlin:1.4.2'
 
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('org.springframework.security:spring-security-test')

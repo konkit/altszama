@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/Errors'
+  import ErrorsComponent from '../commons/ErrorsComponent'
   import SideDishes from './components/SideDishes.vue'
   import LoadingView from "../commons/LoadingView";
   import MoneyInput from "../commons/MoneyInput";

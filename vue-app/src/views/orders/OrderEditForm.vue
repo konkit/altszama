@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/Errors'
+  import ErrorsComponent from '../commons/ErrorsComponent'
   import LoadingView from "../commons/LoadingView";
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
@@ -103,6 +103,7 @@
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import ApiConnector from "../../lib/ApiConnector";
   import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "../../store/modules/ShowOrderModule";
+  import {OrderUpdateRequest} from "../../frontend-client";
 
   @Component({
     components: {
@@ -115,14 +116,13 @@
     }
   })
   export default class OrderEditForm extends Vue {
-    orderId = "";
 
     // Order
-    orderId = 0;
+    orderId: string = "";
     restaurantId = "";
     restaurantName = "";
     orderDate = "";
-    timeOfOrder = 0;
+    timeOfOrder = "";
     decreaseInPercent = 0;
     deliveryCostPerEverybody = 0;
     deliveryCostPerDish = 0;
@@ -142,8 +142,6 @@
 
       this.connector.getOrderEditData(this.orderId)
         .then(response => {
-          this.orderId = response.orderId;
-
           this.restaurantName = response.order.restaurantName;
           this.orderDate = response.order.orderDate;
           this.timeOfOrder = response.order.timeOfOrder;
@@ -167,7 +165,7 @@
     submitForm(e) {
       e.preventDefault();
 
-      const order = {
+      const order: OrderUpdateRequest = {
         orderId: this.orderId,
         orderDate: this.orderDate,
         timeOfOrder: this.timeOfOrder,
@@ -181,11 +179,13 @@
         blikPhoneNumber: this.blikPhoneNumber || ""
       };
 
+
       this.connector.editOrder(order)
         .then(() => {
           this.$store.commit('setLoadingTrue');
           this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
           this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`, {orderId: this.orderId});
+          this.$router.push("/orders/show/" + this.orderId)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
 

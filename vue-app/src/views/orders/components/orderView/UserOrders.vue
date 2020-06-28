@@ -1,7 +1,5 @@
 <template>
   <div>
-    <errors-component/>
-
     <v-list dense>
       <template v-for="(entry, entryIndex) in groupedEntries">
         <v-list-item :key="'list-' + entryIndex">
@@ -82,8 +80,13 @@
   import {Prop} from "vue-property-decorator";
   import Component from "vue-class-component";
   import Vue from "vue";
+  import ErrorsComponent from "@/views/commons/ErrorsComponent"
 
-  @Component({})
+  @Component({
+    components: {
+      ErrorsComponent
+    }
+  })
   export default class UserOrders extends Vue {
     @Prop() groupedEntries;
   }

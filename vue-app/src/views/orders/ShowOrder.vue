@@ -101,7 +101,6 @@
 
 <script lang="ts">
   import LoadingView from '../commons/LoadingView.vue'
-  import {mapState} from 'vuex'
   import {
     FETCH_ORDER_DATA_ACTION,
     NAMESPACE_SHOW_ORDER,
@@ -121,27 +120,6 @@
   import Vue from "vue";
 
   @Component({
-    computed: {
-      ...mapState({
-        username: state => state.username,
-      }),
-      ...mapState('showOrder', [
-        "order",
-        "orderEntries",
-        "currentUserId",
-        "totalOrderPrice",
-        "baseOrderPrice"
-      ]),
-      ...mapState('modifyOrderEntry', [
-        "isEntryCreating",
-        "isEntryEdited",
-        "orderEntryId",
-        "dishEntryId",
-      ]),
-      loading() {
-        return this.$store.state.loading;
-      }
-    },
     components: {
       OrderLockedWarning,
       PaymentOptionsSummary,
@@ -212,6 +190,50 @@
 
     get orderState() {
       return this.$store.state.showOrder.order.orderState;
+    }
+
+    get username() {
+      return this.$store.state.username;
+    }
+
+    get order() {
+      return this.$store.state.showOrder.order;
+    }
+
+    get orderEntries() {
+      return this.$store.state.showOrder.orderEntries;
+    }
+
+    get currentUserId() {
+      return this.$store.state.showOrder.currentUserId;
+    }
+
+    get totalOrderPrice() {
+      return this.$store.state.showOrder.totalOrderPrice;
+    }
+
+    get baseOrderPrice() {
+      return this.$store.state.showOrder.baseOrderPrice;
+    }
+
+    get isEntryCreating() {
+      return this.$store.state.modifyOrderEntry.isEntryCreating;
+    }
+
+    get isEntryEdited() {
+      return this.$store.state.modifyOrderEntry.isEntryEdited;
+    }
+
+    get orderEntryId() {
+      return this.$store.state.modifyOrderEntry.orderEntryId;
+    }
+
+    get dishEntryId() {
+      return this.$store.state.modifyOrderEntry.dishEntryId;
+    }
+
+    get loading() {
+      return this.$store.state.loading;
     }
   }
 </script>
