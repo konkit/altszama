@@ -11,7 +11,7 @@
         <v-list dense class="px-8 no-y-padding" v-if="entry.eatingPeopleEntries.length > 0" :key="'second-list-' + entryIndex">
 
           <template v-for="(eatingPersonEntry, i) in entry.eatingPeopleEntries">
-            <v-list-item :key="i">
+            <v-list-item :key="'eatingPersonEntry-' + i">
               <v-list-item-content>
                 <div class="user-row">
                   <div class="username">
@@ -36,14 +36,14 @@
                         <v-subheader>Side dishes:</v-subheader>
 
                         <template v-for="(sd, j) in eatingPersonEntry.sideDishes">
-                          <v-list-item :key="j">
+                          <v-list-item :key="'entry-' + i + '-side-dish-' + j">
                             <v-list-item-content>
                               {{sd.name}}
                             </v-list-item-content>
                           </v-list-item>
 
                           <template v-if="j < eatingPersonEntry.sideDishes.length - 1">
-                            <v-divider class="custom-margin-divider" :key="j"></v-divider>
+                            <v-divider class="custom-margin-divider" :key="'entry-' + i + '-side-dish-' + j + '-divider'"></v-divider>
                           </template>
                         </template>
                       </template>
@@ -62,7 +62,7 @@
             </v-list-item>
 
             <template v-if="i < entry.eatingPeopleEntries.length - 1">
-              <v-divider class="custom-margin-divider"  :key="i"></v-divider>
+              <v-divider class="custom-margin-divider"  :key="'eatingPersonEntry-' + i + '-divider'"></v-divider>
             </template>
 
           </template>

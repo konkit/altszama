@@ -132,7 +132,7 @@
     }
   })
   export default class ShowOrder extends Vue {
-    orderId;
+    orderId = "";
 
     mounted() {
       this.orderId = this.$route.params.id;
