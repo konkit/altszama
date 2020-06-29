@@ -1,27 +1,32 @@
 package altszama.app.restaurant
 
+import altszama.app.team.Team
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.DBRef
 import java.time.Instant
 
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 data class Restaurant(
-  @Id
-  var id: String = ObjectId().toHexString(),
+        @Id
+        var id: String = ObjectId().toHexString(),
 
-  @field:NotNull
-  @field:Size(min = 1, message = "Restaurant name cannot be blank!")
-  var name: String = "",
+        @DBRef
+        var team: Team?,
 
-  var telephone: String = "",
+        @field:NotNull
+        @field:Size(min = 1, message = "Restaurant name cannot be blank!")
+        var name: String = "",
 
-  var address: String = "",
+        var telephone: String = "",
 
-  var url: String = "",
+        var address: String = "",
 
-  var lastCrawled: Instant? = null,
+        var url: String = "",
 
-  var lastEdited: Instant? = null
+        var lastCrawled: Instant? = null,
+
+        var lastEdited: Instant? = null
 )
