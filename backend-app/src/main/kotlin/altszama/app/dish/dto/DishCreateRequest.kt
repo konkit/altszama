@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.PositiveOrZero
 import javax.validation.constraints.Size
 
-
 data class DishCreateRequest(
   @field:NotNull
   @field:Size(min = 1, message = "Name cannot be blank!")

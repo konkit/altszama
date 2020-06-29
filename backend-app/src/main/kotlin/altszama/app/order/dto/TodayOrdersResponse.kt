@@ -12,14 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class TodayOrdersResponse(
-        val ordersList: List<TodayOrderDto>,
-        val currentOrderEntries: List<OrderEntryDto>
-) {
-
-  companion object {
-
-    data class TodayOrderDto(
+data class TodayOrderDto(
         val id: String,
         val restaurantId: String,
         val restaurantName: String,
@@ -51,9 +44,9 @@ data class TodayOrdersResponse(
         val paymentByCash: Boolean,
         val paymentByBankTransfer: Boolean,
         val bankTransferNumber: String
-    )
+)
 
-    data class OrderEntryDto(
+data class OrderEntryDto(
         var id: String = ObjectId().toHexString(),
         var orderId: String,
         var orderState: OrderState,
@@ -63,7 +56,14 @@ data class TodayOrdersResponse(
         var paymentStatus: OrderEntryPaymentStatus = OrderEntryPaymentStatus.UNPAID,
 
         var created: LocalDate = LocalDate.now()
-    )
+)
+
+data class TodayOrdersResponse(
+        val ordersList: List<TodayOrderDto>,
+        val currentOrderEntries: List<OrderEntryDto>
+) {
+
+  companion object {
 
     private fun fromOrder(order: Order): TodayOrderDto {
       return TodayOrderDto(

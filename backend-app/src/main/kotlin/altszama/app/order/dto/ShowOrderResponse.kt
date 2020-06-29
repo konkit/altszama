@@ -15,20 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class ShowOrderResponse(
-        val order: ShowOrderDto,
-        val orderEntries: List<ParticipantsOrderEntry>,
-        val currentUserId: String,
-        val allDishesInRestaurant: List<DishDto>,
-        val allDishesByCategory: Map<String, List<DishDto>>,
-        val dishIdToSideDishesMap: Map<String, List<SideDish>>,
-        val baseOrderPrice: Int,
-        val totalOrderPrice: Int
-) {
-
-  companion object {
-
-    data class ShowOrderDto(
+data class ShowOrderDto(
         val id: String,
         val restaurantId: String,
         val restaurantName: String,
@@ -64,25 +51,39 @@ data class ShowOrderResponse(
         val bankTransferNumber: String,
         val paymentByBlik: Boolean,
         val blikPhoneNumber: String
-    )
+)
 
-    data class ParticipantsOrderEntry(
+data class ParticipantsOrderEntry(
         val id: String,
         val userId: String,
         val username: String,
         val dishEntries: List<ParticipantsDishEntry>,
         val finalPrice: Int,
         val paymentStatus: OrderEntryPaymentStatus
-    )
+)
 
-    data class ParticipantsDishEntry(
+data class ParticipantsDishEntry(
         val id: String,
         val dishId: String,
         val dishName: String,
         val sideDishes: List<SideDish>,
         val price: Int,
         val comments: String
-    )
+)
+
+
+data class ShowOrderResponse(
+        val order: ShowOrderDto,
+        val orderEntries: List<ParticipantsOrderEntry>,
+        val currentUserId: String,
+        val allDishesInRestaurant: List<DishDto>,
+        val allDishesByCategory: Map<String, List<DishDto>>,
+        val dishIdToSideDishesMap: Map<String, List<SideDish>>,
+        val baseOrderPrice: Int,
+        val totalOrderPrice: Int
+) {
+
+  companion object {
 
     fun create(order: Order,
                entries: List<OrderEntry>,

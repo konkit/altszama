@@ -1,6 +1,5 @@
 package altszama.app.restaurant.dto
 
-import altszama.app.dish.Dish
 import altszama.app.dish.dto.DishDto
 import altszama.app.restaurant.Restaurant
 
