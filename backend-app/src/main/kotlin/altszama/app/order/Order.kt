@@ -4,6 +4,7 @@ import altszama.app.restaurant.Restaurant
 import altszama.app.auth.User
 import altszama.app.orderEntry.DishEntry
 import altszama.app.orderEntry.OrderEntry
+import altszama.app.team.Team
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.DBRef
@@ -13,45 +14,50 @@ import java.time.LocalTime
 
 
 data class Order(
-    @Id
-    var id: String = ObjectId().toHexString(),
+        @Id
+        var id: String = ObjectId().toHexString(),
 
-    @DBRef
-    var restaurant: Restaurant,
+        @DBRef
+        var restaurant: Restaurant,
 
-    @DBRef
-    var orderCreator: User,
+        @DBRef
+        var orderCreator: User,
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    var orderDate: LocalDate,
+        @DBRef
+        var team: Team?,
 
-    var timeOfOrder: LocalTime? = null,
+        var orderParticipants: Set<String>,
 
-    var timeOfDelivery: LocalTime? = null,
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        var orderDate: LocalDate,
 
-    var orderState: OrderState = OrderState.CREATED,
+        var timeOfOrder: LocalTime? = null,
 
-    var decreaseInPercent: Int = 0,
+        var timeOfDelivery: LocalTime? = null,
 
-    var deliveryCostPerEverybody: Int = 0,
+        var orderState: OrderState = OrderState.CREATED,
 
-    var deliveryCostPerDish: Int = 0,
+        var decreaseInPercent: Int = 0,
 
-    var paymentByCash: Boolean = true,
+        var deliveryCostPerEverybody: Int = 0,
 
-    var paymentByBankTransfer: Boolean = true,
+        var deliveryCostPerDish: Int = 0,
 
-    var bankTransferNumber: String = "",
+        var paymentByCash: Boolean = true,
 
-    var paymentByBlik: Boolean = false,
+        var paymentByBankTransfer: Boolean = true,
 
-    var blikPhoneNumber: String = ""
+        var bankTransferNumber: String = "",
+
+        var paymentByBlik: Boolean = false,
+
+        var blikPhoneNumber: String = ""
 ) {
     companion object {
         fun getBasePrice(entries: List<OrderEntry>): Int {
             return entries
-                .map { it.dishEntries.sumBy(DishEntry::priceWithSidedishes) }
-                .sum()
+                    .map { it.dishEntries.sumBy(DishEntry::priceWithSidedishes) }
+                    .sum()
         }
 
         fun getTotalPrice(order: Order, entries: List<OrderEntry>): Int {

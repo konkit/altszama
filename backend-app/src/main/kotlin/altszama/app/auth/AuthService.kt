@@ -1,5 +1,6 @@
 package altszama.app.auth
 
+import altszama.app.activityLog.ActivityEventService
 import altszama.config.SecretsConfig
 import com.google.api.services.oauth2.model.Userinfoplus
 import io.jsonwebtoken.*
@@ -40,7 +41,7 @@ class AuthService(envVarConfig: SecretsConfig) {
 
     val token = createJwt(user.id)
 
-    return AuthTokenInfo(token, user.username)
+    return AuthTokenInfo(token, user.id, user.username)
   }
 
   private fun createNewUser(userinfo: Userinfoplus): User {

@@ -1,5 +1,6 @@
 package altszama.app.auth
 
+import altszama.app.activityLog.ActivityEventService
 import altszama.config.SecretsConfig
 import com.google.api.client.auth.oauth2.TokenResponseException
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest
@@ -33,6 +34,9 @@ class AuthController(envVarConfig: SecretsConfig) {
   @Autowired
   private lateinit var authService: AuthService
 
+  @Autowired
+  private lateinit var activityEventService: ActivityEventService
+
   private val netHttpTransport = NetHttpTransport()
   private val jacksonFactory = JacksonFactory()
 
@@ -60,7 +64,11 @@ class AuthController(envVarConfig: SecretsConfig) {
 
       logger.info("userInfo:" + userinfo.toPrettyString())
 
-      return authService.getUserFromUserInfo(userinfo)
+      val authInfo = authService.getUserFromUserInfo(userinfo)
+
+      activityEventService.saveUserLogin(authInfo.userId)
+
+      return authInfo;
     } else {
       throw RuntimeException("Google's id token is wrong")
     }
