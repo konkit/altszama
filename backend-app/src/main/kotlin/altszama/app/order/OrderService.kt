@@ -46,15 +46,15 @@ class OrderService {
         orderDate = orderSaveRequest.orderDate!!,
         timeOfOrder = orderSaveRequest.timeOfOrder,
         timeOfDelivery = null,
-        decreaseInPercent = orderSaveRequest.decreaseInPercent,
-        deliveryCostPerEverybody = orderSaveRequest.deliveryCostPerEverybody,
-        deliveryCostPerDish = orderSaveRequest.deliveryCostPerDish,
-        paymentByCash = orderSaveRequest.paymentByCash,
-        paymentByBankTransfer = orderSaveRequest.paymentByBankTransfer,
-        paymentByBlik = orderSaveRequest.paymentByBlik,
+        decreaseInPercent = orderSaveRequest.deliveryData.decreaseInPercent,
+        deliveryCostPerEverybody = orderSaveRequest.deliveryData.deliveryCostPerEverybody,
+        deliveryCostPerDish = orderSaveRequest.deliveryData.deliveryCostPerDish,
+        paymentByCash = orderSaveRequest.paymentData.paymentByCash,
+        paymentByBankTransfer = orderSaveRequest.paymentData.paymentByBankTransfer,
+        paymentByBlik = orderSaveRequest.paymentData.paymentByBlik,
         orderState = OrderState.CREATED,
-        bankTransferNumber = orderSaveRequest.bankTransferNumber,
-        blikPhoneNumber = orderSaveRequest.blikPhoneNumber
+        bankTransferNumber = orderSaveRequest.paymentData.bankTransferNumber,
+        blikPhoneNumber = orderSaveRequest.paymentData.blikPhoneNumber
     )
 
     orderRepository.save(order)
@@ -66,14 +66,14 @@ class OrderService {
     val updatedOrder = oldOrder.copy(
         orderDate = orderUpdateRequest.orderDate!!,
         timeOfOrder = orderUpdateRequest.timeOfOrder,
-        decreaseInPercent = orderUpdateRequest.decreaseInPercent,
-        deliveryCostPerEverybody = orderUpdateRequest.deliveryCostPerEverybody,
-        deliveryCostPerDish = orderUpdateRequest.deliveryCostPerDish,
-        paymentByCash = orderUpdateRequest.paymentByCash,
-        paymentByBankTransfer = orderUpdateRequest.paymentByBankTransfer,
-        paymentByBlik = orderUpdateRequest.paymentByBlik,
-        bankTransferNumber = orderUpdateRequest.bankTransferNumber,
-        blikPhoneNumber = orderUpdateRequest.blikPhoneNumber
+        decreaseInPercent = orderUpdateRequest.deliveryData.decreaseInPercent,
+        deliveryCostPerEverybody = orderUpdateRequest.deliveryData.deliveryCostPerEverybody,
+        deliveryCostPerDish = orderUpdateRequest.deliveryData.deliveryCostPerDish,
+        paymentByCash = orderUpdateRequest.paymentData.paymentByCash,
+        paymentByBankTransfer = orderUpdateRequest.paymentData.paymentByBankTransfer,
+        paymentByBlik = orderUpdateRequest.paymentData.paymentByBlik,
+        bankTransferNumber = orderUpdateRequest.paymentData.bankTransferNumber,
+        blikPhoneNumber = orderUpdateRequest.paymentData.blikPhoneNumber
     )
 
     orderRepository.save(updatedOrder)

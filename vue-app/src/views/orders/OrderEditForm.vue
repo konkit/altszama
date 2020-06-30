@@ -134,10 +134,9 @@
     blikPhoneNumber = "";
 
     connector: OrdersApiConnector;
-    
+
     mounted() {
       this.orderId = this.$route.params.id;
-      // this.$store.dispatch(`editOrder/${INIT_EDIT_ORDER_ACTION}`, {orderId: this.orderId})
 
       this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
@@ -146,14 +145,14 @@
           this.restaurantName = response.order.restaurantName;
           this.orderDate = response.order.orderDate;
           this.timeOfOrder = response.order.timeOfOrder;
-          this.decreaseInPercent = response.order.decreaseInPercent;
-          this.deliveryCostPerEverybody = response.order.deliveryCostPerEverybody;
-          this.deliveryCostPerDish = response.order.deliveryCostPerDish;
-          this.paymentByCash = response.order.paymentByCash;
-          this.paymentByBankTransfer = response.order.paymentByBankTransfer;
-          this.bankTransferNumber = response.order.bankTransferNumber || "";
-          this.paymentByBlik = response.order.paymentByBlik ;
-          this.blikPhoneNumber = response.order.blikPhoneNumber || "";
+          this.decreaseInPercent = response.order.deliveryData.decreaseInPercent;
+          this.deliveryCostPerEverybody = response.order.deliveryData.deliveryCostPerEverybody;
+          this.deliveryCostPerDish = response.order.deliveryData.deliveryCostPerDish;
+          this.paymentByCash = response.order.paymentData.paymentByCash;
+          this.paymentByBankTransfer = response.order.paymentData.paymentByBankTransfer;
+          this.bankTransferNumber = response.order.paymentData.bankTransferNumber || "";
+          this.paymentByBlik = response.order.paymentData.paymentByBlik;
+          this.blikPhoneNumber = response.order.paymentData.blikPhoneNumber || "";
 
           this.$store.commit('setLoadingFalse');
 
@@ -169,14 +168,18 @@
         orderId: this.orderId,
         orderDate: this.orderDate,
         timeOfOrder: this.timeOfOrder,
-        decreaseInPercent: this.decreaseInPercent,
-        deliveryCostPerEverybody: this.deliveryCostPerEverybody,
-        deliveryCostPerDish: this.deliveryCostPerDish,
-        paymentByCash: this.paymentByCash,
-        paymentByBankTransfer: this.paymentByBankTransfer,
-        bankTransferNumber: this.bankTransferNumber || "",
-        paymentByBlik: this.paymentByBlik,
-        blikPhoneNumber: this.blikPhoneNumber || ""
+        deliveryData: {
+          decreaseInPercent: this.decreaseInPercent,
+          deliveryCostPerEverybody: this.deliveryCostPerEverybody,
+          deliveryCostPerDish: this.deliveryCostPerDish,
+        },
+        paymentData: {
+          paymentByCash: this.paymentByCash,
+          paymentByBankTransfer: this.paymentByBankTransfer,
+          bankTransferNumber: this.bankTransferNumber || "",
+          paymentByBlik: this.paymentByBlik,
+          blikPhoneNumber: this.blikPhoneNumber || ""
+        }
       };
 
 

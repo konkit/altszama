@@ -150,7 +150,7 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState, RootState> = 
       state.newDishPrice = newValue;
     },
 
-    [ADD_SIDE_DISH] (state, sideDishToAdd: SideDishToAdd) {
+    [ADD_SIDE_DISH] (state, sideDishToAdd: SideDishData) {
       state.chosenSideDishes.push(sideDishToAdd);
     },
     [SET_SIDE_DISH] (state, {sdIndex, newValue}) {

@@ -3,12 +3,12 @@
     <v-list dense>
       <v-list-item>
         <v-list-item-content>
-          <span v-if="this.order.paymentByCash == true" class="payment-entry">
+          <span v-if="paymentData.paymentByCash == true" class="payment-entry">
             <v-chip color="green" text-color="white">
               Payment by cash &nbsp; <span class="fa fa-check"></span>
             </v-chip>
           </span>
-          <span v-if="this.order.paymentByCash == false" class="payment-entry">
+          <span v-if="paymentData.paymentByCash == false" class="payment-entry">
             <v-chip color="red" text-color="white">
               Payment by cash &nbsp; <span class="fa fa-times"></span>
             </v-chip>
@@ -18,12 +18,12 @@
 
       <v-list-item>
         <v-list-item-content>
-          <span v-if="this.order.paymentByBankTransfer == true" class="payment-entry">
+          <span v-if="paymentData.paymentByBankTransfer == true" class="payment-entry">
             <v-chip color="green" text-color="white">
               Payment by bank transfer &nbsp; <span class="fa fa-check"></span>
             </v-chip>
           </span>
-          <span v-if="this.order.paymentByBankTransfer == false" class="payment-entry">
+          <span v-if="paymentData.paymentByBankTransfer == false" class="payment-entry">
             <v-chip color="red" text-color="white">
               Payment by bank transfer &nbsp; <span class="fa fa-times"></span>
             </v-chip>
@@ -31,22 +31,22 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="order.paymentByBankTransfer">
+      <v-list-item v-if="paymentData.paymentByBankTransfer">
         <v-list-item-content>
           <div class="px-3 user-selectable">
-            {{ formatBankAccountNr(order.bankTransferNumber) }}
+            {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
           </div>
         </v-list-item-content>
       </v-list-item>
 
       <v-list-item>
         <v-list-item-content>
-          <span v-if="this.order.paymentByBlik == true" class="payment-entry">
+          <span v-if="paymentData.paymentByBlik == true" class="payment-entry">
             <v-chip color="green" text-color="white">
               Payment by BLIK &nbsp; <span class="fa fa-check"></span>
             </v-chip>
           </span>
-          <span v-if="this.order.paymentByBlik == false" class="payment-entry">
+          <span v-if="paymentData.paymentByBlik == false" class="payment-entry">
             <v-chip color="red" text-color="white">
               Payment by BLIK &nbsp; <span class="fa fa-times"></span>
             </v-chip>
@@ -54,10 +54,10 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="order.paymentByBankTransfer">
+      <v-list-item v-if="paymentData.paymentByBankTransfer">
         <v-list-item-content>
           <div class="px-3 user-selectable">
-            {{ formatBlikPhoneNumber(order.blikPhoneNumber) }}
+            {{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -69,10 +69,12 @@
   import Vue from "vue";
   import {Prop} from "vue-property-decorator";
   import Component from "vue-class-component";
+  import {PaymentData} from "../../../frontend-client";
 
   @Component({})
   export default class PaymentOptionsSummary extends Vue {
-    @Prop() order;
+    // @Prop() order;
+    @Prop() paymentData: PaymentData;
 
     formatBankAccountNr(unformattedInput) {
       if (unformattedInput) {

@@ -72,12 +72,10 @@ export default class OrdersApiConnector {
       sideDishes: editedOrderEntry.chosenSideDishes.map(sd => Object.assign({}, sd, {newSideDishPrice: sd.newSideDishPrice}))
     };
 
-    // return ApiConnector.makePost(action, formData)
     return this.orderEntryApi.update1(formData, headersWithToken())
   }
 
   deleteDishEntry (orderEntryId: string, dishEntryId: string) {
-    // return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
     return this.orderEntryApi.delete1(orderEntryId, dishEntryId, headersWithToken())
   }
 

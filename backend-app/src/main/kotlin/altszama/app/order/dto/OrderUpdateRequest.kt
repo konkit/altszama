@@ -12,9 +12,9 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-@BankTransferNumberPresent(
-    paymentByBankTransfer = "paymentByBankTransfer",
-    bankTransferNumber = "bankTransferNumber")
+//@BankTransferNumberPresent(
+//    paymentByBankTransfer = "paymentByBankTransfer",
+//    bankTransferNumber = "bankTransferNumber")
 data class OrderUpdateRequest(
     @OrderExists
     @IsOrderOwner
@@ -39,12 +39,14 @@ data class OrderUpdateRequest(
     @DateTimeFormat(pattern = "HH:mm")
     val timeOfOrder: LocalTime?,
 
-    val decreaseInPercent: Int = 0,
-    val deliveryCostPerEverybody: Int = 0,
-    val deliveryCostPerDish: Int = 0,
-    val paymentByCash: Boolean = false,
-    val paymentByBankTransfer: Boolean = false,
-    val bankTransferNumber: String,
-    val paymentByBlik: Boolean = false,
-    val blikPhoneNumber: String
+    val deliveryData: DeliveryData,
+    val paymentData: PaymentData
+//    val decreaseInPercent: Int = 0,
+//    val deliveryCostPerEverybody: Int = 0,
+//    val deliveryCostPerDish: Int = 0,
+//    val paymentByCash: Boolean = false,
+//    val paymentByBankTransfer: Boolean = false,
+//    val bankTransferNumber: String,
+//    val paymentByBlik: Boolean = false,
+//    val blikPhoneNumber: String
 )

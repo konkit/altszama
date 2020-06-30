@@ -36,11 +36,9 @@ var OrdersApiConnector = /** @class */ (function () {
             additionalComments: editedOrderEntry.additionalComments,
             sideDishes: editedOrderEntry.chosenSideDishes.map(function (sd) { return Object.assign({}, sd, { newSideDishPrice: sd.newSideDishPrice }); })
         };
-        // return ApiConnector.makePost(action, formData)
         return this.orderEntryApi.update1(formData, headersWithToken());
     };
     OrdersApiConnector.prototype.deleteDishEntry = function (orderEntryId, dishEntryId) {
-        // return ApiConnector.makeGet('/order_entries/' + orderEntryId + '/dish_entry/' + dishEntryId + '/delete')
         return this.orderEntryApi.delete1(orderEntryId, dishEntryId, headersWithToken());
     };
     OrdersApiConnector.prototype.fetchOrder = function (orderId) {

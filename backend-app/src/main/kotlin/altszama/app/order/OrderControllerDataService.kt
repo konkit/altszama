@@ -55,11 +55,6 @@ class OrderControllerDataService {
 
     val order = orderRepository.findById(orderId).get()
 
-    if (!order.orderParticipants.contains(currentUserId)) {
-      order.orderParticipants += currentUserId
-      orderRepository.save(order)
-    }
-
     val entries = orderEntryRepository.findByOrderId(orderId)
 
     val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)

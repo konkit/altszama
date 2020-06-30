@@ -29,14 +29,6 @@ var DishesApiConnector = /** @class */ (function () {
         return this.restaurantApi.editRestaurant(restaurantId, headersWithToken());
     };
     DishesApiConnector.prototype.editRestaurant = function (restaurantId, restaurant) {
-        // let formData = {
-        //   "restaurant.id": restaurantId,
-        //   id: restaurant.id,
-        //   name: restaurant.name,
-        //   telephone: restaurant.telephone,
-        //   address: restaurant.address,
-        //   url: restaurant.url
-        // };
         return this.restaurantApi.updateRestaurant(restaurant, headersWithToken());
     };
     DishesApiConnector.prototype.deleteRestaurant = function (restaurantId) {
@@ -46,21 +38,13 @@ var DishesApiConnector = /** @class */ (function () {
         return this.dishApi.createDish(restaurantId, headersWithToken());
     };
     DishesApiConnector.prototype.createDish = function (restaurantId, formData) {
-        return this.dishApi.saveDish(restaurantId, formData, headersWithToken());
+        return this.dishApi.saveDish(formData, restaurantId, headersWithToken());
     };
     DishesApiConnector.prototype.getDishEditData = function (restaurantId, dishId) {
         return this.dishApi.editDish(restaurantId, dishId, headersWithToken());
     };
     DishesApiConnector.prototype.editDish = function (restaurantId, dishObj) {
-        // const formData = {
-        //   "restaurant.id": restaurantId,
-        //   id: dishObj.id,
-        //   name: dishObj.name,
-        //   price: dishObj.price,
-        //   category: dishObj.category,
-        //   sideDishes: dishObj.sideDishes
-        // };
-        return this.dishApi.updateDish(restaurantId, dishObj, headersWithToken());
+        return this.dishApi.updateDish(dishObj, restaurantId, headersWithToken());
     };
     DishesApiConnector.prototype.deleteDish = function (restaurantId, dishId) {
         return this.dishApi.deleteDish(dishId, headersWithToken());

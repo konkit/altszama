@@ -11,7 +11,6 @@ import {
 } from "../frontend-client/api"
 import store, {RootState} from "@/store";
 import LocalConfiguration from "@/lib/LocalConfiguration";
-import {Store} from "vuex";
 import {Configuration} from "@/frontend-client";
 
 function headersWithToken() {
@@ -54,15 +53,6 @@ export default class DishesApiConnector {
   }
 
   editRestaurant (restaurantId: string, restaurant: RestaurantUpdateRequest) {
-    // let formData = {
-    //   "restaurant.id": restaurantId,
-    //   id: restaurant.id,
-    //   name: restaurant.name,
-    //   telephone: restaurant.telephone,
-    //   address: restaurant.address,
-    //   url: restaurant.url
-    // };
-
     return this.restaurantApi.updateRestaurant(restaurant, headersWithToken())
   }
 
@@ -75,7 +65,7 @@ export default class DishesApiConnector {
   }
 
   createDish (restaurantId: string, formData: DishCreateRequest) {
-    return this.dishApi.saveDish(restaurantId, formData, headersWithToken())
+    return this.dishApi.saveDish(formData, restaurantId, headersWithToken())
   }
 
   getDishEditData (restaurantId: string, dishId: string): Promise<EditDishResponse> {
@@ -83,16 +73,7 @@ export default class DishesApiConnector {
   }
 
   editDish (restaurantId: string, dishObj: DishUpdateRequest) {
-    // const formData = {
-    //   "restaurant.id": restaurantId,
-    //   id: dishObj.id,
-    //   name: dishObj.name,
-    //   price: dishObj.price,
-    //   category: dishObj.category,
-    //   sideDishes: dishObj.sideDishes
-    // };
-
-    return this.dishApi.updateDish(restaurantId, dishObj, headersWithToken())
+    return this.dishApi.updateDish(dishObj, restaurantId, headersWithToken())
   }
 
   deleteDish (restaurantId: string, dishId: string) {

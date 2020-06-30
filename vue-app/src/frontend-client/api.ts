@@ -80,15 +80,70 @@ export class RequiredError extends Error {
 /**
  * 
  * @export
+ * @interface AllOrdersOrderDto
+ */
+export interface AllOrdersOrderDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AllOrdersOrderDto
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllOrdersOrderDto
+     */
+    restaurantName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllOrdersOrderDto
+     */
+    orderCreatorUsername: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllOrdersOrderDto
+     */
+    orderDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AllOrdersOrderDto
+     */
+    orderState: AllOrdersOrderDto.OrderStateEnum;
+}
+
+/**
+ * @export
+ * @namespace AllOrdersOrderDto
+ */
+export namespace AllOrdersOrderDto {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum OrderStateEnum {
+        CREATED = <any> 'CREATED',
+        ORDERING = <any> 'ORDERING',
+        ORDERED = <any> 'ORDERED',
+        DELIVERED = <any> 'DELIVERED',
+        REJECTED = <any> 'REJECTED'
+    }
+}
+/**
+ * 
+ * @export
  * @interface AllOrdersResponse
  */
 export interface AllOrdersResponse {
     /**
      * 
-     * @type {Array<OrderDto>}
+     * @type {Array<AllOrdersOrderDto>}
      * @memberof AllOrdersResponse
      */
-    allOrdersList: Array<OrderDto>;
+    allOrdersList: Array<AllOrdersOrderDto>;
 }
 /**
  * 
@@ -139,6 +194,31 @@ export interface CreateOrderResponse {
      * @memberof CreateOrderResponse
      */
     blikPhoneNumber: string;
+}
+/**
+ * 
+ * @export
+ * @interface DeliveryData
+ */
+export interface DeliveryData {
+    /**
+     * 
+     * @type {number}
+     * @memberof DeliveryData
+     */
+    decreaseInPercent: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DeliveryData
+     */
+    deliveryCostPerEverybody: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DeliveryData
+     */
+    deliveryCostPerDish: number;
 }
 /**
  * 
@@ -407,52 +487,16 @@ export interface EditResponseOrderDto {
     orderState: EditResponseOrderDto.OrderStateEnum;
     /**
      * 
-     * @type {number}
+     * @type {DeliveryData}
      * @memberof EditResponseOrderDto
      */
-    decreaseInPercent: number;
+    deliveryData: DeliveryData;
     /**
      * 
-     * @type {number}
+     * @type {PaymentData}
      * @memberof EditResponseOrderDto
      */
-    deliveryCostPerEverybody: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof EditResponseOrderDto
-     */
-    deliveryCostPerDish: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof EditResponseOrderDto
-     */
-    paymentByCash: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof EditResponseOrderDto
-     */
-    paymentByBankTransfer: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof EditResponseOrderDto
-     */
-    bankTransferNumber: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof EditResponseOrderDto
-     */
-    paymentByBlik: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof EditResponseOrderDto
-     */
-    blikPhoneNumber: string;
+    paymentData: PaymentData;
 }
 
 /**
@@ -596,61 +640,6 @@ export interface LocalTime {
      * @memberof LocalTime
      */
     nano?: number;
-}
-/**
- * 
- * @export
- * @interface OrderDto
- */
-export interface OrderDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderDto
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderDto
-     */
-    restaurantName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderDto
-     */
-    orderCreatorUsername: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderDto
-     */
-    orderDate: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderDto
-     */
-    orderState: OrderDto.OrderStateEnum;
-}
-
-/**
- * @export
- * @namespace OrderDto
- */
-export namespace OrderDto {
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum OrderStateEnum {
-        CREATED = <any> 'CREATED',
-        ORDERING = <any> 'ORDERING',
-        ORDERED = <any> 'ORDERED',
-        DELIVERED = <any> 'DELIVERED',
-        REJECTED = <any> 'REJECTED'
-    }
 }
 /**
  * 
@@ -858,52 +847,16 @@ export interface OrderSaveRequest {
     timeOfOrder?: string;
     /**
      * 
-     * @type {number}
+     * @type {DeliveryData}
      * @memberof OrderSaveRequest
      */
-    decreaseInPercent: number;
+    deliveryData: DeliveryData;
     /**
      * 
-     * @type {number}
+     * @type {PaymentData}
      * @memberof OrderSaveRequest
      */
-    deliveryCostPerEverybody: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof OrderSaveRequest
-     */
-    deliveryCostPerDish: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrderSaveRequest
-     */
-    paymentByCash: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrderSaveRequest
-     */
-    paymentByBankTransfer: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderSaveRequest
-     */
-    bankTransferNumber: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrderSaveRequest
-     */
-    paymentByBlik: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderSaveRequest
-     */
-    blikPhoneNumber: string;
+    paymentData: PaymentData;
 }
 /**
  * 
@@ -931,52 +884,16 @@ export interface OrderUpdateRequest {
     timeOfOrder?: string;
     /**
      * 
-     * @type {number}
+     * @type {DeliveryData}
      * @memberof OrderUpdateRequest
      */
-    decreaseInPercent: number;
+    deliveryData: DeliveryData;
     /**
      * 
-     * @type {number}
+     * @type {PaymentData}
      * @memberof OrderUpdateRequest
      */
-    deliveryCostPerEverybody: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof OrderUpdateRequest
-     */
-    deliveryCostPerDish: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrderUpdateRequest
-     */
-    paymentByCash: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrderUpdateRequest
-     */
-    paymentByBankTransfer: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderUpdateRequest
-     */
-    bankTransferNumber: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrderUpdateRequest
-     */
-    paymentByBlik: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderUpdateRequest
-     */
-    blikPhoneNumber: string;
+    paymentData: PaymentData;
 }
 /**
  * 
@@ -992,22 +909,10 @@ export interface OrderViewResponse {
     orderState: OrderViewResponse.OrderStateEnum;
     /**
      * 
-     * @type {number}
+     * @type {DeliveryData}
      * @memberof OrderViewResponse
      */
-    orderDecreaseInPercent: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof OrderViewResponse
-     */
-    orderDeliveryCostPerEverybody: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof OrderViewResponse
-     */
-    orderDeliveryCostPerDish: number;
+    orderDeliveryData: DeliveryData;
     /**
      * 
      * @type {string}
@@ -1168,6 +1073,43 @@ export namespace ParticipantsOrderEntry {
 /**
  * 
  * @export
+ * @interface PaymentData
+ */
+export interface PaymentData {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PaymentData
+     */
+    paymentByCash: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PaymentData
+     */
+    paymentByBankTransfer: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentData
+     */
+    bankTransferNumber: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PaymentData
+     */
+    paymentByBlik: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentData
+     */
+    blikPhoneNumber: string;
+}
+/**
+ * 
+ * @export
  * @interface Restaurant
  */
 export interface Restaurant {
@@ -1177,6 +1119,12 @@ export interface Restaurant {
      * @memberof Restaurant
      */
     id: string;
+    /**
+     * 
+     * @type {Team}
+     * @memberof Restaurant
+     */
+    team?: Team;
     /**
      * 
      * @type {string}
@@ -1400,52 +1348,16 @@ export interface ShowOrderDto {
     orderState: ShowOrderDto.OrderStateEnum;
     /**
      * 
-     * @type {number}
+     * @type {DeliveryData}
      * @memberof ShowOrderDto
      */
-    decreaseInPercent: number;
+    deliveryData: DeliveryData;
     /**
      * 
-     * @type {number}
+     * @type {PaymentData}
      * @memberof ShowOrderDto
      */
-    deliveryCostPerEverybody: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ShowOrderDto
-     */
-    deliveryCostPerDish: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ShowOrderDto
-     */
-    paymentByCash: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ShowOrderDto
-     */
-    paymentByBankTransfer: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShowOrderDto
-     */
-    bankTransferNumber: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ShowOrderDto
-     */
-    paymentByBlik: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShowOrderDto
-     */
-    blikPhoneNumber: string;
+    paymentData: PaymentData;
 }
 
 /**
@@ -1600,6 +1512,37 @@ export interface SideDishData {
      * @memberof SideDishData
      */
     id?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Team
+ */
+export interface Team {
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    domain?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Team
+     */
+    users: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Team
+     */
+    admins: Array<string>;
 }
 /**
  * 

@@ -16,7 +16,7 @@ data class EditResponseOrderDto(
         val orderCreatorUsername: String,
 
         @Schema(
-                type="string",
+                type = "string",
                 pattern = "[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]",
                 example = "2017-01-31"
         )
@@ -25,7 +25,7 @@ data class EditResponseOrderDto(
         val orderDate: LocalDate,
 
         @Schema(
-                type="string",
+                type = "string",
                 pattern = "[0-9][0-9]:[0-9][0-9]",
                 example = "12:00"
         )
@@ -35,42 +35,40 @@ data class EditResponseOrderDto(
 
         var timeOfDelivery: LocalTime?,
         var orderState: OrderState,
-        var decreaseInPercent: Int,
-        var deliveryCostPerEverybody: Int,
-        var deliveryCostPerDish: Int,
-        var paymentByCash: Boolean,
-        var paymentByBankTransfer: Boolean,
-        var bankTransferNumber: String,
-        val paymentByBlik: Boolean,
-        val blikPhoneNumber: String
+        var deliveryData: DeliveryData,
+        var paymentData: PaymentData
 )
 
 data class EditOrderResponse(val order: EditResponseOrderDto) {
 
-  companion object {
+    companion object {
 
-    fun create(order: Order): EditOrderResponse {
-      val ordedDto = EditResponseOrderDto(
-          order.id,
-          order.restaurant.id,
-          order.restaurant.name,
-          order.orderCreator.id,
-          order.orderCreator.username,
-          order.orderDate,
-          order.timeOfOrder,
-          order.timeOfDelivery,
-          order.orderState,
-          order.decreaseInPercent,
-          order.deliveryCostPerEverybody,
-          order.deliveryCostPerDish,
-          order.paymentByCash,
-          order.paymentByBankTransfer,
-          order.bankTransferNumber,
-          order.paymentByBlik,
-          order.blikPhoneNumber
-      )
+        fun create(order: Order): EditOrderResponse {
+            val ordedDto = EditResponseOrderDto(
+                    order.id,
+                    order.restaurant.id,
+                    order.restaurant.name,
+                    order.orderCreator.id,
+                    order.orderCreator.username,
+                    order.orderDate,
+                    order.timeOfOrder,
+                    order.timeOfDelivery,
+                    order.orderState,
+                    DeliveryData(
+                            order.decreaseInPercent,
+                            order.deliveryCostPerEverybody,
+                            order.deliveryCostPerDish
+                    ),
+                    PaymentData(
+                            order.paymentByCash,
+                            order.paymentByBankTransfer,
+                            order.bankTransferNumber,
+                            order.paymentByBlik,
+                            order.blikPhoneNumber
+                    )
+            )
 
-      return EditOrderResponse(ordedDto)
+            return EditOrderResponse(ordedDto)
+        }
     }
-  }
 }

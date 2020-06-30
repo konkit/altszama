@@ -33,10 +33,10 @@
               <v-card-title>Price summary</v-card-title>
 
               <price-summary
-                  :orderDecreaseInPercent="this.order.decreaseInPercent"
-                  :orderDeliveryCostPerEverybody="this.order.deliveryCostPerEverybody"
+                  :orderDecreaseInPercent="this.order.deliveryData.decreaseInPercent"
+                  :orderDeliveryCostPerEverybody="this.order.deliveryData.deliveryCostPerEverybody"
+                  :orderDeliveryCostPerDish="this.order.deliveryData.deliveryCostPerDish"
                   :basePriceSum="this.baseOrderPrice"
-                  :orderDeliveryCostPerDish="this.order.deliveryCostPerDish"
                   :allEatingPeopleCount="allEatingPeopleCount()"
                   :totalPrice="this.totalOrderPrice"
               ></price-summary>
@@ -47,7 +47,7 @@
             <v-card class="asdf-card">
               <v-card-title>Payment options</v-card-title>
 
-              <PaymentOptionsSummary :order="order"></PaymentOptionsSummary>
+              <PaymentOptionsSummary :payment-data="order.paymentData"></PaymentOptionsSummary>
             </v-card>
           </v-col>
         </v-row>

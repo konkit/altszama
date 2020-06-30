@@ -168,11 +168,11 @@
           this.deliveryCostPerEverybody = response.order.deliveryCostPerEverybody;
           this.deliveryCostPerDish = response.order.deliveryCostPerDish;
           this.paymentByCash = response.order.paymentByCash;
-          this.paymentByBankTransfer = response.order.paymentByBankTransfer ;
+          this.paymentByBankTransfer = response.order.paymentByBankTransfer;
           this.bankTransferNumber = response.order.bankTransferNumber;
-          this.paymentByBlik = response.order.paymentByBlik ;
+          this.paymentByBlik = response.order.paymentByBlik;
           this.blikPhoneNumber = response.order.blikPhoneNumber;
-          
+
           this.$store.commit('setLoadingFalse');
           document.title = `Create new order | Alt Szama`
         })
@@ -230,14 +230,18 @@
         restaurantId: this.restaurantId,
         orderDate: this.orderDate,
         timeOfOrder: this.timeOfOrder,
-        decreaseInPercent: this.decreaseInPercent,
-        deliveryCostPerEverybody: this.deliveryCostPerEverybody,
-        deliveryCostPerDish: this.deliveryCostPerDish,
-        paymentByCash: this.paymentByCash,
-        paymentByBankTransfer: this.paymentByBankTransfer,
-        bankTransferNumber: this.bankTransferNumber,
-        paymentByBlik: this.paymentByBlik,
-        blikPhoneNumber: this.blikPhoneNumber
+        deliveryData: {
+          decreaseInPercent: this.decreaseInPercent,
+          deliveryCostPerEverybody: this.deliveryCostPerEverybody,
+          deliveryCostPerDish: this.deliveryCostPerDish,
+        },
+        paymentData: {
+          paymentByCash: this.paymentByCash,
+          paymentByBankTransfer: this.paymentByBankTransfer,
+          bankTransferNumber: this.bankTransferNumber,
+          paymentByBlik: this.paymentByBlik,
+          blikPhoneNumber: this.blikPhoneNumber
+        }
       };
 
       this.connector.createOrder(order)

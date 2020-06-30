@@ -63,6 +63,25 @@ var RequiredError = /** @class */ (function (_super) {
 export { RequiredError };
 /**
  * @export
+ * @namespace AllOrdersOrderDto
+ */
+export var AllOrdersOrderDto;
+(function (AllOrdersOrderDto) {
+    /**
+     * @export
+     * @enum {string}
+     */
+    var OrderStateEnum;
+    (function (OrderStateEnum) {
+        OrderStateEnum[OrderStateEnum["CREATED"] = 'CREATED'] = "CREATED";
+        OrderStateEnum[OrderStateEnum["ORDERING"] = 'ORDERING'] = "ORDERING";
+        OrderStateEnum[OrderStateEnum["ORDERED"] = 'ORDERED'] = "ORDERED";
+        OrderStateEnum[OrderStateEnum["DELIVERED"] = 'DELIVERED'] = "DELIVERED";
+        OrderStateEnum[OrderStateEnum["REJECTED"] = 'REJECTED'] = "REJECTED";
+    })(OrderStateEnum = AllOrdersOrderDto.OrderStateEnum || (AllOrdersOrderDto.OrderStateEnum = {}));
+})(AllOrdersOrderDto || (AllOrdersOrderDto = {}));
+/**
+ * @export
  * @namespace EditResponseOrderDto
  */
 export var EditResponseOrderDto;
@@ -80,25 +99,6 @@ export var EditResponseOrderDto;
         OrderStateEnum[OrderStateEnum["REJECTED"] = 'REJECTED'] = "REJECTED";
     })(OrderStateEnum = EditResponseOrderDto.OrderStateEnum || (EditResponseOrderDto.OrderStateEnum = {}));
 })(EditResponseOrderDto || (EditResponseOrderDto = {}));
-/**
- * @export
- * @namespace OrderDto
- */
-export var OrderDto;
-(function (OrderDto) {
-    /**
-     * @export
-     * @enum {string}
-     */
-    var OrderStateEnum;
-    (function (OrderStateEnum) {
-        OrderStateEnum[OrderStateEnum["CREATED"] = 'CREATED'] = "CREATED";
-        OrderStateEnum[OrderStateEnum["ORDERING"] = 'ORDERING'] = "ORDERING";
-        OrderStateEnum[OrderStateEnum["ORDERED"] = 'ORDERED'] = "ORDERED";
-        OrderStateEnum[OrderStateEnum["DELIVERED"] = 'DELIVERED'] = "DELIVERED";
-        OrderStateEnum[OrderStateEnum["REJECTED"] = 'REJECTED'] = "REJECTED";
-    })(OrderStateEnum = OrderDto.OrderStateEnum || (OrderDto.OrderStateEnum = {}));
-})(OrderDto || (OrderDto = {}));
 /**
  * @export
  * @namespace OrderEntryDto

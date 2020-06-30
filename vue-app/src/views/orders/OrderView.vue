@@ -184,9 +184,9 @@
       this.connector.fetchOrderView(this.orderId)
         .then(responseObj => {
           this.orderState = responseObj.orderState.toString();
-          this.orderDecreaseInPercent = responseObj.orderDecreaseInPercent;
-          this.orderDeliveryCostPerEverybody = responseObj.orderDeliveryCostPerEverybody;
-          this.orderDeliveryCostPerDish = responseObj.orderDeliveryCostPerDish;
+          this.orderDecreaseInPercent = responseObj.orderDeliveryData.decreaseInPercent;
+          this.orderDeliveryCostPerEverybody = responseObj.orderDeliveryData.deliveryCostPerEverybody;
+          this.orderDeliveryCostPerDish = responseObj.orderDeliveryData.deliveryCostPerDish;
           this.restaurantName = responseObj.restaurantName;
           this.restaurantTelephone = responseObj.restaurantTelephone;
           this.groupedEntries = responseObj.groupedEntries;
