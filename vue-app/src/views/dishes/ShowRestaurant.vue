@@ -6,7 +6,7 @@
         Edit restaurant&nbsp;<span class="fa fa-pencil"/>
       </v-btn>
 
-      <v-btn color="error" @click="deleteRestaurant">
+      <v-btn color="error" @click="deleteRestaurant()">
         Delete restaurant&nbsp;<span class="fa fa-times"/>
       </v-btn>
     </template>
@@ -62,11 +62,16 @@
   import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
   import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable.vue'
   import LoadingView from "@/views/commons/LoadingView.vue";
-  import {FETCH_RESTAURANT_ACTION, ShowRestaurantState} from "../../store/modules/ShowRestaurantModule"
+  import {
+    DELETE_RESTAURANT_ACTION,
+    FETCH_RESTAURANT_ACTION,
+    ShowRestaurantState
+  } from "../../store/modules/ShowRestaurantModule"
   import router from "../../router/index"
   import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Component from "vue-class-component";
   import Vue from 'vue';
+  import moment from "moment"
 
   @Component({
     components: {
@@ -87,6 +92,9 @@
 
     get restaurant() {
       let showRestaurant: ShowRestaurantState = this.$store.state.showRestaurant;
+
+      console.log("showRestaurant: ", showRestaurant);
+
       return showRestaurant.restaurant;
     }
 
@@ -102,6 +110,25 @@
       router.push("/restaurants/" + this.restaurantId + "/dishes/create")
     }
 
+    editRestaurant() {
+      router.push("/restaurants/" + this.restaurantId + "/edit")
+    }
+
+    deleteRestaurant() {
+      let errorsComponent = this.$refs.errorsComponent;
+      this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
+        restaurantId: this.restaurantId,
+        errorsComponent: errorsComponent
+      });
+    }
+
+    dateToRel(date) {
+      if (date) {
+        return moment(date).fromNow()
+      } else {
+        return ""
+      }
+    }
 
   }
 

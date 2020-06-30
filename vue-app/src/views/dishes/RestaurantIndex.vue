@@ -112,6 +112,14 @@
       router.push("/restaurants/create")
     }
 
+    dateToRel(date) {
+      if (date) {
+        return moment(date).fromNow()
+      } else {
+        return ""
+      }
+    }
+
     private mapToRestaurantEntry(restaurant: RestaurantInfo): RestaurantEntry {
         return {
           "id": restaurant.id,
