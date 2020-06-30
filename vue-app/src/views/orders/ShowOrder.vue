@@ -66,7 +66,7 @@
             </v-btn>
 
             <v-btn block color="success" v-if="this.isOrderOwner() && (this.orderState === 'ORDERED')"
-                   @click="setAsDelivered">
+                   @click="setAsDelivered()">
               Mark as delivered &nbsp; <i class="fa fa-arrow-right" aria-hidden="true"></i>
             </v-btn>
           </v-col>
@@ -100,24 +100,25 @@
 </template>
 
 <script lang="ts">
-  import LoadingView from '../commons/LoadingView.vue'
+  import LoadingView from '@/views/commons/LoadingView.vue'
   import {
     FETCH_ORDER_DATA_ACTION,
-    NAMESPACE_SHOW_ORDER,
-    SET_ORDER_AS_DELIVERED_ACTION,
+    NAMESPACE_SHOW_ORDER, SET_ORDER_AS_DELIVERED_ACTION,
+    ShowOrderState,
     UNLOCK_ORDER_ACTION,
-  } from "../../store/modules/ShowOrderModule"
-  import router from '../../router/index'
-  import PriceSummary from "./components/PriceSummary";
-  import ViewWrapper from "../commons/ViewWrapper";
-  import CustomPolyfills from "../../lib/CustomPolyfills";
-  import OrderEntriesCard from "./components/orderEntry/OrderEntriesCard";
-  import NewOrderEntryCard from "./components/orderEntry/NewOrderEntryCard";
-  import OrderDataSummary from "./components/OrderDataSummary";
-  import PaymentOptionsSummary from "./components/PaymentOptionsSummary";
-  import OrderLockedWarning from "./components/OrderLockedWarning";
+  } from "@/store/modules/ShowOrderModule"
+  import router from '@/router/index'
+  import PriceSummary from "@/views/orders/components/PriceSummary.vue";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
+  import OrderEntriesCard from "@/views/orders/components/orderEntry/OrderEntriesCard.vue";
+  import NewOrderEntryCard from "@/views/orders/components/orderEntry/NewOrderEntryCard.vue";
+  import OrderDataSummary from "@/views/orders/components/OrderDataSummary.vue";
+  import PaymentOptionsSummary from "@/views/orders/components/PaymentOptionsSummary.vue";
+  import OrderLockedWarning from "@/views/orders/components/OrderLockedWarning.vue";
   import Component from "vue-class-component";
   import Vue from "vue";
+  import {ParticipantsOrderEntry, ShowOrderDto} from "../../frontend-client";
+  import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
   @Component({
     components: {
@@ -149,7 +150,7 @@
     }
 
     isOrdering() {
-      return this.order.orderState === 'ORDERING';
+      return this.order.orderState === OrderStateEnum.ORDERING;
     }
 
     isOrderOwner() {
@@ -173,7 +174,7 @@
     }
 
     canShowPlaceOrderButton() {
-      return this.isOrderOwner() && (this.orderState === 'CREATED' || this.orderState === 'ORDERING')
+      return this.isOrderOwner() && (this.orderState === OrderStateEnum.CREATED || this.orderState === OrderStateEnum.ORDERING)
     }
 
     isPlaceOrderButtonDisabled() {
@@ -181,7 +182,7 @@
     }
 
     allEatingPeopleCount() {
-      return CustomPolyfills.flatMap(this.orderEntries, e => e.dishEntries).length;
+      this.orderEntries.flatMap(e => e.dishEntries).length
     }
 
     get numberOfCurrentUserEntries() {
@@ -189,31 +190,33 @@
     }
 
     get orderState() {
-      return this.$store.state.showOrder.order.orderState;
-    }
-
-    get username() {
-      return this.$store.state.username;
+      let showOrder: ShowOrderState = this.$store.state.showOrder;
+      return showOrder.order.orderState;
     }
 
     get order() {
-      return this.$store.state.showOrder.order;
+      let showOrder: ShowOrderState = this.$store.state.showOrder;
+      return showOrder.order;
     }
 
-    get orderEntries() {
-      return this.$store.state.showOrder.orderEntries;
+    get orderEntries(): ParticipantsOrderEntry[] {
+      let showOrder: ShowOrderState = this.$store.state.showOrder;
+      return showOrder.orderEntries;
     }
 
-    get currentUserId() {
-      return this.$store.state.showOrder.currentUserId;
+    get currentUserId(): string {
+      let showOrder: ShowOrderState = this.$store.state.showOrder;
+      return showOrder.currentUserId;
     }
 
     get totalOrderPrice() {
-      return this.$store.state.showOrder.totalOrderPrice;
+      let showOrder: ShowOrderState = this.$store.state.showOrder;
+      return showOrder.totalOrderPrice;
     }
 
     get baseOrderPrice() {
-      return this.$store.state.showOrder.baseOrderPrice;
+      let showOrder: ShowOrderState = this.$store.state.showOrder;
+      return showOrder.baseOrderPrice;
     }
 
     get isEntryCreating() {
@@ -224,17 +227,14 @@
       return this.$store.state.modifyOrderEntry.isEntryEdited;
     }
 
-    get orderEntryId() {
-      return this.$store.state.modifyOrderEntry.orderEntryId;
-    }
-
-    get dishEntryId() {
-      return this.$store.state.modifyOrderEntry.dishEntryId;
+    get username() {
+      return this.$store.state.username;
     }
 
     get loading() {
       return this.$store.state.loading;
     }
+
   }
 </script>
 

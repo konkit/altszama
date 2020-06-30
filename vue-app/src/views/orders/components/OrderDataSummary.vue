@@ -46,10 +46,11 @@
   import Vue from "vue";
   import {Prop} from "vue-property-decorator";
   import Component from "vue-class-component";
+  import {ShowOrderDto} from "../../../frontend-client";
 
   @Component({})
   export default class OrderDataSummary extends Vue {
-    @Prop() order;
+    @Prop() order!: ShowOrderDto;
 
     timeOfDeliveryOrNA() {
       if (this.order.timeOfDelivery != null) {

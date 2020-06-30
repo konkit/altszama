@@ -77,11 +77,11 @@
       ApiConnector.logout();
     }
 
-    goToPath(path) {
+    goToPath(path: string) {
       this.$router.push(path)
     }
 
-    setMasterNavDrawerOpened(newValue) {
+    setMasterNavDrawerOpened(newValue: boolean) {
       this.$store.commit("setMasterNavigationDrawerOpened", newValue);
     }
   }

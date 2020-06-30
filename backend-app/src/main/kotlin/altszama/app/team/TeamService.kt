@@ -1,5 +1,6 @@
 package altszama.app.team
 
+import altszama.app.auth.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -13,5 +14,16 @@ class TeamService {
         return teamRepository.findAll()
     }
 
+//    fun getTeamsForUser(user: User) {
+//        getExplicitTeams(user) + getTeamsByDomain(user)
+//    }
+//
+//    private fun getExplicitTeams(user: User): List<Team> {
+//        TODO("Not yet implemented")
+//    }
+//
+//    private fun getTeamsByDomain(user: User): Array<Team> {
+//
+//    }
 
 }

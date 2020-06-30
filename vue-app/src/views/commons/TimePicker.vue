@@ -34,30 +34,29 @@
 
 <script lang="ts">
   import Vue from "vue";
-  import {Prop} from "vue-property-decorator";
+  import {Prop, Watch} from "vue-property-decorator";
   import Component from "vue-class-component";
 
-  @Component({
-    watch: {
-      value(newVal) {
-        this.time = newVal;
-      }
-    }
-  })
+  @Component({})
   export default class TimePicker extends Vue {
-    @Prop() value;
-    @Prop() label;
+    @Prop() value!: string;
+    @Prop() label!: string;
 
-    time = null;
+    time: string | null = null;
     modal2 = false;
 
     mounted() {
       this.time = this.value
     }
 
-    inputEvent(event) {
+    inputEvent(event: Event) {
       console.log("event: ", event)
       this.$emit("input", event)
+    }
+
+    @Watch('value')
+    onPropertyChanged(value: string, oldValue: string) {
+      this.time = value;
     }
   }
 </script>

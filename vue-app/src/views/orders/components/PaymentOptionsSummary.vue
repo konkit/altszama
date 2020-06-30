@@ -74,9 +74,9 @@
   @Component({})
   export default class PaymentOptionsSummary extends Vue {
     // @Prop() order;
-    @Prop() paymentData: PaymentData;
+    @Prop() paymentData!: PaymentData;
 
-    formatBankAccountNr(unformattedInput) {
+    formatBankAccountNr(unformattedInput: string) {
       if (unformattedInput) {
         var input = unformattedInput.trim();
 
@@ -94,7 +94,7 @@
       return unformattedInput;
     }
 
-    formatBlikPhoneNumber(unformattedInput) {
+    formatBlikPhoneNumber(unformattedInput: string) {
       if (unformattedInput) {
         var input = unformattedInput.trim();
 

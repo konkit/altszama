@@ -16,10 +16,6 @@
 
   @Component({})
   export default class ErrorsComponent extends Vue {
-      close(errorIndex) {
-        this.$store.commit("clearErrorAtIndex", errorIndex)
-      }
-
       get errors() {
         return this.$store.state.errors;
       }

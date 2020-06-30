@@ -3,7 +3,7 @@ import ApiConnector from "../../lib/ApiConnector";
 import router from '../../router/index'
 import {Module} from "vuex";
 import {RootState} from "@/store";
-import {DishDto, ShowOrderDto, ShowOrderResponse, SideDish} from "@/frontend-client";
+import {DishDto, ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse, SideDish} from "@/frontend-client";
 
 export const NAMESPACE_SHOW_ORDER = "showOrder";
 
@@ -21,9 +21,9 @@ export const DELETE_ORDER_ACTION = "DELETE_ORDER_ACTION";
 
 export interface ShowOrderState {
   order: ShowOrderDto,
-  orderEntries: object[],
+  orderEntries: ParticipantsOrderEntry[],
   currentUserId: string,
-  allDishesInRestaurant: object[],
+  allDishesInRestaurant: DishDto[],
   allDishesByCategory: { [category: string]: DishDto[] },
   dishIdToSideDishesMap: { [key: string]: SideDish[] },
   totalOrderPrice: number,

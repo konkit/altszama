@@ -136,19 +136,20 @@
 </template>
 
 <script lang="ts">
-  import LoadingView from "../commons/LoadingView";
-  import PriceSummary from "./components/PriceSummary";
-  import TimePicker from "../commons/TimePicker";
-  import ViewWrapper from "../commons/ViewWrapper";
+  import LoadingView from "@/views/commons/LoadingView.vue";
+  import PriceSummary from "@/views/orders/components/PriceSummary.vue";
+  import TimePicker from "@/views/commons/TimePicker.vue";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION} from "../../store/modules/ShowOrderModule"
   import router from '../../router/index'
-  import UserOrders from "./components/orderView/UserOrders";
+  import UserOrders from "@/views/orders/components/orderView/UserOrders.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import ApiConnector from "../../lib/ApiConnector";
-  import ErrorsComponent from "../../../src/views/commons/ErrorsComponent"
+  import ErrorsComponent from "@/views/commons/ErrorsComponent.vue"
   import {RootState} from "../../store";
+  import {GroupedOrderEntry} from "../../frontend-client";
 
   @Component({
     components: {
@@ -169,13 +170,13 @@
     orderDeliveryCostPerDish = 0;
     restaurantName = "";
     restaurantTelephone = "";
-    groupedEntries = [];
+    groupedEntries: GroupedOrderEntry[] = [];
     allEatingPeopleCount = 0;
     basePriceSum = 0;
     totalPrice = 0;
     approxTimeOfDelivery = "12:00";
 
-    connector: OrdersApiConnector;
+    connector?: OrdersApiConnector;
 
     mounted() {
       this.orderId = this.$route.params.id;
@@ -202,13 +203,13 @@
     }
 
     submitForm() {
-      this.connector.makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery.toString()})
+      this.connector?.makeAnOrder(this.orderId, {approxTimeOfDelivery: this.approxTimeOfDelivery.toString()})
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false
     }
 
-    updateApproxTimeOfDelivery(newValue) {
+    updateApproxTimeOfDelivery(newValue: string) {
       this.approxTimeOfDelivery = newValue;
     }
 

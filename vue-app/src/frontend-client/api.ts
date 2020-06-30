@@ -1,3 +1,4 @@
+/* eslint-disable */
 /// <reference path="./custom.d.ts" />
 // tslint:disable
 /**
@@ -1468,7 +1469,7 @@ export interface SideDish {
      * @type {string}
      * @memberof SideDish
      */
-    id: string;
+    id?: string;
     /**
      * 
      * @type {string}
@@ -1527,10 +1528,10 @@ export interface Team {
     id: string;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof Team
      */
-    domain?: string;
+    domains: Array<string>;
     /**
      * 
      * @type {Array<string>}

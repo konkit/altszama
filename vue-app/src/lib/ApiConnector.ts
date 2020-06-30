@@ -12,7 +12,7 @@ let pushNotificationEnabled = false;
 export default {
   getPushNotificationEnabled: () => pushNotificationEnabled,
 
-  setPushNotificationEnabled: (newVal) => pushNotificationEnabled = newVal,
+  setPushNotificationEnabled: (newVal: boolean) => pushNotificationEnabled = newVal,
   
   getBackendUrl: () => backendUrl,
   

@@ -28,10 +28,10 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/ErrorsComponent'
+  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
 
-  import LoadingView from "../commons/LoadingView";
-  import ViewWrapper from "../commons/ViewWrapper";
+  import LoadingView from "@/views/commons/LoadingView.vue";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
   import DishesApiConnector from "../../lib/DishesApiConnector";
@@ -54,11 +54,11 @@
     telephone = '';
     address = '';
 
-    connector: DishesApiConnector;
+    connector?: DishesApiConnector;
 
     mounted() {
       this.restaurantId = this.$route.params.id;
-      this.connector = new DishesApiConnector(this.$store);
+      this.connector = new DishesApiConnector(this.$store.state);
 
       this.connector.getRestaurantEditData(this.restaurantId)
         .then(payload => {
@@ -84,26 +84,26 @@
         address: this.address,
       };
 
-      this.connector.editRestaurant(this.restaurantId, restaurant)
+      this.connector!.editRestaurant(this.restaurantId, restaurant)
         .then(() => router.push("/restaurants/show/" + this.restaurantId))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false;
     }
 
-    updateName(newValue) {
+    updateName(newValue: string) {
       this.name = newValue;
     }
 
-    updateUrl(newValue) {
+    updateUrl(newValue: string) {
       this.url = newValue;
     }
 
-    updateTelephone(newValue) {
+    updateTelephone(newValue: string) {
       this.telephone = newValue;
     }
 
-    updateAddress(newValue) {
+    updateAddress(newValue: string) {
       this.address = newValue;
     }
 

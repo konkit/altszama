@@ -10,6 +10,6 @@
 
   @Component({})
   export default class Price extends Vue {
-    @Prop() dataPrice;
+    @Prop() dataPrice!: number;
   }
 </script>

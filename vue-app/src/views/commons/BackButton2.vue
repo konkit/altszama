@@ -11,10 +11,10 @@
 
   @Component({})
   export default class BackButton extends Vue {
-    @Prop() href: string;
+    @Prop() href!: string;
 
     followLink() {
-      location = this.href;
+      location.href = this.href;
     }
   }
 </script>

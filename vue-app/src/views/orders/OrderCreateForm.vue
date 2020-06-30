@@ -102,21 +102,21 @@
 
 <script lang="ts">
   import router from '../../router/index'
-  import ErrorsComponent from '../commons/ErrorsComponent'
-  import LoadingView from "../commons/LoadingView";
+  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
+  import LoadingView from "@/views/commons/LoadingView.vue";
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY
   } from "../../store/modules/ModifyOrderEntryModule";
-  import MoneyInput from "../commons/MoneyInput";
-  import TimePicker from "../commons/TimePicker";
-  import ViewWrapper from "../commons/ViewWrapper";
+  import MoneyInput from "@/views/commons/MoneyInput.vue";
+  import TimePicker from "@/views/commons/TimePicker.vue";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
   import ApiConnector from "../../lib/ApiConnector";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import {RootState} from "../../store";
-  import {OrderSaveRequest} from "../../frontend-client";
+  import {OrderSaveRequest, Restaurant} from "../../frontend-client";
 
   @Component({
     computed: {
@@ -133,7 +133,7 @@
     }
   })
   export default class OrderCreateForm extends Vue {
-    restaurantsList = [];
+    restaurantsList: Restaurant[] = [];
 
     // Order
     restaurantId = "";
@@ -148,7 +148,7 @@
     paymentByBlik = false;
     blikPhoneNumber = "";
 
-    connector: OrdersApiConnector;
+    connector?: OrdersApiConnector;
 
     created() {
       this.$store.commit('setLoadingTrue')
@@ -179,51 +179,39 @@
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
 
-    updateRestaurantId(newValue) {
+    updateRestaurantId(newValue: string) {
       this.restaurantId = newValue;
     }
 
-    updateOrderDate(newValue) {
+    updateOrderDate(newValue: string) {
       this.orderDate = newValue;
     }
 
-    updateTimeOfOrder(newValue) {
+    updateTimeOfOrder(newValue: string) {
       this.timeOfOrder = newValue
     }
 
-    updateDecreaseInPercent(newValue) {
+    updateDecreaseInPercent(newValue: number) {
       this.decreaseInPercent = newValue;
     }
 
-    updateDeliveryCostPerEverybody(newValue) {
+    updateDeliveryCostPerEverybody(newValue: number) {
       this.deliveryCostPerEverybody = newValue;
     }
 
-    updateDeliveryCostPerDish(newValue) {
+    updateDeliveryCostPerDish(newValue: number) {
       this.deliveryCostPerDish = newValue;
     }
 
-    updatePaymentByCash(newValue) {
-      this.paymentByCash = newValue;
-    }
-
-    updatePaymentByBankTransfer(newValue) {
-      this.paymentByBankTransfer = newValue;
-    }
-
-    updateBankTransferNumber(newValue) {
+    updateBankTransferNumber(newValue: string) {
       this.bankTransferNumber = newValue;
     }
 
-    updatePaymentByBlik(newValue) {
-      this.paymentByBlik = newValue;
-    }
-
-    updateBlikPhoneNumber(newValue) {
+    updateBlikPhoneNumber(newValue: string) {
       this.blikPhoneNumber = newValue;
     }
 
-    submitForm(e) {
+    submitForm(e: Event) {
       e.preventDefault();
 
       const order: OrderSaveRequest = {
@@ -244,7 +232,7 @@
         }
       };
 
-      this.connector.createOrder(order)
+      this.connector!.createOrder(order)
         .then(() => router.push("/orders/"))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 

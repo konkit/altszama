@@ -59,13 +59,12 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/ErrorsComponent'
-  import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable'
-  import LoadingView from "../commons/LoadingView";
-  import {DELETE_RESTAURANT_ACTION, FETCH_RESTAURANT_ACTION} from "../../store/modules/ShowRestaurantModule"
+  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
+  import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable.vue'
+  import LoadingView from "@/views/commons/LoadingView.vue";
+  import {FETCH_RESTAURANT_ACTION, ShowRestaurantState} from "../../store/modules/ShowRestaurantModule"
   import router from "../../router/index"
-  import moment from "moment"
-  import ViewWrapper from "../commons/ViewWrapper";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Component from "vue-class-component";
   import Vue from 'vue';
 
@@ -87,7 +86,8 @@
     }
 
     get restaurant() {
-      return this.$store.state.showRestaurant.restaurant;
+      let showRestaurant: ShowRestaurantState = this.$store.state.showRestaurant;
+      return showRestaurant.restaurant;
     }
 
     get dishes() {
@@ -98,28 +98,8 @@
       return this.$store.state.showRestaurant.dishesByCategory;
     }
 
-    deleteRestaurant() {
-      let errorsComponent = this.$refs.errorsComponent;
-      this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
-        restaurantId: this.restaurantId,
-        errorsComponent: errorsComponent
-      });
-    }
-
     goToCreateDish() {
       router.push("/restaurants/" + this.restaurantId + "/dishes/create")
-    }
-
-    editRestaurant() {
-      router.push("/restaurants/" + this.restaurantId + "/edit")
-    }
-
-    dateToRel(date) {
-      if (date) {
-        return moment(date).fromNow()
-      } else {
-        return ""
-      }
     }
 
 

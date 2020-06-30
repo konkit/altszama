@@ -50,12 +50,11 @@
 </template>
 
 <script lang="ts">
-  import Price from '../../commons/PriceElement'
-  import {DELETE_DISH_ACTION} from "../../../store/modules/ShowRestaurantModule";
-  import moment from "moment"
+  import Price from '../../commons/PriceElement.vue'
   import Vue from 'vue'
   import {Prop} from "vue-property-decorator";
   import Component from "vue-class-component";
+  import {DishDto, Restaurant} from "../../../frontend-client";
 
   @Component({
     components: {
@@ -63,27 +62,12 @@
     },
   })
   export default class ShowRestaurantDishesTable extends Vue {
-    @Prop() restaurant;
-    @Prop() dishesByCategory;
-
-    sideDishesShown: false;
+    @Prop() restaurant!: Restaurant;
+    @Prop() dishesByCategory!: {[key: string]: Array<DishDto>};
 
     mounted() {
       console.log("Dishes by category: ", this.dishesByCategory)
     }
-
-    deleteDish(dishId) {
-      this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {restaurantId: this.restaurant.id, dishId: dishId})
-    }
-
-    dateToRel(date) {
-      if (date) {
-        return moment(date).fromNow()
-      } else {
-        return ""
-      }
-    }
-
   }
 </script>
 

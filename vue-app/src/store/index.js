@@ -4,14 +4,15 @@ import { showOrderModule } from './modules/ShowOrderModule';
 import { showRestaurantModule } from "./modules/ShowRestaurantModule";
 import { modifyOrderEntryModule } from "./modules/ModifyOrderEntryModule";
 Vue.use(Vuex);
+var rootState = {
+    loading: false,
+    username: localStorage.getItem("username") || "",
+    token: localStorage.getItem("token") || "",
+    errors: [],
+    masterNavDrawerOpened: false,
+};
 export default new Vuex.Store({
-    state: {
-        loading: false,
-        username: localStorage.getItem("username") || "",
-        token: localStorage.getItem("token") || "",
-        errors: [],
-        masterNavDrawerOpened: false,
-    },
+    state: rootState,
     mutations: {
         setLoadingTrue: function (state) {
             state.loading = true;
@@ -35,19 +36,19 @@ export default new Vuex.Store({
             if (error instanceof Array) {
                 error.forEach(function (errorStr) { return state.errors.push(errorStr); });
             }
-            else if (typeof error == 'object' && typeof error.exception !== "undefined") {
+            else if (typeof error == 'object' && error.exception !== undefined) {
                 state.errors.push("Error: " + error.exception + " occured!");
             }
-            else if (typeof error == 'object' && typeof error.message !== "undefined") {
+            else if (typeof error == 'object' && error.message !== undefined) {
                 state.errors.push(error.message);
             }
-            else if (typeof error == 'object' && typeof error.body.message !== "undefined") {
+            else if (typeof error == 'object' && error.body.message !== undefined) {
                 state.errors.push(error.body.message);
             }
-            else if (typeof error == 'object' && typeof error.body.messages !== "undefined") {
+            else if (typeof error == 'object' && error.body.messages !== undefined) {
                 error.body.messages.forEach(function (errorStr) { return state.errors.push(errorStr); });
             }
-            else if (typeof error == 'object' && typeof error.statusText !== "undefined") {
+            else if (typeof error == 'object' && error.statusText !== undefined) {
                 state.errors.push(error.statusText);
             }
             else {

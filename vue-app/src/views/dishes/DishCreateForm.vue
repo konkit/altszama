@@ -40,8 +40,8 @@
   import ApiConnector from "../../lib/ApiConnector"
   import ErrorsComponent from '../commons/ErrorsComponent.vue'
   import SideDishes from './components/SideDishes.vue'
-  import MoneyInput from "../commons/MoneyInput";
-  import ViewWrapper from "../commons/ViewWrapper";
+  import MoneyInput from "@/views/commons/MoneyInput.vue";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import {Prop} from "vue-property-decorator";
@@ -55,19 +55,19 @@
     }
   })
   export default class DishCreateForm extends Vue {
-    @Prop(String) restaurantName: string;
+    @Prop(String) restaurantName!: string;
 
     restaurantId = "";
     name = "";
     price = 0;
     category = "";
-    categories = [];
+    categories: string[] = [];
 
-    connector: DishesApiConnector;
+    connector?: DishesApiConnector;
 
     mounted() {
       this.restaurantId = this.$route.params.id;
-      this.connector = new DishesApiConnector(this.$store);
+      this.connector = new DishesApiConnector(this.$store.state);
 
       this.connector.getDishCreateData(this.restaurantId)
         .then(response => {
@@ -78,7 +78,7 @@
     }
 
     submitForm() {
-      let sideDishesElement: SideDishes = this.$refs.sideDishesElement;
+      let sideDishesElement: SideDishes = this.$refs.sideDishesElement as SideDishes;
       let sideDishes = sideDishesElement.getSideDishes();
 
       const dishPayload = {
@@ -89,7 +89,7 @@
         sideDishes: sideDishes
       };
 
-      this.connector.createDish(this.restaurantId, dishPayload)
+      this.connector!.createDish(this.restaurantId, dishPayload)
         .then(() => this.$router.push(this.getBackUrl()))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
@@ -104,15 +104,15 @@
       }
     }
 
-    updateName(newValue) {
+    updateName(newValue: string) {
       this.name = newValue;
     }
 
-    updatePrice(newValue) {
+    updatePrice(newValue: number) {
       this.price = newValue;
     }
 
-    updateCategory(newValue) {
+    updateCategory(newValue: string) {
       this.category = newValue;
     }
 

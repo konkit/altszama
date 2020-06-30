@@ -11,6 +11,8 @@
     "build-staging": "NODE_ENV=production vue-cli-service build --mode staging"
   },
   "dependencies": {
+    "@types/gapi": "0.0.39",
+    "@types/gapi.auth2": "^0.0.52",
     "core-js": "^3.6.5",
     "font-awesome": "^4.7.0",
     "moment": "^2.24.0",
@@ -65,7 +67,9 @@
     ],
     "rules": {
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": ["warn"]
+      "@typescript-eslint/no-unused-vars": [
+        "warn"
+      ]
     },
     "parserOptions": {
       "parser": "@typescript-eslint/parser"

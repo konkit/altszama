@@ -75,7 +75,7 @@
 
 <script lang="ts">
   import {
-    ADD_SIDE_DISH_ACTION,
+    ADD_SIDE_DISH_ACTION, ModifyOrderEntryState,
     NAMESPACE_MODIFY_ORDER_ENTRY,
     REMOVE_SIDE_DISH,
     SET_SIDE_DISH_AS_EXISTING,
@@ -84,9 +84,11 @@
     UPDATE_NEW_SIDE_DISH_PRICE,
     UPDATE_SIDE_DISH_ACTION
   } from "../../../../store/modules/ModifyOrderEntryModule";
-  import MoneyInput from "../../../commons/MoneyInput";
+  import MoneyInput from "@/views/commons/MoneyInput.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
+  import {SideDish, SideDishData} from "../../../../frontend-client";
+  import {ShowOrderState} from "../../../../store/modules/ShowOrderModule";
 
   @Component({
     components: {
@@ -94,7 +96,7 @@
     }
   })
   export default class SideDishesInput extends Vue {
-    removeSideDish(sideDishIndex) {
+    removeSideDish(sideDishIndex: number) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${REMOVE_SIDE_DISH}`, {sdIndex: sideDishIndex});
 
       this.$forceUpdate();
@@ -106,19 +108,19 @@
       this.$forceUpdate();
     }
 
-    setAsNewSideDish(sdIndex) {
+    setAsNewSideDish(sdIndex: number) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_NEW}`, {sdIndex: sdIndex});
 
       this.$forceUpdate();
     }
 
-    setAsExistingSideDish(sdIndex) {
+    setAsExistingSideDish(sdIndex: number) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_SIDE_DISH_AS_EXISTING}`, {sdIndex: sdIndex});
 
       this.$forceUpdate();
     }
 
-    updateNewSideDishName(sdIndex, newValue) {
+    updateNewSideDishName(sdIndex: number, newValue: string) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_NAME}`, {
         sdIndex: sdIndex,
         newValue: newValue
@@ -127,7 +129,7 @@
       this.$forceUpdate();
     }
 
-    changeNewSideDishPrice(sdIndex, newValue) {
+    changeNewSideDishPrice(sdIndex: number, newValue: number) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_SIDE_DISH_PRICE}`, {
         sdIndex: sdIndex,
         newValue: newValue
@@ -136,7 +138,7 @@
       this.$forceUpdate();
     }
 
-    updateSideDishComboBox(sdIndex, sideDishId) {
+    updateSideDishComboBox(sdIndex: number, sideDishId: string) {
       this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_SIDE_DISH_ACTION}`, {
         sdIndex: sdIndex,
         sideDishId: sideDishId
@@ -145,7 +147,7 @@
       this.$forceUpdate();
     }
 
-    onSideDishTypeToggle(sdIndex, e) {
+    onSideDishTypeToggle(sdIndex: number, e: boolean) {
       console.log("onSideDishTypeToggle: ", e);
 
       if (e === true) {
@@ -157,16 +159,19 @@
       }
     }
 
-    get dishId() {
-      return this.$store.state.modifyOrderEntry.dishId;
+    get dishId(): string {
+      let modifyOrderEntry: ModifyOrderEntryState = this.$store.state.modifyOrderEntry;
+      return modifyOrderEntry.dishId;
     }
 
-    get dishIdToSideDishesMap() {
-      return this.$store.state.showOrder.dishIdToSideDishesMap;
+    get dishIdToSideDishesMap(): { [key: string]: SideDish[] } {
+      let showOrderState: ShowOrderState = this.$store.state.showOrder;
+      return showOrderState.dishIdToSideDishesMap;
     }
 
-    get chosenSideDishes() {
-      return this.$store.state.modifyOrderEntry.chosenSideDishes;
+    get chosenSideDishes(): SideDishData[] {
+      let modifyOrderEntry: ModifyOrderEntryState = this.$store.state.modifyOrderEntry;
+      return modifyOrderEntry.chosenSideDishes;
     }
 
     get sideDishesItems() {

@@ -45,7 +45,7 @@ export const SAVE_ORDER_ENTRY_ACTION = "SAVE_ORDER_ENTRY_ACTION";
 export const UPDATE_ORDER_ENTRY_ACTION = "UPDATE_ORDER_ENTRY_ACTION";
 
 
-interface ModifyOrderEntryState {
+export interface ModifyOrderEntryState {
   loadingEntry: boolean,
 
   isEntryCreating: boolean,

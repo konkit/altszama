@@ -37,7 +37,7 @@
 
   @Component({})
   export default class OrderLockedWarning extends Vue {
-    @Prop() orderId;
+    @Prop() orderId!: string;
 
     placeOrder() {
       router.push("/orders/" + this.orderId + "/order_view")

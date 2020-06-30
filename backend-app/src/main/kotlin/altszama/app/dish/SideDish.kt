@@ -7,7 +7,7 @@ import javax.validation.constraints.PositiveOrZero
 
 data class SideDish(
   @Id
-  var id: String = ObjectId().toHexString(),
+  var id: String? = ObjectId().toHexString(),
 
   @field:NotBlank
   var name: String = "",

@@ -42,6 +42,7 @@
   import Vue from "vue";
   import Component from "vue-class-component";
   import {Prop} from "vue-property-decorator";
+  import {ParticipantsDishEntry, ParticipantsOrderEntry} from "../../../../frontend-client";
 
   @Component({
     components: {
@@ -51,9 +52,9 @@
     }
   })
   export default class EditOrderEntry extends Vue {
-    @Prop() index;
-    @Prop() orderEntry;
-    @Prop() dishEntry;
+    @Prop() index!: number;
+    @Prop() orderEntry!: ParticipantsOrderEntry;
+    @Prop() dishEntry!: ParticipantsDishEntry;
 
     created() {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`)
@@ -63,7 +64,7 @@
       this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SETUP_EDIT_ORDER_ENTRY_ACTION}`, {dishEntry: this.dishEntry})
     }
 
-    submitForm(e) {
+    submitForm(e: Event) {
       e.preventDefault();
 
       this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ORDER_ENTRY_ACTION}`, {orderEntryId: this.orderEntry.id});

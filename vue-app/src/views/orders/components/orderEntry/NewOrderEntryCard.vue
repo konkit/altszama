@@ -25,7 +25,7 @@
     NAMESPACE_MODIFY_ORDER_ENTRY,
     SET_DISH_ENTRY_CREATING,
   } from "../../../../store/modules/ModifyOrderEntryModule";
-  import CreateOrderEntry from "./CreateOrderEntry";
+  import CreateOrderEntry from "@/views/orders/components/orderEntry/CreateOrderEntry.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
   import {Prop} from "vue-property-decorator";
@@ -36,8 +36,8 @@
     }
   })
   export default class NewOrderEntryCard extends Vue {
-    @Prop() username;
-    @Prop() isEntryCreating;
+    @Prop() username!: string;
+    @Prop() isEntryCreating!: boolean;
 
     createEntry() {
         this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})

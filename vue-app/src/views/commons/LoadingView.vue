@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from "./ErrorsComponent";
+  import ErrorsComponent from "./ErrorsComponent.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
 

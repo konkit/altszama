@@ -42,14 +42,15 @@
 </template>
 
 <script lang="ts">
-  import LoadingView from "../commons/LoadingView";
+  import LoadingView from "@/views/commons/LoadingView.vue";
   import router from '../../router/index'
-  import ViewWrapper from "../commons/ViewWrapper";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
   import ApiConnector from "../../lib/ApiConnector";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import {RootState} from "../../store";
+  import {AllOrdersOrderDto} from "../../frontend-client";
 
   @Component({
     components: {
@@ -58,7 +59,7 @@
     },
   })
   export default class AllOrders extends Vue {
-    allOrdersList = [];
+    allOrdersList: AllOrdersOrderDto[] = [];
 
     headers = [
       { text: 'Date', align: 'left', value: 'date' },
@@ -67,7 +68,7 @@
       { text: 'Order creator', value: 'orderCreator' },
       ];
 
-    connector: OrdersApiConnector;
+    connector?: OrdersApiConnector;
 
     mounted() {
       this.connector = new OrdersApiConnector(this.$store.state as RootState);
@@ -82,7 +83,7 @@
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
 
-    goToOrder(selectedOrderId) {
+    goToOrder(selectedOrderId: string) {
       router.push("/orders/show/" + selectedOrderId)
     }
   }

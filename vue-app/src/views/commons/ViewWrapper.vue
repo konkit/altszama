@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-  import BackButton from "./BackButton2";
+  import BackButton from "./BackButton2.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
   import {Prop} from "vue-property-decorator";
@@ -42,8 +42,8 @@
     components: {BackButton},
   })
   export default class ViewWrapper extends Vue {
-    @Prop() title;
-    @Prop() backpath;
+    @Prop() title!: string;
+    @Prop() backpath!: string;
 
     titleText() {
       if (this.loading) {

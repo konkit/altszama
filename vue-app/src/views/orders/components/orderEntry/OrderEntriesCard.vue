@@ -93,13 +93,15 @@
   import EditOrderEntry from './EditOrderEntry.vue'
   import ShowOrderEntry from './ShowOrderEntry.vue'
   import {
+    ModifyOrderEntryState,
     NAMESPACE_MODIFY_ORDER_ENTRY,
     SET_DISH_ENTRY_CREATING,
   } from "../../../../store/modules/ModifyOrderEntryModule";
-  import PaymentStatus from "../PaymentStatus";
+  import PaymentStatus from "@/views/orders/components/PaymentStatus.vue";
   import Vue from "vue";
   import {Prop} from "vue-property-decorator";
   import Component from "vue-class-component";
+  import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../frontend-client";
 
   @Component({
     components: {
@@ -111,25 +113,13 @@
     }
   })
   export default class OrderEntriesCard extends Vue {
-    @Prop() order;
-    @Prop() orderEntry;
-    @Prop() entryId;
-    @Prop() currentUserId;
+    @Prop() order!: ShowOrderDto;
+    @Prop() orderEntry!: ParticipantsOrderEntry;
+    @Prop() entryId!: string;
+    @Prop() currentUserId!: string;
 
-    isOrderEntryOwner(orderEntry) {
-      return orderEntry.userId === this.currentUserId
-    }
-
-    paymentStatus(orderEntry) {
-      if (orderEntry.paymentStatus === "UNPAID") {
-        return "Unpaid"
-      } else if (orderEntry.paymentStatus === "MARKED") {
-        return "Marked as paid"
-      } else if (orderEntry.paymentStatus === "CONFIRMED") {
-        return "Payment confirmed"
-      } else {
-        return orderEntry.paymentStatus
-      }
+    isOrderEntryOwner() {
+      return this.orderEntry.userId === this.currentUserId
     }
 
     createEntry() {
@@ -137,19 +127,13 @@
     }
 
     get isEntryCreating() {
-      return this.$store.state.modifyOrderEntry.isEntryCreating;
+      let modifyOrderEntryState: ModifyOrderEntryState = this.$store.state.modifyOrderEntry;
+      return modifyOrderEntryState.isEntryCreating;
     }
 
     get isEntryEdited() {
-      return this.$store.state.modifyOrderEntry.isEntryEdited;
-    }
-
-    get orderEntryId() {
-      return this.$store.state.modifyOrderEntry.orderEntryId;
-    }
-
-    get dishEntryId() {
-      return this.$store.state.modifyOrderEntry.dishEntryId;
+      let modifyOrderEntryState: ModifyOrderEntryState = this.$store.state.modifyOrderEntry;
+      return modifyOrderEntryState.isEntryEdited;
     }
   }
 </script>

@@ -60,7 +60,7 @@
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`)
     }
 
-    submitForm(e) {
+    submitForm(e: Event) {
       e.preventDefault();
 
       this.$store.dispatch(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SAVE_ORDER_ENTRY_ACTION}`);

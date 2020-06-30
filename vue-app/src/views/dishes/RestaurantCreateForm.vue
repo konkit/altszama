@@ -25,8 +25,8 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/ErrorsComponent'
-  import ViewWrapper from "../commons/ViewWrapper";
+  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Vue from "vue";
   import {Prop} from "vue-property-decorator";
   import Component from "vue-class-component";
@@ -41,17 +41,17 @@
     }
   })
   export default class RestaurantCreateForm extends Vue {
-    @Prop() restaurantName: string;
+    @Prop() restaurantName!: string;
 
     name: string = '';
     url: string = '';
     telephone: string = '';
     address: string = '';
 
-    connector: DishesApiConnector;
+    connector?: DishesApiConnector;
 
     mounted() {
-      this.connector = new DishesApiConnector(this.$store);
+      this.connector = new DishesApiConnector(this.$store.state);
 
       document.title = `Create restaurant | Alt Szama`
     }
@@ -64,24 +64,24 @@
         address: this.address,
       };
 
-      this.connector.createRestaurant(restaurant)
+      this.connector!.createRestaurant(restaurant)
         .then(() => router.push("/restaurants"))
         .catch(errResponse => ApiConnector.handleError(errResponse));
     }
 
-    updateName(newValue) {
+    updateName(newValue: string) {
       this.name = newValue;
     }
 
-    updateUrl(newValue) {
+    updateUrl(newValue: string) {
       this.url = newValue;
     }
 
-    updateTelephone(newValue) {
+    updateTelephone(newValue: string) {
       this.telephone = newValue;
     }
 
-    updateAddress(newValue) {
+    updateAddress(newValue: string) {
       this.address = newValue;
     }
   }

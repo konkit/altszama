@@ -125,11 +125,11 @@
 </template>
 
 <script lang="ts">
-  import ApiConnector from '../../lib/ApiConnector'
-  import LoadingView from "../commons/LoadingView";
-  import ErrorsComponent from '../commons/ErrorsComponent'
-  import router from '../../router/index'
-  import ViewWrapper from "../commons/ViewWrapper";
+  import ApiConnector from '@/lib/ApiConnector'
+  import LoadingView from "@/views/commons/LoadingView.vue";
+  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
+  import router from '@/router/index'
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
@@ -147,7 +147,7 @@
     currentOrderEntries: OrderEntryDto[] = [];
     ordersList: TodayOrderDto[] = [];
 
-    connector: OrdersApiConnector;
+    connector?: OrdersApiConnector;
 
     mounted() {
       ApiConnector.initializePushNotifications();

@@ -15,9 +15,9 @@
 
   @Component({})
   export default class MoneyInput extends Vue {
-    @Prop({default: "Price"}) label: string;
-    @Prop() value: number;
-    @Prop({default: "zł"}) currency: string;
+    @Prop({default: "Price"}) label!: string;
+    @Prop() value!: number;
+    @Prop({default: "zł"}) currency!: string;
 
     stringValue: string = "";
     newStringValue: string = "";
@@ -29,7 +29,7 @@
       this.newStringValue = newValue;
     }
 
-    onInput(event) {
+    onInput(event: string) {
       this.newStringValue = event;
     }
 
@@ -38,14 +38,14 @@
     }
 
     @Watch('value')
-    onPropertyChanged(newVal) {
+    onPropertyChanged(newVal: number) {
       const newValue = this.calcNewValue(newVal, this.currency);
 
       this.stringValue = newValue;
       this.newStringValue = newValue;
     }
 
-    private calcNewValue(newVal, currency): string {
+    private calcNewValue(newVal: number, currency: string): string {
       let newValue = 0;
 
       if (newVal) {
@@ -59,7 +59,7 @@
     }
   }
 
-  function fromString(a) {
+  function fromString(a: string) {
     if (!a) {
       return 0;
     }
@@ -74,7 +74,7 @@
       return parseInt(str[0]) * 100
     }
 
-    const wholePart = parseInt(str[0].trim() * 100);
+    const wholePart = parseInt(str[0].trim()) * 100;
 
     const fractionPartString = str[1].trim();
     let fractionPart = 0;

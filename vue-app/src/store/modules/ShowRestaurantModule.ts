@@ -1,7 +1,7 @@
 import ApiConnector from "../../lib/ApiConnector";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 import router from "../../router/index"
-import {DishDto, ShowRestaurantResponse} from "@/frontend-client";
+import {DishDto, Restaurant, ShowRestaurantResponse} from "@/frontend-client";
 import Vuex, {Module} from "vuex";
 import {RootState} from "@/store";
 
@@ -11,13 +11,13 @@ export const DELETE_RESTAURANT_ACTION = "DELETE_RESTAURANT_ACTION";
 export const DELETE_DISH_ACTION = "DELETE_DISH_ACTION";
 
 export interface ShowRestaurantState {
-  restaurant: object
-  dishes: object[]
+  restaurant?: Restaurant
+  dishes: DishDto[]
   dishesByCategory: {[key: string]: DishDto[]}
 }
 
 export const showRestaurantState: ShowRestaurantState = {
-    restaurant: {},
+    restaurant: undefined,
     dishes: [],
     dishesByCategory: {},
 };
@@ -41,7 +41,7 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
           this.commit(`showRestaurant/${INIT_RESTAURANT_DATA}`, response);
           this.commit('setLoadingFalse');
 
-          document.title = `Restaurant ${state.restaurant.name} | Alt Szama`
+          document.title = `Restaurant ${state.restaurant!.name} | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },

@@ -40,16 +40,17 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/ErrorsComponent'
+  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
   import SideDishes from './components/SideDishes.vue'
-  import LoadingView from "../commons/LoadingView";
-  import MoneyInput from "../commons/MoneyInput";
-  import ViewWrapper from "../commons/ViewWrapper";
+  import LoadingView from "@/views/commons/LoadingView.vue";
+  import MoneyInput from "@/views/commons/MoneyInput.vue";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import ApiConnector from "../../lib/ApiConnector";
   import DishesApiConnector from "../../lib/DishesApiConnector";
   import Component from 'vue-class-component'
   import Vue from "vue"
   import router from '../../router/index'
+  import {DishUpdateRequest, SideDish} from "../../frontend-client";
 
   @Component({
     components: {
@@ -66,15 +67,15 @@
     name = "";
     price = 0;
     category = "";
-    categories = [];
-    initialSideDishes = [];
+    categories: string[] = [];
+    initialSideDishes: SideDish[] = [];
 
-    connector: DishesApiConnector;
+    connector?: DishesApiConnector;
 
     mounted() {
       this.restaurantId = this.$route.params.id;
       this.dishId = this.$route.params.dishId;
-      this.connector = new DishesApiConnector(this.$store);
+      this.connector = new DishesApiConnector(this.$store.state);
 
       this.connector.getDishEditData(this.restaurantId, this.dishId)
         .then(dishData => {
@@ -99,10 +100,10 @@
         price: this.price,
         category: this.category
       };
-      let sideDishesElement: SideDishes = this.$refs.sideDishesElement;
+      let sideDishesElement: SideDishes = this.$refs.sideDishesElement as SideDishes;
       let sideDishes = sideDishesElement.getSideDishes();
 
-      const dishObj = {
+      const dishObj: DishUpdateRequest = {
         id: this.dishId,
         name: dish.name,
         price: dish.price,
@@ -110,35 +111,22 @@
         sideDishes: sideDishes
       };
 
-      this.connector.editDish(this.restaurantId, dishObj)
+      this.connector!.editDish(this.restaurantId, dishObj)
         .then(() => router.push("/restaurants/show/" + this.restaurantId))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
       return false;
     }
 
-    // addSideDish() {
-    //   const newSideDish = {
-    //     name: this.newSideDishName,
-    //     price: this.newSideDishPrice
-    //   };
-    //
-    //   this.sideDishes.push(newSideDish)
-    // }
-
-    // removeSideDish(sideDishId) {
-    //   this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId)
-    // }
-
-    updateName(newValue) {
+    updateName(newValue: string) {
       this.name = newValue;
     }
 
-    updatePrice(newValue) {
+    updatePrice(newValue: number) {
       this.price = newValue
     }
 
-    updateCategory(newValue) {
+    updateCategory(newValue: string) {
       this.category = newValue;
     }
   }

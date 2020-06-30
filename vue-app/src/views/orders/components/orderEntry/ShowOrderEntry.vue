@@ -14,7 +14,7 @@
               )
             </div>
 
-            <div class="edit-buttons" v-if="(isOrderEntryOwner(orderEntry)) && order.orderState === 'CREATED'">
+            <div class="edit-buttons" v-if="(isOrderEntryOwner()) && order.orderState === 'CREATED'">
               <v-btn text icon @click="editDishEntry()">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </v-btn>
@@ -60,15 +60,15 @@
 <script lang="ts">
   import Price from '../../../commons/PriceElement.vue'
   import {
-    CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
     DELETE_DISH_ENTRY_ACTION,
-    MARK_ORDER_ENTRY_AS_PAID_ACTION,
-    NAMESPACE_SHOW_ORDER
+    NAMESPACE_SHOW_ORDER,
+    ShowOrderState
   } from "../../../../store/modules/ShowOrderModule";
   import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../../../store/modules/ModifyOrderEntryModule";
   import Component from "vue-class-component";
   import {Prop} from "vue-property-decorator";
   import Vue from "vue";
+  import {ParticipantsDishEntry, ParticipantsOrderEntry} from "../../../../frontend-client";
 
   @Component({
     components: {
@@ -76,49 +76,22 @@
     }
   })
   export default class ShowOrderEntry extends Vue {
-    @Prop() index;
-    @Prop() orderEntry;
-    @Prop() dishEntry;
-    @Prop() currentUserId;
+    @Prop() index!: number;
+    @Prop() orderEntry!: ParticipantsOrderEntry;
+    @Prop() dishEntry!: ParticipantsDishEntry;
+    @Prop() currentUserId!: string;
 
     get order() {
-      return this.$store.state.showOrder.order;
+      let showOrderState: ShowOrderState = this.$store.state.showOrder;
+      return showOrderState.order;
     }
 
     isOrderOwner() {
       return this.order.orderCreatorId === this.currentUserId
     }
 
-    isOrderEntryOwner(orderEntry) {
-      return orderEntry.userId === this.currentUserId
-    }
-
-    shouldShowMarkAsPaidButton(orderEntry) {
-      return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && (orderEntry.paymentStatus !== "MARKED" && orderEntry.paymentStatus !== "CONFIRMED") && this.isOrderOwner() === false)
-    }
-
-    shouldShowConfirmAsPaidButton(orderEntry) {
-      return (this.order.orderState !== 'CREATED' && this.order.orderState !== 'ORDERING' && orderEntry.paymentStatus !== "CONFIRMED" && this.isOrderOwner() === true)
-    }
-
-    paymentStatus(orderEntry) {
-      if (orderEntry.paymentStatus === "UNPAID") {
-        return "Unpaid"
-      } else if (orderEntry.paymentStatus === "MARKED") {
-        return "Marked as paid"
-      } else if (orderEntry.paymentStatus === "CONFIRMED") {
-        return "Payment confirmed"
-      } else {
-        return orderEntry.paymentStatus
-      }
-    }
-
-    confirmAsPaid(orderEntryId) {
-      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
-    }
-
-    markAsPaid(orderEntryId) {
-      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`, {orderEntryId: orderEntryId})
+    isOrderEntryOwner() {
+      return this.orderEntry.userId === this.currentUserId
     }
 
     editDishEntry() {

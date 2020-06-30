@@ -80,7 +80,8 @@
   import {Prop} from "vue-property-decorator";
   import Component from "vue-class-component";
   import Vue from "vue";
-  import ErrorsComponent from "@/views/commons/ErrorsComponent"
+  import ErrorsComponent from "@/views/commons/ErrorsComponent.vue"
+  import {GroupedOrderEntry} from "../../../../frontend-client";
 
   @Component({
     components: {
@@ -88,7 +89,7 @@
     }
   })
   export default class UserOrders extends Vue {
-    @Prop() groupedEntries;
+    @Prop() groupedEntries!: GroupedOrderEntry[];
   }
 </script>
 

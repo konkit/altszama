@@ -88,16 +88,16 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '../commons/ErrorsComponent'
-  import LoadingView from "../commons/LoadingView";
+  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
+  import LoadingView from "@/views/commons/LoadingView.vue";
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
     NAMESPACE_MODIFY_ORDER_ENTRY
   } from "../../store/modules/ModifyOrderEntryModule";
-  import MoneyInput from "../commons/MoneyInput";
-  import TimePicker from "../commons/TimePicker";
-  import OrderStateButtons from "./components/OrderStateButtons";
-  import ViewWrapper from "../commons/ViewWrapper";
+  import MoneyInput from "@/views/commons/MoneyInput.vue";
+  import TimePicker from "@/views/commons/TimePicker.vue";
+  import OrderStateButtons from "@/views/orders/components/OrderStateButtons.vue";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
@@ -133,7 +133,7 @@
     paymentByBlik = false;
     blikPhoneNumber = "";
 
-    connector: OrdersApiConnector;
+    connector?: OrdersApiConnector;
 
     mounted() {
       this.orderId = this.$route.params.id;
@@ -144,7 +144,7 @@
         .then(response => {
           this.restaurantName = response.order.restaurantName;
           this.orderDate = response.order.orderDate;
-          this.timeOfOrder = response.order.timeOfOrder;
+          this.timeOfOrder = response.order.timeOfOrder || "";
           this.decreaseInPercent = response.order.deliveryData.decreaseInPercent;
           this.deliveryCostPerEverybody = response.order.deliveryData.deliveryCostPerEverybody;
           this.deliveryCostPerDish = response.order.deliveryData.deliveryCostPerDish;
@@ -161,7 +161,7 @@
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
 
-    submitForm(e) {
+    submitForm(e: Event) {
       e.preventDefault();
 
       const order: OrderUpdateRequest = {
@@ -183,7 +183,7 @@
       };
 
 
-      this.connector.editOrder(order)
+      this.connector!.editOrder(order)
         .then(() => {
           this.$store.commit('setLoadingTrue');
           this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
@@ -195,43 +195,43 @@
       return false;
     }
 
-    updateOrderDate(newValue) {
+    updateOrderDate(newValue: string) {
       this.orderDate = newValue;
     }
 
-    updateTimeOfOrder(newValue) {
+    updateTimeOfOrder(newValue: string) {
       this.timeOfOrder = newValue;
     }
 
-    updateDecreaseInPercent(newValue) {
+    updateDecreaseInPercent(newValue: number) {
       this.decreaseInPercent = newValue;
     }
 
-    updateDeliveryCostPerEverybody(newValue) {
+    updateDeliveryCostPerEverybody(newValue: number) {
       this.deliveryCostPerEverybody = newValue;
     }
 
-    updateDeliveryCostPerDish(newValue) {
+    updateDeliveryCostPerDish(newValue: number) {
       this.deliveryCostPerDish = newValue;
     }
 
-    updatePaymentByCash(newValue) {
+    updatePaymentByCash(newValue: boolean) {
       this.paymentByCash = newValue;
     }
 
-    updatePaymentByBankTransfer(newValue) {
+    updatePaymentByBankTransfer(newValue: boolean) {
       this.paymentByBankTransfer = newValue;
     }
 
-    updateBankTransferNumber(newValue) {
+    updateBankTransferNumber(newValue: string) {
       this.bankTransferNumber = newValue;
     }
 
-    updatePaymentByBlik(newValue) {
+    updatePaymentByBlik(newValue: boolean) {
       this.paymentByBlik = newValue;
     }
 
-    updateBlikPhoneNumber(newValue) {
+    updateBlikPhoneNumber(newValue: string) {
       this.blikPhoneNumber = newValue;
     }
 

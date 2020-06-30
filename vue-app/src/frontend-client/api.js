@@ -1,3 +1,4 @@
+/* eslint-disable */
 /// <reference path="./custom.d.ts" />
 // tslint:disable
 /**

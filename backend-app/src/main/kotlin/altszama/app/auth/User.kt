@@ -6,4 +6,6 @@ import org.springframework.data.annotation.Id
 data class User(val username: String,
                 val password: String,
                 val email: String,
-                @Id var id: String = ObjectId.get().toHexString())
+                @Id var id: String = ObjectId.get().toHexString()) {
+
+}

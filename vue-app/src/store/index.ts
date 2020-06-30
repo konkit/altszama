@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import {showOrderModule} from './modules/ShowOrderModule'
-import {showRestaurantModule} from "./modules/ShowRestaurantModule";
-import {modifyOrderEntryModule} from "./modules/ModifyOrderEntryModule";
+import {showOrderModule, ShowOrderState} from './modules/ShowOrderModule'
+import {showRestaurantModule, ShowRestaurantState} from "./modules/ShowRestaurantModule";
+import {modifyOrderEntryModule, ModifyOrderEntryState} from "./modules/ModifyOrderEntryModule";
 
 Vue.use(Vuex);
 
@@ -13,16 +13,21 @@ export interface RootState {
   token: string,
   errors: string[],
   masterNavDrawerOpened: boolean,
+  showOrder?: ShowOrderState,
+  modifyOrderEntry?: ModifyOrderEntryState,
+  showRestaurant?: ShowRestaurantState,
 }
 
+const rootState: RootState = {
+  loading: false,
+  username: localStorage.getItem("username") || "",
+  token: localStorage.getItem("token") || "",
+  errors: [],
+  masterNavDrawerOpened: false,
+} as RootState;
+
 export default new Vuex.Store({
-  state: {
-    loading: false,
-    username: localStorage.getItem("username") || "",
-    token: localStorage.getItem("token") || "",
-    errors: [],
-    masterNavDrawerOpened: false,
-  },
+  state: rootState,
   mutations: {
     setLoadingTrue (state) {
       state.loading = true;
@@ -44,18 +49,18 @@ export default new Vuex.Store({
       state.token = "";
       localStorage.setItem("token", "");
     },
-    addError (state, error) {
+    addError (state, error: any) {
       if (error instanceof Array) {
         error.forEach(errorStr => state.errors.push(errorStr));
-      } else if (typeof error == 'object' && typeof error.exception !== "undefined") {
+      } else if (typeof error == 'object' && error.exception !== undefined) {
         state.errors.push("Error: " + error.exception + " occured!");
-      } else if (typeof error == 'object' && typeof error.message !== "undefined") {
+      } else if (typeof error == 'object' && error.message !== undefined) {
         state.errors.push(error.message)
-      } else if (typeof error == 'object' && typeof error.body.message !== "undefined") {
+      } else if (typeof error == 'object' && error.body.message !== undefined) {
         state.errors.push(error.body.message)
-      } else if (typeof error == 'object' && typeof error.body.messages !== "undefined") {
-        error.body.messages.forEach(errorStr => state.errors.push(errorStr));
-      } else if (typeof error == 'object' && typeof error.statusText !== "undefined") {
+      } else if (typeof error == 'object' && error.body.messages !== undefined) {
+        error.body.messages.forEach((errorStr: string) => state.errors.push(errorStr));
+      } else if (typeof error == 'object' && error.statusText !== undefined) {
         state.errors.push(error.statusText);
       } else {
         console.log("Error: ", error);

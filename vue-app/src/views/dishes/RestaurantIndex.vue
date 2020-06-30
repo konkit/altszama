@@ -52,14 +52,23 @@
 </template>
 
 <script lang="ts">
-  import LoadingView from "../commons/LoadingView";
+  import LoadingView from "@/views/commons/LoadingView.vue";
   import router from '../../router/index'
   import moment from "moment"
-  import ViewWrapper from "../commons/ViewWrapper";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
   import Component from "vue-class-component";
   import Vue from "vue";
   import DishesApiConnector from "../../lib/DishesApiConnector";
   import ApiConnector from "../../lib/ApiConnector";
+  import {RestaurantInfo} from "../../frontend-client";
+
+  interface RestaurantEntry {
+    id: string;
+    name: string;
+    dishCount: number;
+    lastCrawled?: Date;
+    lastEdited?: Date;
+  }
 
   @Component({
     components: {
@@ -75,13 +84,13 @@
       {text: "Last updated manually"}
     ];
 
-    restaurants = [];
-    restaurantsEntries = [];
+    restaurants: RestaurantInfo[] = [];
+    restaurantsEntries: RestaurantEntry[] = [];
 
-    connector: DishesApiConnector;
+    connector?: DishesApiConnector;
 
     mounted() {
-      this.connector = new DishesApiConnector(this.$store);
+      this.connector = new DishesApiConnector(this.$store.state);
 
       this.connector.getRestaurants()
         .then(payload => {
@@ -95,7 +104,7 @@
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
 
-    goToRestaurant(restaurantId) {
+    goToRestaurant(restaurantId: string) {
       router.push("/restaurants/show/" + restaurantId)
     }
 
@@ -103,15 +112,7 @@
       router.push("/restaurants/create")
     }
 
-    dateToRel(date) {
-      if (date) {
-        return moment(date).fromNow()
-      } else {
-        return ""
-      }
-    }
-
-    private mapToRestaurantEntry(restaurant) {
+    private mapToRestaurantEntry(restaurant: RestaurantInfo): RestaurantEntry {
         return {
           "id": restaurant.id,
           "name": restaurant.name,

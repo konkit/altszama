@@ -7,7 +7,7 @@ export var FETCH_RESTAURANT_ACTION = "FETCH_RESTAURANT_ACTION";
 export var DELETE_RESTAURANT_ACTION = "DELETE_RESTAURANT_ACTION";
 export var DELETE_DISH_ACTION = "DELETE_DISH_ACTION";
 export var showRestaurantState = {
-    restaurant: {},
+    restaurant: undefined,
     dishes: [],
     dishesByCategory: {},
 };

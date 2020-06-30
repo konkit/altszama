@@ -7,7 +7,7 @@ data class Team(
         @Id
         var id: String = ObjectId().toHexString(),
 
-        var domain: String?,
+        var domains: Set<String> = emptySet(),
 
         var users: Set<String> = emptySet(),
 

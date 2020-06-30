@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-  import Price from "../../commons/PriceElement"
+  import Price from "@/views/commons/PriceElement.vue"
   import Vue from "vue";
   import Component from "vue-class-component";
   import {Prop} from "vue-property-decorator";
@@ -66,30 +66,16 @@
     }
   })
   export default class PriceSummary extends Vue {
-    @Prop() orderDecreaseInPercent;
-    @Prop() orderDeliveryCostPerEverybody;
-    @Prop() basePriceSum;
-    @Prop() orderDeliveryCostPerDish;
-    @Prop() allEatingPeopleCount;
-    @Prop() totalPrice;
+    @Prop() orderDecreaseInPercent!: number;
+    @Prop() orderDeliveryCostPerEverybody!: number;
+    @Prop() basePriceSum!: number;
+    @Prop() orderDeliveryCostPerDish!: number;
+    @Prop() allEatingPeopleCount!: number;
+    @Prop() totalPrice!: number;
   }
 </script>
 
 <style scoped>
-  .grid-container {
-    display: grid;
-    grid-template-columns: 125px 1fr;
-  }
-
-  /*.item-dense {*/
-    /*min-height: 16px !important;*/
-  /*}*/
-
-  /*.item-dense .v-list-item__content {*/
-    /*padding-top: 0px !important;*/
-    /*padding-bottom: 0px !important;*/
-  /*}*/
-
   .unbreakable {
     word-break: keep-all;
   }

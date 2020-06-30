@@ -72,7 +72,6 @@
 
 <script lang="ts">
   import moment from "moment"
-  import CustomPolyfills from "../../../../lib/CustomPolyfills"
   import SideDishesInput from './SideDishesInput.vue'
   import {
     CANCEL_DISH_ENTRY_MODIFICATION,
@@ -85,9 +84,10 @@
     UPDATE_NEW_DISH_NAME,
     UPDATE_NEW_DISH_PRICE,
   } from "../../../../store/modules/ModifyOrderEntryModule";
-  import MoneyInput from "../../../commons/MoneyInput";
+  import MoneyInput from "@/views/commons/MoneyInput.vue";
   import Vue from "vue";
   import Component from "vue-class-component";
+  import {DishDto} from "../../../../frontend-client";
 
   @Component({
     components: {
@@ -104,20 +104,20 @@
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`)
     }
 
-    updateDishId(newValue) {
+    updateDishId(newValue: string) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`, newValue);
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CLEAR_EDITED_SIDE_DISHES}`)
     }
 
-    updateNewDishName(newValue) {
+    updateNewDishName(newValue: string) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_NAME}`, newValue)
     }
 
-    updateNewDishPrice(newValue) {
+    updateNewDishPrice(newValue: number) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`, newValue)
     }
 
-    updateAdditionalComments(newValue) {
+    updateAdditionalComments(newValue: string) {
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ADDITIONAL_COMMENTS}`, newValue)
     }
 
@@ -125,7 +125,7 @@
       this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {})
     }
 
-    onDishTypeToggle(e) {
+    onDishTypeToggle(e: boolean) {
       console.log("onDishTypeToggle: ", e);
 
       if (e === true) {
@@ -137,7 +137,7 @@
       }
     }
 
-    get allDishesByCategory() {
+    get allDishesByCategory(): { [category: string]: DishDto[] } {
       return this.$store.state.showOrder.allDishesByCategory;
     }
 
@@ -170,15 +170,17 @@
     }
 
     get allDishesAtOnce() {
-      let dishByCategoryMap = new Map(Object.entries(this.allDishesByCategory));
+      let dishByCategoryMap: Map<string, DishDto[]> = new Map(Object.entries(this.allDishesByCategory));
 
       console.log("dishByCategoryMap", dishByCategoryMap);
 
-      let result = CustomPolyfills.flatMap(dishByCategoryMap, ([dishesFromCat, category]) => {
-        console.log("categoryData", [dishesFromCat, category]);
+      let entries: [string, DishDto[]][] = Array.from(dishByCategoryMap.entries());
 
-        let dishes = CustomPolyfills.flatMap(dishesFromCat, ([, dish]) => {
-          console.log("dish: ", dish)
+      let result = entries.flatMap(([category, dishesFromCat]) => {
+        console.log("categoryData", [category, dishesFromCat]);
+
+        let dishes: ({header: string} | {text: string, value: string, subtitle: string})[] = dishesFromCat.map((dish) => {
+          console.log("dish: ", dish);
 
           const price = (dish.price / 100).toLocaleString("pl-PL", {style: "currency", currency: "PLN"});
 
@@ -207,7 +209,7 @@
     }
   }
 
-  function dateToRel(date) {
+  function dateToRel(date: Date) {
     if (date) {
       return moment(date).fromNow()
     } else {

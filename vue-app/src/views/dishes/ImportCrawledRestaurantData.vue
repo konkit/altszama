@@ -31,7 +31,7 @@
 <script>
   import ApiConnector from '../../lib/ApiConnector'
   import FileUpload from 'vue-simple-upload/dist/FileUpload'
-  import ViewWrapper from "../commons/ViewWrapper";
+  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 
   export default {
     data() {
