@@ -5,6 +5,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query
 
 interface TeamRepository : MongoRepository<Team, String> {
+
   @Query("{'users': ?0}")
-  fun findByUser(user: User)
+  fun findByUser(user: User): List<Team>
+
+  fun findByDomain(domain: String): List<Team>
 }

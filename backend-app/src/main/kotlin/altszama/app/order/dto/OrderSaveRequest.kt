@@ -16,6 +16,7 @@ import java.time.LocalTime
 data class OrderSaveRequest(
     @RestaurantExists
     val restaurantId: String?,
+    val teamId: String?,
 
     @Schema(
             type="string",
@@ -36,14 +37,6 @@ data class OrderSaveRequest(
     @DateTimeFormat(pattern = "HH:mm")
     val timeOfOrder: LocalTime?,
 
-//    val decreaseInPercent: Int = 0,
-//    val deliveryCostPerEverybody: Int = 0,
-//    val deliveryCostPerDish: Int = 0,
     val deliveryData: DeliveryData,
     val paymentData: PaymentData
-//    val paymentByCash: Boolean = false,
-//    val paymentByBankTransfer: Boolean = false,
-//    val bankTransferNumber: String = "",
-//    val paymentByBlik: Boolean = false,
-//    val blikPhoneNumber: String
 )

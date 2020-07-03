@@ -6,6 +6,8 @@ import altszama.app.order.dto.*
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.restaurant.RestaurantRepository
+import altszama.app.team.TeamRepository
+import altszama.app.team.TeamService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -36,11 +38,15 @@ class OrderControllerDataService {
   @Autowired
   private lateinit var authService: AuthService
 
+  @Autowired
+  private lateinit var teamService: TeamService
+
 
   fun getIndexData(): TodayOrdersResponse {
     val currentUser = authService.currentUser()
+    val teams = teamService.getForUser(currentUser)
 
-    val todaysOrders = orderRepository.findByOrderDate(LocalDate.now())
+    val todaysOrders = teams.flatMap { team -> orderRepository.findByTeamAndOrderDate(team, LocalDate.now()) }
     val usersOrderEntries = orderEntryRepository.findByUser(currentUser)
 
     return TodayOrdersResponse.create(todaysOrders, usersOrderEntries)
@@ -64,16 +70,16 @@ class OrderControllerDataService {
     return ShowOrderResponse.create(order, entries, currentUserId, allDishesInRestaurant, dishIdToSideDishesMap)
   }
 
-  fun getOrderViewData(orderId: String): OrderViewResponse {
+  fun getOrderViewData(orderId: String): OrderViewInitialData {
     orderService.setAsOrdering(orderId)
 
     val order = orderRepository.findById(orderId).get()
     val entries = orderEntryRepository.findByOrderId(orderId)
 
-    return OrderViewResponse.create(order, entries)
+    return OrderViewInitialData.create(order, entries)
   }
 
-  fun getCreateData(): CreateOrderResponse {
+  fun getCreateData(): CreateOrderInitialData {
     val currentUser = authService.currentUser()
 
     val ordersByUser: List<Order> = orderRepository.findTop10ByOrderCreatorOrderByOrderDateDesc(currentUser)
@@ -82,10 +88,15 @@ class OrderControllerDataService {
     val blikPhoneNumber = lastOrderMade?.blikPhoneNumber ?: ""
     val bankTransferNumber = lastOrderMade?.bankTransferNumber ?: ""
 
-    return CreateOrderResponse(restaurantRepository.findAll(), blikPhoneNumber = blikPhoneNumber, bankTransferNumber = bankTransferNumber)
+    return CreateOrderInitialData(
+            restaurantRepository.findAll(),
+            teamService.getForUser(currentUser),
+            blikPhoneNumber = blikPhoneNumber,
+            bankTransferNumber = bankTransferNumber
+    )
   }
 
-  fun getEditData(@PathVariable orderId: String): EditOrderResponse {
-    return EditOrderResponse.create(orderRepository.findById(orderId).get())
+  fun getEditData(@PathVariable orderId: String): EditOrderInitialData {
+    return EditOrderInitialData.create(orderRepository.findById(orderId).get())
   }
 }

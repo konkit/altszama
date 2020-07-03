@@ -17,6 +17,20 @@
                 <v-row>
                   <v-col>
                     <v-autocomplete
+                        :items="teamsList"
+                        item-text="domain"
+                        item-value="id"
+                        label="Team"
+                        :value="this.teamsList.find(t => teamId == t.id)"
+                        @input="updateTeamId($event)"
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col>
+                    <v-autocomplete
                         :items="restaurantsList"
                         item-text="name"
                         item-value="id"
@@ -116,7 +130,7 @@
   import ApiConnector from "../../lib/ApiConnector";
   import OrdersApiConnector from "../../lib/OrdersApiConnector";
   import {RootState} from "../../store";
-  import {OrderSaveRequest, Restaurant} from "../../frontend-client";
+  import {OrderSaveRequest, Restaurant, Team} from "../../frontend-client";
 
   @Component({
     computed: {
@@ -134,9 +148,11 @@
   })
   export default class OrderCreateForm extends Vue {
     restaurantsList: Restaurant[] = [];
+    teamsList: Team[] = [];
 
     // Order
     restaurantId = "";
+    teamId = "";
     orderDate = "";
     timeOfOrder = "";
     decreaseInPercent = 0;
@@ -159,24 +175,80 @@
 
       this.connector.getOrderCreateData()
         .then(response => {
-          this.restaurantsList = response.restaurantsList;
+        // .then(response => {
+          console.log("Response: ", response);
 
-          this.restaurantId = response.order.restaurantId;
-          this.orderDate = response.order.orderDate;
-          this.timeOfOrder = response.order.timeOfOrder;
-          this.decreaseInPercent = response.order.decreaseInPercent;
-          this.deliveryCostPerEverybody = response.order.deliveryCostPerEverybody;
-          this.deliveryCostPerDish = response.order.deliveryCostPerDish;
-          this.paymentByCash = response.order.paymentByCash;
-          this.paymentByBankTransfer = response.order.paymentByBankTransfer;
-          this.bankTransferNumber = response.order.bankTransferNumber;
-          this.paymentByBlik = response.order.paymentByBlik;
-          this.blikPhoneNumber = response.order.blikPhoneNumber;
+            let restaurantId = response.restaurantsList && response.restaurantsList[0] && response.restaurantsList[0].id || "";
+            let teamId = response.teamsList && response.teamsList[0] && response.teamsList[0].id || "";
+
+            let bankTransferNumber = "";
+            let paymentByBankTransfer = false;
+            if (response.bankTransferNumber) {
+              this.paymentByBankTransfer = true;
+              this.bankTransferNumber = response.bankTransferNumber;
+            }
+
+            let blikPhoneNumber = "";
+            let paymentByBlik = false;
+            if (response.blikPhoneNumber) {
+              this.paymentByBlik = true;
+              this.blikPhoneNumber = response.blikPhoneNumber;
+            }
+
+            // return {
+            //   restaurantsList: response.restaurantsList,
+            //   teamsList: response.teamsList,
+            //   order: {
+            //     restaurantId: restaurantId,
+            //     teamId: teamId,
+            //     orderDate: response.orderDate,
+            //     timeOfOrder: response.timeOfOrder,
+            //
+            //     decreaseInPercent: 0,
+            //     deliveryCostPerEverybody: 0,
+            //     deliveryCostPerDish: 0,
+            //     paymentByCash: true,
+            //     paymentByBankTransfer: paymentByBankTransfer,
+            //     bankTransferNumber: bankTransferNumber,
+            //     paymentByBlik: paymentByBlik,
+            //     blikPhoneNumber: blikPhoneNumber
+            //   }
+            // }
+          // });
+
+
+
+
+
+
+
+
+
+          this.restaurantsList = response.restaurantsList;
+          this.teamsList = response.teamsList;
+
+          this.restaurantId = restaurantId;
+          this.teamId = teamId;
+          this.orderDate = response.orderDate;
+          this.timeOfOrder = response.timeOfOrder;
+
+          this.decreaseInPercent = 0;
+          this.deliveryCostPerEverybody = 0;
+          this.deliveryCostPerDish = 0;
+          this.paymentByCash = true;
+          this.paymentByBankTransfer = paymentByBankTransfer;
+          this.bankTransferNumber = bankTransferNumber;
+          this.paymentByBlik = paymentByBlik;
+          this.blikPhoneNumber = blikPhoneNumber;
 
           this.$store.commit('setLoadingFalse');
           document.title = `Create new order | Alt Szama`
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
+    }
+
+    updateTeamId(newValue: string) {
+      this.teamId = newValue;
     }
 
     updateRestaurantId(newValue: string) {
@@ -216,6 +288,7 @@
 
       const order: OrderSaveRequest = {
         restaurantId: this.restaurantId,
+        teamId: this.teamId,
         orderDate: this.orderDate,
         timeOfOrder: this.timeOfOrder,
         deliveryData: {

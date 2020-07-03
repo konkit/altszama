@@ -55,38 +55,45 @@ var OrdersApiConnector = /** @class */ (function () {
     };
     OrdersApiConnector.prototype.getOrderCreateData = function () {
         var createResponse = this.orderApi.create(headersWithToken());
-        return createResponse
-            .then(function (response) {
-            var restaurantId = response.restaurantsList[0].id;
-            var bankTransferNumber = "";
-            var paymentByBankTransfer = false;
-            if (response.bankTransferNumber) {
-                paymentByBankTransfer = true;
-                bankTransferNumber = response.bankTransferNumber;
-            }
-            var blikPhoneNumber = "";
-            var paymentByBlik = false;
-            if (response.blikPhoneNumber) {
-                paymentByBlik = true;
-                blikPhoneNumber = response.blikPhoneNumber;
-            }
-            return {
-                restaurantsList: response.restaurantsList,
-                order: {
-                    restaurantId: restaurantId,
-                    orderDate: response.orderDate,
-                    timeOfOrder: response.timeOfOrder,
-                    decreaseInPercent: 0,
-                    deliveryCostPerEverybody: 0,
-                    deliveryCostPerDish: 0,
-                    paymentByCash: true,
-                    paymentByBankTransfer: paymentByBankTransfer,
-                    bankTransferNumber: bankTransferNumber,
-                    paymentByBlik: paymentByBlik,
-                    blikPhoneNumber: blikPhoneNumber
-                }
-            };
-        });
+        return createResponse;
+        // .then(response => {
+        //   let restaurantId = response.restaurantsList[0].id;
+        //   let teamId = response.teamsList[0].id;
+        //
+        //   let bankTransferNumber = "";
+        //   let paymentByBankTransfer = false;
+        //   if (response.bankTransferNumber) {
+        //     paymentByBankTransfer = true;
+        //     bankTransferNumber = response.bankTransferNumber;
+        //   }
+        //
+        //   let blikPhoneNumber = "";
+        //   let paymentByBlik = false;
+        //   if (response.blikPhoneNumber) {
+        //     paymentByBlik = true;
+        //     blikPhoneNumber = response.blikPhoneNumber;
+        //   }
+        //
+        //   return {
+        //     restaurantsList: response.restaurantsList,
+        //     teamsList: response.teamsList,
+        //     order: {
+        //       restaurantId: restaurantId,
+        //       teamId: teamId,
+        //       orderDate: response.orderDate,
+        //       timeOfOrder: response.timeOfOrder,
+        //
+        //       decreaseInPercent: 0,
+        //       deliveryCostPerEverybody: 0,
+        //       deliveryCostPerDish: 0,
+        //       paymentByCash: true,
+        //       paymentByBankTransfer: paymentByBankTransfer,
+        //       bankTransferNumber: bankTransferNumber,
+        //       paymentByBlik: paymentByBlik,
+        //       blikPhoneNumber: blikPhoneNumber
+        //     }
+        //   }
+        // });
     };
     OrdersApiConnector.prototype.getOrderEditData = function (orderId) {
         return this.orderApi.edit(orderId, headersWithToken());

@@ -22,7 +22,10 @@ var DishesApiConnector = /** @class */ (function () {
     DishesApiConnector.prototype.getShowRestaurantData = function (restaurantId) {
         return this.restaurantApi.showRestaurant(restaurantId, headersWithToken());
     };
-    DishesApiConnector.prototype.createRestaurant = function (restaurant) {
+    DishesApiConnector.prototype.createRestaurant = function () {
+        return this.restaurantApi.createRestaurant(headersWithToken());
+    };
+    DishesApiConnector.prototype.saveRestaurant = function (restaurant) {
         return this.restaurantApi.saveRestaurant(restaurant, headersWithToken());
     };
     DishesApiConnector.prototype.getRestaurantEditData = function (restaurantId) {

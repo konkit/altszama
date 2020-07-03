@@ -44,7 +44,11 @@ export default class DishesApiConnector {
     return this.restaurantApi.showRestaurant(restaurantId, headersWithToken())
   }
 
-  createRestaurant (restaurant: RestaurantSaveRequest) {
+  createRestaurant () {
+    return this.restaurantApi.createRestaurant(headersWithToken())
+  }
+
+  saveRestaurant (restaurant: RestaurantSaveRequest) {
     return this.restaurantApi.saveRestaurant(restaurant, headersWithToken())
   }
 

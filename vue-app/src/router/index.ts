@@ -16,6 +16,8 @@ import RestaurantEditForm from '../views/dishes/RestaurantEditForm.vue'
 import DishCreateForm from '../views/dishes/DishCreateForm.vue'
 import DishEditForm from '../views/dishes/DishEditForm.vue'
 import ImportCrawledRestaurantData from '../views/dishes/ImportCrawledRestaurantData.vue'
+import TeamsView from "@/views/teams/TeamsView.vue"
+import CreateTeamForm from "@/views/teams/CreateTeamForm.vue";
 
 Vue.use(Router);
 
@@ -90,6 +92,16 @@ export default new Router({
       path: '/restaurants/import/upload',
       name: 'ImportCrawledRestaurantData',
       component: ImportCrawledRestaurantData
+    },
+    {
+      path: '/teams',
+      name: 'TeamsView',
+      component: TeamsView
+    },
+    {
+      path: '/teams/create',
+      name: 'TeamsCreate',
+      component: CreateTeamForm
     },
   ]
 })

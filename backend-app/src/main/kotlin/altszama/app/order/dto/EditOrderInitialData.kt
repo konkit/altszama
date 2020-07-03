@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class EditResponseOrderDto(
+data class EditOrderInitialDataOrderDto(
         val id: String,
         val restaurantId: String,
         val restaurantName: String,
@@ -39,12 +39,12 @@ data class EditResponseOrderDto(
         var paymentData: PaymentData
 )
 
-data class EditOrderResponse(val order: EditResponseOrderDto) {
+data class EditOrderInitialData(val order: EditOrderInitialDataOrderDto) {
 
     companion object {
 
-        fun create(order: Order): EditOrderResponse {
-            val ordedDto = EditResponseOrderDto(
+        fun create(order: Order): EditOrderInitialData {
+            val ordedDto = EditOrderInitialDataOrderDto(
                     order.id,
                     order.restaurant.id,
                     order.restaurant.name,
@@ -68,7 +68,7 @@ data class EditOrderResponse(val order: EditResponseOrderDto) {
                     )
             )
 
-            return EditOrderResponse(ordedDto)
+            return EditOrderInitialData(ordedDto)
         }
     }
 }

@@ -4,13 +4,16 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 data class RestaurantSaveRequest(
-    @field:NotNull
-    @field:Size(min = 1, message = "Restaurant name cannot be blank!")
-    var name: String = "",
+  @field:NotNull
+  var teamId: String,
 
-    var telephone: String = "",
+  @field:NotNull
+  @field:Size(min = 1, message = "Restaurant name cannot be blank!")
+  var name: String = "",
 
-    var address: String = "",
+  var telephone: String = "",
 
-    var url: String = ""
+  var address: String = "",
+
+  var url: String = ""
 )

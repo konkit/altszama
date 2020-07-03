@@ -1,4 +1,3 @@
-/* eslint-disable */
 /// <reference path="./custom.d.ts" />
 // tslint:disable
 /**
@@ -83,10 +82,10 @@ export var AllOrdersOrderDto;
 })(AllOrdersOrderDto || (AllOrdersOrderDto = {}));
 /**
  * @export
- * @namespace EditResponseOrderDto
+ * @namespace EditOrderInitialDataOrderDto
  */
-export var EditResponseOrderDto;
-(function (EditResponseOrderDto) {
+export var EditOrderInitialDataOrderDto;
+(function (EditOrderInitialDataOrderDto) {
     /**
      * @export
      * @enum {string}
@@ -98,8 +97,8 @@ export var EditResponseOrderDto;
         OrderStateEnum[OrderStateEnum["ORDERED"] = 'ORDERED'] = "ORDERED";
         OrderStateEnum[OrderStateEnum["DELIVERED"] = 'DELIVERED'] = "DELIVERED";
         OrderStateEnum[OrderStateEnum["REJECTED"] = 'REJECTED'] = "REJECTED";
-    })(OrderStateEnum = EditResponseOrderDto.OrderStateEnum || (EditResponseOrderDto.OrderStateEnum = {}));
-})(EditResponseOrderDto || (EditResponseOrderDto = {}));
+    })(OrderStateEnum = EditOrderInitialDataOrderDto.OrderStateEnum || (EditOrderInitialDataOrderDto.OrderStateEnum = {}));
+})(EditOrderInitialDataOrderDto || (EditOrderInitialDataOrderDto = {}));
 /**
  * @export
  * @namespace OrderEntryDto
@@ -131,10 +130,10 @@ export var OrderEntryDto;
 })(OrderEntryDto || (OrderEntryDto = {}));
 /**
  * @export
- * @namespace OrderViewResponse
+ * @namespace OrderViewInitialData
  */
-export var OrderViewResponse;
-(function (OrderViewResponse) {
+export var OrderViewInitialData;
+(function (OrderViewInitialData) {
     /**
      * @export
      * @enum {string}
@@ -146,8 +145,8 @@ export var OrderViewResponse;
         OrderStateEnum[OrderStateEnum["ORDERED"] = 'ORDERED'] = "ORDERED";
         OrderStateEnum[OrderStateEnum["DELIVERED"] = 'DELIVERED'] = "DELIVERED";
         OrderStateEnum[OrderStateEnum["REJECTED"] = 'REJECTED'] = "REJECTED";
-    })(OrderStateEnum = OrderViewResponse.OrderStateEnum || (OrderViewResponse.OrderStateEnum = {}));
-})(OrderViewResponse || (OrderViewResponse = {}));
+    })(OrderStateEnum = OrderViewInitialData.OrderStateEnum || (OrderViewInitialData.OrderStateEnum = {}));
+})(OrderViewInitialData || (OrderViewInitialData = {}));
 /**
  * @export
  * @namespace ParticipantsOrderEntry
@@ -2108,6 +2107,27 @@ export var RestaurantControllerApiFetchParamCreator = function (configuration) {
     return {
         /**
          *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRestaurant: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/api";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
          * @param {string} restaurantId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2276,6 +2296,26 @@ export var RestaurantControllerApiFp = function (configuration) {
     return {
         /**
          *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRestaurant: function (options) {
+            var localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).createRestaurant(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         *
          * @param {string} restaurantId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2409,6 +2449,14 @@ export var RestaurantControllerApiFactory = function (configuration, fetch, base
     return {
         /**
          *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRestaurant: function (options) {
+            return RestaurantControllerApiFp(configuration).createRestaurant(options)(fetch, basePath);
+        },
+        /**
+         *
          * @param {string} restaurantId
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2475,6 +2523,15 @@ var RestaurantControllerApi = /** @class */ (function (_super) {
     }
     /**
      *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RestaurantControllerApi
+     */
+    RestaurantControllerApi.prototype.createRestaurant = function (options) {
+        return RestaurantControllerApiFp(this.configuration).createRestaurant(options)(this.fetch, this.basePath);
+    };
+    /**
+     *
      * @param {string} restaurantId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2535,4 +2592,227 @@ var RestaurantControllerApi = /** @class */ (function (_super) {
     return RestaurantControllerApi;
 }(BaseAPI));
 export { RestaurantControllerApi };
+/**
+ * TeamControllerApi - fetch parameter creator
+ * @export
+ */
+export var TeamControllerApiFetchParamCreator = function (configuration) {
+    return {
+        /**
+         *
+         * @param {CreateTeamDto} body
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeam: function (body, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body', 'Required parameter body was null or undefined when calling createTeam.');
+            }
+            var localVarPath = "/api/teams/create";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            var needsSerialization = ("CreateTeamDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body = needsSerialization ? JSON.stringify(body || {}) : (body || "");
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAll: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/api/teams/all";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getForUser: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/api/teams/user";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+/**
+ * TeamControllerApi - functional programming interface
+ * @export
+ */
+export var TeamControllerApiFp = function (configuration) {
+    return {
+        /**
+         *
+         * @param {CreateTeamDto} body
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeam: function (body, options) {
+            var localVarFetchArgs = TeamControllerApiFetchParamCreator(configuration).createTeam(body, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAll: function (options) {
+            var localVarFetchArgs = TeamControllerApiFetchParamCreator(configuration).getAll(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getForUser: function (options) {
+            var localVarFetchArgs = TeamControllerApiFetchParamCreator(configuration).getForUser(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    };
+};
+/**
+ * TeamControllerApi - factory interface
+ * @export
+ */
+export var TeamControllerApiFactory = function (configuration, fetch, basePath) {
+    return {
+        /**
+         *
+         * @param {CreateTeamDto} body
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeam: function (body, options) {
+            return TeamControllerApiFp(configuration).createTeam(body, options)(fetch, basePath);
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAll: function (options) {
+            return TeamControllerApiFp(configuration).getAll(options)(fetch, basePath);
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getForUser: function (options) {
+            return TeamControllerApiFp(configuration).getForUser(options)(fetch, basePath);
+        },
+    };
+};
+/**
+ * TeamControllerApi - object-oriented interface
+ * @export
+ * @class TeamControllerApi
+ * @extends {BaseAPI}
+ */
+var TeamControllerApi = /** @class */ (function (_super) {
+    __extends(TeamControllerApi, _super);
+    function TeamControllerApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     *
+     * @param {CreateTeamDto} body
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamControllerApi
+     */
+    TeamControllerApi.prototype.createTeam = function (body, options) {
+        return TeamControllerApiFp(this.configuration).createTeam(body, options)(this.fetch, this.basePath);
+    };
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamControllerApi
+     */
+    TeamControllerApi.prototype.getAll = function (options) {
+        return TeamControllerApiFp(this.configuration).getAll(options)(this.fetch, this.basePath);
+    };
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamControllerApi
+     */
+    TeamControllerApi.prototype.getForUser = function (options) {
+        return TeamControllerApiFp(this.configuration).getForUser(options)(this.fetch, this.basePath);
+    };
+    return TeamControllerApi;
+}(BaseAPI));
+export { TeamControllerApi };
 //# sourceMappingURL=api.js.map

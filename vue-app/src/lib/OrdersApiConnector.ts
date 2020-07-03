@@ -3,16 +3,18 @@ import store, {RootState} from "@/store";
 import {
   AllOrdersResponse,
   Configuration,
-  CreateOrderResponse,
+  CreateOrderInitialData,
+  EditOrderInitialData,
   OrderControllerApi,
   OrderEntryControllerApi,
   OrderEntrySaveRequest,
   OrderEntryUpdateRequest,
   OrderSaveRequest,
   OrderUpdateRequest,
-  OrderViewResponse,
+  OrderViewInitialData,
   SetAsOrderedResponse,
-  ShowOrderResponse, SideDishData
+  ShowOrderResponse,
+  SideDishData
 } from "@/frontend-client";
 import LocalConfiguration from "./LocalConfiguration"
 
@@ -91,51 +93,55 @@ export default class OrdersApiConnector {
     return this.orderApi.todayOrders(headersWithToken())
   }
 
-  fetchOrderView (orderId: string): Promise<OrderViewResponse> {
+  fetchOrderView (orderId: string): Promise<OrderViewInitialData> {
     return this.orderApi.orderViewJson(orderId, headersWithToken())
   }
 
   getOrderCreateData () {
-    const createResponse: Promise<CreateOrderResponse> = this.orderApi.create(headersWithToken());
+    const createResponse: Promise<CreateOrderInitialData> = this.orderApi.create(headersWithToken());
 
     return createResponse
-        .then(response => {
-          let restaurantId = response.restaurantsList[0].id;
-          let bankTransferNumber = "";
-          let paymentByBankTransfer = false;
-          if (response.bankTransferNumber) {
-            paymentByBankTransfer = true;
-            bankTransferNumber = response.bankTransferNumber;
-          }
-
-          let blikPhoneNumber = "";
-          let paymentByBlik = false;
-          if (response.blikPhoneNumber) {
-            paymentByBlik = true;
-            blikPhoneNumber = response.blikPhoneNumber;
-          }
-
-          return {
-            restaurantsList: response.restaurantsList,
-            order: {
-              restaurantId: restaurantId,
-              orderDate: response.orderDate,
-              timeOfOrder: response.timeOfOrder,
-
-              decreaseInPercent: 0,
-              deliveryCostPerEverybody: 0,
-              deliveryCostPerDish: 0,
-              paymentByCash: true,
-              paymentByBankTransfer: paymentByBankTransfer,
-              bankTransferNumber: bankTransferNumber,
-              paymentByBlik: paymentByBlik,
-              blikPhoneNumber: blikPhoneNumber
-            }
-          }
-        });
+        // .then(response => {
+        //   let restaurantId = response.restaurantsList[0].id;
+        //   let teamId = response.teamsList[0].id;
+        //
+        //   let bankTransferNumber = "";
+        //   let paymentByBankTransfer = false;
+        //   if (response.bankTransferNumber) {
+        //     paymentByBankTransfer = true;
+        //     bankTransferNumber = response.bankTransferNumber;
+        //   }
+        //
+        //   let blikPhoneNumber = "";
+        //   let paymentByBlik = false;
+        //   if (response.blikPhoneNumber) {
+        //     paymentByBlik = true;
+        //     blikPhoneNumber = response.blikPhoneNumber;
+        //   }
+        //
+        //   return {
+        //     restaurantsList: response.restaurantsList,
+        //     teamsList: response.teamsList,
+        //     order: {
+        //       restaurantId: restaurantId,
+        //       teamId: teamId,
+        //       orderDate: response.orderDate,
+        //       timeOfOrder: response.timeOfOrder,
+        //
+        //       decreaseInPercent: 0,
+        //       deliveryCostPerEverybody: 0,
+        //       deliveryCostPerDish: 0,
+        //       paymentByCash: true,
+        //       paymentByBankTransfer: paymentByBankTransfer,
+        //       bankTransferNumber: bankTransferNumber,
+        //       paymentByBlik: paymentByBlik,
+        //       blikPhoneNumber: blikPhoneNumber
+        //     }
+        //   }
+        // });
   }
 
-  getOrderEditData (orderId: string) {
+  getOrderEditData (orderId: string): Promise<EditOrderInitialData> {
     return this.orderApi.edit(orderId, headersWithToken())
   }
 

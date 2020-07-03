@@ -3,7 +3,6 @@ package altszama.app.order.dto
 import altszama.app.auth.User
 import altszama.app.dish.Dish
 import altszama.app.dish.dto.DishDto
-import altszama.app.dish.dto.DishDto.Companion.fromDish
 import altszama.app.order.Order
 import altszama.app.order.OrderState
 import altszama.app.orderEntry.DishEntry
@@ -36,9 +35,9 @@ internal class OrderViewResponseTest {
         OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1)))
     )
 
-    val actual = OrderViewResponse.create(order, entriesInThisOrder)
+    val actual = OrderViewInitialDAta.create(order, entriesInThisOrder)
 
-    val expected = OrderViewResponse(
+    val expected = OrderViewInitialDAta(
             OrderState.CREATED,
             0,
             0,
@@ -46,12 +45,12 @@ internal class OrderViewResponseTest {
             restaurant.name,
             "",
             listOf(
-                OrderViewResponse.Companion.GroupedOrderEntry(
+                OrderViewInitialDAta.Companion.GroupedOrderEntry(
                     DishDto.fromDish(dish1),
                     dish1.price,
                     1,
                     listOf(
-                        OrderViewResponse.Companion.EatingPersonEntry(user1.username, "", emptyList())
+                        OrderViewInitialDAta.Companion.EatingPersonEntry(user1.username, "", emptyList())
                     )
                 )
             ),
@@ -71,9 +70,9 @@ internal class OrderViewResponseTest {
         OrderEntry(objectId(), order, user2, listOf(DishEntry(dish2)))
     )
 
-    val actual = OrderViewResponse.create(order, entriesInThisOrder)
+    val actual = OrderViewInitialDAta.create(order, entriesInThisOrder)
 
-    val expected = OrderViewResponse(
+    val expected = OrderViewInitialDAta(
             OrderState.CREATED,
             0,
             0,
@@ -81,20 +80,20 @@ internal class OrderViewResponseTest {
             restaurant.name,
             "",
             listOf(
-                OrderViewResponse.Companion.GroupedOrderEntry(
+                OrderViewInitialDAta.Companion.GroupedOrderEntry(
                     DishDto.fromDish(dish1),
                     dish1.price,
                     1,
                     listOf(
-                        OrderViewResponse.Companion.EatingPersonEntry(user1.username, "", emptyList())
+                        OrderViewInitialDAta.Companion.EatingPersonEntry(user1.username, "", emptyList())
                     )
                 ),
-                OrderViewResponse.Companion.GroupedOrderEntry(
+                OrderViewInitialDAta.Companion.GroupedOrderEntry(
                     DishDto.fromDish(dish2),
                     dish2.price,
                     1,
                     listOf(
-                        OrderViewResponse.Companion.EatingPersonEntry(user2.username, "", emptyList())
+                        OrderViewInitialDAta.Companion.EatingPersonEntry(user2.username, "", emptyList())
                     )
                 )
             ),
@@ -118,9 +117,9 @@ internal class OrderViewResponseTest {
         OrderEntry(objectId(), order, user2, listOf(DishEntry(dish2), DishEntry(dish3)))
     )
 
-    val actual = OrderViewResponse.create(order, entriesInThisOrder)
+    val actual = OrderViewInitialDAta.create(order, entriesInThisOrder)
 
-    val expected = OrderViewResponse(
+    val expected = OrderViewInitialDAta(
             OrderState.CREATED,
             0,
             0,
@@ -128,29 +127,29 @@ internal class OrderViewResponseTest {
             restaurant.name,
             "",
             listOf(
-                OrderViewResponse.Companion.GroupedOrderEntry(
+                OrderViewInitialDAta.Companion.GroupedOrderEntry(
                     DishDto.fromDish(dish1),
                     dish1.price,
                     1,
                     listOf(
-                        OrderViewResponse.Companion.EatingPersonEntry(user1.username, "", emptyList())
+                        OrderViewInitialDAta.Companion.EatingPersonEntry(user1.username, "", emptyList())
                     )
                 ),
-                OrderViewResponse.Companion.GroupedOrderEntry(
+                OrderViewInitialDAta.Companion.GroupedOrderEntry(
                     DishDto.fromDish(dish2),
                     2 * dish2.price,
                         2,
                     listOf(
-                        OrderViewResponse.Companion.EatingPersonEntry(user1.username, "", emptyList()),
-                        OrderViewResponse.Companion.EatingPersonEntry(user2.username, "", emptyList())
+                        OrderViewInitialDAta.Companion.EatingPersonEntry(user1.username, "", emptyList()),
+                        OrderViewInitialDAta.Companion.EatingPersonEntry(user2.username, "", emptyList())
                     )
                 ),
-                OrderViewResponse.Companion.GroupedOrderEntry(
+                OrderViewInitialDAta.Companion.GroupedOrderEntry(
                     DishDto.fromDish(dish3),
                         dish3.price,
                     1,
                     listOf(
-                        OrderViewResponse.Companion.EatingPersonEntry(user2.username, "", emptyList())
+                        OrderViewInitialDAta.Companion.EatingPersonEntry(user2.username, "", emptyList())
                     )
                 )
             ),
@@ -181,29 +180,29 @@ internal class OrderViewResponseTest {
         OrderEntry(objectId(), order, user2, listOf(DishEntry(dish2)))
     )
 
-    val actual = OrderViewResponse.create(order, entriesInThisOrder)
+    val actual = OrderViewInitialDAta.create(order, entriesInThisOrder)
 
-    val expected = OrderViewResponse(
+    val expected = OrderViewInitialDAta(
             OrderState.CREATED,
             0,
             deliveryCostPerAll,
             0,
             restaurant.name,
             "",        listOf(
-            OrderViewResponse.Companion.GroupedOrderEntry(
+            OrderViewInitialDAta.Companion.GroupedOrderEntry(
                 DishDto.fromDish(dish1),
                 dish1.price,
                 1,
                 listOf(
-                    OrderViewResponse.Companion.EatingPersonEntry(user1.username, "", emptyList())
+                    OrderViewInitialDAta.Companion.EatingPersonEntry(user1.username, "", emptyList())
                 )
             ),
-            OrderViewResponse.Companion.GroupedOrderEntry(
+            OrderViewInitialDAta.Companion.GroupedOrderEntry(
                 DishDto.fromDish(dish2),
                 dish2.price,
                 1,
                 listOf(
-                    OrderViewResponse.Companion.EatingPersonEntry(user2.username, "", emptyList())
+                    OrderViewInitialDAta.Companion.EatingPersonEntry(user2.username, "", emptyList())
                 )
             )
         ),
@@ -227,9 +226,9 @@ internal class OrderViewResponseTest {
         OrderEntry(objectId(), order, user2, listOf(DishEntry(dish2)))
     )
 
-    val actual = OrderViewResponse.create(order, entriesInThisOrder)
+    val actual = OrderViewInitialDAta.create(order, entriesInThisOrder)
 
-    val expected = OrderViewResponse(
+    val expected = OrderViewInitialDAta(
             OrderState.CREATED,
             percentDecrease,
             0,
@@ -237,20 +236,20 @@ internal class OrderViewResponseTest {
             restaurant.name,
             "",
             listOf(
-            OrderViewResponse.Companion.GroupedOrderEntry(
+            OrderViewInitialDAta.Companion.GroupedOrderEntry(
                 DishDto.fromDish(dish1),
                 dish1.price,
                 1,
                 listOf(
-                    OrderViewResponse.Companion.EatingPersonEntry(user1.username, "", emptyList())
+                    OrderViewInitialDAta.Companion.EatingPersonEntry(user1.username, "", emptyList())
                 )
             ),
-            OrderViewResponse.Companion.GroupedOrderEntry(
+            OrderViewInitialDAta.Companion.GroupedOrderEntry(
                 DishDto.fromDish(dish2),
                 dish2.price,
                 1,
                 listOf(
-                    OrderViewResponse.Companion.EatingPersonEntry(user2.username, "", emptyList())
+                    OrderViewInitialDAta.Companion.EatingPersonEntry(user2.username, "", emptyList())
                 )
             )
         ),
@@ -269,9 +268,9 @@ internal class OrderViewResponseTest {
         OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1)))
     )
 
-    val actual = OrderViewResponse.create(order, entriesInThisOrder)
+    val actual = OrderViewInitialDAta.create(order, entriesInThisOrder)
 
-    val expected = OrderViewResponse(
+    val expected = OrderViewInitialDAta(
             OrderState.CREATED,
             0,
             0,
@@ -279,13 +278,13 @@ internal class OrderViewResponseTest {
             restaurant.name,
             "",
             listOf(
-            OrderViewResponse.Companion.GroupedOrderEntry(
+            OrderViewInitialDAta.Companion.GroupedOrderEntry(
                 DishDto.fromDish(dish1),
                 2 * dish1.price,
                 2,
                 listOf(
-                    OrderViewResponse.Companion.EatingPersonEntry(user1.username, "", emptyList()),
-                    OrderViewResponse.Companion.EatingPersonEntry(user1.username, "", emptyList())
+                    OrderViewInitialDAta.Companion.EatingPersonEntry(user1.username, "", emptyList()),
+                    OrderViewInitialDAta.Companion.EatingPersonEntry(user1.username, "", emptyList())
                 )
             )
         ),

@@ -34,12 +34,12 @@ class OrderController {
   }
 
   @GetMapping("/orders/{orderId}/order_view.json")
-  fun orderViewJson(@PathVariable orderId: String): OrderViewResponse {
+  fun orderViewJson(@PathVariable orderId: String): OrderViewInitialData {
     return orderControllerDataService.getOrderViewData(orderId)
   }
 
   @GetMapping("/orders/create.json")
-  fun create(): CreateOrderResponse {
+  fun create(): CreateOrderInitialData {
     return orderControllerDataService.getCreateData()
   }
 
@@ -50,7 +50,7 @@ class OrderController {
   }
 
   @GetMapping("/orders/{orderId}/edit.json")
-  fun edit(@PathVariable orderId: String): EditOrderResponse {
+  fun edit(@PathVariable orderId: String): EditOrderInitialData {
     return orderControllerDataService.getEditData(orderId)
   }
 

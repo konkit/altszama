@@ -4,6 +4,7 @@ import altszama.app.dish.DishRepository
 import altszama.app.order.OrderRepository
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.restaurant.dto.RestaurantUpdateRequest
+import altszama.app.team.TeamService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -13,71 +14,75 @@ import java.util.*
 @Service
 class RestaurantService {
 
-    @Autowired
-    private lateinit var restaurantRepository: RestaurantRepository
+  @Autowired
+  private lateinit var restaurantRepository: RestaurantRepository
 
-    @Autowired
-    private lateinit var dishRepository: DishRepository
+  @Autowired
+  private lateinit var dishRepository: DishRepository
 
-    @Autowired
-    private lateinit var orderRepository: OrderRepository
+  @Autowired
+  private lateinit var orderRepository: OrderRepository
 
+  @Autowired
+  private lateinit var teamService: TeamService
 
-    fun createRestaurant(saveRequest: RestaurantSaveRequest): Restaurant {
-        val newRestaurantObj = Restaurant(
-                id = ObjectId().toHexString(),
-                team = null,
-                name = saveRequest.name,
-                telephone = saveRequest.telephone,
-                address = saveRequest.address,
-                url = saveRequest.url,
-                lastCrawled = null,
-                lastEdited = Instant.now()
-        )
-        return restaurantRepository.insert(newRestaurantObj)
-    }
+  fun createRestaurant(saveRequest: RestaurantSaveRequest): Restaurant {
+    val team = teamService.findById(saveRequest.teamId).get()
 
-    fun updateRestaurant(updateRequest: RestaurantUpdateRequest): Optional<Restaurant> {
-        return restaurantRepository.findById(updateRequest.id)
-                .map { restaurant ->
-                    val newRestaurantObj = restaurant.copy(
-                            name = updateRequest.name,
-                            telephone = updateRequest.telephone,
-                            address = updateRequest.address,
-                            url = updateRequest.url,
-                            lastEdited = Instant.now()
-                    )
+    val newRestaurantObj = Restaurant(
+        id = ObjectId().toHexString(),
+        team = team,
+        name = saveRequest.name,
+        telephone = saveRequest.telephone,
+        address = saveRequest.address,
+        url = saveRequest.url,
+        lastCrawled = null,
+        lastEdited = Instant.now()
+    )
+    return restaurantRepository.insert(newRestaurantObj)
+  }
 
-                    restaurantRepository.save(newRestaurantObj)
-                }
-    }
+  fun updateRestaurant(updateRequest: RestaurantUpdateRequest): Optional<Restaurant> {
+    return restaurantRepository.findById(updateRequest.id)
+        .map { restaurant ->
+          val newRestaurantObj = restaurant.copy(
+              name = updateRequest.name,
+              telephone = updateRequest.telephone,
+              address = updateRequest.address,
+              url = updateRequest.url,
+              lastEdited = Instant.now()
+          )
 
-    fun findById(restaurantId: String): Optional<Restaurant> {
-        return restaurantRepository.findById(restaurantId)
-    }
-
-    fun findAll(): List<Restaurant> {
-        return restaurantRepository.findAll()
-    }
-
-    fun deleteRestaurant(restaurantId: String) {
-        val ordersFromRestaurant = orderRepository.findByRestaurantId(restaurantId)
-        if (ordersFromRestaurant.isNotEmpty()) {
-            throw Exception("There are orders from this restaurant")
-        } else {
-            val dishesToRemove = dishRepository.findByRestaurantId(restaurantId)
-            dishesToRemove.forEach { dish ->
-                dishRepository.delete(dish)
-            }
-
-            restaurantRepository.deleteById(restaurantId)
+          restaurantRepository.save(newRestaurantObj)
         }
-    }
+  }
 
-    fun restaurantsToDishCountMap(): Map<Restaurant, Long> {
-        return restaurantRepository.findAll().map { restaurant ->
-            restaurant to dishRepository.countAllByRestaurantId(restaurant.id)
-        }.toMap()
+  fun findById(restaurantId: String): Optional<Restaurant> {
+    return restaurantRepository.findById(restaurantId)
+  }
+
+  fun findAll(): List<Restaurant> {
+    return restaurantRepository.findAll()
+  }
+
+  fun deleteRestaurant(restaurantId: String) {
+    val ordersFromRestaurant = orderRepository.findByRestaurantId(restaurantId)
+    if (ordersFromRestaurant.isNotEmpty()) {
+      throw Exception("There are orders from this restaurant")
+    } else {
+      val dishesToRemove = dishRepository.findByRestaurantId(restaurantId)
+      dishesToRemove.forEach { dish ->
+        dishRepository.delete(dish)
+      }
+
+      restaurantRepository.deleteById(restaurantId)
     }
+  }
+
+  fun restaurantsToDishCountMap(): Map<Restaurant, Long> {
+    return restaurantRepository.findAll().map { restaurant ->
+      restaurant to dishRepository.countAllByRestaurantId(restaurant.id)
+    }.toMap()
+  }
 
 }

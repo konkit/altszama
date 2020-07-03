@@ -8,6 +8,20 @@
           <v-card>
             <v-card-text>
               <v-form id="restaurantCreateForm">
+                <v-row>
+                  <v-col>
+                    <v-autocomplete
+                        :items="teamsList"
+                        item-text="domain"
+                        item-value="id"
+                        label="Team"
+                        :value="this.teamsList.find(t => teamId == t.id)"
+                        @input="updateTeamId($event)"
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                </v-row>
+
                 <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
                 <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
                 <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
@@ -43,6 +57,9 @@
   export default class RestaurantCreateForm extends Vue {
     @Prop() restaurantName!: string;
 
+    teamsList = [];
+
+    teamId: string = '';
     name: string = '';
     url: string = '';
     telephone: string = '';
@@ -51,20 +68,29 @@
     connector?: DishesApiConnector;
 
     mounted() {
-      this.connector = new DishesApiConnector(this.$store.state);
+
+      this.connector = new DishesApiConnector(this.$store.state)
+
+      this.connector.createRestaurant()
+        .then((response) => {
+
+          this.teamsList = response.teamsList;
+          this.teamId = response.teamsList && response.teamsList[0] && response.teamsList[0].id || "";
+        });
 
       document.title = `Create restaurant | Alt Szama`
     }
 
     submitForm() {
       const restaurant = {
+        teamId: this.teamId,
         name: this.name,
         url: this.url,
         telephone: this.telephone,
         address: this.address,
       };
 
-      this.connector!.createRestaurant(restaurant)
+      this.connector!.saveRestaurant(restaurant)
         .then(() => router.push("/restaurants"))
         .catch(errResponse => ApiConnector.handleError(errResponse));
     }
@@ -83,6 +109,10 @@
 
     updateAddress(newValue: string) {
       this.address = newValue;
+    }
+
+    updateTeamId(newValue: string) {
+      this.teamId = newValue;
     }
   }
 </script>

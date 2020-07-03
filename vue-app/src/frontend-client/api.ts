@@ -1,4 +1,3 @@
-/* eslint-disable */
 /// <reference path="./custom.d.ts" />
 // tslint:disable
 /**
@@ -162,39 +161,71 @@ export interface CreateDishResponse {
 /**
  * 
  * @export
- * @interface CreateOrderResponse
+ * @interface CreateOrderInitialData
  */
-export interface CreateOrderResponse {
+export interface CreateOrderInitialData {
     /**
      * 
      * @type {Array<Restaurant>}
-     * @memberof CreateOrderResponse
+     * @memberof CreateOrderInitialData
      */
     restaurantsList: Array<Restaurant>;
     /**
      * 
+     * @type {Array<Team>}
+     * @memberof CreateOrderInitialData
+     */
+    teamsList: Array<Team>;
+    /**
+     * 
      * @type {string}
-     * @memberof CreateOrderResponse
+     * @memberof CreateOrderInitialData
      */
     orderDate: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateOrderResponse
+     * @memberof CreateOrderInitialData
      */
     timeOfOrder: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateOrderResponse
+     * @memberof CreateOrderInitialData
      */
     bankTransferNumber: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateOrderResponse
+     * @memberof CreateOrderInitialData
      */
     blikPhoneNumber: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateRestaurantInitialData
+ */
+export interface CreateRestaurantInitialData {
+    /**
+     * 
+     * @type {Array<Team>}
+     * @memberof CreateRestaurantInitialData
+     */
+    teamsList: Array<Team>;
+}
+/**
+ * 
+ * @export
+ * @interface CreateTeamDto
+ */
+export interface CreateTeamDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTeamDto
+     */
+    domain: string;
 }
 /**
  * 
@@ -416,95 +447,95 @@ export interface EditDishResponse {
 /**
  * 
  * @export
- * @interface EditOrderResponse
+ * @interface EditOrderInitialData
  */
-export interface EditOrderResponse {
+export interface EditOrderInitialData {
     /**
      * 
-     * @type {EditResponseOrderDto}
-     * @memberof EditOrderResponse
+     * @type {EditOrderInitialDataOrderDto}
+     * @memberof EditOrderInitialData
      */
-    order: EditResponseOrderDto;
+    order: EditOrderInitialDataOrderDto;
 }
 /**
  * 
  * @export
- * @interface EditResponseOrderDto
+ * @interface EditOrderInitialDataOrderDto
  */
-export interface EditResponseOrderDto {
+export interface EditOrderInitialDataOrderDto {
     /**
      * 
      * @type {string}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     restaurantId: string;
     /**
      * 
      * @type {string}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     restaurantName: string;
     /**
      * 
      * @type {string}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     orderCreatorId: string;
     /**
      * 
      * @type {string}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     orderCreatorUsername: string;
     /**
      * 
      * @type {string}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     orderDate: string;
     /**
      * 
      * @type {string}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     timeOfOrder?: string;
     /**
      * 
      * @type {LocalTime}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     timeOfDelivery?: LocalTime;
     /**
      * 
      * @type {string}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
-    orderState: EditResponseOrderDto.OrderStateEnum;
+    orderState: EditOrderInitialDataOrderDto.OrderStateEnum;
     /**
      * 
      * @type {DeliveryData}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     deliveryData: DeliveryData;
     /**
      * 
      * @type {PaymentData}
-     * @memberof EditResponseOrderDto
+     * @memberof EditOrderInitialDataOrderDto
      */
     paymentData: PaymentData;
 }
 
 /**
  * @export
- * @namespace EditResponseOrderDto
+ * @namespace EditOrderInitialDataOrderDto
  */
-export namespace EditResponseOrderDto {
+export namespace EditOrderInitialDataOrderDto {
     /**
      * @export
      * @enum {string}
@@ -839,6 +870,12 @@ export interface OrderSaveRequest {
      * @type {string}
      * @memberof OrderSaveRequest
      */
+    teamId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderSaveRequest
+     */
     orderDate?: string;
     /**
      * 
@@ -899,64 +936,64 @@ export interface OrderUpdateRequest {
 /**
  * 
  * @export
- * @interface OrderViewResponse
+ * @interface OrderViewInitialData
  */
-export interface OrderViewResponse {
+export interface OrderViewInitialData {
     /**
      * 
      * @type {string}
-     * @memberof OrderViewResponse
+     * @memberof OrderViewInitialData
      */
-    orderState: OrderViewResponse.OrderStateEnum;
+    orderState: OrderViewInitialData.OrderStateEnum;
     /**
      * 
      * @type {DeliveryData}
-     * @memberof OrderViewResponse
+     * @memberof OrderViewInitialData
      */
     orderDeliveryData: DeliveryData;
     /**
      * 
      * @type {string}
-     * @memberof OrderViewResponse
+     * @memberof OrderViewInitialData
      */
     restaurantName: string;
     /**
      * 
      * @type {string}
-     * @memberof OrderViewResponse
+     * @memberof OrderViewInitialData
      */
     restaurantTelephone: string;
     /**
      * 
      * @type {Array<GroupedOrderEntry>}
-     * @memberof OrderViewResponse
+     * @memberof OrderViewInitialData
      */
     groupedEntries: Array<GroupedOrderEntry>;
     /**
      * 
      * @type {number}
-     * @memberof OrderViewResponse
+     * @memberof OrderViewInitialData
      */
     allEatingPeopleCount: number;
     /**
      * 
      * @type {number}
-     * @memberof OrderViewResponse
+     * @memberof OrderViewInitialData
      */
     basePriceSum: number;
     /**
      * 
      * @type {number}
-     * @memberof OrderViewResponse
+     * @memberof OrderViewInitialData
      */
     totalPrice: number;
 }
 
 /**
  * @export
- * @namespace OrderViewResponse
+ * @namespace OrderViewInitialData
  */
-export namespace OrderViewResponse {
+export namespace OrderViewInitialData {
     /**
      * @export
      * @enum {string}
@@ -1206,6 +1243,12 @@ export interface RestaurantInfo {
  * @interface RestaurantSaveRequest
  */
 export interface RestaurantSaveRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof RestaurantSaveRequest
+     */
+    teamId: string;
     /**
      * 
      * @type {string}
@@ -1528,22 +1571,10 @@ export interface Team {
     id: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {string}
      * @memberof Team
      */
-    domains: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof Team
-     */
-    users: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof Team
-     */
-    admins: Array<string>;
+    domain: string;
 }
 /**
  * 
@@ -2624,7 +2655,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateOrderResponse> {
+        create(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateOrderInitialData> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).create(options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2642,7 +2673,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        edit(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<EditOrderResponse> {
+        edit(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<EditOrderInitialData> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).edit(orderId, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2660,7 +2691,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderViewJson(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<OrderViewResponse> {
+        orderViewJson(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<OrderViewInitialData> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).orderViewJson(orderId, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -3556,6 +3587,28 @@ export const RestaurantControllerApiFetchParamCreator = function (configuration?
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRestaurant(options: any = {}): FetchArgs {
+            const localVarPath = `/api`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} restaurantId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3733,6 +3786,23 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRestaurant(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateRestaurantInitialData> {
+            const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).createRestaurant(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {string} restaurantId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3849,6 +3919,14 @@ export const RestaurantControllerApiFactory = function (configuration?: Configur
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRestaurant(options?: any) {
+            return RestaurantControllerApiFp(configuration).createRestaurant(options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {string} restaurantId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3912,6 +3990,16 @@ export const RestaurantControllerApiFactory = function (configuration?: Configur
 export class RestaurantControllerApi extends BaseAPI {
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RestaurantControllerApi
+     */
+    public createRestaurant(options?: any) {
+        return RestaurantControllerApiFp(this.configuration).createRestaurant(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
      * @param {string} restaurantId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3973,6 +4061,224 @@ export class RestaurantControllerApi extends BaseAPI {
      */
     public updateRestaurant(body: RestaurantUpdateRequest, options?: any) {
         return RestaurantControllerApiFp(this.configuration).updateRestaurant(body, options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * TeamControllerApi - fetch parameter creator
+ * @export
+ */
+export const TeamControllerApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateTeamDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeam(body: CreateTeamDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling createTeam.');
+            }
+            const localVarPath = `/api/teams/create`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CreateTeamDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAll(options: any = {}): FetchArgs {
+            const localVarPath = `/api/teams/all`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getForUser(options: any = {}): FetchArgs {
+            const localVarPath = `/api/teams/user`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TeamControllerApi - functional programming interface
+ * @export
+ */
+export const TeamControllerApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateTeamDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeam(body: CreateTeamDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = TeamControllerApiFetchParamCreator(configuration).createTeam(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAll(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Team>> {
+            const localVarFetchArgs = TeamControllerApiFetchParamCreator(configuration).getAll(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getForUser(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Team>> {
+            const localVarFetchArgs = TeamControllerApiFetchParamCreator(configuration).getForUser(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * TeamControllerApi - factory interface
+ * @export
+ */
+export const TeamControllerApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {CreateTeamDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTeam(body: CreateTeamDto, options?: any) {
+            return TeamControllerApiFp(configuration).createTeam(body, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAll(options?: any) {
+            return TeamControllerApiFp(configuration).getAll(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getForUser(options?: any) {
+            return TeamControllerApiFp(configuration).getForUser(options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * TeamControllerApi - object-oriented interface
+ * @export
+ * @class TeamControllerApi
+ * @extends {BaseAPI}
+ */
+export class TeamControllerApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateTeamDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamControllerApi
+     */
+    public createTeam(body: CreateTeamDto, options?: any) {
+        return TeamControllerApiFp(this.configuration).createTeam(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamControllerApi
+     */
+    public getAll(options?: any) {
+        return TeamControllerApiFp(this.configuration).getAll(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamControllerApi
+     */
+    public getForUser(options?: any) {
+        return TeamControllerApiFp(this.configuration).getForUser(options)(this.fetch, this.basePath);
     }
 
 }

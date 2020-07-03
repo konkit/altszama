@@ -28,6 +28,11 @@ class RestaurantController {
     return restaurantControllerDataService.getShowData(restaurantId)
   }
 
+  @GetMapping
+  fun createRestaurant(): CreateRestaurantInitialData {
+    return restaurantControllerDataService.getCreateRestaurantInitialData()
+  }
+
   @PostMapping("/restaurants/save")
   fun saveRestaurant(@Valid @RequestBody saveRequest: RestaurantSaveRequest): ResponseEntity<String> {
     restaurantService.createRestaurant(saveRequest)

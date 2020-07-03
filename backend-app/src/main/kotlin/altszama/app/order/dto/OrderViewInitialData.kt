@@ -6,10 +6,9 @@ import altszama.app.dish.dto.DishDto
 import altszama.app.order.Order
 import altszama.app.order.OrderState
 import altszama.app.orderEntry.OrderEntry
-import java.time.Instant
 
 
-data class OrderViewResponse(
+data class OrderViewInitialData(
         val orderState: OrderState,
 //    val orderDecreaseInPercent: Int,
 //    val orderDeliveryCostPerEverybody: Int,
@@ -38,12 +37,12 @@ data class OrderViewResponse(
                 val sideDishes: List<SideDish>
         )
 
-        fun create(order: Order, entries: List<OrderEntry>): OrderViewResponse {
+        fun create(order: Order, entries: List<OrderEntry>): OrderViewInitialData {
             val groupedUserEntries = createGroupedUserEntries(entries)
             val basePriceSum = Order.getBasePrice(entries)
             val orderTotalPrice = Order.getTotalPrice(order, entries)
 
-            return OrderViewResponse(
+            return OrderViewInitialData(
                     order.orderState,
                     DeliveryData(
                             order.decreaseInPercent,
