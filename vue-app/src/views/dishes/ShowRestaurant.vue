@@ -20,7 +20,6 @@
             <v-card>
               <v-card-text>
                 <v-layout column>
-                  <p><b>Rating: </b> {{this.restaurant.rating}} </p>
                   <p><b>Address : </b> {{this.restaurant.address}} </p>
                   <p><b>URL : </b> <a :href="this.restaurant.url">{{this.restaurant.url}}</a></p>
                   <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>

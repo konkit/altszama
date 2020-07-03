@@ -7,7 +7,13 @@ export var FETCH_RESTAURANT_ACTION = "FETCH_RESTAURANT_ACTION";
 export var DELETE_RESTAURANT_ACTION = "DELETE_RESTAURANT_ACTION";
 export var DELETE_DISH_ACTION = "DELETE_DISH_ACTION";
 export var showRestaurantState = {
-    restaurant: undefined,
+    restaurant: {
+        id: "",
+        name: "",
+        url: "",
+        telephone: "",
+        address: ""
+    },
     dishes: [],
     dishesByCategory: {},
 };
@@ -50,8 +56,8 @@ export var showRestaurantModule = {
             var connector = new DishesApiConnector(rootState);
             connector.deleteDish(restaurantId, dishId)
                 .then(function (successResponse) {
-                _this.commit('setLoadingFalse');
                 _this.dispatch("showRestaurant/" + FETCH_RESTAURANT_ACTION, { restaurantId: restaurantId });
+                _this.commit('setLoadingFalse');
             })
                 .catch(function (errResponse) { return ApiConnector.handleError(errResponse); });
         },

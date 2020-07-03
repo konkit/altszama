@@ -17,7 +17,13 @@ export interface ShowRestaurantState {
 }
 
 export const showRestaurantState: ShowRestaurantState = {
-    restaurant: undefined,
+    restaurant: {
+      id: "",
+      name: "",
+      url: "",
+      telephone: "",
+      address: ""
+    },
     dishes: [],
     dishesByCategory: {},
 };
@@ -41,7 +47,7 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
           this.commit(`showRestaurant/${INIT_RESTAURANT_DATA}`, response);
           this.commit('setLoadingFalse');
 
-          document.title = `Restaurant ${state.restaurant!.name} | Alt Szama`
+          document.title = `Restaurant ${state.restaurant!.name} | Alt Szama`;
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     },
@@ -57,8 +63,8 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
 
       connector.deleteDish(restaurantId, dishId)
         .then(successResponse => {
-            this.commit('setLoadingFalse')
             this.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: restaurantId})
+            this.commit('setLoadingFalse')
         })
         .catch(errResponse => ApiConnector.handleError(errResponse))
     }
