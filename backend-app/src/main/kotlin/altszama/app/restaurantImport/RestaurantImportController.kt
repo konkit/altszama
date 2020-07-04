@@ -29,10 +29,12 @@ class RestaurantImportController {
     return ResponseEntity("{}", HttpStatus.CREATED)
   }
 
-  @PostMapping("/restaurantImportFromPayload")
-  fun handlePayload(@RequestBody restaurantJsonString: String): ResponseEntity<String> {
-    val restaurantData = objectMapper.readValue<RestaurantImportJson>(restaurantJsonString)
-
+  @PostMapping(
+      value = ["/restaurantImportFromPayload"],
+      consumes = ["application/json"],
+      produces = ["application/json"]
+  )
+  fun handlePayload(@RequestBody restaurantData: RestaurantImportJson): ResponseEntity<String> {
     service.createFromJson(restaurantData)
 
     return ResponseEntity("{}", HttpStatus.CREATED)

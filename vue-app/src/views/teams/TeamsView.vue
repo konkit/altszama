@@ -8,11 +8,11 @@
           </v-col>
         </v-row>
 
-        <v-row>
-          <v-col>
-            <v-btn class="button" @click="goToCreateTeam()">Create team</v-btn>
-          </v-col>
-        </v-row>
+        <!--<v-row>-->
+          <!--<v-col>-->
+            <!--<v-btn class="button" @click="goToCreateTeam()">Create team</v-btn>-->
+          <!--</v-col>-->
+        <!--</v-row>-->
 
         <v-row>
           <v-col cols="xs12">

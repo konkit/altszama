@@ -4,6 +4,7 @@ import org.springdoc.core.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
+
 @Configuration
 open class SwaggerConfig {
 
@@ -32,5 +33,10 @@ open class SwaggerConfig {
         .group("import").packagesToScan(*importPackages)
         .build()
   }
+
+//  @Bean
+//  fun customOpenAPI(): OpenAPI? {
+//    return OpenAPI().addServersItem(Server().url("http://localhost:8081/"))
+//  }
 
 }

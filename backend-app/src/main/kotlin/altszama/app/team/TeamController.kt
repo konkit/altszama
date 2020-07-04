@@ -26,9 +26,9 @@ class TeamController {
         return teamService.getForUser(currentUser)
     }
 
-    @PostMapping("/create")
-    fun createTeam(@RequestBody dto: CreateTeamDto) {
-        teamService.save(dto)
-    }
+//    @PostMapping("/create")
+//    fun createTeam(@RequestBody dto: CreateTeamDto) {
+//        teamService.save(dto)
+//    }
 
 }
