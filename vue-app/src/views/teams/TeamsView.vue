@@ -38,6 +38,12 @@
             </div>
           </v-col>
         </v-row>
+
+        <v-row>
+          <v-col>
+            <h3>Your balance</h3>
+          </v-col>
+        </v-row>
       </v-container>
     </LoadingView>
   </ViewWrapper>
