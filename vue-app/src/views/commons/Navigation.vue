@@ -35,11 +35,11 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="goToPath('/teams')">
-          <v-list-item-content>
-            <v-list-item-title>Teams</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <!--<v-list-item @click="goToPath('/teams')">-->
+          <!--<v-list-item-content>-->
+            <!--<v-list-item-title>Teams</v-list-item-title>-->
+          <!--</v-list-item-content>-->
+        <!--</v-list-item>-->
       </v-list>
 
       <v-divider></v-divider>
