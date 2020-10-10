@@ -1,18 +1,20 @@
 <template>
-  <ViewWrapper :title="`Restaurant ${restaurant.name}`" backpath="#/restaurants">
+  <ViewWrapper
+    :title="`Restaurant ${restaurant.name}`"
+    backpath="#/restaurants"
+  >
     <template slot="toolbar-buttons">
-
       <v-btn @click="editRestaurant">
-        Edit restaurant&nbsp;<span class="fa fa-pencil"/>
+        Edit restaurant&nbsp;<span class="fa fa-pencil" />
       </v-btn>
 
       <v-btn color="error" @click="deleteRestaurant()">
-        Delete restaurant&nbsp;<span class="fa fa-times"/>
+        Delete restaurant&nbsp;<span class="fa fa-times" />
       </v-btn>
     </template>
 
     <LoadingView>
-      <errors-component/>
+      <errors-component />
 
       <v-container>
         <v-row>
@@ -20,11 +22,22 @@
             <v-card>
               <v-card-text>
                 <v-layout column>
-                  <p><b>Address : </b> {{this.restaurant.address}} </p>
-                  <p><b>URL : </b> <a :href="this.restaurant.url">{{this.restaurant.url}}</a></p>
-                  <p><b>Telephone number:</b> {{this.restaurant.telephone}} </p>
-                  <p><b>Last auto-updated:</b> {{ dateToRel(this.restaurant.lastCrawled) }} </p>
-                  <p><b>Last updated manually:</b> {{ dateToRel(this.restaurant.lastEdited) }} </p>
+                  <p><b>Address : </b> {{ this.restaurant.address }}</p>
+                  <p>
+                    <b>URL : </b>
+                    <a :href="this.restaurant.url">{{ this.restaurant.url }}</a>
+                  </p>
+                  <p>
+                    <b>Telephone number:</b> {{ this.restaurant.telephone }}
+                  </p>
+                  <p>
+                    <b>Last auto-updated:</b>
+                    {{ dateToRel(this.restaurant.lastCrawled) }}
+                  </p>
+                  <p>
+                    <b>Last updated manually:</b>
+                    {{ dateToRel(this.restaurant.lastEdited) }}
+                  </p>
                 </v-layout>
               </v-card-text>
             </v-card>
@@ -36,13 +49,25 @@
             <v-card>
               <v-card-text>
                 <v-layout column>
-                  <show-restaurant-dishes-table :restaurant="this.restaurant"
-                                                :dishes-by-category="this.dishesByCategory"/>
+                  <show-restaurant-dishes-table
+                    :restaurant="this.restaurant"
+                    :dishes-by-category="this.dishesByCategory"
+                  />
                 </v-layout>
 
                 <v-tooltip left>
                   <template v-slot:activator="{ on }">
-                    <v-btn fixed dark fab large bottom right color="green" @click="goToCreateDish()" v-on="on">
+                    <v-btn
+                      fixed
+                      dark
+                      fab
+                      large
+                      bottom
+                      right
+                      color="green"
+                      @click="goToCreateDish()"
+                      v-on="on"
+                    >
                       <v-icon>add</v-icon>
                     </v-btn>
                   </template>
@@ -58,80 +83,80 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
-  import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable.vue'
-  import LoadingView from "@/views/commons/LoadingView.vue";
-  import {
-    DELETE_RESTAURANT_ACTION,
-    FETCH_RESTAURANT_ACTION,
-    ShowRestaurantState
-  } from "../../store/modules/ShowRestaurantModule"
-  import router from "../../router/index"
-  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-  import Component from "vue-class-component";
-  import Vue from 'vue';
-  import moment from "moment"
+import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
+import ShowRestaurantDishesTable from "./components/ShowRestaurantDishesTable.vue";
+import LoadingView from "@/views/commons/LoadingView.vue";
+import {
+  DELETE_RESTAURANT_ACTION,
+  FETCH_RESTAURANT_ACTION,
+  ShowRestaurantState
+} from "../../store/modules/ShowRestaurantModule";
+import router from "../../router/index";
+import ViewWrapper from "@/views/commons/ViewWrapper.vue";
+import Component from "vue-class-component";
+import Vue from "vue";
+import moment from "moment";
 
-  @Component({
-    components: {
-      ViewWrapper,
-      LoadingView,
-      ErrorsComponent,
-      ShowRestaurantDishesTable
-    }
-  })
-  export default class ShowRestaurant extends Vue {
-    restaurantId = '';
+@Component({
+  components: {
+    ViewWrapper,
+    LoadingView,
+    ErrorsComponent,
+    ShowRestaurantDishesTable
+  }
+})
+export default class ShowRestaurant extends Vue {
+  restaurantId = "";
 
-    mounted() {
-      this.restaurantId = this.$route.params.id;
+  mounted() {
+    this.restaurantId = this.$route.params.id;
 
-      this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {restaurantId: this.restaurantId});
-    }
-
-    get restaurant() {
-      let showRestaurant: ShowRestaurantState = this.$store.state.showRestaurant;
-
-      console.log("showRestaurant: ", showRestaurant);
-
-      return showRestaurant.restaurant;
-    }
-
-    get dishes() {
-      return this.$store.state.showRestaurant.dishes;
-    }
-
-    get dishesByCategory() {
-      return this.$store.state.showRestaurant.dishesByCategory;
-    }
-
-    goToCreateDish() {
-      router.push("/restaurants/" + this.restaurantId + "/dishes/create")
-    }
-
-    editRestaurant() {
-      router.push("/restaurants/" + this.restaurantId + "/edit")
-    }
-
-    deleteRestaurant() {
-      let errorsComponent = this.$refs.errorsComponent;
-      this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
-        restaurantId: this.restaurantId,
-        errorsComponent: errorsComponent
-      });
-    }
-
-    dateToRel(date: Date) {
-      if (date) {
-        return moment(date).fromNow()
-      } else {
-        return ""
-      }
-    }
-
+    this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {
+      restaurantId: this.restaurantId
+    });
   }
 
+  get restaurant() {
+    const showRestaurant: ShowRestaurantState = this.$store.state
+      .showRestaurant;
+
+    console.log("showRestaurant: ", showRestaurant);
+
+    return showRestaurant.restaurant;
+  }
+
+  get dishes() {
+    return this.$store.state.showRestaurant.dishes;
+  }
+
+  get dishesByCategory() {
+    return this.$store.state.showRestaurant.dishesByCategory;
+  }
+
+  goToCreateDish() {
+    router.push("/restaurants/" + this.restaurantId + "/dishes/create");
+  }
+
+  editRestaurant() {
+    router.push("/restaurants/" + this.restaurantId + "/edit");
+  }
+
+  deleteRestaurant() {
+    const errorsComponent = this.$refs.errorsComponent;
+    this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
+      restaurantId: this.restaurantId,
+      errorsComponent: errorsComponent
+    });
+  }
+
+  dateToRel(date: Date) {
+    if (date) {
+      return moment(date).fromNow();
+    } else {
+      return "";
+    }
+  }
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

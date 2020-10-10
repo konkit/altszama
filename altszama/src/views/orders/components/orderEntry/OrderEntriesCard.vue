@@ -1,65 +1,74 @@
 <template>
   <v-card :key="'entryId-' + entryId">
     <v-card-title>
-      {{orderEntry.username}}
+      {{ orderEntry.username }}
     </v-card-title>
 
     <v-card-text>
-      <PaymentStatus :order="order" :order-entry="orderEntry"
-                     :current-user-id="currentUserId" :cost-for-user="orderEntry.finalPrice"></PaymentStatus>
+      <PaymentStatus
+        :order="order"
+        :order-entry="orderEntry"
+        :current-user-id="currentUserId"
+        :cost-for-user="orderEntry.finalPrice"
+      ></PaymentStatus>
 
       <v-list dense>
         <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
           <v-list-item :key="'dishEntry-' + dishEntryIndex">
-
             <v-list-item-content class="index-element">
               <div style="padding-top: 8px;">
                 <div style="min-height: 40px;">
                   <div style="padding-top: 8px">
                     <div style="line-height: 36px;">
-                      {{dishEntryIndex + 1}}.
+                      {{ dishEntryIndex + 1 }}.
                     </div>
                   </div>
                 </div>
               </div>
-
             </v-list-item-content>
 
             <v-list-item-content>
-              <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+              <template
+                v-if="isEntryEdited === true && dishEntryId === dishEntry.id"
+              >
                 <edit-order-entry
-                    :order-entry="orderEntry"
-                    :dish-entry="dishEntry"
-                    :key="'edit-order-entry-' + dishEntry.id">
+                  :order-entry="orderEntry"
+                  :dish-entry="dishEntry"
+                  :key="'edit-order-entry-' + dishEntry.id"
+                >
                 </edit-order-entry>
-
               </template>
               <template v-else>
                 <show-order-entry
-                    :order-entry="orderEntry"
-                    :dish-entry="dishEntry"
-                    :current-user-id="currentUserId"
-                    :key="'show-order-entry-' + dishEntry.id"
-                    :index="dishEntryIndex + 1">
+                  :order-entry="orderEntry"
+                  :dish-entry="dishEntry"
+                  :current-user-id="currentUserId"
+                  :key="'show-order-entry-' + dishEntry.id"
+                  :index="dishEntryIndex + 1"
+                >
                 </show-order-entry>
               </template>
             </v-list-item-content>
           </v-list-item>
 
           <template v-if="dishEntryIndex < orderEntry.dishEntries.length - 1">
-            <v-divider :key="'dish-entry-divider' + dishEntryIndex" class="dishes-divider"></v-divider>
+            <v-divider
+              :key="'dish-entry-divider' + dishEntryIndex"
+              class="dishes-divider"
+            ></v-divider>
           </template>
-
         </template>
 
-        <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
-
+        <template
+          v-if="
+            order.orderState === 'CREATED' &&
+              isOrderEntryOwner(orderEntry) &&
+              isEntryEdited === false
+          "
+        >
           <v-list-item>
-
             <v-list-item-content class="index-element">
-              <div class="py-4">
-                {{orderEntry.dishEntries.length + 1}}.
-              </div>
+              <div class="py-4">{{ orderEntry.dishEntries.length + 1 }}.</div>
             </v-list-item-content>
 
             <v-list-item-content>
@@ -79,8 +88,9 @@
 
     <v-card-actions>
       <span class="px-2">
-        <b>Cost for user:
-          <price :data-price="orderEntry.finalPrice"/>
+        <b
+          >Cost for user:
+          <price :data-price="orderEntry.finalPrice" />
         </b>
       </span>
     </v-card-actions>
@@ -88,65 +98,73 @@
 </template>
 
 <script lang="ts">
-  import Price from '../../../commons/PriceElement.vue'
-  import CreateOrderEntry from './CreateOrderEntry.vue'
-  import EditOrderEntry from './EditOrderEntry.vue'
-  import ShowOrderEntry from './ShowOrderEntry.vue'
-  import {
-    ModifyOrderEntryState,
-    NAMESPACE_MODIFY_ORDER_ENTRY,
-    SET_DISH_ENTRY_CREATING,
-  } from "../../../../store/modules/ModifyOrderEntryModule";
-  import PaymentStatus from "@/views/orders/components/PaymentStatus.vue";
-  import Vue from "vue";
-  import {Prop} from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../frontend-client";
+import Price from "../../../commons/PriceElement.vue";
+import CreateOrderEntry from "./CreateOrderEntry.vue";
+import EditOrderEntry from "./EditOrderEntry.vue";
+import ShowOrderEntry from "./ShowOrderEntry.vue";
+import {
+  ModifyOrderEntryState,
+  NAMESPACE_MODIFY_ORDER_ENTRY,
+  SET_DISH_ENTRY_CREATING
+} from "../../../../store/modules/ModifyOrderEntryModule";
+import PaymentStatus from "@/views/orders/components/PaymentStatus.vue";
+import Vue from "vue";
+import { Prop } from "vue-property-decorator";
+import Component from "vue-class-component";
+import {
+  ParticipantsOrderEntry,
+  ShowOrderDto
+} from "../../../../frontend-client";
 
-  @Component({
-    components: {
-      PaymentStatus,
-      Price,
-      CreateOrderEntry,
-      EditOrderEntry,
-      ShowOrderEntry
-    }
-  })
-  export default class OrderEntriesCard extends Vue {
-    @Prop() order!: ShowOrderDto;
-    @Prop() orderEntry!: ParticipantsOrderEntry;
-    @Prop() entryId!: string;
-    @Prop() currentUserId!: string;
-
-    isOrderEntryOwner() {
-      return this.orderEntry.userId === this.currentUserId
-    }
-
-    createEntry() {
-      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`, {})
-    }
-
-    get isEntryCreating() {
-      let modifyOrderEntryState: ModifyOrderEntryState = this.$store.state.modifyOrderEntry;
-      return modifyOrderEntryState.isEntryCreating;
-    }
-
-    get isEntryEdited() {
-      let modifyOrderEntryState: ModifyOrderEntryState = this.$store.state.modifyOrderEntry;
-      return modifyOrderEntryState.isEntryEdited;
-    }
+@Component({
+  components: {
+    PaymentStatus,
+    Price,
+    CreateOrderEntry,
+    EditOrderEntry,
+    ShowOrderEntry
   }
+})
+export default class OrderEntriesCard extends Vue {
+  @Prop() order!: ShowOrderDto;
+  @Prop() orderEntry!: ParticipantsOrderEntry;
+  @Prop() entryId!: string;
+  @Prop() currentUserId!: string;
+
+  isOrderEntryOwner() {
+    return this.orderEntry.userId === this.currentUserId;
+  }
+
+  createEntry() {
+    this.$store.commit(
+      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`,
+      {}
+    );
+  }
+
+  get isEntryCreating() {
+    const modifyOrderEntryState: ModifyOrderEntryState = this.$store.state
+      .modifyOrderEntry;
+    return modifyOrderEntryState.isEntryCreating;
+  }
+
+  get isEntryEdited() {
+    const modifyOrderEntryState: ModifyOrderEntryState = this.$store.state
+      .modifyOrderEntry;
+    return modifyOrderEntryState.isEntryEdited;
+  }
+}
 </script>
 
 <style scoped>
-  .index-element {
-    min-width: 20px;
-    flex-grow: 0;
-    align-self: flex-start;
-  }
+.index-element {
+  min-width: 20px;
+  flex-grow: 0;
+  align-self: flex-start;
+}
 
-  .dishes-divider {
-    margin-left: 54px;
-    max-width: calc(100% - 54px);
-  }
+.dishes-divider {
+  margin-left: 54px;
+  max-width: calc(100% - 54px);
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <ViewWrapper title="Create restaurant" backpath="#/restaurants">
     <v-container>
-      <errors-component/>
+      <errors-component />
 
       <v-row>
         <v-col>
@@ -11,21 +11,37 @@
                 <v-row>
                   <v-col>
                     <v-autocomplete
-                        :items="teamsList"
-                        item-text="domain"
-                        item-value="id"
-                        label="Team"
-                        :value="this.teamsList.find(t => teamId == t.id)"
-                        @input="updateTeamId($event)"
+                      :items="teamsList"
+                      item-text="domain"
+                      item-value="id"
+                      label="Team"
+                      :value="this.teamsList.find(t => teamId == t.id)"
+                      @input="updateTeamId($event)"
                     >
                     </v-autocomplete>
                   </v-col>
                 </v-row>
 
-                <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
-                <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
-                <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
-                <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
+                <v-text-field
+                  label="Name"
+                  :value="name"
+                  @input="updateName($event)"
+                ></v-text-field>
+                <v-text-field
+                  label="Url"
+                  :value="url"
+                  @input="updateUrl($event)"
+                ></v-text-field>
+                <v-text-field
+                  label="Telephone"
+                  :value="telephone"
+                  @input="updateTelephone($event)"
+                ></v-text-field>
+                <v-text-field
+                  label="Address"
+                  :value="address"
+                  @input="updateAddress($event)"
+                ></v-text-field>
               </v-form>
             </v-card-text>
             <v-card-actions>
@@ -39,84 +55,84 @@
 </template>
 
 <script lang="ts">
-  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
-  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-  import Vue from "vue";
-  import {Prop} from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import DishesApiConnector from "../../lib/DishesApiConnector";
-  import ApiConnector from "../../lib/ApiConnector";
-  import router from '../../router/index'
-import { Team } from '@/frontend-client';
+import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
+import ViewWrapper from "@/views/commons/ViewWrapper.vue";
+import Vue from "vue";
+import { Prop } from "vue-property-decorator";
+import Component from "vue-class-component";
+import DishesApiConnector from "../../lib/DishesApiConnector";
+import ApiConnector from "../../lib/ApiConnector";
+import router from "../../router/index";
+import { Team } from "@/frontend-client";
 
-  @Component({
-    components: {
-      ViewWrapper,
-      ErrorsComponent,
-    }
-  })
-  export default class RestaurantCreateForm extends Vue {
-    @Prop() restaurantName!: string;
-
-    teamsList: Team[] = [];
-
-    teamId: string = '';
-    name: string = '';
-    url: string = '';
-    telephone: string = '';
-    address: string = '';
-
-    connector?: DishesApiConnector;
-
-    mounted() {
-
-      this.connector = new DishesApiConnector(this.$store.state)
-
-      this.connector.createRestaurant()
-        .then((response) => {
-
-          this.teamsList = response.teamsList;
-          this.teamId = response.teamsList && response.teamsList[0] && response.teamsList[0].id || "";
-        });
-
-      document.title = `Create restaurant | Alt Szama`
-    }
-
-    submitForm() {
-      const restaurant = {
-        teamId: this.teamId,
-        name: this.name,
-        url: this.url,
-        telephone: this.telephone,
-        address: this.address,
-      };
-
-      this.connector!.saveRestaurant(restaurant)
-        .then(() => router.push("/restaurants"))
-        .catch(errResponse => ApiConnector.handleError(errResponse));
-    }
-
-    updateName(newValue: string) {
-      this.name = newValue;
-    }
-
-    updateUrl(newValue: string) {
-      this.url = newValue;
-    }
-
-    updateTelephone(newValue: string) {
-      this.telephone = newValue;
-    }
-
-    updateAddress(newValue: string) {
-      this.address = newValue;
-    }
-
-    updateTeamId(newValue: string) {
-      this.teamId = newValue;
-    }
+@Component({
+  components: {
+    ViewWrapper,
+    ErrorsComponent
   }
+})
+export default class RestaurantCreateForm extends Vue {
+  @Prop() restaurantName!: string;
+
+  teamsList: Team[] = [];
+
+  teamId = "";
+  name = "";
+  url = "";
+  telephone = "";
+  address = "";
+
+  connector?: DishesApiConnector;
+
+  mounted() {
+    this.connector = new DishesApiConnector(this.$store.state);
+
+    this.connector.createRestaurant().then(response => {
+      this.teamsList = response.teamsList;
+      this.teamId =
+        (response.teamsList &&
+          response.teamsList[0] &&
+          response.teamsList[0].id) ||
+        "";
+    });
+
+    document.title = `Create restaurant | Alt Szama`;
+  }
+
+  submitForm() {
+    const restaurant = {
+      teamId: this.teamId,
+      name: this.name,
+      url: this.url,
+      telephone: this.telephone,
+      address: this.address
+    };
+
+    this.connector!.saveRestaurant(restaurant)
+      .then(() => router.push("/restaurants"))
+      .catch(errResponse => ApiConnector.handleError(errResponse));
+  }
+
+  updateName(newValue: string) {
+    this.name = newValue;
+  }
+
+  updateUrl(newValue: string) {
+    this.url = newValue;
+  }
+
+  updateTelephone(newValue: string) {
+    this.telephone = newValue;
+  }
+
+  updateAddress(newValue: string) {
+    this.address = newValue;
+  }
+
+  updateTeamId(newValue: string) {
+    this.teamId = newValue;
+  }
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

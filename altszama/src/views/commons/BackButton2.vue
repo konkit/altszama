@@ -5,16 +5,16 @@
 </template>
 
 <script lang="ts">
-  import Vue from "vue";
-  import {Prop} from "vue-property-decorator";
-  import Component from "vue-class-component";
+import Vue from "vue";
+import { Prop } from "vue-property-decorator";
+import Component from "vue-class-component";
 
-  @Component({})
-  export default class BackButton extends Vue {
-    @Prop() href!: string;
+@Component({})
+export default class BackButton extends Vue {
+  @Prop() href!: string;
 
-    followLink() {
-      location.href = this.href;
-    }
+  followLink() {
+    location.href = this.href;
   }
+}
 </script>

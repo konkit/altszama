@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-list two-line>
-      <template v-for="[category, dishes] in Object.entries(this.dishesByCategory)">
+      <template
+        v-for="[category, dishes] in Object.entries(this.dishesByCategory)"
+      >
         <v-subheader :key="category">
-          <span v-if="category">
-            Category: {{category}}
-          </span>
+          <span v-if="category"> Category: {{ category }} </span>
           <span v-else>
             Uncategorized
           </span>
@@ -15,32 +15,42 @@
           <v-list-item :key="dish.id">
             <v-list-item-content>
               <v-list-item-title>
-                {{dish.name}} (
+                {{ dish.name }} (
                 <price :data-price="dish.price"></price>
                 )
               </v-list-item-title>
 
               <v-list-item-subtitle>
-              <span v-if="dish.lastCrawled != null">
-                auto-updated {{ dateToRel(dish.lastCrawled) }}
-              </span>
+                <span v-if="dish.lastCrawled != null">
+                  auto-updated {{ dateToRel(dish.lastCrawled) }}
+                </span>
 
                 <span v-if="dish.lastCrawled == null">
-                updated manually
-              </span>
+                  updated manually
+                </span>
               </v-list-item-subtitle>
             </v-list-item-content>
 
             <v-list-item-action>
-            <span class="edit-buttons">
-              <v-btn text icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-              </v-btn>
+              <span class="edit-buttons">
+                <v-btn
+                  text
+                  icon
+                  :href="
+                    '#/restaurants/' +
+                      restaurant.id +
+                      '/dishes/' +
+                      dish.id +
+                      '/edit'
+                  "
+                >
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                </v-btn>
 
-              <v-btn text icon @click="deleteDish(dish.id)">
-                <i class="fa fa-times" aria-hidden="true"></i>
-              </v-btn>
-            </span>
+                <v-btn text icon @click="deleteDish(dish.id)">
+                  <i class="fa fa-times" aria-hidden="true"></i>
+                </v-btn>
+              </span>
             </v-list-item-action>
           </v-list-item>
         </template>
@@ -50,33 +60,33 @@
 </template>
 
 <script lang="ts">
-  import Price from '../../commons/PriceElement.vue'
-  import Vue from 'vue'
-  import {Prop} from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import {DishDto, Restaurant} from "../../../frontend-client";
+import Price from "../../commons/PriceElement.vue";
+import Vue from "vue";
+import { Prop } from "vue-property-decorator";
+import Component from "vue-class-component";
+import { DishDto, Restaurant } from "../../../frontend-client";
 
-  @Component({
-    components: {
-      Price,
-    },
-  })
-  export default class ShowRestaurantDishesTable extends Vue {
-    @Prop() restaurant!: Restaurant;
-    @Prop() dishesByCategory!: {[key: string]: Array<DishDto>};
-
-    mounted() {
-      console.log("Dishes by category: ", this.dishesByCategory)
-    }
+@Component({
+  components: {
+    Price
   }
+})
+export default class ShowRestaurantDishesTable extends Vue {
+  @Prop() restaurant!: Restaurant;
+  @Prop() dishesByCategory!: { [key: string]: Array<DishDto> };
+
+  mounted() {
+    console.log("Dishes by category: ", this.dishesByCategory);
+  }
+}
 </script>
 
 <style scoped>
-  .table td {
-    vertical-align: middle;
-  }
+.table td {
+  vertical-align: middle;
+}
 
-  .edit-buttons {
-    margin-left: auto;
-  }
+.edit-buttons {
+  margin-left: auto;
+}
 </style>
