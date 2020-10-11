@@ -1,6 +1,6 @@
 # AltSzama - when Google Sheet is not enough
 
-App written in Spring Boot + Vue 2 + MongoDB + Google Login. Its purpose is to help order food for bigger group of people.
+App written in Spring Boot + Vue.js + MongoDB + Google Login. Its purpose is to help order food for bigger group of people.
 
 ### How to run dev environment ?
 
