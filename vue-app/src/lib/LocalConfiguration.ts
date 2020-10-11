@@ -1,8 +1,7 @@
-import {Configuration} from "@/frontend-client";
-import {RootState} from "@/store";
+import { Configuration } from "@/frontend-client";
+import { RootState } from "@/store";
 
 export default class LocalConfiguration {
-
   private state: RootState;
 
   constructor(state: RootState) {
@@ -10,7 +9,11 @@ export default class LocalConfiguration {
   }
 
   createConfiguration() {
-    const currentDomain = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+    const currentDomain =
+      location.protocol +
+      "//" +
+      location.hostname +
+      (location.port ? ":" + location.port : "");
     const backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
 
     return new Configuration({

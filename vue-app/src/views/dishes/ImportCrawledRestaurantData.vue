@@ -5,21 +5,27 @@
         <v-flex xs10>
           <v-card>
             <v-card-text>
-              <errors-component/>
+              <errors-component />
 
               <v-layout>
-                <a href="/static/example.json" download>Download JSON template</a>
+                <a href="/static/example.json" download
+                  >Download JSON template</a
+                >
               </v-layout>
 
               <v-layout>
                 Upload file:
 
-                <fileupload :target="this.getUploadUrl()" action="POST" @progress="progress" @start="startUpload"
-                            @finish="finishUpload"></fileupload>
+                <fileupload
+                  :target="this.getUploadUrl()"
+                  action="POST"
+                  @progress="progress"
+                  @start="startUpload"
+                  @finish="finishUpload"
+                ></fileupload>
 
-                <p>Status: {{uploadState}}</p>
+                <p>Status: {{ uploadState }}</p>
               </v-layout>
-
             </v-card-text>
           </v-card>
         </v-flex>
@@ -29,44 +35,44 @@
 </template>
 
 <script>
-  import ApiConnector from '../../lib/ApiConnector'
-  import FileUpload from 'vue-simple-upload/dist/FileUpload'
-  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
+import ApiConnector from "../../lib/ApiConnector";
+import FileUpload from "vue-simple-upload/dist/FileUpload";
+import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 
-  export default {
-    data() {
-      return {
-        uploadState: ""
-      }
+export default {
+  data() {
+    return {
+      uploadState: ""
+    };
+  },
+  methods: {
+    getUploadUrl: () => ApiConnector.getBackendUrl() + "/restaurantImport",
+    startUpload: e => {
+      // file upload start event
+      console.log("startUpload", e);
+      this.uploadState = "Starting upload";
     },
-    methods: {
-      getUploadUrl: () => ApiConnector.getBackendUrl() + '/restaurantImport',
-      startUpload: (e) => {
-        // file upload start event
-        console.log("startUpload", e);
-        this.uploadState = "Starting upload"
-      },
-      finishUpload: (e) => {
-        // file upload finish event
-        console.log("finishUpload", e);
-        this.uploadState = "Upload finished"
-      },
-      progress: (e) => {
-        // file upload progress
-        // returns false if progress is not computable
-        console.log("Progress", e);
-        this.uploadState = "Progress = " + e
-      }
+    finishUpload: e => {
+      // file upload finish event
+      console.log("finishUpload", e);
+      this.uploadState = "Upload finished";
     },
-    components: {
-      ViewWrapper,
-      'fileupload': FileUpload,
-    },
+    progress: e => {
+      // file upload progress
+      // returns false if progress is not computable
+      console.log("Progress", e);
+      this.uploadState = "Progress = " + e;
+    }
+  },
+  components: {
+    ViewWrapper,
+    fileupload: FileUpload
   }
+};
 </script>
 
 <style scoped>
-  .layout {
-    margin-top: 2rem;
-  }
+.layout {
+  margin-top: 2rem;
+}
 </style>

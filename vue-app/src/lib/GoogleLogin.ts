@@ -1,62 +1,79 @@
-const gapiUrl = 'https://apis.google.com/js/api:client.js';
+const gapiUrl = "https://apis.google.com/js/api:client.js";
 
-export default {
-  load () {
-    return new Promise((resolve, reject) => {
-      if (window.gapi === undefined) {
-        installClient()
-            .then(() => initClient())
-            .then(() => { resolve() })
-      } else if (window.gapi !== undefined && window.gapi.auth2 === undefined) {
-        initClient()
-          .then(() => { resolve() })
-      } else {
-        resolve()
-      }}
-    )
-  },
+const gapi = () => (window as any).gapi as any;
 
-  signIn () {
-    return new Promise((resolve, reject) => {
-      window.gapi.auth2.getAuthInstance().grantOfflineAccess( { redirect_uri: 'postmessage' } )
-        .then((response) => resolve(response.code))
-        .catch((error) => reject(error))
-    })
-  },
-
-  signOut (successCallback, errorCallback) {
-    if (window.gapi && window.gapi.auth2) {
-      window.gapi.auth2.getAuthInstance().signOut()
-        .then(() => successCallback(), () => errorCallback(error)) 
-    } else {
-      // no window.gapi object, just assume we are logged out
-      successCallback()
-    }
-  }
-}
-
-function installClient () {
+function installClient() {
   return new Promise((resolve, reject) => {
-    var script = document.createElement('script')
-    script.src = gapiUrl
+    const script = document.createElement("script") as any;
+    script.src = gapiUrl;
     script.onreadystatechange = script.onload = () => {
-      if (!script.readyState || /loaded|complete/.test(script.readyState)) {
-        setTimeout(() => { resolve() }, 500)
+      const readyState: any = (script as any).readyState;
+      if (!readyState || /loaded|complete/.test(readyState)) {
+        setTimeout(() => {
+          resolve();
+        }, 500);
       }
-    }
-    document.getElementsByTagName('head')[0].appendChild(script)
-  })
+    };
+    document.getElementsByTagName("head")[0].appendChild(script);
+  });
 }
 
-function initClient () {
+function initClient() {
   const googleConfig = {
-    client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID
+    "client_id": process.env.VUE_APP_GOOGLE_CLIENT_ID
   };
 
   return new Promise((resolve, reject) => {
-    window.gapi.load('auth2', () => {
-      window.gapi.auth2.init(googleConfig)
-      resolve()
-    })
-  })
+    gapi().load("auth2", () => {
+      gapi().auth2.init(googleConfig);
+      resolve();
+    });
+  });
 }
+
+export default {
+  load() {
+    return new Promise((resolve, reject) => {
+      if (gapi() === undefined) {
+        installClient()
+          .then(() => initClient())
+          .then(() => {
+            resolve();
+          });
+      } else if (gapi() !== undefined && gapi().auth2 === undefined) {
+        initClient().then(() => {
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    });
+  },
+
+  signIn(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      gapi().auth2
+        .getAuthInstance()
+        .grantOfflineAccess({ "redirect_uri": "postmessage" })
+        .then((response: any) => resolve(response.code as string))
+        .catch((error: any) => reject(error));
+    });
+  },
+
+  signOut(successCallback: any, errorCallback: any) {
+    if (gapi() && gapi().auth2) {
+      const signOutResult: Promise<any> = gapi().auth2
+        .getAuthInstance()
+        .signOut()
+
+      signOutResult
+        .then(
+          () => successCallback(),
+          error => errorCallback(error)
+        );
+    } else {
+      // no gapi object, just assume we are logged out
+      successCallback();
+    }
+  }
+};

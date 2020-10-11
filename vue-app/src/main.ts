@@ -1,42 +1,33 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import VueResource from 'vue-resource'
-import VueNumeric from 'vue-numeric'
-import vuetify from './plugins/vuetify';
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import VueResource from "vue-resource";
+import VueNumeric from "vue-numeric";
+import vuetify from "./plugins/vuetify";
 import Vuex from "vuex";
-
 Vue.use(VueResource);
 Vue.use(VueNumeric);
 Vue.use(Vuex);
-
-router.beforeEach((to, from, next) => {
+router.beforeEach(function(to, from, next) {
   document.title = "Alt Szama";
-  next()
+  next();
 });
-
 // CSS libs
-import 'font-awesome/css/font-awesome.css';
-import './assets/main-styles.css'
-import './assets/global-styles.css'
-
-import Raven from 'raven-js';
-import RavenVue from 'raven-js/plugins/vue';
-
+import "font-awesome/css/font-awesome.css";
+import "./assets/main-styles.css";
+import "./assets/global-styles.css";
+import Raven from "raven-js";
+import RavenVue from "raven-js/plugins/vue";
 if (process.env.VUE_APP_SENTRY_URL) {
-  Raven
-    .config(process.env.VUE_APP_SENTRY_URL)
+  Raven.config(process.env.VUE_APP_SENTRY_URL)
     .addPlugin(RavenVue, Vue)
     .install();
-
 }
-
 Vue.config.productionTip = false;
-
-Vue.config.errorHandler = (err, vm, info) => {
+Vue.config.errorHandler = function(err, vm, info) {
   console.error(err, vm, info);
   if (process.env.VUE_APP_SENTRY_URL) {
     const options = {
@@ -44,26 +35,28 @@ Vue.config.errorHandler = (err, vm, info) => {
         state: JSON.stringify(store.state)
       }
     };
-
-    Raven.captureException(err, options)
+    Raven.captureException(err, options);
   }
 };
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/custom-service-worker.js').then(registration => {
-    }, err => {
-      console.log('ServiceWorker registration failed: ', err);
-    });
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("/custom-service-worker.js").then(
+      function(registration) {
+        console.log("ServiceWorker registered")
+      },
+      function(err) {
+        console.log("ServiceWorker registration failed: ", err);
+      }
+    );
   });
 }
-
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
+  el: "#app",
+  router: router,
+  store: store,
   vuetify: vuetify,
-  template: '<App/>',
-  components: { App }
+  template: "<App/>",
+  components: { App: App }
 });
+//# sourceMappingURL=main.js.map

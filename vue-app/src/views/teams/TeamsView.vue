@@ -9,9 +9,9 @@
         </v-row>
 
         <!--<v-row>-->
-          <!--<v-col>-->
-            <!--<v-btn class="button" @click="goToCreateTeam()">Create team</v-btn>-->
-          <!--</v-col>-->
+        <!--<v-col>-->
+        <!--<v-btn class="button" @click="goToCreateTeam()">Create team</v-btn>-->
+        <!--</v-col>-->
         <!--</v-row>-->
 
         <v-row>
@@ -19,8 +19,8 @@
             <h3>All teams</h3>
             <div>
               <div v-for="(team, i) in allTeams" :key="'allTeam-' + team.id">
-                <div>{{i + 1}}. Team:</div>
-                <div>{{team.domain}}</div>
+                <div>{{ i + 1 }}. Team:</div>
+                <div>{{ team.domain }}</div>
               </div>
             </div>
           </v-col>
@@ -31,9 +31,12 @@
             <h3>Your teams</h3>
 
             <div>
-              <div v-for="(userTeam, i) in userTeams" :key="'userTeam-' + userTeam.id">
-                <div>{{i + 1}}. Team:</div>
-                <div>{{userTeam.domain}}</div>
+              <div
+                v-for="(userTeam, i) in userTeams"
+                :key="'userTeam-' + userTeam.id"
+              >
+                <div>{{ i + 1 }}. Team:</div>
+                <div>{{ userTeam.domain }}</div>
               </div>
             </div>
           </v-col>
@@ -50,47 +53,45 @@
 </template>
 
 <script lang="ts">
-  import Vue from "vue";
-  import Component from "vue-class-component";
-  import TeamsApiConnector from "../../lib/TeamsApiConnector";
-  import {Team} from "../../frontend-client";
-  import LoadingView from "@/views/commons/LoadingView.vue"
-  import ErrorsComponent from '@/views/commons/ErrorsComponent.vue'
-  import ViewWrapper from "@/views/commons/ViewWrapper.vue";
+import Vue from "vue";
+import Component from "vue-class-component";
+import TeamsApiConnector from "../../lib/TeamsApiConnector";
+import { Team } from "../../frontend-client";
+import LoadingView from "@/views/commons/LoadingView.vue";
+import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
+import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 
-  @Component({
-    components: {
-      ViewWrapper,
-      LoadingView,
-      ErrorsComponent,
-    }
-  })
-  export default class TeamsView extends Vue {
-
-    allTeams: Team[] = [];
-    userTeams: Team[] = [];
-
-    connector?: TeamsApiConnector;
-
-    mounted() {
-      this.connector = new TeamsApiConnector(this.$store.state)
-
-      this.connector.getAllTeams().then((allTeams) => {
-        this.allTeams = allTeams;
-
-        this.connector.getForUser().then((userTeams) => {
-          this.userTeams = userTeams;
-
-          this.$store.commit('setLoadingFalse');
-          document.title = `Teams | Alt Szama`;
-        })
-      })
-    }
-
-    goToCreateTeam() {
-      this.$router.push("/teams/create")
-    }
-
+@Component({
+  components: {
+    ViewWrapper,
+    LoadingView,
+    ErrorsComponent
   }
-</script>
+})
+export default class TeamsView extends Vue {
+  allTeams: Team[] = [];
+  userTeams: Team[] = [];
 
+  connector?: TeamsApiConnector;
+
+  mounted() {
+    const connector = new TeamsApiConnector(this.$store.state);
+    this.connector = connector;
+
+    this.connector.getAllTeams().then(allTeams => {
+      this.allTeams = allTeams;
+
+      connector.getForUser().then(userTeams => {
+        this.userTeams = userTeams;
+
+        this.$store.commit("setLoadingFalse");
+        document.title = `Teams | Alt Szama`;
+      });
+    });
+  }
+
+  goToCreateTeam() {
+    this.$router.push("/teams/create");
+  }
+}
+</script>

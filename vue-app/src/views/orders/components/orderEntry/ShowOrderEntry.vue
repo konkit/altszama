@@ -10,11 +10,14 @@
 
             <div class="dish-price">
               (
-              <price :data-price="dishEntry.price"/>
+              <price :data-price="dishEntry.price" />
               )
             </div>
 
-            <div class="edit-buttons" v-if="(isOrderEntryOwner()) && order.orderState === 'CREATED'">
+            <div
+              class="edit-buttons"
+              v-if="isOrderEntryOwner() && order.orderState === 'CREATED'"
+            >
               <v-btn text icon @click="editDishEntry()">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </v-btn>
@@ -31,12 +34,11 @@
         <v-list-item :key="i">
           <v-list-item-content>
             <div class="side-dish-name-and-price">
-              <div class="side-dish-name">
-                + {{sideDish.name}}
-              </div>
+              <div class="side-dish-name">+ {{ sideDish.name }}</div>
 
-              <div class="side-dish-price"> &nbsp; (
-                <price :data-price="sideDish.price"/>
+              <div class="side-dish-price">
+                &nbsp; (
+                <price :data-price="sideDish.price" />
                 )
               </div>
             </div>
@@ -48,7 +50,7 @@
         <v-list-item>
           <v-list-item-content>
             <div class="dish-comments py-2">
-              Additional comments: {{dishEntry.comments}}
+              Additional comments: {{ dishEntry.comments }}
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -58,103 +60,115 @@
 </template>
 
 <script lang="ts">
-  import Price from '../../../commons/PriceElement.vue'
-  import {
-    DELETE_DISH_ENTRY_ACTION,
-    NAMESPACE_SHOW_ORDER,
-    ShowOrderState
-  } from "../../../../store/modules/ShowOrderModule";
-  import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "../../../../store/modules/ModifyOrderEntryModule";
-  import Component from "vue-class-component";
-  import {Prop} from "vue-property-decorator";
-  import Vue from "vue";
-  import {ParticipantsDishEntry, ParticipantsOrderEntry} from "../../../../frontend-client";
+import Price from "../../../commons/PriceElement.vue";
+import {
+  DELETE_DISH_ENTRY_ACTION,
+  NAMESPACE_SHOW_ORDER,
+  ShowOrderState
+} from "../../../../store/modules/ShowOrderModule";
+import {
+  NAMESPACE_MODIFY_ORDER_ENTRY,
+  SET_DISH_ENTRY_EDITING
+} from "../../../../store/modules/ModifyOrderEntryModule";
+import Component from "vue-class-component";
+import { Prop } from "vue-property-decorator";
+import Vue from "vue";
+import {
+  ParticipantsDishEntry,
+  ParticipantsOrderEntry
+} from "../../../../frontend-client";
 
-  @Component({
-    components: {
-      Price
-    }
-  })
-  export default class ShowOrderEntry extends Vue {
-    @Prop() index!: number;
-    @Prop() orderEntry!: ParticipantsOrderEntry;
-    @Prop() dishEntry!: ParticipantsDishEntry;
-    @Prop() currentUserId!: string;
-
-    get order() {
-      let showOrderState: ShowOrderState = this.$store.state.showOrder;
-      return showOrderState.order;
-    }
-
-    isOrderOwner() {
-      return this.order.orderCreatorId === this.currentUserId
-    }
-
-    isOrderEntryOwner() {
-      return this.orderEntry.userId === this.currentUserId
-    }
-
-    editDishEntry() {
-      this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`, {
-        orderEntryId: this.orderEntry.id,
-        dishEntryId: this.dishEntry.id
-      })
-    }
-
-    deleteDishEntry() {
-      this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`, {
-        orderEntryId: this.orderEntry.id,
-        dishEntryId: this.dishEntry.id
-      });
-    }
+@Component({
+  components: {
+    Price
   }
+})
+export default class ShowOrderEntry extends Vue {
+  @Prop() index!: number;
+  @Prop() orderEntry!: ParticipantsOrderEntry;
+  @Prop() dishEntry!: ParticipantsDishEntry;
+  @Prop() currentUserId!: string;
+
+  get order() {
+    const showOrderState: ShowOrderState = this.$store.state.showOrder;
+    return showOrderState.order;
+  }
+
+  isOrderOwner() {
+    return this.order.orderCreatorId === this.currentUserId;
+  }
+
+  isOrderEntryOwner() {
+    return this.orderEntry.userId === this.currentUserId;
+  }
+
+  editDishEntry() {
+    this.$store.commit(
+      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`,
+      {
+        orderEntryId: this.orderEntry.id,
+        dishEntryId: this.dishEntry.id
+      }
+    );
+  }
+
+  deleteDishEntry() {
+    this.$store.dispatch(
+      `${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`,
+      {
+        orderEntryId: this.orderEntry.id,
+        dishEntryId: this.dishEntry.id
+      }
+    );
+  }
+}
 </script>
 
 <style scoped>
-  .dish-name-and-edit-buttons {
-    display: flex;
-    flex-direction: row;
-    max-width: 100%;
-    line-height: 36px;
-  }
+.dish-name-and-edit-buttons {
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+  line-height: 36px;
+}
 
-  .dish-name-text {
-    display: block;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.dish-name-text {
+  display: block;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .dish-price {
-    white-space: nowrap;
-    padding-left: 5px;
-  }
+.dish-price {
+  white-space: nowrap;
+  padding-left: 5px;
+}
 
-  .side-dish-name-and-price {
-    max-width: 100%;
-    display: flex;
-    flex-direction: row;
-  }
+.side-dish-name-and-price {
+  max-width: 100%;
+  display: flex;
+  flex-direction: row;
+}
 
-  .side-dish-name {
-    margin-top: 0;
-    margin-bottom: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
+.side-dish-name {
+  margin-top: 0;
+  margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
 
-  .side-dish-price {
-    white-space: nowrap;
-  }
+.side-dish-price {
+  white-space: nowrap;
+}
 
-  .show-order-entry-wrapper {
-    max-width: 100%;
-  }
+.show-order-entry-wrapper {
+  max-width: 100%;
+}
 
-  .edit-buttons {
-    min-width: 72px;
-  }
+.edit-buttons {
+  min-width: 72px;
+}
 </style>
