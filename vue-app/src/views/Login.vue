@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import ApiConnector from "../lib/ApiConnector";
+import JsApiConnector from "../lib/JsApiConnector";
 import GoogleLogin from "../lib/GoogleLogin";
 
 export default {
@@ -72,7 +72,7 @@ export default {
           returnPath = this.$route.query.returnPath;
         }
 
-        ApiConnector.loginWithGoogle(returnPath).catch(e => {
+        JsApiConnector.loginWithGoogle(returnPath).catch(e => {
           this.errors.push(e);
           this.loginPending = false;
         });

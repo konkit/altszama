@@ -1,6 +1,6 @@
 const gapiUrl = "https://apis.google.com/js/api:client.js";
 
-const gapi = (window as any).gapi as any;
+const gapi = () => (window as any).gapi as any;
 
 function installClient() {
   return new Promise((resolve, reject) => {
@@ -24,8 +24,8 @@ function initClient() {
   };
 
   return new Promise((resolve, reject) => {
-    gapi.load("auth2", () => {
-      gapi.auth2.init(googleConfig);
+    gapi().load("auth2", () => {
+      gapi().auth2.init(googleConfig);
       resolve();
     });
   });
@@ -34,13 +34,13 @@ function initClient() {
 export default {
   load() {
     return new Promise((resolve, reject) => {
-      if (gapi === undefined) {
+      if (gapi() === undefined) {
         installClient()
           .then(() => initClient())
           .then(() => {
             resolve();
           });
-      } else if (gapi !== undefined && gapi.auth2 === undefined) {
+      } else if (gapi() !== undefined && gapi().auth2 === undefined) {
         initClient().then(() => {
           resolve();
         });
@@ -52,7 +52,7 @@ export default {
 
   signIn(): Promise<string> {
     return new Promise((resolve, reject) => {
-      gapi.auth2
+      gapi().auth2
         .getAuthInstance()
         .grantOfflineAccess({ "redirect_uri": "postmessage" })
         .then((response: any) => resolve(response.code as string))
@@ -61,8 +61,8 @@ export default {
   },
 
   signOut(successCallback: any, errorCallback: any) {
-    if (gapi && gapi.auth2) {
-      const signOutResult: Promise<any> = gapi.auth2
+    if (gapi() && gapi().auth2) {
+      const signOutResult: Promise<any> = gapi().auth2
         .getAuthInstance()
         .signOut()
 
