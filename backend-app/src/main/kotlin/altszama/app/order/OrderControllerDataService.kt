@@ -53,7 +53,12 @@ class OrderControllerDataService {
   }
 
   fun getAllOrdersData(): AllOrdersResponse {
-    return AllOrdersResponse.fromOrderList(orderRepository.findAll().asReversed())
+    val currentUser = authService.currentUser()
+    val teams = teamService.getForUser(currentUser)
+
+    val orderList = teams.flatMap { team -> orderRepository.findByTeam(team) }
+
+    return AllOrdersResponse.fromOrderList(orderList.asReversed())
   }
 
   fun getShowData(orderId: String): ShowOrderResponse {
