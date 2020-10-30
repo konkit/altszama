@@ -53,9 +53,11 @@ import ApiConnector from "../../lib/ApiConnector";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import { RootState } from "../../store";
 import { AllOrdersOrderDto } from "../../frontend-client";
+import Navigation from "@/views/commons/Navigation.vue";
 
 @Component({
   components: {
+    Navigation,
     ViewWrapper,
     LoadingView
   }

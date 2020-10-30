@@ -1,5 +1,5 @@
 <template>
-  <div v-if="shouldDisplayNavigation()">
+  <div v-if="shouldDisplayNavigation">
     <v-navigation-drawer
       app
       :value="masterNavDrawerOpened"
@@ -69,7 +69,7 @@ import ApiConnector from "../../lib/ApiConnector";
 import Vue from "vue";
 import Component from "vue-class-component";
 
-@Component({})
+@Component({name: "Navigation"})
 export default class Navigation extends Vue {
   get username() {
     return this.$store.state.username;
@@ -79,7 +79,7 @@ export default class Navigation extends Vue {
     return this.$store.state.masterNavDrawerOpened;
   }
 
-  shouldDisplayNavigation() {
+  get shouldDisplayNavigation() {
     return this.$route.name !== "Login";
   }
 

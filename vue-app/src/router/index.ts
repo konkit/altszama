@@ -18,20 +18,41 @@ import DishEditForm from "../views/dishes/DishEditForm.vue";
 import ImportCrawledRestaurantData from "../views/dishes/ImportCrawledRestaurantData.vue";
 import TeamsView from "@/views/teams/TeamsView.vue";
 import CreateTeamForm from "@/views/teams/CreateTeamForm.vue";
+import LoginIndexLayout from "@/views/landing/layouts/home/Index.vue";
+import LoginIndexView from '@/views/landing/views/home/Index.vue';
+import VueWithNavigation from "@/views/ViewWithNavigation.vue";
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
+    // {
+    //   path: "/",
+    //   name: "Login",
+    //   component: Login
+    // },
     {
-      path: "/",
+      path: '/',
       name: "Login",
-      component: Login
+      component: LoginIndexLayout,
+      children: [
+        {
+          path: '',
+          name: 'Home',
+          component: LoginIndexView,
+        },
+      ]
     },
     {
       path: "/orders",
       name: "TodayOrders",
-      component: TodayOrders
+      component: VueWithNavigation,
+      children: [
+        {
+          path: '',
+          component: TodayOrders,
+        }
+      ]
     },
     {
       path: "/orders/show/:id",

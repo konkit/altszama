@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Navigation></Navigation>
+    <Navigation v-if="shouldDisplayNavigation"></Navigation>
 
     <router-view></router-view>
   </v-app>
@@ -21,12 +21,15 @@
       },
       masterNavDrawerOpened() {
         return this.$store.state.masterNavDrawerOpened
-      }
-    },
-    methods: {
+      },
       shouldDisplayNavigation() {
         return this.$route.name !== "Login"
       },
+    },
+    methods: {
+      // shouldDisplayNavigation() {
+      //   return this.$route.name !== "Login"
+      // },
       logout() {
         ApiConnector.logout();
       },
@@ -44,4 +47,5 @@
 </script>
 
 <style scoped>
+
 </style>

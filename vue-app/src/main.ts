@@ -7,6 +7,9 @@ import store from "./store";
 import VueResource from "vue-resource";
 import VueNumeric from "vue-numeric";
 import vuetify from "./plugins/vuetify";
+
+import './plugins'
+
 import Vuex from "vuex";
 Vue.use(VueResource);
 Vue.use(VueNumeric);
