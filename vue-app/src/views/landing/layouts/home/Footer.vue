@@ -11,25 +11,6 @@
           cols="12"
           md="6"
         >
-          <div class="d-flex flex-wrap justify-md-start justify-center justify-md-none">
-            <template v-for="(s, i) in social">
-              <a
-                :key="s"
-                class="white--text pa-1 pa-md-0"
-                href="#"
-                v-text="s"
-              />
-
-              <v-responsive
-                v-if="i < social.length - 1"
-                :key="`divider-${s}`"
-                class="mx-4 shrink hidden-sm-and-down"
-                max-height="24"
-              >
-                <v-divider vertical />
-              </v-responsive>
-            </template>
-          </div>
         </v-col>
 
         <v-col

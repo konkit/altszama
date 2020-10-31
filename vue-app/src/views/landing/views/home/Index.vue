@@ -1,38 +1,33 @@
+<template>
+  <section>
+    <v-row no-gutters>
+      <v-col cols="12">
+        <SectionHero></SectionHero>
+        <SectionThemeFeatures></SectionThemeFeatures>
+        <SectionFeatures></SectionFeatures>
+        <SectionBusinessInfo></SectionBusinessInfo>
+      </v-col>
+    </v-row>
+  </section>
+</template>
 
 <script>
-  // Extensions
-  import View from '@/views/landing/views/View'
 
-  // Mixins
-  import LoadSections from '@/views/landing/mixins/load-sections'
+  import SectionBusinessInfo from "@/views/landing/views/sections/Info";
+  import SectionFeatures from "@/views/landing/views/sections/Features";
+  import SectionThemeFeatures from "@/views/landing/views/sections/ThemeFeatures";
+  import SectionHero from "@/views/landing/views/sections/Hero";
 
   export default {
     name: 'Home',
 
     metaInfo: { title: 'Home' },
 
-    extends: View,
-
-    mixins: [
-      LoadSections([
-        'hero',
-        'theme-features',
-        'features',
-        'contact-us',
-        'affiliates',
-        'social-media',
-        'keep-in-touch',
-        'newsletter',
-        'pro-features',
-        'info',
-      ]),
-    ],
-
-    props: {
-      id: {
-        type: String,
-        default: 'home',
-      },
-    },
+    components: {
+      SectionBusinessInfo,
+      SectionFeatures,
+      SectionThemeFeatures,
+      SectionHero
+    }
   }
 </script>
