@@ -18,9 +18,7 @@ import DishEditForm from "../views/dishes/DishEditForm.vue";
 import ImportCrawledRestaurantData from "../views/dishes/ImportCrawledRestaurantData.vue";
 import TeamsView from "@/views/teams/TeamsView.vue";
 import CreateTeamForm from "@/views/teams/CreateTeamForm.vue";
-import LoginIndexLayout from "@/views/landing/layouts/home/Index.vue";
-import LoginIndexView from '@/views/landing/views/home/Index.vue';
-import VueWithNavigation from "@/views/ViewWithNavigation.vue";
+import LandingPage from '@/views/landing/LandingPage.vue';
 
 Vue.use(Router);
 
@@ -29,7 +27,7 @@ export default new Router({
     {
       path: '/',
       name: "Login",
-      component: LoginIndexLayout,
+      component: LandingPage,
     },
     {
       path: "/orders",

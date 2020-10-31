@@ -32,13 +32,6 @@
             >
               <info-features />
             </v-col>
-
-<!--            <v-col-->
-<!--              cols="12"-->
-<!--              md="3"-->
-<!--            >-->
-<!--&lt;!&ndash;              <instagram />&ndash;&gt;-->
-<!--            </v-col>-->
           </v-row>
         </v-container>
       </v-responsive>
@@ -51,8 +44,7 @@
     name: 'SectionBusinessInfo',
 
     components: {
-      InfoFeatures: () => import('@/views/landing/components/InfoFeatures'),
-      // Instagram: () => import('@/views/landing/components/Instagram'),
+      InfoFeatures: () => import('@/views/landing/components/sections/InfoFeatures'),
     },
   }
 </script>
