@@ -1,27 +1,31 @@
 <template>
   <v-app>
-    <home-system-bar />
+    <v-toolbar>
+      <v-toolbar-title>
+        <i class="fa fa-cutlery" aria-hidden="true"></i> Alt Szama
+      </v-toolbar-title>
+    </v-toolbar>
 
-    <home-app-bar />
-
-    <home-view />
+    <v-content>
+      <v-fade-transition mode="out-in">
+        <LoginIndexView></LoginIndexView>
+      </v-fade-transition>
+    </v-content>
 
     <home-footer />
-
-    <home-settings />
   </v-app>
 </template>
 
 <script>
+    import HomeFooter from '@/views/landing/layouts/home/Footer'
+    import LoginIndexView from '@/views/landing/views/home/Index.vue';
+
   export default {
     name: 'HomeLayout',
 
     components: {
-      HomeAppBar: () => import('@/views/landing/layouts/home/AppBar'),
-      HomeFooter: () => import('@/views/landing/layouts/home/Footer'),
-      HomeSettings: () => import('@/views/landing/layouts/home/Settings'),
-      HomeSystemBar: () => import('@/views/landing/layouts/home/SystemBar'),
-      HomeView: () => import('@/views/landing/layouts/home/View'),
+      HomeFooter: HomeFooter,
+      LoginIndexView: LoginIndexView
     },
   }
 </script>

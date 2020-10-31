@@ -35,24 +35,18 @@ export default new Router({
       path: '/',
       name: "Login",
       component: LoginIndexLayout,
-      children: [
-        {
-          path: '',
-          name: 'Home',
-          component: LoginIndexView,
-        },
-      ]
+      // children: [
+      //   {
+      //     path: '',
+      //     name: 'Home',
+      //     component: LoginIndexView,
+      //   },
+      // ]
     },
     {
       path: "/orders",
       name: "TodayOrders",
-      component: VueWithNavigation,
-      children: [
-        {
-          path: '',
-          component: TodayOrders,
-        }
-      ]
+      component: TodayOrders,
     },
     {
       path: "/orders/show/:id",

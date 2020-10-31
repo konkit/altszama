@@ -73,7 +73,7 @@ import GoogleLogin from "@/lib/GoogleLogin";
       minHeight () {
         const height = this.$vuetify.breakpoint.mdAndUp ? '100vh' : '50vh'
 
-        return `calc(${height} - ${this.$vuetify.application.top}px)`
+        return `calc(${height} - ${this.$vuetify.application.top}px - 64px)`
       },
     },
 

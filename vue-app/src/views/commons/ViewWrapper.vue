@@ -20,6 +20,8 @@
       </template>
     </v-app-bar>
 
+    <Navigation></Navigation>
+
     <v-main class="view-content">
       <div class="content-class">
         <slot></slot>
@@ -42,9 +44,10 @@ import BackButton from "./BackButton2.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import Navigation from "@/views/commons/Navigation.vue";
 
 @Component({
-  components: { BackButton }
+  components: { BackButton, Navigation }
 })
 export default class ViewWrapper extends Vue {
   @Prop() title!: string;
