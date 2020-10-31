@@ -12,25 +12,20 @@
           <v-row>
             <v-col
               cols="12"
-              md="4"
+              md="6"
             >
-              <base-info />
+              <base-info-card title="INTERESTED? FEEDBACK?" />
+
+              <base-footer-info />
             </v-col>
 
             <v-col
               cols="12"
-              md="4"
+              md="6"
             >
               <base-info-card title="Contact" />
 
               <base-business-contact dense />
-            </v-col>
-
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <info-features />
             </v-col>
           </v-row>
         </v-container>
@@ -44,7 +39,6 @@
     name: 'SectionBusinessInfo',
 
     components: {
-      InfoFeatures: () => import('@/views/landing/components/sections/InfoFeatures'),
     },
   }
 </script>

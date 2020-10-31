@@ -36,8 +36,8 @@
       cards: [
         {
           icon: 'mdi-keyboard-outline',
-          title: 'Trendy Design',
-          text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
+          title: 'DRY - Don\'t Repeat Yourself',
+          text: 'You write your payment data once, everybody can just copy it and make a transfer',
         },
         {
           icon: 'mdi-camera-outline',

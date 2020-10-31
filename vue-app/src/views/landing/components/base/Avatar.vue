@@ -19,13 +19,13 @@
       v-bind="$attrs"
       v-on="$listeners"
     >
-      <base-icon
+      <v-icon
         v-if="icon"
         :dark="dark"
         :size="size / 2"
       >
         {{ icon }}
-      </base-icon>
+      </v-icon>
     </v-avatar>
   </div>
 </template>

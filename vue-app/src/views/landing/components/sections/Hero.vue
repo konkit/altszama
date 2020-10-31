@@ -1,11 +1,12 @@
 <template>
   <section id="hero">
     <v-img
-      :min-height="minHeight"
+      :height="height"
       :src="require('@/assets/lunch2.png')"
-      class="white--text"
-      gradient="to right, rgba(5, 11, 31, .8), rgba(5, 11, 31, .8)"
-    >
+      class="black--text"
+      >
+<!--      gradient="to right, rgba(5, 11, 31, .8), rgba(5, 11, 31, .8)"-->
+
       <v-container class="fill-height px-4 py-12">
         <v-responsive
           class="d-flex align-center"
@@ -13,16 +14,15 @@
           max-width="700"
           width="100%"
         >
-          <base-heading title="ALT SZAMA" />
+          <base-heading title="ORDERING FOOD AT THE OFFICE?" />
 
           <base-body>
             <p>
-            Yes! Finally a place, which will help order your lovely
-            foody-foody!
+            Hard to keep track the orders and the payments?
             </p>
 
             <p>
-              The button below will use your business Google Account to log in
+              Why don't you check out this fancy tool!
             </p>
           </base-body>
 
@@ -31,7 +31,7 @@
             class="d-flex flex-wrap"
           >
             <div v-if="loginPending == true">
-              <base-btn>Loggin in ... wait plox.</base-btn>
+              <v-btn>Loggin in ... wait plox.</v-btn>
             </div>
 
             <div v-if="loginPending == false">
@@ -70,10 +70,11 @@ import GoogleLogin from "@/lib/GoogleLogin";
     },
 
     computed: {
-      minHeight () {
+      height () {
         const height = this.$vuetify.breakpoint.mdAndUp ? '100vh' : '50vh'
 
-        return `calc(${height} - ${this.$vuetify.application.top}px - 64px)`
+        // return `calc(${height} - ${this.$vuetify.application.top}px - 64px)`
+        return `calc(${height} - 64px)`
       },
     },
 

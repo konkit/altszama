@@ -3,7 +3,6 @@
     id="home-footer"
     color="grey darken-4"
     dark
-    min-height="72"
   >
     <v-container>
       <v-row>
@@ -37,7 +36,8 @@
   }
 </script>
 
-<style lang="sass">
-  #home-footer a
-    text-decoration: none
+<style>
+  #home-footer {
+    min-height: max-content;
+  }
 </style>

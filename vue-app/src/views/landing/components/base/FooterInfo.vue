@@ -1,23 +1,21 @@
 <template>
   <v-theme-provider :dark="dark">
     <div>
-      <base-info-card
-        title="KEEP IN TOUCH WITH US"
-        pace="6"
-      >
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illo pariatur quidem, quis modi iure nihil commodi suscipit, corporis dicta adipisci, voluptatum quia cupiditate. Nulla minus voluptatum nostrum deleniti, asperiores facere.
-      </base-info-card>
-
-      <base-business-contact dense />
+      <base-body>
+        Do not hesitate to contact me!
+      </base-body>
     </div>
   </v-theme-provider>
 </template>
 
 <script>
   export default {
-    name: 'BaseBusinessInfo',
+    name: 'BaseFooterInfo',
 
-    props: { dark: Boolean },
+    props: {
+      title: String,
+      dark: Boolean,
+    },
 
     data: () => ({
       business: [
