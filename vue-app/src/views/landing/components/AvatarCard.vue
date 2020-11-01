@@ -18,6 +18,8 @@
 </template>
 
 <script>
+  import BaseAvatar from "@/views/landing/components/BaseAvatar";
+
   export default {
     name: 'AvatarCard',
 
@@ -26,5 +28,9 @@
       title: String,
       description: String,
     },
+
+    components: {
+      BaseAvatar
+    }
   }
 </script>

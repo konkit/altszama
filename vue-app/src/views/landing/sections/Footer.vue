@@ -31,6 +31,8 @@
 </script>
 
 <style>
+  @import "../variable.scss";
+
   #home-footer {
     min-height: max-content;
   }

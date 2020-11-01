@@ -17,7 +17,6 @@
     "raven-js": "^3.27.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
-    "vue-meta": "^2.4.0",
     "vue-numeric": "^2.3.0",
     "vue-property-decorator": "^8.4.2",
     "vue-resource": "^1.5.1",

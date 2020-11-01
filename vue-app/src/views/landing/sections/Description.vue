@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import AvatarCard from "@/views/landing/components/base/AvatarCard";
+import AvatarCard from "@/views/landing/components/AvatarCard";
 
 export default {
   name: 'Description',
@@ -39,32 +39,32 @@ export default {
     features: [
       {
         title: '1. Create and share a new order sheet',
-        icon: 'mdi-fountain-pen-tip',
+        icon: 'mdi-folder-plus',
         description: "Decide where are we ordering from and create a new order. Share it with your collegaues just like you would share a Google Sheet, where everybody write their choice."
       },
       {
-        title: '2. Write your choice, wait for others',
-        icon: 'mdi-cellphone',
+        title: '2. Select your food, wait for others',
+        icon: 'mdi-silverware',
         description: "Everybody write their choice."
       },
       {
         title: '3. Call the restaurant and make an order',
-        icon: 'mdi-pencil-box-outline',
-        description: "A special view simplifies the order, the same dishes are grouped, so the order making is as fast and easy",
+        icon: 'mdi-phone',
+        description: "A special view simplifies the order, the same dishes are grouped, so the order making is as fast and easy.",
       },
       {
         title: '4. Notify others when the order arrives',
-        icon: 'mdi-image-size-select-actual',
+        icon: 'mdi-bell',
         description: "Web push notifications are used to let your colleagues know, that the food has arrived.",
       },
       {
         title: '5. Payments',
-        icon: 'mdi-ice-pop',
-        description: "People make their payments. They don't ask you for your bank account etc., because it's all visible at the order page",
+        icon: 'mdi-cash',
+        description: "Your colleagues don't ask you multiple times for your bank account because all payment details are there.",
       },
       {
         title: '6. Repeat',
-        icon: 'mdi-help-circle-outline',
+        icon: 'mdi-history',
         description: "Another day, different restaurant?",
       },
     ],
@@ -85,6 +85,8 @@ export default {
 </script>
 
 <style lang="scss">
+//@import "./variable.scss";
+
 .base-body {
   max-width: 700px;
 }

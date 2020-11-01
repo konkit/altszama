@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import HomeFooter from '@/views/landing/components/sections/Footer'
-import Description from "@/views/landing/components/sections/Description";
-import SectionHero from "@/views/landing/components/sections/Hero";
+import HomeFooter from '@/views/landing/sections/Footer'
+import Description from "@/views/landing/sections/Description";
+import SectionHero from "@/views/landing/sections/Hero";
 
 export default {
   name: 'HomeLayout',
