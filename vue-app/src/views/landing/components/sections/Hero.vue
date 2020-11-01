@@ -5,7 +5,6 @@
       :src="require('@/assets/lunch2.png')"
       class="black--text"
       >
-<!--      gradient="to right, rgba(5, 11, 31, .8), rgba(5, 11, 31, .8)"-->
 
       <v-container class="fill-height px-4 py-12">
         <v-responsive
@@ -14,17 +13,10 @@
           max-width="700"
           width="100%"
         >
-          <base-heading title="ORDERING FOOD AT THE OFFICE?" />
+          <h1 class="display-2 font-weight-black mb-4 text-left">ORDERING FOOD AT THE OFFICE?</h1>
 
-          <base-body>
-            <p>
-            Hard to keep track the orders and the payments?
-            </p>
-
-            <p>
-              Why don't you check out this fancy tool!
-            </p>
-          </base-body>
+          <p class="base-body body-1">Hard to keep track the orders and the payments?</p>
+          <p class="base-body body-1">Why don't you check out this fancy tool!</p>
 
           <div
             :class="$vuetify.breakpoint.smAndDown ? 'flex-column align-start' : 'align-center'"
@@ -35,12 +27,13 @@
             </div>
 
             <div v-if="loginPending == false">
-              <base-btn
+              <v-btn
                   color="success"
                   type="submit"
                   :disabled="loginLoaded == false"
                   @click="googleSignIn"
-              >Login using Google</base-btn
+                  x-large
+              >Login using Google</v-btn
               >
             </div>
           </div>

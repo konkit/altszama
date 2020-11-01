@@ -1,88 +1,30 @@
 <template>
-  <div
-    :class="classes"
-    class="pt-2"
-  >
+  <div class="mb-8 d-flex pt-2">
     <base-avatar
-      v-if="icon"
-      :color="color"
-      :dark="dark"
-      :icon="icon"
-      :outlined="outlined"
-      :size="size"
-      class="mb-3"
+        :icon="icon"
+        :outlined="true"
+        :size="72"
+        class="mb-3"
     />
 
-    <div :class="horizontal && title && 'ml-6'">
-      <base-title
-        :title="title"
-        class="text-uppercase"
-        space="3"
-      />
+    <div class="horizontal title ml-6">
+      <h3 class="text-uppercase title font-weight-bold mb-3 text-left grey--text text--darken-1">{{title}}</h3>
 
-      <base-body
-        v-if="text || $slots.default"
-        :space="horizontal ? 0 : undefined"
-        :text="text"
-        class="mx-auto"
-        max-width="700"
-      >
-        <slot />
-      </base-body>
+      <p class="mx-auto base-body body-1 grey--text text--darken-1 mb-10">
+        {{description}}
+      </p>
     </div>
   </div>
 </template>
 
 <script>
-  // Mixins
-  import Heading from '@/views/landing/mixins/heading'
-
   export default {
-    name: 'BaseAvatarCard',
-
-    mixins: [Heading],
+    name: 'AvatarCard',
 
     props: {
-      align: {
-        type: String,
-        default: 'left',
-      },
-      color: String,
-      dark: Boolean,
-      horizontal: Boolean,
       icon: String,
-      outlined: {
-        type: Boolean,
-        default: true,
-      },
-      space: {
-        type: [Number, String],
-        default: 8,
-      },
-      size: {
-        type: [Number, String],
-        default: 72,
-      },
-      text: String,
       title: String,
-    },
-
-    computed: {
-      classes () {
-        const classes = [
-          `mb-${this.space}`,
-        ]
-
-        if (this.horizontal) {
-          classes.push('d-flex')
-
-          if (!this.$slots.default && !this.text) {
-            classes.push('align-center')
-          }
-        }
-
-        return classes
-      },
+      description: String,
     },
   }
 </script>
