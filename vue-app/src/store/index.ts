@@ -29,7 +29,7 @@ const rootState: RootState = {
   username: localStorage.getItem("username") || "",
   token: localStorage.getItem("token") || "",
   errors: [],
-  masterNavDrawerOpened: false
+  masterNavDrawerOpened: true
 } as RootState;
 
 export default new Vuex.Store({

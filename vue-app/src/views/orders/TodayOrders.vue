@@ -4,8 +4,6 @@
       <v-container>
         <v-row>
           <v-col cols="xs12">
-            <v-card>
-              <v-card-text>
                 <h1 class="mb-4">Your orders today:</h1>
 
                 <div v-if="this.currentOrderEntries.length > 0">
@@ -126,8 +124,6 @@
                     </v-list-item>
                   </template>
                 </v-list>
-              </v-card-text>
-            </v-card>
           </v-col>
         </v-row>
       </v-container>

@@ -1,43 +1,39 @@
 <template>
   <ViewWrapper :title="`Create dish`" :backpath="getBackUrl()">
     <v-container>
-      <errors-component />
+      <errors-component/>
 
       <v-row>
         <v-col>
-          <v-card>
-            <v-card-text>
-              <input type="hidden" name="restaurant.id" :value="restaurantId" />
+          <input type="hidden" name="restaurant.id" :value="restaurantId"/>
 
-              <v-text-field
-                label="Name"
-                :value="name"
-                @input="updateName($event)"
-                required=""
-              ></v-text-field>
+          <v-text-field
+              label="Name"
+              :value="name"
+              @input="updateName($event)"
+              required=""
+          ></v-text-field>
 
-              <MoneyInput
-                label="Price"
-                :value="price"
-                @input="updatePrice($event)"
-              ></MoneyInput>
+          <MoneyInput
+              label="Price"
+              :value="price"
+              @input="updatePrice($event)"
+          ></MoneyInput>
 
-              <v-combobox
-                :items="categories"
-                label="Category"
-                :value="category"
-                @input="updateCategory($event)"
-              ></v-combobox>
+          <v-combobox
+              :items="categories"
+              label="Category"
+              :value="category"
+              @input="updateCategory($event)"
+          ></v-combobox>
 
-              <div>
-                <side-dishes ref="sideDishesElement"></side-dishes>
-              </div>
-            </v-card-text>
+          <div>
+            <side-dishes ref="sideDishesElement"></side-dishes>
+          </div>
 
-            <v-card-actions>
-              <v-btn block color="success" @click="submitForm">Create</v-btn>
-            </v-card-actions>
-          </v-card>
+          <div class="mb-4">
+            <v-btn block color="success" @click="submitForm">Create</v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -53,7 +49,7 @@ import MoneyInput from "@/views/commons/MoneyInput.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 
 @Component({
   components: {
@@ -79,17 +75,17 @@ export default class DishCreateForm extends Vue {
     this.connector = new DishesApiConnector(this.$store.state);
 
     this.connector
-      .getDishCreateData(this.restaurantId)
-      .then(response => {
-        this.categories = response.categories;
-        document.title = `Create new dish | Alt Szama`;
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+        .getDishCreateData(this.restaurantId)
+        .then(response => {
+          this.categories = response.categories;
+          document.title = `Create new dish | Alt Szama`;
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 
   submitForm() {
     const sideDishesElement: SideDishes = this.$refs
-      .sideDishesElement as SideDishes;
+        .sideDishesElement as SideDishes;
     const sideDishes = sideDishesElement.getSideDishes();
 
     const dishPayload = {
@@ -101,20 +97,20 @@ export default class DishCreateForm extends Vue {
     };
 
     this.connector!.createDish(this.restaurantId, dishPayload)
-      .then(() => this.$router.push(this.getBackUrl()))
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+        .then(() => this.$router.push(this.getBackUrl()))
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;
   }
 
   getBackUrl() {
     if (
-      typeof this.$route.query.addingToOrderId !== "undefined" &&
-      this.$route.query.addingToOrderId.length > 0
+        typeof this.$route.query.addingToOrderId !== "undefined" &&
+        this.$route.query.addingToOrderId.length > 0
     ) {
-      return `/orders/${this.$route.query.addingToOrderId}/create_entry`;
+      return `#/orders/${this.$route.query.addingToOrderId}/create_entry`;
     } else {
-      return `/restaurants/show/${this.restaurantId}`;
+      return `#/restaurants/show/${this.restaurantId}`;
     }
   }
 

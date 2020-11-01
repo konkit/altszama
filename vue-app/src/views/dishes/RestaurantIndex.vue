@@ -4,57 +4,53 @@
       <v-container>
         <v-row>
           <v-col cols="xs12">
-            <v-card>
-              <v-card-text>
-                <v-data-table
-                  class="table table-hover"
-                  :items="restaurantsEntries"
-                  :headers="headers"
-                  :loading="false"
+            <v-data-table
+                class="table table-hover"
+                :items="restaurantsEntries"
+                :headers="headers"
+                :loading="false"
+            >
+              <template slot="header" slot-scope="props">
+                <tr>
+                  <th v-for="header in props.headers" :key="header.text">
+                    {{ header.text }}
+                  </th>
+                </tr>
+              </template>
+
+              <template slot="item" slot-scope="props">
+                <tr
+                    @click="goToRestaurant(props.item.id)"
+                    :key="props.item.id"
+                    :data-href="'/orders/show/' + props.item.id"
+                    class="pointer"
                 >
-                  <template slot="header" slot-scope="props">
-                    <tr>
-                      <th v-for="header in props.headers" :key="header.text">
-                        {{ header.text }}
-                      </th>
-                    </tr>
-                  </template>
+                  <td>{{ props.item.name }}</td>
+                  <td>{{ props.item.dishCount }}</td>
+                  <td>{{ dateToRel(props.item.lastCrawled) }}</td>
+                  <td>{{ dateToRel(props.item.lastEdited) }}</td>
+                </tr>
+              </template>
+            </v-data-table>
 
-                  <template slot="item" slot-scope="props">
-                    <tr
-                      @click="goToRestaurant(props.item.id)"
-                      :key="props.item.id"
-                      :data-href="'/orders/show/' + props.item.id"
-                      class="pointer"
-                    >
-                      <td>{{ props.item.name }}</td>
-                      <td>{{ props.item.dishCount }}</td>
-                      <td>{{ dateToRel(props.item.lastCrawled) }}</td>
-                      <td>{{ dateToRel(props.item.lastEdited) }}</td>
-                    </tr>
-                  </template>
-                </v-data-table>
-
-                <v-tooltip left>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      fixed
-                      dark
-                      fab
-                      large
-                      bottom
-                      right
-                      color="green"
-                      @click="goToCreateRestaurant()"
-                      v-on="on"
-                    >
-                      <v-icon>add</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Create new restaurant</span>
-                </v-tooltip>
-              </v-card-text>
-            </v-card>
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                    fixed
+                    dark
+                    fab
+                    large
+                    bottom
+                    right
+                    color="green"
+                    @click="goToCreateRestaurant()"
+                    v-on="on"
+                >
+                  <v-icon>add</v-icon>
+                </v-btn>
+              </template>
+              <span>Create new restaurant</span>
+            </v-tooltip>
           </v-col>
         </v-row>
       </v-container>
@@ -71,7 +67,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
-import { RestaurantInfo } from "../../frontend-client";
+import {RestaurantInfo} from "../../frontend-client";
 
 interface RestaurantEntry {
   id: string;
@@ -89,10 +85,10 @@ interface RestaurantEntry {
 })
 export default class RestaurantIndex extends Vue {
   headers = [
-    { text: "Restaurant name", align: "left" },
-    { text: "Dish count" },
-    { text: "Last auto-updated" },
-    { text: "Last updated manually" }
+    {text: "Restaurant name", align: "left"},
+    {text: "Dish count"},
+    {text: "Last auto-updated"},
+    {text: "Last updated manually"}
   ];
 
   restaurants: RestaurantInfo[] = [];
@@ -104,18 +100,18 @@ export default class RestaurantIndex extends Vue {
     this.connector = new DishesApiConnector(this.$store.state);
 
     this.connector
-      .getRestaurants()
-      .then(payload => {
-        this.restaurants = payload.restaurants;
-        this.restaurantsEntries = this.restaurants.map(r =>
-          this.mapToRestaurantEntry(r)
-        );
+        .getRestaurants()
+        .then(payload => {
+          this.restaurants = payload.restaurants;
+          this.restaurantsEntries = this.restaurants.map(r =>
+              this.mapToRestaurantEntry(r)
+          );
 
-        this.$store.commit("setLoadingFalse");
+          this.$store.commit("setLoadingFalse");
 
-        document.title = `Restaurants | Alt Szama`;
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+          document.title = `Restaurants | Alt Szama`;
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 
   goToRestaurant(restaurantId: string) {

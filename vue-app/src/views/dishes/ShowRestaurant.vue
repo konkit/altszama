@@ -1,80 +1,74 @@
 <template>
   <ViewWrapper
-    :title="`Restaurant ${restaurant.name}`"
-    backpath="#/restaurants"
+      :title="`Restaurant ${restaurant.name}`"
+      backpath="#/restaurants"
   >
     <template slot="toolbar-buttons">
       <v-btn @click="editRestaurant">
-        Edit restaurant&nbsp;<span class="fa fa-pencil" />
+        Edit restaurant&nbsp;<span class="fa fa-pencil"/>
       </v-btn>
 
       <v-btn color="error" @click="deleteRestaurant()">
-        Delete restaurant&nbsp;<span class="fa fa-times" />
+        Delete restaurant&nbsp;<span class="fa fa-times"/>
       </v-btn>
     </template>
 
     <LoadingView>
-      <errors-component />
+      <errors-component/>
 
       <v-container>
         <v-row>
           <v-col cols="xs12">
-            <v-card>
-              <v-card-text>
-                <v-layout column>
-                  <p><b>Address : </b> {{ this.restaurant.address }}</p>
-                  <p>
-                    <b>URL : </b>
-                    <a :href="this.restaurant.url">{{ this.restaurant.url }}</a>
-                  </p>
-                  <p>
-                    <b>Telephone number:</b> {{ this.restaurant.telephone }}
-                  </p>
-                  <p>
-                    <b>Last auto-updated:</b>
-                    {{ dateToRel(this.restaurant.lastCrawled) }}
-                  </p>
-                  <p>
-                    <b>Last updated manually:</b>
-                    {{ dateToRel(this.restaurant.lastEdited) }}
-                  </p>
-                </v-layout>
-              </v-card-text>
-            </v-card>
+            <v-layout column>
+              <p><b>Address : </b> {{ this.restaurant.address }}</p>
+              <p>
+                <b>URL : </b>
+                <a :href="this.restaurant.url">{{ this.restaurant.url }}</a>
+              </p>
+              <p>
+                <b>Telephone number:</b> {{ this.restaurant.telephone }}
+              </p>
+              <p>
+                <b>Last auto-updated:</b>
+                {{ dateToRel(this.restaurant.lastCrawled) }}
+              </p>
+              <p>
+                <b>Last updated manually:</b>
+                {{ dateToRel(this.restaurant.lastEdited) }}
+              </p>
+            </v-layout>
           </v-col>
         </v-row>
 
+        <v-divider></v-divider>
+
         <v-row>
           <v-col cols="xs12">
-            <v-card>
-              <v-card-text>
-                <v-layout column>
-                  <show-restaurant-dishes-table
-                    :restaurant="this.restaurant"
-                    :dishes-by-category="this.dishesByCategory"
-                  />
-                </v-layout>
+            <v-layout column>
+              <show-restaurant-dishes-table
+                  :restaurant="this.restaurant"
+                  :dishes-by-category="this.dishesByCategory"
+              />
+            </v-layout>
 
-                <v-tooltip left>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      fixed
-                      dark
-                      fab
-                      large
-                      bottom
-                      right
-                      color="green"
-                      @click="goToCreateDish()"
-                      v-on="on"
-                    >
-                      <v-icon>add</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Create new dish</span>
-                </v-tooltip>
-              </v-card-text>
-            </v-card>
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                    fixed
+                    dark
+                    fab
+                    large
+                    bottom
+                    right
+                    color="green"
+                    @click="goToCreateDish()"
+                    v-on="on"
+                >
+                  <v-icon>add</v-icon>
+                </v-btn>
+              </template>
+              <span>Create new dish</span>
+            </v-tooltip>
           </v-col>
         </v-row>
       </v-container>
@@ -118,7 +112,7 @@ export default class ShowRestaurant extends Vue {
 
   get restaurant() {
     const showRestaurant: ShowRestaurantState = this.$store.state
-      .showRestaurant;
+        .showRestaurant;
 
     console.log("showRestaurant: ", showRestaurant);
 

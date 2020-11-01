@@ -1,19 +1,17 @@
 <template>
   <ViewWrapper
-    :title="`Ordering from ${restaurantName}`"
-    :backpath="`#/orders/show/${orderId}`"
+      :title="`Ordering from ${restaurantName}`"
+      :backpath="`#/orders/show/${orderId}`"
   >
     <LoadingView>
-      <errors-component />
+      <errors-component/>
 
       <template v-if="isStateOrdering">
         <v-container>
           <v-row>
             <v-col cols="12">
               <v-banner>
-                <v-icon slot="icon" color="warning" size="36"
-                  >mdi-lock-alert</v-icon
-                >
+                <v-icon slot="icon" color="warning" size="36">mdi-lock-alert</v-icon>
 
                 <p><strong>The order is locked!</strong></p>
 
@@ -21,11 +19,11 @@
                   Order is now locked, so no one should order anything else now.
                 </p>
 
-                <template v-slot:actions>
+                <p>
                   <v-btn text color="primary" @click="unlockOrder()">
                     Unlock &nbsp; <span class="fa fa-unlock"></span>
                   </v-btn>
-                </template>
+                </p>
               </v-banner>
             </v-col>
           </v-row>
@@ -34,61 +32,55 @@
         <v-container>
           <v-row>
             <v-col cols="8">
-              <v-card height="100%">
-                <v-card-title>Call the place!</v-card-title>
+              <h1>Call the place!</h1>
 
-                <v-card-text>
-                  <v-row>
-                    <v-col>
-                      <p>
-                        Now please call the restaurant, make an order and then
-                        enter approximate delivery time and click "Order placed"
-                      </p>
-                    </v-col>
-                  </v-row>
+              <v-row>
+                <v-col>
+                  <p>
+                    Now please call the restaurant, make an order and then
+                    enter approximate delivery time and click "Order placed"
+                  </p>
+                </v-col>
+              </v-row>
 
-                  <v-row>
-                    <v-col
-                      v-if="restaurantTelephone.length > 0"
-                      class="align-center"
-                    >
-                      <b>tel. {{ restaurantTelephone }}</b>
-                    </v-col>
-                    <v-col v-else class="align-center">
-                      <b>Telephone number not specified, sorry :/</b>
-                    </v-col>
-                  </v-row>
+              <v-row>
+                <v-col
+                    v-if="restaurantTelephone.length > 0"
+                    class="align-center"
+                >
+                  <b>tel. {{ restaurantTelephone }}</b>
+                </v-col>
+                <v-col v-else class="align-center">
+                  <b>Telephone number not specified, sorry :/</b>
+                </v-col>
+              </v-row>
 
-                  <v-row class="justify-space-around">
-                    <v-col class="align-center align-self-center">
-                      <div class=" delivery-time-wrapper">
-                        <TimePicker
-                          :value="approxTimeOfDelivery"
-                          @input="updateApproxTimeOfDelivery($event)"
-                          label="Approximate time of delivery"
-                        ></TimePicker>
-                      </div>
-                    </v-col>
+              <v-row class="justify-space-around">
+                <v-col class="align-center align-self-center">
+                  <div class=" delivery-time-wrapper">
+                    <TimePicker
+                        :value="approxTimeOfDelivery"
+                        @input="updateApproxTimeOfDelivery($event)"
+                        label="Approximate time of delivery"
+                    ></TimePicker>
+                  </div>
+                </v-col>
 
-                    <v-col class="align-center align-self-center">
-                      <v-btn color="success" @click="submitForm">
-                        Order placed! &nbsp;<i
-                          class="fa fa-arrow-right"
-                          aria-hidden="true"
-                        ></i>
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
+                <v-col class="align-center align-self-center">
+                  <v-btn color="success" @click="submitForm">
+                    Order placed! &nbsp;<i
+                      class="fa fa-arrow-right"
+                      aria-hidden="true"
+                  ></i>
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-col>
 
             <v-col cols="4">
-              <v-card>
-                <v-card-title>Cost summary</v-card-title>
+                <h1>Cost summary</h1>
 
-                <v-card-text>
-                  <price-summary
+                <price-summary
                     :orderDecreaseInPercent="orderDecreaseInPercent"
                     :orderDeliveryCostPerEverybody="
                       orderDeliveryCostPerEverybody
@@ -97,10 +89,8 @@
                     :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
                     :allEatingPeopleCount="allEatingPeopleCount"
                     :totalPrice="totalPrice"
-                  >
-                  </price-summary>
-                </v-card-text>
-              </v-card>
+                >
+                </price-summary>
             </v-col>
           </v-row>
         </v-container>
@@ -108,15 +98,9 @@
         <v-container>
           <v-row>
             <v-col cols="xs12">
-              <v-card>
-                <v-card-title>
-                  Dishes:
-                </v-card-title>
+              <h1>Dishes:</h1>
 
-                <v-card-text>
-                  <UserOrders :groupedEntries="groupedEntries"></UserOrders>
-                </v-card-text>
-              </v-card>
+              <UserOrders :groupedEntries="groupedEntries"></UserOrders>
             </v-col>
           </v-row>
         </v-container>
@@ -132,7 +116,7 @@
                   <h4>Sorry, the order is empty</h4>
                   <p>
                     <back-button
-                      :href="'#/orders/show/' + orderId"
+                        :href="'#/orders/show/' + orderId"
                     ></back-button>
                   </p>
                 </v-card-text>
@@ -161,8 +145,8 @@ import Component from "vue-class-component";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import { RootState } from "../../store";
-import { GroupedOrderEntry } from "../../frontend-client";
+import {RootState} from "../../store";
+import {GroupedOrderEntry} from "../../frontend-client";
 
 @Component({
   components: {
@@ -196,35 +180,35 @@ export default class OrderView extends Vue {
     this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
     this.connector
-      .fetchOrderView(this.orderId)
-      .then(responseObj => {
-        this.orderState = responseObj.orderState.toString();
-        this.orderDecreaseInPercent =
-          responseObj.orderDeliveryData.decreaseInPercent;
-        this.orderDeliveryCostPerEverybody =
-          responseObj.orderDeliveryData.deliveryCostPerEverybody;
-        this.orderDeliveryCostPerDish =
-          responseObj.orderDeliveryData.deliveryCostPerDish;
-        this.restaurantName = responseObj.restaurantName;
-        this.restaurantTelephone = responseObj.restaurantTelephone;
-        this.groupedEntries = responseObj.groupedEntries;
-        this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
-        this.basePriceSum = responseObj.basePriceSum;
-        this.totalPrice = responseObj.totalPrice;
+        .fetchOrderView(this.orderId)
+        .then(responseObj => {
+          this.orderState = responseObj.orderState.toString();
+          this.orderDecreaseInPercent =
+              responseObj.orderDeliveryData.decreaseInPercent;
+          this.orderDeliveryCostPerEverybody =
+              responseObj.orderDeliveryData.deliveryCostPerEverybody;
+          this.orderDeliveryCostPerDish =
+              responseObj.orderDeliveryData.deliveryCostPerDish;
+          this.restaurantName = responseObj.restaurantName;
+          this.restaurantTelephone = responseObj.restaurantTelephone;
+          this.groupedEntries = responseObj.groupedEntries;
+          this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
+          this.basePriceSum = responseObj.basePriceSum;
+          this.totalPrice = responseObj.totalPrice;
 
-        this.$store.commit("setLoadingFalse");
+          this.$store.commit("setLoadingFalse");
 
-        document.title = `Ordering from ${this.restaurantName} | Alt Szama`;
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+          document.title = `Ordering from ${this.restaurantName} | Alt Szama`;
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 
   submitForm() {
     this.connector
-      ?.makeAnOrder(this.orderId, {
-        approxTimeOfDelivery: this.approxTimeOfDelivery.toString()
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+        ?.makeAnOrder(this.orderId, {
+          approxTimeOfDelivery: this.approxTimeOfDelivery.toString()
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;
   }
@@ -235,10 +219,10 @@ export default class OrderView extends Vue {
 
   unlockOrder() {
     this.$store
-      .dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {
-        orderId: this.orderId
-      })
-      .then(() => router.push("/orders/show/" + this.orderId));
+        .dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {
+          orderId: this.orderId
+        })
+        .then(() => router.push("/orders/show/" + this.orderId));
   }
 
   get isStateOrdering() {

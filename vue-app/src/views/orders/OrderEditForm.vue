@@ -15,8 +15,6 @@
 
         <v-row>
           <v-col>
-            <v-card>
-              <v-card-text>
                 <v-row>
                   <v-col>
                     <h3>Order time</h3>
@@ -28,7 +26,7 @@
                   </v-col>
 
                   <v-col>
-                    <h3>Price change</h3>
+                    <h3>Price modifiers</h3>
 
                     <v-text-field
                       class="percent-input"
@@ -56,7 +54,7 @@
                   </v-col>
 
                   <v-col>
-                    <h3>Payment</h3>
+                    <h3>Payment options</h3>
 
                     <v-switch
                       v-model="paymentByCash"
@@ -96,8 +94,6 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-              </v-card-text>
-            </v-card>
           </v-col>
         </v-row>
       </v-container>

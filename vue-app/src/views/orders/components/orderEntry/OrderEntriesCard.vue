@@ -73,7 +73,7 @@
 
             <v-list-item-content>
               <div v-if="isEntryCreating === false">
-                <v-btn text @click="createEntry()">
+                <v-btn color="success" @click="createEntry()">
                   Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
                 </v-btn>
               </div>
@@ -87,11 +87,8 @@
     </v-card-text>
 
     <v-card-actions>
-      <span class="px-2">
-        <b
-          >Cost for user:
-          <price :data-price="orderEntry.finalPrice" />
-        </b>
+      <span class="px-2 mb-2">
+        <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b>
       </span>
     </v-card-actions>
   </v-card>

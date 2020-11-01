@@ -5,8 +5,6 @@
 
       <v-row>
         <v-col>
-          <v-card>
-            <v-card-text>
               <v-form id="restaurantCreateForm">
                 <v-row>
                   <v-col>
@@ -43,11 +41,9 @@
                   @input="updateAddress($event)"
                 ></v-text-field>
               </v-form>
-            </v-card-text>
-            <v-card-actions>
+            <div class="my-4">
               <v-btn block color="success" @click="submitForm">Create</v-btn>
-            </v-card-actions>
-          </v-card>
+            </div>
         </v-col>
       </v-row>
     </v-container>

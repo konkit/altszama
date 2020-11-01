@@ -7,7 +7,7 @@
         <v-subheader :key="category">
           <span v-if="category"> Category: {{ category }} </span>
           <span v-else>
-            Uncategorized
+            No category
           </span>
         </v-subheader>
 

@@ -9,8 +9,6 @@
 
         <v-row>
           <v-col>
-            <v-card>
-              <v-card-text>
                 <input
                   type="hidden"
                   name="restaurant.id"
@@ -44,12 +42,10 @@
                     :initialSideDishes="initialSideDishes"
                   ></side-dishes>
                 </div>
-              </v-card-text>
 
-              <v-card-actions>
+              <div class="my-4">
                 <v-btn block color="success" @click="submitForm">Update</v-btn>
-              </v-card-actions>
-            </v-card>
+              </div>
           </v-col>
         </v-row>
       </v-container>

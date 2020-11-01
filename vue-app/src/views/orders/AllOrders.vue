@@ -4,38 +4,34 @@
       <v-container>
         <v-row>
           <v-col cols="xs12">
-            <v-card>
-              <v-card-text>
-                <v-data-table
-                  class="table table-hover"
-                  :items="allOrdersList"
-                  :headers="headers"
-                  :loading="false"
-                >
-                  <template slot="header" slot-scope="props">
-                    <tr>
-                      <th v-for="header in props.headers" :key="header.text">
-                        {{ header.text }}
-                      </th>
-                    </tr>
-                  </template>
+            <v-data-table
+                class="table table-hover"
+                :items="allOrdersList"
+                :headers="headers"
+                :loading="false"
+            >
+              <template slot="header" slot-scope="props">
+                <tr>
+                  <th v-for="header in props.headers" :key="header.text">
+                    {{ header.text }}
+                  </th>
+                </tr>
+              </template>
 
-                  <template slot="item" slot-scope="props">
-                    <tr
-                      @click="goToOrder(props.item.id)"
-                      :key="props.item.id"
-                      :data-href="'/orders/show/' + props.item.id"
-                      class="pointer"
-                    >
-                      <td>{{ props.item.orderDate }}</td>
-                      <td>{{ props.item.restaurantName }}</td>
-                      <td>{{ props.item.orderState }}</td>
-                      <td>{{ props.item.orderCreatorUsername }}</td>
-                    </tr>
-                  </template>
-                </v-data-table>
-              </v-card-text>
-            </v-card>
+              <template slot="item" slot-scope="props">
+                <tr
+                    @click="goToOrder(props.item.id)"
+                    :key="props.item.id"
+                    :data-href="'/orders/show/' + props.item.id"
+                    class="pointer"
+                >
+                  <td>{{ props.item.orderDate }}</td>
+                  <td>{{ props.item.restaurantName }}</td>
+                  <td>{{ props.item.orderState }}</td>
+                  <td>{{ props.item.orderCreatorUsername }}</td>
+                </tr>
+              </template>
+            </v-data-table>
           </v-col>
         </v-row>
       </v-container>
@@ -51,8 +47,8 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ApiConnector from "../../lib/ApiConnector";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
-import { RootState } from "../../store";
-import { AllOrdersOrderDto } from "../../frontend-client";
+import {RootState} from "../../store";
+import {AllOrdersOrderDto} from "../../frontend-client";
 import Navigation from "@/views/commons/Navigation.vue";
 
 @Component({
@@ -66,10 +62,10 @@ export default class AllOrders extends Vue {
   allOrdersList: AllOrdersOrderDto[] = [];
 
   headers = [
-    { text: "Date", align: "left", value: "date" },
-    { text: "Restaurant", value: "restaurant" },
-    { text: "Status", value: "status" },
-    { text: "Order creator", value: "orderCreator" }
+    {text: "Date", align: "left", value: "date"},
+    {text: "Restaurant", value: "restaurant"},
+    {text: "Status", value: "status"},
+    {text: "Order creator", value: "orderCreator"}
   ];
 
   connector?: OrdersApiConnector;
@@ -78,14 +74,14 @@ export default class AllOrders extends Vue {
     this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
     this.connector
-      .fetchAllOrders()
-      .then(allOrdersList => {
-        this.allOrdersList = allOrdersList.allOrdersList;
-        this.$store.commit("setLoadingFalse");
+        .fetchAllOrders()
+        .then(allOrdersList => {
+          this.allOrdersList = allOrdersList.allOrdersList;
+          this.$store.commit("setLoadingFalse");
 
-        document.title = `All orders | Alt Szama`;
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+          document.title = `All orders | Alt Szama`;
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 
   goToOrder(selectedOrderId: string) {

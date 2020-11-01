@@ -6,14 +6,11 @@
 
         <v-row>
           <v-col cols="12">
-            <v-card v-if="this.restaurantsList.length === 0">
-              <v-card-text>
-                <p>There are no restaurants, please create one first</p>
-              </v-card-text>
-            </v-card>
+            <div v-if="this.restaurantsList.length === 0">
+                <h1 class="my-4">There are no restaurants, please create one first</h1>
+            </div>
 
-            <v-card v-if="this.restaurantsList.length > 0">
-              <v-card-text>
+            <div v-if="this.restaurantsList.length > 0">
                 <v-row>
                   <v-col>
                     <v-autocomplete
@@ -125,8 +122,7 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-              </v-card-text>
-            </v-card>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -347,9 +343,6 @@ export default class OrderCreateForm extends Vue {
 </script>
 
 <style scoped>
-.row {
-  margin-top: 2rem;
-}
 
 .percent-input {
   width: 150px;

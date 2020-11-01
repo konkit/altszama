@@ -12,7 +12,7 @@
       <v-container v-if="this.isOrdering() && this.isOrderOwner()">
         <v-row>
           <v-col :cols="12">
-            <OrderLockedWarning :order-id="this.orderId"> </OrderLockedWarning>
+            <OrderLockedWarning :order-id="this.orderId"></OrderLockedWarning>
           </v-col>
         </v-row>
       </v-container>
@@ -20,17 +20,14 @@
       <v-container>
         <v-row>
           <v-col :cols="12" :md="4">
-            <v-card class="asdf-card">
-              <v-card-title>Order details</v-card-title>
-              <OrderDataSummary :order="order"></OrderDataSummary>
-            </v-card>
+            <h1>Order details</h1>
+            <OrderDataSummary :order="order"></OrderDataSummary>
           </v-col>
 
           <v-col :cols="12" :md="4">
-            <v-card class="asdf-card">
-              <v-card-title>Price summary</v-card-title>
+            <h1>Price summary</h1>
 
-              <price-summary
+            <price-summary
                 :orderDecreaseInPercent="
                   this.order.deliveryData.decreaseInPercent
                 "
@@ -43,47 +40,46 @@
                 :basePriceSum="this.baseOrderPrice"
                 :allEatingPeopleCount="allEatingPeopleCount()"
                 :totalPrice="this.totalOrderPrice"
-              ></price-summary>
-            </v-card>
+            ></price-summary>
           </v-col>
 
           <v-col :cols="12" :md="4">
-            <v-card class="asdf-card">
-              <v-card-title>Payment options</v-card-title>
+            <h1>Payment options</h1>
 
-              <PaymentOptionsSummary
+            <PaymentOptionsSummary
                 :payment-data="order.paymentData"
-              ></PaymentOptionsSummary>
-            </v-card>
+            ></PaymentOptionsSummary>
           </v-col>
         </v-row>
 
         <v-row>
           <v-col>
+            <h1 class="mb-4">User entries</h1>
+
             <div class="py-2 px-4">
               <b>See menu at &nbsp;</b>
               <a target="_blank" :href="order.restaurantUrl">{{
-                order.restaurantUrl
-              }}</a>
+                  order.restaurantUrl
+                }}</a>
             </div>
           </v-col>
           <v-col>
             <v-btn
-              block
-              color="success"
-              v-if="canShowPlaceOrderButton()"
-              @click="placeOrder"
-              :disabled="isPlaceOrderButtonDisabled()"
+                block
+                color="success"
+                v-if="canShowPlaceOrderButton()"
+                @click="placeOrder"
+                :disabled="isPlaceOrderButtonDisabled()"
             >
               Place order &nbsp;
               <i class="fa fa-arrow-right" aria-hidden="true"></i>
             </v-btn>
 
             <v-btn
-              block
-              color="success"
-              v-if="this.isOrderOwner() && this.orderState === 'ORDERED'"
-              @click="setAsDelivered()"
+                block
+                color="success"
+                v-if="this.isOrderOwner() && this.orderState === 'ORDERED'"
+                @click="setAsDelivered()"
             >
               Mark as delivered &nbsp;
               <i class="fa fa-arrow-right" aria-hidden="true"></i>
@@ -95,10 +91,10 @@
           <v-row :key="entryId">
             <v-col>
               <OrderEntriesCard
-                :order="order"
-                :order-entry="orderEntry"
-                :entry-id="entryId"
-                :current-user-id="currentUserId"
+                  :order="order"
+                  :order-entry="orderEntry"
+                  :entry-id="entryId"
+                  :current-user-id="currentUserId"
               >
               </OrderEntriesCard>
             </v-col>
@@ -106,15 +102,15 @@
         </template>
 
         <template
-          v-if="
+            v-if="
             order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0
           "
         >
           <v-row>
             <v-col>
               <new-order-entry-card
-                :is-entry-creating="isEntryCreating"
-                :username="username"
+                  :is-entry-creating="isEntryCreating"
+                  :username="username"
               ></new-order-entry-card>
             </v-col>
           </v-row>
@@ -143,7 +139,7 @@ import PaymentOptionsSummary from "@/views/orders/components/PaymentOptionsSumma
 import OrderLockedWarning from "@/views/orders/components/OrderLockedWarning.vue";
 import Component from "vue-class-component";
 import Vue from "vue";
-import { ParticipantsOrderEntry, ShowOrderDto } from "../../frontend-client";
+import {ParticipantsOrderEntry, ShowOrderDto} from "../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -173,8 +169,8 @@ export default class ShowOrder extends Vue {
   fetchOrder() {
     this.$store.commit("setLoadingTrue");
     return this.$store.dispatch(
-      `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-      this.orderId
+        `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+        this.orderId
     );
   }
 
@@ -208,9 +204,9 @@ export default class ShowOrder extends Vue {
 
   canShowPlaceOrderButton() {
     return (
-      this.isOrderOwner() &&
-      (this.orderState === OrderStateEnum.CREATED ||
-        this.orderState === OrderStateEnum.ORDERING)
+        this.isOrderOwner() &&
+        (this.orderState === OrderStateEnum.CREATED ||
+            this.orderState === OrderStateEnum.ORDERING)
     );
   }
 
@@ -224,7 +220,7 @@ export default class ShowOrder extends Vue {
 
   get numberOfCurrentUserEntries() {
     return this.orderEntries.filter(e => e.userId === this.currentUserId)
-      .length;
+        .length;
   }
 
   get orderState() {
