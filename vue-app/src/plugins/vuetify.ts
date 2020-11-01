@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify/lib/framework'
+import Vuetify from 'vuetify'
 import {
   VCol,
   VRow,
@@ -12,7 +12,7 @@ Vue.use(Vuetify, {
   },
 })
 
-export default new Vuetify({
+const vuetify = new Vuetify({
   theme: {
     dark: false,
     themes: {
@@ -28,3 +28,5 @@ export default new Vuetify({
     iconfont: 'mdi',
   },
 });
+
+export default vuetify;

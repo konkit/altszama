@@ -6,7 +6,7 @@ import router from "./router";
 import store from "./store";
 import VueResource from "vue-resource";
 import VueNumeric from "vue-numeric";
-const vuetify = require("@/plugins/vuetify");
+import vuetify from "./plugins/vuetify";
 
 import Vuex from "vuex";
 Vue.use(VueResource);
