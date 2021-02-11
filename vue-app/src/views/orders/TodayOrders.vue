@@ -4,148 +4,120 @@
       <v-container>
         <v-row>
           <v-col cols="xs12">
-                <h1 class="mb-4">Your orders today:</h1>
+            <h1 class="mb-4">Your orders today:</h1>
 
-                <div v-if="this.currentOrderEntries.length > 0">
-                  <v-list>
-                    <template v-for="(orderEntry, i) in currentOrderEntries">
-                      <template v-for="(dishEntry, j) in orderEntry.dishEntries">
-                        <v-list-item
-                            @click="goToOrder(orderEntry.orderId)"
-                            :key="'dish-entry-' + i + '-' + j"
-                        >
-                          <v-list-item-content>
-                            <v-list-item-title class="pointer">
-                              <b>{{ dishEntry.dish.name }}</b>
-                              from
-                              <b>{{ dishEntry.restaurantName }}</b>
-                              (STATUS: {{ orderEntry.orderState }})
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </template>
-                    </template>
-                  </v-list>
-                </div>
-
-                <div v-else>
-                  <v-list>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title>You haven't ordered anything today yet.</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </div>
-
-                <v-divider class="my-5"></v-divider>
-
-                <h1>Orders:</h1>
-
-                <errors-component/>
-
-                <v-list>
-                  <template v-if="this.ordersList.length > 0">
+            <div v-if="this.currentOrderEntries.length > 0">
+              <v-list>
+                <template v-for="(orderEntry, i) in currentOrderEntries">
+                  <template v-for="(dishEntry, j) in orderEntry.dishEntries">
                     <v-list-item
-                        @click="goToOrder(order.id)"
-                        v-for="(order, i) in this.ordersList"
-                        :key="'order-' + i"
+                        @click="goToOrder(orderEntry.orderId)"
+                        :key="'dish-entry-' + i + '-' + j"
                     >
                       <v-list-item-content>
                         <v-list-item-title class="pointer">
-                          <div
-                              class="wide-order-status"
-                              v-if="$vuetify.breakpoint.mdAndUp"
-                          >
-                            <div class="order-data-wrapper">
-                              <b>{{ order.restaurantName }}</b> (created by
-                              {{ order.orderCreatorUsername }})
-                            </div>
-
-                            <div class="order-state-wrapper">
-                              <div
-                                  class="orderState"
-                                  :class="{
-                                  matchingState: order.orderState === 'CREATED'
-                                }"
-                              >
-                                CREATED
-                              </div>
-
-                              <div
-                                  class="orderState"
-                                  :class="{
-                                  matchingState: order.orderState === 'ORDERING'
-                                }"
-                              >
-                                ORDERING RIGHT NOW
-                              </div>
-
-                              <div
-                                  class="orderState"
-                                  :class="{
-                                  matchingState: order.orderState === 'ORDERED'
-                                }"
-                              >
-                                ORDERED
-                              </div>
-
-                              <div
-                                  class="orderState"
-                                  :class="{
-                                  matchingState:
-                                    order.orderState === 'DELIVERED'
-                                }"
-                              >
-                                DELIVERED
-                              </div>
-                            </div>
-                          </div>
-
-                          <div
-                              class="thin-order-status"
-                              v-if="$vuetify.breakpoint.smAndDown"
-                          >
-                            <div>
-                              <b>{{ order.restaurantName }}</b> (created by
-                              {{ order.orderCreatorUsername }})
-                            </div>
-                            <div>Status: {{ order.orderState }}</div>
-                          </div>
+                          <b>{{ dishEntry.dish.name }}</b>
+                          from
+                          <b>{{ dishEntry.restaurantName }}</b>
+                          (STATUS: {{ orderEntry.orderState }})
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                   </template>
-                  <template v-if="this.ordersList.length === 0">
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title>No orders yet</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </template>
-                </v-list>
+                </template>
+              </v-list>
+            </div>
+
+            <div v-else>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>You haven't ordered anything today yet.</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </div>
+
+            <v-divider class="my-5"></v-divider>
+
+            <h1>Orders:</h1>
+
+            <errors-component/>
+
+            <v-list>
+              <template v-if="this.ordersList.length > 0">
+                <v-list-item
+                    @click="goToOrder(order.id)"
+                    v-for="(order, i) in this.ordersList"
+                    :key="'order-' + i"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title class="pointer">
+                      <div
+                          class="wide-order-status"
+                          v-if="$vuetify.breakpoint.mdAndUp"
+                      >
+                        <div class="order-data-wrapper">
+                          <b>{{ order.restaurantName }}</b> (created by
+                          {{ order.orderCreatorUsername }})
+                        </div>
+
+                        <div class="order-state-wrapper">
+                          <div class="orderState" :class="{matchingState: order.orderState === 'CREATED'}">
+                            CREATED
+                          </div>
+
+                          <div class="orderState" :class="{matchingState: order.orderState === 'ORDERING'}">
+                            ORDERING RIGHT NOW
+                          </div>
+
+                          <div class="orderState" :class="{matchingState: order.orderState === 'ORDERED'}">
+                            ORDERED
+                          </div>
+
+                          <div class="orderState" :class="{matchingState:order.orderState === 'DELIVERED'}">
+                            DELIVERED
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="thin-order-status" v-if="$vuetify.breakpoint.smAndDown">
+                        <div>
+                          <b>{{ order.restaurantName }}</b> (created by
+                          {{ order.orderCreatorUsername }})
+                        </div>
+                        <div>Status: {{ order.orderState }}</div>
+                      </div>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+              <template v-if="this.ordersList.length === 0">
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>No orders yet</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+
+
+              </template>
+
+            </v-list>
+
+              <v-btn
+                  dark
+                  large
+                  bottom
+                  right
+                  color="green"
+                  @click="goToCreateOrder()"
+              >
+                Add new order<v-icon>add</v-icon>
+              </v-btn>
+
           </v-col>
         </v-row>
       </v-container>
-
-      <v-tooltip left>
-        <template v-slot:activator="{ on }">
-          <v-btn
-              fixed
-              dark
-              fab
-              large
-              bottom
-              right
-              color="green"
-              @click="goToCreateOrder()"
-              v-on="on"
-          >
-            <v-icon>add</v-icon>
-          </v-btn>
-        </template>
-        <span>Create new order</span>
-      </v-tooltip>
     </LoadingView>
   </ViewWrapper>
 </template>
@@ -161,13 +133,14 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import {OrderEntryDto, TodayOrderDto} from "../../frontend-client";
-import {RootState} from "../../store";
+import {RootState} from "@/store";
+import Navigation from "@/views/commons/Navigation.vue";
 
 @Component({
   components: {
     ViewWrapper,
     LoadingView,
-    ErrorsComponent
+    ErrorsComponent,
   }
 })
 export default class TodayOrders extends Vue {

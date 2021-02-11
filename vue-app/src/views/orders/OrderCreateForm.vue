@@ -14,26 +14,12 @@
                 <v-row>
                   <v-col>
                     <v-autocomplete
-                      :items="teamsList"
-                      item-text="domain"
-                      item-value="id"
-                      label="Team"
-                      :value="this.teamsList.find(t => teamId == t.id)"
-                      @input="updateTeamId($event)"
-                    >
-                    </v-autocomplete>
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col>
-                    <v-autocomplete
                       :items="restaurantsList"
                       item-text="name"
                       item-value="id"
                       label="Restaurant"
                       :value="
-                        this.restaurantsList.find(r => restaurantId == r.id)
+                        this.restaurantsList.find(r => restaurantId === r.id)
                       "
                       @input="updateRestaurantId($event)"
                     >
@@ -168,7 +154,6 @@ export default class OrderCreateForm extends Vue {
 
   // Order
   restaurantId = "";
-  teamId = "";
   orderDate = "";
   timeOfOrder = "";
   decreaseInPercent = 0;
@@ -245,7 +230,6 @@ export default class OrderCreateForm extends Vue {
         this.teamsList = response.teamsList;
 
         this.restaurantId = restaurantId;
-        this.teamId = teamId;
         this.orderDate = response.orderDate;
         this.timeOfOrder = response.timeOfOrder;
 
@@ -262,10 +246,6 @@ export default class OrderCreateForm extends Vue {
         document.title = `Create new order | Alt Szama`;
       })
       .catch(errResponse => ApiConnector.handleError(errResponse));
-  }
-
-  updateTeamId(newValue: string) {
-    this.teamId = newValue;
   }
 
   updateRestaurantId(newValue: string) {
@@ -305,7 +285,6 @@ export default class OrderCreateForm extends Vue {
 
     const order: OrderSaveRequest = {
       restaurantId: this.restaurantId,
-      teamId: this.teamId,
       orderDate: this.orderDate,
       timeOfOrder: this.timeOfOrder,
       deliveryData: {

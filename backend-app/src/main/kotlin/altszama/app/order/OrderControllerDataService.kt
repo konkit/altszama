@@ -46,7 +46,7 @@ class OrderControllerDataService {
     val currentUser = authService.currentUser()
     val teams = teamService.getForUser(currentUser)
 
-    val todaysOrders = teams.flatMap { team -> orderRepository.findByTeamAndOrderDate(team, LocalDate.now()) }
+    val todaysOrders = teams.flatMap { team -> orderRepository.findByOrderDate(LocalDate.now()) }
     val usersOrderEntries = orderEntryRepository.findByUser(currentUser)
 
     return TodayOrdersResponse.create(todaysOrders, usersOrderEntries)
@@ -56,7 +56,7 @@ class OrderControllerDataService {
     val currentUser = authService.currentUser()
     val teams = teamService.getForUser(currentUser)
 
-    val orderList = teams.flatMap { team -> orderRepository.findByTeam(team) }
+    val orderList = teams.flatMap { team -> orderRepository.findAll() }
 
     return AllOrdersResponse.fromOrderList(orderList.asReversed())
   }

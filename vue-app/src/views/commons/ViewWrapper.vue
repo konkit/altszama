@@ -6,10 +6,7 @@
         @click.stop="toggleMasterNavDrawerOpened()"
       ></v-app-bar-nav-icon>
 
-      <back-button
-        v-if="shouldDisplayBackButton()"
-        :href="backpath"
-      ></back-button>
+      <back-button v-if="shouldDisplayBackButton()" :href="backpath"></back-button>
 
       <v-toolbar-title>{{ titleText() }}</v-toolbar-title>
 
@@ -19,8 +16,6 @@
         <slot name="toolbar-buttons"></slot>
       </template>
     </v-app-bar>
-
-    <Navigation></Navigation>
 
     <v-main class="view-content">
       <div class="content-class">
@@ -44,10 +39,10 @@ import BackButton from "./BackButton2.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import Navigation from "@/views/commons/Navigation.vue";
 
 @Component({
-  components: { BackButton, Navigation }
+  name: "ViewWrapper",
+  components: { BackButton }
 })
 export default class ViewWrapper extends Vue {
   @Prop() title!: string;

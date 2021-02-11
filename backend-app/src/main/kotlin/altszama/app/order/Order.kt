@@ -23,9 +23,6 @@ data class Order(
         @DBRef
         var orderCreator: User,
 
-        @DBRef
-        var team: Team?,
-
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         var orderDate: LocalDate,
 

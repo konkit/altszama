@@ -42,11 +42,9 @@ class OrderService {
 
   fun saveOrder(orderSaveRequest: OrderSaveRequest) {
     val restaurant = restaurantRepository.findById(orderSaveRequest.restaurantId!!).get()
-    val team = teamService.findById(orderSaveRequest.teamId!!).get()
 
     val order = Order(
         restaurant = restaurant,
-        team = team,
         orderCreator = authService.currentUser(),
         orderDate = orderSaveRequest.orderDate!!,
         timeOfOrder = orderSaveRequest.timeOfOrder,

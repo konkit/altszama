@@ -44,9 +44,10 @@ export default {
 
   computed: {
     height() {
-      const height = this.$vuetify.breakpoint.mdAndUp ? '100vh' : '50vh'
+      // const height = this.$vuetify.breakpoint.mdAndUp ? '100vh' : '50vh'
+      // return `calc(${height} - 64px)`
 
-      return `calc(${height} - 64px)`
+      return "calc(100vh - 64px)"
     },
   },
 }

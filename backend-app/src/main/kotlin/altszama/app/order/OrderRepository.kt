@@ -6,9 +6,11 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import java.time.LocalDate
 
 interface OrderRepository : MongoRepository<Order, String> {
-  fun findByTeam(team: Team): List<Order>
+//  fun findByTeam(team: Team): List<Order>
 
-  fun findByTeamAndOrderDate(team: Team, orderDate: LocalDate): List<Order>
+//  fun findByTeamAndOrderDate(team: Team, orderDate: LocalDate): List<Order>
+
+  fun findByOrderDate(orderDate: LocalDate): List<Order>
 
   fun findByRestaurantId(restaurantId: String): List<Order>
 

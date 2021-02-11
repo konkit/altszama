@@ -71,6 +71,7 @@ import Component from "vue-class-component";
 
 @Component({name: "Navigation"})
 export default class Navigation extends Vue {
+
   get username() {
     return this.$store.state.username;
   }
@@ -88,7 +89,7 @@ export default class Navigation extends Vue {
   }
 
   goToPath(path: string) {
-    this.$router.push(path);
+    this.$router.push(path).catch(err => { /* NOP */ 1 == 1})
   }
 
   setMasterNavDrawerOpened(newValue: boolean) {
