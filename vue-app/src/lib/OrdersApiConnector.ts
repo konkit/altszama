@@ -1,5 +1,5 @@
 import router from "../router/index";
-import store, { RootState } from "@/store";
+import store, {RootState} from "@/store";
 import {
   AllOrdersResponse,
   Configuration,
@@ -109,49 +109,7 @@ export default class OrdersApiConnector {
   }
 
   getOrderCreateData() {
-    const createResponse: Promise<CreateOrderInitialData> = this.orderApi.create(
-      headersWithToken()
-    );
-
-    return createResponse;
-    // .then(response => {
-    //   let restaurantId = response.restaurantsList[0].id;
-    //   let teamId = response.teamsList[0].id;
-    //
-    //   let bankTransferNumber = "";
-    //   let paymentByBankTransfer = false;
-    //   if (response.bankTransferNumber) {
-    //     paymentByBankTransfer = true;
-    //     bankTransferNumber = response.bankTransferNumber;
-    //   }
-    //
-    //   let blikPhoneNumber = "";
-    //   let paymentByBlik = false;
-    //   if (response.blikPhoneNumber) {
-    //     paymentByBlik = true;
-    //     blikPhoneNumber = response.blikPhoneNumber;
-    //   }
-    //
-    //   return {
-    //     restaurantsList: response.restaurantsList,
-    //     teamsList: response.teamsList,
-    //     order: {
-    //       restaurantId: restaurantId,
-    //       teamId: teamId,
-    //       orderDate: response.orderDate,
-    //       timeOfOrder: response.timeOfOrder,
-    //
-    //       decreaseInPercent: 0,
-    //       deliveryCostPerEverybody: 0,
-    //       deliveryCostPerDish: 0,
-    //       paymentByCash: true,
-    //       paymentByBankTransfer: paymentByBankTransfer,
-    //       bankTransferNumber: bankTransferNumber,
-    //       paymentByBlik: paymentByBlik,
-    //       blikPhoneNumber: blikPhoneNumber
-    //     }
-    //   }
-    // });
+    return this.orderApi.create(headersWithToken());
   }
 
   getOrderEditData(orderId: string): Promise<EditOrderInitialData> {

@@ -6,11 +6,7 @@
 
         <v-row>
           <v-col cols="12">
-            <div v-if="this.restaurantsList.length === 0">
-                <h1 class="my-4">There are no restaurants, please create one first</h1>
-            </div>
-
-            <div v-if="this.restaurantsList.length > 0">
+            <NoRestaurantsGuard :restaurantsList="this.restaurantsList">
                 <v-row>
                   <v-col>
                     <v-autocomplete
@@ -18,9 +14,7 @@
                       item-text="name"
                       item-value="id"
                       label="Restaurant"
-                      :value="
-                        this.restaurantsList.find(r => restaurantId === r.id)
-                      "
+                      :value="this.restaurantsList.find(r => restaurantId === r.id)"
                       @input="updateRestaurantId($event)"
                     >
                     </v-autocomplete>
@@ -38,66 +32,13 @@
                   </v-col>
 
                   <v-col cols="4">
-                    <h3>Price change</h3>
-
-                    <v-text-field
-                      class="percent-input"
-                      label="Price decrease (in percent)"
-                      suffix="%"
-                      :value="decreaseInPercent"
-                      @input="updateDecreaseInPercent($event)"
-                    ></v-text-field>
-
-                    <MoneyInput
-                      class="short-input"
-                      label="Delivery cost (total)"
-                      :value="deliveryCostPerEverybody"
-                      @input="updateDeliveryCostPerEverybody($event)"
-                    >
-                    </MoneyInput>
-
-                    <MoneyInput
-                      class="short-input"
-                      label="Delivery cost (per dish)"
-                      :value="deliveryCostPerDish"
-                      @input="updateDeliveryCostPerDish($event)"
-                    >
-                    </MoneyInput>
+                  <PriceModifiersFields :price-modifiers="priceModifiers"
+                                        @input="(newPriceModifiers) => {priceModifiers = newPriceModifiers}"/>
                   </v-col>
 
                   <v-col cols="4">
-                    <h3>Payment</h3>
-
-                    <v-switch
-                      v-model="paymentByCash"
-                      label="Payment by cash"
-                    ></v-switch>
-
-                    <v-switch
-                      v-model="paymentByBankTransfer"
-                      label="Payment by bank transfer"
-                    ></v-switch>
-
-                    <v-text-field
-                      v-if="paymentByBankTransfer"
-                      label="Bank transfer number"
-                      :value="bankTransferNumber"
-                      @change="updateBankTransferNumber($event)"
-                    >
-                    </v-text-field>
-
-                    <v-switch
-                      v-model="paymentByBlik"
-                      label="Payment by BLIK"
-                    ></v-switch>
-
-                    <v-text-field
-                      v-if="paymentByBlik"
-                      label="BLIK phone number"
-                      :value="blikPhoneNumber"
-                      @change="updateBlikPhoneNumber($event)"
-                    >
-                    </v-text-field>
+                  <PaymentDataFields :payment-data="paymentData"
+                                     @input="(newPaymentData) => {paymentData = newPaymentData}" />
                   </v-col>
                 </v-row>
 
@@ -108,7 +49,7 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-            </div>
+            </NoRestaurantsGuard>
           </v-col>
         </v-row>
       </v-container>
@@ -133,6 +74,10 @@ import ApiConnector from "../../lib/ApiConnector";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import { RootState } from "../../store";
 import { OrderSaveRequest, Restaurant, Team } from "../../frontend-client";
+import NoRestaurantsGuard from "@/views/orders/components/orderCreateForm/NoRestaurantsGuard.vue";
+import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
+import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";
+import PaymentDataFields from "@/views/orders/components/orderCreateForm/PaymentDataFields.vue";
 
 @Component({
   computed: {
@@ -141,6 +86,9 @@ import { OrderSaveRequest, Restaurant, Team } from "../../frontend-client";
     }
   },
   components: {
+    PaymentDataFields,
+    PriceModifiersFields,
+    NoRestaurantsGuard,
     ViewWrapper,
     TimePicker,
     MoneyInput,
@@ -156,14 +104,20 @@ export default class OrderCreateForm extends Vue {
   restaurantId = "";
   orderDate = "";
   timeOfOrder = "";
-  decreaseInPercent = 0;
-  deliveryCostPerEverybody = 0;
-  deliveryCostPerDish = 0;
-  paymentByCash = true;
-  paymentByBankTransfer = false;
-  bankTransferNumber = "";
-  paymentByBlik = false;
-  blikPhoneNumber = "";
+
+  priceModifiers: PriceModifierFieldsValue = {
+    decreaseInPercent: 0,
+    deliveryCostPerEverybody: 0,
+    deliveryCostPerDish: 0
+  }
+
+  paymentData: PaymentDataFieldsValue = {
+    paymentByCash: true,
+    paymentByBankTransfer: false,
+    bankTransferNumber: "",
+    paymentByBlik: false,
+    blikPhoneNumber: ""
+  }
 
   connector?: OrdersApiConnector;
 
@@ -177,54 +131,11 @@ export default class OrderCreateForm extends Vue {
     this.connector
       .getOrderCreateData()
       .then(response => {
-        // .then(response => {
-        console.log("Response: ", response);
-
         const restaurantId =
           (response.restaurantsList &&
             response.restaurantsList[0] &&
             response.restaurantsList[0].id) ||
           "";
-        const teamId =
-          (response.teamsList &&
-            response.teamsList[0] &&
-            response.teamsList[0].id) ||
-          "";
-
-        const bankTransferNumber = "";
-        const paymentByBankTransfer = false;
-        if (response.bankTransferNumber) {
-          this.paymentByBankTransfer = true;
-          this.bankTransferNumber = response.bankTransferNumber;
-        }
-
-        const blikPhoneNumber = "";
-        const paymentByBlik = false;
-        if (response.blikPhoneNumber) {
-          this.paymentByBlik = true;
-          this.blikPhoneNumber = response.blikPhoneNumber;
-        }
-
-        // return {
-        //   restaurantsList: response.restaurantsList,
-        //   teamsList: response.teamsList,
-        //   order: {
-        //     restaurantId: restaurantId,
-        //     teamId: teamId,
-        //     orderDate: response.orderDate,
-        //     timeOfOrder: response.timeOfOrder,
-        //
-        //     decreaseInPercent: 0,
-        //     deliveryCostPerEverybody: 0,
-        //     deliveryCostPerDish: 0,
-        //     paymentByCash: true,
-        //     paymentByBankTransfer: paymentByBankTransfer,
-        //     bankTransferNumber: bankTransferNumber,
-        //     paymentByBlik: paymentByBlik,
-        //     blikPhoneNumber: blikPhoneNumber
-        //   }
-        // }
-        // });
 
         this.restaurantsList = response.restaurantsList;
         this.teamsList = response.teamsList;
@@ -233,14 +144,29 @@ export default class OrderCreateForm extends Vue {
         this.orderDate = response.orderDate;
         this.timeOfOrder = response.timeOfOrder;
 
-        this.decreaseInPercent = 0;
-        this.deliveryCostPerEverybody = 0;
-        this.deliveryCostPerDish = 0;
-        this.paymentByCash = true;
-        this.paymentByBankTransfer = paymentByBankTransfer;
-        this.bankTransferNumber = bankTransferNumber;
-        this.paymentByBlik = paymentByBlik;
-        this.blikPhoneNumber = blikPhoneNumber;
+        this.priceModifiers = {
+          decreaseInPercent: 0,
+          deliveryCostPerEverybody: 0,
+          deliveryCostPerDish: 0
+        }
+
+        this.paymentData = {
+          paymentByCash: true,
+          paymentByBankTransfer: false,
+          bankTransferNumber: "",
+          paymentByBlik: false,
+          blikPhoneNumber: ""
+        }
+
+        if (response.bankTransferNumber) {
+          this.paymentData.paymentByBankTransfer = true;
+          this.paymentData.bankTransferNumber = response.bankTransferNumber;
+        }
+
+        if (response.blikPhoneNumber) {
+          this.paymentData.paymentByBlik = true;
+          this.paymentData.blikPhoneNumber = response.blikPhoneNumber;
+        }
 
         this.$store.commit("setLoadingFalse");
         document.title = `Create new order | Alt Szama`;
@@ -252,32 +178,8 @@ export default class OrderCreateForm extends Vue {
     this.restaurantId = newValue;
   }
 
-  updateOrderDate(newValue: string) {
-    this.orderDate = newValue;
-  }
-
   updateTimeOfOrder(newValue: string) {
     this.timeOfOrder = newValue;
-  }
-
-  updateDecreaseInPercent(newValue: number) {
-    this.decreaseInPercent = newValue;
-  }
-
-  updateDeliveryCostPerEverybody(newValue: number) {
-    this.deliveryCostPerEverybody = newValue;
-  }
-
-  updateDeliveryCostPerDish(newValue: number) {
-    this.deliveryCostPerDish = newValue;
-  }
-
-  updateBankTransferNumber(newValue: string) {
-    this.bankTransferNumber = newValue;
-  }
-
-  updateBlikPhoneNumber(newValue: string) {
-    this.blikPhoneNumber = newValue;
   }
 
   submitForm(e: Event) {
@@ -287,18 +189,8 @@ export default class OrderCreateForm extends Vue {
       restaurantId: this.restaurantId,
       orderDate: this.orderDate,
       timeOfOrder: this.timeOfOrder,
-      deliveryData: {
-        decreaseInPercent: this.decreaseInPercent,
-        deliveryCostPerEverybody: this.deliveryCostPerEverybody,
-        deliveryCostPerDish: this.deliveryCostPerDish
-      },
-      paymentData: {
-        paymentByCash: this.paymentByCash,
-        paymentByBankTransfer: this.paymentByBankTransfer,
-        bankTransferNumber: this.bankTransferNumber,
-        paymentByBlik: this.paymentByBlik,
-        blikPhoneNumber: this.blikPhoneNumber
-      }
+      deliveryData: this.priceModifiers,
+      paymentData: this.paymentData
     };
 
     this.connector!.createOrder(order)
@@ -323,11 +215,4 @@ export default class OrderCreateForm extends Vue {
 
 <style scoped>
 
-.percent-input {
-  width: 150px;
-}
-
-.short-input {
-  width: 200px;
-}
 </style>
