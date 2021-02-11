@@ -3,13 +3,13 @@
     <h3>Payment</h3>
 
     <v-switch
-        :value="paymentData.paymentByCash"
+        :input-value="paymentData.paymentByCash"
         @change="updatePaymentByCash($event)"
         label="Payment by cash"
     ></v-switch>
 
     <v-switch
-        :value="paymentData.paymentByBankTransfer"
+        :input-value="paymentData.paymentByBankTransfer"
         @change="updatePaymentByBankTransfer($event)"
         label="Payment by bank transfer"
     ></v-switch>
@@ -23,7 +23,7 @@
     </v-text-field>
 
     <v-switch
-        :value="paymentData.paymentByBlik"
+        :input-value="paymentData.paymentByBlik"
         @change="updatePaymentByBlik($event)"
         label="Payment by BLIK"
     ></v-switch>

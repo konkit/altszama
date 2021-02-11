@@ -1,11 +1,11 @@
 <template>
   <ViewWrapper
-    :title="`Edit order from ${restaurantName}`"
-    :backpath="`#/orders/show/${orderId}`"
+      :title="`Edit order from ${restaurantName}`"
+      :backpath="`#/orders/show/${orderId}`"
   >
     <LoadingView>
       <v-container>
-        <errors-component />
+        <errors-component/>
 
         <v-row>
           <v-col>
@@ -15,85 +15,34 @@
 
         <v-row>
           <v-col>
-                <v-row>
-                  <v-col>
-                    <h3>Order time</h3>
-                    <TimePicker
-                      :value="timeOfOrder"
-                      @input="updateTimeOfOrder($event)"
-                      label="Order time"
-                    ></TimePicker>
-                  </v-col>
+            <v-row>
+              <v-col>
+                <h3>Order time</h3>
+                <TimePicker
+                    :value="timeOfOrder"
+                    @input="updateTimeOfOrder($event)"
+                    label="Order time"
+                ></TimePicker>
+              </v-col>
 
-                  <v-col>
-                    <h3>Price modifiers</h3>
+              <v-col>
+                <PriceModifiersFields :price-modifiers="priceModifiers"
+                                      @input="(newPriceModifiers) => {priceModifiers = newPriceModifiers}"/>
+              </v-col>
 
-                    <v-text-field
-                      class="percent-input"
-                      label="Price decrease (in percent)"
-                      suffix="%"
-                      :value="decreaseInPercent"
-                      @input="updateDecreaseInPercent($event)"
-                    ></v-text-field>
+              <v-col>
+                <PaymentDataFields :payment-data="paymentData"
+                                   @input="(newPaymentData) => {paymentData = newPaymentData}"/>
+              </v-col>
+            </v-row>
 
-                    <MoneyInput
-                      class="short-input"
-                      label="Delivery cost (total)"
-                      :value="deliveryCostPerEverybody"
-                      @input="updateDeliveryCostPerEverybody($event)"
-                    >
-                    </MoneyInput>
-
-                    <MoneyInput
-                      class="short-input"
-                      label="Delivery cost (per dish)"
-                      :value="deliveryCostPerDish"
-                      @input="updateDeliveryCostPerDish($event)"
-                    >
-                    </MoneyInput>
-                  </v-col>
-
-                  <v-col>
-                    <h3>Payment options</h3>
-
-                    <v-switch
-                      v-model="paymentByCash"
-                      label="Payment by cash"
-                    ></v-switch>
-
-                    <v-switch
-                      v-model="paymentByBankTransfer"
-                      label="Payment by bank transfer"
-                    ></v-switch>
-
-                    <v-text-field
-                      v-if="paymentByBankTransfer"
-                      label="Bank transfer number"
-                      :value="bankTransferNumber"
-                      @change="updateBankTransferNumber($event)"
-                    />
-
-                    <v-switch
-                      v-model="paymentByBlik"
-                      label="Payment by BLIK"
-                    ></v-switch>
-
-                    <v-text-field
-                      v-if="paymentByBlik"
-                      label="BLIK phone number"
-                      :value="blikPhoneNumber"
-                      @change="updateBlikPhoneNumber($event)"
-                    />
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col>
-                    <v-btn color="success" block @click="submitForm">
-                      Update
-                    </v-btn>
-                  </v-col>
-                </v-row>
+            <v-row>
+              <v-col>
+                <v-btn color="success" block @click="submitForm">
+                  Update
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-container>
@@ -120,8 +69,11 @@ import {
   FETCH_ORDER_DATA_ACTION,
   NAMESPACE_SHOW_ORDER
 } from "../../store/modules/ShowOrderModule";
-import { OrderUpdateRequest } from "../../frontend-client";
-import { RootState } from "../../store";
+import {OrderUpdateRequest} from "../../frontend-client";
+import {RootState} from "../../store";
+import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
+import PaymentDataFields from "@/views/orders/components/orderCreateForm/PaymentDataFields.vue";
+import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";
 
 @Component({
   components: {
@@ -130,7 +82,9 @@ import { RootState } from "../../store";
     TimePicker,
     MoneyInput,
     LoadingView,
-    ErrorsComponent
+    ErrorsComponent,
+    PriceModifiersFields,
+    PaymentDataFields
   }
 })
 export default class OrderEditForm extends Vue {
@@ -140,14 +94,20 @@ export default class OrderEditForm extends Vue {
   restaurantName = "";
   orderDate = "";
   timeOfOrder = "";
-  decreaseInPercent = 0;
-  deliveryCostPerEverybody = 0;
-  deliveryCostPerDish = 0;
-  paymentByCash = true;
-  paymentByBankTransfer = false;
-  bankTransferNumber = "";
-  paymentByBlik = false;
-  blikPhoneNumber = "";
+
+  priceModifiers: PriceModifierFieldsValue = {
+    decreaseInPercent: 0,
+    deliveryCostPerEverybody: 0,
+    deliveryCostPerDish: 0
+  }
+
+  paymentData: PaymentDataFieldsValue = {
+    paymentByCash: true,
+    paymentByBankTransfer: false,
+    bankTransferNumber: "",
+    paymentByBlik: false,
+    blikPhoneNumber: ""
+  }
 
   connector?: OrdersApiConnector;
 
@@ -157,29 +117,31 @@ export default class OrderEditForm extends Vue {
     this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
     this.connector
-      .getOrderEditData(this.orderId)
-      .then(response => {
-        this.restaurantName = response.order.restaurantName;
-        this.orderDate = response.order.orderDate;
-        this.timeOfOrder = response.order.timeOfOrder || "";
-        this.decreaseInPercent = response.order.deliveryData.decreaseInPercent;
-        this.deliveryCostPerEverybody =
-          response.order.deliveryData.deliveryCostPerEverybody;
-        this.deliveryCostPerDish =
-          response.order.deliveryData.deliveryCostPerDish;
-        this.paymentByCash = response.order.paymentData.paymentByCash;
-        this.paymentByBankTransfer =
-          response.order.paymentData.paymentByBankTransfer;
-        this.bankTransferNumber =
-          response.order.paymentData.bankTransferNumber || "";
-        this.paymentByBlik = response.order.paymentData.paymentByBlik;
-        this.blikPhoneNumber = response.order.paymentData.blikPhoneNumber || "";
+        .getOrderEditData(this.orderId)
+        .then(response => {
+          this.restaurantName = response.order.restaurantName;
+          this.orderDate = response.order.orderDate;
+          this.timeOfOrder = response.order.timeOfOrder || "";
 
-        this.$store.commit("setLoadingFalse");
+          this.priceModifiers = {
+            decreaseInPercent: response.order.deliveryData.decreaseInPercent,
+            deliveryCostPerEverybody: response.order.deliveryData.deliveryCostPerEverybody,
+            deliveryCostPerDish: response.order.deliveryData.deliveryCostPerDish
+          }
 
-        document.title = `Edit order from ${response.order.restaurantName} | Alt Szama`;
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+          this.paymentData = {
+            paymentByCash: response.order.paymentData.paymentByCash,
+            paymentByBankTransfer: response.order.paymentData.paymentByBankTransfer,
+            bankTransferNumber: response.order.paymentData.bankTransferNumber || "",
+            paymentByBlik:  response.order.paymentData.paymentByBlik,
+            blikPhoneNumber: response.order.paymentData.blikPhoneNumber || ""
+          }
+
+          this.$store.commit("setLoadingFalse");
+
+          document.title = `Edit order from ${response.order.restaurantName} | Alt Szama`;
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 
   submitForm(e: Event) {
@@ -189,82 +151,36 @@ export default class OrderEditForm extends Vue {
       orderId: this.orderId,
       orderDate: this.orderDate,
       timeOfOrder: this.timeOfOrder,
-      deliveryData: {
-        decreaseInPercent: this.decreaseInPercent,
-        deliveryCostPerEverybody: this.deliveryCostPerEverybody,
-        deliveryCostPerDish: this.deliveryCostPerDish
-      },
-      paymentData: {
-        paymentByCash: this.paymentByCash,
-        paymentByBankTransfer: this.paymentByBankTransfer,
-        bankTransferNumber: this.bankTransferNumber || "",
-        paymentByBlik: this.paymentByBlik,
-        blikPhoneNumber: this.blikPhoneNumber || ""
-      }
+      deliveryData: this.priceModifiers,
+      paymentData: this.paymentData
     };
 
     this.connector!.editOrder(order)
-      .then(() => {
-        this.$store.commit("setLoadingTrue");
-        this.$store.commit(
-          `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-          {}
-        );
-        this.$store.dispatch(
-          `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-          this.orderId
-        );
-        this.$router.push("/orders/show/" + this.orderId);
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.commit(
+              `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
+              {}
+          );
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.orderId
+          );
+          this.$router.push("/orders/show/" + this.orderId);
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;
-  }
-
-  updateOrderDate(newValue: string) {
-    this.orderDate = newValue;
   }
 
   updateTimeOfOrder(newValue: string) {
     this.timeOfOrder = newValue;
   }
 
-  updateDecreaseInPercent(newValue: number) {
-    this.decreaseInPercent = newValue;
-  }
-
-  updateDeliveryCostPerEverybody(newValue: number) {
-    this.deliveryCostPerEverybody = newValue;
-  }
-
-  updateDeliveryCostPerDish(newValue: number) {
-    this.deliveryCostPerDish = newValue;
-  }
-
-  updatePaymentByCash(newValue: boolean) {
-    this.paymentByCash = newValue;
-  }
-
-  updatePaymentByBankTransfer(newValue: boolean) {
-    this.paymentByBankTransfer = newValue;
-  }
-
-  updateBankTransferNumber(newValue: string) {
-    this.bankTransferNumber = newValue;
-  }
-
-  updatePaymentByBlik(newValue: boolean) {
-    this.paymentByBlik = newValue;
-  }
-
-  updateBlikPhoneNumber(newValue: string) {
-    this.blikPhoneNumber = newValue;
-  }
-
   cancelEdit() {
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-      {}
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
+        {}
     );
   }
 
@@ -275,11 +191,4 @@ export default class OrderEditForm extends Vue {
 </script>
 
 <style scoped>
-.percent-input {
-  width: 150px;
-}
-
-.short-input {
-  width: 200px;
-}
 </style>
