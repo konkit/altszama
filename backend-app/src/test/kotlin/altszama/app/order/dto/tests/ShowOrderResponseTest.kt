@@ -31,7 +31,7 @@ class ShowOrderResponseTest {
   private val dish3 = Dish(restaurant, objectId(), "dish3", 1500)
   private val dish4 = Dish(restaurant, objectId(), "dish3", 1700)
 
-  private val order = Order(objectId(), restaurant, orderCreator, null, LocalDate.now())
+  private val order = Order(objectId(), restaurant, orderCreator, LocalDate.now())
 
   private val allDishesInRestaurant = listOf(dish1, dish2, dish3)
   private val allDishesDtosInRestaurant = allDishesInRestaurant.map { d -> DishDto.fromDish(d) }

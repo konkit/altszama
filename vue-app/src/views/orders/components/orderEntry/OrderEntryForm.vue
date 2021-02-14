@@ -87,11 +87,11 @@ import {
   UPDATE_DISH_ID,
   UPDATE_NEW_DISH_NAME,
   UPDATE_NEW_DISH_PRICE
-} from "../../../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { DishDto } from "../../../../frontend-client";
+import { DishDto } from "@/frontend-client";
 
 function dateToRel(date: Date) {
   if (date) {
@@ -194,10 +194,6 @@ export default class OrderEntryForm extends Vue {
 
   get newDishPrice() {
     return this.$store.state.modifyOrderEntry.newDishPrice;
-  }
-
-  get chosenSideDishes() {
-    return this.$store.state.modifyOrderEntry.chosenSideDishes;
   }
 
   get allDishesAtOnce() {

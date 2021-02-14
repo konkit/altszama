@@ -50,7 +50,7 @@ import MoneyInput from "../../commons/MoneyInput.vue";
 import Vue from "vue";
 import { Prop } from "vue-property-decorator";
 import Component from "vue-class-component";
-import { SideDish } from "../../../frontend-client";
+import { SideDish } from "@/frontend-client";
 
 @Component({
   components: {

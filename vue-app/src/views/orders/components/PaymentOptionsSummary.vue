@@ -3,14 +3,14 @@
     <v-list dense>
       <v-list-item>
         <v-list-item-content>
-          <span v-if="paymentData.paymentByCash == true" class="payment-entry">
+          <span v-if="paymentData.paymentByCash === true" class="payment-entry">
             <v-chip color="green" text-color="white">
-              Payment by cash &nbsp; <span class="fa fa-check"></span>
+              Payment by cash &nbsp; <span class="fa fa-check ml-2"></span>
             </v-chip>
           </span>
-          <span v-if="paymentData.paymentByCash == false" class="payment-entry">
+          <span v-if="paymentData.paymentByCash === false" class="payment-entry">
             <v-chip color="red" text-color="white">
-              Payment by cash &nbsp; <span class="fa fa-times"></span>
+              Payment by cash &nbsp; <span class="fa fa-times ml-2"></span>
             </v-chip>
           </span>
         </v-list-item-content>
@@ -19,19 +19,19 @@
       <v-list-item>
         <v-list-item-content>
           <span
-            v-if="paymentData.paymentByBankTransfer == true"
+            v-if="paymentData.paymentByBankTransfer === true"
             class="payment-entry"
           >
             <v-chip color="green" text-color="white">
-              Payment by bank transfer &nbsp; <span class="fa fa-check"></span>
+              Payment by bank transfer <span class="fa fa-check ml-2"></span>
             </v-chip>
           </span>
           <span
-            v-if="paymentData.paymentByBankTransfer == false"
+            v-if="paymentData.paymentByBankTransfer === false"
             class="payment-entry"
           >
             <v-chip color="red" text-color="white">
-              Payment by bank transfer &nbsp; <span class="fa fa-times"></span>
+              Payment by bank transfer <span class="fa fa-times ml-2"></span>
             </v-chip>
           </span>
         </v-list-item-content>
@@ -47,14 +47,14 @@
 
       <v-list-item>
         <v-list-item-content>
-          <span v-if="paymentData.paymentByBlik == true" class="payment-entry">
+          <span v-if="paymentData.paymentByBlik === true" class="payment-entry">
             <v-chip color="green" text-color="white">
-              Payment by BLIK &nbsp; <span class="fa fa-check"></span>
+              Payment by BLIK &nbsp; <span class="fa fa-check ml-2"></span>
             </v-chip>
           </span>
-          <span v-if="paymentData.paymentByBlik == false" class="payment-entry">
+          <span v-if="paymentData.paymentByBlik === false" class="payment-entry">
             <v-chip color="red" text-color="white">
-              Payment by BLIK &nbsp; <span class="fa fa-times"></span>
+              Payment by BLIK &nbsp; <span class="fa fa-times ml-2"></span>
             </v-chip>
           </span>
         </v-list-item-content>
@@ -75,7 +75,7 @@
 import Vue from "vue";
 import { Prop } from "vue-property-decorator";
 import Component from "vue-class-component";
-import { PaymentData } from "../../../frontend-client";
+import { PaymentData } from "@/frontend-client";
 
 @Component({})
 export default class PaymentOptionsSummary extends Vue {

@@ -8,13 +8,9 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="success" @click="submitForm">
-          Submit
-        </v-btn>
+        <v-btn color="success" @click="submitForm">Submit</v-btn>
 
-        <v-btn @click="cancelEdit()">
-          Cancel
-        </v-btn>
+        <v-btn @click="cancelEdit()">Cancel</v-btn>
       </div>
     </template>
 
@@ -37,7 +33,7 @@ import {
   SET_ENTRY_LOADING_TRUE,
   SETUP_EDIT_ORDER_ENTRY_ACTION,
   UPDATE_ORDER_ENTRY_ACTION
-} from "../../../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";

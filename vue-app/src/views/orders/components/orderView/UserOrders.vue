@@ -95,7 +95,7 @@ import { Prop } from "vue-property-decorator";
 import Component from "vue-class-component";
 import Vue from "vue";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import { GroupedOrderEntry } from "../../../../frontend-client";
+import { GroupedOrderEntry } from "@/frontend-client";
 
 @Component({
   components: {

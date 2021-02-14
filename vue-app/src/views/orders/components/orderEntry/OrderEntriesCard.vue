@@ -28,9 +28,7 @@
             </v-list-item-content>
 
             <v-list-item-content>
-              <template
-                v-if="isEntryEdited === true && dishEntryId === dishEntry.id"
-              >
+              <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
                 <edit-order-entry
                   :order-entry="orderEntry"
                   :dish-entry="dishEntry"
@@ -59,13 +57,7 @@
           </template>
         </template>
 
-        <template
-          v-if="
-            order.orderState === 'CREATED' &&
-              isOrderEntryOwner(orderEntry) &&
-              isEntryEdited === false
-          "
-        >
+        <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
           <v-list-item>
             <v-list-item-content class="index-element">
               <div class="py-4">{{ orderEntry.dishEntries.length + 1 }}.</div>
@@ -103,7 +95,7 @@ import {
   ModifyOrderEntryState,
   NAMESPACE_MODIFY_ORDER_ENTRY,
   SET_DISH_ENTRY_CREATING
-} from "../../../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import PaymentStatus from "@/views/orders/components/PaymentStatus.vue";
 import Vue from "vue";
 import { Prop } from "vue-property-decorator";
@@ -149,6 +141,12 @@ export default class OrderEntriesCard extends Vue {
     const modifyOrderEntryState: ModifyOrderEntryState = this.$store.state
       .modifyOrderEntry;
     return modifyOrderEntryState.isEntryEdited;
+  }
+
+  get dishEntryId() {
+    const modifyOrderEntryState: ModifyOrderEntryState = this.$store.state
+        .modifyOrderEntry;
+    return modifyOrderEntryState.dishEntryId;
   }
 }
 </script>

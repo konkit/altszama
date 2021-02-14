@@ -89,7 +89,9 @@ export default class Navigation extends Vue {
   }
 
   goToPath(path: string) {
-    this.$router.push(path).catch(err => { /* NOP */ 1 == 1})
+    this.$router.push(path).catch(err => {
+      /* NOP */
+    })
   }
 
   setMasterNavDrawerOpened(newValue: boolean) {

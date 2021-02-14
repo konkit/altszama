@@ -13,7 +13,17 @@
 
       <v-divider></v-divider>
 
-      <v-list-item class="item-dense">
+      <v-list-item class="item-dense" v-if="orderDecreaseInPercent === 0 && orderDeliveryCostPerEverybody === 0 && orderDeliveryCostPerDish === 0">
+        <v-list-item-content>
+          <v-list-item-title></v-list-item-title>
+        </v-list-item-content>
+
+        <v-list-item-content>
+          <span class="unbreakable"><i>No price modifiers</i></span>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item class="item-dense" v-if="orderDecreaseInPercent !== 0">
         <v-list-item-content>
           <v-list-item-title>Price decrease :</v-list-item-title>
         </v-list-item-content>
@@ -23,28 +33,23 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item class="item-dense">
+      <v-list-item class="item-dense" v-if="orderDeliveryCostPerEverybody !== 0">
         <v-list-item-content>
           <v-list-item-title>Delivery :</v-list-item-title>
         </v-list-item-content>
 
         <v-list-item-content>
-          <span class="unbreakable"
-            >+ <price :data-price="orderDeliveryCostPerEverybody"
-          /></span>
+          <span class="unbreakable" >+ <price :data-price="orderDeliveryCostPerEverybody"/></span>
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item class="item-dense">
+      <v-list-item class="item-dense" v-if="orderDeliveryCostPerDish !== 0">
         <v-list-item-content>
           <v-list-item-title>Delivery per dish:</v-list-item-title>
         </v-list-item-content>
 
         <v-list-item-content>
-          <span class="unbreakable"
-            >+ <price :data-price="orderDeliveryCostPerDish" /> *
-            {{ allEatingPeopleCount }}</span
-          >
+          <span class="unbreakable">+ <price :data-price="orderDeliveryCostPerDish" /> * {{ allEatingPeopleCount || 0 }}</span>
         </v-list-item-content>
       </v-list-item>
 

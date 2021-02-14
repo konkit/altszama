@@ -1,8 +1,5 @@
 <template>
-  <ViewWrapper
-      :title="`Edit order from ${restaurantName}`"
-      :backpath="`#/orders/show/${orderId}`"
-  >
+  <ViewWrapper :title="`Edit order from ${restaurantName}`" :backpath="`#/orders/show/${orderId}`">
     <LoadingView>
       <v-container>
         <errors-component/>
@@ -56,7 +53,7 @@ import LoadingView from "@/views/commons/LoadingView.vue";
 import {
   CANCEL_DISH_ENTRY_MODIFICATION,
   NAMESPACE_MODIFY_ORDER_ENTRY
-} from "../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import TimePicker from "@/views/commons/TimePicker.vue";
 import OrderStateButtons from "@/views/orders/components/OrderStateButtons.vue";
@@ -68,9 +65,9 @@ import ApiConnector from "../../lib/ApiConnector";
 import {
   FETCH_ORDER_DATA_ACTION,
   NAMESPACE_SHOW_ORDER
-} from "../../store/modules/ShowOrderModule";
-import {OrderUpdateRequest} from "../../frontend-client";
-import {RootState} from "../../store";
+} from "@/store/modules/ShowOrderModule";
+import {OrderUpdateRequest} from "@/frontend-client";
+import {RootState} from "@/store";
 import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
 import PaymentDataFields from "@/views/orders/components/orderCreateForm/PaymentDataFields.vue";
 import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";

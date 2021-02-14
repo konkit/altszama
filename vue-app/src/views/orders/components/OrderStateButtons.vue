@@ -33,7 +33,7 @@ import {
   SET_ORDER_AS_DELIVERED_ACTION,
   SET_ORDER_AS_REJECTED_ACTION,
   DELETE_ORDER_ACTION
-} from "../../../store/modules/ShowOrderModule";
+} from "@/store/modules/ShowOrderModule";
 import router from "../../../router";
 import Component from "vue-class-component";
 import Vue from "vue";

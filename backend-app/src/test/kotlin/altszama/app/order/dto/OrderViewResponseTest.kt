@@ -27,7 +27,7 @@ internal class OrderViewResponseTest {
   private val dish2 = Dish(restaurant, objectId(), "dish2", 1300)
   private val dish3 = Dish(restaurant, objectId(), "dish3", 1500)
 
-  private val order = Order(objectId(), restaurant, orderCreator, null, LocalDate.now())
+  private val order = Order(objectId(), restaurant, orderCreator, LocalDate.now())
 
   @Test
   fun onePersonOrdered() {

@@ -40,9 +40,9 @@
 
 <script lang="ts">
 import MoneyInput from "@/views/commons/MoneyInput.vue"
-import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";
+import {PaymentDataFieldsValue} from "@/views/orders/components/orderCreateForm/model";
 import Vue from "vue";
-import { Prop } from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 
 @Component({

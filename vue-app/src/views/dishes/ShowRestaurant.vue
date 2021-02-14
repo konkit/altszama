@@ -1,8 +1,5 @@
 <template>
-  <ViewWrapper
-      :title="`Restaurant ${restaurant.name}`"
-      backpath="#/restaurants"
-  >
+  <ViewWrapper :title="`Restaurant ${restaurant.name}`" backpath="#/restaurants">
     <template slot="toolbar-buttons">
       <v-btn @click="editRestaurant">
         Edit restaurant&nbsp;<span class="fa fa-pencil"/>
@@ -84,7 +81,7 @@ import {
   DELETE_RESTAURANT_ACTION,
   FETCH_RESTAURANT_ACTION,
   ShowRestaurantState
-} from "../../store/modules/ShowRestaurantModule";
+} from "@/store/modules/ShowRestaurantModule";
 import router from "../../router/index";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Component from "vue-class-component";

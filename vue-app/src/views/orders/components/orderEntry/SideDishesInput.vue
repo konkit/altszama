@@ -9,11 +9,7 @@
             </v-list-item-content>
 
             <v-list-item-content>
-              <v-btn-toggle
-                :value="sideDish.isNew"
-                mandatory
-                @change="onSideDishTypeToggle(sdIndex, $event)"
-              >
+              <v-btn-toggle :value="sideDish.isNew" mandatory @change="onSideDishTypeToggle(sdIndex, $event)">
                 <v-btn text :value="false">
                   Select side dish from the list
                 </v-btn>
@@ -91,12 +87,12 @@ import {
   UPDATE_NEW_SIDE_DISH_NAME,
   UPDATE_NEW_SIDE_DISH_PRICE,
   UPDATE_SIDE_DISH_ACTION
-} from "../../../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { SideDish, SideDishData } from "../../../../frontend-client";
-import { ShowOrderState } from "../../../../store/modules/ShowOrderModule";
+import {SideDish, SideDishData} from "../../../../frontend-client";
+import {ShowOrderState} from "@/store/modules/ShowOrderModule";
 
 @Component({
   components: {

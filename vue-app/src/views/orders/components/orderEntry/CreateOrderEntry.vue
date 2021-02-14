@@ -38,7 +38,7 @@ import {
   SET_ENTRY_LOADING_FALSE,
   SET_ENTRY_LOADING_TRUE,
   SETUP_CREATE_ORDER_ENTRY_ACTION
-} from "../../../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import Component from "vue-class-component";
 import Vue from "vue";
 
@@ -112,14 +112,6 @@ export default class CreateOrderEntry extends Vue {
 
   get newDishName() {
     return this.$store.state.modifyOrderEntry.newDishName;
-  }
-
-  get newDishPrice() {
-    return this.$store.state.modifyOrderEntry.newDishPrice;
-  }
-
-  get chosenSideDishes() {
-    return this.$store.state.modifyOrderEntry.chosenSideDishes;
   }
 }
 </script>

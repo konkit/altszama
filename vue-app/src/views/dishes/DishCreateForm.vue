@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Create dish`" :backpath="getBackUrl()">
+  <ViewWrapper :title="`Create dish`" :backpath="'#' + getBackUrl()">
     <v-container>
       <errors-component/>
 
@@ -84,8 +84,7 @@ export default class DishCreateForm extends Vue {
   }
 
   submitForm() {
-    const sideDishesElement: SideDishes = this.$refs
-        .sideDishesElement as SideDishes;
+    const sideDishesElement: SideDishes = this.$refs.sideDishesElement as SideDishes;
     const sideDishes = sideDishesElement.getSideDishes();
 
     const dishPayload = {
@@ -104,13 +103,13 @@ export default class DishCreateForm extends Vue {
   }
 
   getBackUrl() {
-    if (
-        typeof this.$route.query.addingToOrderId !== "undefined" &&
-        this.$route.query.addingToOrderId.length > 0
-    ) {
-      return `#/orders/${this.$route.query.addingToOrderId}/create_entry`;
+    const addingToOrderIdSet = typeof this.$route.query.addingToOrderId !== "undefined"
+        && this.$route.query.addingToOrderId.length > 0;
+
+    if (addingToOrderIdSet) {
+      return `/orders/${this.$route.query.addingToOrderId}/create_entry`;
     } else {
-      return `#/restaurants/show/${this.restaurantId}`;
+      return `/restaurants/show/${this.restaurantId}`;
     }
   }
 
@@ -129,7 +128,4 @@ export default class DishCreateForm extends Vue {
 </script>
 
 <style scoped>
-.row {
-  margin-top: 2rem;
-}
 </style>

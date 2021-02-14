@@ -64,7 +64,7 @@ import LoadingView from "@/views/commons/LoadingView.vue";
 import {
   CANCEL_DISH_ENTRY_MODIFICATION,
   NAMESPACE_MODIFY_ORDER_ENTRY
-} from "../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import TimePicker from "@/views/commons/TimePicker.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";

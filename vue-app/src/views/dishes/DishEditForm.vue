@@ -1,19 +1,12 @@
 <template>
-  <ViewWrapper
-    title="Edit dish"
-    :backpath="`#/restaurants/show/${restaurantId}`"
-  >
+  <ViewWrapper title="Edit dish" :backpath="`#/restaurants/show/${restaurantId}`">
     <LoadingView>
       <v-container>
         <errors-component />
 
         <v-row>
           <v-col>
-                <input
-                  type="hidden"
-                  name="restaurant.id"
-                  :value="restaurantId"
-                />
+                <input type="hidden" name="restaurant.id" :value="restaurantId"/>
                 <input type="hidden" name="id" :value="dishId" />
 
                 <v-text-field

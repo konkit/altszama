@@ -6,40 +6,13 @@
       <v-row>
         <v-col>
               <v-form id="restaurantCreateForm">
-                <v-row>
-                  <v-col>
-                    <v-autocomplete
-                      :items="teamsList"
-                      item-text="domain"
-                      item-value="id"
-                      label="Team"
-                      :value="this.teamsList.find(t => teamId == t.id)"
-                      @input="updateTeamId($event)"
-                    >
-                    </v-autocomplete>
-                  </v-col>
-                </v-row>
+                <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
 
-                <v-text-field
-                  label="Name"
-                  :value="name"
-                  @input="updateName($event)"
-                ></v-text-field>
-                <v-text-field
-                  label="Url"
-                  :value="url"
-                  @input="updateUrl($event)"
-                ></v-text-field>
-                <v-text-field
-                  label="Telephone"
-                  :value="telephone"
-                  @input="updateTelephone($event)"
-                ></v-text-field>
-                <v-text-field
-                  label="Address"
-                  :value="address"
-                  @input="updateAddress($event)"
-                ></v-text-field>
+                <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
+
+                <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
+
+                <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
               </v-form>
             <div class="my-4">
               <v-btn block color="success" @click="submitForm">Create</v-btn>

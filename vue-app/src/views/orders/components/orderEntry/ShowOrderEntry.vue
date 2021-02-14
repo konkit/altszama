@@ -9,15 +9,10 @@
             </div>
 
             <div class="dish-price">
-              (
-              <price :data-price="dishEntry.price" />
-              )
+              (<price :data-price="dishEntry.price" />)
             </div>
 
-            <div
-              class="edit-buttons"
-              v-if="isOrderEntryOwner() && order.orderState === 'CREATED'"
-            >
+            <div class="edit-buttons" v-if="isOrderEntryOwner() && order.orderState === 'CREATED'">
               <v-btn text icon @click="editDishEntry()">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </v-btn>
@@ -65,11 +60,11 @@ import {
   DELETE_DISH_ENTRY_ACTION,
   NAMESPACE_SHOW_ORDER,
   ShowOrderState
-} from "../../../../store/modules/ShowOrderModule";
+} from "@/store/modules/ShowOrderModule";
 import {
   NAMESPACE_MODIFY_ORDER_ENTRY,
   SET_DISH_ENTRY_EDITING
-} from "../../../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
 import Vue from "vue";

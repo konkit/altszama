@@ -134,10 +134,7 @@ import LoadingView from "@/views/commons/LoadingView.vue";
 import PriceSummary from "@/views/orders/components/PriceSummary.vue";
 import TimePicker from "@/views/commons/TimePicker.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import {
-  NAMESPACE_SHOW_ORDER,
-  UNLOCK_ORDER_ACTION
-} from "../../store/modules/ShowOrderModule";
+import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION} from "@/store/modules/ShowOrderModule";
 import router from "../../router/index";
 import UserOrders from "@/views/orders/components/orderView/UserOrders.vue";
 import Vue from "vue";
@@ -145,11 +142,13 @@ import Component from "vue-class-component";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import {RootState} from "../../store";
-import {GroupedOrderEntry} from "../../frontend-client";
+import {RootState} from "@/store";
+import {GroupedOrderEntry} from "@/frontend-client";
+import BackButton from "@/views/commons/BackButton.vue";
 
 @Component({
   components: {
+    BackButton,
     UserOrders,
     ViewWrapper,
     TimePicker,

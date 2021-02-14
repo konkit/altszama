@@ -27,20 +27,13 @@
           <v-col :cols="12" :md="4">
             <h1>Price summary</h1>
 
-            <price-summary
-                :orderDecreaseInPercent="
-                  this.order.deliveryData.decreaseInPercent
-                "
-                :orderDeliveryCostPerEverybody="
-                  this.order.deliveryData.deliveryCostPerEverybody
-                "
-                :orderDeliveryCostPerDish="
-                  this.order.deliveryData.deliveryCostPerDish
-                "
-                :basePriceSum="this.baseOrderPrice"
-                :allEatingPeopleCount="allEatingPeopleCount()"
-                :totalPrice="this.totalOrderPrice"
-            ></price-summary>
+            <price-summary :orderDecreaseInPercent="this.order.deliveryData.decreaseInPercent"
+                           :orderDeliveryCostPerEverybody="this.order.deliveryData.deliveryCostPerEverybody"
+                           :orderDeliveryCostPerDish="this.order.deliveryData.deliveryCostPerDish"
+                           :basePriceSum="this.baseOrderPrice"
+                           :allEatingPeopleCount="allEatingPeopleCount()"
+                           :totalPrice="this.totalOrderPrice">
+            </price-summary>
           </v-col>
 
           <v-col :cols="12" :md="4">
@@ -58,9 +51,7 @@
 
             <div class="py-2 px-4">
               <b>See menu at &nbsp;</b>
-              <a target="_blank" :href="order.restaurantUrl">{{
-                  order.restaurantUrl
-                }}</a>
+              <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
             </div>
           </v-col>
           <v-col>
@@ -101,11 +92,7 @@
           </v-row>
         </template>
 
-        <template
-            v-if="
-            order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0
-          "
-        >
+        <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
           <v-row>
             <v-col>
               <new-order-entry-card

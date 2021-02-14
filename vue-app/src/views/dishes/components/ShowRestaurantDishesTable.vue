@@ -1,9 +1,7 @@
 <template>
   <div>
     <v-list two-line>
-      <template
-        v-for="[category, dishes] in Object.entries(this.dishesByCategory)"
-      >
+      <template v-for="[category, dishes] in Object.entries(this.dishesByCategory)">
         <v-subheader :key="category">
           <span v-if="category"> Category: {{ category }} </span>
           <span v-else>
@@ -33,17 +31,7 @@
 
             <v-list-item-action>
               <span class="edit-buttons">
-                <v-btn
-                  text
-                  icon
-                  :href="
-                    '#/restaurants/' +
-                      restaurant.id +
-                      '/dishes/' +
-                      dish.id +
-                      '/edit'
-                  "
-                >
+                <v-btn text icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">
                   <i class="fa fa-pencil" aria-hidden="true"></i>
                 </v-btn>
 
@@ -62,9 +50,12 @@
 <script lang="ts">
 import Price from "../../commons/PriceElement.vue";
 import Vue from "vue";
-import { Prop } from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
-import { DishDto, Restaurant } from "../../../frontend-client";
+import {DishDto, Restaurant} from "../../../frontend-client";
+import moment from "moment";
+import {DELETE_DISH_ACTION} from "@/store/modules/ShowRestaurantModule";
+
 
 @Component({
   components: {
@@ -75,8 +66,20 @@ export default class ShowRestaurantDishesTable extends Vue {
   @Prop() restaurant!: Restaurant;
   @Prop() dishesByCategory!: { [key: string]: Array<DishDto> };
 
-  mounted() {
-    console.log("Dishes by category: ", this.dishesByCategory);
+  deleteDish(dishId: string) {
+    this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {
+      restaurantId: this.restaurant.id,
+      dishId: dishId
+    });
+
+  }
+
+  dateToRel(date: Date) {
+    if (date) {
+      return moment(date).fromNow();
+    } else {
+      return "";
+    }
   }
 }
 </script>

@@ -67,7 +67,7 @@ import Component from "vue-class-component";
 import Vue from "vue";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
-import {RestaurantInfo} from "../../frontend-client";
+import {RestaurantInfo} from "@/frontend-client";
 
 interface RestaurantEntry {
   id: string;

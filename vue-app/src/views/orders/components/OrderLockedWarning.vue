@@ -28,7 +28,7 @@ import router from "../../../router/index";
 import {
   NAMESPACE_SHOW_ORDER,
   UNLOCK_ORDER_ACTION
-} from "../../../store/modules/ShowOrderModule";
+} from "@/store/modules/ShowOrderModule";
 import { Prop } from "vue-property-decorator";
 import Component from "vue-class-component";
 import Vue from "vue";

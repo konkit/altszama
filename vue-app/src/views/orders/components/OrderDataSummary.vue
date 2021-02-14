@@ -63,8 +63,4 @@ export default class OrderDataSummary extends Vue {
 </script>
 
 <style scoped>
-.grid-container {
-  display: grid;
-  grid-template-columns: 125px 1fr;
-}
 </style>

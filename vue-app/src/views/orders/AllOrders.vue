@@ -4,12 +4,7 @@
       <v-container>
         <v-row>
           <v-col cols="xs12">
-            <v-data-table
-                class="table table-hover"
-                :items="allOrdersList"
-                :headers="headers"
-                :loading="false"
-            >
+            <v-data-table class="table table-hover" :items="allOrdersList" :headers="headers" :loading="false">
               <template slot="header" slot-scope="props">
                 <tr>
                   <th v-for="header in props.headers" :key="header.text">
@@ -19,8 +14,7 @@
               </template>
 
               <template slot="item" slot-scope="props">
-                <tr
-                    @click="goToOrder(props.item.id)"
+                <tr @click="goToOrder(props.item.id)"
                     :key="props.item.id"
                     :data-href="'/orders/show/' + props.item.id"
                     class="pointer"
@@ -47,7 +41,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ApiConnector from "../../lib/ApiConnector";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
-import {RootState} from "../../store";
+import {RootState} from "@/store";
 import {AllOrdersOrderDto} from "../../frontend-client";
 import Navigation from "@/views/commons/Navigation.vue";
 

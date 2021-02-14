@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import BackButton from "./BackButton2.vue";
+import BackButton from "./BackButton.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";

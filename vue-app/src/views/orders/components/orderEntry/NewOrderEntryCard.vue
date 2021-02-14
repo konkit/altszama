@@ -24,7 +24,7 @@
 import {
   NAMESPACE_MODIFY_ORDER_ENTRY,
   SET_DISH_ENTRY_CREATING
-} from "../../../../store/modules/ModifyOrderEntryModule";
+} from "@/store/modules/ModifyOrderEntryModule";
 import CreateOrderEntry from "@/views/orders/components/orderEntry/CreateOrderEntry.vue";
 import Vue from "vue";
 import Component from "vue-class-component";

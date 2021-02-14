@@ -8,9 +8,7 @@
               <errors-component />
 
               <v-layout>
-                <a href="/static/example.json" download
-                  >Download JSON template</a
-                >
+                <a href="/static/example.json" download>Download JSON template</a>
               </v-layout>
 
               <v-layout>
@@ -38,6 +36,7 @@
 import ApiConnector from "../../lib/ApiConnector";
 import FileUpload from "vue-simple-upload/dist/FileUpload";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
+import ErrorsComponent from "@/views/commons/ErrorsComponent.vue"
 
 export default {
   data() {
@@ -66,13 +65,11 @@ export default {
   },
   components: {
     ViewWrapper,
-    fileupload: FileUpload
+    fileupload: FileUpload,
+    ErrorsComponent
   }
 };
 </script>
 
 <style scoped>
-.layout {
-  margin-top: 2rem;
-}
 </style>
