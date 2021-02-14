@@ -61,7 +61,7 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
       connector
         .deleteRestaurant(restaurantId)
         .then(response => router.push({ path: "/restaurants" }))
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => errResponse.text().then((errorMessage: string) => ApiConnector.handleError(errorMessage)));
     },
     [DELETE_DISH_ACTION]({ state, rootState }, { restaurantId, dishId }) {
       const connector = new DishesApiConnector(rootState);
@@ -69,12 +69,10 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
       connector
         .deleteDish(restaurantId, dishId)
         .then(successResponse => {
-          this.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {
-            restaurantId: restaurantId
-          });
+          this.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, { restaurantId: restaurantId });
           this.commit("setLoadingFalse");
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => errResponse.text().then((errorMessage: string) => ApiConnector.handleError(errorMessage)));
     }
   }
 };

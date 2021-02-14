@@ -29,9 +29,6 @@ class AuthController(envVarConfig: SecretsConfig) {
   private var clientSecret: String = envVarConfig.googleClientSecret
 
   @Autowired
-  private lateinit var userRepository: UserRepository
-
-  @Autowired
   private lateinit var authService: AuthService
 
   @Autowired
@@ -64,7 +61,7 @@ class AuthController(envVarConfig: SecretsConfig) {
 
       logger.info("userInfo:" + userinfo.toPrettyString())
 
-      val authInfo = authService.getUserFromUserInfo(userinfo)
+      val authInfo = authService.getJwtTokenFromUserInfo(userinfo)
 
       activityEventService.saveUserLogin(authInfo.userId)
 

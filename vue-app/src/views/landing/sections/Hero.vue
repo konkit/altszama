@@ -13,10 +13,9 @@
             max-width="700"
             width="100%"
         >
-          <h1 class="display-2 font-weight-black mb-4 text-left">ORDERING FOOD AT THE OFFICE?</h1>
+          <h1 class="display-2 font-weight-black mb-4 text-left">ORDERING FOOD WITH YOUR COLLEAGUES?</h1>
 
-          <h5 class="base-body text-h5 mb-4">Hard to keep track the orders and the payments?</h5>
-          <h5 class="base-body text-h5 mb-4">The search is over!</h5>
+          <h5 class="base-body text-h5 mb-4">Keep track of orders and payments easily!</h5>
 
           <div
               :class="$vuetify.breakpoint.smAndDown ? 'flex-column align-start' : 'align-center'"
@@ -44,9 +43,6 @@ export default {
 
   computed: {
     height() {
-      // const height = this.$vuetify.breakpoint.mdAndUp ? '100vh' : '50vh'
-      // return `calc(${height} - 64px)`
-
       return "calc(100vh - 64px)"
     },
   },

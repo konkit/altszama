@@ -20,7 +20,7 @@
               <p><b>Address : </b> {{ this.restaurant.address }}</p>
               <p>
                 <b>URL : </b>
-                <a :href="this.restaurant.url">{{ this.restaurant.url }}</a>
+                <a target="_blank" :href="this.restaurant.url">{{ this.restaurant.url }}</a>
               </p>
               <p>
                 <b>Telephone number:</b> {{ this.restaurant.telephone }}

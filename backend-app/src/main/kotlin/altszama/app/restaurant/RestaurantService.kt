@@ -7,6 +7,7 @@ import altszama.app.restaurant.dto.RestaurantUpdateRequest
 import altszama.app.team.TeamService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.*
@@ -61,14 +62,10 @@ class RestaurantService {
     return restaurantRepository.findById(restaurantId)
   }
 
-  fun findAll(): List<Restaurant> {
-    return restaurantRepository.findAll()
-  }
-
   fun deleteRestaurant(restaurantId: String) {
     val ordersFromRestaurant = orderRepository.findByRestaurantId(restaurantId)
     if (ordersFromRestaurant.isNotEmpty()) {
-      throw Exception("There are orders from this restaurant")
+      throw RestaurantInUseException()
     } else {
       val dishesToRemove = dishRepository.findByRestaurantId(restaurantId)
       dishesToRemove.forEach { dish ->
@@ -80,9 +77,11 @@ class RestaurantService {
   }
 
   fun restaurantsToDishCountMap(): Map<Restaurant, Long> {
-    return restaurantRepository.findAll().map { restaurant ->
+    return restaurantRepository.findAll(Sort.by(Sort.Direction.DESC, "lastCrawled")).map { restaurant ->
       restaurant to dishRepository.countAllByRestaurantId(restaurant.id)
     }.toMap()
   }
 
 }
+
+class RestaurantInUseException() : Exception("There are orders from this restaurant")

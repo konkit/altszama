@@ -52,7 +52,11 @@ class RestaurantController {
 
   @DeleteMapping("/restaurants/{restaurantId}/delete")
   fun deleteRestaurant(@PathVariable restaurantId: String): ResponseEntity<String> {
-    restaurantService.deleteRestaurant(restaurantId)
-    return ResponseEntity("{}", HttpStatus.CREATED)
+    return try {
+      restaurantService.deleteRestaurant(restaurantId)
+      ResponseEntity("{}", HttpStatus.CREATED)
+    } catch (e: RestaurantInUseException) {
+      ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+    }
   }
 }

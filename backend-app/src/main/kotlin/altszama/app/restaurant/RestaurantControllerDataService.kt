@@ -26,7 +26,8 @@ class RestaurantControllerDataService {
   fun getIndexData(): IndexResponse {
     val restaurantToCountMap: Map<Restaurant, Long> = restaurantService.restaurantsToDishCountMap()
 
-    val restaurantInfoList = restaurantToCountMap.entries.map { entry -> RestaurantInfo(entry.key.id, entry.key.name, entry.key.lastCrawled, entry.key.lastEdited, entry.value) }
+    val restaurantInfoList = restaurantToCountMap.entries
+        .map { entry -> RestaurantInfo(entry.key.id, entry.key.name, entry.key.lastCrawled, entry.key.lastEdited, entry.value) }
 
     return IndexResponse(restaurantInfoList)
   }

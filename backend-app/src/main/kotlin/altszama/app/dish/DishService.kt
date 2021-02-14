@@ -68,7 +68,7 @@ class DishService {
 
   fun deleteDish(dishId: String) {
     if (orderEntryRepository.findByDishIdQuery(ObjectId(dishId)).isNotEmpty()) {
-      throw Exception("There are order entries using this dish!")
+      throw DishInUseException()
     }
 
     dishRepository.deleteById(dishId)
@@ -84,3 +84,5 @@ class DishService {
   }
 
 }
+
+class DishInUseException() : Exception("Delete failed - there are order entries using this dish!")

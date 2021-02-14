@@ -45,8 +45,12 @@ class DishController {
 
   @DeleteMapping("/restaurants/{restaurantId}/dishes/{dishId}/delete")
   fun deleteDish(@PathVariable dishId: String): ResponseEntity<String> {
-    dishService.deleteDish(dishId)
-    return ResponseEntity("{}", HttpStatus.OK)
+    return try {
+      dishService.deleteDish(dishId)
+      ResponseEntity("{}", HttpStatus.OK)
+    } catch (e: DishInUseException) {
+      ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+    }
   }
 
   @DeleteMapping("/dishes/{dishId}/side_dishes/{sideDishId}/delete")

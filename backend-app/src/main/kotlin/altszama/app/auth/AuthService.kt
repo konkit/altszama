@@ -36,7 +36,7 @@ class AuthService(envVarConfig: SecretsConfig) {
         .subject
   }
 
-  fun getUserFromUserInfo(userinfo: Userinfoplus): AuthTokenInfo {
+  fun getJwtTokenFromUserInfo(userinfo: Userinfoplus): AuthTokenInfo {
     val user = userRepository.findByEmail(userinfo.email) ?: createNewUser(userinfo)
 
     val token = createJwt(user.id)

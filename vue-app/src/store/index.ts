@@ -64,10 +64,7 @@ export default new Vuex.Store({
         state.errors.push(error.message);
       } else if (typeof error == "object" && error.body.message !== undefined) {
         state.errors.push(error.body.message);
-      } else if (
-        typeof error == "object" &&
-        error.body.messages !== undefined
-      ) {
+      } else if (typeof error == "object" && error.body.messages !== undefined) {
         error.body.messages.forEach((errorStr: string) =>
           state.errors.push(errorStr)
         );
