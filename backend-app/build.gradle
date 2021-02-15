@@ -80,7 +80,6 @@ dependencies {
   compile("nl.martijndwars:web-push:5.0.2")
   compile("org.bouncycastle:bcprov-jdk15on:1.54")
 
-
   // Jackson
   compile("com.fasterxml.jackson.module:jackson-module-parameter-names")
   compile("com.fasterxml.jackson.module:jackson-module-kotlin")

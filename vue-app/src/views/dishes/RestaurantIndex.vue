@@ -33,24 +33,19 @@
               </template>
             </v-data-table>
 
-            <v-tooltip left>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                    fixed
-                    dark
-                    fab
-                    large
-                    bottom
-                    right
-                    color="green"
-                    @click="goToCreateRestaurant()"
-                    v-on="on"
-                >
-                  <v-icon>add</v-icon>
-                </v-btn>
-              </template>
-              <span>Create new restaurant</span>
-            </v-tooltip>
+            <router-link to="/restaurants/create">
+              <v-btn dark large bottom right color="green">
+                Create new restaurant
+                <v-icon class="ml-2">add</v-icon>
+              </v-btn>
+            </router-link>
+
+            <a :href="getSwaggerUrl()">
+              <v-btn large bottom right>
+                Manual import API
+                <v-icon class="ml-2">upload</v-icon>
+              </v-btn>
+            </a>
           </v-col>
         </v-row>
       </v-container>
@@ -112,6 +107,10 @@ export default class RestaurantIndex extends Vue {
           document.title = `Restaurants | Alt Szama`;
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
+  }
+
+  getSwaggerUrl() {
+    return ApiConnector.getBackendUrl() + "/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/"
   }
 
   goToRestaurant(restaurantId: string) {
