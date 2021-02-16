@@ -78,7 +78,7 @@ export default class RestaurantCreateForm extends Vue {
     };
 
     this.connector!.saveRestaurant(restaurant)
-      .then(() => router.push("/restaurants"))
+      .then(() => this.$router.back())
       .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 

@@ -161,6 +161,6 @@ export default class OrdersApiConnector {
   makeAnOrder(orderId: string, formData: SetAsOrderedResponse) {
     return this.orderApi
       .setAsOrdered(formData, orderId, headersWithToken())
-      .then(() => router.push("/orders/show/" + orderId));
+      .then(() => router.back());
   }
 }

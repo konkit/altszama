@@ -91,7 +91,7 @@ export default class TeamsView extends Vue {
   }
 
   goToCreateTeam() {
-    this.$router.push("/teams/create");
+    this.$router.push({name: "TeamsCreate"});
   }
 }
 </script>

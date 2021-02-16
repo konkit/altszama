@@ -4,7 +4,6 @@ import altszama.app.dish.DishRepository
 import altszama.app.order.OrderRepository
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.restaurant.dto.RestaurantUpdateRequest
-import altszama.app.team.TeamService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
@@ -24,15 +23,9 @@ class RestaurantService {
   @Autowired
   private lateinit var orderRepository: OrderRepository
 
-  @Autowired
-  private lateinit var teamService: TeamService
-
   fun createRestaurant(saveRequest: RestaurantSaveRequest): Restaurant {
-    val team = teamService.findById(saveRequest.teamId).get()
-
     val newRestaurantObj = Restaurant(
         id = ObjectId().toHexString(),
-        team = team,
         name = saveRequest.name,
         telephone = saveRequest.telephone,
         address = saveRequest.address,

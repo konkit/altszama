@@ -81,11 +81,11 @@ export default class OrderStateButtons extends Vue {
   }
 
   placeOrder() {
-    router.push("/orders/" + this.orderId + "/order_view");
+    router.push({name: "OrderView", params: {id: this.orderId}});
   }
 
   edit() {
-    router.push("/orders/" + this.orderId + "/edit");
+    router.push({name: "OrderEditForm", params: {id: this.orderId}});
   }
 }
 </script>

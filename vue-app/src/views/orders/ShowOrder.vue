@@ -170,7 +170,7 @@ export default class ShowOrder extends Vue {
   }
 
   placeOrder() {
-    router.push("/orders/" + this.orderId + "/order_view");
+    router.push({name: "OrderView", params: {id: this.orderId}});
   }
 
   unlockOrder() {
@@ -186,7 +186,7 @@ export default class ShowOrder extends Vue {
   }
 
   edit() {
-    router.push("/orders/" + this.orderId + "/edit");
+    router.push({name: "OrderEditForm", params: {id: this.orderId}});
   }
 
   canShowPlaceOrderButton() {

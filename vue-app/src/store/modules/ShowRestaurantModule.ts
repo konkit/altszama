@@ -52,15 +52,12 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
-    [DELETE_RESTAURANT_ACTION](
-      { state, rootState },
-      { restaurantId, errorsComponent }
-    ) {
+    [DELETE_RESTAURANT_ACTION]({ state, rootState },{ restaurantId, errorsComponent }) {
       const connector = new DishesApiConnector(rootState);
 
       connector
         .deleteRestaurant(restaurantId)
-        .then(response => router.push({ path: "/restaurants" }))
+        .then(response => router.push({ name: "RestaurantIndex" }))
         .catch(errResponse => errResponse.text().then((errorMessage: string) => ApiConnector.handleError(errorMessage)));
     },
     [DELETE_DISH_ACTION]({ state, rootState }, { restaurantId, dishId }) {

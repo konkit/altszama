@@ -96,21 +96,10 @@ export default class DishCreateForm extends Vue {
     };
 
     this.connector!.createDish(this.restaurantId, dishPayload)
-        .then(() => this.$router.push(this.getBackUrl()))
+        .then(() => this.$router.back())
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;
-  }
-
-  getBackUrl() {
-    const addingToOrderIdSet = typeof this.$route.query.addingToOrderId !== "undefined"
-        && this.$route.query.addingToOrderId.length > 0;
-
-    if (addingToOrderIdSet) {
-      return `/orders/${this.$route.query.addingToOrderId}/create_entry`;
-    } else {
-      return `/restaurants/show/${this.restaurantId}`;
-    }
   }
 
   updateName(newValue: string) {

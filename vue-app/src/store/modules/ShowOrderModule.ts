@@ -208,7 +208,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
     [DELETE_ORDER_ACTION]({ rootState }, { orderId }) {
       new OrdersApiConnector(rootState)
         .deleteOrder(orderId)
-        .then(() => router.push("/orders"))
+        .then(() => router.push({name: "TodayOrders"}))
         .catch(errResponse => ApiConnector.handleError(errResponse));
     }
   }

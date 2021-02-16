@@ -84,7 +84,7 @@ export default class CreateTeamForm extends Vue {
     };
 
     this.connector!.createTeam(dto)
-      .then(() => router.push("/teams/"))
+      .then(() => router.push({name: "TeamsView"}))
       .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;

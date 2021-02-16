@@ -16,7 +16,6 @@
               <template slot="item" slot-scope="props">
                 <tr @click="goToOrder(props.item.id)"
                     :key="props.item.id"
-                    :data-href="'/orders/show/' + props.item.id"
                     class="pointer"
                 >
                   <td>{{ props.item.orderDate }}</td>
@@ -79,7 +78,7 @@ export default class AllOrders extends Vue {
   }
 
   goToOrder(selectedOrderId: string) {
-    router.push("/orders/show/" + selectedOrderId);
+    router.push({name: "ShowOrder", params: {id: selectedOrderId}});
   }
 }
 </script>

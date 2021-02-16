@@ -81,7 +81,7 @@ export default class RestaurantEditForm extends Vue {
     };
 
     this.connector!.editRestaurant(this.restaurantId, restaurant)
-      .then(() => router.push("/restaurants/show/" + this.restaurantId))
+      .then(() => router.push({name: "ShowRestaurant", params: {id: this.restaurantId}}))
       .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;

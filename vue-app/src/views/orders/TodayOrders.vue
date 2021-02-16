@@ -10,10 +10,7 @@
               <v-list>
                 <template v-for="(orderEntry, i) in currentOrderEntries">
                   <template v-for="(dishEntry, j) in orderEntry.dishEntries">
-                    <v-list-item
-                        @click="goToOrder(orderEntry.orderId)"
-                        :key="'dish-entry-' + i + '-' + j"
-                    >
+                    <v-list-item @click="goToOrder(orderEntry.orderId)" :key="'dish-entry-' + i + '-' + j">
                       <v-list-item-content>
                         <v-list-item-title class="pointer">
                           <b>{{ dishEntry.dish.name }}</b>
@@ -46,17 +43,10 @@
 
             <v-list>
               <template v-if="this.ordersList.length > 0">
-                <v-list-item
-                    @click="goToOrder(order.id)"
-                    v-for="(order, i) in this.ordersList"
-                    :key="'order-' + i"
-                >
+                <v-list-item @click="goToOrder(order.id)" v-for="(order, i) in this.ordersList" :key="'order-' + i">
                   <v-list-item-content>
                     <v-list-item-title class="pointer">
-                      <div
-                          class="wide-order-status"
-                          v-if="$vuetify.breakpoint.mdAndUp"
-                      >
+                      <div class="wide-order-status" v-if="$vuetify.breakpoint.mdAndUp">
                         <div class="order-data-wrapper">
                           <b>{{ order.restaurantName }}</b> (created by
                           {{ order.orderCreatorUsername }})
@@ -83,8 +73,7 @@
 
                       <div class="thin-order-status" v-if="$vuetify.breakpoint.smAndDown">
                         <div>
-                          <b>{{ order.restaurantName }}</b> (created by
-                          {{ order.orderCreatorUsername }})
+                          <b>{{ order.restaurantName }}</b> (created by {{ order.orderCreatorUsername }})
                         </div>
                         <div>Status: {{ order.orderState }}</div>
                       </div>
@@ -92,29 +81,19 @@
                   </v-list-item-content>
                 </v-list-item>
               </template>
+
               <template v-if="this.ordersList.length === 0">
                 <v-list-item>
                   <v-list-item-content>
                     <v-list-item-title>No orders yet</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-
-
               </template>
-
             </v-list>
 
-              <v-btn
-                  dark
-                  large
-                  bottom
-                  right
-                  color="green"
-                  @click="goToCreateOrder()"
-              >
-                Add new order<v-icon>add</v-icon>
-              </v-btn>
-
+            <v-btn dark large bottom right color="green" @click="goToCreateOrder()">
+              Add new order<v-icon>add</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -167,11 +146,11 @@ export default class TodayOrders extends Vue {
   }
 
   goToOrder(selectedOrderId: string) {
-    router.push("/orders/show/" + selectedOrderId);
+    router.push({name: "ShowOrder", params: {id: selectedOrderId}});
   }
 
   goToCreateOrder() {
-    router.push("/orders/create");
+    router.push({name: "OrderCreateForm"});
   }
 }
 </script>

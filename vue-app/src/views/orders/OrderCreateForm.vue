@@ -194,7 +194,7 @@ export default class OrderCreateForm extends Vue {
     };
 
     this.connector!.createOrder(order)
-        .then(() => router.push("/orders/"))
+        .then(() => router.push({name: "TodayOrders"}))
         .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;

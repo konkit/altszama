@@ -8,7 +8,6 @@ import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.OrderUpdateRequest
 import altszama.app.orderEntry.*
 import altszama.app.restaurant.RestaurantRepository
-import altszama.app.team.TeamService
 import altszama.app.validation.ValidationFailedException
 import org.funktionale.tries.Try
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,9 +34,6 @@ class OrderService {
 
   @Autowired
   private lateinit var restaurantRepository: RestaurantRepository
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
 
   fun saveOrder(orderSaveRequest: OrderSaveRequest) {

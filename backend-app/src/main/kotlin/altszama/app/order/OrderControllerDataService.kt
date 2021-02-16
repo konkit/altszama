@@ -6,8 +6,6 @@ import altszama.app.order.dto.*
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.restaurant.RestaurantRepository
-import altszama.app.team.TeamRepository
-import altszama.app.team.TeamService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -37,9 +35,6 @@ class OrderControllerDataService {
 
   @Autowired
   private lateinit var authService: AuthService
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
 
   fun getIndexData(): TodayOrdersResponse {
@@ -91,7 +86,6 @@ class OrderControllerDataService {
 
     return CreateOrderInitialData(
             restaurantRepository.findAll(),
-            teamService.getForUser(currentUser),
             blikPhoneNumber = blikPhoneNumber,
             bankTransferNumber = bankTransferNumber
     )

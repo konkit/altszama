@@ -107,7 +107,7 @@
                   <h1>Ordering from {{ restaurantName }}</h1>
                   <h4>Sorry, the order is empty</h4>
                   <p>
-                    <v-btn @click="$router.push({name: 'ShowOrder', params: { id: orderId }})"
+                    <v-btn @click="$router.back()"
                            icon
                            class="hidden-xs-only">
                       <v-icon>arrow_back</v-icon>
@@ -213,7 +213,7 @@ export default class OrderView extends Vue {
         .dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {
           orderId: this.orderId
         })
-        .then(() => router.push("/orders/show/" + this.orderId));
+        .then(() => router.back());
   }
 
   get isStateOrdering() {

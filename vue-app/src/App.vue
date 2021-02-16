@@ -33,9 +33,6 @@
       logout() {
         ApiConnector.logout();
       },
-      goToPath(path) {
-        this.$router.push(path)
-      },
       setMasterNavDrawerOpened(newValue) {
         this.$store.commit("setMasterNavigationDrawerOpened", newValue);
       }

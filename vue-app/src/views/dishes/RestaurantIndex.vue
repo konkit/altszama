@@ -19,10 +19,8 @@
               </template>
 
               <template slot="item" slot-scope="props">
-                <tr
-                    @click="goToRestaurant(props.item.id)"
+                <tr @click="goToRestaurant(props.item.id)"
                     :key="props.item.id"
-                    :data-href="'/orders/show/' + props.item.id"
                     class="pointer"
                 >
                   <td>{{ props.item.name }}</td>
@@ -114,11 +112,11 @@ export default class RestaurantIndex extends Vue {
   }
 
   goToRestaurant(restaurantId: string) {
-    router.push("/restaurants/show/" + restaurantId);
+    router.push({name: "ShowRestaurant", params: {id: restaurantId}});
   }
 
   goToCreateRestaurant() {
-    router.push("/restaurants/create");
+    router.push({name: "CreateRestaurant"});
   }
 
   dateToRel(date: Date) {

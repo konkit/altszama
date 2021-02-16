@@ -120,7 +120,7 @@ export default class DishEditForm extends Vue {
     };
 
     this.connector!.editDish(this.restaurantId, dishObj)
-      .then(() => router.push("/restaurants/show/" + this.restaurantId))
+      .then(() => router.back())
       .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;

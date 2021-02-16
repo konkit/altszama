@@ -163,7 +163,7 @@ export default class OrderEditForm extends Vue {
               `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
               this.orderId
           );
-          this.$router.push("/orders/show/" + this.orderId);
+          this.$router.back();
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
 

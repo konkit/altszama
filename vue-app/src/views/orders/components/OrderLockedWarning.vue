@@ -38,7 +38,7 @@ export default class OrderLockedWarning extends Vue {
   @Prop() orderId!: string;
 
   placeOrder() {
-    router.push("/orders/" + this.orderId + "/order_view");
+    router.push({name: "OrderView", params: {id: this.orderId}});
   }
 
   unlockOrder() {

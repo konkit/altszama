@@ -24,7 +24,7 @@ class RestaurantImportService {
     val now = Instant.now()
 
     val restaurant = restaurantRepository.findByName(restaurantData.name)
-        ?: restaurantRepository.findByUrl(restaurantData.url) ?: Restaurant(team = null)
+        ?: restaurantRepository.findByUrl(restaurantData.url) ?: Restaurant()
 
     val updatedRestaurant = restaurant.copy(
         name = restaurantData.name,

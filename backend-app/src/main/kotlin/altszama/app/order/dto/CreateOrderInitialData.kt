@@ -10,7 +10,6 @@ import java.time.LocalTime
 
 data class CreateOrderInitialData(
         val restaurantsList: List<Restaurant>,
-        val teamsList: List<Team>,
         val orderDate: LocalDate = LocalDate.now(),
 
         @Schema(

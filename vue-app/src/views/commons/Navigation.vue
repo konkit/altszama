@@ -20,19 +20,19 @@
       <!--<v-divider></v-divider>-->
 
       <v-list>
-        <v-list-item @click="goToPath('/orders')">
+        <v-list-item @click="goToPath({name: 'TodayOrders'})">
           <v-list-item-content>
             <v-list-item-title>Today's orders</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="goToPath('/all_orders')">
+        <v-list-item @click="goToPath({name: 'AllOrders'})">
           <v-list-item-content>
             <v-list-item-title>All orders</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="goToPath('/restaurants')">
+        <v-list-item @click="goToPath({name: 'RestaurantIndex'})">
           <v-list-item-content>
             <v-list-item-title>Restaurants and dishes</v-list-item-title>
           </v-list-item-content>
@@ -68,6 +68,7 @@
 import ApiConnector from "../../lib/ApiConnector";
 import Vue from "vue";
 import Component from "vue-class-component";
+import {RawLocation} from "vue-router";
 
 @Component({name: "Navigation"})
 export default class Navigation extends Vue {
@@ -88,7 +89,7 @@ export default class Navigation extends Vue {
     ApiConnector.logout();
   }
 
-  goToPath(path: string) {
+  goToPath(path: RawLocation) {
     this.$router.push(path).catch(err => {
       /* NOP */
     })

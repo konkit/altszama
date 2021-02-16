@@ -125,11 +125,11 @@ export default class ShowRestaurant extends Vue {
   }
 
   goToCreateDish() {
-    router.push("/restaurants/" + this.restaurantId + "/dishes/create");
+    router.push({name: "DishCreateForm", params: {id: this.restaurantId}})
   }
 
   editRestaurant() {
-    router.push("/restaurants/" + this.restaurantId + "/edit");
+    router.push({name: "RestaurantEditForm", params: {id: this.restaurantId}})
   }
 
   deleteRestaurant() {
