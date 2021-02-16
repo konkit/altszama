@@ -91,7 +91,7 @@ import {
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import {SideDish, SideDishData} from "../../../../frontend-client";
+import {SideDish, SideDishData} from "../../../../../frontend-client";
 import {ShowOrderState} from "@/store/modules/ShowOrderModule";
 
 @Component({

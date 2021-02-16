@@ -30,7 +30,7 @@
 import ErrorsComponent from "../../../commons/ErrorsComponent.vue";
 import Spinner from "../../../commons/Spinner.vue";
 
-import OrderEntryForm from "./OrderEntryForm.vue";
+import OrderEntryForm from "./orderEntryForm/OrderEntryForm.vue";
 import {
   CANCEL_DISH_ENTRY_MODIFICATION,
   NAMESPACE_MODIFY_ORDER_ENTRY,

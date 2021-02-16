@@ -33,9 +33,7 @@
           <template v-else>
             <v-list-item-content>
               <v-list-item-title v-html="data.item.text"></v-list-item-title>
-              <v-list-item-subtitle
-                v-html="data.item.subtitle"
-              ></v-list-item-subtitle>
+              <v-list-item-subtitle v-html="data.item.subtitle"></v-list-item-subtitle>
             </v-list-item-content>
           </template>
         </template>
@@ -47,17 +45,13 @@
         type="text"
         placeholder="New dish name"
         id="newDishName"
-        :value="newDishName"
         class="pr-2"
+        :value="newDishName"
         @input="updateNewDishName($event)"
       >
       </v-text-field>
 
-      <MoneyInput
-        label="New dish price"
-        :value="newDishPrice"
-        @input="updateNewDishPrice($event)"
-      >
+      <MoneyInput class="money-input" label="New dish price" :value="newDishPrice" @input="updateNewDishPrice($event)">
       </MoneyInput>
     </template>
 
@@ -65,11 +59,7 @@
 
     <side-dishes-input></side-dishes-input>
 
-    <v-text-field
-      label="Additional Comments"
-      :value="additionalComments"
-      @input="updateAdditionalComments($event)"
-    >
+    <v-text-field label="Additional Comments" :value="additionalComments" @input="updateAdditionalComments($event)">
     </v-text-field>
   </div>
 </template>
@@ -156,12 +146,12 @@ export default class OrderEntryForm extends Vue {
     );
   }
 
-  onDishTypeToggle(e: boolean) {
-    console.log("onDishTypeToggle: ", e);
+  onDishTypeToggle(value: boolean) {
+    console.log("onDishTypeToggle: ", value);
 
-    if (e === true) {
+    if (value) {
       this.setDishAsNew();
-    } else if (e === false) {
+    } else if (!value) {
       this.setDishAsExisting();
     } else {
       console.warn("Dish type toggle returned wrong value");
@@ -250,4 +240,8 @@ export default class OrderEntryForm extends Vue {
 }
 </script>
 
-<style></style>
+<style>
+  .money-input {
+    width: 5rem;
+  }
+</style>

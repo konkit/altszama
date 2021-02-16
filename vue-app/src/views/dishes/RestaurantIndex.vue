@@ -42,7 +42,7 @@
 
             <a :href="getSwaggerUrl()">
               <v-btn large bottom right>
-                Manual import API
+                Import API
                 <v-icon class="ml-2">upload</v-icon>
               </v-btn>
             </a>
