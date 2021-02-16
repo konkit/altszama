@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Import restaurant from JSON" backpath="#/restaurants">
+  <ViewWrapper title="Import restaurant from JSON">
     <LoadingView>
       <v-container>
         <v-row>

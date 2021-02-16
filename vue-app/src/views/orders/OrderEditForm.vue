@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Edit order from ${restaurantName}`" :backpath="`#/orders/show/${orderId}`">
+  <ViewWrapper :title="`Edit order from ${restaurantName}`">
     <LoadingView>
       <v-container>
         <errors-component/>

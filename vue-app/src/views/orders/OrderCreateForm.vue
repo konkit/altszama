@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Create new order" backpath="#/orders">
+  <ViewWrapper title="Create new order">
     <LoadingView>
       <v-container>
         <errors-component/>

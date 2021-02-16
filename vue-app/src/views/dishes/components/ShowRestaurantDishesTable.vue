@@ -31,9 +31,11 @@
 
             <v-list-item-action>
               <span class="edit-buttons">
-                <v-btn text icon :href="'#/restaurants/' + restaurant.id + '/dishes/' + dish.id + '/edit'">
-                  <i class="fa fa-pencil" aria-hidden="true"></i>
-                </v-btn>
+                <router-link :to="{name: 'DishEditForm', params: {id: restaurant.id, dishId: dish.id}}">
+                  <v-btn text icon>
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                  </v-btn>
+                </router-link>
 
                 <v-btn text icon @click="deleteDish(dish.id)">
                   <i class="fa fa-times" aria-hidden="true"></i>

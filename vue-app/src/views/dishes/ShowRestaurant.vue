@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Restaurant ${restaurant.name}`" backpath="#/restaurants">
+  <ViewWrapper :title="`Restaurant ${restaurant.name}`">
     <template slot="toolbar-buttons">
       <v-btn @click="editRestaurant">
         Edit restaurant&nbsp;<span class="fa fa-pencil"/>

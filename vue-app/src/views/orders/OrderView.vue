@@ -1,8 +1,5 @@
 <template>
-  <ViewWrapper
-      :title="`Ordering from ${restaurantName}`"
-      :backpath="`#/orders/show/${orderId}`"
-  >
+  <ViewWrapper :title="`Ordering from ${restaurantName}`">
     <LoadingView>
       <errors-component/>
 
@@ -15,9 +12,7 @@
 
                 <p><strong>The order is locked!</strong></p>
 
-                <p>
-                  Order is now locked, so no one should order anything else now.
-                </p>
+                <p>Order is now locked, so no one should order anything else now.</p>
 
                 <p>
                   <v-btn text color="primary" @click="unlockOrder()">
@@ -44,10 +39,7 @@
               </v-row>
 
               <v-row>
-                <v-col
-                    v-if="restaurantTelephone.length > 0"
-                    class="align-center"
-                >
+                <v-col v-if="restaurantTelephone.length > 0" class="align-center">
                   <b>tel. {{ restaurantTelephone }}</b>
                 </v-col>
                 <v-col v-else class="align-center">
@@ -115,9 +107,11 @@
                   <h1>Ordering from {{ restaurantName }}</h1>
                   <h4>Sorry, the order is empty</h4>
                   <p>
-                    <back-button
-                        :href="'#/orders/show/' + orderId"
-                    ></back-button>
+                    <v-btn @click="$router.push({name: 'ShowOrder', params: { id: orderId }})"
+                           icon
+                           class="hidden-xs-only">
+                      <v-icon>arrow_back</v-icon>
+                    </v-btn>
                   </p>
                 </v-card-text>
               </v-card>
@@ -144,11 +138,9 @@ import ApiConnector from "../../lib/ApiConnector";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import {RootState} from "@/store";
 import {GroupedOrderEntry} from "@/frontend-client";
-import BackButton from "@/views/commons/BackButton.vue";
 
 @Component({
   components: {
-    BackButton,
     UserOrders,
     ViewWrapper,
     TimePicker,

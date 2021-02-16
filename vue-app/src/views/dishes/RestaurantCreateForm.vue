@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Create restaurant" backpath="#/restaurants">
+  <ViewWrapper title="Create restaurant">
     <v-container>
       <errors-component />
 

@@ -23,6 +23,7 @@ import LandingPage from '@/views/landing/LandingPage.vue';
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -33,76 +34,91 @@ export default new Router({
       path: "/orders",
       name: "TodayOrders",
       component: TodayOrders,
+      meta: {backButton: false}
     },
     {
       path: "/orders/show/:id",
       name: "ShowOrder",
-      component: ShowOrder
+      component: ShowOrder,
+      meta: {backButton: true}
     },
     {
       path: "/orders/create",
       name: "OrderCreateForm",
-      component: OrderCreateForm
+      component: OrderCreateForm,
+      meta: {backButton: true}
     },
     {
       path: "/orders/:id/edit",
       name: "OrderEditForm",
-      component: OrderEditForm
+      component: OrderEditForm,
+      meta: {backButton: true}
     },
     {
       path: "/orders/:id/order_view",
       name: "OrderView",
-      component: OrderView
+      component: OrderView,
+      meta: {backButton: true}
     },
     {
       path: "/all_orders",
       name: "AllOrders",
-      component: AllOrders
+      component: AllOrders,
+      meta: {backButton: false}
     },
     {
       path: "/restaurants",
       name: "RestaurantIndex",
-      component: RestaurantIndex
+      component: RestaurantIndex,
+      meta: {backButton: false}
     },
     {
       path: "/restaurants/show/:id",
       name: "ShowRestaurant",
-      component: ShowRestaurant
+      component: ShowRestaurant,
+      meta: {backButton: true}
     },
     {
       path: "/restaurants/create",
       name: "RestaurantCreateForm",
-      component: RestaurantCreateForm
+      component: RestaurantCreateForm,
+      meta: {backButton: true}
     },
     {
       path: "/restaurants/:id/edit",
       name: "RestaurantEditForm",
-      component: RestaurantEditForm
+      component: RestaurantEditForm,
+      meta: {backButton: true}
     },
     {
       path: "/restaurants/:id/dishes/create",
       name: "DishCreateForm",
-      component: DishCreateForm
+      component: DishCreateForm,
+      meta: {backButton: true}
     },
     {
       path: "/restaurants/:id/dishes/:dishId/edit",
       name: "DishEditForm",
-      component: DishEditForm
+      component: DishEditForm,
+      meta: {backButton: true}
     },
     {
       path: "/restaurants/import/upload",
       name: "ImportCrawledRestaurantData",
-      component: ImportCrawledRestaurantData
+      component: ImportCrawledRestaurantData,
+      meta: {backButton: true}
     },
     {
       path: "/teams",
       name: "TeamsView",
-      component: TeamsView
+      component: TeamsView,
+      meta: {backButton: true}
     },
     {
       path: "/teams/create",
       name: "TeamsCreate",
-      component: CreateTeamForm
+      component: CreateTeamForm,
+      meta: {backButton: true}
     }
   ]
 });

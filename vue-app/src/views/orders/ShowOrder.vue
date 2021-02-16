@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="title()" backpath="#/orders/">
+  <ViewWrapper :title="title()">
     <template slot="toolbar-buttons">
       <template v-if="!loading && isOrderOwner()">
         <v-btn @click="edit">

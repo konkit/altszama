@@ -6,7 +6,9 @@
         @click.stop="toggleMasterNavDrawerOpened()"
       ></v-app-bar-nav-icon>
 
-      <back-button v-if="shouldDisplayBackButton()" :href="backpath"></back-button>
+      <v-btn v-if="shouldDisplayBackButton()" icon class="hidden-xs-only" @click="goBack()">
+        <v-icon>arrow_back</v-icon>
+      </v-btn>
 
       <v-toolbar-title>{{ titleText() }}</v-toolbar-title>
 
@@ -24,10 +26,8 @@
 
       <v-footer height="auto">
         <div class="footer-info pa-4">
-          Please direct all your wishes and complaints to&nbsp;<a
-            href="mailto:lukasztenerowicz+altszama@gmail.com"
-            >Łukasz Tenerowicz</a
-          >
+          Please direct all your wishes and complaints to&nbsp;
+          <a href="mailto:lukasztenerowicz+altszama@gmail.com">Łukasz Tenerowicz</a>
         </div>
       </v-footer>
     </v-main>
@@ -35,18 +35,23 @@
 </template>
 
 <script lang="ts">
-import BackButton from "./BackButton.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
 
 @Component({
   name: "ViewWrapper",
-  components: { BackButton }
 })
 export default class ViewWrapper extends Vue {
   @Prop() title!: string;
-  @Prop() backpath!: string;
+
+  displayBackButton = false
+
+  mounted() {
+    this.$route.matched.forEach(r => {
+      this.displayBackButton = r.meta.backButton
+    })
+  }
 
   titleText() {
     if (this.loading) {
@@ -57,15 +62,19 @@ export default class ViewWrapper extends Vue {
   }
 
   shouldDisplayHamburger() {
-    return !this.backpath;
+    return !this.displayBackButton;
   }
 
   shouldDisplayBackButton() {
-    return this.backpath;
+    return this.displayBackButton;
   }
 
   toggleMasterNavDrawerOpened() {
     this.$store.commit("toggleMasterNavigationDrawerOpened");
+  }
+
+  goBack() {
+    this.$router.back();
   }
 
   get loading() {

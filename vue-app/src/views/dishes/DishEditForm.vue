@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Edit dish" :backpath="`#/restaurants/show/${restaurantId}`">
+  <ViewWrapper title="Edit dish" :display-back-button="true">
     <LoadingView>
       <v-container>
         <errors-component />

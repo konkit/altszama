@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Create dish`" :backpath="'#' + getBackUrl()">
+  <ViewWrapper :title="`Create dish`" :display-back-button="true">
     <v-container>
       <errors-component/>
 

@@ -16,18 +16,25 @@ router.beforeEach(function(to, from, next) {
   document.title = "Alt Szama";
   next();
 });
+
+
 // CSS libs
 import "font-awesome/css/font-awesome.css";
 import "./assets/main-styles.css";
 import "./assets/global-styles.css";
 import Raven from "raven-js";
 import RavenVue from "raven-js/plugins/vue";
+
+
 if (process.env.VUE_APP_SENTRY_URL) {
   Raven.config(process.env.VUE_APP_SENTRY_URL)
     .addPlugin(RavenVue, Vue)
     .install();
 }
+
+
 Vue.config.productionTip = false;
+
 Vue.config.errorHandler = function(err, vm, info) {
   console.error(err, vm, info);
   if (process.env.VUE_APP_SENTRY_URL) {
@@ -39,6 +46,8 @@ Vue.config.errorHandler = function(err, vm, info) {
     Raven.captureException(err, options);
   }
 };
+
+
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function() {
     navigator.serviceWorker.register("/custom-service-worker.js").then(
@@ -51,6 +60,8 @@ if ("serviceWorker" in navigator) {
     );
   });
 }
+
+
 /* eslint-disable no-new */
 new Vue({
   el: "#app",
