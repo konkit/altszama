@@ -1,0 +1,17 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "testcafe": "testcafe chrome src/tests/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "testcafe": "^1.11.0",
+    "typescript": "^4.1.5"
+  }
+}

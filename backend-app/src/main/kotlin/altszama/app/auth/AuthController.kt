@@ -61,7 +61,7 @@ class AuthController(envVarConfig: SecretsConfig) {
 
       logger.info("userInfo:" + userinfo.toPrettyString())
 
-      val authInfo = authService.getJwtTokenFromUserInfo(userinfo)
+      val authInfo = authService.getJwtTokenFromUserInfo(userinfo.name, userinfo.email)
 
       activityEventService.saveUserLogin(authInfo.userId)
 
