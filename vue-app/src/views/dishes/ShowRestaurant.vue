@@ -42,30 +42,16 @@
         <v-row>
           <v-col cols="xs12">
             <v-layout column>
+              <v-btn dark large color="green" @click="goToCreateDish()">
+                Create new dish
+                <v-icon>add</v-icon>
+              </v-btn>
+
               <show-restaurant-dishes-table
                   :restaurant="this.restaurant"
                   :dishes-by-category="this.dishesByCategory"
               />
             </v-layout>
-
-            <v-tooltip left>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                    fixed
-                    dark
-                    fab
-                    large
-                    bottom
-                    right
-                    color="green"
-                    @click="goToCreateDish()"
-                    v-on="on"
-                >
-                  <v-icon>add</v-icon>
-                </v-btn>
-              </template>
-              <span>Create new dish</span>
-            </v-tooltip>
           </v-col>
         </v-row>
       </v-container>
