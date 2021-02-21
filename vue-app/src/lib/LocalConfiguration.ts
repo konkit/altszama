@@ -1,5 +1,6 @@
-import { Configuration } from "@/frontend-client";
-import { RootState } from "@/store";
+import {Configuration} from "@/frontend-client";
+import {RootState} from "@/store";
+import {CURRENT_DOMAIN} from "@/lib/config";
 
 export default class LocalConfiguration {
   private state: RootState;
@@ -9,15 +10,8 @@ export default class LocalConfiguration {
   }
 
   createConfiguration() {
-    const currentDomain =
-      location.protocol +
-      "//" +
-      location.hostname +
-      (location.port ? ":" + location.port : "");
-    const backendUrl = process.env.VUE_APP_BACKEND_URL2 || currentDomain;
-
     return new Configuration({
-      basePath: backendUrl,
+      basePath: CURRENT_DOMAIN,
       accessToken: this.state.token || ""
     });
   }

@@ -2,14 +2,7 @@ import Vue from "vue";
 import store from "../store";
 import router from "../router";
 import GoogleLogin from "./GoogleLogin";
-
-const currentDomain =
-  location.protocol +
-  "//" +
-  location.hostname +
-  (location.port ? ":" + location.port : "");
-const backendUrl = process.env.VUE_APP_BACKEND_URL || currentDomain;
-const vapidPublicKey = process.env.VUE_APP_VAPID_PUBLIC_KEY;
+import {BACKEND_URL} from "@/lib/config";
 
 let pushNotificationEnabled = false;
 
@@ -31,7 +24,7 @@ export default {
   setPushNotificationEnabled: (newVal: boolean) =>
     (pushNotificationEnabled = newVal),
 
-  getBackendUrl: () => backendUrl,
+  getBackendUrl: () => BACKEND_URL,
 
   handleError(errorResponse: any) {
     console.log(errorResponse);

@@ -33,7 +33,6 @@ module.exports = {
           background_color: "#000000",
           theme_color: "#4DBA87",
           orientation: "portrait",
-          gcm_sender_id: process.env.VUE_APP_GCM_SENDER_ID
         }),
         new CopyWebpackPlugin([
           {

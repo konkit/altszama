@@ -24,10 +24,11 @@ import "./assets/main-styles.css";
 import "./assets/global-styles.css";
 import Raven from "raven-js";
 import RavenVue from "raven-js/plugins/vue";
+import {SENTRY_URL} from "@/lib/config";
 
 
-if (process.env.VUE_APP_SENTRY_URL) {
-  Raven.config(process.env.VUE_APP_SENTRY_URL)
+if (SENTRY_URL) {
+  Raven.config(SENTRY_URL)
     .addPlugin(RavenVue, Vue)
     .install();
 }
@@ -37,7 +38,7 @@ Vue.config.productionTip = false;
 
 Vue.config.errorHandler = function(err, vm, info) {
   console.error(err, vm, info);
-  if (process.env.VUE_APP_SENTRY_URL) {
+  if (SENTRY_URL) {
     const options = {
       extra: {
         state: JSON.stringify(store.state)

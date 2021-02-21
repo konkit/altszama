@@ -131,3 +131,7 @@ tasks {
     }
   }
 }
+
+bootBuildImage {
+  imageName="altszama-backend"
+}

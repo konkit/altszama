@@ -2,10 +2,7 @@ import Vue from "vue";
 import store from "../store";
 import router from "../router";
 import GoogleLogin from "./GoogleLogin";
-
-const currentDomain = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "");
-const backendUrl = process.env.VUE_APP_BACKEND_URL || currentDomain;
-const vapidPublicKey = process.env.VUE_APP_VAPID_PUBLIC_KEY;
+import {BACKEND_URL, VAPID_PUBLIC_KEY} from "@/lib/config";
 
 let pushNotificationEnabled = false;
 
@@ -29,14 +26,14 @@ export default {
   setPushNotificationEnabled: (newVal: boolean) =>
     (pushNotificationEnabled = newVal),
 
-  getBackendUrl: () => backendUrl,
+  getBackendUrl: () => BACKEND_URL,
 
   loginWithGoogle: (returnPath = "") => {
     return new Promise((resolve, reject) => {
       GoogleLogin.signIn()
         .then(authCode => {
           const authUrl =
-            backendUrl +
+            BACKEND_URL +
             "/auth/authorizationCode?authCode=" +
             encodeURIComponent(authCode);
 
@@ -132,7 +129,7 @@ export default {
     return navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
       const subscribePayload = {
         userVisibleOnly: true,
-        applicationServerKey: vapidPublicKey
+        applicationServerKey: VAPID_PUBLIC_KEY
       };
 
       console.log("Subscribe payload: ", subscribePayload);
@@ -175,7 +172,7 @@ export default {
     console.log("url: ", url);
 
     return Vue.http.post(
-      backendUrl + url,
+      BACKEND_URL + url,
       subscribeData,
       headersWithToken(store.state.token)
     );

@@ -1,3 +1,5 @@
+import {GOOGLE_CLIENT_ID} from "@/lib/config";
+
 const gapiUrl = "https://apis.google.com/js/api:client.js";
 
 const gapi = () => (window as any).gapi as any;
@@ -20,7 +22,7 @@ function installClient() {
 
 function initClient() {
   const googleConfig = {
-    "client_id": process.env.VUE_APP_GOOGLE_CLIENT_ID
+    "client_id": GOOGLE_CLIENT_ID
   };
 
   return new Promise((resolve, reject) => {
