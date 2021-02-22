@@ -1,67 +1,62 @@
 <template>
-  <div v-if="shouldDisplayNavigation">
-    <v-navigation-drawer
-      app
-      :value="masterNavDrawerOpened"
-      @input="setMasterNavDrawerOpened($event)"
-    >
-      <v-list>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>fa fa-cutlery</v-icon>
-          </v-list-item-icon>
+  <v-navigation-drawer v-if="shouldDisplayNavigation" app :value="masterNavDrawerOpened"
+                       @input="setMasterNavDrawerOpened($event)">
+    <v-list>
+      <v-list-item link>
+        <v-list-item-icon>
+          <v-icon>fa fa-cutlery</v-icon>
+        </v-list-item-icon>
 
-          <v-list-item-content>
-            <v-list-item-title>Alt Szama</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+        <v-list-item-content>
+          <v-list-item-title>Alt Szama</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
 
-      <!--<v-divider></v-divider>-->
+    <!--<v-divider></v-divider>-->
 
-      <v-list>
-        <v-list-item @click="goToPath({name: 'TodayOrders'})">
-          <v-list-item-content>
-            <v-list-item-title>Today's orders</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+    <v-list>
+      <v-list-item @click="goToPath({name: 'TodayOrders'})">
+        <v-list-item-content>
+          <v-list-item-title>Today's orders</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-        <v-list-item @click="goToPath({name: 'AllOrders'})">
-          <v-list-item-content>
-            <v-list-item-title>All orders</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+      <v-list-item @click="goToPath({name: 'AllOrders'})">
+        <v-list-item-content>
+          <v-list-item-title>All orders</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-        <v-list-item @click="goToPath({name: 'RestaurantIndex'})">
-          <v-list-item-content>
-            <v-list-item-title>Restaurants and dishes</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+      <v-list-item @click="goToPath({name: 'RestaurantIndex'})">
+        <v-list-item-content>
+          <v-list-item-title>Restaurants and dishes</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-        <!--<v-list-item @click="goToPath('/teams')">-->
-        <!--<v-list-item-content>-->
-        <!--<v-list-item-title>Teams</v-list-item-title>-->
-        <!--</v-list-item-content>-->
-        <!--</v-list-item>-->
-      </v-list>
+      <!--<v-list-item @click="goToPath('/teams')">-->
+      <!--<v-list-item-content>-->
+      <!--<v-list-item-title>Teams</v-list-item-title>-->
+      <!--</v-list-item-content>-->
+      <!--</v-list-item>-->
+    </v-list>
 
-      <v-divider></v-divider>
+    <v-divider></v-divider>
 
-      <v-list>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title
-              ><b>Hi {{ this.username }}!</b></v-list-item-title
-            >
-          </v-list-item-content>
-        </v-list-item>
+    <v-list>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title
+          ><b>Hi {{ this.username }}!</b></v-list-item-title
+          >
+        </v-list-item-content>
+      </v-list-item>
 
-        <v-list-item @click="logout">
-          <v-list-item-title>Logout</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-  </div>
+      <v-list-item @click="logout">
+        <v-list-item-title>Logout</v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
 <script lang="ts">
