@@ -39,9 +39,7 @@
           <v-col :cols="12" :md="4">
             <h1>Payment options</h1>
 
-            <PaymentOptionsSummary
-                :payment-data="order.paymentData"
-            ></PaymentOptionsSummary>
+            <PaymentOptionsSummary :payment-data="order.paymentData"></PaymentOptionsSummary>
           </v-col>
         </v-row>
 
@@ -78,27 +76,29 @@
           </v-col>
         </v-row>
 
-        <template v-for="(orderEntry, entryId) in this.orderEntries">
+        <template v-if="order.orderState == 'CREATED' && numberOfCurrentUserEntries === 0">
+          <v-row>
+            <v-col>
+              <new-order-entry-card :is-entry-creating="isEntryCreating" :username="username">
+              </new-order-entry-card>
+            </v-col>
+          </v-row>
+        </template>
+
+        <template v-for="(orderEntry, entryId) in this.yourOrderEntries">
           <v-row :key="entryId">
             <v-col>
-              <OrderEntriesCard
-                  :order="order"
-                  :order-entry="orderEntry"
-                  :entry-id="entryId"
-                  :current-user-id="currentUserId"
-              >
+              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId" :current-user-id="currentUserId">
               </OrderEntriesCard>
             </v-col>
           </v-row>
         </template>
 
-        <template v-if="order.orderState === 'CREATED' && numberOfCurrentUserEntries === 0">
-          <v-row>
+        <template v-for="(orderEntry, entryId) in this.otherUsersOrderEntries">
+          <v-row :key="entryId">
             <v-col>
-              <new-order-entry-card
-                  :is-entry-creating="isEntryCreating"
-                  :username="username"
-              ></new-order-entry-card>
+              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId" :current-user-id="currentUserId">
+              </OrderEntriesCard>
             </v-col>
           </v-row>
         </template>
@@ -223,6 +223,16 @@ export default class ShowOrder extends Vue {
   get orderEntries(): ParticipantsOrderEntry[] {
     const showOrder: ShowOrderState = this.$store.state.showOrder;
     return showOrder.orderEntries;
+  }
+
+  get yourOrderEntries(): ParticipantsOrderEntry[] {
+    const showOrder: ShowOrderState = this.$store.state.showOrder;
+    return showOrder.orderEntries.filter(e => e.userId === this.currentUserId);
+  }
+
+  get otherUsersOrderEntries(): ParticipantsOrderEntry[] {
+    const showOrder: ShowOrderState = this.$store.state.showOrder;
+    return showOrder.orderEntries.filter(e => e.userId !== this.currentUserId);
   }
 
   get currentUserId(): string {

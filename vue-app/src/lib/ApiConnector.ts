@@ -40,7 +40,7 @@ export default {
         router.push({name: "Login", query: {returnPath: fullRoutePath}});
       GoogleLogin.signOut(signOutCallback, signOutCallback);
     } else {
-      errorResponse.json().then(body => store.commit("addError", body))
+      errorResponse.json().then((body: any) => store.commit("addError", body))
     }
   },
 

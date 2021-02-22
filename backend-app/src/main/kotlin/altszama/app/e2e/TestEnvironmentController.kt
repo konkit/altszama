@@ -17,7 +17,12 @@ class TestEnvironmentController() {
   private lateinit var testEnvironmentService: TestEnvironmentService
 
   @RequestMapping("/clearEverything")
-  fun testLogin() {
+  fun clearEverything() {
     testEnvironmentService.clearEverything()
+  }
+
+  @RequestMapping("/generateEverything")
+  fun generateEverything() {
+    testEnvironmentService.generateEverything()
   }
 }

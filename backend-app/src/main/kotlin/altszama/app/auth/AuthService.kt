@@ -44,7 +44,7 @@ class AuthService(envVarConfig: SecretsConfig) {
     return AuthTokenInfo(token, user.id, user.username)
   }
 
-  private fun createNewUser(name: String, email: String): User {
+  fun createNewUser(name: String, email: String): User {
     val newUser = User(name, "somePlaceholderPassword", email)
     userRepository.save(newUser)
     return newUser
