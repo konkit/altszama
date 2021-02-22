@@ -9,6 +9,7 @@ import RestaurantsListView from "../pageObjects/RestaurantsListView";
 import CreateRestaurantForm from "../pageObjects/CreateRestaurantForm";
 import ShowRestaurantView from "../pageObjects/ShowRestaurantView";
 import CreateDishForm from "../pageObjects/CreateDishForm";
+import EditDishForm from "../pageObjects/EditDishForm";
 
 const tokenAuthorization = new TokenAuthorization();
 const testEnvApi = new TestEnvApi()
@@ -16,40 +17,61 @@ const testEnvApi = new TestEnvApi()
 fixture(`Feature: my new feature`)
   .before( async _ => {
     await tokenAuthorization.init()
-    await testEnvApi.clearEverything()
   })
   .beforeEach(async t => {
+    await testEnvApi.clearEverything()
     await t.resizeWindow(1400, 700)
   })
   .page `http://localhost:8080/orders`
   .requestHooks(tokenAuthorization);
 
 test('Create restaurant and dish', async t => {
-  await TodaysOrderView.expectNoOrdersMadeYet(t);
-  await TodaysOrderView.clickAddNewOrderButton(t);
+  await TodaysOrderView.expectNoOrdersMadeYet();
+  await TodaysOrderView.clickAddNewOrderButton();
 
-  await CreateOrderView.expectNoRestaurantsAlert(t);
+  await CreateOrderView.expectNoRestaurantsAlert();
 
-  await Navigation.clickRestaurantAndDishesMenuEntry(t);
+  await Navigation.clickRestaurantAndDishesMenuEntry();
 
-  await RestaurantsListView.expectNoDataInRestaurantTable(t);
-  await RestaurantsListView.clickCreateNewRestaurantButton(t);
+  await RestaurantsListView.expectNoDataInRestaurantTable();
+  await RestaurantsListView.clickCreateNewRestaurantButton();
 
-  await Toolbar.toolbarShouldContain(t, "Create restaurant");
+  await Toolbar.toolbarShouldContain("Create restaurant");
 
-  await CreateRestaurantForm.fillNameField(t, "Restaurant 1")
-  await CreateRestaurantForm.fillUrlField(t, "http://pyszne.pl")
-  await CreateRestaurantForm.clickCreateRestaurantButton(t);
+  await CreateRestaurantForm.fillNameField("Restaurant 1")
+  await CreateRestaurantForm.fillUrlField("http://pyszne.pl")
+  await CreateRestaurantForm.clickCreateRestaurantButton();
 
-  await Toolbar.toolbarShouldContain(t, "Restaurants");
-  await RestaurantsListView.expectRestaurantInTable(t, "Restaurant 1");
-  await RestaurantsListView.goToRestaurant(t, "Restaurant 1");
+  await Toolbar.toolbarShouldContain("Restaurants");
+  await RestaurantsListView.expectRestaurantInTable("Restaurant 1");
+  await RestaurantsListView.goToRestaurant("Restaurant 1");
 
-  await ShowRestaurantView.clickCreateNewDishButton(t)
-  await CreateDishForm.fillNameField(t, "New dish")
-  await CreateDishForm.fillPriceField(t, "1,23")
-  await CreateDishForm.clickCreateDishButton(t)
+  await ShowRestaurantView.clickCreateNewDishButton()
+  await CreateDishForm.fillNameField("New dish")
+  await CreateDishForm.fillPriceField("1,23")
+  await CreateDishForm.clickCreateDishButton()
 
-  await ShowRestaurantView.dishExists(t, "New dish", "1,23")
+  await ShowRestaurantView.dishExists("New dish", "1,23")
+
+  await ShowRestaurantView.clickCreateNewDishButton()
+  // Do not fill the form
+  await CreateDishForm.clickCreateDishButton()
+  await CreateDishForm.expectValidationError("Name cannot be blank!")
+
+  await Toolbar.goBack()
+
+  await ShowRestaurantView.editDish("New dish")
+
+  await EditDishForm.fillNameField("New dish edited")
+  await EditDishForm.fillPriceField("3,33")
+
+  await EditDishForm.clickUpdateDishButton()
+
+  await ShowRestaurantView.dishExists("New dish edited", "3,33")
+
+  await ShowRestaurantView.deleteDish("New dish edited")
+
+  await ShowRestaurantView.dishNotExists("New dish edited", "3,33")
+
+  await t.debug()
 });
-

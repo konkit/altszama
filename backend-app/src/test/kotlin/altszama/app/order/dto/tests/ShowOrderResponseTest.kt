@@ -24,7 +24,7 @@ class ShowOrderResponseTest {
   private val user1 = User("username1", "password", "mail1@mail.com")
   private val user2 = User("username2", "password", "mail2@mail.com")
 
-  private val restaurant = Restaurant(team = null, name = "Restaurant1")
+  private val restaurant = Restaurant(name = "Restaurant1")
 
   private val dish1 = Dish(restaurant, objectId(), "dish1", 1100)
   private val dish2 = Dish(restaurant, objectId(), "dish2", 1300)

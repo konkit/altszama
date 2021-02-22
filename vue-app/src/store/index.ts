@@ -56,15 +56,21 @@ export default new Vuex.Store({
       localStorage.setItem("token", "");
     },
     addError(state, error: any) {
+      console.log("Error: ", error)
+
       if (error instanceof Array) {
         error.forEach(errorStr => state.errors.push(errorStr));
+      } else if (typeof error == "object" && error.messages !== undefined) {
+        error.messages.forEach((errorStr: string) =>
+          state.errors.push(errorStr)
+        );
       } else if (typeof error == "object" && error.exception !== undefined) {
         state.errors.push("Error: " + error.exception + " occured!");
       } else if (typeof error == "object" && error.message !== undefined) {
         state.errors.push(error.message);
-      } else if (typeof error == "object" && error.body.message !== undefined) {
+      } else if (typeof error == "object" && error.body?.message !== undefined) {
         state.errors.push(error.body.message);
-      } else if (typeof error == "object" && error.body.messages !== undefined) {
+      } else if (typeof error == "object" && error.body?.messages !== undefined) {
         error.body.messages.forEach((errorStr: string) =>
           state.errors.push(errorStr)
         );

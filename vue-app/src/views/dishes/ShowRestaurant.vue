@@ -47,10 +47,7 @@
                 <v-icon>add</v-icon>
               </v-btn>
 
-              <show-restaurant-dishes-table
-                  :restaurant="this.restaurant"
-                  :dishes-by-category="this.dishesByCategory"
-              />
+              <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
             </v-layout>
           </v-col>
         </v-row>

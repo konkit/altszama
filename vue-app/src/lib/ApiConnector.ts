@@ -7,7 +7,7 @@ import {BACKEND_URL} from "@/lib/config";
 let pushNotificationEnabled = false;
 
 function headersWithToken(token: string) {
-  return { headers: { Authorization: "Bearer " + token } };
+  return {headers: {Authorization: "Bearer " + token}};
 }
 
 function doLogout() {
@@ -15,7 +15,7 @@ function doLogout() {
 
   pushNotificationEnabled = false;
 
-  const signOutCallback = () => router.push({ name: "Login" });
+  const signOutCallback = () => router.push({name: "Login"});
   GoogleLogin.signOut(signOutCallback, signOutCallback);
 }
 
@@ -37,10 +37,10 @@ export default {
       pushNotificationEnabled = false;
 
       const signOutCallback = () =>
-        router.push({ name: "Login", query: { returnPath: fullRoutePath } });
+        router.push({name: "Login", query: {returnPath: fullRoutePath}});
       GoogleLogin.signOut(signOutCallback, signOutCallback);
     } else {
-      store.commit("addError", errorResponse);
+      errorResponse.json().then(body => store.commit("addError", body))
     }
   },
 

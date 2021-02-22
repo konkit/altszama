@@ -1,10 +1,14 @@
 import {Selector} from "testcafe";
 import { t } from 'testcafe';
 
-export default class CreateDishForm {
+export default class EditDishForm {
+
   static async fillNameField(value: string) {
     let inputSelector = Selector("label").withText("Name").parent().find("input");
-    await t.typeText(inputSelector, value)
+    await t
+      .click(inputSelector)
+      .pressKey('ctrl+a delete')
+      .typeText(inputSelector, value)
   }
 
   static async fillPriceField(value: string) {
@@ -15,8 +19,8 @@ export default class CreateDishForm {
       .typeText(inputSelector, value)
   }
 
-  static async clickCreateDishButton() {
-    await t.click(Selector("button").withText("CREATE"))
+  static async clickUpdateDishButton() {
+    await t.click(Selector("button").withText("UPDATE"))
   }
 
   static async expectValidationError(errorMsg: string) {

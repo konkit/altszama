@@ -6,26 +6,9 @@
       <v-row>
         <v-col>
           <input type="hidden" name="restaurant.id" :value="restaurantId"/>
-
-          <v-text-field
-              label="Name"
-              :value="name"
-              @input="updateName($event)"
-              required=""
-          ></v-text-field>
-
-          <MoneyInput
-              label="Price"
-              :value="price"
-              @input="updatePrice($event)"
-          ></MoneyInput>
-
-          <v-combobox
-              :items="categories"
-              label="Category"
-              :value="category"
-              @input="updateCategory($event)"
-          ></v-combobox>
+          <v-text-field label="Name" :value="name" @input="updateName($event)" required="" ></v-text-field>
+          <MoneyInput label="Price" :value="price" @input="updatePrice($event)" ></MoneyInput>
+          <v-combobox :items="categories" label="Category" :value="category" @input="updateCategory($event)"></v-combobox>
 
           <div>
             <side-dishes ref="sideDishesElement"></side-dishes>

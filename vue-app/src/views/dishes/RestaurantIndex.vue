@@ -19,10 +19,7 @@
               </template>
 
               <template slot="item" slot-scope="props">
-                <tr @click="goToRestaurant(props.item.id)"
-                    :key="props.item.id"
-                    class="pointer"
-                >
+                <tr @click="goToRestaurant(props.item.id)" :key="props.item.id" class="pointer">
                   <td>{{ props.item.name }}</td>
                   <td>{{ props.item.dishCount }}</td>
                   <td>{{ dateToRel(props.item.lastCrawled) }}</td>

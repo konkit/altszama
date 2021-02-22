@@ -2,43 +2,26 @@
   <ViewWrapper title="Edit dish" :display-back-button="true">
     <LoadingView>
       <v-container>
-        <errors-component />
+        <errors-component/>
 
         <v-row>
           <v-col>
-                <input type="hidden" name="restaurant.id" :value="restaurantId"/>
-                <input type="hidden" name="id" :value="dishId" />
+            <input type="hidden" name="restaurant.id" :value="restaurantId"/>
+            <input type="hidden" name="id" :value="dishId"/>
 
-                <v-text-field
-                  label="Name"
-                  :value="name"
-                  @input="updateName($event)"
-                  required=""
-                ></v-text-field>
+            <v-text-field label="Name" :value="name" @input="updateName($event)" required="" ></v-text-field>
 
-                <MoneyInput
-                  label="Price"
-                  :value="price"
-                  @input="updatePrice($event)"
-                ></MoneyInput>
+            <MoneyInput label="Price" :value="price" @input="updatePrice($event)" ></MoneyInput>
 
-                <v-combobox
-                  :items="categories"
-                  label="Category"
-                  :value="category"
-                  @input="updateCategory($event)"
-                ></v-combobox>
+            <v-combobox :items="categories" label="Category" :value="category" @input="updateCategory($event)" ></v-combobox>
 
-                <div>
-                  <side-dishes
-                    ref="sideDishesElement"
-                    :initialSideDishes="initialSideDishes"
-                  ></side-dishes>
-                </div>
+            <div>
+              <side-dishes ref="sideDishesElement" :initialSideDishes="initialSideDishes"></side-dishes>
+            </div>
 
-              <div class="my-4">
-                <v-btn block color="success" @click="submitForm">Update</v-btn>
-              </div>
+            <div class="my-4">
+              <v-btn block color="success" @click="submitForm">Update</v-btn>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -57,7 +40,7 @@ import DishesApiConnector from "../../lib/DishesApiConnector";
 import Component from "vue-class-component";
 import Vue from "vue";
 import router from "../../router/index";
-import { DishUpdateRequest, SideDish } from "../../frontend-client";
+import {DishUpdateRequest, SideDish} from "../../frontend-client";
 
 @Component({
   components: {
@@ -85,20 +68,20 @@ export default class DishEditForm extends Vue {
     this.connector = new DishesApiConnector(this.$store.state);
 
     this.connector
-      .getDishEditData(this.restaurantId, this.dishId)
-      .then(dishData => {
-        this.name = dishData.dish.name;
-        this.price = dishData.dish.price;
-        this.category = dishData.dish.category;
+        .getDishEditData(this.restaurantId, this.dishId)
+        .then(dishData => {
+          this.name = dishData.dish.name;
+          this.price = dishData.dish.price;
+          this.category = dishData.dish.category;
 
-        this.initialSideDishes = dishData.dish.sideDishes;
-        this.categories = dishData.categories;
+          this.initialSideDishes = dishData.dish.sideDishes;
+          this.categories = dishData.categories;
 
-        this.$store.commit("setLoadingFalse");
+          this.$store.commit("setLoadingFalse");
 
-        document.title = `Edit dish | Alt Szama`;
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+          document.title = `Edit dish | Alt Szama`;
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 
   submitForm() {
@@ -108,7 +91,7 @@ export default class DishEditForm extends Vue {
       category: this.category
     };
     const sideDishesElement: SideDishes = this.$refs
-      .sideDishesElement as SideDishes;
+        .sideDishesElement as SideDishes;
     const sideDishes = sideDishesElement.getSideDishes();
 
     const dishObj: DishUpdateRequest = {
@@ -120,8 +103,8 @@ export default class DishEditForm extends Vue {
     };
 
     this.connector!.editDish(this.restaurantId, dishObj)
-      .then(() => router.back())
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+        .then(() => router.back())
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;
   }

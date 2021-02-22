@@ -1,22 +1,19 @@
 <template>
   <ViewWrapper title="Create restaurant">
     <v-container>
-      <errors-component />
+      <errors-component/>
 
       <v-row>
         <v-col>
-              <v-form id="restaurantCreateForm">
-                <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
-
-                <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
-
-                <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
-
-                <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
-              </v-form>
-            <div class="my-4">
-              <v-btn block color="success" @click="submitForm">Create</v-btn>
-            </div>
+          <v-form id="restaurantCreateForm">
+            <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
+            <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
+            <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
+            <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
+          </v-form>
+          <div class="my-4">
+            <v-btn block color="success" @click="submitForm">Create</v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -27,12 +24,12 @@
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
-import { Prop } from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 import DishesApiConnector from "../../lib/DishesApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import router from "../../router/index";
-import { Team } from "@/frontend-client";
+import {Team} from "@/frontend-client";
 
 @Component({
   components: {
@@ -59,10 +56,10 @@ export default class RestaurantCreateForm extends Vue {
     this.connector.createRestaurant().then(response => {
       this.teamsList = response.teamsList;
       this.teamId =
-        (response.teamsList &&
-          response.teamsList[0] &&
-          response.teamsList[0].id) ||
-        "";
+          (response.teamsList &&
+              response.teamsList[0] &&
+              response.teamsList[0].id) ||
+          "";
     });
 
     document.title = `Create restaurant | Alt Szama`;
@@ -78,8 +75,8 @@ export default class RestaurantCreateForm extends Vue {
     };
 
     this.connector!.saveRestaurant(restaurant)
-      .then(() => this.$router.back())
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+        .then(() => this.$router.back())
+        .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 
   updateName(newValue: string) {

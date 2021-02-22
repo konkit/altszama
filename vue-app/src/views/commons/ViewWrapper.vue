@@ -6,7 +6,7 @@
         @click.stop="toggleMasterNavDrawerOpened()"
       ></v-app-bar-nav-icon>
 
-      <v-btn v-if="shouldDisplayBackButton()" icon class="hidden-xs-only" @click="goBack()">
+      <v-btn v-if="shouldDisplayBackButton()" icon class="back-button hidden-xs-only" @click="goBack()">
         <v-icon>arrow_back</v-icon>
       </v-btn>
 

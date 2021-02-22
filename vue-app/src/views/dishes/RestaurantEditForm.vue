@@ -2,19 +2,19 @@
   <ViewWrapper :title="`Edit restaurant ${initialName}`">
     <LoadingView>
       <v-container>
-        <errors-component />
+        <errors-component/>
 
         <v-row>
           <v-col>
-                <v-form id="restaurantCreateForm">
-                  <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
-                  <v-text-field label="Url" :value="url" @input="updateUrl($event)" ></v-text-field>
-                  <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)" ></v-text-field>
-                  <v-text-field label="Address" :value="address" @input="updateAddress($event)" ></v-text-field>
-                </v-form>
-              <div class="my-4">
-                <v-btn block color="success" @click="submitForm">Update</v-btn>
-              </div>
+            <v-form id="restaurantCreateForm">
+              <v-text-field label="Name" :value="name" @input="updateName($event)"></v-text-field>
+              <v-text-field label="Url" :value="url" @input="updateUrl($event)"></v-text-field>
+              <v-text-field label="Telephone" :value="telephone" @input="updateTelephone($event)"></v-text-field>
+              <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
+            </v-form>
+            <div class="my-4">
+              <v-btn block color="success" @click="submitForm">Update</v-btn>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -56,19 +56,19 @@ export default class RestaurantEditForm extends Vue {
     this.connector = new DishesApiConnector(this.$store.state);
 
     this.connector
-      .getRestaurantEditData(this.restaurantId)
-      .then(payload => {
-        this.name = payload.name;
-        this.url = payload.url;
-        this.telephone = payload.telephone;
-        this.address = payload.address;
-        this.$store.commit("setLoadingFalse");
+        .getRestaurantEditData(this.restaurantId)
+        .then(payload => {
+          this.name = payload.name;
+          this.url = payload.url;
+          this.telephone = payload.telephone;
+          this.address = payload.address;
+          this.$store.commit("setLoadingFalse");
 
-        this.initialName = payload.name;
+          this.initialName = payload.name;
 
-        document.title = `Edit restaurant ${this.initialName} | Alt Szama`;
-      })
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+          document.title = `Edit restaurant ${this.initialName} | Alt Szama`;
+        })
+        .catch(errResponse => ApiConnector.handleError(errResponse));
   }
 
   submitForm() {
@@ -81,8 +81,8 @@ export default class RestaurantEditForm extends Vue {
     };
 
     this.connector!.editRestaurant(this.restaurantId, restaurant)
-      .then(() => router.push({name: "ShowRestaurant", params: {id: this.restaurantId}}))
-      .catch(errResponse => ApiConnector.handleError(errResponse));
+        .then(() => router.push({name: "ShowRestaurant", params: {id: this.restaurantId}}))
+        .catch(errResponse => ApiConnector.handleError(errResponse));
 
     return false;
   }
