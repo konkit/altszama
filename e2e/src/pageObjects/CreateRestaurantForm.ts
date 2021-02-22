@@ -12,7 +12,7 @@ export default class CreateRestaurantForm {
     await t.typeText(inputSelector, value)
   }
 
-  static async clickCreateRestaurantButton() {
+  static async submit() {
     await t.click(Selector("button").withText("CREATE"))
   }
 }

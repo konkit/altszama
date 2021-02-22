@@ -10,9 +10,12 @@ import CreateRestaurantForm from "../pageObjects/CreateRestaurantForm";
 import ShowRestaurantView from "../pageObjects/ShowRestaurantView";
 import CreateDishForm from "../pageObjects/CreateDishForm";
 import EditDishForm from "../pageObjects/EditDishForm";
+import EditRestaurantForm from "../pageObjects/EditRestaurantForm";
+
 
 const tokenAuthorization = new TokenAuthorization();
 const testEnvApi = new TestEnvApi()
+
 
 fixture(`Feature: my new feature`)
   .before( async _ => {
@@ -25,7 +28,8 @@ fixture(`Feature: my new feature`)
   .page `http://localhost:8080/orders`
   .requestHooks(tokenAuthorization);
 
-test('Create restaurant and dish', async t => {
+
+test('Create restaurant and dish, update and delete', async _ => {
   await TodaysOrderView.expectNoOrdersMadeYet();
   await TodaysOrderView.clickAddNewOrderButton();
 
@@ -34,13 +38,12 @@ test('Create restaurant and dish', async t => {
   await Navigation.clickRestaurantAndDishesMenuEntry();
 
   await RestaurantsListView.expectNoDataInRestaurantTable();
+
   await RestaurantsListView.clickCreateNewRestaurantButton();
-
   await Toolbar.toolbarShouldContain("Create restaurant");
-
   await CreateRestaurantForm.fillNameField("Restaurant 1")
   await CreateRestaurantForm.fillUrlField("http://pyszne.pl")
-  await CreateRestaurantForm.clickCreateRestaurantButton();
+  await CreateRestaurantForm.submit();
 
   await Toolbar.toolbarShouldContain("Restaurants");
   await RestaurantsListView.expectRestaurantInTable("Restaurant 1");
@@ -49,23 +52,19 @@ test('Create restaurant and dish', async t => {
   await ShowRestaurantView.clickCreateNewDishButton()
   await CreateDishForm.fillNameField("New dish")
   await CreateDishForm.fillPriceField("1,23")
-  await CreateDishForm.clickCreateDishButton()
+  await CreateDishForm.submit()
 
   await ShowRestaurantView.dishExists("New dish", "1,23")
 
   await ShowRestaurantView.clickCreateNewDishButton()
-  // Do not fill the form
-  await CreateDishForm.clickCreateDishButton()
+  await CreateDishForm.submit()
   await CreateDishForm.expectValidationError("Name cannot be blank!")
-
   await Toolbar.goBack()
 
   await ShowRestaurantView.editDish("New dish")
-
   await EditDishForm.fillNameField("New dish edited")
   await EditDishForm.fillPriceField("3,33")
-
-  await EditDishForm.clickUpdateDishButton()
+  await EditDishForm.submit()
 
   await ShowRestaurantView.dishExists("New dish edited", "3,33")
 
@@ -73,5 +72,16 @@ test('Create restaurant and dish', async t => {
 
   await ShowRestaurantView.dishNotExists("New dish edited", "3,33")
 
-  await t.debug()
+  await ShowRestaurantView.editRestaurant()
+  await EditRestaurantForm.fillNameField("Edited restaurant 1")
+  await EditRestaurantForm.fillUrlField("http://pyszne.pl/restaurant2")
+  await EditRestaurantForm.submit()
+
+  await Toolbar.toolbarShouldContain("Edited restaurant 1")
+
+  await ShowRestaurantView.deleteRestaurant()
+
+  await Toolbar.toolbarShouldContain("Restaurants")
+
+  await RestaurantsListView.expectNoDataInRestaurantTable();
 });

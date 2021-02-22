@@ -1,7 +1,8 @@
 import {Selector} from "testcafe";
 import { t } from 'testcafe';
 
-export default class EditDishForm {
+
+export default class EditRestaurantForm {
 
   static async fillNameField(value: string) {
     let inputSelector = Selector("label").withText("Name").parent().find("input");
@@ -11,8 +12,8 @@ export default class EditDishForm {
       .typeText(inputSelector, value)
   }
 
-  static async fillPriceField(value: string) {
-    let inputSelector = Selector("label").withText("Price").parent().find("input");
+  static async fillUrlField(value: string) {
+    let inputSelector = Selector("label").withText("Url").parent().find("input");
     await t
       .click(inputSelector)
       .pressKey('ctrl+a delete')
@@ -22,9 +23,4 @@ export default class EditDishForm {
   static async submit() {
     await t.click(Selector("button").withText("UPDATE"))
   }
-
-  static async expectValidationError(errorMsg: string) {
-    await t.expect(Selector(".v-alert").textContent).contains(errorMsg)
-  }
-
 }

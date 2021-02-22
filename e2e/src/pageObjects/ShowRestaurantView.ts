@@ -23,4 +23,12 @@ export default class ShowRestaurantView {
   static async deleteDish(dishName: string) {
     await t.click(Selector(".v-list-item__title").withText(dishName).parent(".v-list-item").find(".delete-button"))
   }
+
+  static async editRestaurant() {
+    await t.click(Selector(".v-btn").withText("EDIT RESTAURANT"))
+  }
+
+  static async deleteRestaurant() {
+    await t.click(Selector(".v-btn").withText("DELETE RESTAURANT"))
+  }
 }

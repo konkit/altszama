@@ -15,7 +15,7 @@ export default class CreateDishForm {
       .typeText(inputSelector, value)
   }
 
-  static async clickCreateDishButton() {
+  static async submit() {
     await t.click(Selector("button").withText("CREATE"))
   }
 
