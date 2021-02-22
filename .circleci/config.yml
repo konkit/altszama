@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     environment:
       _JAVA_OPTIONS: "-Xmx3g"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
@@ -18,35 +18,23 @@ jobs:
         key: v1-gradle-cache-{{ checksum "backend-app/build.gradle" }}
 
     - run:
-        name: Fill .env.production.local
-        command: |
-          echo "VUE_APP_BACKEND_URL=$VUE_APP_BACKEND_URL" > ./vue-app/.env.production.local
-          echo "VUE_APP_GOOGLE_CLIENT_ID=$VUE_APP_GOOGLE_CLIENT_ID" >> ./vue-app/.env.production.local
-          echo "VUE_APP_SENTRY_URL=$VUE_APP_SENTRY_URL" >> ./vue-app/.env.production.local
-          echo "VUE_APP_VAPID_PUBLIC_KEY=$VUE_APP_VAPID_PUBLIC_KEY" >> ./vue-app/.env.production.local
-
-    - run:
-        name: Dockerize backend app
+        name: Build backend app
         command: |
           cd ./backend-app
-          ./gradlew --console=plain clean build jib -Djib.to.image=$DOCKER_REGISTRY_URL/konkit/altszama:$CIRCLE_WORKFLOW_ID -Djib.to.auth.username=$DOCKER_REGISTRY_USER -Djib.to.auth.password=$DOCKER_REGISTRY_PASS
+          ./gradlew --console=plain clean build
           cd ../
 
     # - run: docker push konkit/altszama:$CIRCLE_WORKFLOW_ID
-    - setup_remote_docker
+#    - setup_remote_docker
 
-    - run: echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USER --password-stdin
+#    - run: echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USER --password-stdin
 
     - run:
-        name: Dockerize frontend app
+        name: Build frontend app
         command: |
           cd ./vue-app
-          docker build . -t konkit/altszama-frontend
+          npm run build
           cd ../
-
-    - run: docker tag konkit/altszama-frontend $DOCKER_REGISTRY_URL/konkit/altszama-frontend:$CIRCLE_WORKFLOW_ID
-
-    - run: docker push $DOCKER_REGISTRY_URL/konkit/altszama-frontend:$CIRCLE_WORKFLOW_ID
 
     - save_cache:
         paths:
@@ -71,12 +59,8 @@ jobs:
     - run:
         name: Do the upgrade
         command: |
-          ssh $SITE_SSH_USER@$SITE_SSH_HOST "cd /var/app/altszama && /bin/bash update_version.sh $CIRCLE_WORKFLOW_ID && docker-compose down && docker-compose up -d"
+          ssh $SITE_SSH_USER@$SITE_SSH_HOST "cd /var/app/altszama && sh update.sh"
 
-    # - run:
-    #     name: Restart app
-    #     command: |
-    #       ssh $SITE_SSH_USER@$SITE_SSH_HOST "$RESTART_APP_COMMAND"
 workflows:
   version: 2
   build-and-deploy:
