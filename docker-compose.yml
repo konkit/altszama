@@ -45,4 +45,4 @@ services:
       - "127.0.0.1:${TARGET_PORT}:80"
 
 volumes:
-  mongodb-volume: {}
+  altszama-mongodb-volume: {}
