@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Restaurants">
+  <ViewWrapper>
     <LoadingView>
       <v-container>
         <v-row>
@@ -97,9 +97,8 @@ export default class RestaurantIndex extends Vue {
               this.mapToRestaurantEntry(r)
           );
 
+          this.$store.commit("setTitle", "Restaurants")
           this.$store.commit("setLoadingFalse");
-
-          document.title = `Restaurants | Alt Szama`;
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }

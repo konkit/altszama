@@ -98,7 +98,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             showOrderData
           );
           this.commit("setLoadingFalse");
-          document.title = `Order from ${state.order.restaurantName} (${state.order.orderDate}) | Alt Szama`;
+          this.commit("setTitle", `[${state.order.orderState}] Order from ${state.order.restaurantName} (${state.order.orderDate})`)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },

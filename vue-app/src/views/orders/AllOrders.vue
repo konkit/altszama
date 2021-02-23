@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="All orders">
+  <ViewWrapper>
     <LoadingView>
       <v-container>
         <v-row>
@@ -70,9 +70,9 @@ export default class AllOrders extends Vue {
         .fetchAllOrders()
         .then(allOrdersList => {
           this.allOrdersList = allOrdersList.allOrdersList;
-          this.$store.commit("setLoadingFalse");
 
-          document.title = `All orders | Alt Szama`;
+          this.$store.commit("setTitle", "All orders")
+          this.$store.commit("setLoadingFalse");
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }

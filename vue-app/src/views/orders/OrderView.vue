@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Ordering from ${restaurantName}`">
+  <ViewWrapper>
     <LoadingView>
       <errors-component/>
 
@@ -188,8 +188,7 @@ export default class OrderView extends Vue {
           this.totalPrice = responseObj.totalPrice;
 
           this.$store.commit("setLoadingFalse");
-
-          document.title = `Ordering from ${this.restaurantName} | Alt Szama`;
+          this.$store.commit("setTitle", `Ordering from ${this.restaurantName}`)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }

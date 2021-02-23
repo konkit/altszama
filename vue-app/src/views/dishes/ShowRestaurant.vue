@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="restaurant.name">
+  <ViewWrapper>
     <template slot="toolbar-buttons">
       <v-btn @click="editRestaurant">
         Edit restaurant&nbsp;<span class="fa fa-pencil"/>

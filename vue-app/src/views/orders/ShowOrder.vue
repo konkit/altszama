@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="title()">
+  <ViewWrapper>
     <template slot="toolbar-buttons">
       <template v-if="!loading && isOrderOwner()">
         <v-btn @click="edit">
@@ -147,10 +147,6 @@ export default class ShowOrder extends Vue {
   mounted() {
     this.orderId = this.$route.params.id;
     this.fetchOrder();
-  }
-
-  title() {
-    return `[${this.order.orderState}] Order from ${this.order.restaurantName} (${this.order.orderDate})`;
   }
 
   fetchOrder() {

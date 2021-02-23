@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Edit dish" :display-back-button="true">
+  <ViewWrapper :display-back-button="true">
     <LoadingView>
       <v-container>
         <errors-component/>
@@ -77,9 +77,8 @@ export default class DishEditForm extends Vue {
           this.initialSideDishes = dishData.dish.sideDishes;
           this.categories = dishData.categories;
 
+          this.$store.commit("setTitle", "Edit dish")
           this.$store.commit("setLoadingFalse");
-
-          document.title = `Edit dish | Alt Szama`;
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }

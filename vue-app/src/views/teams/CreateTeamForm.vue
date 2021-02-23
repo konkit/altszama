@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Create new order">
+  <ViewWrapper>
     <LoadingView>
       <v-container>
         <errors-component />
@@ -21,7 +21,7 @@
 
                 <v-row>
                   <v-col>
-                    <v-btn color="success" block @click="submitForm">
+                    <v-btn color="primary" block @click="submitForm">
                       Create
                     </v-btn>
                   </v-col>

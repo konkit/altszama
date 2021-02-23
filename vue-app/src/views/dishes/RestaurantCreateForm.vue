@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Create restaurant">
+  <ViewWrapper>
     <v-container>
       <errors-component/>
 
@@ -62,7 +62,7 @@ export default class RestaurantCreateForm extends Vue {
           "";
     });
 
-    document.title = `Create restaurant | Alt Szama`;
+    this.$store.commit("setTitle", "Create restaurant")
   }
 
   submitForm() {

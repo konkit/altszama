@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Today's orders">
+  <ViewWrapper>
     <LoadingView>
       <v-container>
         <v-row>
@@ -139,8 +139,8 @@ export default class TodayOrders extends Vue {
           this.currentOrderEntries = todayOrdersData.currentOrderEntries;
           this.ordersList = todayOrdersData.ordersList;
 
+          this.$store.commit("setTitle", "Today orders")
           this.$store.commit("setLoadingFalse");
-          document.title = `Today orders | Alt Szama`;
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }

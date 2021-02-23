@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Create new order">
+  <ViewWrapper>
     <LoadingView>
       <v-container>
         <errors-component/>
@@ -204,8 +204,8 @@ export default class OrderCreateForm extends Vue {
             this.paymentData.blikPhoneNumber = response.blikPhoneNumber;
           }
 
+          this.$store.commit("setTitle", "Create new order")
           this.$store.commit("setLoadingFalse");
-          document.title = `Create new order | Alt Szama`;
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }

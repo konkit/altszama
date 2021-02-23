@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Edit order from ${restaurantName}`">
+  <ViewWrapper>
     <LoadingView>
       <v-container>
         <errors-component/>
@@ -134,9 +134,8 @@ export default class OrderEditForm extends Vue {
             blikPhoneNumber: response.order.paymentData.blikPhoneNumber || ""
           }
 
+          this.$store.commit("setTitle", `Edit order from ${response.order.restaurantName}`)
           this.$store.commit("setLoadingFalse");
-
-          document.title = `Edit order from ${response.order.restaurantName} | Alt Szama`;
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }

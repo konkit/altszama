@@ -46,9 +46,8 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
         .getShowRestaurantData(restaurantId)
         .then(response => {
           this.commit(`showRestaurant/${INIT_RESTAURANT_DATA}`, response);
+          this.commit("setTitle", `Restaurant ${state.restaurant!.name}`)
           this.commit("setLoadingFalse");
-
-          document.title = `Restaurant ${state.restaurant!.name} | Alt Szama`;
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },

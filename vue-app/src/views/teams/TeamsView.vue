@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper title="Teams">
+  <ViewWrapper>
     <LoadingView>
       <v-container>
         <v-row>
@@ -85,7 +85,7 @@ export default class TeamsView extends Vue {
         this.userTeams = userTeams;
 
         this.$store.commit("setLoadingFalse");
-        document.title = `Teams | Alt Szama`;
+        this.$store.commit("setTitle", "Teams");
       });
     });
   }

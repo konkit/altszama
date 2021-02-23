@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import { showOrderModule, ShowOrderState } from "./modules/ShowOrderModule";
+import {showOrderModule, ShowOrderState} from "./modules/ShowOrderModule";
 import {
   showRestaurantModule,
   ShowRestaurantState
@@ -19,6 +19,7 @@ export interface RootState {
   token: string;
   errors: string[];
   masterNavDrawerOpened: boolean;
+  title: string;
   showOrder?: ShowOrderState;
   modifyOrderEntry?: ModifyOrderEntryState;
   showRestaurant?: ShowRestaurantState;
@@ -29,7 +30,8 @@ const rootState: RootState = {
   username: localStorage.getItem("username") || "",
   token: localStorage.getItem("token") || "",
   errors: [],
-  masterNavDrawerOpened: false
+  masterNavDrawerOpened: false,
+  title: "AltSzama"
 } as RootState;
 
 export default new Vuex.Store({
@@ -92,6 +94,19 @@ export default new Vuex.Store({
     },
     toggleMasterNavigationDrawerOpened(state) {
       state.masterNavDrawerOpened = !state.masterNavDrawerOpened;
+    },
+    setTitle(state, value) {
+      document.title = `${value} | AltSzama`
+      state.title = value
+    }
+  },
+  getters: {
+    titleText: state => {
+      if (state.loading === true) {
+        return "Loading ...";
+      } else {
+        return state.title;
+      }
     }
   },
   modules: {

@@ -10,7 +10,7 @@
         <v-icon>arrow_back</v-icon>
       </v-btn>
 
-      <v-toolbar-title>{{ titleText() }}</v-toolbar-title>
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -43,22 +43,12 @@ import { Prop } from "vue-property-decorator";
   name: "ViewWrapper",
 })
 export default class ViewWrapper extends Vue {
-  @Prop() title!: string;
-
   displayBackButton = false
 
   mounted() {
     this.$route.matched.forEach(r => {
       this.displayBackButton = r.meta.backButton
     })
-  }
-
-  titleText() {
-    if (this.loading) {
-      return "Loading ...";
-    } else {
-      return this.title;
-    }
   }
 
   shouldDisplayHamburger() {
@@ -79,6 +69,10 @@ export default class ViewWrapper extends Vue {
 
   get loading() {
     return this.$store.state.loading;
+  }
+
+  get title() {
+    return this.$store.getters.titleText;
   }
 }
 </script>

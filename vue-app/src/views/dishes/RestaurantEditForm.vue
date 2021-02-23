@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Edit restaurant ${initialName}`">
+  <ViewWrapper>
     <LoadingView>
       <v-container>
         <errors-component/>
@@ -66,7 +66,7 @@ export default class RestaurantEditForm extends Vue {
 
           this.initialName = payload.name;
 
-          document.title = `Edit restaurant ${this.initialName} | Alt Szama`;
+          this.$store.commit("setTitle", `Edit restaurant ${this.initialName}`)
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }

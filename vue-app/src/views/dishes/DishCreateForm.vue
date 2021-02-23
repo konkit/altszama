@@ -1,5 +1,5 @@
 <template>
-  <ViewWrapper :title="`Create dish`" :display-back-button="true">
+  <ViewWrapper :display-back-button="true">
     <v-container>
       <errors-component/>
 
@@ -61,7 +61,8 @@ export default class DishCreateForm extends Vue {
         .getDishCreateData(this.restaurantId)
         .then(response => {
           this.categories = response.categories;
-          document.title = `Create new dish | Alt Szama`;
+
+          this.$store.commit("setTitle", "Create new dish")
         })
         .catch(errResponse => ApiConnector.handleError(errResponse));
   }
