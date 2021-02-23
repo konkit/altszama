@@ -75,7 +75,7 @@ export default class Navigation extends Vue {
   }
 
   get shouldDisplayNavigation() {
-    return this.$route.name !== "Login";
+    return this.$store.state.currentRouteName !== "Login"
   }
 
   logout(): void {

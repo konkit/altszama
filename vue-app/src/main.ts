@@ -14,6 +14,8 @@ Vue.use(VueNumeric);
 Vue.use(Vuex);
 router.beforeEach(function(to, from, next) {
   document.title = "Alt Szama";
+  store.commit("setCurrentRouteName", to.name)
+  store.commit("setDisplayBackButton", to.meta.backButton)
   next();
 });
 

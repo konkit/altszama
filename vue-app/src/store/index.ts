@@ -20,6 +20,10 @@ export interface RootState {
   errors: string[];
   masterNavDrawerOpened: boolean;
   title: string;
+  displayBackButton: boolean,
+  currentRouteName: string,
+
+
   showOrder?: ShowOrderState;
   modifyOrderEntry?: ModifyOrderEntryState;
   showRestaurant?: ShowRestaurantState;
@@ -31,7 +35,9 @@ const rootState: RootState = {
   token: localStorage.getItem("token") || "",
   errors: [],
   masterNavDrawerOpened: false,
-  title: "AltSzama"
+  title: "AltSzama",
+  currentRouteName: "Login",
+  displayBackButton: false
 } as RootState;
 
 export default new Vuex.Store({
@@ -98,6 +104,12 @@ export default new Vuex.Store({
     setTitle(state, value) {
       document.title = `${value} | AltSzama`
       state.title = value
+    },
+    setDisplayBackButton(state, value) {
+      state.displayBackButton = value
+    },
+    setCurrentRouteName(state, value) {
+      state.currentRouteName = value
     }
   },
   getters: {

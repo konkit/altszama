@@ -1,13 +1,5 @@
 <template>
   <ViewWrapper>
-    <template slot="toolbar-buttons">
-      <template v-if="!loading && isOrderOwner()">
-        <v-btn @click="edit">
-          <i class="fa fa-cog" aria-hidden="true"></i>
-        </v-btn>
-      </template>
-    </template>
-
     <LoadingView>
       <v-container v-if="this.isOrdering() && this.isOrderOwner()">
         <v-row>
@@ -46,33 +38,41 @@
         <v-row>
           <v-col>
             <h1 class="mb-4">User entries</h1>
-
-            <div class="py-2 px-4">
-              <b>See menu at &nbsp;</b>
-              <a target="_blank" :href="order.restaurantUrl">{{order.restaurantUrl}}</a>
-            </div>
           </v-col>
           <v-col>
-            <v-btn
-                block
-                color="primary"
-                v-if="canShowPlaceOrderButton()"
-                @click="placeOrder"
-                :disabled="isPlaceOrderButtonDisabled()"
-            >
-              Place order &nbsp;
-              <i class="fa fa-arrow-right" aria-hidden="true"></i>
-            </v-btn>
+            <div class="d-flex justify-end">
+              <v-btn v-if="isOrderOwner()" @click="edit">
+                Edit order<i class="fa fa-cog" aria-hidden="true"></i>
+              </v-btn>
 
-            <v-btn
-                block
-                color="primary"
-                v-if="this.isOrderOwner() && this.orderState === 'ORDERED'"
-                @click="setAsDelivered()"
-            >
-              Mark as delivered &nbsp;
-              <i class="fa fa-arrow-right" aria-hidden="true"></i>
-            </v-btn>
+              <v-btn
+                  color="primary"
+                  v-if="canShowPlaceOrderButton()"
+                  @click="placeOrder"
+                  :disabled="isPlaceOrderButtonDisabled()"
+              >
+                Place order &nbsp;
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </v-btn>
+
+              <v-btn
+                  color="primary"
+                  v-if="this.isOrderOwner() && this.orderState === 'ORDERED'"
+                  @click="setAsDelivered()"
+              >
+                Mark as delivered &nbsp;
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <div class="px-4">
+              <b>See menu at &nbsp;</b>
+              <a target="_blank" :href="order.restaurantUrl">{{ order.restaurantUrl }}</a>
+            </div>
           </v-col>
         </v-row>
 
@@ -88,7 +88,8 @@
         <template v-for="(orderEntry, entryId) in this.yourOrderEntries">
           <v-row :key="entryId">
             <v-col>
-              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId" :current-user-id="currentUserId">
+              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId"
+                                :current-user-id="currentUserId">
               </OrderEntriesCard>
             </v-col>
           </v-row>
@@ -97,7 +98,8 @@
         <template v-for="(orderEntry, entryId) in this.otherUsersOrderEntries">
           <v-row :key="entryId">
             <v-col>
-              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId" :current-user-id="currentUserId">
+              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId"
+                                :current-user-id="currentUserId">
               </OrderEntriesCard>
             </v-col>
           </v-row>

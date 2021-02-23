@@ -18,18 +18,12 @@
 
       <v-list-item>
         <v-list-item-content>
-          <span
-            v-if="paymentData.paymentByBankTransfer === true"
-            class="payment-entry"
-          >
+          <span v-if="paymentData.paymentByBankTransfer === true" class="payment-entry">
             <v-chip color="green" text-color="white">
               Payment by bank transfer <span class="fa fa-check ml-2"></span>
             </v-chip>
           </span>
-          <span
-            v-if="paymentData.paymentByBankTransfer === false"
-            class="payment-entry"
-          >
+          <span v-if="paymentData.paymentByBankTransfer === false" class="payment-entry">
             <v-chip color="red" text-color="white">
               Payment by bank transfer <span class="fa fa-times ml-2"></span>
             </v-chip>
@@ -37,7 +31,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="paymentData.paymentByBankTransfer">
+      <v-list-item v-if="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
         <v-list-item-content>
           <div class="px-3 user-selectable">
             {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
@@ -60,7 +54,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="paymentData.paymentByBankTransfer">
+      <v-list-item v-if="paymentData.paymentByBankTransfer && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
         <v-list-item-content>
           <div class="px-3 user-selectable">
             {{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}

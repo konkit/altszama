@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-toolbar>
+    <v-app-bar absolute color="white">
       <v-toolbar-title>
         <i class="fa fa-cutlery" aria-hidden="true"></i> Alt Szama
       </v-toolbar-title>
-    </v-toolbar>
+    </v-app-bar>
 
-    <v-content>
+    <v-main >
       <v-fade-transition mode="out-in">
         <section>
           <v-row no-gutters>
@@ -17,7 +17,7 @@
           </v-row>
         </section>
       </v-fade-transition>
-    </v-content>
+    </v-main>
 
     <home-footer/>
   </v-app>

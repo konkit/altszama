@@ -1,15 +1,5 @@
 <template>
   <ViewWrapper>
-    <template slot="toolbar-buttons">
-      <v-btn @click="editRestaurant">
-        Edit restaurant&nbsp;<span class="fa fa-pencil"/>
-      </v-btn>
-
-      <v-btn color="error" @click="deleteRestaurant()">
-        Delete restaurant&nbsp;<span class="fa fa-times"/>
-      </v-btn>
-    </template>
-
     <LoadingView>
       <errors-component/>
 
@@ -40,15 +30,27 @@
         <v-divider></v-divider>
 
         <v-row>
-          <v-col cols="xs12">
-            <v-layout column>
-              <v-btn dark large color="green" @click="goToCreateDish()">
-                Create new dish
-                <v-icon>add</v-icon>
-              </v-btn>
+          <v-col>
+            <div class="d-flex justify-space-between">
+            <v-btn dark color="green" @click="goToCreateDish()">
+              Create new dish
+              <v-icon>add</v-icon>
+            </v-btn>
 
-              <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
-            </v-layout>
+            <v-btn @click="editRestaurant">
+              Edit restaurant&nbsp;<span class="fa fa-pencil"/>
+            </v-btn>
+
+            <v-btn color="error" @click="deleteRestaurant()">
+              Delete restaurant&nbsp;<span class="fa fa-times"/>
+            </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
           </v-col>
         </v-row>
       </v-container>
