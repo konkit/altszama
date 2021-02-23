@@ -33,6 +33,7 @@ jobs:
         name: Build frontend app
         command: |
           cd ./vue-app
+          npm install
           npm run build
           cd ../
 
