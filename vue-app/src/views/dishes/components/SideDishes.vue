@@ -33,7 +33,7 @@
       >
       </MoneyInput>
 
-      <v-btn color="success" @click="addSideDish">
+      <v-btn color="primary" @click="addSideDish">
         Add &nbsp; <i class="fa fa-plus" />
       </v-btn>
 

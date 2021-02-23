@@ -7,7 +7,7 @@
     <v-card-text>
       <div class="user-order-col">
         <template v-if="isEntryCreating === false">
-          <v-btn color="success" @click="createEntry()">
+          <v-btn color="primary" @click="createEntry()">
             Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
           </v-btn>
         </template>

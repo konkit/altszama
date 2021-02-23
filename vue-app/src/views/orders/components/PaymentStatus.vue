@@ -7,14 +7,14 @@
     </template>
 
     <template v-if="shouldShowMarkAsPaidButton(orderEntry)">
-      <v-btn text color="success" @click="markAsPaid(orderEntry.id)">
+      <v-btn text color="primary" @click="markAsPaid(orderEntry.id)">
         Mark as paid
         <i class="fa fa-check" aria-hidden="true"></i>
       </v-btn>
     </template>
 
     <template v-if="shouldShowConfirmAsPaidButton(orderEntry)">
-      <v-btn text color="success" @click="confirmAsPaid(orderEntry.id)">
+      <v-btn text color="primary" @click="confirmAsPaid(orderEntry.id)">
         Confirm as paid
         <i class="fa fa-check" aria-hidden="true"></i>
       </v-btn>

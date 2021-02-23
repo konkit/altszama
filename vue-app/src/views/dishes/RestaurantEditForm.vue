@@ -13,7 +13,7 @@
               <v-text-field label="Address" :value="address" @input="updateAddress($event)"></v-text-field>
             </v-form>
             <div class="my-4">
-              <v-btn block color="success" @click="submitForm">Update</v-btn>
+              <v-btn color="primary" @click="submitForm">Update</v-btn>
             </div>
           </v-col>
         </v-row>

@@ -55,7 +55,7 @@
           <v-col>
             <v-btn
                 block
-                color="success"
+                color="primary"
                 v-if="canShowPlaceOrderButton()"
                 @click="placeOrder"
                 :disabled="isPlaceOrderButtonDisabled()"
@@ -66,7 +66,7 @@
 
             <v-btn
                 block
-                color="success"
+                color="primary"
                 v-if="this.isOrderOwner() && this.orderState === 'ORDERED'"
                 @click="setAsDelivered()"
             >

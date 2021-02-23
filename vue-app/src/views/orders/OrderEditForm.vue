@@ -35,7 +35,7 @@
 
             <v-row>
               <v-col>
-                <v-btn color="success" block @click="submitForm">
+                <v-btn color="primary" block @click="submitForm">
                   Update
                 </v-btn>
               </v-col>

@@ -59,7 +59,7 @@
                 </v-col>
 
                 <v-col class="align-center align-self-center">
-                  <v-btn color="success" @click="submitForm">
+                  <v-btn color="primary" @click="submitForm">
                     Order placed! &nbsp;<i
                       class="fa fa-arrow-right"
                       aria-hidden="true"

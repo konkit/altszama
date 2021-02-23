@@ -91,7 +91,7 @@
               </template>
             </v-list>
 
-            <v-btn dark large bottom right color="green" @click="goToCreateOrder()">
+            <v-btn dark large bottom right color="primary" @click="goToCreateOrder()">
               Add new order<v-icon>add</v-icon>
             </v-btn>
           </v-col>

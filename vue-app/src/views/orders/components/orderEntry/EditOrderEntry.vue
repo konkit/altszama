@@ -8,7 +8,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="success" @click="submitForm">Submit</v-btn>
+        <v-btn color="primary" @click="submitForm">Submit</v-btn>
 
         <v-btn @click="cancelEdit()">Cancel</v-btn>
       </div>

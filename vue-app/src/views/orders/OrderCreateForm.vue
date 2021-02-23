@@ -7,48 +7,82 @@
         <v-row>
           <v-col cols="12">
             <NoRestaurantsGuard :restaurantsList="this.restaurantsList">
-              <v-row>
-                <v-col>
-                  <v-autocomplete
-                      :items="restaurantsList"
-                      item-text="name"
-                      item-value="id"
-                      label="Restaurant"
-                      :value="this.restaurantsList.find(r => restaurantId === r.id)"
-                      @input="updateRestaurantId($event)"
-                  >
-                  </v-autocomplete>
-                </v-col>
-              </v-row>
 
-              <v-row>
-                <v-col cols="4">
-                  <h3>Order time</h3>
-                  <TimePicker
-                      :value="timeOfOrder"
-                      @input="updateTimeOfOrder($event)"
-                      label="Order time"
-                  ></TimePicker>
-                </v-col>
+              <v-stepper alt-labels v-model="stepperState" class="elevation-0">
+                <v-stepper-header>
+<!--                  <v-stepper-step :complete="stepperState > 1" step="1">-->
+<!--                    Specify crew-->
+<!--                  </v-stepper-step>-->
 
-                <v-col cols="4">
-                  <PriceModifiersFields :price-modifiers="priceModifiers"
-                                        @input="(newPriceModifiers) => {priceModifiers = newPriceModifiers}"/>
-                </v-col>
+<!--                  <v-divider></v-divider>-->
 
-                <v-col cols="4">
-                  <PaymentDataFields :payment-data="paymentData"
-                                     @input="(newPaymentData) => {paymentData = newPaymentData}"/>
-                </v-col>
-              </v-row>
+                  <v-stepper-step :complete="stepperState > 1" step="1">
+                    Select restaurant
+                  </v-stepper-step>
 
-              <v-row>
-                <v-col>
-                  <v-btn color="success" block @click="submitForm">
-                    Create
-                  </v-btn>
-                </v-col>
-              </v-row>
+                  <v-divider></v-divider>
+
+                  <v-stepper-step step="2">
+                    Fill details
+                  </v-stepper-step>
+                </v-stepper-header>
+
+                <v-stepper-items>
+<!--                  <v-stepper-content step="1">-->
+<!--                    <h1>Specify crew</h1>-->
+
+<!--                    <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>-->
+
+<!--                    <v-btn text @click="back()">Back</v-btn>-->
+<!--                    <v-btn color="primary" @click="next()">Continue</v-btn>-->
+<!--                  </v-stepper-content>-->
+
+                  <v-stepper-content step="1">
+                    <h1>Select restaurant</h1>
+
+                    <v-autocomplete
+                        :items="restaurantsList"
+                        item-text="name"
+                        item-value="id"
+                        label="Restaurant"
+                        :value="this.restaurantsList.find(r => restaurantId === r.id)"
+                        @input="updateRestaurantId($event)"
+                    >
+                    </v-autocomplete>
+
+                    <v-btn color="primary" @click="next()">Continue</v-btn>
+                    <v-btn text @click="back()">Back</v-btn>
+                  </v-stepper-content>
+
+                  <v-stepper-content step="2">
+                    <h1>Fill details</h1>
+
+                    <v-row>
+                      <v-col cols="12" sm="4">
+                        <h3>Order time</h3>
+                        <TimePicker
+                            :value="timeOfOrder"
+                            @input="updateTimeOfOrder($event)"
+                            label="Order time"
+                        ></TimePicker>
+                      </v-col>
+
+                      <v-col cols="12" sm="4">
+                        <PriceModifiersFields :price-modifiers="priceModifiers"
+                                              @input="(newPriceModifiers) => {priceModifiers = newPriceModifiers}"/>
+                      </v-col>
+
+                      <v-col cols="12" sm="4">
+                        <PaymentDataFields :payment-data="paymentData"
+                                           @input="(newPaymentData) => {paymentData = newPaymentData}"/>
+                      </v-col>
+                    </v-row>
+
+                    <v-btn color="primary" @click="(e) => submitForm(e)">Create</v-btn>
+                    <v-btn text @click="back()">Back</v-btn>
+                  </v-stepper-content>
+                </v-stepper-items>
+              </v-stepper>
             </NoRestaurantsGuard>
           </v-col>
         </v-row>
@@ -99,6 +133,8 @@ import PaymentDataFields from "@/views/orders/components/orderCreateForm/Payment
 export default class OrderCreateForm extends Vue {
   restaurantsList: Restaurant[] = [];
   teamsList: Team[] = [];
+
+  stepperState = 1
 
   // Order
   restaurantId = "";
@@ -210,9 +246,21 @@ export default class OrderCreateForm extends Vue {
   get loading() {
     return this.$store.state.loading;
   }
+
+  next() {
+    this.stepperState = this.stepperState + 1
+  }
+
+  back() {
+    if (this.stepperState > 1) {
+      this.stepperState -= 1
+    }
+  }
 }
 </script>
 
 <style scoped>
-
+.v-stepper__header {
+  box-shadow: none;
+}
 </style>

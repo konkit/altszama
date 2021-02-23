@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn
-      color="success"
+      color="primary"
       v-if="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'"
       @click="setAsCreated"
     >
@@ -9,7 +9,7 @@
     </v-btn>
 
     <v-btn
-      color="success"
+      color="primary"
       v-if="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'"
       @click="setAsOrdered"
     >

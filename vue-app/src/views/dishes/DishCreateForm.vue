@@ -15,7 +15,7 @@
           </div>
 
           <div class="mb-4">
-            <v-btn block color="success" @click="submitForm">Create</v-btn>
+            <v-btn color="primary" @click="submitForm">Create</v-btn>
           </div>
         </v-col>
       </v-row>
