@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-
-import Login from "@/views/Login.vue";
+import LoginView from "@/views/login/LoginView.vue"
 import TodayOrders from "../views/orders/TodayOrders.vue";
 import ShowOrder from "../views/orders/ShowOrder.vue";
 import OrderCreateForm from "../views/orders/OrderCreateForm.vue";
@@ -15,8 +14,6 @@ import RestaurantCreateForm from "../views/dishes/RestaurantCreateForm.vue";
 import RestaurantEditForm from "../views/dishes/RestaurantEditForm.vue";
 import DishCreateForm from "../views/dishes/DishCreateForm.vue";
 import DishEditForm from "../views/dishes/DishEditForm.vue";
-import TeamsView from "@/views/teams/TeamsView.vue";
-import CreateTeamForm from "@/views/teams/CreateTeamForm.vue";
 import LandingPage from '@/views/landing/LandingPage.vue';
 
 Vue.use(Router);
@@ -26,8 +23,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: "Login",
+      name: "LandingPage",
       component: LandingPage,
+    },
+    {
+      path: "/login",
+      name: "Login",
+      component: LoginView,
     },
     {
       path: "/orders",
@@ -99,18 +101,6 @@ export default new Router({
       path: "/restaurants/:id/dishes/:dishId/edit",
       name: "DishEditForm",
       component: DishEditForm,
-      meta: {backButton: true}
-    },
-    {
-      path: "/teams",
-      name: "TeamsView",
-      component: TeamsView,
-      meta: {backButton: true}
-    },
-    {
-      path: "/teams/create",
-      name: "TeamsCreate",
-      component: CreateTeamForm,
       meta: {backButton: true}
     }
   ]

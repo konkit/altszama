@@ -1,8 +1,5 @@
 package altszama.app.team
 
-import altszama.app.auth.User
-import altszama.app.team.dto.CreateTeamDto
-import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -17,29 +14,29 @@ class TeamService {
         return teamRepository.findById(id)
     }
 
-    fun getAll(): List<Team> {
-        return teamRepository.findAll()
-    }
-
-    fun getForUser(user: User): List<Team> {
-        return getExplicitTeams(user) + getTeamsByDomain(user)
-    }
-
-    private fun getExplicitTeams(user: User): List<Team> {
-        return teamRepository.findByUser(user)
-    }
-
-    private fun getTeamsByDomain(user: User): List<Team> {
-        val domain = user.email.split("@")[1]
-        return teamRepository.findByDomain(domain)
-    }
-
-    fun save(dto: CreateTeamDto): Any {
-        val team = Team(
-                id = ObjectId().toHexString(),
-                domain = dto.domain
-        )
-        return teamRepository.save(team)
-    }
+//    fun getAll(): List<Team> {
+//        return teamRepository.findAll()
+//    }
+//
+//    fun getForUser(user: User): List<Team> {
+//        return getExplicitTeams(user) + getTeamsByDomain(user)
+//    }
+//
+//    private fun getExplicitTeams(user: User): List<Team> {
+//        return teamRepository.findByUser(user)
+//    }
+//
+//    private fun getTeamsByDomain(user: User): List<Team> {
+//        val domain = user.email.split("@")[1]
+//        return teamRepository.findByDomain(domain)
+//    }
+//
+//    fun save(dto: CreateTeamDto): Any {
+//        val team = Team(
+//                id = ObjectId().toHexString(),
+//                domain = dto.domain
+//        )
+//        return teamRepository.save(team)
+//    }
 
 }

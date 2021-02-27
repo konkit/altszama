@@ -1,13 +1,7 @@
 <template>
-  <v-app>
-    <v-app-bar absolute color="white">
-      <v-toolbar-title>
-        <i class="fa fa-cutlery" aria-hidden="true"></i> Alt Szama
-      </v-toolbar-title>
-    </v-app-bar>
-
-    <v-main >
-      <v-fade-transition mode="out-in">
+<!--  <v-app>-->
+<!--    <v-main >-->
+<!--      <v-fade-transition mode="out-in">-->
         <section>
           <v-row no-gutters>
             <v-col cols="12">
@@ -16,11 +10,11 @@
             </v-col>
           </v-row>
         </section>
-      </v-fade-transition>
-    </v-main>
+<!--      </v-fade-transition>-->
+<!--    </v-main>-->
 
-    <home-footer/>
-  </v-app>
+<!--    <home-footer/>-->
+<!--  </v-app>-->
 </template>
 
 <script>
@@ -32,7 +26,7 @@ export default {
   name: 'HomeLayout',
 
   components: {
-    HomeFooter,
+    // HomeFooter,
     Description,
     SectionHero
   }

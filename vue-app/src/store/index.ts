@@ -36,7 +36,7 @@ const rootState: RootState = {
   errors: [],
   masterNavDrawerOpened: false,
   title: "AltSzama",
-  currentRouteName: "Login",
+  currentRouteName: "LandingPage",
   displayBackButton: false
 } as RootState;
 
@@ -119,6 +119,12 @@ export default new Vuex.Store({
       } else {
         return state.title;
       }
+    },
+    shouldDisplayToolbar: state => {
+      return !["Login", "LandingPage"].includes(state.currentRouteName)
+    },
+    shouldDisplayLoginToolbar: state => {
+      return ["Login", "LandingPage"].includes(state.currentRouteName)
     }
   },
   modules: {

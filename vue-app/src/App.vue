@@ -2,6 +2,12 @@
   <v-app>
     <Navigation></Navigation>
 
+    <v-app-bar app color="white" v-if="shouldDisplayLoginToolbar">
+      <v-toolbar-title class="cursor-pointer" @click="$router.push({name: 'LandingPage'})">
+        <i class="fa fa-cutlery" aria-hidden="true"></i> Alt Szama
+      </v-toolbar-title>
+    </v-app-bar>
+
     <v-app-bar app v-if="shouldDisplayToolbar">
       <v-app-bar-nav-icon v-if="shouldDisplayHamburger()" @click.stop="toggleMasterNavDrawerOpened()">
       </v-app-bar-nav-icon>
@@ -73,7 +79,11 @@ export default class App extends Vue {
   }
 
   get shouldDisplayToolbar() {
-    return this.$store.state.currentRouteName !== "Login"
+    return this.$store.getters.shouldDisplayToolbar
+  }
+
+  get shouldDisplayLoginToolbar() {
+    return this.$store.getters.shouldDisplayLoginToolbar
   }
 }
 </script>
@@ -89,15 +99,7 @@ footer {
   justify-self: center;
 }
 
-/*.view-wrapper {*/
-/*  height: 100%;*/
-/*}*/
-
-/*.view-content {*/
-/*  height: 100%;*/
-/*}*/
-
-/*.content-class {*/
-/*  min-height: 100%;*/
-/*}*/
+.cursor-pointer {
+  cursor: pointer;
+}
 </style>

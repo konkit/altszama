@@ -31,12 +31,6 @@
           <v-list-item-title>Restaurants and dishes</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
-      <v-list-item @click="goToPath('/teams')">
-        <v-list-item-content>
-          <v-list-item-title>Crews and balance</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
     </v-list>
 
     <v-divider></v-divider>
@@ -75,7 +69,7 @@ export default class Navigation extends Vue {
   }
 
   get shouldDisplayNavigation() {
-    return this.$store.state.currentRouteName !== "Login"
+    return this.$store.getters.shouldDisplayToolbar
   }
 
   logout(): void {
@@ -90,6 +84,10 @@ export default class Navigation extends Vue {
 
   setMasterNavDrawerOpened(newValue: boolean) {
     this.$store.commit("setMasterNavigationDrawerOpened", newValue);
+  }
+
+  get shouldDisplayToolbar() {
+    return this.$store.getters.shouldDisplayToolbar
   }
 }
 </script>
