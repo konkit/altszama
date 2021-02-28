@@ -103,7 +103,6 @@
 
 <script lang="ts">
 import ApiConnector from "@/lib/ApiConnector";
-import JsApiConnector from "../../lib/JsApiConnector";
 import LoadingView from "@/views/commons/LoadingView.vue";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import router from "@/router/index";
@@ -113,7 +112,7 @@ import Component from "vue-class-component";
 import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import {OrderEntryDto, TodayOrderDto} from "../../frontend-client";
 import {RootState} from "@/store";
-import Navigation from "@/views/commons/Navigation.vue";
+import NotificationsApiConnector from "@/lib/NotificationsApiConnector";
 
 @Component({
   components: {
@@ -127,11 +126,13 @@ export default class TodayOrders extends Vue {
   ordersList: TodayOrderDto[] = [];
 
   connector?: OrdersApiConnector;
+  notificationsConnector: NotificationsApiConnector
 
   mounted() {
-    JsApiConnector.initializePushNotifications();
-
     this.connector = new OrdersApiConnector(this.$store.state as RootState);
+    this.notificationsConnector = new NotificationsApiConnector(this.$store.state as RootState);
+
+    this.notificationsConnector.initializePushNotifications();
 
     this.connector
         .fetchTodaysOrders()

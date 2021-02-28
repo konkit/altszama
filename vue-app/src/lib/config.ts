@@ -1,5 +1,5 @@
 declare global {
-  interface Window { _env?: any; }
+  interface Window { _env?: any }
 }
 
 export const CURRENT_DOMAIN = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "");

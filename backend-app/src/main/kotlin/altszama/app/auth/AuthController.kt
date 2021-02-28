@@ -1,115 +1,50 @@
 package altszama.app.auth
 
-import altszama.app.activityLog.ActivityEventService
-import altszama.config.SecretsConfig
-import com.google.api.client.auth.oauth2.TokenResponseException
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse
-import com.google.api.client.googleapis.json.GoogleJsonResponseException
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.jackson2.JacksonFactory
-import com.google.api.services.oauth2.Oauth2
-import com.google.api.services.oauth2.model.Userinfoplus
-import org.slf4j.LoggerFactory
+import altszama.app.auth.google.GoogleAuthError
+import altszama.app.auth.google.GoogleAuthResult
+import altszama.app.auth.google.GoogleAuthSuccess
+import altszama.app.auth.google.GoogleLoginService
+import arrow.core.Either
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api")
-class AuthController(envVarConfig: SecretsConfig) {
-
-  private val logger = LoggerFactory.getLogger(AuthController::class.java)
-
-  private var clientId: String = envVarConfig.googleClientId
-
-  private var clientSecret: String = envVarConfig.googleClientSecret
+class AuthController() {
 
   @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var googleLoginService: GoogleLoginService
 
-  @Autowired
-  private lateinit var activityEventService: ActivityEventService
-
-  private val netHttpTransport = NetHttpTransport()
-  private val jacksonFactory = JacksonFactory()
-
-
-
-
-  @RequestMapping("/auth/authorizationCode")
-  fun loginWithIdToken(@RequestParam authCode: String): AuthTokenInfo {
-    logger.info("Logging with Google, googleClientId: $clientId, googleClientSecret: $clientSecret, authCode: $authCode")
-
-    val accessTokenResponse = requestAccessToken(authCode)
-
-    val idTokenString = accessTokenResponse.idToken
-
-    val verifier = GoogleIdTokenVerifier.Builder(netHttpTransport, jacksonFactory)
-        .setAudience(listOf(clientId))
-        .build()
-
-    val idToken = verifier.verify(idTokenString)
-
-    if (idToken != null) {
-      val credential = GoogleCredential().setAccessToken(accessTokenResponse.accessToken)
-      val oauth2 = Oauth2.Builder(netHttpTransport, jacksonFactory, credential).build()
-      val userinfo: Userinfoplus = oauth2.userinfo().get().execute()
-
-      logger.info("userInfo:" + userinfo.toPrettyString())
-
-      val authInfo = authService.getJwtTokenFromUserInfo(userinfo.name, userinfo.email)
-
-      activityEventService.saveUserLogin(authInfo.userId)
-
-      return authInfo;
-    } else {
-      throw RuntimeException("Google's id token is wrong")
-    }
-  }
-
-  private fun requestAccessToken(authorizationCode: String): GoogleTokenResponse {
-    val redirectUrl = "postmessage"
-
-    try {
-      val codeTokenRequest = GoogleAuthorizationCodeTokenRequest(
-          netHttpTransport, jacksonFactory, clientId, clientSecret, authorizationCode, redirectUrl
-      )
-
-      logger.info(jacksonFactory.toString(codeTokenRequest))
-
-      return codeTokenRequest.execute()
-    } catch (e: TokenResponseException) {
-      handleGoogleError(e)
-      throw e
-    } catch (e: GoogleJsonResponseException) {
-      logger.error(e.message)
-      logger.error(e.details.message)
-      logger.error(e.details.code.toString())
-      logger.error(e.details.errors.joinToString(","))
-      throw e
-    }
-  }
-
-  companion object {
-    private val logger = LoggerFactory.getLogger(AuthController::class.java)
-
-    private fun handleGoogleError(e: TokenResponseException) {
-      if (e.details != null) {
-        logger.error("details.error: " + e.details.error)
-
-        if (e.details.errorDescription != null) {
-          logger.error("details.errorDesc: " + e.details.errorDescription)
-        }
-
-        if (e.details.errorUri != null) {
-          logger.error("details.errorUri" + e.details.errorUri)
-        }
-      } else {
-        logger.error("details.message: " + e.message)
+  @PostMapping("/auth/googleLogin/authorizationCode")
+  @ApiResponses(value = [
+    ApiResponse(
+        responseCode="200",
+        description = "Success",
+        content = [Content(mediaType = "application/json", schema = Schema(implementation = GoogleAuthSuccess::class))]
+    ),
+    ApiResponse(
+        responseCode="400",
+        description = "Error",
+        content = [Content(mediaType = "application/json", schema = Schema(implementation = GoogleAuthError::class))]
+    )
+  ])
+  fun loginWithIdToken(@RequestParam authCode: String): ResponseEntity<out GoogleAuthResult> {
+    return runBlocking {
+      when(val result = googleLoginService.verifyTokenAndGetUserInfo(authCode)) {
+        is Either.Left ->
+          ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.a);
+        is Either.Right ->
+          ResponseEntity.ok(result.b);
       }
     }
   }

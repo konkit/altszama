@@ -1,6 +1,6 @@
 package altszama.app.orderEntry
 
-import altszama.app.auth.AuthService
+import altszama.app.auth.UserService
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.SideDish
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service
 class OrderEntryService {
 
   @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var userService: UserService
 
   @Autowired
   private lateinit var orderRepository: OrderRepository
@@ -32,7 +32,7 @@ class OrderEntryService {
 
   fun saveEntry(orderEntrySaveRequest: OrderEntrySaveRequest) {
     val order = orderRepository.findById(orderEntrySaveRequest.orderId).get()
-    val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, authService.currentUser())
+    val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, userService.currentUser())
 
     val dish: Dish = if (orderEntrySaveRequest.newDish == true && orderEntrySaveRequest.newDishName?.isNotBlank() == true) {
       createNewDish(order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
@@ -57,7 +57,7 @@ class OrderEntryService {
       OrderEntry(
           id = ObjectId().toHexString(),
           order = order,
-          user = authService.currentUser(),
+          user = userService.currentUser(),
           dishEntries = dishEntries
       )
     }

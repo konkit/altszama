@@ -31,4 +31,7 @@ open class SecretsConfig {
     @Value("#{environment.VAPID_SUBJECT}")
     lateinit var vapidSubject: String
 
+    @Value("#{environment.JWT_SIGNING_KEY}")
+    lateinit var jwtSigningKey: String
+
 }

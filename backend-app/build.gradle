@@ -28,10 +28,15 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'kotlin-kapt'
+
+
+def arrow_version = "0.11.0"
 
 group = 'altszama'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
 compileKotlin {
   kotlinOptions {
     freeCompilerArgs = ["-Xjsr305=strict"]
@@ -60,6 +65,7 @@ repositories {
   jcenter()
   maven { url = uri("http://repo.spring.io/plugins-release") }
   maven { url = uri("https://plugins.gradle.org/m2/") }
+  maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
 }
 
 
@@ -96,7 +102,13 @@ dependencies {
   // Kotlin
   compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   compile("org.jetbrains.kotlin:kotlin-reflect")
-  compile("org.funktionale:funktionale-all:1.2")
+  implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2')
+
+  // Arrow
+  implementation "io.arrow-kt:arrow-core:$arrow_version"
+  implementation "io.arrow-kt:arrow-syntax:$arrow_version"
+  implementation "io.arrow-kt:arrow-fx:$arrow_version"
+//    kapt    "io.arrow-kt:arrow-meta:$arrow_version"
 
   compile 'org.springdoc:springdoc-openapi-ui:1.4.2'
   compile 'org.springdoc:springdoc-openapi-kotlin:1.4.2'

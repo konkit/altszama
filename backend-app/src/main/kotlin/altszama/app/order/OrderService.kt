@@ -3,13 +3,12 @@ package altszama.app.order
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import altszama.app.notification.NotificationService
-import altszama.app.auth.AuthService
+import altszama.app.auth.UserService
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.OrderUpdateRequest
 import altszama.app.orderEntry.*
 import altszama.app.restaurant.RestaurantRepository
 import altszama.app.validation.ValidationFailedException
-import org.funktionale.tries.Try
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -21,7 +20,7 @@ import java.time.format.DateTimeFormatter
 class OrderService {
 
   @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var userService: UserService
 
   @Autowired
   private lateinit var orderRepository: OrderRepository
@@ -41,7 +40,7 @@ class OrderService {
 
     val order = Order(
         restaurant = restaurant,
-        orderCreator = authService.currentUser(),
+        orderCreator = userService.currentUser(),
         orderDate = orderSaveRequest.orderDate!!,
         timeOfOrder = orderSaveRequest.timeOfOrder,
         timeOfDelivery = null,
@@ -79,7 +78,7 @@ class OrderService {
   }
 
   fun setAsCreated(orderId: String) {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
@@ -93,7 +92,7 @@ class OrderService {
   }
 
   fun setAsOrdering(orderId: String) {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
@@ -111,7 +110,7 @@ class OrderService {
   }
 
   fun setAsOrdered(orderId: String, approxTimeOfDelivery: String?)  {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
@@ -127,7 +126,11 @@ class OrderService {
     order.orderState = OrderState.ORDERED
     order.timeOfOrder = currentLocalTime().truncatedTo(ChronoUnit.MINUTES)
 
-    order.timeOfDelivery = Try { LocalTime.parse(approxTimeOfDelivery) }.getOrElse { null }
+    try {
+      order.timeOfDelivery = LocalTime.parse(approxTimeOfDelivery)
+    } catch (e: Exception) {
+      order.timeOfDelivery = null
+    }
 
     val formatter = DateTimeFormatter.ISO_LOCAL_TIME
     val eta = order.timeOfDelivery?.format(formatter) ?: "Undefined"
@@ -137,7 +140,7 @@ class OrderService {
   }
 
   fun setBackAsOrdered(orderId: String)  {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
@@ -151,7 +154,7 @@ class OrderService {
   }
 
   fun setAsDelivered(orderId: String) {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
@@ -166,7 +169,7 @@ class OrderService {
   }
 
   fun setAsRejected(orderId: String)  {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 
@@ -180,7 +183,7 @@ class OrderService {
   }
 
   fun deleteOrder(orderId: String) {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
 

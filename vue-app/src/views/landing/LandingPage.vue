@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import HomeFooter from '@/views/landing/sections/Footer'
 import Description from "@/views/landing/sections/Description";
 import SectionHero from "@/views/landing/sections/Hero";
 

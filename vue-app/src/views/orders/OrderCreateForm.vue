@@ -132,7 +132,6 @@ import PaymentDataFields from "@/views/orders/components/orderCreateForm/Payment
 })
 export default class OrderCreateForm extends Vue {
   restaurantsList: Restaurant[] = [];
-  teamsList: Team[] = [];
 
   stepperState = 1
 
@@ -174,7 +173,6 @@ export default class OrderCreateForm extends Vue {
               "";
 
           this.restaurantsList = response.restaurantsList;
-          this.teamsList = response.teamsList;
 
           this.restaurantId = restaurantId;
           this.orderDate = response.orderDate;

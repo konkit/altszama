@@ -20,8 +20,9 @@ export interface RootState {
   errors: string[];
   masterNavDrawerOpened: boolean;
   title: string;
-  displayBackButton: boolean,
-  currentRouteName: string,
+  displayBackButton: boolean;
+  currentRouteName: string;
+  pushNotificationEnabled: boolean;
 
 
   showOrder?: ShowOrderState;
@@ -37,7 +38,8 @@ const rootState: RootState = {
   masterNavDrawerOpened: false,
   title: "AltSzama",
   currentRouteName: "LandingPage",
-  displayBackButton: false
+  displayBackButton: false,
+  pushNotificationEnabled: false,
 } as RootState;
 
 export default new Vuex.Store({
@@ -62,6 +64,8 @@ export default new Vuex.Store({
 
       state.token = "";
       localStorage.setItem("token", "");
+
+      state.pushNotificationEnabled = false
     },
     addError(state, error: any) {
       console.log("Error: ", error)
@@ -110,6 +114,9 @@ export default new Vuex.Store({
     },
     setCurrentRouteName(state, value) {
       state.currentRouteName = value
+    },
+    setPushNotificationEnabled(state, value) {
+      state.pushNotificationEnabled = value
     }
   },
   getters: {

@@ -1,22 +1,26 @@
 package altszama.app.auth
 
-import altszama.app.activityLog.ActivityEventService
+import altszama.app.team.Team
 import altszama.config.SecretsConfig
-import com.google.api.services.oauth2.model.Userinfoplus
-import io.jsonwebtoken.*
+import io.jsonwebtoken.JwtException
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.util.*
 
+
+data class AuthUserInfo(val token: String, val userId: String, val username: String)
+
+
 @Service
-class AuthService(envVarConfig: SecretsConfig) {
+class UserService(envVarConfig: SecretsConfig) {
+
+  private val jwtSigningKey: String = envVarConfig.jwtSigningKey
 
   @Autowired
   private lateinit var userRepository: UserRepository
-
-  private val clientSecret: String = envVarConfig.googleClientSecret
 
   fun currentUser(): User {
     val securityContext = SecurityContextHolder.getContext()
@@ -30,18 +34,18 @@ class AuthService(envVarConfig: SecretsConfig) {
   @Throws(JwtException::class)
   fun getUserIdFromJwt(tokenStr: String): String {
     return Jwts.parser()
-        .setSigningKey(clientSecret)
+        .setSigningKey(jwtSigningKey)
         .parseClaimsJws(tokenStr)
         .body
         .subject
   }
 
-  fun getJwtTokenFromUserInfo(name: String, email: String): AuthTokenInfo {
-    val user = userRepository.findByEmail(email) ?: createNewUser(name, email)
+  fun createJwtTokenFromUserInfo(name: String, email: String): AuthUserInfo {
+    val user = userRepository.findByEmail(email).orElseGet { createNewUser(name, email) }
 
     val token = createJwt(user.id)
 
-    return AuthTokenInfo(token, user.id, user.username)
+    return AuthUserInfo(token, user.id, user.username)
   }
 
   fun createNewUser(name: String, email: String): User {
@@ -54,7 +58,7 @@ class AuthService(envVarConfig: SecretsConfig) {
     return Jwts.builder()
         .setSubject(userId)
         .setExpiration(Date(System.currentTimeMillis() + 864_000_000))
-        .signWith(SignatureAlgorithm.HS512, clientSecret)
+        .signWith(SignatureAlgorithm.HS512, jwtSigningKey)
         .compact()
   }
 }

@@ -1,0 +1,17 @@
+server:
+  port: 8088
+
+springdoc:
+  packagesToScan:
+    - altszama.app.dish
+    - altszama.app.order
+    - altszama.app.orderEntry
+    - altszama.app.restaurant
+    - altszama.app.team
+    - altszama.app.auth
+    - altszama.app.notification
+  pathsToMatch: /api/**
+
+
+#springdoc.swagger-ui.filter=group-a
+

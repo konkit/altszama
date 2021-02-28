@@ -1,6 +1,6 @@
 package altszama.app.validation
 
-import altszama.app.auth.AuthService
+import altszama.app.auth.UserService
 import altszama.app.order.OrderRepository
 import org.springframework.beans.factory.annotation.Autowired
 import javax.validation.Constraint
@@ -21,7 +21,7 @@ annotation class IsOrderOwner(
 class IsOrderOwnerValidator : ConstraintValidator<IsOrderOwner, String?> {
 
   @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var userService: UserService
 
   @Autowired
   private lateinit var orderRepository: OrderRepository
@@ -31,7 +31,7 @@ class IsOrderOwnerValidator : ConstraintValidator<IsOrderOwner, String?> {
 
   override fun isValid(orderId: String?, context: ConstraintValidatorContext): Boolean {
     val order = orderRepository.findById(orderId!!).get()
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     return order.orderCreator == currentUser
   }

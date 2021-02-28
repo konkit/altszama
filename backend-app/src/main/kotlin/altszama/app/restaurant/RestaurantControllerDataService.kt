@@ -1,6 +1,6 @@
 package altszama.app.restaurant
 
-import altszama.app.auth.AuthService
+import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishDto
 import altszama.app.restaurant.dto.*
@@ -18,7 +18,7 @@ class RestaurantControllerDataService {
   private lateinit var dishService: DishService
 
   @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var userService: UserService
 
   fun getIndexData(): IndexResponse {
     val restaurantToCountMap: Map<Restaurant, Long> = restaurantService.restaurantsToDishCountMap()
@@ -38,7 +38,7 @@ class RestaurantControllerDataService {
   }
 
   fun getCreateRestaurantInitialData(): CreateRestaurantInitialData {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     return CreateRestaurantInitialData(emptyList())
   }

@@ -1,6 +1,6 @@
 package altszama.app.order
 
-import altszama.app.auth.AuthService
+import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.order.dto.*
 import altszama.app.orderEntry.OrderEntryRepository
@@ -34,11 +34,11 @@ class OrderControllerDataService {
   private lateinit var dishService: DishService
 
   @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var userService: UserService
 
 
   fun getIndexData(): TodayOrdersResponse {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val todaysOrders = orderRepository.findByOrderDate(LocalDate.now())
     val usersOrderEntries = orderEntryRepository.findByUser(currentUser)
@@ -53,7 +53,7 @@ class OrderControllerDataService {
   }
 
   fun getShowData(orderId: String): ShowOrderResponse {
-    val currentUserId = authService.currentUser().id
+    val currentUserId = userService.currentUser().id
 
     val order = orderRepository.findById(orderId).get()
 
@@ -76,7 +76,7 @@ class OrderControllerDataService {
   }
 
   fun getCreateData(): CreateOrderInitialData {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val ordersByUser: List<Order> = orderRepository.findTop10ByOrderCreatorOrderByOrderDateDesc(currentUser)
     val lastOrderMade: Order? = ordersByUser.sortedByDescending { order -> ObjectId(order.id).timestamp }.firstOrNull()

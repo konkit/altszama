@@ -1,6 +1,6 @@
 package altszama.app.e2e
 
-import altszama.app.auth.AuthService
+import altszama.app.auth.UserService
 import altszama.app.auth.User
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
@@ -35,7 +35,7 @@ class TestEnvironmentService {
   private lateinit var orderEntryRepository: OrderEntryRepository
 
   @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var userService: UserService
 
   fun clearEverything() {
     dishRepository.deleteAll()
@@ -47,9 +47,9 @@ class TestEnvironmentService {
   fun generateEverything() {
     clearEverything()
 
-    val user1 = authService.createNewUser("John Doe", "john.doe@altszama.club")
-    val user2 = authService.createNewUser("James Bond", "james.bond@altszama.club")
-    val user3 = authService.createNewUser("Jackie Chan", "jackie.chan@altszama.club")
+    val user1 = userService.createNewUser("John Doe", "john.doe@altszama.club")
+    val user2 = userService.createNewUser("James Bond", "james.bond@altszama.club")
+    val user3 = userService.createNewUser("Jackie Chan", "jackie.chan@altszama.club")
 
     val pizzeria = createRestaurant("Pizzeria")
     val chineseSpot = createRestaurant("Chinese spot")

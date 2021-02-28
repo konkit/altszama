@@ -1,9 +1,22 @@
 package altszama.app.notification;
 
-import altszama.app.auth.AuthService;
+import altszama.app.auth.UserService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.constraints.NotNull
+
+data class PushNotifSubscriptionData(
+    @NotNull
+    var endpoint: String = "",
+
+    @NotNull
+    var p256dhKey: String = "",
+
+    @NotNull
+    var authKey: String = ""
+)
+
 
 @RestController
 @RequestMapping("/api")
@@ -13,13 +26,13 @@ class NotificationController {
   private lateinit var subscriberRepository: PushNotSubscriptionRepository
 
   @Autowired
-  private lateinit var authService: AuthService
+  private lateinit var userService: UserService
 
   private val logger = LoggerFactory.getLogger(NotificationController::class.java)
 
-  @RequestMapping("/notification/subscribe")
-  fun addSubscriber(@RequestBody subscriberParams: PushNotifSubscription): String {
-    val currentUser = authService.currentUser()
+  @PostMapping("/notification/subscribe")
+  fun addSubscriber(@RequestBody subscriberParams: PushNotifSubscriptionData): String {
+    val currentUser = userService.currentUser()
 
     if (currentUser != null) {
       val currentSubscriber = subscriberRepository.findByUserId(currentUser.id)
@@ -40,9 +53,9 @@ class NotificationController {
     return "OK"
   }
 
-  @RequestMapping("/notification/unsubscribe/}")
+  @DeleteMapping("/notification/unsubscribe")
   fun removeSubscriber(): String {
-    val currentUser = authService.currentUser()
+    val currentUser = userService.currentUser()
 
     val subscr = subscriberRepository.findByUserId(currentUser.id)
     if (subscr != null) {
