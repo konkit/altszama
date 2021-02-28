@@ -10,12 +10,6 @@
 
               <v-stepper alt-labels v-model="stepperState" class="elevation-0">
                 <v-stepper-header>
-<!--                  <v-stepper-step :complete="stepperState > 1" step="1">-->
-<!--                    Specify crew-->
-<!--                  </v-stepper-step>-->
-
-<!--                  <v-divider></v-divider>-->
-
                   <v-stepper-step :complete="stepperState > 1" step="1">
                     Select restaurant
                   </v-stepper-step>
@@ -28,15 +22,6 @@
                 </v-stepper-header>
 
                 <v-stepper-items>
-<!--                  <v-stepper-content step="1">-->
-<!--                    <h1>Specify crew</h1>-->
-
-<!--                    <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>-->
-
-<!--                    <v-btn text @click="back()">Back</v-btn>-->
-<!--                    <v-btn color="primary" @click="next()">Continue</v-btn>-->
-<!--                  </v-stepper-content>-->
-
                   <v-stepper-content step="1">
                     <h1>Select restaurant</h1>
 
@@ -246,6 +231,8 @@ export default class OrderCreateForm extends Vue {
   back() {
     if (this.stepperState > 1) {
       this.stepperState -= 1
+    } else {
+      this.$router.back()
     }
   }
 }

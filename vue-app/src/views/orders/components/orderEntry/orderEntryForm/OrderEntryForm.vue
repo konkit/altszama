@@ -12,12 +12,12 @@
 
     <template v-if="!newDish">
       <v-autocomplete
-        :items="allDishesAtOnce"
-        label="Dish"
-        :value="dishId"
-        @change="updateDishId($event)"
-        item-text="text"
-        item-value="value"
+          :items="allDishesAtOnce"
+          label="Dish"
+          :value="dishId"
+          @change="updateDishId($event)"
+          item-text="text"
+          item-value="value"
       >
         <template slot="selection" slot-scope="data">
           {{ data.item.text }}
@@ -26,7 +26,7 @@
         <template slot="item" slot-scope="data">
           <template v-if="typeof data.item.category !== 'undefined'">
             <v-list-item-content
-              v-text="data.item.category"
+                v-text="data.item.category"
             ></v-list-item-content>
           </template>
 
@@ -42,12 +42,12 @@
 
     <template v-if="newDish">
       <v-text-field
-        type="text"
-        placeholder="New dish name"
-        id="newDishName"
-        class="pr-2"
-        :value="newDishName"
-        @input="updateNewDishName($event)"
+          type="text"
+          placeholder="New dish name"
+          id="newDishName"
+          class="pr-2"
+          :value="newDishName"
+          @input="updateNewDishName($event)"
       >
       </v-text-field>
 
@@ -57,7 +57,11 @@
 
     <v-subheader>Side dishes:</v-subheader>
 
-    <side-dishes-input></side-dishes-input>
+    <side-dishes-input :chosen-side-dishes="chosenSideDishes"
+                       :dish-id-to-side-dishes-map="dishIdToSideDishesMap"
+                       :dish-id="dishId"
+                       @change="updateChosenSideDishes($event)">
+    </side-dishes-input>
 
     <v-text-field label="Additional Comments" :value="additionalComments" @input="updateAdditionalComments($event)">
     </v-text-field>
@@ -81,7 +85,7 @@ import {
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { DishDto } from "@/frontend-client";
+import {DishDto} from "@/frontend-client";
 
 function dateToRel(date: Date) {
   if (date) {
@@ -104,45 +108,45 @@ export default class OrderEntryForm extends Vue {
 
   setDishAsExisting() {
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`
     );
   }
 
   updateDishId(newValue: string) {
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`,
-      newValue
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`,
+        newValue
     );
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CLEAR_EDITED_SIDE_DISHES}`
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CLEAR_EDITED_SIDE_DISHES}`
     );
   }
 
   updateNewDishName(newValue: string) {
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_NAME}`,
-      newValue
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_NAME}`,
+        newValue
     );
   }
 
   updateNewDishPrice(newValue: number) {
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`,
-      newValue
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`,
+        newValue
     );
   }
 
   updateAdditionalComments(newValue: string) {
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ADDITIONAL_COMMENTS}`,
-      newValue
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ADDITIONAL_COMMENTS}`,
+        newValue
     );
   }
 
   cancelEdit() {
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-      {}
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
+        {}
     );
   }
 
@@ -160,10 +164,6 @@ export default class OrderEntryForm extends Vue {
 
   get allDishesByCategory(): { [category: string]: DishDto[] } {
     return this.$store.state.showOrder.allDishesByCategory;
-  }
-
-  get orderId() {
-    return this.$store.state.modifyOrderEntry.orderId;
   }
 
   get dishId() {
@@ -186,62 +186,62 @@ export default class OrderEntryForm extends Vue {
     return this.$store.state.modifyOrderEntry.newDishPrice;
   }
 
+  get chosenSideDishes() {
+    return this.$store.state.modifyOrderEntry.chosenSideDishes;
+  }
+
+  get dishIdToSideDishesMap() {
+    return this.$store.state.showOrder.dishIdToSideDishesMap;
+  }
+
   get allDishesAtOnce() {
     const dishByCategoryMap: Map<string, DishDto[]> = new Map(
-      Object.entries(this.allDishesByCategory)
+        Object.entries(this.allDishesByCategory)
     );
 
-    console.log("dishByCategoryMap", dishByCategoryMap);
-
     const entries: [string, DishDto[]][] = Array.from(
-      dishByCategoryMap.entries()
+        dishByCategoryMap.entries()
     );
 
     const result = entries.flatMap(([category, dishesFromCat]) => {
-      console.log("categoryData", [category, dishesFromCat]);
+      const dishes: (| { header: string } | { text: string; value: string; subtitle: string })[] =
+          dishesFromCat.map(dish => {
+            const price = (dish.price / 100).toLocaleString("pl-PL", {
+              style: "currency",
+              currency: "PLN"
+            });
 
-      const dishes: (
-        | { header: string }
-        | { text: string; value: string; subtitle: string }
-      )[] = dishesFromCat.map(dish => {
-        console.log("dish: ", dish);
+            let updateDesc = "";
+            if (dish.lastCrawled) {
+              updateDesc = `auto-updated ${dateToRel(dish.lastCrawled)}`;
+            }
 
-        const price = (dish.price / 100).toLocaleString("pl-PL", {
-          style: "currency",
-          currency: "PLN"
-        });
+            return Object.assign(
+                {},
+                {
+                  text: `${dish.name}`,
+                  value: dish.id,
+                  subtitle: `Price: ${price}, ${updateDesc}`
+                }
+            );
+          });
 
-        let updateDesc = "";
-        if (dish.lastCrawled) {
-          updateDesc = `auto-updated ${dateToRel(dish.lastCrawled)}`;
-        }
-
-        return Object.assign(
-          {},
-          {
-            text: `${dish.name}`,
-            value: dish.id,
-            subtitle: `Price: ${price}, ${updateDesc}`
-          }
-        );
-      });
-
-      console.log("Dishes: ", dishes);
-
-      dishes.unshift({ header: `Category: ${category}` });
+      dishes.unshift({header: `Category: ${category}`});
 
       return dishes;
     });
 
-    console.log("Result: ", result);
-
     return result;
+  }
+
+  updateChosenSideDishes(newSideDishes: []) {
+    this.$store.commit("modifyOrderEntry/updateChosenSideDishes", newSideDishes)
   }
 }
 </script>
 
 <style>
-  .money-input {
-    width: 5rem;
-  }
+.money-input {
+  width: 5rem;
+}
 </style>
