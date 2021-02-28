@@ -1,4 +1,4 @@
-import ApiConnector from "../../lib/ApiConnector";
+import ErrorHandler from "../../lib/ErrorHandler";
 import router from "../../router/index";
 import {DishDto, Restaurant, ShowRestaurantResponse} from "@/frontend-client";
 import {Module} from "vuex";
@@ -49,13 +49,13 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
           this.commit("setTitle", `Restaurant ${state.restaurant!.name}`)
           this.commit("setLoadingFalse");
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [DELETE_RESTAURANT_ACTION]({ state, rootState },{ restaurantId, errorsComponent }) {
       connector
         .deleteRestaurant(restaurantId)
         .then(response => router.push({ name: "RestaurantIndex" }))
-        .catch(errResponse => errResponse.text().then((errorMessage: string) => ApiConnector.handleError(errorMessage)));
+        .catch(errResponse => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
     },
     [DELETE_DISH_ACTION]({ state, rootState }, { restaurantId, dishId }) {
       connector
@@ -64,7 +64,7 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
           this.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, { restaurantId: restaurantId });
           this.commit("setLoadingFalse");
         })
-        .catch(errResponse => errResponse.text().then((errorMessage: string) => ApiConnector.handleError(errorMessage)));
+        .catch(errResponse => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
     }
   }
 };

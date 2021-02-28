@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import SideDishes from "./components/SideDishes.vue";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
@@ -63,7 +63,7 @@ export default class DishCreateForm extends Vue {
 
           this.$store.commit("setTitle", "Create new dish")
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   submitForm() {
@@ -80,7 +80,7 @@ export default class DishCreateForm extends Vue {
 
     this.connector!.createDish(this.restaurantId, dishPayload)
         .then(() => this.$router.back())
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
 
     return false;
   }

@@ -1,4 +1,4 @@
-import ApiConnector from "../../lib/ApiConnector";
+import ErrorHandler from "../../lib/ErrorHandler";
 import router from "../../router/index";
 import { Module } from "vuex";
 import { RootState } from "@/store";
@@ -104,7 +104,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
           this.commit("setLoadingFalse");
           this.commit("setTitle", `[${state.order.orderState}] Order from ${state.order.restaurantName} (${state.order.orderDate})`)
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
 
     [UNLOCK_ORDER_ACTION]({ state, rootState }) {
@@ -117,7 +117,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             state.order.id
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [DELETE_DISH_ENTRY_ACTION](
       { state, rootState },
@@ -132,7 +132,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             state.order.id
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [CONFIRM_ORDER_ENTRY_AS_PAID_ACTION](
       { state, rootState },
@@ -147,7 +147,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             state.order.id
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [MARK_ORDER_ENTRY_AS_PAID_ACTION]({ state, rootState }, { orderEntryId }) {
       ordersConnector
@@ -159,7 +159,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             state.order.id
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [SET_ORDER_AS_CREATED_ACTION]({ state, rootState }, { orderId }) {
       ordersConnector
@@ -171,7 +171,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             state.order.id
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [SET_ORDER_AS_ORDERED_ACTION]({ state, rootState }, { orderId }) {
       ordersConnector
@@ -183,7 +183,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             state.order.id
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [SET_ORDER_AS_DELIVERED_ACTION]({ state, rootState }, { orderId }) {
       ordersConnector
@@ -195,7 +195,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             state.order.id
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [SET_ORDER_AS_REJECTED_ACTION]({ state, rootState }, { orderId }) {
       ordersConnector
@@ -207,13 +207,13 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
             state.order.id
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [DELETE_ORDER_ACTION]({ rootState }, { orderId }) {
       ordersConnector
         .deleteOrder(orderId)
         .then(() => router.push({name: "TodayOrders"}))
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     }
   }
 };

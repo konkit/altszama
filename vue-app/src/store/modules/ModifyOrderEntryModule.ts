@@ -1,5 +1,5 @@
 import Vue from "vue";
-import ApiConnector from "../../lib/ApiConnector";
+import ErrorHandler from "../../lib/ErrorHandler";
 import {
   FETCH_ORDER_DATA_ACTION,
   NAMESPACE_SHOW_ORDER,
@@ -243,7 +243,7 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
             orderId
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [UPDATE_ORDER_ENTRY_ACTION](
       { state, rootState, getters },
@@ -274,7 +274,7 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
             orderId
           );
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
     },
     [ADD_SIDE_DISH_ACTION]({ state, rootState }) {
       const showOrderState = rootState.showOrder as ShowOrderState;

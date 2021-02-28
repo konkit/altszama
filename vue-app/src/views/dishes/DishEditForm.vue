@@ -35,7 +35,7 @@ import SideDishes from "./components/SideDishes.vue";
 import LoadingView from "@/views/commons/LoadingView.vue";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
 import Component from "vue-class-component";
 import Vue from "vue";
@@ -79,7 +79,7 @@ export default class DishEditForm extends Vue {
           this.$store.commit("setTitle", "Edit dish")
           this.$store.commit("setLoadingFalse");
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   submitForm() {
@@ -102,7 +102,7 @@ export default class DishEditForm extends Vue {
 
     this.connector!.editDish(this.restaurantId, dishObj)
         .then(() => router.back())
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
 
     return false;
   }

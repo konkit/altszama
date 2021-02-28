@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts">
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import LoadingView from "@/views/commons/LoadingView.vue";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import router from "@/router/index";
@@ -139,7 +139,7 @@ export default class TodayOrders extends Vue {
           this.$store.commit("setTitle", "Today orders")
           this.$store.commit("setLoadingFalse");
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   goToOrder(selectedOrderId: string) {

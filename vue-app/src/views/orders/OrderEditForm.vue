@@ -61,7 +61,7 @@ import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import {
   FETCH_ORDER_DATA_ACTION,
   NAMESPACE_SHOW_ORDER
@@ -135,7 +135,7 @@ export default class OrderEditForm extends Vue {
           this.$store.commit("setTitle", `Edit order from ${response.order.restaurantName}`)
           this.$store.commit("setLoadingFalse");
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   submitForm(e: Event) {
@@ -162,7 +162,7 @@ export default class OrderEditForm extends Vue {
           );
           this.$router.back();
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
 
     return false;
   }

@@ -56,8 +56,9 @@ import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Component from "vue-class-component";
 import Vue from "vue";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import {RestaurantInfo} from "@/frontend-client";
+import {BACKEND_URL} from "@/lib/config";
 
 interface RestaurantEntry {
   id: string;
@@ -98,11 +99,11 @@ export default class RestaurantIndex extends Vue {
           this.$store.commit("setTitle", "Restaurants")
           this.$store.commit("setLoadingFalse");
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   getSwaggerUrl() {
-    return ApiConnector.getBackendUrl() + "/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/"
+    return BACKEND_URL + "/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/"
   }
 
   goToRestaurant(restaurantId: string) {

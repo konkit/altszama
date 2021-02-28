@@ -134,7 +134,7 @@ import UserOrders from "@/views/orders/components/orderView/UserOrders.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import {GroupedOrderEntry} from "@/frontend-client";
 
@@ -188,7 +188,7 @@ export default class OrderView extends Vue {
           this.$store.commit("setLoadingFalse");
           this.$store.commit("setTitle", `Ordering from ${this.restaurantName}`)
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   submitForm() {
@@ -196,7 +196,7 @@ export default class OrderView extends Vue {
         ?.makeAnOrder(this.orderId, {
           approxTimeOfDelivery: this.approxTimeOfDelivery.toString()
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
 
     return false;
   }

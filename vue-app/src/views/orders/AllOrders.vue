@@ -38,7 +38,7 @@ import router from "@/router/index";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import {AllOrdersOrderDto} from "@/frontend-client";
 import Navigation from "@/views/commons/Navigation.vue";
@@ -71,7 +71,7 @@ export default class AllOrders extends Vue {
           this.$store.commit("setTitle", "All orders")
           this.$store.commit("setLoadingFalse");
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   goToOrder(selectedOrderId: string) {

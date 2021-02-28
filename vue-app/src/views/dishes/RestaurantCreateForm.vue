@@ -27,7 +27,7 @@ import Vue from "vue";
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import {Team} from "@/frontend-client";
 
 @Component({
@@ -73,7 +73,7 @@ export default class RestaurantCreateForm extends Vue {
 
     this.connector!.saveRestaurant(restaurant)
         .then(() => this.$router.back())
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   updateName(newValue: string) {

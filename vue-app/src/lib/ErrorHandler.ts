@@ -1,12 +1,8 @@
 import store from "../store";
 import router from "../router";
 import GoogleLogin from "./GoogleLogin";
-import {BACKEND_URL} from "@/lib/config";
 
-export default class ApiConnector {
-
-  static getBackendUrl() { return BACKEND_URL }
-
+export default class ErrorHandler {
   static handleError(errorResponse: any) {
     console.log(errorResponse);
 
@@ -23,15 +19,6 @@ export default class ApiConnector {
     } else {
       errorResponse.json().then((body: unknown) => store.commit("addError", body))
     }
-  }
-
-  static logout() {
-    store.commit("logoutUser");
-
-    store.commit("setPushNotificationEnabled", false);
-
-    const signOutCallback = () => router.push({name: "Login"});
-    GoogleLogin.signOut(signOutCallback, signOutCallback);
   }
 }
 

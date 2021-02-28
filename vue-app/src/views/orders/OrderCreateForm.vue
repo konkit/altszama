@@ -101,7 +101,7 @@ import TimePicker from "@/views/commons/TimePicker.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import {OrderSaveRequest, Restaurant} from "@/frontend-client";
 import NoRestaurantsGuard from "@/views/orders/components/orderCreateForm/NoRestaurantsGuard.vue";
@@ -199,7 +199,7 @@ export default class OrderCreateForm extends Vue {
           this.$store.commit("setTitle", "Create new order")
           this.$store.commit("setLoadingFalse");
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   updateRestaurantId(newValue: string) {
@@ -223,7 +223,7 @@ export default class OrderCreateForm extends Vue {
 
     this.connector!.createOrder(order)
         .then(() => router.push({name: "TodayOrders"}))
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
 
     return false;
   }

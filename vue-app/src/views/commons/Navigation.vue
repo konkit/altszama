@@ -52,10 +52,12 @@
 </template>
 
 <script lang="ts">
-import ApiConnector from "../../lib/ApiConnector";
 import Vue from "vue";
 import Component from "vue-class-component";
 import {RawLocation} from "vue-router";
+import store from "@/store";
+import router from "@/router";
+import GoogleLogin from "@/lib/GoogleLogin";
 
 @Component({name: "Navigation"})
 export default class Navigation extends Vue {
@@ -73,7 +75,12 @@ export default class Navigation extends Vue {
   }
 
   logout(): void {
-    ApiConnector.logout();
+    store.commit("logoutUser");
+
+    store.commit("setPushNotificationEnabled", false);
+
+    const signOutCallback = () => router.push({name: "Login"});
+    GoogleLogin.signOut(signOutCallback, signOutCallback);
   }
 
   goToPath(path: RawLocation) {

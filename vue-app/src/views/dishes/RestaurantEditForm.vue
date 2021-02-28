@@ -30,7 +30,7 @@ import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import ApiConnector from "@/lib/ApiConnector";
+import ErrorHandler from "@/lib/ErrorHandler";
 import router from "@/router/index";
 
 @Component({
@@ -67,7 +67,7 @@ export default class RestaurantEditForm extends Vue {
 
           this.$store.commit("setTitle", `Edit restaurant ${this.initialName}`)
         })
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   submitForm() {
@@ -81,7 +81,7 @@ export default class RestaurantEditForm extends Vue {
 
     this.connector!.editRestaurant(this.restaurantId, restaurant)
         .then(() => router.push({name: "ShowRestaurant", params: {id: this.restaurantId}}))
-        .catch(errResponse => ApiConnector.handleError(errResponse));
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
 
     return false;
   }
