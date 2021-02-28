@@ -1,14 +1,8 @@
-import Vue from "vue";
 import store, {RootState} from "../store";
 import router from "../router";
 import GoogleLogin from "./GoogleLogin";
-import {BACKEND_URL} from "@/lib/config";
-import {AuthControllerApi, Configuration, OrderControllerApi, OrderEntryControllerApi} from "@/frontend-client";
+import {AuthControllerApi, Configuration} from "@/frontend-client";
 import LocalConfiguration from "@/lib/LocalConfiguration";
-
-function headersWithToken(token: string) {
-  return {headers: {Authorization: "Bearer " + token}};
-}
 
 export default class AuthApiConnector {
 

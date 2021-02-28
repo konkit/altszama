@@ -6,7 +6,7 @@ import {Configuration, NotificationControllerApi, PushNotifSubscriptionData} fro
 export default class NotificationsApiConnector {
 
   private localConfiguration: LocalConfiguration;
-  private configuration: Configuration;
+  private readonly configuration: Configuration;
   private readonly notificationControllerApi: NotificationControllerApi
 
   constructor(rootState: RootState) {
