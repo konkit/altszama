@@ -26,9 +26,8 @@ import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
-import DishesApiConnector from "../../lib/DishesApiConnector";
-import ApiConnector from "../../lib/ApiConnector";
-import router from "../../router/index";
+import DishesApiConnector from "@/lib/api/DishesApiConnector";
+import ApiConnector from "@/lib/ApiConnector";
 import {Team} from "@/frontend-client";
 
 @Component({

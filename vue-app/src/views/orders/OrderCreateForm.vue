@@ -92,22 +92,18 @@
 </template>
 
 <script lang="ts">
-import router from "../../router/index";
+import router from "@/router/index";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import LoadingView from "@/views/commons/LoadingView.vue";
-import {
-  CANCEL_DISH_ENTRY_MODIFICATION,
-  NAMESPACE_MODIFY_ORDER_ENTRY
-} from "@/store/modules/ModifyOrderEntryModule";
+import {CANCEL_DISH_ENTRY_MODIFICATION, NAMESPACE_MODIFY_ORDER_ENTRY} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import TimePicker from "@/views/commons/TimePicker.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import ApiConnector from "../../lib/ApiConnector";
-import OrdersApiConnector from "../../lib/OrdersApiConnector";
-import {RootState} from "../../store";
-import {OrderSaveRequest, Restaurant, Team} from "../../frontend-client";
+import ApiConnector from "@/lib/ApiConnector";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import {OrderSaveRequest, Restaurant} from "@/frontend-client";
 import NoRestaurantsGuard from "@/views/orders/components/orderCreateForm/NoRestaurantsGuard.vue";
 import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
 import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";

@@ -1,14 +1,16 @@
 import ApiConnector from "../../lib/ApiConnector";
-import DishesApiConnector from "../../lib/DishesApiConnector";
 import router from "../../router/index";
-import { DishDto, Restaurant, ShowRestaurantResponse } from "@/frontend-client";
-import Vuex, { Module } from "vuex";
-import { RootState } from "@/store";
+import {DishDto, Restaurant, ShowRestaurantResponse} from "@/frontend-client";
+import {Module} from "vuex";
+import {RootState} from "@/store";
+import DishesApiConnector from "@/lib/api/DishesApiConnector";
 
 export const INIT_RESTAURANT_DATA = "INIT_RESTAURANT_DATA";
 export const FETCH_RESTAURANT_ACTION = "FETCH_RESTAURANT_ACTION";
 export const DELETE_RESTAURANT_ACTION = "DELETE_RESTAURANT_ACTION";
 export const DELETE_DISH_ACTION = "DELETE_DISH_ACTION";
+
+const connector = new DishesApiConnector();
 
 export interface ShowRestaurantState {
   restaurant?: Restaurant;
@@ -40,8 +42,6 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
   },
   actions: {
     [FETCH_RESTAURANT_ACTION]({ state, rootState }, { restaurantId }) {
-      const connector = new DishesApiConnector();
-
       connector
         .getShowRestaurantData(restaurantId)
         .then(response => {
@@ -52,16 +52,12 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [DELETE_RESTAURANT_ACTION]({ state, rootState },{ restaurantId, errorsComponent }) {
-      const connector = new DishesApiConnector();
-
       connector
         .deleteRestaurant(restaurantId)
         .then(response => router.push({ name: "RestaurantIndex" }))
         .catch(errResponse => errResponse.text().then((errorMessage: string) => ApiConnector.handleError(errorMessage)));
     },
     [DELETE_DISH_ACTION]({ state, rootState }, { restaurantId, dishId }) {
-      const connector = new DishesApiConnector();
-
       connector
         .deleteDish(restaurantId, dishId)
         .then(successResponse => {

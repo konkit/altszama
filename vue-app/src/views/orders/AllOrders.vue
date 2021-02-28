@@ -34,14 +34,13 @@
 
 <script lang="ts">
 import LoadingView from "@/views/commons/LoadingView.vue";
-import router from "../../router/index";
+import router from "@/router/index";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import ApiConnector from "../../lib/ApiConnector";
-import OrdersApiConnector from "../../lib/OrdersApiConnector";
-import {RootState} from "@/store";
-import {AllOrdersOrderDto} from "../../frontend-client";
+import ApiConnector from "@/lib/ApiConnector";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import {AllOrdersOrderDto} from "@/frontend-client";
 import Navigation from "@/views/commons/Navigation.vue";
 
 @Component({

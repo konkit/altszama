@@ -1,4 +1,4 @@
-import router from "../router/index";
+import router from "@/router/index";
 import {
   AllOrdersResponse,
   EditOrderInitialData,
@@ -13,7 +13,7 @@ import {
   ShowOrderResponse,
   SideDishData
 } from "@/frontend-client";
-import {AbstractApiConnector} from "@/lib/AbstractApiConnector";
+import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
 
 
 export interface OrderEntryToModify {

@@ -55,8 +55,8 @@ import moment from "moment";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Component from "vue-class-component";
 import Vue from "vue";
-import DishesApiConnector from "../../lib/DishesApiConnector";
-import ApiConnector from "../../lib/ApiConnector";
+import DishesApiConnector from "@/lib/api/DishesApiConnector";
+import ApiConnector from "@/lib/ApiConnector";
 import {RestaurantInfo} from "@/frontend-client";
 
 interface RestaurantEntry {

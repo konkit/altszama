@@ -1,7 +1,7 @@
-import store from "../store";
+import store from "@/store";
 import {VAPID_PUBLIC_KEY} from "@/lib/config";
 import {NotificationControllerApi, PushNotifSubscriptionData} from "@/frontend-client";
-import {AbstractApiConnector} from "@/lib/AbstractApiConnector";
+import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
 
 
 export default class NotificationsApiConnector extends AbstractApiConnector {

@@ -8,8 +8,8 @@ import {
   RestaurantControllerApi,
   RestaurantSaveRequest,
   RestaurantUpdateRequest
-} from "../frontend-client/api";
-import {AbstractApiConnector} from "@/lib/AbstractApiConnector";
+} from "@/frontend-client/api";
+import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
 
 
 export default class DishesApiConnector extends AbstractApiConnector {

@@ -1,4 +1,3 @@
-import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import router from "../../router/index";
 import { Module } from "vuex";
@@ -10,6 +9,11 @@ import {
   ShowOrderResponse,
   SideDish
 } from "@/frontend-client";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+
+
+const ordersConnector = new OrdersApiConnector()
+
 
 export const NAMESPACE_SHOW_ORDER = "showOrder";
 
@@ -90,7 +94,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
 
   actions: {
     [FETCH_ORDER_DATA_ACTION]({ state, rootState }, orderId) {
-      new OrdersApiConnector()
+      ordersConnector
         .fetchOrder(orderId)
         .then(showOrderData => {
           this.commit(
@@ -104,7 +108,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
     },
 
     [UNLOCK_ORDER_ACTION]({ state, rootState }) {
-      new OrdersApiConnector()
+      ordersConnector
         .setOrderAsCreated(state.order.id)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -119,7 +123,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       { state, rootState },
       { orderEntryId, dishEntryId }
     ) {
-      new OrdersApiConnector()
+      ordersConnector
         .deleteDishEntry(orderEntryId, dishEntryId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -134,7 +138,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       { state, rootState },
       { orderEntryId }
     ) {
-      new OrdersApiConnector()
+      ordersConnector
         .confirmOrderEntryAsPaid(orderEntryId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -146,7 +150,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [MARK_ORDER_ENTRY_AS_PAID_ACTION]({ state, rootState }, { orderEntryId }) {
-      new OrdersApiConnector()
+      ordersConnector
         .markOrderEntryAsPaid(orderEntryId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -158,7 +162,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [SET_ORDER_AS_CREATED_ACTION]({ state, rootState }, { orderId }) {
-      new OrdersApiConnector()
+      ordersConnector
         .setOrderAsCreated(orderId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -170,7 +174,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [SET_ORDER_AS_ORDERED_ACTION]({ state, rootState }, { orderId }) {
-      new OrdersApiConnector()
+      ordersConnector
         .setOrderAsOrdered(orderId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -182,7 +186,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [SET_ORDER_AS_DELIVERED_ACTION]({ state, rootState }, { orderId }) {
-      new OrdersApiConnector()
+      ordersConnector
         .setOrderAsDelivered(orderId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -194,7 +198,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [SET_ORDER_AS_REJECTED_ACTION]({ state, rootState }, { orderId }) {
-      new OrdersApiConnector()
+      ordersConnector
         .setOrderAsRejected(orderId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -206,7 +210,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [DELETE_ORDER_ACTION]({ rootState }, { orderId }) {
-      new OrdersApiConnector()
+      ordersConnector
         .deleteOrder(orderId)
         .then(() => router.push({name: "TodayOrders"}))
         .catch(errResponse => ApiConnector.handleError(errResponse));

@@ -133,10 +133,9 @@ import router from "../../router/index";
 import UserOrders from "@/views/orders/components/orderView/UserOrders.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import OrdersApiConnector from "../../lib/OrdersApiConnector";
-import ApiConnector from "../../lib/ApiConnector";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import ApiConnector from "@/lib/ApiConnector";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import {RootState} from "@/store";
 import {GroupedOrderEntry} from "@/frontend-client";
 
 @Component({

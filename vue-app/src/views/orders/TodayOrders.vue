@@ -109,10 +109,9 @@ import router from "@/router/index";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import OrdersApiConnector from "../../lib/OrdersApiConnector";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import {OrderEntryDto, TodayOrderDto} from "../../frontend-client";
-import {RootState} from "@/store";
-import NotificationsApiConnector from "@/lib/NotificationsApiConnector";
+import NotificationsApiConnector from "@/lib/api/NotificationsApiConnector";
 
 @Component({
   components: {

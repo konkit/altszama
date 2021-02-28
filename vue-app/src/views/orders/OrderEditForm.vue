@@ -60,8 +60,8 @@ import OrderStateButtons from "@/views/orders/components/OrderStateButtons.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import OrdersApiConnector from "../../lib/OrdersApiConnector";
-import ApiConnector from "../../lib/ApiConnector";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import ApiConnector from "@/lib/ApiConnector";
 import {
   FETCH_ORDER_DATA_ACTION,
   NAMESPACE_SHOW_ORDER

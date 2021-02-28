@@ -1,5 +1,4 @@
 import Vue from "vue";
-import OrdersApiConnector from "../../lib/OrdersApiConnector";
 import ApiConnector from "../../lib/ApiConnector";
 import {
   FETCH_ORDER_DATA_ACTION,
@@ -9,6 +8,10 @@ import {
 import { Module } from "vuex";
 import { RootState } from "@/store";
 import { SideDishData } from "@/frontend-client";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+
+
+const ordersConnector = new OrdersApiConnector()
 
 export const NAMESPACE_MODIFY_ORDER_ENTRY = "modifyOrderEntry";
 
@@ -84,10 +87,7 @@ const modifyOrderEntryState: ModifyOrderEntryState = {
   chosenSideDishes: []
 };
 
-export const modifyOrderEntryModule: Module<
-  ModifyOrderEntryState,
-  RootState
-> = {
+export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
   namespaced: true,
 
   state: modifyOrderEntryState,
@@ -230,7 +230,7 @@ export const modifyOrderEntryModule: Module<
         chosenSideDishes: state.chosenSideDishes
       };
 
-      new OrdersApiConnector()
+      ordersConnector
         .saveOrderEntry(orderId, orderEntryToSave)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -261,7 +261,7 @@ export const modifyOrderEntryModule: Module<
         chosenSideDishes: state.chosenSideDishes
       };
 
-      new OrdersApiConnector()
+      ordersConnector
         .updateOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
         .then(() => {
           this.commit("setLoadingTrue");

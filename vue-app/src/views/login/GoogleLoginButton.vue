@@ -17,8 +17,7 @@
 import GoogleLogin from "@/lib/GoogleLogin";
 import Vue from "vue";
 import Component from "vue-class-component";
-import AuthApiConnector from "@/lib/AuthApiConnector";
-import {RootState} from "@/store";
+import AuthApiConnector from "@/lib/api/AuthApiConnector";
 
 @Component({})
 export default class GoogleLoginButton extends Vue {

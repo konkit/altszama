@@ -1,8 +1,8 @@
-import store from "../store";
-import router from "../router";
-import GoogleLogin from "./GoogleLogin";
+import store from "@/store";
+import router from "@/router";
+import GoogleLogin from "@/lib/GoogleLogin";
 import {AuthControllerApi} from "@/frontend-client";
-import {AbstractApiConnector} from "@/lib/AbstractApiConnector";
+import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
 
 
 export default class AuthApiConnector extends AbstractApiConnector {

@@ -24,9 +24,9 @@
 </template>
 
 <script lang="ts">
-import DishesApiConnector from "../../lib/DishesApiConnector";
-import ApiConnector from "../../lib/ApiConnector";
-import ErrorsComponent from "../commons/ErrorsComponent.vue";
+import DishesApiConnector from "@/lib/api/DishesApiConnector";
+import ApiConnector from "@/lib/ApiConnector";
+import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import SideDishes from "./components/SideDishes.vue";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
