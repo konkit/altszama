@@ -154,15 +154,13 @@ export default class OrderCreateForm extends Vue {
     blikPhoneNumber: ""
   }
 
-  connector?: OrdersApiConnector;
+  connector: OrdersApiConnector = new OrdersApiConnector();
 
   created() {
     this.$store.commit("setLoadingTrue");
   }
 
   mounted() {
-    this.connector = new OrdersApiConnector(this.$store.state as RootState);
-
     this.connector
         .getOrderCreateData()
         .then(response => {

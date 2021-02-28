@@ -61,11 +61,9 @@ export default class AllOrders extends Vue {
     {text: "Order creator", value: "orderCreator"}
   ];
 
-  connector?: OrdersApiConnector;
+  connector: OrdersApiConnector = new OrdersApiConnector();
 
   mounted() {
-    this.connector = new OrdersApiConnector(this.$store.state as RootState);
-
     this.connector
         .fetchAllOrders()
         .then(allOrdersList => {

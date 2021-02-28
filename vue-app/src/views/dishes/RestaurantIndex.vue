@@ -84,11 +84,9 @@ export default class RestaurantIndex extends Vue {
   restaurants: RestaurantInfo[] = [];
   restaurantsEntries: RestaurantEntry[] = [];
 
-  connector?: DishesApiConnector;
+  connector: DishesApiConnector = new DishesApiConnector();
 
   mounted() {
-    this.connector = new DishesApiConnector(this.$store.state);
-
     this.connector
         .getRestaurants()
         .then(payload => {

@@ -26,11 +26,9 @@ export default class GoogleLoginButton extends Vue {
   loginLoaded = false
   loginPending = false
 
-  connector?: AuthApiConnector;
+  connector: AuthApiConnector = new AuthApiConnector()
 
   mounted() {
-    this.connector = new AuthApiConnector(this.$store.state as RootState)
-
     GoogleLogin.load().then(() => (this.loginLoaded = true));
   }
 
@@ -45,7 +43,9 @@ export default class GoogleLoginButton extends Vue {
 
       this.connector?.loginWithGoogle(returnPath).catch(e => {
         this.$store.commit("clearErrors");
-        this.$store.commit("addError", e);
+        if (e) {
+          this.$store.commit("addError", e);
+        }
         this.loginPending = false;
       });
     }

@@ -106,12 +106,10 @@ export default class OrderEditForm extends Vue {
     blikPhoneNumber: ""
   }
 
-  connector?: OrdersApiConnector;
+  connector: OrdersApiConnector = new OrdersApiConnector();
 
   mounted() {
     this.orderId = this.$route.params.id;
-
-    this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
     this.connector
         .getOrderEditData(this.orderId)

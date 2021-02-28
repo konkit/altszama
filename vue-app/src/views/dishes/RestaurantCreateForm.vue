@@ -48,11 +48,9 @@ export default class RestaurantCreateForm extends Vue {
   telephone = "";
   address = "";
 
-  connector?: DishesApiConnector;
+  connector: DishesApiConnector = new DishesApiConnector();
 
   mounted() {
-    this.connector = new DishesApiConnector(this.$store.state);
-
     this.connector.createRestaurant().then(response => {
       this.teamsList = response.teamsList;
       this.teamId =

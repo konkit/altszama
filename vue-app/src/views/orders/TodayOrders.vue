@@ -125,13 +125,10 @@ export default class TodayOrders extends Vue {
   currentOrderEntries: OrderEntryDto[] = [];
   ordersList: TodayOrderDto[] = [];
 
-  connector?: OrdersApiConnector;
-  notificationsConnector: NotificationsApiConnector
+  connector: OrdersApiConnector = new OrdersApiConnector();
+  notificationsConnector: NotificationsApiConnector = new NotificationsApiConnector();
 
   mounted() {
-    this.connector = new OrdersApiConnector(this.$store.state as RootState);
-    this.notificationsConnector = new NotificationsApiConnector(this.$store.state as RootState);
-
     this.notificationsConnector.initializePushNotifications();
 
     this.connector

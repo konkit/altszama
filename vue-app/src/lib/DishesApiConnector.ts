@@ -9,30 +9,23 @@ import {
   RestaurantSaveRequest,
   RestaurantUpdateRequest
 } from "../frontend-client/api";
-import store, { RootState } from "@/store";
-import LocalConfiguration from "@/lib/LocalConfiguration";
-import { Configuration } from "@/frontend-client";
+import {AbstractApiConnector} from "@/lib/AbstractApiConnector";
 
-function headersWithToken() {
-  return { headers: { Authorization: "Bearer " + store.state.token } };
-}
 
-export default class DishesApiConnector {
-  private localConfiguration: LocalConfiguration;
-  private configuration: Configuration;
+export default class DishesApiConnector extends AbstractApiConnector {
   private readonly restaurantApi: RestaurantControllerApi;
   private readonly dishApi: DishControllerApi;
 
-  constructor(rootState: RootState) {
-    this.localConfiguration = new LocalConfiguration(rootState);
-    this.configuration = this.localConfiguration.createConfiguration();
-    this.restaurantApi = new RestaurantControllerApi(this.configuration);
-    this.dishApi = new DishControllerApi(this.configuration);
+  constructor() {
+    super()
+    const configuration = this.createConfiguration()
+    this.restaurantApi = new RestaurantControllerApi(configuration);
+    this.dishApi = new DishControllerApi(configuration);
   }
 
   getRestaurants(): Promise<IndexResponse> {
     return this.restaurantApi
-      .indexRestaurants(headersWithToken())
+      .indexRestaurants(this.headersWithToken())
       .then(response => {
         return {
           restaurants: response.restaurants
@@ -41,52 +34,52 @@ export default class DishesApiConnector {
   }
 
   getShowRestaurantData(restaurantId: string) {
-    return this.restaurantApi.showRestaurant(restaurantId, headersWithToken());
+    return this.restaurantApi.showRestaurant(restaurantId, this.headersWithToken());
   }
 
   createRestaurant() {
-    return this.restaurantApi.createRestaurant(headersWithToken());
+    return this.restaurantApi.createRestaurant(this.headersWithToken());
   }
 
   saveRestaurant(restaurant: RestaurantSaveRequest) {
-    return this.restaurantApi.saveRestaurant(restaurant, headersWithToken());
+    return this.restaurantApi.saveRestaurant(restaurant, this.headersWithToken());
   }
 
   getRestaurantEditData(restaurantId: string): Promise<EditRestaurantResponse> {
-    return this.restaurantApi.editRestaurant(restaurantId, headersWithToken());
+    return this.restaurantApi.editRestaurant(restaurantId, this.headersWithToken());
   }
 
   editRestaurant(restaurantId: string, restaurant: RestaurantUpdateRequest) {
-    return this.restaurantApi.updateRestaurant(restaurant, headersWithToken());
+    return this.restaurantApi.updateRestaurant(restaurant, this.headersWithToken());
   }
 
   deleteRestaurant(restaurantId: string) {
     return this.restaurantApi.deleteRestaurant(
       restaurantId,
-      headersWithToken()
+      this.headersWithToken()
     );
   }
 
   getDishCreateData(restaurantId: string) {
-    return this.dishApi.createDish(restaurantId, headersWithToken());
+    return this.dishApi.createDish(restaurantId, this.headersWithToken());
   }
 
   createDish(restaurantId: string, formData: DishCreateRequest) {
-    return this.dishApi.saveDish(formData, restaurantId, headersWithToken());
+    return this.dishApi.saveDish(formData, restaurantId, this.headersWithToken());
   }
 
   getDishEditData(
     restaurantId: string,
     dishId: string
   ): Promise<EditDishResponse> {
-    return this.dishApi.editDish(restaurantId, dishId, headersWithToken());
+    return this.dishApi.editDish(restaurantId, dishId, this.headersWithToken());
   }
 
   editDish(restaurantId: string, dishObj: DishUpdateRequest) {
-    return this.dishApi.updateDish(dishObj, restaurantId, headersWithToken());
+    return this.dishApi.updateDish(dishObj, restaurantId, this.headersWithToken());
   }
 
   deleteDish(restaurantId: string, dishId: string) {
-    return this.dishApi.deleteDish(dishId, headersWithToken());
+    return this.dishApi.deleteDish(dishId, this.headersWithToken());
   }
 }

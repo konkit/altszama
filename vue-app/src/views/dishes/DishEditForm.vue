@@ -60,12 +60,11 @@ export default class DishEditForm extends Vue {
   categories: string[] = [];
   initialSideDishes: SideDish[] = [];
 
-  connector?: DishesApiConnector;
+  connector: DishesApiConnector = new DishesApiConnector();
 
   mounted() {
     this.restaurantId = this.$route.params.id;
     this.dishId = this.$route.params.dishId;
-    this.connector = new DishesApiConnector(this.$store.state);
 
     this.connector
         .getDishEditData(this.restaurantId, this.dishId)

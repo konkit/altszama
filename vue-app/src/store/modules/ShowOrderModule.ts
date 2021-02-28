@@ -90,7 +90,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
 
   actions: {
     [FETCH_ORDER_DATA_ACTION]({ state, rootState }, orderId) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .fetchOrder(orderId)
         .then(showOrderData => {
           this.commit(
@@ -104,7 +104,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
     },
 
     [UNLOCK_ORDER_ACTION]({ state, rootState }) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .setOrderAsCreated(state.order.id)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -119,7 +119,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       { state, rootState },
       { orderEntryId, dishEntryId }
     ) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .deleteDishEntry(orderEntryId, dishEntryId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -134,7 +134,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       { state, rootState },
       { orderEntryId }
     ) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .confirmOrderEntryAsPaid(orderEntryId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -146,7 +146,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [MARK_ORDER_ENTRY_AS_PAID_ACTION]({ state, rootState }, { orderEntryId }) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .markOrderEntryAsPaid(orderEntryId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -158,7 +158,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [SET_ORDER_AS_CREATED_ACTION]({ state, rootState }, { orderId }) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .setOrderAsCreated(orderId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -170,7 +170,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [SET_ORDER_AS_ORDERED_ACTION]({ state, rootState }, { orderId }) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .setOrderAsOrdered(orderId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -182,7 +182,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [SET_ORDER_AS_DELIVERED_ACTION]({ state, rootState }, { orderId }) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .setOrderAsDelivered(orderId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -194,7 +194,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [SET_ORDER_AS_REJECTED_ACTION]({ state, rootState }, { orderId }) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .setOrderAsRejected(orderId)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -206,7 +206,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [DELETE_ORDER_ACTION]({ rootState }, { orderId }) {
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .deleteOrder(orderId)
         .then(() => router.push({name: "TodayOrders"}))
         .catch(errResponse => ApiConnector.handleError(errResponse));

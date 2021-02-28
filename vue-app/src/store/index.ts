@@ -70,27 +70,33 @@ export default new Vuex.Store({
     addError(state, error: any) {
       console.log("Error: ", error)
 
+      const pushError = (errorStr: string) => {
+        if (errorStr && errorStr.trim().length > 0) {
+          state.errors.push(errorStr)
+        }
+      }
+
       if (error instanceof Array) {
-        error.forEach(errorStr => state.errors.push(errorStr));
+        error.forEach(errorStr => pushError(errorStr));
       } else if (typeof error == "object" && error.messages !== undefined) {
         error.messages.forEach((errorStr: string) =>
-          state.errors.push(errorStr)
+          pushError(errorStr)
         );
       } else if (typeof error == "object" && error.exception !== undefined) {
-        state.errors.push("Error: " + error.exception + " occured!");
+        pushError("Error: " + error.exception + " occured!");
       } else if (typeof error == "object" && error.message !== undefined) {
-        state.errors.push(error.message);
+        pushError(error.message);
       } else if (typeof error == "object" && error.body?.message !== undefined) {
-        state.errors.push(error.body.message);
+        pushError(error.body.message);
       } else if (typeof error == "object" && error.body?.messages !== undefined) {
         error.body.messages.forEach((errorStr: string) =>
-          state.errors.push(errorStr)
+          pushError(errorStr)
         );
       } else if (typeof error == "object" && error.statusText !== undefined) {
-        state.errors.push(error.statusText);
+        pushError(error.statusText);
       } else {
         console.log("Error: ", error);
-        state.errors.push(error);
+        pushError(error);
       }
     },
     clearErrorAtIndex(state, index) {

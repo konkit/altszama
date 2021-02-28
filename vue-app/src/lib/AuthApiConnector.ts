@@ -1,46 +1,50 @@
-import store, {RootState} from "../store";
+import store from "../store";
 import router from "../router";
 import GoogleLogin from "./GoogleLogin";
-import {AuthControllerApi, Configuration} from "@/frontend-client";
-import LocalConfiguration from "@/lib/LocalConfiguration";
+import {AuthControllerApi} from "@/frontend-client";
+import {AbstractApiConnector} from "@/lib/AbstractApiConnector";
 
-export default class AuthApiConnector {
 
-  private localConfiguration: LocalConfiguration;
-  private configuration: Configuration;
+export default class AuthApiConnector extends AbstractApiConnector {
+
   private readonly authControllerApi: AuthControllerApi;
 
-  constructor(rootState: RootState) {
-    this.localConfiguration = new LocalConfiguration(rootState);
-    this.configuration = this.localConfiguration.createConfiguration();
-    this.authControllerApi = new AuthControllerApi(this.configuration);
+  constructor() {
+    super()
+    this.authControllerApi = new AuthControllerApi(this.createConfiguration());
   }
 
   loginWithGoogle(returnPath = "") {
     return new Promise((resolve, reject) => {
       GoogleLogin.signIn()
-        .then(authCode => {
-          this.authControllerApi.loginWithIdToken(authCode)
-            .then(
-              response => {
-                store.commit("loginUser", {
-                  username: response.userInfo.username,
-                  token: response.userInfo.token
-                });
+        .then(
+          authCode => {
+            this.authControllerApi.loginWithIdToken(authCode)
+              .then(
+                response => {
+                  store.commit("loginUser", {
+                    username: response.userInfo.username,
+                    token: response.userInfo.token
+                  });
 
-                if (returnPath.length > 0) {
-                  router.push({path: returnPath});
-                } else {
-                  router.push({name: "TodayOrders"});
+                  if (returnPath.length > 0) {
+                    router.push({path: returnPath});
+                  } else {
+                    router.push({name: "TodayOrders"});
+                  }
+
+                  resolve();
+                },
+                errorResponse => {
+                  errorResponse.json().then((error: unknown) => reject(error))
                 }
-
-                resolve();
-              },
-              errorResponse => {
-                errorResponse.json().then((error: unknown) => reject(error))
-              }
-            );
-        });
+              );
+          },
+          err => {
+            console.log("Google login sign in error: ", err)
+            reject()
+          }
+        )
     });
   }
 

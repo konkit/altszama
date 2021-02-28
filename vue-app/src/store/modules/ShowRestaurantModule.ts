@@ -40,7 +40,7 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
   },
   actions: {
     [FETCH_RESTAURANT_ACTION]({ state, rootState }, { restaurantId }) {
-      const connector = new DishesApiConnector(rootState);
+      const connector = new DishesApiConnector();
 
       connector
         .getShowRestaurantData(restaurantId)
@@ -52,7 +52,7 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
         .catch(errResponse => ApiConnector.handleError(errResponse));
     },
     [DELETE_RESTAURANT_ACTION]({ state, rootState },{ restaurantId, errorsComponent }) {
-      const connector = new DishesApiConnector(rootState);
+      const connector = new DishesApiConnector();
 
       connector
         .deleteRestaurant(restaurantId)
@@ -60,7 +60,7 @@ export const showRestaurantModule: Module<ShowRestaurantState, RootState> = {
         .catch(errResponse => errResponse.text().then((errorMessage: string) => ApiConnector.handleError(errorMessage)));
     },
     [DELETE_DISH_ACTION]({ state, rootState }, { restaurantId, dishId }) {
-      const connector = new DishesApiConnector(rootState);
+      const connector = new DishesApiConnector();
 
       connector
         .deleteDish(restaurantId, dishId)

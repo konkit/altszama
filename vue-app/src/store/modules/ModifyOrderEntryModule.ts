@@ -230,7 +230,7 @@ export const modifyOrderEntryModule: Module<
         chosenSideDishes: state.chosenSideDishes
       };
 
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .saveOrderEntry(orderId, orderEntryToSave)
         .then(() => {
           this.commit("setLoadingTrue");
@@ -261,7 +261,7 @@ export const modifyOrderEntryModule: Module<
         chosenSideDishes: state.chosenSideDishes
       };
 
-      new OrdersApiConnector(rootState)
+      new OrdersApiConnector()
         .updateOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
         .then(() => {
           this.commit("setLoadingTrue");

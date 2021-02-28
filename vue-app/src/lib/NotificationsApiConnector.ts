@@ -1,18 +1,16 @@
-import store, {RootState} from "../store";
+import store from "../store";
 import {VAPID_PUBLIC_KEY} from "@/lib/config";
-import LocalConfiguration from "@/lib/LocalConfiguration";
-import {Configuration, NotificationControllerApi, PushNotifSubscriptionData} from "@/frontend-client";
+import {NotificationControllerApi, PushNotifSubscriptionData} from "@/frontend-client";
+import {AbstractApiConnector} from "@/lib/AbstractApiConnector";
 
-export default class NotificationsApiConnector {
 
-  private localConfiguration: LocalConfiguration;
-  private readonly configuration: Configuration;
+export default class NotificationsApiConnector extends AbstractApiConnector {
+
   private readonly notificationControllerApi: NotificationControllerApi
 
-  constructor(rootState: RootState) {
-    this.localConfiguration = new LocalConfiguration(rootState);
-    this.configuration = this.localConfiguration.createConfiguration();
-    this.notificationControllerApi = new NotificationControllerApi(this.configuration);
+  constructor() {
+    super()
+    this.notificationControllerApi = new NotificationControllerApi(this.createConfiguration());
   }
 
   initializePushNotifications() {
@@ -83,7 +81,7 @@ export default class NotificationsApiConnector {
     });
   }
 
-  sendSubscriptionToServer(subscription: any) {
+  sendSubscriptionToServer(subscription: PushSubscription) {
     const key = subscription.getKey ? subscription.getKey("p256dh") : "";
     const auth = subscription.getKey ? subscription.getKey("auth") : "";
 
@@ -93,6 +91,6 @@ export default class NotificationsApiConnector {
       authKey: auth ? btoa(String.fromCharCode(...new Uint8Array(auth))) : ""
     };
 
-    return this.notificationControllerApi.addSubscriber(subscribeData)
+    return this.notificationControllerApi.addSubscriber(subscribeData, this.headersWithToken())
   }
 }

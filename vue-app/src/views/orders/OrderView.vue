@@ -164,11 +164,10 @@ export default class OrderView extends Vue {
   totalPrice = 0;
   approxTimeOfDelivery = "12:00";
 
-  connector?: OrdersApiConnector;
+  connector: OrdersApiConnector = new OrdersApiConnector();
 
   mounted() {
     this.orderId = this.$route.params.id;
-    this.connector = new OrdersApiConnector(this.$store.state as RootState);
 
     this.connector
         .fetchOrderView(this.orderId)

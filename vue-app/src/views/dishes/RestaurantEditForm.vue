@@ -49,11 +49,10 @@ export default class RestaurantEditForm extends Vue {
   telephone = "";
   address = "";
 
-  connector?: DishesApiConnector;
+  connector: DishesApiConnector = new DishesApiConnector();
 
   mounted() {
     this.restaurantId = this.$route.params.id;
-    this.connector = new DishesApiConnector(this.$store.state);
 
     this.connector
         .getRestaurantEditData(this.restaurantId)
