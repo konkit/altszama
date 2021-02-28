@@ -13,7 +13,7 @@
               <h1 class="pb-5 text-align-center">Login using Google Account</h1>
 
               <v-alert v-if="$store.state.errors.length === 0" outlined type="info" class="pt-5">
-                Remember to use your company's Google account to have access to your colleauges' orders.
+                Remember to use your company's Google account to access your colleauges' orders.
               </v-alert>
 
               <errors-component></errors-component>

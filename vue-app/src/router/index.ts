@@ -15,6 +15,7 @@ import RestaurantEditForm from "../views/dishes/RestaurantEditForm.vue";
 import DishCreateForm from "../views/dishes/DishCreateForm.vue";
 import DishEditForm from "../views/dishes/DishEditForm.vue";
 import LandingPage from '@/views/landing/LandingPage.vue';
+import TestLoginView from "@/views/login/TestLogin.vue";
 
 Vue.use(Router);
 
@@ -102,6 +103,11 @@ export default new Router({
       name: "DishEditForm",
       component: DishEditForm,
       meta: {backButton: true}
+    },
+    {
+      path: "/login/test",
+      name: "TestLogin",
+      component: TestLoginView,
     }
   ]
 });

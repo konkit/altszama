@@ -91,7 +91,7 @@ class OrderControllerDataService {
     )
   }
 
-  fun getEditData(@PathVariable orderId: String): EditOrderInitialData {
+  fun getEditData(orderId: String): EditOrderInitialData {
     return EditOrderInitialData.create(orderRepository.findById(orderId).get())
   }
 }

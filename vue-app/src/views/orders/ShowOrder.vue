@@ -86,7 +86,7 @@
         </template>
 
         <template v-for="(orderEntry, entryId) in this.yourOrderEntries">
-          <v-row :key="entryId">
+          <v-row :key="orderEntry.id + entryId">
             <v-col>
               <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId"
                                 :current-user-id="currentUserId">
@@ -96,7 +96,7 @@
         </template>
 
         <template v-for="(orderEntry, entryId) in this.otherUsersOrderEntries">
-          <v-row :key="entryId">
+          <v-row :key="orderEntry.id + entryId">
             <v-col>
               <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId"
                                 :current-user-id="currentUserId">

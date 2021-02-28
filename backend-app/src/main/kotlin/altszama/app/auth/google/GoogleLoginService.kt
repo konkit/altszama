@@ -20,7 +20,7 @@ data class GoogleAuthError(val message: String) : GoogleAuthResult()
 
 
 @Service
-class GoogleLoginService(envVarConfig: SecretsConfig) {
+class GoogleLoginService() {
 
   private val logger = LoggerFactory.getLogger(GoogleLoginService::class.java)
 
@@ -60,7 +60,7 @@ class GoogleLoginService(envVarConfig: SecretsConfig) {
     return if (teamOpt.isPresent) {
       Either.right(teamOpt.get())
     } else {
-      Either.left(GoogleAuthError("User does not belong to any team"))
+      Either.left(GoogleAuthError("Your account does not belong to any team. Make sure that you use your company email."))
     }
   }
 }
