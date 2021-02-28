@@ -11,6 +11,8 @@ import altszama.app.orderEntry.OrderEntry
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantRepository
+import altszama.app.team.Team
+import altszama.app.team.TeamRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
@@ -37,15 +39,22 @@ class TestEnvironmentService {
   @Autowired
   private lateinit var userService: UserService
 
+  @Autowired
+  private lateinit var teamRepository: TeamRepository
+
   fun clearEverything() {
     dishRepository.deleteAll()
     restaurantRepository.deleteAll()
     orderEntryRepository.deleteAll()
     orderRepository.deleteAll()
+    teamRepository.deleteAll()
   }
 
   fun generateEverything() {
     clearEverything()
+
+    val team = Team(domain = "altszama.club", users = emptyList())
+    teamRepository.save(team)
 
     val user1 = userService.createNewUser("John Doe", "john.doe@altszama.club")
     val user2 = userService.createNewUser("James Bond", "james.bond@altszama.club")

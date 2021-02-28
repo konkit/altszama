@@ -12,6 +12,7 @@ import CreateDishForm from "../pageObjects/CreateDishForm";
 import EditDishForm from "../pageObjects/EditDishForm";
 import EditRestaurantForm from "../pageObjects/EditRestaurantForm";
 
+const TARGET_PORT = process.env.TARGET_PORT;
 
 const tokenAuthorization = new TokenAuthorization();
 const testEnvApi = new TestEnvApi()
@@ -25,7 +26,7 @@ fixture(`Feature: my new feature`)
     await testEnvApi.clearEverything()
     await t.resizeWindow(1400, 700)
   })
-  .page `http://localhost:8080/orders`
+  .page `http://localhost:${TARGET_PORT}/orders`
   .requestHooks(tokenAuthorization);
 
 

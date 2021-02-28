@@ -1,6 +1,8 @@
 import {RequestHook} from "testcafe";
 import axios from "axios";
 
+const TARGET_PORT = process.env.TARGET_PORT;
+
 export interface TokenData {
   token: string,
   userId: string,
@@ -12,7 +14,7 @@ async function getToken(): Promise<TokenData> {
     username: "John Testcafe",
     email: "john@altszama.club"
   }
-  const response = await axios.post("http://localhost:8088/api/auth/testLogin", payload)
+  const response = await axios.post(`http://localhost:${TARGET_PORT}/api/auth/testLogin`, payload)
 
   return response.data as TokenData
 }
