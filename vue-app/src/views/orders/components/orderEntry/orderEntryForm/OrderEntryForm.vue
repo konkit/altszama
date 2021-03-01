@@ -71,7 +71,11 @@
 <script lang="ts">
 import moment from "moment";
 import SideDishesInput from "./SideDishesInput.vue";
-import {OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
+import {
+  CANCEL_DISH_ENTRY_MODIFICATION,
+  NAMESPACE_MODIFY_ORDER_ENTRY,
+  OrderEntryData
+} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -148,14 +152,8 @@ export default class OrderEntryForm extends Vue {
   }
 
   cancelEdit() {
-    const newOrderEntryData: OrderEntryData = {
-      ...this.orderEntryData,
-      isEntryCreating: false,
-      isEntryEdited: false,
-      orderEntryId: "",
-      dishEntryId: ""
-    }
-    this.updateOrderEntryData(newOrderEntryData);
+    this.updateOrderEntryData(this.orderEntryData);
+    this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
   }
 
   updateChosenSideDishes(newSideDishes: []) {

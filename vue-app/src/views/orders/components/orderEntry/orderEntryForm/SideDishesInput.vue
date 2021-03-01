@@ -22,30 +22,30 @@
               <v-layout>
                 <template v-if="sideDish.isNew === true">
                   <v-text-field
-                    label="New side dish name"
-                    v-model="sideDish.newSideDishName"
-                    @input="updateNewSideDishName(sdIndex, $event)"
+                      label="New side dish name"
+                      v-model="sideDish.newSideDishName"
+                      @input="updateNewSideDishName(sdIndex, $event)"
                   >
                   </v-text-field>
 
                   <MoneyInput
-                    label="New side dish price"
-                    :value="sideDish.newSideDishPrice"
-                    @input="changeNewSideDishPrice(sdIndex, $event)"
+                      label="New side dish price"
+                      :value="sideDish.newSideDishPrice"
+                      @input="changeNewSideDishPrice(sdIndex, $event)"
                   >
                   </MoneyInput>
 
                   <v-btn text icon @click="removeSideDish(sdIndex)"
-                    ><span class="fa fa-remove"></span
+                  ><span class="fa fa-remove"></span
                   ></v-btn>
                 </template>
 
                 <template v-else>
                   <v-autocomplete
-                    :items="sideDishesItems"
-                    label="Side dish"
-                    :value="sideDish.id"
-                    @change="updateSideDishComboBox(sdIndex, $event)"
+                      :items="sideDishesItems"
+                      label="Side dish"
+                      :value="sideDish.id"
+                      @change="updateSideDishComboBox(sdIndex, $event)"
                   >
                   </v-autocomplete>
 
@@ -89,13 +89,15 @@ import {Prop} from "vue-property-decorator";
   }
 })
 export default class SideDishesInput extends Vue {
-  @Prop() chosenSideDishes: []
+  @Prop() chosenSideDishes: SideDishData[]
   @Prop() dishId: string
   @Prop() dishIdToSideDishesMap: { [key: string]: SideDish[] }
 
   removeSideDish(sideDishIndex: number) {
-    const newSideDishes = [...this.chosenSideDishes.slice(0, sideDishIndex), ...this.chosenSideDishes.slice(sideDishIndex+1)]
-
+    const newSideDishes: SideDishData[] = [
+      ...this.chosenSideDishes.slice(0, sideDishIndex),
+      ...this.chosenSideDishes.slice(sideDishIndex + 1)
+    ]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -108,7 +110,7 @@ export default class SideDishesInput extends Vue {
       newSideDishPrice: 0
     };
 
-    const newSideDishes = [...this.chosenSideDishes, sideDishToAdd]
+    const newSideDishes: SideDishData[] = [...this.chosenSideDishes, sideDishToAdd]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -118,7 +120,7 @@ export default class SideDishesInput extends Vue {
     const oldItem = this.chosenSideDishes[sdIndex]
     const newItem = Object.assign(oldItem, {isNew: true})
 
-    const newSideDishes = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex+1)]
+    const newSideDishes: SideDishData[] = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex + 1)]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -128,7 +130,7 @@ export default class SideDishesInput extends Vue {
     const oldItem = this.chosenSideDishes[sdIndex]
     const newItem = Object.assign(oldItem, {isNew: false})
 
-    const newSideDishes = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex+1)]
+    const newSideDishes: SideDishData[] = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex + 1)]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -138,7 +140,7 @@ export default class SideDishesInput extends Vue {
     const oldItem = this.chosenSideDishes[sdIndex]
     const newItem = Object.assign(oldItem, {newSideDishName: newValue})
 
-    const newSideDishes = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex+1)]
+    const newSideDishes: SideDishData[] = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex + 1)]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -148,7 +150,7 @@ export default class SideDishesInput extends Vue {
     const oldItem = this.chosenSideDishes[sdIndex]
     const newItem = Object.assign(oldItem, {newSideDishPrice: newValue})
 
-    const newSideDishes = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex+1)]
+    const newSideDishes: SideDishData[] = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex + 1)]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -158,7 +160,11 @@ export default class SideDishesInput extends Vue {
     const newSideDish = this.dishIdToSideDishesMap[this.dishId]
         .find(sd => sd.id === sideDishId);
 
-    const newSideDishes = [...this.chosenSideDishes.slice(0, sdIndex), newSideDish, ...this.chosenSideDishes.slice(sdIndex+1)]
+    const newSideDishes: SideDishData[] = [
+      ...this.chosenSideDishes.slice(0, sdIndex),
+      ...(newSideDish ? [newSideDish] : []),
+      ...this.chosenSideDishes.slice(sdIndex + 1)
+    ]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -184,7 +190,7 @@ export default class SideDishesInput extends Vue {
       });
       const text = `${entry.name} (${price})`;
 
-      return Object.assign({}, { text: text, value: entry.id });
+      return Object.assign({}, {text: text, value: entry.id});
     });
   }
 

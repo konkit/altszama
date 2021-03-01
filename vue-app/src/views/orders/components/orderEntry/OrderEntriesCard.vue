@@ -65,7 +65,7 @@
 
             <v-list-item-content>
               <div v-if="isEntryCreating === false">
-                <v-btn color="primary" @click="createEntry()">
+                <v-btn color="primary ml-4" @click="createEntry()">
                   Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
                 </v-btn>
               </div>

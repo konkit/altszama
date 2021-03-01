@@ -111,13 +111,7 @@
 
 <script lang="ts">
 import LoadingView from "@/views/commons/LoadingView.vue";
-import {
-  FETCH_ORDER_DATA_ACTION,
-  NAMESPACE_SHOW_ORDER,
-  SET_ORDER_AS_DELIVERED_ACTION,
-  ShowOrderState,
-  UNLOCK_ORDER_ACTION
-} from "@/store/modules/ShowOrderModule";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER, ShowOrderState} from "@/store/modules/ShowOrderModule";
 import router from "@/router/index";
 import PriceSummary from "@/views/orders/components/PriceSummary.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
@@ -129,6 +123,8 @@ import OrderLockedWarning from "@/views/orders/components/OrderLockedWarning.vue
 import Component from "vue-class-component";
 import Vue from "vue";
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../frontend-client";
+import ErrorHandler from "@/lib/ErrorHandler";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -145,6 +141,8 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 })
 export default class ShowOrder extends Vue {
   orderId = "";
+
+  ordersConnector = new OrdersApiConnector()
 
   mounted() {
     this.orderId = this.$route.params.id;
@@ -172,15 +170,29 @@ export default class ShowOrder extends Vue {
   }
 
   unlockOrder() {
-    this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {
-      orderId: this.orderId
-    });
+    this.ordersConnector
+        .setOrderAsCreated(this.$store.state.showOrder.order.id)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   setAsDelivered() {
-    return this.$store.dispatch(`showOrder/${SET_ORDER_AS_DELIVERED_ACTION}`, {
-      orderId: this.orderId
-    });
+    this.ordersConnector
+        .setOrderAsDelivered(this.orderId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   edit() {

@@ -9,7 +9,9 @@
             </div>
 
             <div class="dish-price">
-              (<price :data-price="dishEntry.price" />)
+              (
+              <price :data-price="dishEntry.price"/>
+              )
             </div>
 
             <div class="edit-buttons" v-if="isOrderEntryOwner() && order.orderState === 'CREATED'">
@@ -33,7 +35,7 @@
 
               <div class="side-dish-price">
                 &nbsp; (
-                <price :data-price="sideDish.price" />
+                <price :data-price="sideDish.price"/>
                 )
               </div>
             </div>
@@ -56,22 +58,14 @@
 
 <script lang="ts">
 import Price from "../../../commons/PriceElement.vue";
-import {
-  DELETE_DISH_ENTRY_ACTION,
-  NAMESPACE_SHOW_ORDER,
-  ShowOrderState
-} from "@/store/modules/ShowOrderModule";
-import {
-  NAMESPACE_MODIFY_ORDER_ENTRY,
-  SET_DISH_ENTRY_EDITING
-} from "@/store/modules/ModifyOrderEntryModule";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER, ShowOrderState} from "@/store/modules/ShowOrderModule";
+import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "@/store/modules/ModifyOrderEntryModule";
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 import Vue from "vue";
-import {
-  ParticipantsDishEntry,
-  ParticipantsOrderEntry
-} from "../../../../frontend-client";
+import {ParticipantsDishEntry, ParticipantsOrderEntry} from "../../../../frontend-client";
+import ErrorHandler from "@/lib/ErrorHandler";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 
 @Component({
   components: {
@@ -83,6 +77,8 @@ export default class ShowOrderEntry extends Vue {
   @Prop() orderEntry!: ParticipantsOrderEntry;
   @Prop() dishEntry!: ParticipantsDishEntry;
   @Prop() currentUserId!: string;
+
+  ordersConnector = new OrdersApiConnector()
 
   get order() {
     const showOrderState: ShowOrderState = this.$store.state.showOrder;
@@ -99,22 +95,25 @@ export default class ShowOrderEntry extends Vue {
 
   editDishEntry() {
     this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`,
-      {
-        orderEntryId: this.orderEntry.id,
-        dishEntryId: this.dishEntry.id
-      }
+        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`,
+        {
+          orderEntryId: this.orderEntry.id,
+          dishEntryId: this.dishEntry.id
+        }
     );
   }
 
   deleteDishEntry() {
-    this.$store.dispatch(
-      `${NAMESPACE_SHOW_ORDER}/${DELETE_DISH_ENTRY_ACTION}`,
-      {
-        orderEntryId: this.orderEntry.id,
-        dishEntryId: this.dishEntry.id
-      }
-    );
+    this.ordersConnector
+        .deleteDishEntry(this.orderEntry.id, this.dishEntry.id)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 }
 </script>

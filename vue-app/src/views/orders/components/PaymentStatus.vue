@@ -22,34 +22,34 @@
 
     <template v-if="shouldShowQRCodeButton(orderEntry)">
       <BankTransferQRCode
-        :order="order"
-        :userOrderAmount="costForUser"
+          :order="order"
+          :userOrderAmount="costForUser"
       ></BankTransferQRCode>
     </template>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  CONFIRM_ORDER_ENTRY_AS_PAID_ACTION,
-  MARK_ORDER_ENTRY_AS_PAID_ACTION,
-  NAMESPACE_SHOW_ORDER
-} from "@/store/modules/ShowOrderModule";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "@/store/modules/ShowOrderModule";
 import BankTransferQRCode from "@/views/orders/components/orderEntry/BankTransferQRCode.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
-import { ParticipantsOrderEntry, ShowOrderDto } from "../../../frontend-client";
+import {Prop} from "vue-property-decorator";
+import {ParticipantsOrderEntry, ShowOrderDto} from "../../../frontend-client";
+import ErrorHandler from "@/lib/ErrorHandler";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
-  components: { BankTransferQRCode }
+  components: {BankTransferQRCode}
 })
 export default class PaymentStatus extends Vue {
   @Prop() order!: ShowOrderDto;
   @Prop() orderEntry!: ParticipantsOrderEntry;
   @Prop() currentUserId!: string;
   @Prop() costForUser!: number;
+
+  ordersConnector = new OrdersApiConnector()
 
   isOrderOwner() {
     return this.order.orderCreatorId === this.currentUserId;
@@ -61,71 +61,83 @@ export default class PaymentStatus extends Vue {
 
   shouldShowPaymentStatus() {
     return (
-      (this.isOrderEntryOwner() || this.isOrderOwner()) &&
-      (this.order.orderState === OrderStateEnum.ORDERED ||
-        this.order.orderState === OrderStateEnum.DELIVERED)
+        (this.isOrderEntryOwner() || this.isOrderOwner()) &&
+        (this.order.orderState === OrderStateEnum.ORDERED ||
+            this.order.orderState === OrderStateEnum.DELIVERED)
     );
   }
 
   shouldShowMarkAsPaidButton() {
     return (
-      this.order.orderState !== OrderStateEnum.CREATED &&
-      this.order.orderState !== OrderStateEnum.ORDERING &&
-      this.orderEntry.paymentStatus !==
+        this.order.orderState !== OrderStateEnum.CREATED &&
+        this.order.orderState !== OrderStateEnum.ORDERING &&
+        this.orderEntry.paymentStatus !==
         ParticipantsOrderEntry.PaymentStatusEnum.MARKED &&
-      this.orderEntry.paymentStatus !==
+        this.orderEntry.paymentStatus !==
         ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED &&
-      this.isOrderOwner() === false
+        this.isOrderOwner() === false
     );
   }
 
   shouldShowConfirmAsPaidButton() {
     return (
-      this.order.orderState !== OrderStateEnum.CREATED &&
-      this.order.orderState !== OrderStateEnum.ORDERING &&
-      this.orderEntry.paymentStatus !==
+        this.order.orderState !== OrderStateEnum.CREATED &&
+        this.order.orderState !== OrderStateEnum.ORDERING &&
+        this.orderEntry.paymentStatus !==
         ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED &&
-      this.isOrderOwner() === true
+        this.isOrderOwner() === true
     );
   }
 
   shouldShowQRCodeButton() {
     return (
-      this.isOrderEntryOwner() &&
-      this.order.paymentData.paymentByBankTransfer === true &&
-      (this.order.orderState === OrderStateEnum.ORDERED ||
-        this.order.orderState === OrderStateEnum.DELIVERED)
+        this.isOrderEntryOwner() &&
+        this.order.paymentData.paymentByBankTransfer === true &&
+        (this.order.orderState === OrderStateEnum.ORDERED ||
+            this.order.orderState === OrderStateEnum.DELIVERED)
     );
   }
 
   confirmAsPaid(orderEntryId: string) {
-    this.$store.dispatch(
-      `${NAMESPACE_SHOW_ORDER}/${CONFIRM_ORDER_ENTRY_AS_PAID_ACTION}`,
-      { orderEntryId: orderEntryId }
-    );
+    this.ordersConnector
+        .confirmOrderEntryAsPaid(orderEntryId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   markAsPaid(orderEntryId: string) {
-    this.$store.dispatch(
-      `${NAMESPACE_SHOW_ORDER}/${MARK_ORDER_ENTRY_AS_PAID_ACTION}`,
-      { orderEntryId: orderEntryId }
-    );
+    this.ordersConnector
+        .markOrderEntryAsPaid(orderEntryId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   paymentStatusAsText() {
     if (
-      this.orderEntry.paymentStatus ===
-      ParticipantsOrderEntry.PaymentStatusEnum.UNPAID
+        this.orderEntry.paymentStatus ===
+        ParticipantsOrderEntry.PaymentStatusEnum.UNPAID
     ) {
       return "Status: Unpaid";
     } else if (
-      this.orderEntry.paymentStatus ===
-      ParticipantsOrderEntry.PaymentStatusEnum.MARKED
+        this.orderEntry.paymentStatus ===
+        ParticipantsOrderEntry.PaymentStatusEnum.MARKED
     ) {
       return "Status: Marked as paid";
     } else if (
-      this.orderEntry.paymentStatus ===
-      ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED
+        this.orderEntry.paymentStatus ===
+        ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED
     ) {
       return "Status: Payment confirmed";
     } else {

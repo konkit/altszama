@@ -32,25 +32,28 @@
         <v-row>
           <v-col>
             <div class="d-flex justify-space-between">
-            <v-btn dark color="green" @click="goToCreateDish()">
-              Create new dish
-              <v-icon>add</v-icon>
-            </v-btn>
+              <v-btn dark color="green" @click="goToCreateDish()">
+                Create new dish
+                <v-icon>add</v-icon>
+              </v-btn>
 
-            <v-btn @click="editRestaurant">
-              Edit restaurant&nbsp;<span class="fa fa-pencil"/>
-            </v-btn>
+              <v-btn @click="editRestaurant">
+                Edit restaurant&nbsp;<span class="fa fa-pencil"/>
+              </v-btn>
 
-            <v-btn color="error" @click="deleteRestaurant()">
-              Delete restaurant&nbsp;<span class="fa fa-times"/>
-            </v-btn>
+              <v-btn color="error" @click="deleteRestaurant()">
+                Delete restaurant&nbsp;<span class="fa fa-times"/>
+              </v-btn>
             </div>
           </v-col>
         </v-row>
 
         <v-row>
           <v-col>
-            <show-restaurant-dishes-table :restaurant="this.restaurant" :dishes-by-category="this.dishesByCategory"/>
+            <show-restaurant-dishes-table :restaurant="this.restaurant"
+                                          :dishes-by-category="this.dishesByCategory"
+                                          @delete-dish="deleteDish($event)">
+            </show-restaurant-dishes-table>
           </v-col>
         </v-row>
       </v-container>
@@ -62,16 +65,14 @@
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import ShowRestaurantDishesTable from "./components/ShowRestaurantDishesTable.vue";
 import LoadingView from "@/views/commons/LoadingView.vue";
-import {
-  DELETE_RESTAURANT_ACTION,
-  FETCH_RESTAURANT_ACTION,
-  ShowRestaurantState
-} from "@/store/modules/ShowRestaurantModule";
 import router from "../../router/index";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
 import Component from "vue-class-component";
 import Vue from "vue";
 import moment from "moment";
+import ErrorHandler from "@/lib/ErrorHandler";
+import DishesApiConnector from "@/lib/api/DishesApiConnector";
+import {DishDto, Restaurant} from "@/frontend-client";
 
 @Component({
   components: {
@@ -84,29 +85,32 @@ import moment from "moment";
 export default class ShowRestaurant extends Vue {
   restaurantId = "";
 
+  restaurant: Restaurant = {
+    id: "",
+    name: "",
+    url: "",
+    telephone: "",
+    address: ""
+  }
+  dishes: DishDto[] = []
+  dishesByCategory: { [key: string]: DishDto[] } = {}
+
+  connector = new DishesApiConnector()
+
   mounted() {
     this.restaurantId = this.$route.params.id;
 
-    this.$store.dispatch(`showRestaurant/${FETCH_RESTAURANT_ACTION}`, {
-      restaurantId: this.restaurantId
-    });
-  }
+    this.connector
+        .getShowRestaurantData(this.restaurantId)
+        .then(response => {
+          this.restaurant = response.restaurant;
+          this.dishes = response.dishes;
+          this.dishesByCategory = response.dishesByCategory;
 
-  get restaurant() {
-    const showRestaurant: ShowRestaurantState = this.$store.state
-        .showRestaurant;
-
-    console.log("showRestaurant: ", showRestaurant);
-
-    return showRestaurant.restaurant;
-  }
-
-  get dishes() {
-    return this.$store.state.showRestaurant.dishes;
-  }
-
-  get dishesByCategory() {
-    return this.$store.state.showRestaurant.dishesByCategory;
+          this.$store.commit("setTitle", `Restaurant ${this.restaurant!.name}`)
+          this.$store.commit("setLoadingFalse");
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   goToCreateDish() {
@@ -118,11 +122,28 @@ export default class ShowRestaurant extends Vue {
   }
 
   deleteRestaurant() {
-    const errorsComponent = this.$refs.errorsComponent;
-    this.$store.dispatch(`showRestaurant/${DELETE_RESTAURANT_ACTION}`, {
-      restaurantId: this.restaurantId,
-      errorsComponent: errorsComponent
-    });
+    this.connector
+        .deleteRestaurant(this.restaurantId)
+        .then(response => this.$router.push({name: "RestaurantIndex"}))
+        .catch(errResponse => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
+  }
+
+  deleteDish(dishId: string) {
+    this.connector
+        .deleteDish(this.restaurant.id, dishId)
+        .then(_ => {
+          return this.connector
+              .getShowRestaurantData(this.restaurantId)
+              .then(response => {
+                this.restaurant = response.restaurant;
+                this.dishes = response.dishes;
+                this.dishesByCategory = response.dishesByCategory;
+
+                this.$store.commit("setTitle", `Restaurant ${this.restaurant!.name}`)
+                this.$store.commit("setLoadingFalse");
+              })
+        })
+        .catch(errResponse => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
   }
 
   dateToRel(date: Date) {

@@ -1,17 +1,17 @@
 <template>
   <div>
     <v-btn
-      color="primary"
-      v-if="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'"
-      @click="setAsCreated"
+        color="primary"
+        v-if="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'"
+        @click="setAsCreated"
     >
       <i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Mark back as un-ordered
     </v-btn>
 
     <v-btn
-      color="primary"
-      v-if="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'"
-      @click="setAsOrdered"
+        color="primary"
+        v-if="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'"
+        @click="setAsOrdered"
     >
       <i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Back to ordered
     </v-btn>
@@ -27,20 +27,18 @@
 </template>
 
 <script lang="ts">
-import {
-  SET_ORDER_AS_CREATED_ACTION,
-  SET_ORDER_AS_ORDERED_ACTION,
-  SET_ORDER_AS_DELIVERED_ACTION,
-  SET_ORDER_AS_REJECTED_ACTION,
-  DELETE_ORDER_ACTION
-} from "@/store/modules/ShowOrderModule";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "@/store/modules/ShowOrderModule";
 import router from "../../../router";
 import Component from "vue-class-component";
 import Vue from "vue";
+import ErrorHandler from "@/lib/ErrorHandler";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 
 @Component({})
 export default class OrderStateButtons extends Vue {
   longVersion = true;
+
+  ordersConnector = new OrdersApiConnector()
 
   get orderId() {
     return this.$store.state.showOrder.order.id;
@@ -51,33 +49,62 @@ export default class OrderStateButtons extends Vue {
   }
 
   setAsCreated() {
-    return this.$store.dispatch(`showOrder/${SET_ORDER_AS_CREATED_ACTION}`, {
-      orderId: this.orderId
-    });
+    this.ordersConnector
+        .setOrderAsCreated(this.orderId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   setAsOrdered() {
-    return this.$store.dispatch(`showOrder/${SET_ORDER_AS_ORDERED_ACTION}`, {
-      orderId: this.orderId
-    });
+    this.ordersConnector
+        .setOrderAsOrdered(this.orderId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   setAsDelivered() {
-    return this.$store.dispatch(`showOrder/${SET_ORDER_AS_DELIVERED_ACTION}`, {
-      orderId: this.orderId
-    });
+    this.ordersConnector
+        .setOrderAsDelivered(this.orderId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   setAsRejected() {
-    return this.$store.dispatch(`showOrder/${SET_ORDER_AS_REJECTED_ACTION}`, {
-      orderId: this.orderId
-    });
+    this.ordersConnector
+        .setOrderAsRejected(this.orderId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   deleteDishEntry() {
-    return this.$store.dispatch(`showOrder/${DELETE_ORDER_ACTION}`, {
-      orderId: this.orderId
-    });
+    this.ordersConnector
+        .deleteOrder(this.orderId)
+        .then(() => this.$router.push({name: "TodayOrders"}))
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   placeOrder() {

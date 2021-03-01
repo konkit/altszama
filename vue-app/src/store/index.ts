@@ -3,10 +3,6 @@ import Vuex from "vuex";
 
 import {showOrderModule, ShowOrderState} from "./modules/ShowOrderModule";
 import {
-  showRestaurantModule,
-  ShowRestaurantState
-} from "./modules/ShowRestaurantModule";
-import {
   modifyOrderEntryModule,
   ModifyOrderEntryState
 } from "./modules/ModifyOrderEntryModule";
@@ -27,7 +23,6 @@ export interface RootState {
 
   showOrder?: ShowOrderState;
   modifyOrderEntry?: ModifyOrderEntryState;
-  showRestaurant?: ShowRestaurantState;
 }
 
 const rootState: RootState = {
@@ -144,8 +139,5 @@ export default new Vuex.Store({
     // Orders
     showOrder: showOrderModule,
     modifyOrderEntry: modifyOrderEntryModule,
-
-    // Dishes
-    showRestaurant: showRestaurantModule
   }
 });

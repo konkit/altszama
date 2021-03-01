@@ -8,7 +8,7 @@
 
     <p>
       The order is locked in ordering state and the order entries are
-      freezed.<br />
+      freezed.<br/>
       If you are not ordering yet, click button to go back to created state.
     </p>
 
@@ -25,26 +25,34 @@
 
 <script lang="ts">
 import router from "../../../router/index";
-import {
-  NAMESPACE_SHOW_ORDER,
-  UNLOCK_ORDER_ACTION
-} from "@/store/modules/ShowOrderModule";
-import { Prop } from "vue-property-decorator";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "@/store/modules/ShowOrderModule";
+import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 import Vue from "vue";
+import ErrorHandler from "@/lib/ErrorHandler";
+import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 
 @Component({})
 export default class OrderLockedWarning extends Vue {
   @Prop() orderId!: string;
+
+  ordersConnector = new OrdersApiConnector()
 
   placeOrder() {
     router.push({name: "OrderView", params: {id: this.orderId}});
   }
 
   unlockOrder() {
-    this.$store.dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {
-      orderId: this.orderId
-    });
+    this.ordersConnector
+        .setOrderAsCreated(this.orderId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(
+              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
+              this.$store.state.showOrder.order.id
+          );
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 }
 </script>

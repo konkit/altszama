@@ -70,19 +70,19 @@
             </v-col>
 
             <v-col cols="4">
-                <h1>Cost summary</h1>
+              <h1>Cost summary</h1>
 
-                <price-summary
-                    :orderDecreaseInPercent="orderDecreaseInPercent"
-                    :orderDeliveryCostPerEverybody="
+              <price-summary
+                  :orderDecreaseInPercent="orderDecreaseInPercent"
+                  :orderDeliveryCostPerEverybody="
                       orderDeliveryCostPerEverybody
                     "
-                    :basePriceSum="basePriceSum"
-                    :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
-                    :allEatingPeopleCount="allEatingPeopleCount"
-                    :totalPrice="totalPrice"
-                >
-                </price-summary>
+                  :basePriceSum="basePriceSum"
+                  :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
+                  :allEatingPeopleCount="allEatingPeopleCount"
+                  :totalPrice="totalPrice"
+              >
+              </price-summary>
             </v-col>
           </v-row>
         </v-container>
@@ -128,8 +128,6 @@ import LoadingView from "@/views/commons/LoadingView.vue";
 import PriceSummary from "@/views/orders/components/PriceSummary.vue";
 import TimePicker from "@/views/commons/TimePicker.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import {NAMESPACE_SHOW_ORDER, UNLOCK_ORDER_ACTION} from "@/store/modules/ShowOrderModule";
-import router from "../../router/index";
 import UserOrders from "@/views/orders/components/orderView/UserOrders.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -206,11 +204,13 @@ export default class OrderView extends Vue {
   }
 
   unlockOrder() {
-    this.$store
-        .dispatch(`${NAMESPACE_SHOW_ORDER}/${UNLOCK_ORDER_ACTION}`, {
-          orderId: this.orderId
+    this.connector
+        .setOrderAsCreated(this.orderId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
         })
-        .then(() => router.back());
+        .then(() => this.$router.back())
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
   get isStateOrdering() {

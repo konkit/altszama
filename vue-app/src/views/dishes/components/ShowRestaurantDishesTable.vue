@@ -56,7 +56,7 @@ import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 import {DishDto, Restaurant} from "../../../frontend-client";
 import moment from "moment";
-import {DELETE_DISH_ACTION} from "@/store/modules/ShowRestaurantModule";
+import DishesApiConnector from "@/lib/api/DishesApiConnector";
 
 
 @Component({
@@ -68,12 +68,10 @@ export default class ShowRestaurantDishesTable extends Vue {
   @Prop() restaurant!: Restaurant;
   @Prop() dishesByCategory!: { [key: string]: Array<DishDto> };
 
-  deleteDish(dishId: string) {
-    this.$store.dispatch(`showRestaurant/${DELETE_DISH_ACTION}`, {
-      restaurantId: this.restaurant.id,
-      dishId: dishId
-    });
+  connector = new DishesApiConnector()
 
+  deleteDish(dishId: string) {
+    this.$emit("delete-dish", dishId)
   }
 
   dateToRel(date: Date) {
