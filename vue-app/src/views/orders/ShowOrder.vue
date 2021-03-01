@@ -41,10 +41,6 @@
           </v-col>
           <v-col>
             <div class="d-flex justify-end">
-              <v-btn v-if="isOrderOwner()" @click="edit">
-                Edit order<i class="fa fa-cog" aria-hidden="true"></i>
-              </v-btn>
-
               <v-btn
                   color="primary"
                   v-if="canShowPlaceOrderButton()"
@@ -62,6 +58,10 @@
               >
                 Mark as delivered &nbsp;
                 <i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </v-btn>
+
+              <v-btn v-if="isOrderOwner()" @click="edit">
+                Edit order<i class="fa fa-cog" aria-hidden="true"></i>
               </v-btn>
             </div>
           </v-col>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn-toggle :value="newDish" mandatory @change="onDishTypeToggle($event)">
+    <v-btn-toggle :value="orderEntryData.newDish" mandatory @change="onDishTypeToggle($event)">
       <v-btn text :value="false">
         Select dish from the list
       </v-btn>
@@ -10,11 +10,11 @@
       </v-btn>
     </v-btn-toggle>
 
-    <template v-if="!newDish">
+    <template v-if="!orderEntryData.newDish">
       <v-autocomplete
           :items="allDishesAtOnce"
           label="Dish"
-          :value="dishId"
+          :value="orderEntryData.dishId"
           @change="updateDishId($event)"
           item-text="text"
           item-value="value"
@@ -40,30 +40,30 @@
       </v-autocomplete>
     </template>
 
-    <template v-if="newDish">
+    <template v-if="orderEntryData.newDish">
       <v-text-field
           type="text"
           placeholder="New dish name"
           id="newDishName"
           class="pr-2"
-          :value="newDishName"
+          :value="orderEntryData.newDishName"
           @input="updateNewDishName($event)"
       >
       </v-text-field>
 
-      <MoneyInput class="money-input" label="New dish price" :value="newDishPrice" @input="updateNewDishPrice($event)">
+      <MoneyInput class="money-input" label="New dish price" :value="orderEntryData.newDishPrice" @input="updateNewDishPrice($event)">
       </MoneyInput>
     </template>
 
     <v-subheader>Side dishes:</v-subheader>
 
-    <side-dishes-input :chosen-side-dishes="chosenSideDishes"
+    <side-dishes-input :chosen-side-dishes="orderEntryData.chosenSideDishes"
                        :dish-id-to-side-dishes-map="dishIdToSideDishesMap"
-                       :dish-id="dishId"
+                       :dish-id="orderEntryData.dishId"
                        @change="updateChosenSideDishes($event)">
     </side-dishes-input>
 
-    <v-text-field label="Additional Comments" :value="additionalComments" @input="updateAdditionalComments($event)">
+    <v-text-field label="Additional Comments" :value="orderEntryData.additionalComments" @input="updateAdditionalComments($event)">
     </v-text-field>
   </div>
 </template>
@@ -71,21 +71,12 @@
 <script lang="ts">
 import moment from "moment";
 import SideDishesInput from "./SideDishesInput.vue";
-import {
-  CANCEL_DISH_ENTRY_MODIFICATION,
-  CLEAR_EDITED_SIDE_DISHES,
-  NAMESPACE_MODIFY_ORDER_ENTRY,
-  SET_DISH_AS_EXISTING,
-  SET_DISH_AS_NEW,
-  UPDATE_ADDITIONAL_COMMENTS,
-  UPDATE_DISH_ID,
-  UPDATE_NEW_DISH_NAME,
-  UPDATE_NEW_DISH_PRICE
-} from "@/store/modules/ModifyOrderEntryModule";
+import {OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
 import {DishDto} from "@/frontend-client";
+import {Prop} from "vue-property-decorator";
 
 function dateToRel(date: Date) {
   if (date) {
@@ -102,52 +93,72 @@ function dateToRel(date: Date) {
   }
 })
 export default class OrderEntryForm extends Vue {
+
+  @Prop() orderEntryData: OrderEntryData
+
   setDishAsNew() {
-    this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_NEW}`);
+    const newOrderEntryData: OrderEntryData = {
+      ...this.orderEntryData,
+      newDish: true,
+    }
+    this.updateOrderEntryData(newOrderEntryData);
   }
 
   setDishAsExisting() {
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_AS_EXISTING}`
-    );
+    const newOrderEntryData: OrderEntryData = {
+      ...this.orderEntryData,
+      newDish: false,
+    }
+    this.updateOrderEntryData(newOrderEntryData);
   }
 
   updateDishId(newValue: string) {
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_DISH_ID}`,
-        newValue
-    );
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CLEAR_EDITED_SIDE_DISHES}`
-    );
+    const newOrderEntryData: OrderEntryData = {
+      ...this.orderEntryData,
+      dishId: newValue,
+      chosenSideDishes: []
+    }
+    this.updateOrderEntryData(newOrderEntryData);
   }
 
   updateNewDishName(newValue: string) {
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_NAME}`,
-        newValue
-    );
+    const newOrderEntryData: OrderEntryData = {
+      ...this.orderEntryData,
+      newDishName: newValue,
+    }
+    this.updateOrderEntryData(newOrderEntryData);
   }
 
   updateNewDishPrice(newValue: number) {
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_NEW_DISH_PRICE}`,
-        newValue
-    );
+    const newOrderEntryData: OrderEntryData = {
+      ...this.orderEntryData,
+      newDishPrice: newValue,
+    }
+    this.updateOrderEntryData(newOrderEntryData);
   }
 
   updateAdditionalComments(newValue: string) {
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${UPDATE_ADDITIONAL_COMMENTS}`,
-        newValue
-    );
+    const newOrderEntryData: OrderEntryData = {
+      ...this.orderEntryData,
+      additionalComments: newValue,
+    }
+    this.updateOrderEntryData(newOrderEntryData);
   }
 
   cancelEdit() {
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-        {}
-    );
+    const newOrderEntryData: OrderEntryData = {
+      ...this.orderEntryData,
+      isEntryCreating: false,
+      isEntryEdited: false,
+      orderEntryId: "",
+      dishEntryId: ""
+    }
+    this.updateOrderEntryData(newOrderEntryData);
+  }
+
+  updateChosenSideDishes(newSideDishes: []) {
+    const newOrderEntryData: OrderEntryData = {...this.orderEntryData, chosenSideDishes: newSideDishes}
+    this.updateOrderEntryData(newOrderEntryData);
   }
 
   onDishTypeToggle(value: boolean) {
@@ -166,30 +177,6 @@ export default class OrderEntryForm extends Vue {
     return this.$store.state.showOrder.allDishesByCategory;
   }
 
-  get dishId() {
-    return this.$store.state.modifyOrderEntry.dishId;
-  }
-
-  get additionalComments() {
-    return this.$store.state.modifyOrderEntry.additionalComments;
-  }
-
-  get newDish() {
-    return this.$store.state.modifyOrderEntry.newDish;
-  }
-
-  get newDishName() {
-    return this.$store.state.modifyOrderEntry.newDishName;
-  }
-
-  get newDishPrice() {
-    return this.$store.state.modifyOrderEntry.newDishPrice;
-  }
-
-  get chosenSideDishes() {
-    return this.$store.state.modifyOrderEntry.chosenSideDishes;
-  }
-
   get dishIdToSideDishesMap() {
     return this.$store.state.showOrder.dishIdToSideDishesMap;
   }
@@ -203,7 +190,7 @@ export default class OrderEntryForm extends Vue {
         dishByCategoryMap.entries()
     );
 
-    const result = entries.flatMap(([category, dishesFromCat]) => {
+    return entries.flatMap(([category, dishesFromCat]) => {
       const dishes: (| { header: string } | { text: string; value: string; subtitle: string })[] =
           dishesFromCat.map(dish => {
             const price = (dish.price / 100).toLocaleString("pl-PL", {
@@ -230,12 +217,10 @@ export default class OrderEntryForm extends Vue {
 
       return dishes;
     });
-
-    return result;
   }
 
-  updateChosenSideDishes(newSideDishes: []) {
-    this.$store.commit("modifyOrderEntry/updateChosenSideDishes", newSideDishes)
+  private updateOrderEntryData(newOrderEntryData: OrderEntryData) {
+    this.$emit("change", newOrderEntryData)
   }
 }
 </script>

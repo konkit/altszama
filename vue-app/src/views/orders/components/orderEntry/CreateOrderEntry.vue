@@ -4,7 +4,7 @@
       <errors-component />
 
       <div>
-        <order-entry-form></order-entry-form>
+        <order-entry-form @change="updateOrderEntryData($event)"></order-entry-form>
 
         <v-spacer></v-spacer>
 
@@ -33,7 +33,7 @@ import Spinner from "../../../commons/Spinner.vue";
 import OrderEntryForm from "./orderEntryForm/OrderEntryForm.vue";
 import {
   CANCEL_DISH_ENTRY_MODIFICATION,
-  NAMESPACE_MODIFY_ORDER_ENTRY,
+  NAMESPACE_MODIFY_ORDER_ENTRY, OrderEntryData,
   SAVE_ORDER_ENTRY_ACTION,
   SET_ENTRY_LOADING_FALSE,
   SET_ENTRY_LOADING_TRUE,
@@ -82,10 +82,6 @@ export default class CreateOrderEntry extends Vue {
     );
   }
 
-  get order() {
-    return this.$store.state.showOrder.order;
-  }
-
   get allDishesInRestaurant() {
     return this.$store.state.showOrder.allDishesInRestaurant;
   }
@@ -94,24 +90,8 @@ export default class CreateOrderEntry extends Vue {
     return this.$store.state.modifyOrderEntry.loadingEntry;
   }
 
-  get orderId() {
-    return this.$store.state.modifyOrderEntry.orderId;
-  }
-
-  get dishId() {
-    return this.$store.state.modifyOrderEntry.dishId;
-  }
-
-  get additionalComments() {
-    return this.$store.state.modifyOrderEntry.additionalComments;
-  }
-
-  get newDish() {
-    return this.$store.state.modifyOrderEntry.newDish;
-  }
-
-  get newDishName() {
-    return this.$store.state.modifyOrderEntry.newDishName;
+  updateOrderEntryData(newOrderEntryData: OrderEntryData) {
+    this.$store.commit("modifyOrderEntry/updateOrderEntryData", newOrderEntryData)
   }
 }
 </script>

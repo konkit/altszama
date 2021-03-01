@@ -50,10 +50,7 @@
 <script lang="ts">
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import LoadingView from "@/views/commons/LoadingView.vue";
-import {
-  CANCEL_DISH_ENTRY_MODIFICATION,
-  NAMESPACE_MODIFY_ORDER_ENTRY
-} from "@/store/modules/ModifyOrderEntryModule";
+import {CANCEL_DISH_ENTRY_MODIFICATION, NAMESPACE_MODIFY_ORDER_ENTRY} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import TimePicker from "@/views/commons/TimePicker.vue";
 import OrderStateButtons from "@/views/orders/components/OrderStateButtons.vue";
@@ -62,12 +59,8 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import ErrorHandler from "@/lib/ErrorHandler";
-import {
-  FETCH_ORDER_DATA_ACTION,
-  NAMESPACE_SHOW_ORDER
-} from "@/store/modules/ShowOrderModule";
+import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "@/store/modules/ShowOrderModule";
 import {OrderUpdateRequest} from "@/frontend-client";
-import {RootState} from "@/store";
 import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
 import PaymentDataFields from "@/views/orders/components/orderCreateForm/PaymentDataFields.vue";
 import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";

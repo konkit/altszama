@@ -4,7 +4,7 @@
       <errors-component />
 
       <div class="form-wrapper">
-        <order-entry-form></order-entry-form>
+        <order-entry-form :order-entry-data="orderEntryData" @change="updateOrderEntryData($event)"></order-entry-form>
 
         <v-spacer></v-spacer>
 
@@ -29,7 +29,7 @@ import Spinner from "../../../commons/Spinner.vue";
 import OrderEntryForm from "./orderEntryForm/OrderEntryForm.vue";
 import {
   CANCEL_DISH_ENTRY_MODIFICATION,
-  NAMESPACE_MODIFY_ORDER_ENTRY,
+  NAMESPACE_MODIFY_ORDER_ENTRY, OrderEntryData,
   SET_ENTRY_LOADING_TRUE,
   SETUP_EDIT_ORDER_ENTRY_ACTION,
   UPDATE_ORDER_ENTRY_ACTION
@@ -87,6 +87,14 @@ export default class EditOrderEntry extends Vue {
 
   get loadingEntry() {
     return this.$store.state.modifyOrderEntry.loadingEntry;
+  }
+
+  get orderEntryData() {
+    return this.$store.state.modifyOrderEntry.orderEntryData;
+  }
+
+  updateOrderEntryData(newOrderEntryData: OrderEntryData) {
+    this.$store.commit("modifyOrderEntry/updateOrderEntryData", newOrderEntryData)
   }
 }
 </script>

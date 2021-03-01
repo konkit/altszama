@@ -16,14 +16,9 @@ export const SET_ENTRY_LOADING_FALSE = "SET_ENTRY_LOADING_FALSE";
 export const SET_DISH_ENTRY_CREATING = "SET_DISH_ENTRY_CREATING";
 
 export const SET_DISH_ENTRY_EDITING = "SET_DISH_ENTRY_EDITING";
-export const SET_DISH_AS_NEW = "SET_DISH_AS_NEW";
-export const SET_DISH_AS_EXISTING = "SET_DISH_AS_EXISTING";
 export const CANCEL_DISH_ENTRY_MODIFICATION = "CANCEL_DISH_ENTRY_MODIFICATION";
 
-export const UPDATE_DISH_ID = "UPDATE_DISH_ID";
-export const UPDATE_ADDITIONAL_COMMENTS = "UPDATE_ADDITIONAL_COMMENTS";
 
-export const UPDATE_NEW_DISH_NAME = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH_NAME";
 export const UPDATE_NEW_DISH_PRICE = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH_PRICE";
 
 export const CLEAR_EDITED_SIDE_DISHES = "CLEAR_EDITED_SIDE_DISHES";
@@ -38,6 +33,15 @@ export const SETUP_EDIT_ORDER_ENTRY_ACTION = "SETUP_EDIT_ORDER_ENTRY_ACTION";
 export const SAVE_ORDER_ENTRY_ACTION = "SAVE_ORDER_ENTRY_ACTION";
 export const UPDATE_ORDER_ENTRY_ACTION = "UPDATE_ORDER_ENTRY_ACTION";
 
+export interface OrderEntryData {
+  dishId: string;
+  additionalComments: string;
+  newDish: boolean;
+  newDishName: string;
+  newDishPrice: number;
+  chosenSideDishes: SideDishData[];
+}
+
 export interface ModifyOrderEntryState {
   loadingEntry: boolean;
 
@@ -45,14 +49,9 @@ export interface ModifyOrderEntryState {
   isEntryEdited: boolean;
   orderEntryId: string;
   dishEntryId: string;
-
   orderId: string;
-  dishId: string;
-  additionalComments: string;
-  newDish: boolean;
-  newDishName: string;
-  newDishPrice: number;
-  chosenSideDishes: SideDishData[];
+
+  orderEntryData: OrderEntryData;
 }
 
 const modifyOrderEntryState: ModifyOrderEntryState = {
@@ -62,14 +61,16 @@ const modifyOrderEntryState: ModifyOrderEntryState = {
   isEntryEdited: false,
   orderEntryId: "",
   dishEntryId: "",
-
   orderId: "",
-  dishId: "",
-  additionalComments: "",
-  newDish: false,
-  newDishName: "",
-  newDishPrice: 0,
-  chosenSideDishes: []
+
+  orderEntryData: {
+    dishId: "",
+    additionalComments: "",
+    newDish: false,
+    newDishName: "",
+    newDishPrice: 0,
+    chosenSideDishes: []
+  }
 };
 
 export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
@@ -83,7 +84,6 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
     [SET_ENTRY_LOADING_FALSE](state) {
       state.loadingEntry = false;
     },
-
     [SET_DISH_ENTRY_CREATING](state) {
       state.isEntryCreating = true;
       state.isEntryEdited = false;
@@ -102,50 +102,33 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
       state.orderEntryId = "";
       state.dishEntryId = "";
     },
-
-    [SET_DISH_AS_NEW](state) {
-      state.newDish = true;
-      // state.dishId = ""
-    },
-    [SET_DISH_AS_EXISTING](state) {
-      state.newDish = false;
-    },
     [SET_INITIAL_CREATED_ORDER_ENTRY](state, { orderId, dishId }) {
-      state.orderId = orderId;
-      state.dishId = dishId;
-      state.additionalComments = "";
-      state.newDish = false;
-      state.newDishName = "";
-      state.newDishPrice = 0;
-      state.chosenSideDishes = [];
+      state.orderId = orderId
+
+      state.orderEntryData = {
+        dishId: dishId,
+        additionalComments: "",
+        newDish: false,
+        newDishName: "",
+        newDishPrice: 0,
+        chosenSideDishes: []
+      }
     },
     [SET_INITIAL_EDITED_ORDER_ENTRY](state, { orderId, dishEntry }) {
-      state.orderId = orderId;
-      state.dishId = dishEntry.dishId;
+      state.orderId = orderId
       state.dishEntryId = dishEntry.id;
-      state.additionalComments = dishEntry.comments;
-      state.newDish = false;
-      state.newDishName = "";
-      state.newDishPrice = 0;
-      state.chosenSideDishes = dishEntry.sideDishes || [];
+
+      state.orderEntryData = {
+        dishId: dishEntry.dishId,
+        additionalComments: dishEntry.comments,
+        newDish: false,
+        newDishName: "",
+        newDishPrice: 0,
+        chosenSideDishes: dishEntry.sideDishes || []
+      }
     },
-    [UPDATE_DISH_ID](state, newValue) {
-      state.dishId = newValue;
-    },
-    [UPDATE_ADDITIONAL_COMMENTS](state, newValue) {
-      state.additionalComments = newValue;
-    },
-    [UPDATE_NEW_DISH_NAME](state, newValue) {
-      state.newDishName = newValue;
-    },
-    [UPDATE_NEW_DISH_PRICE](state, newValue) {
-      state.newDishPrice = newValue;
-    },
-    [CLEAR_EDITED_SIDE_DISHES](state) {
-      state.chosenSideDishes = [];
-    },
-    updateChosenSideDishes(state, sideDishes) {
-      state.chosenSideDishes = sideDishes;
+    updateOrderEntryData(state, newValue) {
+      state.orderEntryData = newValue
     }
   },
   actions: {
@@ -186,13 +169,13 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
 
       const orderEntryToSave = {
         orderId: state.orderId,
-        dishId: state.dishId,
+        dishId: state.orderEntryData.dishId,
         dishEntryId: state.dishEntryId,
-        additionalComments: state.additionalComments,
-        newDish: state.newDish,
-        newDishName: state.newDishName,
-        newDishPrice: state.newDishPrice,
-        chosenSideDishes: state.chosenSideDishes
+        additionalComments: state.orderEntryData.additionalComments,
+        newDish: state.orderEntryData.newDish,
+        newDishName: state.orderEntryData.newDishName,
+        newDishPrice: state.orderEntryData.newDishPrice,
+        chosenSideDishes: state.orderEntryData.chosenSideDishes
       };
 
       ordersConnector
@@ -217,13 +200,13 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
       const orderId = state.orderId;
       const orderEntryToUpdate = {
         orderId: orderId,
-        dishId: state.dishId,
+        dishId: state.orderEntryData.dishId,
         dishEntryId: state.dishEntryId,
-        additionalComments: state.additionalComments,
-        newDish: state.newDish,
-        newDishName: state.newDishName,
-        newDishPrice: state.newDishPrice,
-        chosenSideDishes: state.chosenSideDishes
+        additionalComments: state.orderEntryData.additionalComments,
+        newDish: state.orderEntryData.newDish,
+        newDishName: state.orderEntryData.newDishName,
+        newDishPrice: state.orderEntryData.newDishPrice,
+        chosenSideDishes: state.orderEntryData.chosenSideDishes
       };
 
       ordersConnector
