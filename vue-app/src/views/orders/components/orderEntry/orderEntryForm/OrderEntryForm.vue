@@ -75,7 +75,7 @@ import {OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import {DishDto} from "@/frontend-client";
+import {DishDto, SideDish} from "@/frontend-client";
 import {Prop} from "vue-property-decorator";
 
 function dateToRel(date: Date) {
@@ -95,6 +95,8 @@ function dateToRel(date: Date) {
 export default class OrderEntryForm extends Vue {
 
   @Prop() orderEntryData: OrderEntryData
+  @Prop() allDishesByCategory: { [category: string]: DishDto[] }
+  @Prop() dishIdToSideDishesMap: { [key: string]: SideDish[] }
 
   setDishAsNew() {
     const newOrderEntryData: OrderEntryData = {
@@ -171,14 +173,6 @@ export default class OrderEntryForm extends Vue {
     } else {
       console.warn("Dish type toggle returned wrong value");
     }
-  }
-
-  get allDishesByCategory(): { [category: string]: DishDto[] } {
-    return this.$store.state.showOrder.allDishesByCategory;
-  }
-
-  get dishIdToSideDishesMap() {
-    return this.$store.state.showOrder.dishIdToSideDishesMap;
   }
 
   get allDishesAtOnce() {

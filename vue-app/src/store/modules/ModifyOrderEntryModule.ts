@@ -1,12 +1,7 @@
-import ErrorHandler from "../../lib/ErrorHandler";
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER, ShowOrderState} from "./ShowOrderModule";
 import {Module} from "vuex";
 import {RootState} from "@/store";
 import {SideDishData} from "@/frontend-client";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 
-
-const ordersConnector = new OrdersApiConnector()
 
 export const NAMESPACE_MODIFY_ORDER_ENTRY = "modifyOrderEntry";
 
@@ -14,24 +9,13 @@ export const SET_ENTRY_LOADING_TRUE = "SET_ENTRY_LOADING_TRUE";
 export const SET_ENTRY_LOADING_FALSE = "SET_ENTRY_LOADING_FALSE";
 
 export const SET_DISH_ENTRY_CREATING = "SET_DISH_ENTRY_CREATING";
-
 export const SET_DISH_ENTRY_EDITING = "SET_DISH_ENTRY_EDITING";
+
 export const CANCEL_DISH_ENTRY_MODIFICATION = "CANCEL_DISH_ENTRY_MODIFICATION";
 
-
-export const UPDATE_NEW_DISH_PRICE = "UPDATE_EDITED_ORDER_ENTRY_NEW_DISH_PRICE";
-
-export const CLEAR_EDITED_SIDE_DISHES = "CLEAR_EDITED_SIDE_DISHES";
-
-export const SET_INITIAL_CREATED_ORDER_ENTRY =
-  "SET_INITIAL_CREATED_ORDER_ENTRY";
+export const SET_INITIAL_CREATED_ORDER_ENTRY = "SET_INITIAL_CREATED_ORDER_ENTRY";
 export const SET_INITIAL_EDITED_ORDER_ENTRY = "SET_INITIAL_EDITED_ORDER_ENTRY";
 
-export const SETUP_CREATE_ORDER_ENTRY_ACTION =
-  "SETUP_CREATE_ORDER_ENTRY_ACTION";
-export const SETUP_EDIT_ORDER_ENTRY_ACTION = "SETUP_EDIT_ORDER_ENTRY_ACTION";
-export const SAVE_ORDER_ENTRY_ACTION = "SAVE_ORDER_ENTRY_ACTION";
-export const UPDATE_ORDER_ENTRY_ACTION = "UPDATE_ORDER_ENTRY_ACTION";
 
 export interface OrderEntryData {
   dishId: string;
@@ -130,99 +114,5 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
     updateOrderEntryData(state, newValue) {
       state.orderEntryData = newValue
     }
-  },
-  actions: {
-    [SETUP_CREATE_ORDER_ENTRY_ACTION]({ state, rootState }) {
-      this.commit("clearErrors");
-
-      const showOrderState = rootState.showOrder as ShowOrderState;
-
-      const orderId = showOrderState.order.id;
-
-      let dishId;
-      if (showOrderState.allDishesInRestaurant.length > 0) {
-        dishId = showOrderState.allDishesInRestaurant[0].id;
-      } else {
-        dishId = null;
-      }
-
-      this.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_CREATED_ORDER_ENTRY}`,
-        { orderId: orderId, dishId: dishId }
-      );
-    },
-    [SETUP_EDIT_ORDER_ENTRY_ACTION]({ state, rootState }, { dishEntry }) {
-      this.commit("clearErrors");
-
-      const showOrderState = rootState.showOrder as ShowOrderState;
-
-      const orderId = showOrderState.order.id;
-
-      this.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_EDITED_ORDER_ENTRY}`,
-        { orderId: orderId, dishEntry: dishEntry }
-      );
-      this.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`);
-    },
-    [SAVE_ORDER_ENTRY_ACTION]({ state, rootState }) {
-      const orderId = state.orderId;
-
-      const orderEntryToSave = {
-        orderId: state.orderId,
-        dishId: state.orderEntryData.dishId,
-        dishEntryId: state.dishEntryId,
-        additionalComments: state.orderEntryData.additionalComments,
-        newDish: state.orderEntryData.newDish,
-        newDishName: state.orderEntryData.newDishName,
-        newDishPrice: state.orderEntryData.newDishPrice,
-        chosenSideDishes: state.orderEntryData.chosenSideDishes
-      };
-
-      ordersConnector
-        .saveOrderEntry(orderId, orderEntryToSave)
-        .then(() => {
-          this.commit("setLoadingTrue");
-          this.commit(
-            `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-            {}
-          );
-          this.dispatch(
-            `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-            orderId
-          );
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
-    },
-    [UPDATE_ORDER_ENTRY_ACTION](
-      { state, rootState, getters },
-      { orderEntryId }
-    ) {
-      const orderId = state.orderId;
-      const orderEntryToUpdate = {
-        orderId: orderId,
-        dishId: state.orderEntryData.dishId,
-        dishEntryId: state.dishEntryId,
-        additionalComments: state.orderEntryData.additionalComments,
-        newDish: state.orderEntryData.newDish,
-        newDishName: state.orderEntryData.newDishName,
-        newDishPrice: state.orderEntryData.newDishPrice,
-        chosenSideDishes: state.orderEntryData.chosenSideDishes
-      };
-
-      ordersConnector
-        .updateOrderEntry(orderId, orderEntryId, orderEntryToUpdate)
-        .then(() => {
-          this.commit("setLoadingTrue");
-          this.commit(
-            `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-            {}
-          );
-          this.dispatch(
-            `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-            orderId
-          );
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
-    },
   }
 };
