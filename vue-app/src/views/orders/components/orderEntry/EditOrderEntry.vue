@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="this.loadingEntry === false">
-      <errors-component />
+      <errors-component/>
 
       <div class="form-wrapper">
         <order-entry-form :order-entry-data="orderEntryData"
@@ -30,14 +30,7 @@ import ErrorsComponent from "../../../commons/ErrorsComponent.vue";
 import Spinner from "../../../commons/Spinner.vue";
 
 import OrderEntryForm from "./orderEntryForm/OrderEntryForm.vue";
-import {
-  CANCEL_DISH_ENTRY_MODIFICATION,
-  NAMESPACE_MODIFY_ORDER_ENTRY,
-  OrderEntryData,
-  SET_ENTRY_LOADING_FALSE,
-  SET_ENTRY_LOADING_TRUE,
-  SET_INITIAL_EDITED_ORDER_ENTRY
-} from "@/store/modules/ModifyOrderEntryModule";
+import {OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
 import Vue from "vue";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
@@ -61,9 +54,7 @@ export default class EditOrderEntry extends Vue {
   ordersConnector = new OrdersApiConnector()
 
   created() {
-    this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`
-    );
+    this.$store.commit("modifyOrderEntry/setEntryLoading", true)
   }
 
   mounted() {
@@ -73,11 +64,8 @@ export default class EditOrderEntry extends Vue {
 
     const orderId = showOrderState.order.id;
 
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_EDITED_ORDER_ENTRY}`,
-        { orderId: orderId, dishEntry: this.dishEntry }
-    );
-    this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`);
+    this.$store.commit("modifyOrderEntry/setInitialEditedOrderEntry", {orderId: orderId, dishEntry: this.dishEntry});
+    this.$store.commit("modifyOrderEntry/setEntryLoading", false)
   }
 
   submitForm(e: Event) {
@@ -101,10 +89,7 @@ export default class EditOrderEntry extends Vue {
         .updateOrderEntry(orderId, this.orderEntry.id, orderEntryToUpdate)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.commit(
-              `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-              {}
-          );
+          this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`, {});
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, orderId);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
@@ -113,10 +98,7 @@ export default class EditOrderEntry extends Vue {
   }
 
   cancelEdit() {
-    this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-      {}
-    );
+    this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});
   }
 
   get loadingEntry() {

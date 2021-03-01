@@ -7,8 +7,6 @@ import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 
 const ordersConnector = new OrdersApiConnector()
 
-export const LOAD_SHOW_ORDER_DATA = "LOAD_SHOW_ORDER_DATA";
-
 export interface ShowOrderState {
   order: ShowOrderDto;
   orderEntries: ParticipantsOrderEntry[];
@@ -58,7 +56,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
   state: showOrderState,
 
   mutations: {
-    [LOAD_SHOW_ORDER_DATA](state, payload: ShowOrderResponse) {
+    loadShowOrderData(state, payload: ShowOrderResponse) {
       state.order = payload.order;
       state.orderEntries = payload.orderEntries;
       state.currentUserId = payload.currentUserId;
@@ -75,7 +73,7 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       ordersConnector
         .fetchOrder(orderId)
         .then(showOrderData => {
-          this.commit(`showOrder/${LOAD_SHOW_ORDER_DATA}`,showOrderData);
+          this.commit("showOrder/loadShowOrderData",showOrderData);
           this.commit("setLoadingFalse");
           this.commit("setTitle", `[${state.order.orderState}] Order from ${state.order.restaurantName} (${state.order.orderDate})`)
         })

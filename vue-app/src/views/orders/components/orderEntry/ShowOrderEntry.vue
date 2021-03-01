@@ -59,7 +59,6 @@
 <script lang="ts">
 import Price from "../../../commons/PriceElement.vue";
 import {ShowOrderState} from "@/store/modules/ShowOrderModule";
-import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "@/store/modules/ModifyOrderEntryModule";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
 import Vue from "vue";
@@ -95,7 +94,7 @@ export default class ShowOrderEntry extends Vue {
 
   editDishEntry() {
     this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_EDITING}`,
+        `modifyOrderEntry/setDishEntryEditing`,
         {
           orderEntryId: this.orderEntry.id,
           dishEntryId: this.dishEntry.id

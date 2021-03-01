@@ -91,7 +91,6 @@ import Price from "../../../commons/PriceElement.vue";
 import CreateOrderEntry from "./CreateOrderEntry.vue";
 import EditOrderEntry from "./EditOrderEntry.vue";
 import ShowOrderEntry from "./ShowOrderEntry.vue";
-import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_CREATING} from "@/store/modules/ModifyOrderEntryModule";
 import PaymentStatus from "@/views/orders/components/PaymentStatus.vue";
 import Vue from "vue";
 import {Prop} from "vue-property-decorator";
@@ -118,7 +117,7 @@ export default class OrderEntriesCard extends Vue {
   }
 
   createEntry() {
-    this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`,{});
+    this.$store.commit(`modifyOrderEntry/setDishEntryCreating`,{});
   }
 
   get isEntryCreating() {

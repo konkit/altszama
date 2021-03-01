@@ -2,21 +2,6 @@ import {Module} from "vuex";
 import {RootState} from "@/store";
 import {SideDishData} from "@/frontend-client";
 
-
-export const NAMESPACE_MODIFY_ORDER_ENTRY = "modifyOrderEntry";
-
-export const SET_ENTRY_LOADING_TRUE = "SET_ENTRY_LOADING_TRUE";
-export const SET_ENTRY_LOADING_FALSE = "SET_ENTRY_LOADING_FALSE";
-
-export const SET_DISH_ENTRY_CREATING = "SET_DISH_ENTRY_CREATING";
-export const SET_DISH_ENTRY_EDITING = "SET_DISH_ENTRY_EDITING";
-
-export const CANCEL_DISH_ENTRY_MODIFICATION = "CANCEL_DISH_ENTRY_MODIFICATION";
-
-export const SET_INITIAL_CREATED_ORDER_ENTRY = "SET_INITIAL_CREATED_ORDER_ENTRY";
-export const SET_INITIAL_EDITED_ORDER_ENTRY = "SET_INITIAL_EDITED_ORDER_ENTRY";
-
-
 export interface OrderEntryData {
   dishId: string;
   additionalComments: string;
@@ -62,31 +47,28 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
 
   state: modifyOrderEntryState,
   mutations: {
-    [SET_ENTRY_LOADING_TRUE](state) {
-      state.loadingEntry = true;
+    setEntryLoading(state, newValue: boolean) {
+      state.loadingEntry = newValue
     },
-    [SET_ENTRY_LOADING_FALSE](state) {
-      state.loadingEntry = false;
-    },
-    [SET_DISH_ENTRY_CREATING](state) {
+    setDishEntryCreating(state) {
       state.isEntryCreating = true;
       state.isEntryEdited = false;
       state.orderEntryId = "";
       state.dishEntryId = "";
     },
-    [SET_DISH_ENTRY_EDITING](state, payload) {
+    setDishEntryEditing(state, payload) {
       state.isEntryCreating = false;
       state.isEntryEdited = true;
       state.orderEntryId = payload.orderEntryId;
       state.dishEntryId = payload.dishEntryId;
     },
-    [CANCEL_DISH_ENTRY_MODIFICATION](state) {
+    cancelDishEntryModification(state) {
       state.isEntryCreating = false;
       state.isEntryEdited = false;
       state.orderEntryId = "";
       state.dishEntryId = "";
     },
-    [SET_INITIAL_CREATED_ORDER_ENTRY](state, { orderId, dishId }) {
+    setInitialCreateOrderEntry(state, { orderId, dishId }) {
       state.orderId = orderId
 
       state.orderEntryData = {
@@ -98,7 +80,7 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
         chosenSideDishes: []
       }
     },
-    [SET_INITIAL_EDITED_ORDER_ENTRY](state, { orderId, dishEntry }) {
+    setInitialEditedOrderEntry(state, { orderId, dishEntry }) {
       state.orderId = orderId
       state.dishEntryId = dishEntry.id;
 

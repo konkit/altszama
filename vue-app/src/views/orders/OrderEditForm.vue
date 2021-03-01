@@ -50,7 +50,6 @@
 <script lang="ts">
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import LoadingView from "@/views/commons/LoadingView.vue";
-import {CANCEL_DISH_ENTRY_MODIFICATION, NAMESPACE_MODIFY_ORDER_ENTRY} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import TimePicker from "@/views/commons/TimePicker.vue";
 import OrderStateButtons from "@/views/orders/components/OrderStateButtons.vue";
@@ -144,10 +143,7 @@ export default class OrderEditForm extends Vue {
     this.connector!.editOrder(order)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.commit(
-              `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-              {}
-          );
+          this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.orderId);
           this.$router.back();
         })
@@ -161,10 +157,7 @@ export default class OrderEditForm extends Vue {
   }
 
   cancelEdit() {
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-        {}
-    );
+    this.$store.commit("modifyOrderEntry/cancelDishEntryModification",{});
   }
 
   get loading() {

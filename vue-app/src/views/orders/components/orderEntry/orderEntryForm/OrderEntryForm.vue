@@ -72,8 +72,6 @@
 import moment from "moment";
 import SideDishesInput from "./SideDishesInput.vue";
 import {
-  CANCEL_DISH_ENTRY_MODIFICATION,
-  NAMESPACE_MODIFY_ORDER_ENTRY,
   OrderEntryData
 } from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
@@ -153,7 +151,7 @@ export default class OrderEntryForm extends Vue {
 
   cancelEdit() {
     this.updateOrderEntryData(this.orderEntryData);
-    this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`, {});
+    this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`, {});
   }
 
   updateChosenSideDishes(newSideDishes: []) {

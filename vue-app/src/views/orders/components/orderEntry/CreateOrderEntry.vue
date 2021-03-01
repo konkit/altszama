@@ -31,12 +31,7 @@ import Spinner from "../../../commons/Spinner.vue";
 
 import OrderEntryForm from "./orderEntryForm/OrderEntryForm.vue";
 import {
-  CANCEL_DISH_ENTRY_MODIFICATION,
-  NAMESPACE_MODIFY_ORDER_ENTRY,
-  OrderEntryData,
-  SET_ENTRY_LOADING_FALSE,
-  SET_ENTRY_LOADING_TRUE,
-  SET_INITIAL_CREATED_ORDER_ENTRY
+  OrderEntryData
 } from "@/store/modules/ModifyOrderEntryModule";
 import Component from "vue-class-component";
 import Vue from "vue";
@@ -57,9 +52,7 @@ export default class CreateOrderEntry extends Vue {
   ordersConnector = new OrdersApiConnector()
 
   created() {
-    this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_TRUE}`
-    );
+    this.$store.commit("modifyOrderEntry/setEntryLoading", true)
   }
 
   mounted() {
@@ -76,14 +69,8 @@ export default class CreateOrderEntry extends Vue {
       dishId = null;
     }
 
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_INITIAL_CREATED_ORDER_ENTRY}`,
-        { orderId: orderId, dishId: dishId }
-    );
-
-    this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_ENTRY_LOADING_FALSE}`
-    );
+    this.$store.commit(`modifyOrderEntry/setInitialCreateOrderEntry`,{ orderId: orderId, dishId: dishId });
+    this.$store.commit("modifyOrderEntry/setEntryLoading", false)
   }
 
   submitForm(e: Event) {
@@ -108,10 +95,7 @@ export default class CreateOrderEntry extends Vue {
         .saveOrderEntry(orderId, orderEntryToSave)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.commit(
-              `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-              {}
-          );
+          this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, orderId);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
@@ -120,10 +104,7 @@ export default class CreateOrderEntry extends Vue {
   }
 
   cancelEdit() {
-    this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-      {}
-    );
+    this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});
   }
 
   get allDishesInRestaurant() {

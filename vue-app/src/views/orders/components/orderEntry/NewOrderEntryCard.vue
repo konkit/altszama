@@ -21,14 +21,10 @@
 </template>
 
 <script lang="ts">
-import {
-  NAMESPACE_MODIFY_ORDER_ENTRY,
-  SET_DISH_ENTRY_CREATING
-} from "@/store/modules/ModifyOrderEntryModule";
 import CreateOrderEntry from "@/views/orders/components/orderEntry/CreateOrderEntry.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 
 @Component({
   components: {
@@ -40,10 +36,7 @@ export default class NewOrderEntryCard extends Vue {
   @Prop() isEntryCreating!: boolean;
 
   createEntry() {
-    this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`,
-      {}
-    );
+    this.$store.commit(`modifyOrderEntry/setDishEntryCreating`,{});
   }
 }
 </script>

@@ -80,7 +80,6 @@
 import router from "@/router/index";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import LoadingView from "@/views/commons/LoadingView.vue";
-import {CANCEL_DISH_ENTRY_MODIFICATION, NAMESPACE_MODIFY_ORDER_ENTRY} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import TimePicker from "@/views/commons/TimePicker.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
@@ -214,10 +213,7 @@ export default class OrderCreateForm extends Vue {
   }
 
   cancelEdit() {
-    this.$store.commit(
-        `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
-        {}
-    );
+    this.$store.commit("modifyOrderEntry/cancelDishEntryModification",{});
   }
 
   get loading() {
