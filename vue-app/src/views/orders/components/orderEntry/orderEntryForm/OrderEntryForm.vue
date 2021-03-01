@@ -1,59 +1,23 @@
 <template>
   <div>
-    <v-btn-toggle :value="orderEntryData.newDish" mandatory @change="onDishTypeToggle($event)">
-      <v-btn text :value="false">
-        Select dish from the list
-      </v-btn>
+    <v-combobox
+        placeholder="New dish name"
+        id="newDishName"
+        class="pr-2"
+        :value="name"
+        :items="allDishesAtOnce"
+        @input="updateNewDishName($event)"
+    >
+      <template v-slot:item="{ index, item }">
+        <v-list-item-content>
+          <v-list-item-title v-html="item.text"></v-list-item-title>
+          <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
+        </v-list-item-content>
+      </template>
+    </v-combobox>
 
-      <v-btn text :value="true">
-        Type your own dish
-      </v-btn>
-    </v-btn-toggle>
-
-    <template v-if="!orderEntryData.newDish">
-      <v-autocomplete
-          :items="allDishesAtOnce"
-          label="Dish"
-          :value="orderEntryData.dishId"
-          @change="updateDishId($event)"
-          item-text="text"
-          item-value="value"
-      >
-        <template slot="selection" slot-scope="data">
-          {{ data.item.text }}
-        </template>
-
-        <template slot="item" slot-scope="data">
-          <template v-if="typeof data.item.category !== 'undefined'">
-            <v-list-item-content
-                v-text="data.item.category"
-            ></v-list-item-content>
-          </template>
-
-          <template v-else>
-            <v-list-item-content>
-              <v-list-item-title v-html="data.item.text"></v-list-item-title>
-              <v-list-item-subtitle v-html="data.item.subtitle"></v-list-item-subtitle>
-            </v-list-item-content>
-          </template>
-        </template>
-      </v-autocomplete>
-    </template>
-
-    <template v-if="orderEntryData.newDish">
-      <v-text-field
-          type="text"
-          placeholder="New dish name"
-          id="newDishName"
-          class="pr-2"
-          :value="orderEntryData.newDishName"
-          @input="updateNewDishName($event)"
-      >
-      </v-text-field>
-
-      <MoneyInput class="money-input" label="New dish price" :value="orderEntryData.newDishPrice" @input="updateNewDishPrice($event)">
-      </MoneyInput>
-    </template>
+    <MoneyInput class="money-input" label="New dish price" :value="price" @input="updateNewDishPrice($event)">
+    </MoneyInput>
 
     <v-subheader>Side dishes:</v-subheader>
 
@@ -71,9 +35,7 @@
 <script lang="ts">
 import moment from "moment";
 import SideDishesInput from "./SideDishesInput.vue";
-import {
-  OrderEntryData
-} from "@/store/modules/ModifyOrderEntryModule";
+import {OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
 import MoneyInput from "@/views/commons/MoneyInput.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -88,6 +50,12 @@ function dateToRel(date: Date) {
   }
 }
 
+interface ComboBoxItem {
+  text: string;
+  value: string;
+  subtitle: string;
+}
+
 @Component({
   components: {
     MoneyInput,
@@ -97,45 +65,48 @@ function dateToRel(date: Date) {
 export default class OrderEntryForm extends Vue {
 
   @Prop() orderEntryData: OrderEntryData
+  @Prop() allDishesInRestaurant: DishDto[]
   @Prop() allDishesByCategory: { [category: string]: DishDto[] }
   @Prop() dishIdToSideDishesMap: { [key: string]: SideDish[] }
 
-  setDishAsNew() {
-    const newOrderEntryData: OrderEntryData = {
-      ...this.orderEntryData,
-      newDish: true,
-    }
-    this.updateOrderEntryData(newOrderEntryData);
-  }
+  // items: ({ header: string } | { text: string; value: string; subtitle: string })[] = []
+  //
+  // mounted() {
+  //   this.items = this.generateAllDishesAtOnce()
+  // }
 
-  setDishAsExisting() {
-    const newOrderEntryData: OrderEntryData = {
-      ...this.orderEntryData,
-      newDish: false,
+  updateNewDishName(newValue: string | ComboBoxItem | null) {
+    if (typeof newValue === "string") {
+      const newOrderEntryData: OrderEntryData = {
+        ...this.orderEntryData,
+        newDish: true,
+        dishId: undefined,
+        newDishName: newValue,
+      }
+      this.updateOrderEntryData(newOrderEntryData);
+    } else if (newValue != null && typeof newValue === "object") {
+      const newOrderEntryData: OrderEntryData = {
+        ...this.orderEntryData,
+        newDish: false,
+        dishId: newValue.value,
+        chosenSideDishes: []
+      }
+      this.updateOrderEntryData(newOrderEntryData);
     }
-    this.updateOrderEntryData(newOrderEntryData);
-  }
-
-  updateDishId(newValue: string) {
-    const newOrderEntryData: OrderEntryData = {
-      ...this.orderEntryData,
-      dishId: newValue,
-      chosenSideDishes: []
-    }
-    this.updateOrderEntryData(newOrderEntryData);
-  }
-
-  updateNewDishName(newValue: string) {
-    const newOrderEntryData: OrderEntryData = {
-      ...this.orderEntryData,
-      newDishName: newValue,
-    }
-    this.updateOrderEntryData(newOrderEntryData);
   }
 
   updateNewDishPrice(newValue: number) {
+    let newDishName
+    if (this.orderEntryData.newDish) {
+      newDishName = this.orderEntryData.newDishName
+    } else {
+      newDishName = this.allDishesInRestaurant.find(d => d.id === this.orderEntryData.dishId)?.name ?? ""
+    }
+
     const newOrderEntryData: OrderEntryData = {
       ...this.orderEntryData,
+      newDish: true,
+      newDishName: newDishName,
       newDishPrice: newValue,
     }
     this.updateOrderEntryData(newOrderEntryData);
@@ -159,54 +130,56 @@ export default class OrderEntryForm extends Vue {
     this.updateOrderEntryData(newOrderEntryData);
   }
 
-  onDishTypeToggle(value: boolean) {
-    console.log("onDishTypeToggle: ", value);
+  get allDishesAtOnce(): ({ header: string } | ComboBoxItem)[] {
+    const dishByCategoryMap: Map<string, DishDto[]> = new Map(Object.entries(this.allDishesByCategory));
 
-    if (value) {
-      this.setDishAsNew();
-    } else if (!value) {
-      this.setDishAsExisting();
-    } else {
-      console.warn("Dish type toggle returned wrong value");
-    }
-  }
-
-  get allDishesAtOnce() {
-    const dishByCategoryMap: Map<string, DishDto[]> = new Map(
-        Object.entries(this.allDishesByCategory)
-    );
-
-    const entries: [string, DishDto[]][] = Array.from(
-        dishByCategoryMap.entries()
-    );
+    const entries: [string, DishDto[]][] = Array.from(dishByCategoryMap.entries());
 
     return entries.flatMap(([category, dishesFromCat]) => {
       const dishes: (| { header: string } | { text: string; value: string; subtitle: string })[] =
           dishesFromCat.map(dish => {
-            const price = (dish.price / 100).toLocaleString("pl-PL", {
-              style: "currency",
-              currency: "PLN"
-            });
-
-            let updateDesc = "";
-            if (dish.lastCrawled) {
-              updateDesc = `auto-updated ${dateToRel(dish.lastCrawled)}`;
-            }
-
-            return Object.assign(
-                {},
-                {
-                  text: `${dish.name}`,
-                  value: dish.id,
-                  subtitle: `Price: ${price}, ${updateDesc}`
-                }
-            );
+            return OrderEntryForm.dishToComboBoxItem(dish);
           });
 
       dishes.unshift({header: `Category: ${category}`});
 
       return dishes;
     });
+  }
+
+  private static dishToComboBoxItem(dish: DishDto): ComboBoxItem {
+    const price = (dish.price / 100).toLocaleString("pl-PL", {
+      style: "currency",
+      currency: "PLN"
+    });
+
+    let updateDesc = "";
+    if (dish.lastCrawled) {
+      updateDesc = `auto-updated ${dateToRel(dish.lastCrawled)}`;
+    }
+
+    return {
+      text: `${dish.name}`,
+      value: dish.id,
+      subtitle: `Price: ${price}, ${updateDesc}`
+    };
+  }
+
+  get name(): string | ComboBoxItem {
+    if (this.orderEntryData.newDish) {
+      return this.orderEntryData.newDishName
+    } else {
+      const dish: DishDto = this.allDishesInRestaurant.find(d => d.id === this.orderEntryData.dishId)!;
+      return OrderEntryForm.dishToComboBoxItem(dish)
+    }
+  }
+
+  get price() {
+    if (this.orderEntryData.newDish) {
+      return this.orderEntryData.newDishPrice
+    } else {
+      return this.allDishesInRestaurant.find(d => d.id === this.orderEntryData.dishId)?.price
+    }
   }
 
   private updateOrderEntryData(newOrderEntryData: OrderEntryData) {

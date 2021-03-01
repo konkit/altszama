@@ -1,10 +1,11 @@
 <template>
   <div>
     <template v-if="this.loadingEntry === false">
-      <errors-component />
+      <errors-component/>
 
       <div>
-        <order-entry-form :all-dishes-by-category="allDishesByCategory"
+        <order-entry-form :all-dishes-in-restaurant="allDishesInRestaurant"
+                          :all-dishes-by-category="allDishesByCategory"
                           :dish-id-to-side-dishes-map="dishIdToSideDishesMap"
                           :order-entry-data="orderEntryData"
                           @change="updateOrderEntryData($event)">
@@ -69,7 +70,7 @@ export default class CreateOrderEntry extends Vue {
       dishId = null;
     }
 
-    this.$store.commit(`modifyOrderEntry/setInitialCreateOrderEntry`,{ orderId: orderId, dishId: dishId });
+    this.$store.commit(`modifyOrderEntry/setInitialCreateOrderEntry`, {orderId: orderId, dishId: dishId});
     this.$store.commit("modifyOrderEntry/setEntryLoading", false)
   }
 
@@ -95,7 +96,7 @@ export default class CreateOrderEntry extends Vue {
         .saveOrderEntry(orderId, orderEntryToSave)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});
+          this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`, {});
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, orderId);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
@@ -104,10 +105,10 @@ export default class CreateOrderEntry extends Vue {
   }
 
   cancelEdit() {
-    this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});
+    this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`, {});
   }
 
-  get allDishesInRestaurant() {
+  get allDishesInRestaurant(): DishDto[] {
     return this.$store.state.showOrder.allDishesInRestaurant;
   }
 

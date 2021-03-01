@@ -4,7 +4,8 @@
       <errors-component/>
 
       <div class="form-wrapper">
-        <order-entry-form :order-entry-data="orderEntryData"
+        <order-entry-form :all-dishes-in-restaurant="allDishesInRestaurant"
+                          :order-entry-data="orderEntryData"
                           :all-dishes-by-category="allDishesByCategory"
                           :dish-id-to-side-dishes-map="dishIdToSideDishesMap"
                           @change="updateOrderEntryData($event)">
@@ -103,6 +104,10 @@ export default class EditOrderEntry extends Vue {
 
   get loadingEntry() {
     return this.$store.state.modifyOrderEntry.loadingEntry;
+  }
+
+  get allDishesInRestaurant(): DishDto[] {
+    return this.$store.state.showOrder.allDishesInRestaurant;
   }
 
   get orderEntryData() {

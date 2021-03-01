@@ -9,50 +9,31 @@
             </v-list-item-content>
 
             <v-list-item-content>
-              <v-btn-toggle :value="sideDish.isNew" mandatory @change="onSideDishTypeToggle(sdIndex, $event)">
-                <v-btn text :value="false">
-                  Select side dish from the list
-                </v-btn>
-
-                <v-btn text :value="true">
-                  Type your own side dish
-                </v-btn>
-              </v-btn-toggle>
-
               <v-layout>
-                <template v-if="sideDish.isNew === true">
-                  <v-text-field
-                      label="New side dish name"
-                      v-model="sideDish.newSideDishName"
-                      @input="updateNewSideDishName(sdIndex, $event)"
-                  >
-                  </v-text-field>
+                <v-combobox
+                    :items="sideDishesItems"
+                    label="New side dish name"
+                    :value="getName(sideDish)"
+                    @input="updateNewSideDishName(sdIndex, $event)"
+                >
+                  <template v-slot:item="{ index, item }">
+                    <v-list-item-content>
+                      <v-list-item-title v-html="item.text"></v-list-item-title>
+                      <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
+                    </v-list-item-content>
+                  </template>
+                </v-combobox>
 
-                  <MoneyInput
-                      label="New side dish price"
-                      :value="sideDish.newSideDishPrice"
-                      @input="changeNewSideDishPrice(sdIndex, $event)"
-                  >
-                  </MoneyInput>
+                <MoneyInput
+                    label="New side dish price"
+                    :value="getPrice(sideDish)"
+                    @input="changeNewSideDishPrice(sdIndex, $event)"
+                >
+                </MoneyInput>
 
-                  <v-btn text icon @click="removeSideDish(sdIndex)"
-                  ><span class="fa fa-remove"></span
-                  ></v-btn>
-                </template>
-
-                <template v-else>
-                  <v-autocomplete
-                      :items="sideDishesItems"
-                      label="Side dish"
-                      :value="sideDish.id"
-                      @change="updateSideDishComboBox(sdIndex, $event)"
-                  >
-                  </v-autocomplete>
-
-                  <v-btn text icon @click="removeSideDish(sdIndex)">
-                    <span class="fa fa-remove"></span>
-                  </v-btn>
-                </template>
+                <v-btn text icon @click="removeSideDish(sdIndex)">
+                  <span class="fa fa-remove"></span>
+                </v-btn>
               </v-layout>
             </v-list-item-content>
           </v-list-item>
@@ -82,6 +63,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import {SideDish, SideDishData} from "../../../../../frontend-client";
 import {Prop} from "vue-property-decorator";
+
+interface ComboBoxItem {
+  text: string;
+  value: string;
+  subtitle: string;
+}
 
 @Component({
   components: {
@@ -120,7 +107,11 @@ export default class SideDishesInput extends Vue {
     const oldItem = this.chosenSideDishes[sdIndex]
     const newItem = Object.assign(oldItem, {isNew: true})
 
-    const newSideDishes: SideDishData[] = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex + 1)]
+    const newSideDishes: SideDishData[] = [
+      ...this.chosenSideDishes.slice(0, sdIndex),
+      newItem,
+      ...this.chosenSideDishes.slice(sdIndex + 1)
+    ]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -130,27 +121,59 @@ export default class SideDishesInput extends Vue {
     const oldItem = this.chosenSideDishes[sdIndex]
     const newItem = Object.assign(oldItem, {isNew: false})
 
-    const newSideDishes: SideDishData[] = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex + 1)]
+    const newSideDishes: SideDishData[] = [
+      ...this.chosenSideDishes.slice(0, sdIndex),
+      newItem,
+      ...this.chosenSideDishes.slice(sdIndex + 1)
+    ]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
   }
 
-  updateNewSideDishName(sdIndex: number, newValue: string) {
-    const oldItem = this.chosenSideDishes[sdIndex]
-    const newItem = Object.assign(oldItem, {newSideDishName: newValue})
+  updateNewSideDishName(sdIndex: number, newValue: string | ComboBoxItem | null) {
+    if (typeof newValue === "string") {
+      const oldItem = this.chosenSideDishes[sdIndex]
+      const newItem = Object.assign(oldItem, {isNew: true, newSideDishName: newValue})
 
-    const newSideDishes: SideDishData[] = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex + 1)]
-    this.updateSideDishes(newSideDishes);
+      const newSideDishes: SideDishData[] = [
+        ...this.chosenSideDishes.slice(0, sdIndex),
+        newItem,
+        ...this.chosenSideDishes.slice(sdIndex + 1)
+      ]
+      this.updateSideDishes(newSideDishes);
+    } else if (newValue != null && typeof newValue === "object") {
+      const oldItem = this.chosenSideDishes[sdIndex]
+      const newItem = Object.assign(oldItem, {isNew: false, id: newValue.value})
+
+      const newSideDishes: SideDishData[] = [
+        ...this.chosenSideDishes.slice(0, sdIndex),
+        newItem,
+        ...this.chosenSideDishes.slice(sdIndex + 1)
+      ]
+      this.updateSideDishes(newSideDishes);
+    }
 
     this.$forceUpdate();
   }
 
   changeNewSideDishPrice(sdIndex: number, newValue: number) {
-    const oldItem = this.chosenSideDishes[sdIndex]
-    const newItem = Object.assign(oldItem, {newSideDishPrice: newValue})
+    const oldItem: SideDishData = this.chosenSideDishes[sdIndex]
 
-    const newSideDishes: SideDishData[] = [...this.chosenSideDishes.slice(0, sdIndex), newItem, ...this.chosenSideDishes.slice(sdIndex + 1)]
+    let newSideDishName
+    if (oldItem.isNew) {
+      newSideDishName = oldItem.newSideDishName
+    } else {
+      newSideDishName = this.dishIdToSideDishesMap[this.dishId].find(sd => sd.id === oldItem.id)?.name ?? ""
+    }
+
+    const newItem: SideDishData = Object.assign(oldItem, {isNew: true, newSideDishName: newSideDishName, newSideDishPrice: newValue})
+
+    const newSideDishes: SideDishData[] = [
+      ...this.chosenSideDishes.slice(0, sdIndex),
+      newItem,
+      ...this.chosenSideDishes.slice(sdIndex + 1)
+    ]
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -183,15 +206,39 @@ export default class SideDishesInput extends Vue {
   }
 
   get sideDishesItems() {
-    return this.dishIdToSideDishesMap[this.dishId].map(entry => {
-      const price = (entry.price / 100.0).toLocaleString("pl-PL", {
-        style: "currency",
-        currency: "PLN"
-      });
-      const text = `${entry.name} (${price})`;
+    if (this.dishId) {
+      return this.dishIdToSideDishesMap[this.dishId].map(entry => SideDishesInput.toComboBoxItem(entry));
+    } else {
+      return []
+    }
+  }
 
-      return Object.assign({}, {text: text, value: entry.id});
-    });
+  getName(item: SideDishData): string | ComboBoxItem {
+    if (item.isNew) {
+      return item.newSideDishName!
+    } else {
+      const sideDish = this.dishIdToSideDishesMap[this.dishId]?.find(d => d.id === item.id)
+
+      return sideDish ? SideDishesInput.toComboBoxItem(sideDish) : undefined
+    }
+  }
+
+  getPrice(item: SideDishData) {
+    if (item.isNew) {
+      return item.newSideDishPrice
+    } else {
+      return this.dishIdToSideDishesMap[this.dishId]?.find(d => d.id === item.id)?.price
+    }
+  }
+
+  private static toComboBoxItem(entry: SideDish): ComboBoxItem {
+    const price = (entry.price / 100).toLocaleString("pl-PL", {style: "currency",currency: "PLN"});
+
+    return {
+      text: `${entry.name}`,
+      value: entry.id,
+      subtitle: `Price: ${price}`
+    };
   }
 
   private updateSideDishes(newSideDishes: SideDishData[]) {
