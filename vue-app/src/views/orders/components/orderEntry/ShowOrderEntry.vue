@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import Price from "../../../commons/PriceElement.vue";
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER, ShowOrderState} from "@/store/modules/ShowOrderModule";
+import {ShowOrderState} from "@/store/modules/ShowOrderModule";
 import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_EDITING} from "@/store/modules/ModifyOrderEntryModule";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
@@ -108,10 +108,7 @@ export default class ShowOrderEntry extends Vue {
         .deleteDishEntry(this.orderEntry.id, this.dishEntry.id)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }

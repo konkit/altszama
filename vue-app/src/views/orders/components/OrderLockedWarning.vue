@@ -25,7 +25,6 @@
 
 <script lang="ts">
 import router from "../../../router/index";
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "@/store/modules/ShowOrderModule";
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 import Vue from "vue";
@@ -47,10 +46,7 @@ export default class OrderLockedWarning extends Vue {
         .setOrderAsCreated(this.orderId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }

@@ -40,7 +40,7 @@ import {
 } from "@/store/modules/ModifyOrderEntryModule";
 import Component from "vue-class-component";
 import Vue from "vue";
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER, ShowOrderState} from "@/store/modules/ShowOrderModule";
+import {ShowOrderState} from "@/store/modules/ShowOrderModule";
 import ErrorHandler from "@/lib/ErrorHandler";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import {DishDto, SideDish} from "@/frontend-client";
@@ -112,10 +112,7 @@ export default class CreateOrderEntry extends Vue {
               `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
               {}
           );
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              orderId
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, orderId);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
 

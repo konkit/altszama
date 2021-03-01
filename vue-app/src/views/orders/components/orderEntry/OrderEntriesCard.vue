@@ -91,19 +91,12 @@ import Price from "../../../commons/PriceElement.vue";
 import CreateOrderEntry from "./CreateOrderEntry.vue";
 import EditOrderEntry from "./EditOrderEntry.vue";
 import ShowOrderEntry from "./ShowOrderEntry.vue";
-import {
-  ModifyOrderEntryState,
-  NAMESPACE_MODIFY_ORDER_ENTRY,
-  SET_DISH_ENTRY_CREATING
-} from "@/store/modules/ModifyOrderEntryModule";
+import {NAMESPACE_MODIFY_ORDER_ENTRY, SET_DISH_ENTRY_CREATING} from "@/store/modules/ModifyOrderEntryModule";
 import PaymentStatus from "@/views/orders/components/PaymentStatus.vue";
 import Vue from "vue";
-import { Prop } from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
-import {
-  ParticipantsOrderEntry,
-  ShowOrderDto
-} from "../../../../frontend-client";
+import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../frontend-client";
 
 @Component({
   components: {
@@ -125,28 +118,19 @@ export default class OrderEntriesCard extends Vue {
   }
 
   createEntry() {
-    this.$store.commit(
-      `${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`,
-      {}
-    );
+    this.$store.commit(`${NAMESPACE_MODIFY_ORDER_ENTRY}/${SET_DISH_ENTRY_CREATING}`,{});
   }
 
   get isEntryCreating() {
-    const modifyOrderEntryState: ModifyOrderEntryState = this.$store.state
-      .modifyOrderEntry;
-    return modifyOrderEntryState.isEntryCreating;
+    return this.$store.state.modifyOrderEntry.isEntryCreating;
   }
 
   get isEntryEdited() {
-    const modifyOrderEntryState: ModifyOrderEntryState = this.$store.state
-      .modifyOrderEntry;
-    return modifyOrderEntryState.isEntryEdited;
+    return this.$store.state.modifyOrderEntry.isEntryEdited;
   }
 
   get dishEntryId() {
-    const modifyOrderEntryState: ModifyOrderEntryState = this.$store.state
-        .modifyOrderEntry;
-    return modifyOrderEntryState.dishEntryId;
+    return this.$store.state.modifyOrderEntry.dishEntryId;
   }
 }
 </script>

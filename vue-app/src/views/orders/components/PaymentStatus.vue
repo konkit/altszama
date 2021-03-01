@@ -30,7 +30,6 @@
 </template>
 
 <script lang="ts">
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "@/store/modules/ShowOrderModule";
 import BankTransferQRCode from "@/views/orders/components/orderEntry/BankTransferQRCode.vue";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -103,10 +102,7 @@ export default class PaymentStatus extends Vue {
         .confirmOrderEntryAsPaid(orderEntryId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
@@ -116,10 +112,7 @@ export default class PaymentStatus extends Vue {
         .markOrderEntryAsPaid(orderEntryId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }

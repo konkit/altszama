@@ -59,7 +59,6 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import ErrorHandler from "@/lib/ErrorHandler";
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "@/store/modules/ShowOrderModule";
 import {OrderUpdateRequest} from "@/frontend-client";
 import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
 import PaymentDataFields from "@/views/orders/components/orderCreateForm/PaymentDataFields.vue";
@@ -149,10 +148,7 @@ export default class OrderEditForm extends Vue {
               `${NAMESPACE_MODIFY_ORDER_ENTRY}/${CANCEL_DISH_ENTRY_MODIFICATION}`,
               {}
           );
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.orderId
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.orderId);
           this.$router.back();
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));

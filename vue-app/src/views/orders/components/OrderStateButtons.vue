@@ -27,7 +27,6 @@
 </template>
 
 <script lang="ts">
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER} from "@/store/modules/ShowOrderModule";
 import router from "../../../router";
 import Component from "vue-class-component";
 import Vue from "vue";
@@ -53,10 +52,7 @@ export default class OrderStateButtons extends Vue {
         .setOrderAsCreated(this.orderId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
@@ -66,10 +62,7 @@ export default class OrderStateButtons extends Vue {
         .setOrderAsOrdered(this.orderId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
@@ -79,10 +72,7 @@ export default class OrderStateButtons extends Vue {
         .setOrderAsDelivered(this.orderId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
@@ -92,10 +82,7 @@ export default class OrderStateButtons extends Vue {
         .setOrderAsRejected(this.orderId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }

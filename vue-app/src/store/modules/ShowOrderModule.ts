@@ -7,12 +7,7 @@ import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 
 const ordersConnector = new OrdersApiConnector()
 
-
-export const NAMESPACE_SHOW_ORDER = "showOrder";
-
 export const LOAD_SHOW_ORDER_DATA = "LOAD_SHOW_ORDER_DATA";
-export const FETCH_ORDER_DATA_ACTION = "FETCH_ORDER_DATA_ACTION";
-
 
 export interface ShowOrderState {
   order: ShowOrderDto;
@@ -76,11 +71,11 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
   },
 
   actions: {
-    [FETCH_ORDER_DATA_ACTION]({ state, rootState }, orderId) {
+    fetchOrderDataAction({ state, rootState }, orderId) {
       ordersConnector
         .fetchOrder(orderId)
         .then(showOrderData => {
-          this.commit(`${NAMESPACE_SHOW_ORDER}/${LOAD_SHOW_ORDER_DATA}`,showOrderData);
+          this.commit(`showOrder/${LOAD_SHOW_ORDER_DATA}`,showOrderData);
           this.commit("setLoadingFalse");
           this.commit("setTitle", `[${state.order.orderState}] Order from ${state.order.restaurantName} (${state.order.orderDate})`)
         })

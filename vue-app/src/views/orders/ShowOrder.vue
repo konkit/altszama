@@ -111,7 +111,7 @@
 
 <script lang="ts">
 import LoadingView from "@/views/commons/LoadingView.vue";
-import {FETCH_ORDER_DATA_ACTION, NAMESPACE_SHOW_ORDER, ShowOrderState} from "@/store/modules/ShowOrderModule";
+import {ShowOrderState} from "@/store/modules/ShowOrderModule";
 import router from "@/router/index";
 import PriceSummary from "@/views/orders/components/PriceSummary.vue";
 import ViewWrapper from "@/views/commons/ViewWrapper.vue";
@@ -151,10 +151,7 @@ export default class ShowOrder extends Vue {
 
   fetchOrder() {
     this.$store.commit("setLoadingTrue");
-    return this.$store.dispatch(
-        `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-        this.orderId
-    );
+    this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.orderId);
   }
 
   isOrdering() {
@@ -174,10 +171,7 @@ export default class ShowOrder extends Vue {
         .setOrderAsCreated(this.$store.state.showOrder.order.id)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
@@ -187,10 +181,7 @@ export default class ShowOrder extends Vue {
         .setOrderAsDelivered(this.orderId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(
-              `${NAMESPACE_SHOW_ORDER}/${FETCH_ORDER_DATA_ACTION}`,
-              this.$store.state.showOrder.order.id
-          );
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
