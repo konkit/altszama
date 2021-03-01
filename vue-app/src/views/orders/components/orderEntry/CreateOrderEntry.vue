@@ -31,14 +31,12 @@ import ErrorsComponent from "../../../commons/ErrorsComponent.vue";
 import Spinner from "../../../commons/Spinner.vue";
 
 import OrderEntryForm from "./orderEntryForm/OrderEntryForm.vue";
-import {
-  OrderEntryData
-} from "@/store/modules/ModifyOrderEntryModule";
+import {NewDishData, OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
 import Component from "vue-class-component";
 import Vue from "vue";
 import {ShowOrderState} from "@/store/modules/ShowOrderModule";
 import ErrorHandler from "@/lib/ErrorHandler";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import OrdersApiConnector, {OrderEntryToModify} from "@/lib/api/OrdersApiConnector";
 import {DishDto, SideDish} from "@/frontend-client";
 
 @Component({
@@ -81,16 +79,30 @@ export default class CreateOrderEntry extends Vue {
 
     const orderId = state.orderId;
 
-    const orderEntryToSave = {
-      orderId: state.orderId,
-      dishId: state.orderEntryData.dishId,
-      dishEntryId: state.dishEntryId,
-      additionalComments: state.orderEntryData.additionalComments,
-      newDish: state.orderEntryData.newDish,
-      newDishName: state.orderEntryData.newDishName,
-      newDishPrice: state.orderEntryData.newDishPrice,
-      chosenSideDishes: state.orderEntryData.chosenSideDishes
-    };
+    let orderEntryToSave: OrderEntryToModify
+    if (state.orderEntryData.dishData.kind === "NewDishData") {
+      orderEntryToSave = {
+        orderId: state.orderId,
+        dishEntryId: state.dishEntryId,
+        dishId: "",
+        additionalComments: state.orderEntryData.additionalComments,
+        newDish: true,
+        newDishName: state.orderEntryData.dishData.newDishName,
+        newDishPrice: state.orderEntryData.dishData.newDishPrice,
+        chosenSideDishes: state.orderEntryData.dishData.chosenSideDishes
+      };
+    } else {
+      orderEntryToSave = {
+        orderId: state.orderId,
+        dishEntryId: state.dishEntryId,
+        dishId: state.orderEntryData.dishData.dishId,
+        additionalComments: state.orderEntryData.additionalComments,
+        newDish: false,
+        newDishName: "",
+        newDishPrice: 0,
+        chosenSideDishes: state.orderEntryData.dishData.chosenSideDishes
+      };
+    }
 
     this.ordersConnector
         .saveOrderEntry(orderId, orderEntryToSave)

@@ -31,7 +31,7 @@ import ErrorsComponent from "../../../commons/ErrorsComponent.vue";
 import Spinner from "../../../commons/Spinner.vue";
 
 import OrderEntryForm from "./orderEntryForm/OrderEntryForm.vue";
-import {OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
+import {ExistingDishData, NewDishData, OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
 import Vue from "vue";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
@@ -75,16 +75,33 @@ export default class EditOrderEntry extends Vue {
     const state = this.$store.state.modifyOrderEntry
 
     const orderId = state.orderId;
-    const orderEntryToUpdate = {
-      orderId: orderId,
-      dishId: state.orderEntryData.dishId,
-      dishEntryId: state.dishEntryId,
-      additionalComments: state.orderEntryData.additionalComments,
-      newDish: state.orderEntryData.newDish,
-      newDishName: state.orderEntryData.newDishName,
-      newDishPrice: state.orderEntryData.newDishPrice,
-      chosenSideDishes: state.orderEntryData.chosenSideDishes
-    };
+
+    let orderEntryToUpdate
+
+    const dishData: (NewDishData | ExistingDishData) = state.orderEntryData.dishData
+    if (dishData.kind === "NewDishData") {
+      orderEntryToUpdate = {
+        orderId: orderId,
+        dishId: "",
+        dishEntryId: state.dishEntryId,
+        additionalComments: state.orderEntryData.additionalComments,
+        newDish: true,
+        newDishName: dishData.newDishName,
+        newDishPrice: dishData.newDishPrice,
+        chosenSideDishes: dishData.chosenSideDishes
+      };
+    } else {
+      orderEntryToUpdate = {
+        orderId: orderId,
+        dishId: dishData.dishId,
+        dishEntryId: state.dishEntryId,
+        additionalComments: state.orderEntryData.additionalComments,
+        newDish: false,
+        newDishName: "",
+        newDishPrice: 0,
+        chosenSideDishes: dishData.chosenSideDishes
+      };
+    }
 
     this.ordersConnector
         .updateOrderEntry(orderId, this.orderEntry.id, orderEntryToUpdate)

@@ -77,8 +77,7 @@ interface ComboBoxItem {
 })
 export default class SideDishesInput extends Vue {
   @Prop() chosenSideDishes: SideDishData[]
-  @Prop() dishId: string
-  @Prop() dishIdToSideDishesMap: { [key: string]: SideDish[] }
+  @Prop() availableSideDishes: SideDish[]
 
   removeSideDish(sideDishIndex: number) {
     const newSideDishes: SideDishData[] = [
@@ -164,7 +163,7 @@ export default class SideDishesInput extends Vue {
     if (oldItem.isNew) {
       newSideDishName = oldItem.newSideDishName
     } else {
-      newSideDishName = this.dishIdToSideDishesMap[this.dishId].find(sd => sd.id === oldItem.id)?.name ?? ""
+      newSideDishName = this.availableSideDishes.find(sd => sd.id === oldItem.id)?.name ?? ""
     }
 
     const newItem: SideDishData = Object.assign(oldItem, {isNew: true, newSideDishName: newSideDishName, newSideDishPrice: newValue})
@@ -180,8 +179,7 @@ export default class SideDishesInput extends Vue {
   }
 
   updateSideDishComboBox(sdIndex: number, sideDishId: string) {
-    const newSideDish = this.dishIdToSideDishesMap[this.dishId]
-        .find(sd => sd.id === sideDishId);
+    const newSideDish = this.availableSideDishes.find(sd => sd.id === sideDishId);
 
     const newSideDishes: SideDishData[] = [
       ...this.chosenSideDishes.slice(0, sdIndex),
@@ -206,18 +204,18 @@ export default class SideDishesInput extends Vue {
   }
 
   get sideDishesItems() {
-    if (this.dishId) {
-      return this.dishIdToSideDishesMap[this.dishId].map(entry => SideDishesInput.toComboBoxItem(entry));
+    if (this.availableSideDishes) {
+      return this.availableSideDishes.map(entry => SideDishesInput.toComboBoxItem(entry));
     } else {
       return []
     }
   }
 
-  getName(item: SideDishData): string | ComboBoxItem {
+  getName(item: SideDishData): string | ComboBoxItem | undefined {
     if (item.isNew) {
       return item.newSideDishName!
     } else {
-      const sideDish = this.dishIdToSideDishesMap[this.dishId]?.find(d => d.id === item.id)
+      const sideDish = this.availableSideDishes.find(d => d.id === item.id)
 
       return sideDish ? SideDishesInput.toComboBoxItem(sideDish) : undefined
     }
@@ -227,7 +225,7 @@ export default class SideDishesInput extends Vue {
     if (item.isNew) {
       return item.newSideDishPrice
     } else {
-      return this.dishIdToSideDishesMap[this.dishId]?.find(d => d.id === item.id)?.price
+      return this.availableSideDishes.find(d => d.id === item.id)?.price
     }
   }
 
@@ -236,7 +234,7 @@ export default class SideDishesInput extends Vue {
 
     return {
       text: `${entry.name}`,
-      value: entry.id,
+      value: entry.id!,
       subtitle: `Price: ${price}`
     };
   }

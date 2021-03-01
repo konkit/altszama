@@ -2,13 +2,22 @@ import {Module} from "vuex";
 import {RootState} from "@/store";
 import {SideDishData} from "@/frontend-client";
 
-export interface OrderEntryData {
-  dishId: string;
-  additionalComments: string;
-  newDish: boolean;
+export interface NewDishData {
+  kind: "NewDishData";
   newDishName: string;
   newDishPrice: number;
   chosenSideDishes: SideDishData[];
+}
+
+export interface ExistingDishData {
+  kind: "ExistingDishData";
+  dishId: string;
+  chosenSideDishes: SideDishData[];
+}
+
+export interface OrderEntryData {
+  dishData: NewDishData | ExistingDishData;
+  additionalComments: string;
 }
 
 export interface ModifyOrderEntryState {
@@ -33,12 +42,13 @@ const modifyOrderEntryState: ModifyOrderEntryState = {
   orderId: "",
 
   orderEntryData: {
-    dishId: "",
+    dishData: {
+      kind: "NewDishData",
+      newDishName: "",
+      newDishPrice: 0,
+      chosenSideDishes: []
+    },
     additionalComments: "",
-    newDish: false,
-    newDishName: "",
-    newDishPrice: 0,
-    chosenSideDishes: []
   }
 };
 
@@ -72,12 +82,13 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
       state.orderId = orderId
 
       state.orderEntryData = {
-        dishId: dishId,
+        dishData: {
+          kind: "NewDishData",
+          newDishName: "",
+          newDishPrice: 0,
+          chosenSideDishes: []
+        },
         additionalComments: "",
-        newDish: false,
-        newDishName: "",
-        newDishPrice: 0,
-        chosenSideDishes: []
       }
     },
     setInitialEditedOrderEntry(state, { orderId, dishEntry }) {
@@ -85,12 +96,12 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
       state.dishEntryId = dishEntry.id;
 
       state.orderEntryData = {
-        dishId: dishEntry.dishId,
+        dishData: {
+          kind: "ExistingDishData",
+          dishId: dishEntry.dishId,
+          chosenSideDishes: dishEntry.sideDishes || []
+        },
         additionalComments: dishEntry.comments,
-        newDish: false,
-        newDishName: "",
-        newDishPrice: 0,
-        chosenSideDishes: dishEntry.sideDishes || []
       }
     },
     updateOrderEntryData(state, newValue) {
