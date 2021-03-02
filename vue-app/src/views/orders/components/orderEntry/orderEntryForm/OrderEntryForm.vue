@@ -1,23 +1,25 @@
 <template>
   <div>
-    <v-combobox
-        placeholder="New dish name"
-        id="newDishName"
-        class="pr-2"
-        :value="name"
-        :items="allDishesAtOnce"
-        @input="updateNewDishName($event)"
-    >
-      <template v-slot:item="{ index, item }">
-        <v-list-item-content>
-          <v-list-item-title v-html="item.text"></v-list-item-title>
-          <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
-        </v-list-item-content>
-      </template>
-    </v-combobox>
+    <div class="d-flex fix-top-margin">
+      <v-combobox
+          placeholder="New dish name"
+          id="newDishName"
+          class="pr-2"
+          :value="name"
+          :items="allDishesAtOnce"
+          @input="updateNewDishName($event)"
+      >
+        <template v-slot:item="{ index, item }">
+          <v-list-item-content v-on="on">
+            <v-list-item-title><span class="text-wrap">{{item.text}}</span></v-list-item-title>
+            <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
+          </v-list-item-content>
+        </template>
+      </v-combobox>
 
-    <MoneyInput class="money-input" label="New dish price" :value="price" @input="updateNewDishPrice($event)">
-    </MoneyInput>
+      <MoneyInput class="money-input" :value="price" @input="updateNewDishPrice($event)">
+      </MoneyInput>
+    </div>
 
     <v-subheader>Side dishes:</v-subheader>
 
@@ -26,7 +28,8 @@
                        @change="updateChosenSideDishes($event)">
     </side-dishes-input>
 
-    <v-text-field label="Additional Comments" :value="orderEntryData.additionalComments" @input="updateAdditionalComments($event)">
+    <v-text-field label="Additional Comments" :value="orderEntryData.additionalComments"
+                  @input="updateAdditionalComments($event)">
     </v-text-field>
   </div>
 </template>
@@ -140,7 +143,10 @@ export default class OrderEntryForm extends Vue {
   }
 
   updateChosenSideDishes(newSideDishes: SideDishData[]) {
-    const newDishData: NewDishData | ExistingDishData = {...this.orderEntryData.dishData, chosenSideDishes: newSideDishes}
+    const newDishData: NewDishData | ExistingDishData = {
+      ...this.orderEntryData.dishData,
+      chosenSideDishes: newSideDishes
+    }
 
     const newOrderEntryData: OrderEntryData = {...this.orderEntryData, dishData: newDishData}
     this.updateOrderEntryData(newOrderEntryData);
@@ -217,5 +223,10 @@ export default class OrderEntryForm extends Vue {
 <style>
 .money-input {
   width: 5rem;
+}
+
+.fix-top-margin {
+  margin-top: -7px;
+  padding-left: 16px;
 }
 </style>
