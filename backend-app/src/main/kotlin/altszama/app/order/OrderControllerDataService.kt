@@ -1,5 +1,6 @@
 package altszama.app.order
 
+import altszama.app.auth.User
 import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.order.dto.*
@@ -33,13 +34,11 @@ class OrderControllerDataService {
   @Autowired
   private lateinit var dishService: DishService
 
-  @Autowired
-  private lateinit var userService: UserService
+//  @Autowired
+//  private lateinit var userService: UserService
 
 
-  fun getIndexData(): TodayOrdersResponse {
-    val currentUser = userService.currentUser()
-
+  fun getIndexData(currentUser: User): TodayOrdersResponse {
     val todaysOrders = orderRepository.findByOrderDate(LocalDate.now())
     val usersOrderEntries = orderEntryRepository.findByUser(currentUser)
 
@@ -52,8 +51,8 @@ class OrderControllerDataService {
     return AllOrdersResponse.fromOrderList(orderList.asReversed())
   }
 
-  fun getShowData(orderId: String): ShowOrderResponse {
-    val currentUserId = userService.currentUser().id
+  fun getShowData(orderId: String, currentUser: User): ShowOrderResponse {
+    val currentUserId = currentUser.id
 
     val order = orderRepository.findById(orderId).get()
 
@@ -66,8 +65,8 @@ class OrderControllerDataService {
     return ShowOrderResponse.create(order, entries, currentUserId, allDishesInRestaurant, dishIdToSideDishesMap)
   }
 
-  fun getOrderViewData(orderId: String): OrderViewInitialData {
-    orderService.setAsOrdering(orderId)
+  fun getOrderViewData(orderId: String, currentUser: User): OrderViewInitialData {
+    orderService.setAsOrdering(orderId, currentUser)
 
     val order = orderRepository.findById(orderId).get()
     val entries = orderEntryRepository.findByOrderId(orderId)
@@ -75,9 +74,7 @@ class OrderControllerDataService {
     return OrderViewInitialData.create(order, entries)
   }
 
-  fun getCreateData(): CreateOrderInitialData {
-    val currentUser = userService.currentUser()
-
+  fun getCreateData(currentUser: User): CreateOrderInitialData {
     val ordersByUser: List<Order> = orderRepository.findTop10ByOrderCreatorOrderByOrderDateDesc(currentUser)
     val lastOrderMade: Order? = ordersByUser.sortedByDescending { order -> ObjectId(order.id).timestamp }.firstOrNull()
 

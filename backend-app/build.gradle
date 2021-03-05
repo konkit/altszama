@@ -115,33 +115,14 @@ dependencies {
 
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('org.springframework.security:spring-security-test')
+  testImplementation("org.assertj:assertj-core")
 
   testImplementation('org.junit.jupiter:junit-jupiter-api:5.1.0')
   testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.1.0')
 }
 
-tasks {
-  tasks.register("setBuildVersion") {
-    setGroup("version")
-
-    doLast {
-      if (project.hasProperty('buildVersion')) {
-        project.version = project.buildVersion
-      } else {
-        def versionPropsFile = file('version.properties')
-
-        if (versionPropsFile.canRead()) {
-          Properties versionProps = new Properties()
-
-          versionProps.load(new FileInputStream(versionPropsFile))
-
-          version = "${versionProps['VERSION_MAJOR']}.${versionProps['VERSION_MINOR']}.${versionProps['VERSION_PATCH']}"
-        } else {
-          throw new GradleException("Could not read version.properties!")
-        }
-      }
-    }
-  }
+test {
+  useJUnitPlatform()
 }
 
 bootBuildImage {

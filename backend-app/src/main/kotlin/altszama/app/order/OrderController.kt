@@ -1,5 +1,6 @@
 package altszama.app.order
 
+import altszama.app.auth.UserService
 import altszama.app.order.dto.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -12,6 +13,9 @@ import javax.validation.Valid
 class OrderController {
 
   @Autowired
+  private lateinit var userService: UserService
+
+  @Autowired
   private lateinit var orderService: OrderService
 
   @Autowired
@@ -20,7 +24,8 @@ class OrderController {
 
   @GetMapping("/orders/today.json")
   fun todayOrders(): TodayOrdersResponse {
-    return orderControllerDataService.getIndexData()
+    val currentUser = userService.currentUser()
+    return orderControllerDataService.getIndexData(currentUser)
   }
 
   @GetMapping("/orders/all.json")
@@ -30,22 +35,26 @@ class OrderController {
 
   @GetMapping("/orders/{orderId}/show.json")
   fun show(@PathVariable orderId: String): ShowOrderResponse {
-    return orderControllerDataService.getShowData(orderId)
+    val currentUser = userService.currentUser()
+    return orderControllerDataService.getShowData(orderId, currentUser)
   }
 
   @GetMapping("/orders/{orderId}/order_view.json")
   fun orderViewJson(@PathVariable orderId: String): OrderViewInitialData {
-    return orderControllerDataService.getOrderViewData(orderId)
+    val currentUser = userService.currentUser()
+    return orderControllerDataService.getOrderViewData(orderId, currentUser)
   }
 
   @GetMapping("/orders/create.json")
   fun create(): CreateOrderInitialData {
-    return orderControllerDataService.getCreateData()
+    val currentUser = userService.currentUser()
+    return orderControllerDataService.getCreateData(currentUser)
   }
 
   @PostMapping("/orders/save")
   fun save(@RequestBody @Valid orderSaveRequest: OrderSaveRequest): ResponseEntity<String> {
-    orderService.saveOrder(orderSaveRequest)
+    val currentUser = userService.currentUser()
+    orderService.saveOrder(orderSaveRequest, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
@@ -62,43 +71,50 @@ class OrderController {
 
   @DeleteMapping("/orders/{orderId}/delete")
   fun delete(@PathVariable orderId: String): ResponseEntity<String> {
-    orderService.deleteOrder(orderId)
+    val currentUser = userService.currentUser()
+    orderService.deleteOrder(orderId, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @PutMapping("/orders/{orderId}/set_as_created")
   fun setAsCreated(@PathVariable orderId: String): ResponseEntity<String> {
-    orderService.setAsCreated(orderId)
+    val currentUser = userService.currentUser()
+    orderService.setAsCreated(orderId, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @PutMapping("/orders/{orderId}/set_as_ordering")
   fun setAsOrdering(@PathVariable orderId: String): ResponseEntity<String> {
-    orderService.setAsOrdering(orderId)
+    val currentUser = userService.currentUser()
+    orderService.setAsOrdering(orderId, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @PutMapping("/orders/{orderId}/set_as_ordered")
   fun setAsOrdered(@PathVariable orderId: String, @RequestBody requestResponse: SetAsOrderedResponse): ResponseEntity<String> {
-    orderService.setAsOrdered(orderId, requestResponse.approxTimeOfDelivery)
+    val currentUser = userService.currentUser()
+    orderService.setAsOrdered(orderId, requestResponse.approxTimeOfDelivery, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @PutMapping("/orders/{orderId}/set_back_as_ordered")
   fun setBackAsOrdered(@PathVariable orderId: String): ResponseEntity<String> {
-    orderService.setBackAsOrdered(orderId)
+    val currentUser = userService.currentUser()
+    orderService.setBackAsOrdered(orderId, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @PutMapping("/orders/{orderId}/set_as_delivered")
   fun setAsDelivered(@PathVariable orderId: String): ResponseEntity<String> {
-    orderService.setAsDelivered(orderId)
+    val currentUser = userService.currentUser()
+    orderService.setAsDelivered(orderId, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @PutMapping("/orders/{orderId}/set_as_rejected")
   fun setAsRejected(@PathVariable orderId: String): ResponseEntity<String> {
-    orderService.setAsRejected(orderId)
+    val currentUser = userService.currentUser()
+    orderService.setAsRejected(orderId, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 }

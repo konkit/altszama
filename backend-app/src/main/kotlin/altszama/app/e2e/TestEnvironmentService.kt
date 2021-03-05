@@ -53,7 +53,7 @@ class TestEnvironmentService {
   fun generateEverything() {
     clearEverything()
 
-    val team = Team(domain = "altszama.club", users = emptyList())
+    val team = Team(domain = "altszama.club", userEmails = emptyList())
     teamRepository.save(team)
 
     val user1 = userService.createNewUser("John Doe", "john.doe@altszama.club")

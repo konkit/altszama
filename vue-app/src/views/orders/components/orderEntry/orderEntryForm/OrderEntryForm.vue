@@ -11,7 +11,7 @@
       >
         <template v-slot:item="{ index, item }">
           <v-list-item-content v-on="on">
-            <v-list-item-title><span class="text-wrap">{{item.text}}</span></v-list-item-title>
+            <v-list-item-title><span class="text-wrap">{{ item.text }}</span></v-list-item-title>
             <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
           </v-list-item-content>
         </template>
@@ -52,6 +52,10 @@ function dateToRel(date: Date) {
   }
 }
 
+interface ComboBoxHeaderItem {
+  header: string
+}
+
 interface ComboBoxItem {
   text: string;
   value: string;
@@ -68,14 +72,44 @@ export default class OrderEntryForm extends Vue {
 
   @Prop() orderEntryData: OrderEntryData
   @Prop() allDishesInRestaurant: DishDto[]
-  @Prop() allDishesByCategory: { [category: string]: DishDto[] }
-  @Prop() dishIdToSideDishesMap: { [key: string]: SideDish[] }
+  @Prop() allDishesByCategory: Record<string, DishDto[]>
+  @Prop() dishIdToSideDishesMap: Record<string, SideDish[]>
 
-  // items: ({ header: string } | { text: string; value: string; subtitle: string })[] = []
-  //
-  // mounted() {
-  //   this.items = this.generateAllDishesAtOnce()
-  // }
+  get name(): string | ComboBoxItem {
+    if (this.orderEntryData.dishData.kind === "NewDishData") {
+      return this.orderEntryData.dishData.newDishName
+    } else {
+      const existingDishData: ExistingDishData = this.orderEntryData.dishData
+      const dish: DishDto = this.allDishesInRestaurant.find(d => d.id === existingDishData.dishId)!;
+      return OrderEntryForm.dishToComboBoxItem(dish)
+    }
+  }
+
+  get price() {
+    if (this.orderEntryData.dishData.kind === "NewDishData") {
+      return this.orderEntryData.dishData.newDishPrice
+    } else {
+      const existingDishData: ExistingDishData = this.orderEntryData.dishData
+      return this.allDishesInRestaurant.find(d => d.id === existingDishData.dishId)?.price
+    }
+  }
+
+  get availableSideDishes() {
+    if (this.orderEntryData.dishData.kind === "ExistingDishData") {
+      return this.dishIdToSideDishesMap[this.orderEntryData.dishData.dishId] || []
+    } else {
+      return []
+    }
+  }
+
+  get allDishesAtOnce(): (ComboBoxHeaderItem | ComboBoxItem)[] {
+    return Object.entries(this.allDishesByCategory).flatMap(([category, dishesFromCat]) => {
+      const categoryHeader = {header: `Category: ${category}`}
+      const dishes = dishesFromCat.map(dish => OrderEntryForm.dishToComboBoxItem(dish));
+
+      return [categoryHeader, ...dishes];
+    });
+  }
 
   updateNewDishName(newValue: string | ComboBoxItem | null) {
     if (typeof newValue === "string") {
@@ -129,6 +163,16 @@ export default class OrderEntryForm extends Vue {
     this.updateOrderEntryData(newOrderEntryData);
   }
 
+  updateChosenSideDishes(newSideDishes: SideDishData[]) {
+    const newDishData: NewDishData | ExistingDishData = {
+      ...this.orderEntryData.dishData,
+      chosenSideDishes: newSideDishes
+    }
+
+    const newOrderEntryData: OrderEntryData = {...this.orderEntryData, dishData: newDishData}
+    this.updateOrderEntryData(newOrderEntryData);
+  }
+
   updateAdditionalComments(newValue: string) {
     const newOrderEntryData: OrderEntryData = {
       ...this.orderEntryData,
@@ -140,33 +184,6 @@ export default class OrderEntryForm extends Vue {
   cancelEdit() {
     this.updateOrderEntryData(this.orderEntryData);
     this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`, {});
-  }
-
-  updateChosenSideDishes(newSideDishes: SideDishData[]) {
-    const newDishData: NewDishData | ExistingDishData = {
-      ...this.orderEntryData.dishData,
-      chosenSideDishes: newSideDishes
-    }
-
-    const newOrderEntryData: OrderEntryData = {...this.orderEntryData, dishData: newDishData}
-    this.updateOrderEntryData(newOrderEntryData);
-  }
-
-  get allDishesAtOnce(): ({ header: string } | ComboBoxItem)[] {
-    const dishByCategoryMap: Map<string, DishDto[]> = new Map(Object.entries(this.allDishesByCategory));
-
-    const entries: [string, DishDto[]][] = Array.from(dishByCategoryMap.entries());
-
-    return entries.flatMap(([category, dishesFromCat]) => {
-      const dishes: (| { header: string } | { text: string; value: string; subtitle: string })[] =
-          dishesFromCat.map(dish => {
-            return OrderEntryForm.dishToComboBoxItem(dish);
-          });
-
-      dishes.unshift({header: `Category: ${category}`});
-
-      return dishes;
-    });
   }
 
   private static dishToComboBoxItem(dish: DishDto): ComboBoxItem {
@@ -185,33 +202,6 @@ export default class OrderEntryForm extends Vue {
       value: dish.id,
       subtitle: `Price: ${price}, ${updateDesc}`
     };
-  }
-
-  get name(): string | ComboBoxItem {
-    if (this.orderEntryData.dishData.kind === "NewDishData") {
-      return this.orderEntryData.dishData.newDishName
-    } else {
-      const existingDishData: ExistingDishData = this.orderEntryData.dishData
-      const dish: DishDto = this.allDishesInRestaurant.find(d => d.id === existingDishData.dishId)!;
-      return OrderEntryForm.dishToComboBoxItem(dish)
-    }
-  }
-
-  get price() {
-    if (this.orderEntryData.dishData.kind === "NewDishData") {
-      return this.orderEntryData.dishData.newDishPrice
-    } else {
-      const existingDishData: ExistingDishData = this.orderEntryData.dishData
-      return this.allDishesInRestaurant.find(d => d.id === existingDishData.dishId)?.price
-    }
-  }
-
-  get availableSideDishes() {
-    if (this.orderEntryData.dishData.kind === "ExistingDishData") {
-      return this.dishIdToSideDishesMap[this.orderEntryData.dishData.dishId] || []
-    } else {
-      return []
-    }
   }
 
   private updateOrderEntryData(newOrderEntryData: OrderEntryData) {
