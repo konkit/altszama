@@ -1,5 +1,6 @@
 package altszama.app.orderEntry
 
+import altszama.app.auth.UserService
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.orderEntry.dto.OrderEntryUpdateRequest
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,10 +16,13 @@ class OrderEntryController {
   @Autowired
   private lateinit var orderEntryService: OrderEntryService
 
+  @Autowired
+  private lateinit var userService: UserService
 
   @PostMapping("/order_entries/save")
   fun save(@RequestBody @Valid saveRequest: OrderEntrySaveRequest): ResponseEntity<String> {
-    orderEntryService.saveEntry(saveRequest)
+    val currentUser = userService.currentUser()
+    orderEntryService.saveEntry(currentUser, saveRequest)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 

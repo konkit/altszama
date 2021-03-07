@@ -41,16 +41,13 @@
           <v-col>
             <h1>Import API</h1>
 
-            <a :href="getSwaggerUrl()">
-              <v-btn large bottom right>
-                See Import API specification
-                <v-icon class="ml-2">upload</v-icon>
-              </v-btn>
-            </a>
+            <p>To use the Restaurant Import API, please use the following credentials: </p>
+            <p><b>Username:</b> {{importApiUsername}}</p>
+            <p><b>Password:</b> {{importApiPassword}}</p>
 
-            <p>To authenticate within the API, use the following credentials: </p>
-            <p>username: {{importApiUsername}}</p>
-            <p>username: {{importApiPassword}}</p>
+            <a :href="getSwaggerUrl()">
+              <v-btn large bottom right>See Import API specification<v-icon class="ml-2">upload</v-icon></v-btn>
+            </a>
           </v-col>
         </v-row>
       </v-container>

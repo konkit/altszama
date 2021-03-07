@@ -54,6 +54,10 @@ class UserService(envVarConfig: SecretsConfig) {
     return newUser
   }
 
+  fun findByEmail(email: String): Optional<User> {
+    return userRepository.findByEmail(email)
+  }
+
   fun createJwt(userId: String): String {
     return Jwts.builder()
         .setSubject(userId)

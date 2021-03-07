@@ -17,7 +17,8 @@ open class TestInitializer : ApplicationContextInitializer<ConfigurableApplicati
         "GOOGLE_CLIENT_SECRET:googleSecret",
         "VAPID_PRIVATE_KEY:vapidPrivateKey",
         "VAPID_PUBLIC_KEY:vapidPublicKey",
-        "VAPID_SUBJECT:vapidSubject"
+        "VAPID_SUBJECT:vapidSubject",
+        "ORIGIN_URL:somevalue"
     ).applyTo(ctx)
   }
 }

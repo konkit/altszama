@@ -33,7 +33,7 @@ class OrderService {
   private lateinit var restaurantRepository: RestaurantRepository
 
 
-  fun saveOrder(orderSaveRequest: OrderSaveRequest, currentUser: User) {
+  fun saveOrder(orderSaveRequest: OrderSaveRequest, currentUser: User): Order {
     val restaurant = restaurantRepository.findById(orderSaveRequest.restaurantId!!).get()
 
     val order = Order(
@@ -53,7 +53,7 @@ class OrderService {
         blikPhoneNumber = orderSaveRequest.paymentData.blikPhoneNumber
     )
 
-    orderRepository.save(order)
+    return orderRepository.save(order)
   }
 
   fun updateOrder(orderUpdateRequest: OrderUpdateRequest) {

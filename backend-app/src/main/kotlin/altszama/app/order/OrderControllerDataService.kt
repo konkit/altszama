@@ -61,7 +61,7 @@ class OrderControllerDataService {
 
     val entries = orderEntryRepository.findByOrderId(orderId)
 
-    val allDishesInRestaurant = dishService.findByRestaurantId(order.restaurant.id)
+    val allDishesInRestaurant = dishService.findAllDishesByRestaurantId(order.restaurant.id)
 
     val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
 

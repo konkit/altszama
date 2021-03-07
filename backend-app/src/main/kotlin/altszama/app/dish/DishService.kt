@@ -4,11 +4,17 @@ import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.dish.dto.DishUpdateRequest
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.restaurant.RestaurantService
+import altszama.app.team.Team
+import altszama.app.team.TeamService
+import altszama.app.validation.*
+import arrow.core.extensions.list.foldable.exists
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.*
+import javax.validation.Validation
+import javax.validation.Validator
 
 
 @Service
@@ -23,8 +29,31 @@ class DishService {
   @Autowired
   private lateinit var restaurantService: RestaurantService
 
-  fun insert(restaurantId: String, dish: DishCreateRequest): Dish {
-    val restaurant = restaurantService.findById(restaurantId).get()
+  fun findDishById(dishId: String): Optional<Dish> {
+    return dishRepository.findById(dishId)
+  }
+
+  fun findAllDishesByRestaurantId(restaurantId: String): List<Dish> {
+    return dishRepository.findByRestaurantId(restaurantId)
+  }
+
+  fun getAllCategoriesByRestaurantId(restaurantId: String): List<String> {
+    return dishRepository.findByRestaurantId(restaurantId).map { dish -> dish.category }.distinct()
+  }
+
+  fun saveDish(currentUserTeam: Team, restaurantId: String, dish: DishCreateRequest): Dish {
+    val restaurant = restaurantService.findById(restaurantId).orElseThrow { RestaurantDoesNotExist() }
+
+    if (restaurant.team != currentUserTeam) {
+      throw NoAccessToRestaurant()
+    }
+
+    val validator: Validator = Validation.buildDefaultValidatorFactory().validator
+    val result = validator.validate(dish)
+
+    if (result.isNotEmpty()) {
+      throw DishDataInvalid(result.first().message)
+    }
 
     val newDish = Dish(
         restaurant = restaurant,
@@ -39,50 +68,71 @@ class DishService {
     return dishRepository.insert(newDish)
   }
 
-  fun update(restaurantId: String, dishId: String, dishDto: DishUpdateRequest): Optional<Dish> {
-    return dishRepository.findById(dishId)
-        .map { dish ->
-          val newDish = dish.copy(
-              name = dishDto.name,
-              price = dishDto.price,
-              sideDishes = dishDto.sideDishes,
-              category = dishDto.category,
-              lastEdited = Instant.now()
-          )
+  fun updateDish(currentUserTeam: Team, restaurantId: String, dishId: String, dishDto: DishUpdateRequest): Dish {
+    val restaurant = restaurantService.findById(restaurantId).orElseThrow { RestaurantDoesNotExist() }
+    val dish = dishRepository.findById(dishId).orElseThrow { DishDoesNotExist() }
 
-          dishRepository.save(newDish)
-        }
+    if (restaurant.team != currentUserTeam) {
+      throw NoAccessToRestaurant()
+    }
+
+    val validator: Validator = Validation.buildDefaultValidatorFactory().validator
+    val result = validator.validate(dishDto)
+
+    if (result.isNotEmpty()) {
+      throw DishDataInvalid(result.first().message)
+    }
+
+    val updatedDish = dish.copy(
+        name = dishDto.name,
+        price = dishDto.price,
+        sideDishes = dishDto.sideDishes,
+        category = dishDto.category,
+        lastEdited = Instant.now()
+    )
+
+    return dishRepository.save(updatedDish)
   }
 
-  fun findById(dishId: String): Optional<Dish> {
-    return dishRepository.findById(dishId)
-  }
+  fun deleteDish(currentUserTeam: Team, dishId: String) {
+    val dish = dishRepository.findById(dishId).orElseThrow { DishDoesNotExist() }
+    val restaurant = restaurantService.findById(dish.restaurant!!.id).orElseThrow { RestaurantDoesNotExist() }
 
-  fun findByRestaurantId(restaurantId: String): List<Dish> {
-    return dishRepository.findByRestaurantId(restaurantId)
-  }
+    if (restaurant.team != currentUserTeam) {
+      throw NoAccessToRestaurant()
+    }
 
-  fun allCategories(restaurantId: String): List<String> {
-    return dishRepository.findByRestaurantId(restaurantId).map { dish -> dish.category }.distinct()
-  }
-
-  fun deleteDish(dishId: String) {
     if (orderEntryRepository.findByDishIdQuery(ObjectId(dishId)).isNotEmpty()) {
-      throw DishInUseException()
+      throw DishInUse()
     }
 
     dishRepository.deleteById(dishId)
   }
 
-  fun deleteSideDish(dishId: String, sideDishId: String) {
-    val dishOpt = dishRepository.findById(dishId)
+  fun deleteSideDish(currentUserTeam: Team, dishId: String, sideDishId: String) {
+    val dish = dishRepository.findById(dishId).orElseThrow { DishDoesNotExist() }
+    val restaurant = restaurantService.findById(dish.restaurant!!.id).orElseThrow { RestaurantDoesNotExist() }
 
-    dishOpt.map { dish ->
+    if (restaurant.team != currentUserTeam) {
+      throw NoAccessToRestaurant()
+    }
+
+    val sideDishInUse = orderEntryRepository.findByDishIdQuery(ObjectId(dishId))
+        .exists { orderEntry ->
+          orderEntry.dishEntries.exists { dishEntry ->
+            dishEntry.chosenSideDishes.map { sd -> sd.id }.contains(sideDishId)
+          }
+        }
+    if (sideDishInUse) {
+      throw SideDishInUse()
+    }
+
+    if (dish.sideDishes.exists { sd -> sd.id == sideDishId }) {
       dish.sideDishes = dish.sideDishes.filter { sd -> sd.id != sideDishId }
       dishRepository.save(dish)
+    } else {
+      throw SideDishDoesNotExist()
     }
   }
 
 }
-
-class DishInUseException() : Exception("Delete failed - there are order entries using this dish!")

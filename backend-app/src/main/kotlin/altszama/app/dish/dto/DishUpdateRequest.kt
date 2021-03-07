@@ -12,11 +12,11 @@ data class DishUpdateRequest(
   @Id
   var id: String = ObjectId().toHexString(),
 
-  @field:NotBlank
-  @field:Size(min = 1, message = "Name cannot be blank!")
+  @field:NotBlank(message = "Dish name cannot be blank")
+  @field:Size(min = 1, message = "Dish name cannot be blank")
   var name: String = "",
 
-  @field:PositiveOrZero(message = "Price must not be negative")
+  @field:PositiveOrZero(message = "Dish price must not be negative")
   var price: Int = 0,
 
   var sideDishes: List<SideDish> = emptyList(),

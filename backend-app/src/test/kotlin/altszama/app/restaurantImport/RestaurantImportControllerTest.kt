@@ -56,7 +56,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
 
     assertThat(restaurant.name).isEqualTo("Restaurant 1")
 
-    val dishes = dishService.findByRestaurantId(restaurant.id)
+    val dishes = dishService.findAllDishesByRestaurantId(restaurant.id)
     assertThat(dishes).hasSize(3)
 
     assertThat(dishes[0].name).isEqualTo("Dish 1")
@@ -85,7 +85,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
         .andExpect(MockMvcResultMatchers.status().isCreated)
 
     val restaurant = restaurantService.findByTeamAndName(team2, "Restaurant 1")!!
-    val dishes = dishService.findByRestaurantId(restaurant.id)
+    val dishes = dishService.findAllDishesByRestaurantId(restaurant.id)
     assertThat(dishes).hasSize(3)
   }
 
