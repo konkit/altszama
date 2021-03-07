@@ -1,7 +1,6 @@
 package altszama.app.orderEntry
 
 import altszama.app.auth.User
-import altszama.app.auth.UserService
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.SideDish

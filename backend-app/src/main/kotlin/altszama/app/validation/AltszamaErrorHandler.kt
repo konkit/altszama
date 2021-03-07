@@ -13,7 +13,7 @@ class AltszamaErrorHandler {
   @ExceptionHandler(AltszamaErrorException::class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ResponseBody
-  fun processValidationError(ex: ValidationFailedException): ErrorResponse {
-    return ErrorResponse(ex.message ?: "")
+  fun processValidationError(ex: AltszamaErrorException): ErrorResponse {
+    return ErrorResponse(ex.message)
   }
 }

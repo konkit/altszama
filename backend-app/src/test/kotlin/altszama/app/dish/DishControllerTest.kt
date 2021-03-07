@@ -13,6 +13,8 @@ import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.validation.DishInUse
+import altszama.app.validation.SideDishInUse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -696,7 +698,7 @@ internal class DishControllerTest : AbstractIntegrationTest() {
         .andReturn()
         .response.contentAsString
 
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Delete failed - there are order entries using this dish")
+    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(DishInUse().message)
   }
 
 
@@ -825,7 +827,7 @@ internal class DishControllerTest : AbstractIntegrationTest() {
         .andReturn()
         .response.contentAsString
 
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Delete failed - there are order entries using this side dish")
+    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(SideDishInUse().message)
   }
 
 

@@ -5,6 +5,7 @@ import altszama.app.restaurant.dto.*
 import altszama.app.team.TeamService
 import altszama.app.validation.AltszamaErrorException
 import altszama.app.validation.ErrorResponse
+import altszama.app.validation.UserDoesNotBelongToAnyTeam
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -29,55 +30,49 @@ class RestaurantController {
   @Autowired
   private lateinit var teamService: TeamService
 
-  @Autowired
-  private lateinit var objectMapper: ObjectMapper
-
   @GetMapping("/restaurants.json")
   fun indexRestaurants(): IndexResponse {
     val currentUser = userService.currentUser()
-    return restaurantControllerDataService.getIndexData(currentUser)
+    val currentUserTeam = teamService.findByUser(currentUser).orElseThrow { UserDoesNotBelongToAnyTeam() }
+    return restaurantControllerDataService.getIndexData(currentUserTeam)
   }
 
   @GetMapping("/restaurants/{restaurantId}/show.json")
-  fun showRestaurant(@PathVariable restaurantId: String): ShowRestaurantResponse {
-    return restaurantControllerDataService.getShowData(restaurantId)
+  fun showRestaurant(@PathVariable restaurantId: String): ResponseEntity<ShowRestaurantResponse> {
+    val currentUser = userService.currentUser()
+    val currentUserTeam = teamService.findByUser(currentUser).orElseThrow { UserDoesNotBelongToAnyTeam() }
+    val response = restaurantControllerDataService.getShowData(currentUserTeam, restaurantId)
+    return ResponseEntity(response, HttpStatus.OK)
   }
 
   @PostMapping("/restaurants/save")
-  fun saveRestaurant(@RequestBody saveRequest: RestaurantSaveRequest): ResponseEntity<String> = handleErrors {
+  fun saveRestaurant(@RequestBody saveRequest: RestaurantSaveRequest): ResponseEntity<String> {
     val currentUser = userService.currentUser()
-    val team = teamService.findByUser(currentUser).get()
-    restaurantService.createRestaurant(team, saveRequest)
-    ResponseEntity("{}", HttpStatus.CREATED)
+    val currentUserTeam = teamService.findByUser(currentUser).orElseThrow { UserDoesNotBelongToAnyTeam() }
+    restaurantService.createRestaurant(currentUserTeam, saveRequest)
+    return ResponseEntity("{}", HttpStatus.CREATED)
   }
 
   @GetMapping("/restaurants/{restaurantId}/edit.json")
   fun editRestaurant(@PathVariable restaurantId: String): EditRestaurantResponse {
     val currentUser = userService.currentUser()
-    return restaurantControllerDataService.getEditRestaurantData(currentUser, restaurantId)
+    val currentUserTeam = teamService.findByUser(currentUser).orElseThrow { UserDoesNotBelongToAnyTeam() }
+    return restaurantControllerDataService.getEditRestaurantData(currentUserTeam, restaurantId)
   }
 
   @PutMapping("/restaurants/update")
-  fun updateRestaurant(@RequestBody updateRequest: RestaurantUpdateRequest): ResponseEntity<String> = handleErrors {
+  fun updateRestaurant(@RequestBody updateRequest: RestaurantUpdateRequest): ResponseEntity<String> {
     val currentUser = userService.currentUser()
-    val currentUserTeam = teamService.findByUser(currentUser).get()
+    val currentUserTeam = teamService.findByUser(currentUser).orElseThrow { UserDoesNotBelongToAnyTeam() }
     restaurantService.updateRestaurant(currentUserTeam, updateRequest)
-    ResponseEntity("{}", HttpStatus.OK)
+    return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @DeleteMapping("/restaurants/{restaurantId}/delete")
-  fun deleteRestaurant(@PathVariable restaurantId: String): ResponseEntity<String> = handleErrors {
+  fun deleteRestaurant(@PathVariable restaurantId: String): ResponseEntity<String> {
       val currentUser = userService.currentUser()
       val currentUserTeam = teamService.findByUser(currentUser).get()
       restaurantService.deleteRestaurant(currentUserTeam, restaurantId)
-      ResponseEntity("{}", HttpStatus.OK)
-  }
-
-  private fun handleErrors(func: () -> ResponseEntity<String>): ResponseEntity<String> {
-    return try {
-      func()
-    } catch (e: AltszamaErrorException) {
-      ResponseEntity(objectMapper.writeValueAsString(ErrorResponse(e.message)), HttpStatus.BAD_REQUEST)
-    }
+      return ResponseEntity("{}", HttpStatus.OK)
   }
 }

@@ -1,20 +1,19 @@
 package altszama.app.order
 
 import altszama.app.auth.User
-import java.time.LocalTime
-import java.time.temporal.ChronoUnit
 import altszama.app.notification.NotificationService
-import altszama.app.auth.UserService
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.OrderUpdateRequest
-import altszama.app.orderEntry.*
+import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.restaurant.RestaurantRepository
 import altszama.app.validation.ValidationFailedException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 @Service

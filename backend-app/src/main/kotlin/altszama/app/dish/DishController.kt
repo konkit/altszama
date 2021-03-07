@@ -36,64 +36,56 @@ class DishController {
 
 
   @GetMapping("/restaurants/{restaurantId}/dishes/create.json")
-  fun createDish(@PathVariable restaurantId: String): ResponseEntity<String> = handleErrors {
+  fun createDish(@PathVariable restaurantId: String): ResponseEntity<CreateDishResponse> {
     val currentUser = userService.currentUser()
     val currentUserTeam = teamService.findByUser(currentUser).get()
 
     val createData = dishControllerDataService.getCreateData(currentUserTeam, restaurantId)
-    ResponseEntity(objectMapper.writeValueAsString(createData), HttpStatus.OK)
+    return ResponseEntity(createData, HttpStatus.OK)
   }
 
   @PostMapping("/restaurants/{restaurantId}/dishes/save")
-  fun saveDish(@PathVariable restaurantId: String, @RequestBody dishCreateRequest: DishCreateRequest): ResponseEntity<String> = handleErrors {
+  fun saveDish(@PathVariable restaurantId: String, @RequestBody dishCreateRequest: DishCreateRequest): ResponseEntity<String> {
     val currentUser = userService.currentUser()
     val currentUserTeam = teamService.findByUser(currentUser).get()
 
     dishService.saveDish(currentUserTeam, restaurantId, dishCreateRequest)
-    ResponseEntity("{}", HttpStatus.CREATED)
+    return ResponseEntity("{}", HttpStatus.CREATED)
   }
 
   @GetMapping("/restaurants/{restaurantId}/dishes/{dishId}/edit.json")
-  fun editDish(@PathVariable restaurantId: String, @PathVariable dishId: String): ResponseEntity<String> = handleErrors {
+  fun editDish(@PathVariable restaurantId: String, @PathVariable dishId: String): ResponseEntity<EditDishResponse> {
     val currentUser = userService.currentUser()
     val currentUserTeam = teamService.findByUser(currentUser).get()
 
     val result = dishControllerDataService.getEditData(currentUserTeam, restaurantId, dishId)
-    ResponseEntity(objectMapper.writeValueAsString(result), HttpStatus.OK)
+    return ResponseEntity(result, HttpStatus.OK)
   }
 
   @PutMapping("/restaurants/{restaurantId}/dishes/update")
-  fun updateDish(@PathVariable restaurantId: String, @RequestBody dishUpdateRequest: DishUpdateRequest): ResponseEntity<String> = handleErrors {
+  fun updateDish(@PathVariable restaurantId: String, @RequestBody dishUpdateRequest: DishUpdateRequest): ResponseEntity<String> {
     val currentUser = userService.currentUser()
     val currentUserTeam = teamService.findByUser(currentUser).get()
 
     dishService.updateDish(currentUserTeam, restaurantId, dishUpdateRequest.id, dishUpdateRequest)
-    ResponseEntity("{}", HttpStatus.OK)
+    return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @DeleteMapping("/dishes/{dishId}/delete")
-  fun deleteDish(@PathVariable dishId: String): ResponseEntity<String> = handleErrors {
+  fun deleteDish(@PathVariable dishId: String): ResponseEntity<String> {
     val currentUser = userService.currentUser()
     val currentUserTeam = teamService.findByUser(currentUser).get()
 
     dishService.deleteDish(currentUserTeam, dishId)
-    ResponseEntity("{}", HttpStatus.OK)
+    return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @DeleteMapping("/dishes/{dishId}/side_dishes/{sideDishId}/delete")
-  fun deleteSideDish(@PathVariable dishId: String, @PathVariable sideDishId: String): ResponseEntity<String> = handleErrors {
+  fun deleteSideDish(@PathVariable dishId: String, @PathVariable sideDishId: String): ResponseEntity<String> {
     val currentUser = userService.currentUser()
     val currentUserTeam = teamService.findByUser(currentUser).get()
 
     dishService.deleteSideDish(currentUserTeam, dishId, sideDishId)
-    ResponseEntity("{}", HttpStatus.OK)
-  }
-
-  private fun handleErrors(func: () -> ResponseEntity<String>): ResponseEntity<String> {
-    return try {
-      func()
-    } catch (e: AltszamaErrorException) {
-      ResponseEntity(objectMapper.writeValueAsString(ErrorResponse(e.message)), HttpStatus.BAD_REQUEST)
-    }
+    return ResponseEntity("{}", HttpStatus.OK)
   }
 }

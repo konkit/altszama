@@ -1,6 +1,5 @@
 package altszama.app.auth
 
-import altszama.app.team.Team
 import altszama.config.SecretsConfig
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
