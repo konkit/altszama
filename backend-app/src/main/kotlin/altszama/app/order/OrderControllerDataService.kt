@@ -6,6 +6,7 @@ import altszama.app.order.dto.*
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.restaurant.RestaurantRepository
+import altszama.app.team.Team
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -32,12 +33,9 @@ class OrderControllerDataService {
   @Autowired
   private lateinit var dishService: DishService
 
-//  @Autowired
-//  private lateinit var userService: UserService
 
-
-  fun getIndexData(currentUser: User): TodayOrdersResponse {
-    val todaysOrders = orderRepository.findByOrderDate(LocalDate.now())
+  fun getIndexData(currentUser: User, currentUserTeam: Team): TodayOrdersResponse {
+    val todaysOrders = orderRepository.findByTeamAndOrderDate(currentUserTeam, LocalDate.now())
 
     val todayOrderDtos = todaysOrders.map { order -> TodayOrderDto.fromOrder(order) }
 
@@ -48,8 +46,8 @@ class OrderControllerDataService {
     return TodayOrdersResponse(todayOrderDtos, currentOrderEntries)
   }
 
-  fun getAllOrdersData(): AllOrdersResponse {
-    val orderList = orderRepository.findAll()
+  fun getAllOrdersData(currentUserTeam: Team): AllOrdersResponse {
+    val orderList = orderRepository.findAllByTeam(currentUserTeam)
 
     return AllOrdersResponse.fromOrderList(orderList.asReversed())
   }

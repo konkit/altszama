@@ -1,7 +1,7 @@
 package altszama.app.e2e
 
-import altszama.app.auth.UserService
 import altszama.app.auth.User
+import altszama.app.auth.UserService
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.order.Order
@@ -75,6 +75,7 @@ class TestEnvironmentService {
 
     val order1 = Order(
         restaurant = pizzeria.restaurant,
+        team = pizzeria.restaurant.team,
         orderCreator = user1,
         orderDate = LocalDate.now(),
         timeOfOrder = LocalTime.of(14, 0)

@@ -9,9 +9,9 @@ import altszama.app.orderEntry.DishEntry
 import altszama.app.orderEntry.OrderEntry
 import altszama.app.restaurant.Restaurant
 import altszama.app.team.Team
-import org.junit.jupiter.api.Assertions.*
 import org.bson.types.ObjectId
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.LocalDate
 
 internal class OrderViewResponseTest {
@@ -29,7 +29,7 @@ internal class OrderViewResponseTest {
   private val dish2 = Dish(restaurant, objectId(), "dish2", 1300)
   private val dish3 = Dish(restaurant, objectId(), "dish3", 1500)
 
-  private val order = Order(objectId(), restaurant, orderCreator, LocalDate.now())
+  private val order = Order(objectId(), team, restaurant, orderCreator, LocalDate.now())
 
   @Test
   fun onePersonOrdered() {

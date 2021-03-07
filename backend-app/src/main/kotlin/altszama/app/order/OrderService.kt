@@ -37,6 +37,7 @@ class OrderService {
 
     val order = Order(
         restaurant = restaurant,
+        team = restaurant.team,
         orderCreator = currentUser,
         orderDate = orderSaveRequest.orderDate!!,
         timeOfOrder = orderSaveRequest.timeOfOrder,

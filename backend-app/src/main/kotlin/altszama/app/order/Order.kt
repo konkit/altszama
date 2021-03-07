@@ -1,9 +1,9 @@
 package altszama.app.order
 
-import altszama.app.restaurant.Restaurant
 import altszama.app.auth.User
 import altszama.app.orderEntry.DishEntry
 import altszama.app.orderEntry.OrderEntry
+import altszama.app.restaurant.Restaurant
 import altszama.app.team.Team
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
@@ -16,6 +16,9 @@ import java.time.LocalTime
 data class Order(
         @Id
         var id: String = ObjectId().toHexString(),
+
+        @DBRef
+        var team: Team,
 
         @DBRef
         var restaurant: Restaurant,

@@ -2,6 +2,7 @@ package altszama.app.order
 
 import altszama.app.auth.UserService
 import altszama.app.order.dto.*
+import altszama.app.utils.CurrentUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,18 +20,23 @@ class OrderController {
   private lateinit var orderService: OrderService
 
   @Autowired
+  private lateinit var currentUserService: CurrentUserService
+
+  @Autowired
   private lateinit var orderControllerDataService: OrderControllerDataService
 
 
   @GetMapping("/orders/today.json")
   fun todayOrders(): TodayOrdersResponse {
-    val currentUser = userService.currentUser()
-    return orderControllerDataService.getIndexData(currentUser)
+    val currentUser = currentUserService.getCurrentUser()
+    val currentUserTeam = currentUserService.getCurrentUserTeam()
+    return orderControllerDataService.getIndexData(currentUser, currentUserTeam)
   }
 
   @GetMapping("/orders/all.json")
   fun allOrders(): AllOrdersResponse {
-    return orderControllerDataService.getAllOrdersData()
+    val currentUserTeam = currentUserService.getCurrentUserTeam()
+    return orderControllerDataService.getAllOrdersData(currentUserTeam)
   }
 
   @GetMapping("/orders/{orderId}/show.json")
