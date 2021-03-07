@@ -8,6 +8,7 @@ import altszama.app.order.OrderState
 import altszama.app.orderEntry.DishEntry
 import altszama.app.orderEntry.OrderEntry
 import altszama.app.restaurant.Restaurant
+import altszama.app.team.Team
 import org.junit.jupiter.api.Assertions.*
 import org.bson.types.ObjectId
 import org.junit.Test
@@ -15,13 +16,14 @@ import java.time.LocalDate
 
 internal class OrderViewResponseTest {
 
+  private val team = Team(name = "mail.com", domain = "mail.com", userEmails = emptyList())
 
   private val orderCreator = User("orderCreator", "password", "mail@mail.com")
 
   private val user1 = User("username1", "password", "mail1@mail.com")
   private val user2 = User("username2", "password", "mail2@mail.com")
 
-  private val restaurant = Restaurant(name = "Restaurant1")
+  private val restaurant = Restaurant(team = team, name = "Restaurant1")
 
   private val dish1 = Dish(restaurant, objectId(), "dish1", 1100)
   private val dish2 = Dish(restaurant, objectId(), "dish2", 1300)

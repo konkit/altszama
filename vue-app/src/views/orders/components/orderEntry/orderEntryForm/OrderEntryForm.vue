@@ -53,7 +53,7 @@ function dateToRel(date: Date) {
 }
 
 interface ComboBoxHeaderItem {
-  header: string
+  header: string;
 }
 
 interface ComboBoxItem {

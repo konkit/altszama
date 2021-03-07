@@ -1,9 +1,12 @@
 package altszama.app.restaurant
 
+import altszama.app.auth.User
 import altszama.app.dish.DishRepository
 import altszama.app.order.OrderRepository
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.restaurant.dto.RestaurantUpdateRequest
+import altszama.app.team.Team
+import altszama.app.team.TeamService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
@@ -23,9 +26,10 @@ class RestaurantService {
   @Autowired
   private lateinit var orderRepository: OrderRepository
 
-  fun createRestaurant(saveRequest: RestaurantSaveRequest): Restaurant {
+  fun createRestaurant(team: Team, saveRequest: RestaurantSaveRequest): Restaurant {
     val newRestaurantObj = Restaurant(
         id = ObjectId().toHexString(),
+        team = team,
         name = saveRequest.name,
         telephone = saveRequest.telephone,
         address = saveRequest.address,
@@ -53,6 +57,10 @@ class RestaurantService {
 
   fun findById(restaurantId: String): Optional<Restaurant> {
     return restaurantRepository.findById(restaurantId)
+  }
+
+  fun findByTeamAndName(team1: Team, name: String): Restaurant? {
+    return restaurantRepository.findByTeamAndName(team1, name)
   }
 
   fun deleteRestaurant(restaurantId: String) {

@@ -1,6 +1,8 @@
 package altszama.app.restaurant
 
+import altszama.app.auth.UserService
 import altszama.app.restaurant.dto.*
+import altszama.app.team.TeamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,10 +19,16 @@ class RestaurantController {
   @Autowired
   private lateinit var restaurantControllerDataService: RestaurantControllerDataService
 
+  @Autowired
+  private lateinit var userService: UserService
+
+  @Autowired
+  private lateinit var teamService: TeamService
 
   @GetMapping("/restaurants.json")
   fun indexRestaurants(): IndexResponse {
-    return restaurantControllerDataService.getIndexData()
+    val currentUser = userService.currentUser()
+    return restaurantControllerDataService.getIndexData(currentUser)
   }
 
   @GetMapping("/restaurants/{restaurantId}/show.json")
@@ -35,7 +43,9 @@ class RestaurantController {
 
   @PostMapping("/restaurants/save")
   fun saveRestaurant(@Valid @RequestBody saveRequest: RestaurantSaveRequest): ResponseEntity<String> {
-    restaurantService.createRestaurant(saveRequest)
+    val currentUser = userService.currentUser()
+    val team = teamService.findByEmail(currentUser.email).get()
+    restaurantService.createRestaurant(team, saveRequest)
     return ResponseEntity("{}", HttpStatus.CREATED)
   }
 

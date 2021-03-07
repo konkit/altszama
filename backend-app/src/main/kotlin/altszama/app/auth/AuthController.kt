@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -38,6 +39,7 @@ class AuthController() {
         content = [Content(mediaType = "application/json", schema = Schema(implementation = GoogleAuthError::class))]
     )
   ])
+  @SecurityRequirements
   fun loginWithIdToken(@RequestParam authCode: String): ResponseEntity<out GoogleAuthResult> {
     return runBlocking {
       when(val result = googleLoginService.verifyTokenAndGetUserInfo(authCode)) {

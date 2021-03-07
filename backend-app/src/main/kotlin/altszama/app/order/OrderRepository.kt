@@ -16,5 +16,7 @@ interface OrderRepository : MongoRepository<Order, String> {
 
   fun findByOrderStateNotInAndOrderDateBefore(states: List<OrderState>, beforeDate: LocalDate): List<Order>
 
+  fun findByOrderCreator(orderCreator: User): List<Order>
+
   fun findTop10ByOrderCreatorOrderByOrderDateDesc(orderCreator: User): List<Order>
 }

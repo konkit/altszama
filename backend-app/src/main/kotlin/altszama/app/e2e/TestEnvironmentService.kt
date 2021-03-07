@@ -50,18 +50,28 @@ class TestEnvironmentService {
     teamRepository.deleteAll()
   }
 
+  fun generateJustRestaurants() {
+    clearEverything()
+
+    val team = Team(name = "altszama.club", domain = "altszama.club", userEmails = emptyList())
+    teamRepository.save(team)
+
+    val pizzeria = createRestaurant(team, "Pizzeria")
+    val chineseSpot = createRestaurant(team, "Chinese spot")
+  }
+
   fun generateEverything() {
     clearEverything()
 
-    val team = Team(domain = "altszama.club", userEmails = emptyList())
+    val team = Team(name = "altszama.club", domain = "altszama.club", userEmails = emptyList())
     teamRepository.save(team)
 
     val user1 = userService.createNewUser("John Doe", "john.doe@altszama.club")
     val user2 = userService.createNewUser("James Bond", "james.bond@altszama.club")
     val user3 = userService.createNewUser("Jackie Chan", "jackie.chan@altszama.club")
 
-    val pizzeria = createRestaurant("Pizzeria")
-    val chineseSpot = createRestaurant("Chinese spot")
+    val pizzeria = createRestaurant(team, "Pizzeria")
+    val chineseSpot = createRestaurant(team, "Chinese spot")
 
     val order1 = Order(
         restaurant = pizzeria.restaurant,
@@ -71,13 +81,13 @@ class TestEnvironmentService {
     )
     val order = orderRepository.save(order1)
 
-    createOrderEntry(order, user1, pizzeria)
-    createOrderEntry(order, user2, pizzeria)
-    createOrderEntry(order, user3, pizzeria)
+    createOrderEntry(order, user1, pizzeria.dishes[0])
+    createOrderEntry(order, user2, pizzeria.dishes[1])
+    createOrderEntry(order, user3, pizzeria.dishes[2])
   }
 
-  private fun createRestaurant(restaurantName: String): RestaurantWithDishes {
-    val restaurant = restaurantRepository.save(Restaurant(name = restaurantName))
+  private fun createRestaurant(team: Team, restaurantName: String): RestaurantWithDishes {
+    val restaurant = restaurantRepository.save(Restaurant(team = team, name = restaurantName))
 
     val dishes = (1..15).map { i ->
       dishRepository.save(Dish(restaurant, name = "Dish ${i}", price = randomPrice(), category = "Category ${i/5}"))
@@ -86,11 +96,11 @@ class TestEnvironmentService {
     return RestaurantWithDishes(restaurant, dishes)
   }
 
-  private fun createOrderEntry(order: Order, user1: User, restaurantWithDishes: RestaurantWithDishes): OrderEntry {
+  private fun createOrderEntry(order: Order, user1: User, dish: Dish): OrderEntry {
     val orderEntry = OrderEntry(
         order = order,
         user = user1,
-        dishEntries = listOf(DishEntry(restaurantWithDishes.dishes.random()))
+        dishEntries = listOf(DishEntry(dish))
     )
     return orderEntryRepository.save(orderEntry)
   }

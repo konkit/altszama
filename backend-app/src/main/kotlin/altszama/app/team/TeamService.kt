@@ -10,8 +10,8 @@ class TeamService {
   @Autowired
   private lateinit var teamRepository: TeamRepository
 
-  fun createTeam(domain: String, userEmails: List<String> = emptyList()): Team {
-    val team = Team(domain = domain, userEmails = userEmails)
+  fun createTeam(name: String, domain: String, userEmails: List<String> = emptyList()): Team {
+    val team = Team(name = name, domain = domain, userEmails = userEmails)
     teamRepository.save(team)
     return team
   }
@@ -22,7 +22,8 @@ class TeamService {
 
   fun findByEmail(email: String): Optional<Team> {
     val domain = email.substringAfter("@")
-    return teamRepository.findByDomain(domain).or { teamRepository.findByUserEmails(email) }
+    val result = teamRepository.findByDomain(domain).or { teamRepository.findByUserEmails(email) }
+    return result
   }
 
 }

@@ -18,7 +18,7 @@ const tokenAuthorization = new TokenAuthorization();
 const testEnvApi = new TestEnvApi()
 
 
-fixture(`Feature: my new feature`)
+fixture(`Create restaurant and dish`)
   .before( async _ => {
     await tokenAuthorization.init()
   })

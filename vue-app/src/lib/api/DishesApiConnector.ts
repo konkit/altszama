@@ -24,13 +24,7 @@ export default class DishesApiConnector extends AbstractApiConnector {
   }
 
   getRestaurants(): Promise<IndexResponse> {
-    return this.restaurantApi
-      .indexRestaurants(this.headersWithToken())
-      .then(response => {
-        return {
-          restaurants: response.restaurants
-        };
-      });
+    return this.restaurantApi.indexRestaurants(this.headersWithToken())
   }
 
   getShowRestaurantData(restaurantId: string) {

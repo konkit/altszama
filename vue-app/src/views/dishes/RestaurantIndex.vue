@@ -34,13 +34,23 @@
                 <v-icon class="ml-2">add</v-icon>
               </v-btn>
             </router-link>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <h1>Import API</h1>
 
             <a :href="getSwaggerUrl()">
               <v-btn large bottom right>
-                Import API
+                See Import API specification
                 <v-icon class="ml-2">upload</v-icon>
               </v-btn>
             </a>
+
+            <p>To authenticate within the API, use the following credentials: </p>
+            <p>username: {{importApiUsername}}</p>
+            <p>username: {{importApiPassword}}</p>
           </v-col>
         </v-row>
       </v-container>
@@ -58,7 +68,7 @@ import Vue from "vue";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
 import ErrorHandler from "@/lib/ErrorHandler";
 import {RestaurantInfo} from "@/frontend-client";
-import {BACKEND_URL} from "@/lib/config";
+import {BACKEND_URL, CURRENT_DOMAIN} from "@/lib/config";
 
 interface RestaurantEntry {
   id: string;
@@ -85,6 +95,9 @@ export default class RestaurantIndex extends Vue {
   restaurants: RestaurantInfo[] = [];
   restaurantsEntries: RestaurantEntry[] = [];
 
+  importApiUsername = ""
+  importApiPassword = ""
+
   connector: DishesApiConnector = new DishesApiConnector();
 
   mounted() {
@@ -95,15 +108,20 @@ export default class RestaurantIndex extends Vue {
           this.restaurantsEntries = this.restaurants.map(r =>
               this.mapToRestaurantEntry(r)
           );
+          console.log("Payload: ", payload)
+          this.importApiUsername = payload.importCredentials.username
+          this.importApiPassword = payload.importCredentials.password
 
           this.$store.commit("setTitle", "Restaurants")
           this.$store.commit("setLoadingFalse");
         })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        .catch(errResponse => {
+          ErrorHandler.handleError(errResponse)
+        });
   }
 
   getSwaggerUrl() {
-    return BACKEND_URL + "/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/"
+    return CURRENT_DOMAIN + "/api/swagger/swagger-ui/index.html?configUrl=/api/swagger/swagger-config"
   }
 
   goToRestaurant(restaurantId: string) {

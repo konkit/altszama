@@ -1,9 +1,11 @@
 package altszama.app.restaurant
 
+import altszama.app.auth.User
 import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishDto
 import altszama.app.restaurant.dto.*
+import altszama.app.team.TeamService
 import altszama.app.validation.ValidationFailedException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -20,17 +22,23 @@ class RestaurantControllerDataService {
   @Autowired
   private lateinit var userService: UserService
 
-  fun getIndexData(): IndexResponse {
+  @Autowired
+  private lateinit var teamService: TeamService
+
+  fun getIndexData(currentUser: User): IndexResponse {
+    val team = teamService.findByEmail(currentUser.email).get()
+
     val restaurantToCountMap: Map<Restaurant, Long> = restaurantService.restaurantsToDishCountMap()
 
     val restaurantInfoList = restaurantToCountMap.entries
         .map { entry -> RestaurantInfo(entry.key.id, entry.key.name, entry.key.lastCrawled, entry.key.lastEdited, entry.value) }
 
-    return IndexResponse(restaurantInfoList)
+    return IndexResponse(restaurantInfoList, ImportCredentials(team.importUsername, team.importPassword))
   }
 
   fun getShowData(restaurantId: String): ShowRestaurantResponse {
     val restaurant = restaurantService.findById(restaurantId).orElseThrow { ValidationFailedException("Restaurant does not exist") }
+    val team = teamService.findById(restaurant.team.id).get()
     val dishes = dishService.findByRestaurantId(restaurant.id).map { dish -> DishDto.fromDish(dish) }
     val dishesByCategory: Map<String, List<DishDto>> = dishes.groupBy { dish -> dish.category }
 

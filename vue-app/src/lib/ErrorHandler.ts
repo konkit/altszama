@@ -16,6 +16,8 @@ export default class ErrorHandler {
         () => router.push({name: "Login", query: {returnPath: fullRoutePath}});
 
       GoogleLogin.signOut(signOutCallback, signOutCallback);
+    } else if (errorResponse.status === 500) {
+      store.commit("addError", {message: "Internal error occured, please try again or contact the administrator."})
     } else {
       errorResponse.json().then((body: unknown) => store.commit("addError", body))
     }

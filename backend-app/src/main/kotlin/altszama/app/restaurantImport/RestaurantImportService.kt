@@ -1,10 +1,13 @@
 package altszama.app.restaurantImport
 
+import altszama.app.auth.User
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.SideDish
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantRepository
+import altszama.app.team.Team
+import altszama.app.team.TeamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -19,12 +22,11 @@ class RestaurantImportService {
   @Autowired
   private lateinit var dishRepository: DishRepository
 
-
-  fun createFromJson(restaurantData: RestaurantImportJson) {
+  fun createFromJson(team: Team, restaurantData: RestaurantImportJson) {
     val now = Instant.now()
 
-    val restaurant = restaurantRepository.findByName(restaurantData.name)
-        ?: restaurantRepository.findByUrl(restaurantData.url) ?: Restaurant()
+    val restaurant = restaurantRepository.findByTeamAndName(team, restaurantData.name)
+        ?: restaurantRepository.findByTeamAndUrl(team, restaurantData.url) ?: Restaurant(team = team)
 
     val updatedRestaurant = restaurant.copy(
         name = restaurantData.name,

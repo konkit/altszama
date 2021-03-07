@@ -10,6 +10,7 @@ import altszama.app.order.dto.TodayOrdersResponse
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.TeamService
+import altszama.app.test.AbstractIntegrationTest
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mongodb.BasicDBObject
 import org.assertj.core.api.Assertions.assertThat
@@ -26,10 +27,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
 
 
-@SpringBootTest(properties = ["spring.main.allow-bean-definition-overriding=true"])
-@AutoConfigureMockMvc
-@ContextConfiguration(initializers = [TestInitializer::class])
-open class OrderControllerTodayOrdersTest() {
+//@SpringBootTest(properties = ["spring.main.allow-bean-definition-overriding=true"])
+//@AutoConfigureMockMvc
+//@ContextConfiguration(initializers = [TestInitializer::class])
+//open class OrderControllerTodayOrdersTest() {
+
+open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var mockMvc: MockMvc
@@ -55,14 +58,14 @@ open class OrderControllerTodayOrdersTest() {
   @Autowired
   private lateinit var mongoTemplate: MongoTemplate
 
-  @BeforeEach
-  fun beforeEach() {
-    for (collectionName in mongoTemplate.collectionNames) {
-      if (!collectionName.startsWith("system.")) {
-        mongoTemplate.getCollection(collectionName).deleteMany(BasicDBObject())
-      }
-    }
-  }
+//  @BeforeEach
+//  fun beforeEach() {
+//    for (collectionName in mongoTemplate.collectionNames) {
+//      if (!collectionName.startsWith("system.")) {
+//        mongoTemplate.getCollection(collectionName).deleteMany(BasicDBObject())
+//      }
+//    }
+//  }
 
   @Test
   fun shouldReturnEmptyOrdersListIfThereAreNoOrders() {
@@ -71,21 +74,24 @@ open class OrderControllerTodayOrdersTest() {
     val request = get("/api/orders/today.json")
         .header("Authorization", token)
 
-    val response = mockMvc.perform(request)
+    val responseJson = mockMvc.perform(request)
         .andExpect(status().isOk)
         .andReturn()
         .response.contentAsString
 
-    assertThat(response).isEqualTo("""{"ordersList":[],"currentOrderEntries":[]}""")
+    val response = objectMapper.readValue(responseJson, TodayOrdersResponse::class.java)
+
+    assertThat(response.ordersList).isEmpty()
+    assertThat(response.currentOrderEntries).isEmpty()
   }
 
   @Test
   fun shouldReturnOrdersIfThereAreAny() {
     val orderCreator = userService.createNewUser("James", "james@team1.com")
 
-    val team1 = teamService.createTeam("team1.com")
+    val team1 = teamService.createTeam("team1.com", "team1.com")
 
-    val restaurant = restaurantService.createRestaurant(RestaurantSaveRequest(team1.id, "Restaurant 1"))
+    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest(team1.id, "Restaurant 1"))
     val orderDate = LocalDate.now()
     val orderSaveRequest = OrderSaveRequest(
         restaurant.id,
@@ -119,7 +125,7 @@ open class OrderControllerTodayOrdersTest() {
     assertThat(response.currentOrderEntries).hasSize(0)
   }
 
-  private fun createUserAndGetToken(username: String, email: String): String {
-    return "Bearer ${userService.createJwtTokenFromUserInfo(username, email).token}"
-  }
+//  private fun createUserAndGetToken(username: String, email: String): String {
+//    return "Bearer ${userService.createJwtTokenFromUserInfo(username, email).token}"
+//  }
 }

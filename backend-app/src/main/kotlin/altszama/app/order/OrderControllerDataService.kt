@@ -1,7 +1,6 @@
 package altszama.app.order
 
 import altszama.app.auth.User
-import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.order.dto.*
 import altszama.app.orderEntry.OrderEntryRepository
@@ -10,7 +9,6 @@ import altszama.app.restaurant.RestaurantRepository
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.PathVariable
 import java.time.LocalDate
 
 @Service
@@ -40,9 +38,14 @@ class OrderControllerDataService {
 
   fun getIndexData(currentUser: User): TodayOrdersResponse {
     val todaysOrders = orderRepository.findByOrderDate(LocalDate.now())
-    val usersOrderEntries = orderEntryRepository.findByUser(currentUser)
 
-    return TodayOrdersResponse.create(todaysOrders, usersOrderEntries)
+    val todayOrderDtos = todaysOrders.map { order -> TodayOrderDto.fromOrder(order) }
+
+    val currentOrderEntries = orderEntryRepository.findByUser(currentUser)
+        .filter { orderEntry -> todaysOrders.any { order -> order.id == orderEntry.order.id } }
+        .map { orderEntry -> OrderEntryDto.fromOrderEntry(orderEntry) }
+
+    return TodayOrdersResponse(todayOrderDtos, currentOrderEntries)
   }
 
   fun getAllOrdersData(): AllOrdersResponse {

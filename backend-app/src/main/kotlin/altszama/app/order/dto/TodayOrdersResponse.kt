@@ -12,6 +12,11 @@ import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import java.time.LocalTime
 
+data class TodayOrdersResponse(
+    val ordersList: List<TodayOrderDto>,
+    val currentOrderEntries: List<OrderEntryDto>
+)
+
 data class TodayOrderDto(
         val id: String,
         val restaurantId: String,
@@ -44,7 +49,29 @@ data class TodayOrderDto(
         val paymentByCash: Boolean,
         val paymentByBankTransfer: Boolean,
         val bankTransferNumber: String
-)
+) {
+  companion object {
+    fun fromOrder(order: Order): TodayOrderDto {
+      return TodayOrderDto(
+          order.id,
+          order.restaurant.id,
+          order.restaurant.name,
+          order.orderCreator.id,
+          order.orderCreator.username,
+          order.orderDate,
+          order.timeOfOrder,
+          order.timeOfDelivery,
+          order.orderState,
+          order.decreaseInPercent,
+          order.deliveryCostPerEverybody,
+          order.deliveryCostPerDish,
+          order.paymentByCash,
+          order.paymentByBankTransfer,
+          order.bankTransferNumber
+      )
+    }
+  }
+}
 
 data class OrderEntryDto(
         var id: String = ObjectId().toHexString(),
@@ -56,54 +83,17 @@ data class OrderEntryDto(
         var paymentStatus: OrderEntryPaymentStatus = OrderEntryPaymentStatus.UNPAID,
 
         var created: LocalDate = LocalDate.now()
-)
-
-data class TodayOrdersResponse(
-        val ordersList: List<TodayOrderDto>,
-        val currentOrderEntries: List<OrderEntryDto>
 ) {
-
   companion object {
-
-    private fun fromOrder(order: Order): TodayOrderDto {
-      return TodayOrderDto(
-        order.id,
-        order.restaurant.id,
-        order.restaurant.name,
-        order.orderCreator.id,
-        order.orderCreator.username,
-        order.orderDate,
-        order.timeOfOrder,
-        order.timeOfDelivery,
-        order.orderState,
-        order.decreaseInPercent,
-        order.deliveryCostPerEverybody,
-        order.deliveryCostPerDish,
-        order.paymentByCash,
-        order.paymentByBankTransfer,
-        order.bankTransferNumber
-      )
-    }
-
-    private fun fromOrderEntry(orderEntry: OrderEntry): OrderEntryDto {
+    fun fromOrderEntry(orderEntry: OrderEntry): OrderEntryDto {
       return OrderEntryDto(
-        orderEntry.id,
-        orderEntry.order.id,
-        orderEntry.order.orderState,
-        orderEntry.dishEntries.map { dishEntry -> DishEntryDto.fromDishEntry(dishEntry, orderEntry.order.restaurant.name) },
-        orderEntry.paymentStatus,
-        orderEntry.created
+          orderEntry.id,
+          orderEntry.order.id,
+          orderEntry.order.orderState,
+          orderEntry.dishEntries.map { dishEntry -> DishEntryDto.fromDishEntry(dishEntry, orderEntry.order.restaurant.name) },
+          orderEntry.paymentStatus,
+          orderEntry.created
       )
-    }
-
-    fun create(todaysOrders: List<Order>, usersOrderEntries: List<OrderEntry>): TodayOrdersResponse {
-      val todayOrderDtos = todaysOrders.map { order -> fromOrder(order) }
-
-      val currentOrderEntries = usersOrderEntries
-          .filter { orderEntry -> todaysOrders.any { order -> order.id == orderEntry.order.id } }
-          .map { orderEntry -> fromOrderEntry(orderEntry) }
-
-      return TodayOrdersResponse(todayOrderDtos, currentOrderEntries)
     }
   }
 }

@@ -18,6 +18,11 @@ class TestEnvironmentController() {
     testEnvironmentService.clearEverything()
   }
 
+  @RequestMapping("/generateJustRestaurants")
+  fun generateJustRestaurants() {
+    testEnvironmentService.generateJustRestaurants()
+  }
+
   @RequestMapping("/generateEverything")
   fun generateEverything() {
     testEnvironmentService.generateEverything()
