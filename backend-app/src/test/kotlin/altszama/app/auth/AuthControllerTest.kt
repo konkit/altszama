@@ -1,7 +1,6 @@
-package altszama.app.order
+package altszama.app.auth
 
 import altszama.app.TestInitializer
-import altszama.app.auth.UserService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

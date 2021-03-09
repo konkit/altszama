@@ -134,8 +134,8 @@ internal class RestaurantControllerDeleteTest : AbstractIntegrationTest() {
     val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = emptyList())
     val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
 
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, teamId = team1.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1)
+    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
+    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
 
     val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
     val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)

@@ -15,20 +15,12 @@ data class EditOrderInitialDataOrderDto(
         val orderCreatorId: String,
         val orderCreatorUsername: String,
 
-        @Schema(
-                type = "string",
-                pattern = "[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]",
-                example = "2017-01-31"
-        )
+        @Schema(type = "string", pattern = "[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]", example = "2017-01-31")
         @JsonFormat(pattern = "yyyy-MM-dd")
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         val orderDate: LocalDate,
 
-        @Schema(
-                type = "string",
-                pattern = "[0-9][0-9]:[0-9][0-9]",
-                example = "12:00"
-        )
+        @Schema(type = "string", pattern = "[0-9][0-9]:[0-9][0-9]", example = "12:00")
         @JsonFormat(pattern = "HH:mm")
         @DateTimeFormat(pattern = "HH:mm")
         val timeOfOrder: LocalTime?,

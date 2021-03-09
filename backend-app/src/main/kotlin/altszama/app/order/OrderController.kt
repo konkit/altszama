@@ -42,7 +42,8 @@ class OrderController {
   @GetMapping("/orders/{orderId}/show.json")
   fun show(@PathVariable orderId: String): ShowOrderResponse {
     val currentUser = userService.currentUser()
-    return orderControllerDataService.getShowData(orderId, currentUser)
+    val currentUserTeam = currentUserService.getCurrentUserTeam()
+    return orderControllerDataService.getShowData(orderId, currentUser, currentUserTeam)
   }
 
   @GetMapping("/orders/{orderId}/order_view.json")
@@ -54,24 +55,32 @@ class OrderController {
   @GetMapping("/orders/create.json")
   fun create(): CreateOrderInitialData {
     val currentUser = userService.currentUser()
-    return orderControllerDataService.getCreateData(currentUser)
+    val currentUserTeam = currentUserService.getCurrentUserTeam()
+
+    return orderControllerDataService.getCreateData(currentUser, currentUserTeam)
   }
 
   @PostMapping("/orders/save")
   fun save(@RequestBody @Valid orderSaveRequest: OrderSaveRequest): ResponseEntity<String> {
     val currentUser = userService.currentUser()
-    orderService.saveOrder(orderSaveRequest, currentUser)
+    val currentUserTeam = currentUserService.getCurrentUserTeam()
+
+    orderService.saveOrder(orderSaveRequest, currentUser, currentUserTeam)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
   @GetMapping("/orders/{orderId}/edit.json")
   fun edit(@PathVariable orderId: String): EditOrderInitialData {
-    return orderControllerDataService.getEditData(orderId)
+    val currentUser = userService.currentUser()
+    return orderControllerDataService.getEditData(orderId, currentUser)
   }
 
   @PutMapping("/orders/update")
   fun update(@RequestBody @Valid orderUpdateRequest: OrderUpdateRequest): ResponseEntity<String> {
-    orderService.updateOrder(orderUpdateRequest)
+    val currentUser = userService.currentUser()
+    val currentUserTeam = currentUserService.getCurrentUserTeam()
+
+    orderService.updateOrder(orderUpdateRequest, currentUser, currentUserTeam)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 

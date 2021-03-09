@@ -6,7 +6,8 @@ import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.OrderUpdateRequest
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.restaurant.RestaurantRepository
-import altszama.app.validation.ValidationFailedException
+import altszama.app.team.Team
+import altszama.app.validation.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -14,6 +15,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.*
 
 
 @Service
@@ -32,8 +34,22 @@ class OrderService {
   private lateinit var restaurantRepository: RestaurantRepository
 
 
-  fun saveOrder(orderSaveRequest: OrderSaveRequest, currentUser: User): Order {
-    val restaurant = restaurantRepository.findById(orderSaveRequest.restaurantId!!).get()
+  fun saveOrder(orderSaveRequest: OrderSaveRequest, currentUser: User, currentUserTeam: Team): Order {
+    val restaurant = Optional.ofNullable(orderSaveRequest.restaurantId)
+        .flatMap { restaurantId -> restaurantRepository.findById(restaurantId) }
+        .orElseThrow { RestaurantDoesNotExist() }
+
+    if (restaurant.team != currentUserTeam) {
+      throw NoAccessToRestaurant()
+    }
+
+    if (orderSaveRequest.orderDate == null) {
+      throw OrderDateIsInvalid()
+    }
+
+    if (orderSaveRequest.paymentData.paymentByBankTransfer && orderSaveRequest.paymentData.bankTransferNumber.isBlank()) {
+      throw BankTransferNumberNotSpecified()
+    }
 
     val order = Order(
         restaurant = restaurant,
@@ -56,7 +72,23 @@ class OrderService {
     return orderRepository.save(order)
   }
 
-  fun updateOrder(orderUpdateRequest: OrderUpdateRequest) {
+  fun updateOrder(orderUpdateRequest: OrderUpdateRequest, currentUser: User, currentUserTeam: Team) {
+    val order = Optional.ofNullable(orderUpdateRequest.orderId)
+        .flatMap { orderId -> orderRepository.findById(orderId) }
+        .orElseThrow { OrderDoesNotExist() }
+
+    if (order.orderCreator != currentUser) {
+      throw YouCannotUpdateThisOrder()
+    }
+
+    if (orderUpdateRequest.orderDate == null) {
+      throw OrderDateIsInvalid()
+    }
+
+    if (orderUpdateRequest.paymentData.paymentByBankTransfer && orderUpdateRequest.paymentData.bankTransferNumber.isBlank()) {
+      throw BankTransferNumberNotSpecified()
+    }
+
     val oldOrder = orderRepository.findById(orderUpdateRequest.orderId!!).get()
 
     val updatedOrder = oldOrder.copy(

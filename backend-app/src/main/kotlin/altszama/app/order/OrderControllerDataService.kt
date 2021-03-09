@@ -7,10 +7,14 @@ import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.restaurant.RestaurantRepository
 import altszama.app.team.Team
+import altszama.app.validation.NoAccessToOrder
+import altszama.app.validation.OrderDoesNotExist
+import altszama.app.validation.YouCannotUpdateThisOrder
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.util.*
 
 @Service
 class OrderControllerDataService {
@@ -52,10 +56,12 @@ class OrderControllerDataService {
     return AllOrdersResponse.fromOrderList(orderList.asReversed())
   }
 
-  fun getShowData(orderId: String, currentUser: User): ShowOrderResponse {
-    val currentUserId = currentUser.id
+  fun getShowData(orderId: String, currentUser: User, currentUserTeam: Team): ShowOrderResponse {
+    val order = orderRepository.findById(orderId).orElseThrow { OrderDoesNotExist() }
 
-    val order = orderRepository.findById(orderId).get()
+    if (order.restaurant.team != currentUserTeam) {
+      throw NoAccessToOrder()
+    }
 
     val entries = orderEntryRepository.findByOrderId(orderId)
 
@@ -63,7 +69,7 @@ class OrderControllerDataService {
 
     val dishIdToSideDishesMap = orderEntryService.getDishToSideDishesMap(order.restaurant)
 
-    return ShowOrderResponse.create(order, entries, currentUserId, allDishesInRestaurant, dishIdToSideDishesMap)
+    return ShowOrderResponse.create(order, entries, currentUser.id, allDishesInRestaurant, dishIdToSideDishesMap)
   }
 
   fun getOrderViewData(orderId: String, currentUser: User): OrderViewInitialData {
@@ -75,7 +81,7 @@ class OrderControllerDataService {
     return OrderViewInitialData.create(order, entries)
   }
 
-  fun getCreateData(currentUser: User): CreateOrderInitialData {
+  fun getCreateData(currentUser: User, currentUserTeam: Team): CreateOrderInitialData {
     val ordersByUser: List<Order> = orderRepository.findTop10ByOrderCreatorOrderByOrderDateDesc(currentUser)
     val lastOrderMade: Order? = ordersByUser.sortedByDescending { order -> ObjectId(order.id).timestamp }.firstOrNull()
 
@@ -83,13 +89,21 @@ class OrderControllerDataService {
     val bankTransferNumber = lastOrderMade?.bankTransferNumber ?: ""
 
     return CreateOrderInitialData(
-            restaurantRepository.findAll(),
+            restaurantRepository.findAllByTeam(currentUserTeam),
             blikPhoneNumber = blikPhoneNumber,
             bankTransferNumber = bankTransferNumber
     )
   }
 
-  fun getEditData(orderId: String): EditOrderInitialData {
-    return EditOrderInitialData.create(orderRepository.findById(orderId).get())
+  fun getEditData(orderId: String?, currentUser: User): EditOrderInitialData {
+    val order = Optional.ofNullable(orderId)
+        .flatMap { id -> orderRepository.findById(id) }
+        .orElseThrow { OrderDoesNotExist() }
+
+    if (order.orderCreator != currentUser) {
+      throw YouCannotUpdateThisOrder()
+    }
+
+    return EditOrderInitialData.create(order)
   }
 }

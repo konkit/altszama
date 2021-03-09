@@ -1,7 +1,5 @@
 package altszama.app.validation
 
-import java.lang.RuntimeException
-
 sealed class AltszamaErrorException(override val message: String) : RuntimeException(message)
 
 class RestaurantInUseException() : AltszamaErrorException("Dalete failed - delete all orders from this restaurant first")
@@ -18,3 +16,11 @@ data class DishDataInvalid(override val message: String) : AltszamaErrorExceptio
 class DishInUse() : AltszamaErrorException("Delete failed - delete all orders using this dish first")
 class SideDishInUse() : AltszamaErrorException("Delete failed - delete all orders using this side dish first")
 class SideDishDoesNotExist() : AltszamaErrorException("Side dish does not exist")
+
+
+class OrderDoesNotExist() : AltszamaErrorException("Order does not exist")
+class NoAccessToOrder() : AltszamaErrorException("You have no access to this order")
+class OrderDateIsInvalid() : AltszamaErrorException("Order date is invalid")
+class BankTransferNumberNotSpecified() : AltszamaErrorException("Bank transfer number is not specified")
+
+class YouCannotUpdateThisOrder() : AltszamaErrorException("You cannot update this order")
