@@ -29,8 +29,7 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
   @Test
   fun itShouldCreateRestaurantSuccessfully() {
     val team1 = teamService.createTeam("team1.com", "", listOf("james@team1.com"))
-
-    val restaurantCreatorToken = createUserAndGetToken("James", "james@team1.com")
+    val (restaurantCreatorToken, user1) = createUserAndGetToken("James", "james@team1.com")
 
     val restaurantSaveDataJson = """{
       "name": "New Restaurant",
@@ -56,8 +55,7 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
   @Test
   fun itShouldFailToCreateRestaurantWithoutName() {
     val team1 = teamService.createTeam("team1.com", "", listOf("james@team1.com"))
-
-    val restaurantCreatorToken = createUserAndGetToken("James", "james@team1.com")
+    val (restaurantCreatorToken, user1) = createUserAndGetToken("James", "james@team1.com")
 
     val restaurantSaveDataJson = """{
       "name": "",

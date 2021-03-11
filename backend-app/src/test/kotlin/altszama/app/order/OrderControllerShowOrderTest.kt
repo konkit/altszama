@@ -47,8 +47,8 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldShowOrderSuccessfully() {
-    val orderCreator = userService.createNewUser("James", "james@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, orderCreator) = createUserAndGetToken("James", "james@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
 
@@ -63,8 +63,6 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
         paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, orderCreator, team1)
-
-    val token = createUserAndGetToken("John", "john@team1.com")
 
     val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/show.json")
         .header("Authorization", token)
@@ -84,8 +82,8 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotShowOrderIfItDoesntExist() {
-    val token = createUserAndGetToken("John", "john@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val fakeOrderId = "111111111111111111111111"
 
@@ -114,7 +112,7 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
     val order = orderService.saveOrder(orderSaveRequest, orderCreator1, team1)
 
     val team2 = teamService.createTeam("team2.com", "team2.com")
-    val token = createUserAndGetToken("John", "john@team2.com")
+    val (token, user) = createUserAndGetToken("John", "john@team2.com")
 
     val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/show.json")
         .header("Authorization", token)

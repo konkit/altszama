@@ -57,10 +57,8 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldMoveToOrderingStateAndReturnOrderViewDataSuccessfully() {
-    val token = createUserAndGetToken("John", "john@team1.com")
-    val orderCreator = userService.findByEmail("john@team1.com").get()
-
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, orderCreator) = createUserAndGetToken("John", "john@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
 
@@ -104,9 +102,7 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
   @Test()
   fun itShouldNotReturnOrderViewIfOrderDoesNotExist() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
-
-    val token = createUserAndGetToken("John", "john@team1.com")
-    val orderCreator = userService.findByEmail("john@team1.com").get()
+    val (token, orderCreator) = createUserAndGetToken("John", "john@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
 
@@ -124,7 +120,6 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
     val orderCreator = userService.createNewUser("John", "john@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
     val orderDate = LocalDate.now()
@@ -141,7 +136,7 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
     val orderEntry = orderEntryService.saveEntry(orderCreator, orderEntrySaveRequest)
 
     val team2 = teamService.createTeam("team2.com", "team2.com")
-    val token2 = createUserAndGetToken("Jake", "john@team2.com")
+    val (token2, user2) = createUserAndGetToken("Jake", "john@team2.com")
 
     val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/order_view.json")
         .header("Authorization", token2)
@@ -151,10 +146,8 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldNotReturnOrderViewIfThereAreNoOrderEntries() {
-    val token = createUserAndGetToken("John", "john@team1.com")
-    val orderCreator = userService.findByEmail("john@team1.com").get()
-
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, orderCreator) = createUserAndGetToken("John", "john@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
 

@@ -54,9 +54,8 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldDeleteSideishSuccessfully() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = listOf(SideDish(name = "Side dish 1", price = 100)))
@@ -77,9 +76,8 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotDeleteSideishIfItAlreadyDoesntExist() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = emptyList())
@@ -96,9 +94,8 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotDeleteSideishIfTheDishDoesNotExist() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
 
@@ -114,9 +111,9 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotDeleteSideishIfUserHasNoAccessToRestaurant() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
+
     val team2 = teamService.createTeam("team2.com", "", listOf("james2@team2.com"))
 
     val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
@@ -134,10 +131,8 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotDeleteSidedishIfItIsIsUse() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-    val user1 = userService.findByEmail("james1@team1.com").get()
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = listOf(SideDish(name = "Side dish 1", price = 100)))

@@ -34,9 +34,8 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldUpdateDishSuccessfully() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -70,9 +69,8 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateDishIfRestaurantDoesNotExist() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
 
     val fakeRestaurantId = "111111111111111111111111"
     val fakeDishIdR = "111111111111111111111112"
@@ -98,9 +96,8 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateDishIfDishDoesNotExist() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val fakeDishIdR = "111111111111111111111112"
@@ -126,9 +123,9 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateDishIfUserHasNoAccessToRestaurant() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
+
     val team2 = teamService.createTeam("team2.com", "", listOf("james2@team2.com"))
 
     val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
@@ -155,9 +152,8 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateDishIfTheNewNameIsBlank() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -183,9 +179,9 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateDishIfTheNewNamePriceIsNegative() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
-
     val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
+
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))

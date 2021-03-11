@@ -52,8 +52,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
-    val token = createUserAndGetToken("John", "john@team1.com")
-
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -84,8 +83,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
   @Test
   fun itShouldNotSaveOrderIfTheRestaurantDoesNotExist() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
-
-    val token = createUserAndGetToken("John", "john@team1.com")
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -111,7 +109,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
     val team2 = teamService.createTeam("team2.com", "team2.com")
-    val token = createUserAndGetToken("John", "john@team2.com")
+    val (token, user) = createUserAndGetToken("John", "john@team2.com")
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -136,8 +134,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
-    val token = createUserAndGetToken("John", "john@team1.com")
-
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -161,7 +158,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
-    val token = createUserAndGetToken("John", "john@team1.com")
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val nowDate = LocalDate.now()
     val createContent = """{

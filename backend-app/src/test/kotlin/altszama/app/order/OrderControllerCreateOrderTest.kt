@@ -42,8 +42,8 @@ class OrderControllerCreateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldReturnCreateDataSuccessfully() {
-    val token = createUserAndGetToken("John", "john@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -69,7 +69,7 @@ class OrderControllerCreateOrderTest() : AbstractIntegrationTest() {
     val team2 = teamService.createTeam("team2.com", "team2.com")
     val restaurant2 = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 2"))
 
-    val token = createUserAndGetToken("John", "john@team1.com")
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val request = MockMvcRequestBuilders.get("/api/orders/create.json")
         .header("Authorization", token)

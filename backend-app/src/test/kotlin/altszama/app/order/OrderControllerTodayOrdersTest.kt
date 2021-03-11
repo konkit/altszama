@@ -42,8 +42,8 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldReturnEmptyOrdersListIfThereAreNoOrders() {
-    val token = createUserAndGetToken("John", "john@mail.com")
     val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
+    val (token, user) = createUserAndGetToken("John", "john@mail.com")
 
     val request = get("/api/orders/today.json")
         .header("Authorization", token)
@@ -61,8 +61,8 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldReturnOrdersIfThereAreAny() {
-    val orderCreator = userService.createNewUser("James", "james@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, orderCreator) = createUserAndGetToken("James", "james@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val orderDate = LocalDate.now()
@@ -74,8 +74,6 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
         paymentData = PaymentData()
     )
     orderService.saveOrder(orderSaveRequest, orderCreator, team1)
-
-    val token = createUserAndGetToken("John", "john@team1.com")
 
     val request = get("/api/orders/today.json")
         .header("Authorization", token)
@@ -99,8 +97,8 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldReturnOnlyOrdersUserHasAccessTo() {
-    val orderCreator1 = userService.createNewUser("James", "james@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, orderCreator1) = createUserAndGetToken("James", "james@team1.com")
 
     val restaurant1 = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val orderDate1 = LocalDate.now()
@@ -127,8 +125,6 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
     )
     orderService.saveOrder(orderSaveRequest2, orderCreator2, team2)
 
-    val token = createUserAndGetToken("John", "john@team1.com")
-
     val request = get("/api/orders/today.json")
         .header("Authorization", token)
 
@@ -151,8 +147,8 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldReturnOnlyTodayOrders() {
-    val orderCreator = userService.createNewUser("James", "james@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, orderCreator) = createUserAndGetToken("James", "james@team1.com")
 
     val restaurant1 = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val restaurant2 = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 2"))
@@ -177,8 +173,6 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
     )
     orderService.saveOrder(orderSaveRequest2, orderCreator, team1)
 
-    val token = createUserAndGetToken("John", "john@team1.com")
-
     val request = get("/api/orders/today.json")
         .header("Authorization", token)
 
@@ -200,8 +194,8 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
   fun shouldReturnOrdersOnlyFromTheCorrectTeam() {
     val orderDate = LocalDate.now()
 
-    val orderCreator1 = userService.createNewUser("James", "james@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, orderCreator1) = createUserAndGetToken("James", "james@team1.com")
 
     val restaurant1 = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val orderSaveRequest1 = OrderSaveRequest(
@@ -212,7 +206,6 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
         paymentData = PaymentData()
     )
     orderService.saveOrder(orderSaveRequest1, orderCreator1, team1)
-
 
     val orderCreator2 = userService.createNewUser("James", "james@team2.com")
     val team2 = teamService.createTeam("team2.com", "team2.com")
@@ -226,10 +219,6 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
         paymentData = PaymentData()
     )
     orderService.saveOrder(orderSaveRequest2, orderCreator2, team2)
-
-
-
-    val token = createUserAndGetToken("John", "john@team1.com")
 
     val request = get("/api/orders/today.json")
         .header("Authorization", token)

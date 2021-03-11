@@ -41,8 +41,8 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldReturnEmptyOrdersListIfThereAreNoOrders() {
-    val token = createUserAndGetToken("John", "john@mail.com")
     val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
+    val (token, user) = createUserAndGetToken("John", "john@mail.com")
 
     val request = MockMvcRequestBuilders.get("/api/orders/all.json")
         .header("Authorization", token)
@@ -73,7 +73,7 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
     )
     orderService.saveOrder(orderSaveRequest, orderCreator, team1)
 
-    val token = createUserAndGetToken("John", "john@team1.com")
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val request = MockMvcRequestBuilders.get("/api/orders/all.json")
         .header("Authorization", token)
@@ -120,7 +120,7 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
     )
     orderService.saveOrder(orderSaveRequest2, orderCreator, team1)
 
-    val token = createUserAndGetToken("John", "john@team1.com")
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val request = MockMvcRequestBuilders.get("/api/orders/all.json")
         .header("Authorization", token)
@@ -169,7 +169,7 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
 
 
 
-    val token = createUserAndGetToken("John", "john@team1.com")
+    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val request = MockMvcRequestBuilders.get("/api/orders/all.json")
         .header("Authorization", token)

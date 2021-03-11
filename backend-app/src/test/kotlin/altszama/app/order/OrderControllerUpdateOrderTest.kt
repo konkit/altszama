@@ -56,9 +56,8 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldUpdateOrderSuccessfully() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
-    val user1 = userService.findByEmail("james1@team1.com").get()
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -98,9 +97,8 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateOrderIfItDoesNotExist() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
-    val user1 = userService.findByEmail("james1@team1.com").get()
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -132,8 +130,8 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateOrderIfItIsNotCreator() {
-    val user1 = userService.createNewUser("james1@team1.com", "James1")
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (token, user1) = createUserAndGetToken("james1@team1.com", "James1")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -141,7 +139,7 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
 
-    val user2Token = createUserAndGetToken("James2", "james2@team1.com")
+    val (user2Token, user2) = createUserAndGetToken("James2", "james2@team1.com")
 
     val nowDate = LocalDate.now()
     val updateContent = """{
@@ -163,14 +161,13 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user2Token)
 
-    expectBadRequestWithMessage(request, "You cannot update this order")
+    expectBadRequestWithMessage(request, "You can edit only your own orders")
   }
 
   @Test
   fun itShouldNotUpdateOrderIfTheOrderDateIsMissing() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
-    val user1 = userService.findByEmail("james1@team1.com").get()
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -205,9 +202,8 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateOrderIfTheBankTransferNumberIsMissing() {
-    val user1Token = createUserAndGetToken("James1", "james1@team1.com")
     val team1 = teamService.createTeam("team1.com", "team1.com")
-    val user1 = userService.findByEmail("james1@team1.com").get()
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))

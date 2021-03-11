@@ -1,6 +1,7 @@
 package altszama.app.test
 
 import altszama.app.TestInitializer
+import altszama.app.auth.User
 import altszama.app.auth.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mongodb.BasicDBObject
@@ -44,8 +45,11 @@ open class AbstractIntegrationTest() {
     }
   }
 
-  protected fun createUserAndGetToken(username: String, email: String): String {
-    return "Bearer ${userService.createJwtTokenFromUserInfo(username, email).token}"
+  protected fun createUserAndGetToken(username: String, email: String): Pair<String, User> {
+    val user = userService.createNewUser(username, email)
+    val token = "Bearer ${userService.createJwtTokenFromUserInfo(username, email).token}"
+
+    return Pair(token, user)
   }
 
   protected fun expectBadRequestWithMessage(request: MockHttpServletRequestBuilder, expectedMessage: String) {
