@@ -92,12 +92,7 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.get("/api/orders/${fakeOrderId}/show.json")
         .header("Authorization", token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    Assertions.assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Order does not exist")
+    expectBadRequestWithMessage(request, "Order does not exist")
   }
 
   @Test
@@ -124,12 +119,7 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/show.json")
         .header("Authorization", token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    Assertions.assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("You have no access to this order")
+    expectBadRequestWithMessage(request, "You have no access to this order")
   }
 
 }

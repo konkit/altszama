@@ -91,12 +91,7 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Side dish does not exist")
+    expectBadRequestWithMessage(request, "Side dish does not exist")
   }
 
   @Test
@@ -114,12 +109,7 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Dish does not exist")
+    expectBadRequestWithMessage(request, "Dish does not exist")
   }
 
   @Test
@@ -139,12 +129,7 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("You have no access to this restaurant")
+    expectBadRequestWithMessage(request, "You have no access to this restaurant")
   }
 
   @Test
@@ -170,12 +155,7 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(SideDishInUse().message)
+    expectBadRequestWithMessage(request, SideDishInUse().message)
   }
 
 

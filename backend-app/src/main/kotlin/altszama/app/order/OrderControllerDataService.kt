@@ -9,7 +9,7 @@ import altszama.app.restaurant.RestaurantRepository
 import altszama.app.team.Team
 import altszama.app.validation.NoAccessToOrder
 import altszama.app.validation.OrderDoesNotExist
-import altszama.app.validation.YouCannotUpdateThisOrder
+import altszama.app.validation.YouCanEditOnlyYourOwnOrders
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -101,7 +101,7 @@ class OrderControllerDataService {
         .orElseThrow { OrderDoesNotExist() }
 
     if (order.orderCreator != currentUser) {
-      throw YouCannotUpdateThisOrder()
+      throw YouCanEditOnlyYourOwnOrders()
     }
 
     return EditOrderInitialData.create(order)

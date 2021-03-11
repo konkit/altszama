@@ -83,12 +83,7 @@ internal class RestaurantControllerUpdateTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(RestaurantDoesNotExist().message)
+    expectBadRequestWithMessage(request, RestaurantDoesNotExist().message)
   }
 
   @Test
@@ -113,12 +108,7 @@ internal class RestaurantControllerUpdateTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(NoAccessToRestaurant().message)
+    expectBadRequestWithMessage(request, NoAccessToRestaurant().message)
 
     val updatedRestaurant = restaurantService.findById(restaurant.id).get()
 
@@ -147,12 +137,7 @@ internal class RestaurantControllerUpdateTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Restaurant name cannot be blank")
+    expectBadRequestWithMessage(request, "Restaurant name cannot be blank")
 
     val updatedRestaurant = restaurantService.findById(restaurant.id).get()
 
@@ -180,12 +165,7 @@ internal class RestaurantControllerUpdateTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Restaurant name cannot be blank")
+    expectBadRequestWithMessage(request, "Restaurant name cannot be blank")
 
     val updatedRestaurant = restaurantService.findById(restaurant.id).get()
 

@@ -90,12 +90,7 @@ internal class RestaurantControllerDeleteTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(RestaurantDoesNotExist().message)
+    expectBadRequestWithMessage(request, RestaurantDoesNotExist().message)
   }
 
   @Test
@@ -111,12 +106,7 @@ internal class RestaurantControllerDeleteTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(NoAccessToRestaurant().message)
+    expectBadRequestWithMessage(request, NoAccessToRestaurant().message)
 
     val deletedRestaurantOpt = restaurantService.findById(restaurant.id)
 
@@ -144,11 +134,6 @@ internal class RestaurantControllerDeleteTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(RestaurantInUseException().message)
+    expectBadRequestWithMessage(request, RestaurantInUseException().message)
   }
 }

@@ -78,7 +78,7 @@ class OrderService {
         .orElseThrow { OrderDoesNotExist() }
 
     if (order.orderCreator != currentUser) {
-      throw YouCannotUpdateThisOrder()
+      throw YouCanEditOnlyYourOwnOrders()
     }
 
     if (orderUpdateRequest.orderDate == null) {
@@ -120,15 +120,15 @@ class OrderService {
   }
 
   fun setAsOrdering(orderId: String, currentUser: User) {
-    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
+    val order = orderRepository.findById(orderId).orElseThrow { throw OrderDoesNotExist() }
 
     if (order.orderCreator != currentUser) {
-      throw ValidationFailedException("You can edit only your orders.")
+      throw YouCanEditOnlyYourOwnOrders()
     }
 
     val orderEntriesSize = orderEntryRepository.findByOrderId(orderId).count()
     if (orderEntriesSize == 0) {
-      throw ValidationFailedException("There are no order entries")
+      throw NoOrderEntriesInThisOrder()
     }
 
     order.orderState = OrderState.ORDERING
@@ -136,7 +136,7 @@ class OrderService {
   }
 
   fun setAsOrdered(orderId: String, approxTimeOfDelivery: String?, currentUser: User)  {
-    val order = orderRepository.findById(orderId).orElseThrow({ throw ValidationFailedException("Order not found") })
+    val order = orderRepository.findById(orderId).orElseThrow { throw OrderDoesNotExist() }
 
     if (order.orderCreator != currentUser) {
       throw ValidationFailedException("You can edit only your orders.")

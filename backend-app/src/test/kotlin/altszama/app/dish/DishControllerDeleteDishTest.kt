@@ -83,12 +83,7 @@ internal class DishControllerDeleteDishTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Dish does not exist")
+    expectBadRequestWithMessage(request, "Dish does not exist")
   }
 
   @Test
@@ -105,12 +100,7 @@ internal class DishControllerDeleteDishTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("You have no access to this restaurant")
+    expectBadRequestWithMessage(request, "You have no access to this restaurant")
   }
 
   @Test
@@ -133,12 +123,7 @@ internal class DishControllerDeleteDishTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(DishInUse().message)
+    expectBadRequestWithMessage(request, DishInUse().message)
   }
 
 }

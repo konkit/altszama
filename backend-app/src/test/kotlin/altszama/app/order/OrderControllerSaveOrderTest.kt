@@ -100,12 +100,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Restaurant does not exist")
+    expectBadRequestWithMessage(request, "Restaurant does not exist")
   }
 
   @Test
@@ -131,12 +126,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("You have no access to this restaurant")
+    expectBadRequestWithMessage(request, "You have no access to this restaurant")
   }
 
   @Test
@@ -161,12 +151,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Order date is invalid")
+    expectBadRequestWithMessage(request, "Order date is invalid")
   }
 
   @Test
@@ -197,12 +182,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Bank transfer number is not specified")
+    expectBadRequestWithMessage(request, "Bank transfer number is not specified")
   }
 
 }

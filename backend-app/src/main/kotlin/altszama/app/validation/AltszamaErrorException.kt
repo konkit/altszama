@@ -22,5 +22,5 @@ class OrderDoesNotExist() : AltszamaErrorException("Order does not exist")
 class NoAccessToOrder() : AltszamaErrorException("You have no access to this order")
 class OrderDateIsInvalid() : AltszamaErrorException("Order date is invalid")
 class BankTransferNumberNotSpecified() : AltszamaErrorException("Bank transfer number is not specified")
-
-class YouCannotUpdateThisOrder() : AltszamaErrorException("You cannot update this order")
+class YouCanEditOnlyYourOwnOrders() : AltszamaErrorException("You can edit only your own orders")
+class NoOrderEntriesInThisOrder() : AltszamaErrorException("There are no order entries in this order")

@@ -34,12 +34,10 @@ internal class DishControllerCreateDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldReturnCreateDishDataSuccessfully() {
+    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
     val user1Token = createUserAndGetToken("James1", "james1@team1.com")
 
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
-
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
-
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
     val request = MockMvcRequestBuilders.get("/api/restaurants/${restaurant.id}/dishes/create.json")
@@ -66,12 +64,7 @@ internal class DishControllerCreateDishTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Restaurant does not exist")
+    expectBadRequestWithMessage(request,"Restaurant does not exist")
   }
 
   @Test
@@ -94,6 +87,6 @@ internal class DishControllerCreateDishTest : AbstractIntegrationTest() {
         .andReturn()
         .response.contentAsString
 
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("You have no access to this restaurant")
+    expectBadRequestWithMessage(request, "You have no access to this restaurant")
   }
 }

@@ -100,12 +100,7 @@ class OrderControllerEditOrderTest() : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Order does not exist")
+    expectBadRequestWithMessage(request, "Order does not exist")
   }
 
   @Test
@@ -125,11 +120,6 @@ class OrderControllerEditOrderTest() : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user2Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("You cannot update this order")
+    expectBadRequestWithMessage(request, "You cannot update this order")
   }
 }
