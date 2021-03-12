@@ -1,16 +1,21 @@
 package altszama.app.orderEntry
 
+import altszama.app.auth.User
+import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.DishService
 import altszama.app.dish.SideDish
 import altszama.app.dish.dto.DishCreateRequest
+import altszama.app.order.Order
 import altszama.app.order.OrderService
 import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
+import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
+import altszama.app.team.Team
 import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import org.assertj.core.api.Assertions.assertThat
@@ -18,6 +23,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.LocalDate
@@ -49,46 +55,23 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
   @Autowired
   private lateinit var mockMvc: MockMvc
 
+  private val sideDish1 = SideDish(name = "Side dish 1", price = 100)
+  private val sideDish2 = SideDish(name = "Side dish 2", price = 120)
+  private val sideDish3 = SideDish(name = "Side dish 3", price = 150)
+
+  val fakeDishId = "11111111"
+  val fakeSideDishId = "111111111111"
+
   @Test()
   fun itShouldAddOrderEntryWithExistingDishAndExistingSidedishSuccessfully() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": false, "id": "${sideDish1.id}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
+    val request = createRequest(createContent, user1Token)
 
     mockMvc.perform(request)
       .andExpect(MockMvcResultMatchers.status().isOk)
@@ -98,9 +81,11 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     assertThat(orderEntriesInDb).hasSize(1)
     assertThat(orderEntriesInDb[0].order.id).isEqualTo(order.id)
     assertThat(orderEntriesInDb[0].dishEntries).hasSize(1)
-    assertThat(orderEntriesInDb[0].dishEntries[0].dish.id).isEqualTo(dish1.id)
-    assertThat(orderEntriesInDb[0].dishEntries[0].additionalComments).isEqualTo("Some funny comment")
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes).isEqualTo(listOf(sideDish1))
+
+    val firstDishEntry = orderEntriesInDb[0].dishEntries[0]
+    assertThat(firstDishEntry.dish.id).isEqualTo(dish1.id)
+    assertThat(firstDishEntry.additionalComments).isEqualTo("Some funny comment")
+    assertThat(firstDishEntry.chosenSideDishes).isEqualTo(listOf(sideDish1))
   }
 
   @Test()
@@ -108,43 +93,13 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
     val (user2Token, user2) = createUserAndGetToken("James2", "james2@team1.com")
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": false, "id": "${sideDish1.id}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user2Token)
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
+    val request = createRequest(createContent, user2Token)
 
     mockMvc.perform(request)
       .andExpect(MockMvcResultMatchers.status().isOk)
@@ -164,44 +119,13 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
     val newSideDishName = "Side dish 4"
     val newSideDishPrice = 200
-
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": true, "newSideDishName": "${newSideDishName}", "newSideDishPrice": "${newSideDishPrice}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = orderEntryPayloadWithExistingDishAndNewSideDish(order, dish1, newSideDishName, newSideDishPrice)
+    val request = createRequest(createContent, user1Token)
 
     mockMvc.perform(request)
       .andExpect(MockMvcResultMatchers.status().isOk)
@@ -211,15 +135,19 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     assertThat(orderEntriesInDb).hasSize(1)
     assertThat(orderEntriesInDb[0].order.id).isEqualTo(order.id)
     assertThat(orderEntriesInDb[0].dishEntries).hasSize(1)
-    assertThat(orderEntriesInDb[0].dishEntries[0].dish.id).isEqualTo(dish1.id)
-    assertThat(orderEntriesInDb[0].dishEntries[0].additionalComments).isEqualTo("Some funny comment")
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes).hasSize(1)
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes[0].name).isEqualTo(newSideDishName)
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes[0].price).isEqualTo(newSideDishPrice)
 
-    val orderedDishFromDb = dishRepository.findById(orderEntriesInDb[0].dishEntries[0].dish.id).get()
+    val firstDishEntry = orderEntriesInDb[0].dishEntries[0]
+    assertThat(firstDishEntry.dish.id).isEqualTo(dish1.id)
+    assertThat(firstDishEntry.additionalComments).isEqualTo("Some funny comment")
+    assertThat(firstDishEntry.chosenSideDishes).hasSize(1)
+    assertThat(firstDishEntry.chosenSideDishes[0].name).isEqualTo(newSideDishName)
+    assertThat(firstDishEntry.chosenSideDishes[0].price).isEqualTo(newSideDishPrice)
+
+    val orderedDishFromDb = dishRepository.findById(firstDishEntry.dish.id).get()
     assertThat(orderedDishFromDb.sideDishes).hasSize(4)
-    assertThat(orderedDishFromDb.sideDishes.find { sd -> sd.name == newSideDishName }!!.price).isEqualTo(newSideDishPrice)
+    assertThat(orderedDishFromDb.sideDishes.find { sd -> sd.name == newSideDishName }!!.price).isEqualTo(
+      newSideDishPrice
+    )
   }
 
   @Test()
@@ -227,24 +155,8 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
     val newDishName = "New dish"
     val newDishPrice = 2400
@@ -252,22 +164,8 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val newSideDishName = "Side dish 4"
     val newSideDishPrice = 200
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": true,
-        "newDishName": "${newDishName}",
-        "newDishPrice": "${newDishPrice}",
-        "sideDishes": [
-          {"isNew": true, "newSideDishName": "${newSideDishName}", "newSideDishPrice": "${newSideDishPrice}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithNewDishAndNewSideDish(order, dish1, newDishName, newDishPrice, newSideDishName, newSideDishPrice)
+    val request = createRequest(createContent, user1Token)
 
     mockMvc.perform(request)
       .andExpect(MockMvcResultMatchers.status().isOk)
@@ -277,14 +175,16 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     assertThat(orderEntriesInDb).hasSize(1)
     assertThat(orderEntriesInDb[0].order.id).isEqualTo(order.id)
     assertThat(orderEntriesInDb[0].dishEntries).hasSize(1)
-    assertThat(orderEntriesInDb[0].dishEntries[0].dish.name).isEqualTo(newDishName)
-    assertThat(orderEntriesInDb[0].dishEntries[0].dish.price).isEqualTo(newDishPrice)
-    assertThat(orderEntriesInDb[0].dishEntries[0].additionalComments).isEqualTo("Some funny comment")
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes).hasSize(1)
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes[0].name).isEqualTo(newSideDishName)
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes[0].price).isEqualTo(newSideDishPrice)
 
-    val orderedDishFromDb = dishRepository.findById(orderEntriesInDb[0].dishEntries[0].dish.id).get()
+    val firstDishEntry = orderEntriesInDb[0].dishEntries[0]
+    assertThat(firstDishEntry.dish.name).isEqualTo(newDishName)
+    assertThat(firstDishEntry.dish.price).isEqualTo(newDishPrice)
+    assertThat(firstDishEntry.additionalComments).isEqualTo("Some funny comment")
+    assertThat(firstDishEntry.chosenSideDishes).hasSize(1)
+    assertThat(firstDishEntry.chosenSideDishes[0].name).isEqualTo(newSideDishName)
+    assertThat(firstDishEntry.chosenSideDishes[0].price).isEqualTo(newSideDishPrice)
+
+    val orderedDishFromDb = dishRepository.findById(firstDishEntry.dish.id).get()
     assertThat(orderedDishFromDb.name).isEqualTo(newDishName)
     assertThat(orderedDishFromDb.price).isEqualTo(newDishPrice)
     assertThat(orderedDishFromDb.sideDishes).hasSize(1)
@@ -297,46 +197,13 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
-
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
+    createOrderEntry(order, dish1, user1)
     orderService.setAsOrdered(order.id, null, currentUser = user1)
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": false, "id": "${sideDish1.id}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
+    val request = createRequest(createContent, user1Token)
 
     mockMvc.perform(request)
       .andExpect(MockMvcResultMatchers.status().isOk)
@@ -356,48 +223,15 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
-
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
+    createOrderEntry(order, dish1, user1)
     orderService.setAsOrdered(order.id, null, currentUser = user1)
 
     val (user2Token, user2) = createUserAndGetToken("James2", "james2@team1.com")
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": false, "id": "${sideDish1.id}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user2Token)
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
+    val request = createRequest(createContent, user2Token)
 
     expectBadRequestWithMessage(request, "Order is already ordered")
   }
@@ -407,47 +241,14 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
-
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
+    createOrderEntry(order, dish1, user1)
     orderService.setAsOrdered(order.id, null, currentUser = user1)
     orderService.setAsDelivered(order.id, currentUser = user1)
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": false, "id": "${sideDish1.id}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
+    val request = createRequest(createContent, user1Token)
 
     mockMvc.perform(request)
       .andExpect(MockMvcResultMatchers.status().isOk)
@@ -467,49 +268,16 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
-
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
+    createOrderEntry(order, dish1, user1)
     orderService.setAsOrdered(order.id, null, currentUser = user1)
     orderService.setAsDelivered(order.id, currentUser = user1)
 
     val (user2Token, user2) = createUserAndGetToken("James2", "james2@team1.com")
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": false, "id": "${sideDish1.id}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user2Token)
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
+    val request = createRequest(createContent, user2Token)
 
     expectBadRequestWithMessage(request, "Order is already ordered")
   }
@@ -519,46 +287,13 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
-
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
+    createOrderEntry(order, dish1, user1)
     orderService.setAsRejected(order.id, currentUser = user1)
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": false, "id": "${sideDish1.id}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
+    val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "Order is already ordered")
   }
@@ -568,43 +303,11 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val fakeSideDishId = "111111111111"
-
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": false, "id": "${fakeSideDishId}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, fakeSideDishId)
+    val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "Side dish does not exist")
   }
@@ -614,44 +317,15 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
 
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
+    val order = createOrder(restaurant, user1, team1)
 
     val newSideDishName = "Side dish 4"
     val newSideDishPrice = -200
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": true, "newSideDishName": "${newSideDishName}", "newSideDishPrice": "${newSideDishPrice}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = orderEntryPayloadWithExistingDishAndNewSideDish(order, dish1, newSideDishName, newSideDishPrice)
+    val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "New side dish price cannot be negative")
   }
@@ -661,44 +335,14 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
     val newSideDishName = ""
     val newSideDishPrice = 200
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": [
-          {"isNew": true, "newSideDishName": "${newSideDishName}", "newSideDishPrice": "${newSideDishPrice}"}
-        ]
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = orderEntryPayloadWithExistingDishAndNewSideDish(order, dish1, newSideDishName, newSideDishPrice)
+    val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "New side dish name cannot be empty")
   }
@@ -708,41 +352,11 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
+    val (restaurant, dish) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val fakeDishId = "11111111"
-
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${fakeDishId}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": []
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithExistingDishAndNoSideDishes(order.id, fakeDishId)
+    val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "Dish does not exist")
   }
@@ -752,42 +366,14 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
     val newDishName = ""
     val newDishPrice = 2400
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": true,
-        "newDishName": "${newDishName}",
-        "newDishPrice": "${newDishPrice}",
-        "sideDishes": []
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithNewDishAndNoSideDishes(order, newDishName, newDishPrice)
+    val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "Dish name cannot be empty")
   }
@@ -797,42 +383,14 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
-
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
 
     val newDishName = "New dish"
     val newDishPrice = -2400
 
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": true,
-        "newDishName": "${newDishName}",
-        "newDishPrice": "${newDishPrice}",
-        "sideDishes": []
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithNewDishAndNoSideDishes(order, newDishName, newDishPrice)
+    val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "Dish price cannot be negative")
   }
@@ -842,34 +400,10 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
-    val dishCreateRequest = DishCreateRequest(
-      "Dish 1",
-      100,
-      category = "Category 1",
-      sideDishes = listOf(
-        sideDish1,
-        sideDish2,
-        sideDish3
-      )
-    )
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
+    val (_, dish1) = createRestaurantAndDish(team1)
 
-    val createContent = """{
-        "orderId": "${fakeOrderId}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "sideDishes": []
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
-      .content(createContent)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user1Token)
+    val createContent = createPayloadWithExistingDishAndNoSideDishes(fakeOrderId, dish1.id)
+    val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "Order does not exist")
   }
@@ -879,10 +413,32 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
+    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
+
+    val team2 = teamService.createTeam("team2.com", "team2.com")
+    val (user2Token, user2) = createUserAndGetToken("James2", "james2@team2.com")
+
+    val createContent = createPayloadWithExistingDishAndNoSideDishes(order.id, dish1.id)
+    val request = createRequest(createContent, user2Token)
+
+    expectBadRequestWithMessage(request, "You have no access to this order")
+  }
+
+
+  private fun createOrder(restaurant: Restaurant, user1: User, team1: Team): Order {
+    val orderSaveRequest = OrderSaveRequest(
+      restaurantId = restaurant.id,
+      orderDate = LocalDate.now(),
+      timeOfOrder = LocalTime.of(14, 0),
+      deliveryData = DeliveryData(),
+      paymentData = PaymentData()
+    )
+    return orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
+  }
+
+  private fun createRestaurantAndDish(team1: Team): Pair<Restaurant, Dish> {
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDish1 = SideDish(name = "Side dish 1", price = 100)
-    val sideDish2 = SideDish(name = "Side dish 2", price = 120)
-    val sideDish3 = SideDish(name = "Side dish 3", price = 150)
     val dishCreateRequest = DishCreateRequest(
       "Dish 1",
       100,
@@ -894,28 +450,103 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
       )
     )
     val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
+    return Pair(restaurant, dish1)
+  }
 
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val team2 = teamService.createTeam("team2.com", "team2.com")
-    val (user2Token, user2) = createUserAndGetToken("James2", "james2@team2.com")
-
-    val createContent = """{
-        "orderId": "${order.id}",
-        "dishId": "${dish1.id}",
-        "additionalComments": "Some funny comment",
-        "newDish": false,
-        "newDishName": "",
-        "newDishPrice": 0,
-        "sideDishes": []
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.post("/api/order_entries/save")
+  private fun createRequest(createContent: String, user1Token: String): MockHttpServletRequestBuilder {
+    return MockMvcRequestBuilders.post("/api/order_entries/save")
       .content(createContent)
       .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", user2Token)
+      .header("Authorization", user1Token)
+  }
 
-    expectBadRequestWithMessage(request, "You have no access to this order")
+  private fun createOrderEntry(order: Order, dish1: Dish, user1: User): OrderEntry {
+    val orderEntrySaveRequest = OrderEntrySaveRequest(
+      orderId = order.id,
+      dishId = dish1.id,
+      newDish = false,
+      newDishName = null,
+      newDishPrice = null
+    )
+    return orderEntryService.saveEntry(user1, orderEntrySaveRequest)
+  }
+
+  private fun orderEntryPayloadWithExistingDishAndNewSideDish(
+    order: Order,
+    dish1: Dish,
+    newSideDishName: String,
+    newSideDishPrice: Int
+  ): String {
+    return """{
+          "orderId": "${order.id}",
+          "dishId": "${dish1.id}",
+          "additionalComments": "Some funny comment",
+          "newDish": false,
+          "newDishName": "",
+          "newDishPrice": 0,
+          "sideDishes": [
+            {"isNew": true, "newSideDishName": "${newSideDishName}", "newSideDishPrice": "${newSideDishPrice}"}
+          ]
+      }""".trimIndent()
+  }
+
+  private fun createPayloadWithExistingDishAndNoSideDishes(orderId: String, dishId: String): String {
+    return """{
+          "orderId": "${orderId}",
+          "dishId": "${dishId}",
+          "additionalComments": "Some funny comment",
+          "newDish": false,
+          "sideDishes": []
+      }""".trimIndent()
+  }
+
+  private fun createPayloadWithNewDishAndNoSideDishes(order: Order, newDishName: String, newDishPrice: Int): String {
+    return """{
+          "orderId": "${order.id}",
+          "additionalComments": "Some funny comment",
+          "newDish": true,
+          "newDishName": "${newDishName}",
+          "newDishPrice": "${newDishPrice}",
+          "sideDishes": []
+      }""".trimIndent()
+  }
+
+  private fun createPayloadWithExistingDishAndExistingSideDish(
+    order: Order,
+    dishId: String,
+    sideDishId: String
+  ): String {
+    return """{
+          "orderId": "${order.id}",
+          "dishId": "${dishId}",
+          "additionalComments": "Some funny comment",
+          "newDish": false,
+          "newDishName": "",
+          "newDishPrice": 0,
+          "sideDishes": [
+            {"isNew": false, "id": "${sideDishId}"}
+          ]
+      }""".trimIndent()
+  }
+
+  private fun createPayloadWithNewDishAndNewSideDish(
+    order: Order,
+    dish1: Dish,
+    newDishName: String,
+    newDishPrice: Int,
+    newSideDishName: String,
+    newSideDishPrice: Int
+  ): String {
+    return """{
+          "orderId": "${order.id}",
+          "dishId": "${dish1.id}",
+          "additionalComments": "Some funny comment",
+          "newDish": true,
+          "newDishName": "${newDishName}",
+          "newDishPrice": "${newDishPrice}",
+          "sideDishes": [
+            {"isNew": true, "newSideDishName": "${newSideDishName}", "newSideDishPrice": "${newSideDishPrice}"}
+          ]
+      }""".trimIndent()
   }
 }
