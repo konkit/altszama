@@ -3,6 +3,7 @@ package altszama.app.orderEntry
 import altszama.app.auth.UserService
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.orderEntry.dto.OrderEntryUpdateRequest
+import altszama.app.utils.CurrentUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,10 +20,15 @@ class OrderEntryController {
   @Autowired
   private lateinit var userService: UserService
 
+  @Autowired
+  private lateinit var currentUserService: CurrentUserService
+
   @PostMapping("/order_entries/save")
-  fun save(@RequestBody @Valid saveRequest: OrderEntrySaveRequest): ResponseEntity<String> {
+  fun save(@RequestBody saveRequest: OrderEntrySaveRequest): ResponseEntity<String> {
     val currentUser = userService.currentUser()
-    orderEntryService.saveEntry(currentUser, saveRequest)
+    val currentUserTeam = currentUserService.getCurrentUserTeam()
+
+    orderEntryService.saveEntry(currentUser, currentUserTeam, saveRequest)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 

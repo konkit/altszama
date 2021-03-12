@@ -8,7 +8,6 @@ import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.OrderViewInitialData
 import altszama.app.order.dto.PaymentData
 import altszama.app.orderEntry.OrderEntryService
-import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.TeamService
@@ -73,9 +72,7 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
         paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, orderCreator, team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(orderCreator, orderEntrySaveRequest)
+    createOrderEntry(order, dish1, orderCreator, team1)
 
     assertThat(order.orderState).isEqualTo(OrderState.CREATED)
 
@@ -131,9 +128,7 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
         paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, orderCreator, team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(orderCreator, orderEntrySaveRequest)
+    createOrderEntry(order, dish1, orderCreator, team1)
 
     val team2 = teamService.createTeam("team2.com", "team2.com")
     val (token2, user2) = createUserAndGetToken("Jake", "john@team2.com")

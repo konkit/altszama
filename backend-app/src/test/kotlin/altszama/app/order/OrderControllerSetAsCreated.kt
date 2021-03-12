@@ -7,7 +7,6 @@ import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
 import altszama.app.orderEntry.OrderEntryService
-import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.TeamService
@@ -65,9 +64,7 @@ class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
 
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
+    createOrderEntry(order, dish1, user1, team1)
 
     orderService.setAsOrdered(order.id, "14:00", user1)
     val afterOrdered = orderRepository.findById(order.id).get()
@@ -107,9 +104,7 @@ class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
 
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
+    createOrderEntry(order, dish1, user1, team1)
 
     orderService.setAsOrdered(order.id, "14:00", user1)
 

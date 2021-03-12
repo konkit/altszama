@@ -11,7 +11,6 @@ import altszama.app.order.OrderService
 import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
-import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
@@ -197,9 +196,10 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val (restaurant, dishesList) = createRestaurantAndTwoDishes(team1)
+    val (dish1, dish2) = dishesList
     val order = createOrder(restaurant, user1, team1)
-    createOrderEntry(order, dish1, user1)
+    createOrderEntry(order, dish2, user1, team1)
     orderService.setAsOrdered(order.id, null, currentUser = user1)
 
     val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
@@ -212,10 +212,12 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
 
     assertThat(orderEntriesInDb).hasSize(1)
     assertThat(orderEntriesInDb[0].order.id).isEqualTo(order.id)
-    assertThat(orderEntriesInDb[0].dishEntries).hasSize(1)
-    assertThat(orderEntriesInDb[0].dishEntries[0].dish.id).isEqualTo(dish1.id)
-    assertThat(orderEntriesInDb[0].dishEntries[0].additionalComments).isEqualTo("Some funny comment")
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes).isEqualTo(listOf(sideDish1))
+
+    assertThat(orderEntriesInDb[0].dishEntries).hasSize(2)
+    val dishEntry = orderEntriesInDb[0].dishEntries.find { de -> de.dish.id == dish1.id}!!
+    assertThat(dishEntry.dish.id).isEqualTo(dish1.id)
+    assertThat(dishEntry.additionalComments).isEqualTo("Some funny comment")
+    assertThat(dishEntry.chosenSideDishes).isEqualTo(listOf(sideDish1))
   }
 
   @Test()
@@ -225,7 +227,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
 
     val (restaurant, dish1) = createRestaurantAndDish(team1)
     val order = createOrder(restaurant, user1, team1)
-    createOrderEntry(order, dish1, user1)
+    createOrderEntry(order, dish1, user1, team1)
     orderService.setAsOrdered(order.id, null, currentUser = user1)
 
     val (user2Token, user2) = createUserAndGetToken("James2", "james2@team1.com")
@@ -233,7 +235,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
     val request = createRequest(createContent, user2Token)
 
-    expectBadRequestWithMessage(request, "Order is already ordered")
+    expectBadRequestWithMessage(request, "Order is locked - you cannot modify it now")
   }
 
   @Test()
@@ -241,9 +243,10 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val (restaurant, dish1) = createRestaurantAndDish(team1)
+    val (restaurant, dishesList) = createRestaurantAndTwoDishes(team1)
+    val (dish1, dish2) = dishesList
     val order = createOrder(restaurant, user1, team1)
-    createOrderEntry(order, dish1, user1)
+    createOrderEntry(order, dish2, user1, team1)
     orderService.setAsOrdered(order.id, null, currentUser = user1)
     orderService.setAsDelivered(order.id, currentUser = user1)
 
@@ -257,10 +260,12 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
 
     assertThat(orderEntriesInDb).hasSize(1)
     assertThat(orderEntriesInDb[0].order.id).isEqualTo(order.id)
-    assertThat(orderEntriesInDb[0].dishEntries).hasSize(1)
-    assertThat(orderEntriesInDb[0].dishEntries[0].dish.id).isEqualTo(dish1.id)
-    assertThat(orderEntriesInDb[0].dishEntries[0].additionalComments).isEqualTo("Some funny comment")
-    assertThat(orderEntriesInDb[0].dishEntries[0].chosenSideDishes).isEqualTo(listOf(sideDish1))
+    assertThat(orderEntriesInDb[0].dishEntries).hasSize(2)
+
+    val dishEntry = orderEntriesInDb[0].dishEntries.find { de -> de.dish.id == dish1.id}!!
+    assertThat(dishEntry.dish.id).isEqualTo(dish1.id)
+    assertThat(dishEntry.additionalComments).isEqualTo("Some funny comment")
+    assertThat(dishEntry.chosenSideDishes).isEqualTo(listOf(sideDish1))
   }
 
   @Test()
@@ -270,7 +275,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
 
     val (restaurant, dish1) = createRestaurantAndDish(team1)
     val order = createOrder(restaurant, user1, team1)
-    createOrderEntry(order, dish1, user1)
+    createOrderEntry(order, dish1, user1, team1)
     orderService.setAsOrdered(order.id, null, currentUser = user1)
     orderService.setAsDelivered(order.id, currentUser = user1)
 
@@ -279,7 +284,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
     val request = createRequest(createContent, user2Token)
 
-    expectBadRequestWithMessage(request, "Order is already ordered")
+    expectBadRequestWithMessage(request, "Order is locked - you cannot modify it now")
   }
 
   @Test()
@@ -289,13 +294,13 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
 
     val (restaurant, dish1) = createRestaurantAndDish(team1)
     val order = createOrder(restaurant, user1, team1)
-    createOrderEntry(order, dish1, user1)
+    createOrderEntry(order, dish1, user1, team1)
     orderService.setAsRejected(order.id, currentUser = user1)
 
     val createContent = createPayloadWithExistingDishAndExistingSideDish(order, dish1.id, sideDish1.id!!)
     val request = createRequest(createContent, user1Token)
 
-    expectBadRequestWithMessage(request, "Order is already ordered")
+    expectBadRequestWithMessage(request, "Order is locked - you cannot modify it now")
   }
 
   @Test()
@@ -327,7 +332,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val createContent = orderEntryPayloadWithExistingDishAndNewSideDish(order, dish1, newSideDishName, newSideDishPrice)
     val request = createRequest(createContent, user1Token)
 
-    expectBadRequestWithMessage(request, "New side dish price cannot be negative")
+    expectBadRequestWithMessage(request, "Side dish price cannot be blank or negative")
   }
 
   @Test()
@@ -344,7 +349,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val createContent = orderEntryPayloadWithExistingDishAndNewSideDish(order, dish1, newSideDishName, newSideDishPrice)
     val request = createRequest(createContent, user1Token)
 
-    expectBadRequestWithMessage(request, "New side dish name cannot be empty")
+    expectBadRequestWithMessage(request, "Side dish name cannot be blank")
   }
 
   @Test()
@@ -375,7 +380,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val createContent = createPayloadWithNewDishAndNoSideDishes(order, newDishName, newDishPrice)
     val request = createRequest(createContent, user1Token)
 
-    expectBadRequestWithMessage(request, "Dish name cannot be empty")
+    expectBadRequestWithMessage(request, "Dish name cannot be blank")
   }
 
   @Test()
@@ -392,7 +397,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val createContent = createPayloadWithNewDishAndNoSideDishes(order, newDishName, newDishPrice)
     val request = createRequest(createContent, user1Token)
 
-    expectBadRequestWithMessage(request, "Dish price cannot be negative")
+    expectBadRequestWithMessage(request, "Dish price cannot be blank or negative")
   }
 
   @Test()
@@ -453,22 +458,31 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     return Pair(restaurant, dish1)
   }
 
+  private fun createRestaurantAndTwoDishes(team1: Team): Pair<Restaurant, Pair<Dish, Dish>> {
+    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
+    val sideDishesList = listOf(sideDish1, sideDish2, sideDish3)
+    val dishCreateRequest1 = DishCreateRequest(
+      "Dish 1",
+      100,
+      category = "Category 1",
+      sideDishes = sideDishesList
+    )
+    val dishCreateRequest2 = DishCreateRequest(
+      "Dish 2",
+      120,
+      category = "Category 1",
+      sideDishes = sideDishesList
+    )
+    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest1)
+    val dish2 = dishService.saveDish(team1, restaurant.id, dishCreateRequest2)
+    return Pair(restaurant, Pair(dish1, dish2))
+  }
+
   private fun createRequest(createContent: String, user1Token: String): MockHttpServletRequestBuilder {
     return MockMvcRequestBuilders.post("/api/order_entries/save")
       .content(createContent)
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", user1Token)
-  }
-
-  private fun createOrderEntry(order: Order, dish1: Dish, user1: User): OrderEntry {
-    val orderEntrySaveRequest = OrderEntrySaveRequest(
-      orderId = order.id,
-      dishId = dish1.id,
-      newDish = false,
-      newDishName = null,
-      newDishPrice = null
-    )
-    return orderEntryService.saveEntry(user1, orderEntrySaveRequest)
   }
 
   private fun orderEntryPayloadWithExistingDishAndNewSideDish(

@@ -113,7 +113,7 @@ internal class DishControllerDeleteDishTest : AbstractIntegrationTest() {
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
 
     val orderEntrySaveRequest = OrderEntrySaveRequest(orderId = order.id, dishId = dish1.id, newDish = false, newDishName = null, newDishPrice = null)
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
+    val orderEntry = orderEntryService.saveEntry(user1, team1, orderEntrySaveRequest)
 
     val request = MockMvcRequestBuilders.delete("/api/dishes/${dish1.id}/delete")
         .contentType(MediaType.APPLICATION_JSON)

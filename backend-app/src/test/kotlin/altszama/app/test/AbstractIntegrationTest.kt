@@ -3,6 +3,12 @@ package altszama.app.test
 import altszama.app.TestInitializer
 import altszama.app.auth.User
 import altszama.app.auth.UserService
+import altszama.app.dish.Dish
+import altszama.app.order.Order
+import altszama.app.orderEntry.OrderEntry
+import altszama.app.orderEntry.OrderEntryService
+import altszama.app.orderEntry.dto.OrderEntrySaveRequest
+import altszama.app.team.Team
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mongodb.BasicDBObject
 import org.assertj.core.api.Assertions
@@ -34,6 +40,9 @@ open class AbstractIntegrationTest() {
   @Autowired
   private lateinit var objectMapper: ObjectMapper
 
+  @Autowired
+  private lateinit var orderEntryService: OrderEntryService
+
   protected val fakeOrderId = "111111111111111111111111"
 
   @BeforeEach
@@ -59,6 +68,17 @@ open class AbstractIntegrationTest() {
         .response.contentAsString
 
     Assertions.assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(expectedMessage)
+  }
+
+  protected fun createOrderEntry(order: Order, dish: Dish, user: User, team: Team): OrderEntry {
+    val orderEntrySaveRequest = OrderEntrySaveRequest(
+      orderId = order.id,
+      dishId = dish.id,
+      newDish = false,
+      newDishName = null,
+      newDishPrice = null
+    )
+    return orderEntryService.saveEntry(user, team, orderEntrySaveRequest)
   }
 
 }

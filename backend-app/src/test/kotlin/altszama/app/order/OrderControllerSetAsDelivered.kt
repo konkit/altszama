@@ -80,7 +80,7 @@ class OrderControllerSetAsDelivered() : AbstractIntegrationTest() {
       newDishName = null,
       newDishPrice = null
     )
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
+    val orderEntry = orderEntryService.saveEntry(user1, team1, orderEntrySaveRequest)
 
     val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_delivered")
       .contentType(MediaType.APPLICATION_JSON)
@@ -121,15 +121,7 @@ class OrderControllerSetAsDelivered() : AbstractIntegrationTest() {
       paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val orderEntrySaveRequest = OrderEntrySaveRequest(
-      orderId = order.id,
-      dishId = dish1.id,
-      newDish = false,
-      newDishName = null,
-      newDishPrice = null
-    )
-    val orderEntry = orderEntryService.saveEntry(user1, orderEntrySaveRequest)
+    createOrderEntry(order, dish1, user1, team1)
 
     val (token2, user2) = createUserAndGetToken("James", "james@mail.com")
 

@@ -16,7 +16,11 @@ data class DishDataInvalid(override val message: String) : AltszamaErrorExceptio
 class DishInUse() : AltszamaErrorException("Delete failed - delete all orders using this dish first")
 class SideDishInUse() : AltszamaErrorException("Delete failed - delete all orders using this side dish first")
 class SideDishDoesNotExist() : AltszamaErrorException("Side dish does not exist")
-
+class DishNameCannotBeBlank() : AltszamaErrorException("Dish name cannot be blank")
+class DishPriceCannotBeBlankOrNegative() : AltszamaErrorException("Dish price cannot be blank or negative")
+class SideDishNameCannotBeBlank() : AltszamaErrorException("Side dish name cannot be blank")
+class SideDishPriceCannotBeBlankOrNegative() : AltszamaErrorException("Side dish price cannot be blank or negative")
+class OrderIsLocked() : AltszamaErrorException("Order is locked - you cannot modify it now")
 
 class OrderDoesNotExist() : AltszamaErrorException("Order does not exist")
 class NoAccessToOrder() : AltszamaErrorException("You have no access to this order")

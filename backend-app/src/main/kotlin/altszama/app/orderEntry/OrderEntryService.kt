@@ -5,13 +5,17 @@ import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.SideDish
 import altszama.app.order.OrderRepository
+import altszama.app.order.OrderState
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.orderEntry.dto.OrderEntryUpdateRequest
 import altszama.app.orderEntry.dto.SideDishData
 import altszama.app.restaurant.Restaurant
+import altszama.app.team.Team
+import altszama.app.validation.*
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 
 @Service
@@ -27,21 +31,43 @@ class OrderEntryService {
   private lateinit var dishRepository: DishRepository
 
 
-  fun saveEntry(currentUser: User, orderEntrySaveRequest: OrderEntrySaveRequest): OrderEntry {
-    val order = orderRepository.findById(orderEntrySaveRequest.orderId).get()
+  fun saveEntry(currentUser: User, currentUserTeam: Team, orderEntrySaveRequest: OrderEntrySaveRequest): OrderEntry {
+    val order = orderRepository.findById(orderEntrySaveRequest.orderId).orElseThrow { throw OrderDoesNotExist() }
+
+    if (order.restaurant.team != currentUserTeam) {
+      throw NoAccessToOrder()
+    }
+
+    if (order.orderState == OrderState.REJECTED || (currentUser.id != order.orderCreator.id && order.orderState != OrderState.CREATED)) {
+      throw OrderIsLocked()
+    }
+
     val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, currentUser)
 
-    val dish: Dish = if (orderEntrySaveRequest.newDish == true && orderEntrySaveRequest.newDishName?.isNotBlank() == true) {
-      createNewDish(order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
+    val dish: Dish = if (orderEntrySaveRequest.newDish == true) {
+      if (orderEntrySaveRequest.newDishName?.isBlank() == true) {
+        throw DishNameCannotBeBlank()
+      } else if (orderEntrySaveRequest.newDishPrice == null || orderEntrySaveRequest.newDishPrice!! < 0) {
+        throw DishPriceCannotBeBlankOrNegative()
+      } else {
+        createNewDish(order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
+      }
     } else {
-      dishRepository.findById(orderEntrySaveRequest.dishId!!).get()
+      dishRepository.findById(orderEntrySaveRequest.dishId!!).orElseThrow { DishDoesNotExist() }
     }
 
     val sideDishes: List<SideDish> = orderEntrySaveRequest.sideDishes.mapNotNull { sideDishData ->
-      if (sideDishData.isNew == true && sideDishData.newSideDishName?.isNotBlank() == true) {
-        createNewSideDish(sideDishData, dish)
+      if (sideDishData.isNew == true) {
+        if (sideDishData.newSideDishName?.isBlank() == true) {
+          throw SideDishNameCannotBeBlank()
+        } else if (sideDishData.newSideDishPrice == null || sideDishData.newSideDishPrice < 0) {
+          throw SideDishPriceCannotBeBlankOrNegative()
+        } else {
+          createNewSideDish(sideDishData, dish)
+        }
       } else {
-        dish.sideDishes.find { existingSideDish -> sideDishData.id == existingSideDish.id }
+        val foundSideDish = dish.sideDishes.find { existingSideDish -> sideDishData.id == existingSideDish.id }
+        Optional.ofNullable(foundSideDish).orElseThrow { SideDishDoesNotExist() }
       }
     }
 
