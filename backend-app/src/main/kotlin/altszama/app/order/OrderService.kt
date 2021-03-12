@@ -182,6 +182,11 @@ class OrderService {
       throw YouCanEditOnlyYourOwnOrders()
     }
 
+    val orderEntriesSize = orderEntryRepository.findByOrderId(orderId).count()
+    if (orderEntriesSize == 0) {
+      throw NoOrderEntriesInThisOrder()
+    }
+
     order.orderState = OrderState.DELIVERED
     order.timeOfDelivery = currentLocalTime().truncatedTo(ChronoUnit.MINUTES)
     orderRepository.save(order)
