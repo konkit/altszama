@@ -28,7 +28,6 @@ import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
 import ErrorHandler from "@/lib/ErrorHandler";
-import {Team} from "@/frontend-client";
 
 @Component({
   components: {
@@ -39,9 +38,6 @@ import {Team} from "@/frontend-client";
 export default class RestaurantCreateForm extends Vue {
   @Prop() restaurantName!: string;
 
-  teamsList: Team[] = [];
-
-  teamId = "";
   name = "";
   url = "";
   telephone = "";
@@ -50,28 +46,18 @@ export default class RestaurantCreateForm extends Vue {
   connector: DishesApiConnector = new DishesApiConnector();
 
   mounted() {
-    this.connector.createRestaurant().then(response => {
-      this.teamsList = response.teamsList;
-      this.teamId =
-          (response.teamsList &&
-              response.teamsList[0] &&
-              response.teamsList[0].id) ||
-          "";
-    });
-
     this.$store.commit("setTitle", "Create restaurant")
   }
 
   submitForm() {
     const restaurant = {
-      teamId: this.teamId,
       name: this.name,
       url: this.url,
       telephone: this.telephone,
       address: this.address
     };
 
-    this.connector!.saveRestaurant(restaurant)
+    this.connector.saveRestaurant(restaurant)
         .then(() => this.$router.back())
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
@@ -90,10 +76,6 @@ export default class RestaurantCreateForm extends Vue {
 
   updateAddress(newValue: string) {
     this.address = newValue;
-  }
-
-  updateTeamId(newValue: string) {
-    this.teamId = newValue;
   }
 }
 </script>

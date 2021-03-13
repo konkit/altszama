@@ -53,12 +53,41 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
   }
 
   @Test
-  fun itShouldFailToCreateRestaurantWithoutName() {
+  fun itShouldFailToCreateRestaurantWithEmptyName() {
     val team1 = teamService.createTeam("team1.com", "", listOf("james@team1.com"))
     val (restaurantCreatorToken, user1) = createUserAndGetToken("James", "james@team1.com")
 
     val restaurantSaveDataJson = """{
       "name": "",
+      "telephone": "123123123",
+      "address": "Privet drive 4",
+      "url": "https://google.com"
+    }
+    """.trimIndent()
+
+    val request = MockMvcRequestBuilders.post("/api/restaurants/save")
+      .content(restaurantSaveDataJson)
+      .contentType(MediaType.APPLICATION_JSON)
+      .header("Authorization", restaurantCreatorToken)
+
+    val response = mockMvc.perform(request)
+      .andExpect(MockMvcResultMatchers.status().isBadRequest)
+      .andReturn()
+      .response.contentAsString
+
+    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Restaurant name cannot be blank")
+
+    val restaurant = restaurantService.findByTeamAndName(team1, "New Restaurant")
+
+    assertThat(restaurant).isNull()
+  }
+
+  @Test
+  fun itShouldFailToCreateRestaurantWithoutName() {
+    val team1 = teamService.createTeam("team1.com", "", listOf("james@team1.com"))
+    val (restaurantCreatorToken, user1) = createUserAndGetToken("James", "james@team1.com")
+
+    val restaurantSaveDataJson = """{
       "telephone": "123123123",
       "address": "Privet drive 4",
       "url": "https://google.com"

@@ -31,10 +31,6 @@ export default class DishesApiConnector extends AbstractApiConnector {
     return this.restaurantApi.showRestaurant(restaurantId, this.headersWithToken());
   }
 
-  createRestaurant() {
-    return this.restaurantApi.createRestaurant(this.headersWithToken());
-  }
-
   saveRestaurant(restaurant: RestaurantSaveRequest) {
     return this.restaurantApi.saveRestaurant(restaurant, this.headersWithToken());
   }

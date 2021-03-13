@@ -38,7 +38,7 @@ class RestaurantControllerDataService {
     val dishes = dishService.findAllDishesByRestaurantId(restaurant.id).map { dish -> DishDto.fromDish(dish) }
     val dishesByCategory: Map<String, List<DishDto>> = dishes.groupBy { dish -> dish.category }
 
-    return ShowRestaurantResponse(restaurant, dishes, dishesByCategory)
+    return ShowRestaurantResponse(RestaurantDto.fromRestaurant(restaurant), dishes, dishesByCategory)
   }
 
   fun getEditRestaurantData(currentUserTeam: Team, restaurantId: String): EditRestaurantResponse {

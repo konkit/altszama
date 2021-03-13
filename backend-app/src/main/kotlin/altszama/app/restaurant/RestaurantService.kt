@@ -48,11 +48,8 @@ class RestaurantService {
   }
 
   fun createRestaurant(team: Team, saveRequest: RestaurantSaveRequest): Restaurant {
-    val validator: Validator = Validation.buildDefaultValidatorFactory().validator
-    val result = validator.validate(saveRequest)
-
-    if (result.isNotEmpty()) {
-      throw RestaurantDataInvalid(result.first().message)
+    if (saveRequest.name.isBlank()) {
+      throw RestaurantDataInvalid("Restaurant name cannot be blank")
     }
 
     val newRestaurantObj = Restaurant(
@@ -70,6 +67,10 @@ class RestaurantService {
 
   fun updateRestaurant(currentUserTeam: Team, updateRequest: RestaurantUpdateRequest): Restaurant {
     val restaurant = restaurantRepository.findById(updateRequest.id).orElseThrow { RestaurantDoesNotExist() }
+
+    if (updateRequest.name.isBlank()) {
+      throw RestaurantDataInvalid("Restaurant name cannot be blank")
+    }
 
     if (restaurant.team != currentUserTeam) {
       throw NoAccessToRestaurant()

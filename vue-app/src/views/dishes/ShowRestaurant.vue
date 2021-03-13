@@ -72,7 +72,7 @@ import Vue from "vue";
 import moment from "moment";
 import ErrorHandler from "@/lib/ErrorHandler";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import {DishDto, Restaurant} from "@/frontend-client";
+import {DishDto, RestaurantDto} from "@/frontend-client";
 
 @Component({
   components: {
@@ -85,7 +85,7 @@ import {DishDto, Restaurant} from "@/frontend-client";
 export default class ShowRestaurant extends Vue {
   restaurantId = "";
 
-  restaurant: Restaurant = {
+  restaurant: RestaurantDto = {
     id: "",
     name: "",
     url: "",
