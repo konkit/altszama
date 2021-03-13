@@ -76,7 +76,8 @@ open class AbstractIntegrationTest() {
       dishId = dish.id,
       newDish = false,
       newDishName = null,
-      newDishPrice = null
+      newDishPrice = null,
+      sideDishes = emptyList()
     )
     return orderEntryService.saveEntry(user, team, orderEntrySaveRequest)
   }

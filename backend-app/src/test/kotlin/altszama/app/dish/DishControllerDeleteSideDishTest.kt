@@ -1,14 +1,21 @@
 package altszama.app.dish
 
+import altszama.app.auth.User
 import altszama.app.auth.UserService
 import altszama.app.dish.dto.DishCreateRequest
+import altszama.app.order.Order
 import altszama.app.order.OrderService
 import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
+import altszama.app.orderEntry.OrderEntry
 import altszama.app.orderEntry.OrderEntryService
+import altszama.app.orderEntry.dto.OrderEntrySaveRequest
+import altszama.app.orderEntry.dto.SideDishData
+import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
+import altszama.app.team.Team
 import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.validation.SideDishInUse
@@ -133,20 +140,64 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
-    val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = listOf(SideDish(name = "Side dish 1", price = 100)))
+    val dishCreateRequest = DishCreateRequest(
+      "Dish 1",
+      100,
+      category = "Category 1",
+      sideDishes = listOf(SideDish(name = "Side dish 1", price = 100))
+    )
     val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
 
     val createdSideDish = dish1.sideDishes.first()
 
-    val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
+    val order = createOrder(restaurant, user1, team1)
+    val orderEntry = createOrderEntry(order, dish1, createdSideDish, user1, team1)
 
     val request = MockMvcRequestBuilders.delete("/api/dishes/${dish1.id}/side_dishes/${createdSideDish.id}/delete")
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, SideDishInUse().message)
+  }
+
+  private fun createOrderEntry(
+    order: Order,
+    dish1: Dish,
+    createdSideDish: SideDish,
+    user1: User,
+    team1: Team
+  ): OrderEntry {
+    val orderEntrySaveRequest = OrderEntrySaveRequest(
+      orderId = order.id,
+      dishId = dish1.id,
+      newDish = false,
+      newDishName = null,
+      newDishPrice = null,
+      sideDishes = listOf(
+        SideDishData(
+          isNew = false,
+          id = createdSideDish.id,
+          newSideDishName = null,
+          newSideDishPrice = null
+        )
+      )
+    )
+    return orderEntryService.saveEntry(user1, team1, orderEntrySaveRequest)
+  }
+
+  private fun createOrder(
+    restaurant: Restaurant,
+    user1: User,
+    team1: Team
+  ): Order {
+    val orderSaveRequest = OrderSaveRequest(
+      restaurantId = restaurant.id,
+      orderDate = LocalDate.now(),
+      timeOfOrder = LocalTime.of(14, 0),
+      deliveryData = DeliveryData(),
+      paymentData = PaymentData()
+    )
+    return orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
   }
 
 

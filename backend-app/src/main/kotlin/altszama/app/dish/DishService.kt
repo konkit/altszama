@@ -5,7 +5,6 @@ import altszama.app.dish.dto.DishUpdateRequest
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.restaurant.RestaurantService
 import altszama.app.team.Team
-import altszama.app.team.TeamService
 import altszama.app.validation.*
 import arrow.core.extensions.list.foldable.exists
 import org.bson.types.ObjectId
@@ -117,12 +116,14 @@ class DishService {
       throw NoAccessToRestaurant()
     }
 
-    val sideDishInUse = orderEntryRepository.findByDishIdQuery(ObjectId(dishId))
+    val orderEntries = orderEntryRepository.findByDishIdQuery(ObjectId(dishId))
+    val sideDishInUse = orderEntries
         .exists { orderEntry ->
           orderEntry.dishEntries.exists { dishEntry ->
             dishEntry.chosenSideDishes.map { sd -> sd.id }.contains(sideDishId)
           }
         }
+
     if (sideDishInUse) {
       throw SideDishInUse()
     }
