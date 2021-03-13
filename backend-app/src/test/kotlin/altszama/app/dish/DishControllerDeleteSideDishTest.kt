@@ -5,14 +5,10 @@ import altszama.app.auth.UserService
 import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.order.Order
 import altszama.app.order.OrderService
-import altszama.app.order.dto.DeliveryData
-import altszama.app.order.dto.OrderSaveRequest
-import altszama.app.order.dto.PaymentData
 import altszama.app.orderEntry.OrderEntry
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.orderEntry.dto.SideDishData
-import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.Team
@@ -27,8 +23,6 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import java.time.LocalDate
-import java.time.LocalTime
 
 internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
@@ -184,21 +178,5 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
     )
     return orderEntryService.saveEntry(user1, team1, orderEntrySaveRequest)
   }
-
-  private fun createOrder(
-    restaurant: Restaurant,
-    user1: User,
-    team1: Team
-  ): Order {
-    val orderSaveRequest = OrderSaveRequest(
-      restaurantId = restaurant.id,
-      orderDate = LocalDate.now(),
-      timeOfOrder = LocalTime.of(14, 0),
-      deliveryData = DeliveryData(),
-      paymentData = PaymentData()
-    )
-    return orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-  }
-
 
 }

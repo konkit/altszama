@@ -1,13 +1,10 @@
-package altszama.app.order.dto.tests
+package altszama.app.order.dto
 
 import altszama.app.auth.User
 import altszama.app.dish.Dish
 import altszama.app.dish.SideDish
 import altszama.app.dish.dto.DishDto
 import altszama.app.order.Order
-import altszama.app.order.dto.ParticipantsDishEntry
-import altszama.app.order.dto.ParticipantsOrderEntry
-import altszama.app.order.dto.ShowOrderResponse
 import altszama.app.orderEntry.DishEntry
 import altszama.app.orderEntry.OrderEntry
 import altszama.app.orderEntry.OrderEntryPaymentStatus

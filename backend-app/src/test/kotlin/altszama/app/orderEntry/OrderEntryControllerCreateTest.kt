@@ -1,6 +1,5 @@
 package altszama.app.orderEntry
 
-import altszama.app.auth.User
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.DishService
@@ -8,9 +7,6 @@ import altszama.app.dish.SideDish
 import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.order.Order
 import altszama.app.order.OrderService
-import altszama.app.order.dto.DeliveryData
-import altszama.app.order.dto.OrderSaveRequest
-import altszama.app.order.dto.PaymentData
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
@@ -25,8 +21,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import java.time.LocalDate
-import java.time.LocalTime
 
 class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
 
@@ -430,18 +424,6 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     val request = createRequest(createContent, user2Token)
 
     expectBadRequestWithMessage(request, "You have no access to this order")
-  }
-
-
-  private fun createOrder(restaurant: Restaurant, user1: User, team1: Team): Order {
-    val orderSaveRequest = OrderSaveRequest(
-      restaurantId = restaurant.id,
-      orderDate = LocalDate.now(),
-      timeOfOrder = LocalTime.of(14, 0),
-      deliveryData = DeliveryData(),
-      paymentData = PaymentData()
-    )
-    return orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
   }
 
   private fun createRestaurantAndDish(team1: Team): Pair<Restaurant, Dish> {
