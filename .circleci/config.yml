@@ -7,6 +7,7 @@ jobs:
 
     docker:
     - image: cimg/openjdk:11.0-node
+    - image: circleci/mongo:4.2.3
 
     steps:
     - checkout
