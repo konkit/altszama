@@ -42,7 +42,6 @@ class OrderEntryService {
       throw OrderIsLocked()
     }
 
-    val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, currentUser)
 
     val dish: Dish = if (orderEntrySaveRequest.newDish == true) {
       if (orderEntrySaveRequest.newDishName?.isBlank() == true) {
@@ -73,6 +72,7 @@ class OrderEntryService {
 
     val dishEntries = listOf(DishEntry(dish, sideDishes, orderEntrySaveRequest.additionalComments))
 
+    val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, currentUser)
     val savedEntry = if (orderEntry != null) {
       orderEntry.dishEntries = orderEntry.dishEntries + dishEntries
       orderEntry
@@ -109,26 +109,53 @@ class OrderEntryService {
     return sideDish
   }
 
-  fun updateEntry(orderEntryUpdateRequest: OrderEntryUpdateRequest) {
-    val orderEntry = orderEntryRepository.findById(orderEntryUpdateRequest.id!!).get()
+  fun updateEntry(currentUser: User, currentUserTeam: Team, orderEntryUpdateRequest: OrderEntryUpdateRequest) {
+    val orderEntryId = Optional.ofNullable(orderEntryUpdateRequest.id).orElseThrow { InvalidOrderEntryId() }
+    val dishEntryId = Optional.ofNullable(orderEntryUpdateRequest.dishEntryId).orElseThrow { InvalidDishEntryId() }
 
-    val dish: Dish = if (orderEntryUpdateRequest.newDish == true && orderEntryUpdateRequest.newDishName?.isNotBlank() == true) {
-      createNewDish(orderEntry.order.restaurant, orderEntryUpdateRequest.newDishName, orderEntryUpdateRequest.newDishPrice)
-    } else {
-      dishRepository.findById(orderEntryUpdateRequest.dishId!!).get()
+    val orderEntry = orderEntryRepository.findById(orderEntryId).orElseThrow { throw OrderEntryDoesNotExist() }
+    val dishEntry = Optional
+      .ofNullable(orderEntry.dishEntries.find { de -> de.id == dishEntryId })
+      .orElseThrow { DishEntryDoesNotExist() }
+
+    if (orderEntry.user != currentUser) {
+      throw NoAccessToOrderEntry()
     }
 
-    val sideDishes = orderEntryUpdateRequest.sideDishes.mapNotNull { sideDishData ->
-      if (sideDishData.isNew == true && sideDishData.newSideDishName?.isNotBlank() == true) {
-        createNewSideDish(sideDishData, dish)
+    if (orderEntry.order.orderState == OrderState.REJECTED || (currentUser.id != orderEntry.order.orderCreator.id && orderEntry.order.orderState != OrderState.CREATED)) {
+      throw OrderIsLocked()
+    }
+
+    val dish: Dish = if (orderEntryUpdateRequest.newDish == true) {
+      if (orderEntryUpdateRequest.newDishName?.isBlank() == true) {
+        throw DishNameCannotBeBlank()
+      } else if (orderEntryUpdateRequest.newDishPrice == null || orderEntryUpdateRequest.newDishPrice!! < 0) {
+        throw DishPriceCannotBeBlankOrNegative()
       } else {
-        dish.sideDishes.find { existingSideDish -> sideDishData.id == existingSideDish.id }
+        createNewDish(orderEntry.order.restaurant, orderEntryUpdateRequest.newDishName, orderEntryUpdateRequest.newDishPrice)
+      }
+    } else {
+      dishRepository.findById(orderEntryUpdateRequest.dishId!!).orElseThrow { DishDoesNotExist() }
+    }
+
+    val sideDishes: List<SideDish> = orderEntryUpdateRequest.sideDishes.mapNotNull { sideDishData ->
+      if (sideDishData.isNew == true) {
+        if (sideDishData.newSideDishName?.isBlank() == true) {
+          throw SideDishNameCannotBeBlank()
+        } else if (sideDishData.newSideDishPrice == null || sideDishData.newSideDishPrice < 0) {
+          throw SideDishPriceCannotBeBlankOrNegative()
+        } else {
+          createNewSideDish(sideDishData, dish)
+        }
+      } else {
+        val foundSideDish = dish.sideDishes.find { existingSideDish -> sideDishData.id == existingSideDish.id }
+        Optional.ofNullable(foundSideDish).orElseThrow { SideDishDoesNotExist() }
       }
     }
 
-    val updatedDishEntry = DishEntry(dish, sideDishes, orderEntryUpdateRequest.additionalComments, orderEntryUpdateRequest.dishEntryId!!)
+    val updatedDishEntry = DishEntry(dish, sideDishes, orderEntryUpdateRequest.additionalComments, dishEntryId)
     val dishEntries = orderEntry.dishEntries.map { entry ->
-      if (entry.id != orderEntryUpdateRequest.dishEntryId!!) entry else updatedDishEntry
+      if (entry.id != dishEntryId) entry else updatedDishEntry
     }
 
     val updatedEntry = orderEntry.copy(dishEntries = dishEntries)

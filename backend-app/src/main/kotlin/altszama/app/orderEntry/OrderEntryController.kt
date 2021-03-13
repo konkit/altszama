@@ -34,7 +34,10 @@ class OrderEntryController {
 
   @PutMapping("/order_entries/update")
   fun update(@RequestBody @Valid updateRequest: OrderEntryUpdateRequest): ResponseEntity<String> {
-    orderEntryService.updateEntry(updateRequest)
+    val currentUser = userService.currentUser()
+    val currentUserTeam = currentUserService.getCurrentUserTeam()
+
+    orderEntryService.updateEntry(currentUser, currentUserTeam, updateRequest)
     return ResponseEntity("{}", HttpStatus.OK)
   }
 

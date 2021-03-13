@@ -23,8 +23,14 @@ class SideDishPriceCannotBeBlankOrNegative() : AltszamaErrorException("Side dish
 class OrderIsLocked() : AltszamaErrorException("Order is locked - you cannot modify it now")
 
 class OrderDoesNotExist() : AltszamaErrorException("Order does not exist")
+class OrderEntryDoesNotExist() : AltszamaErrorException("Order entry does not exist")
+class DishEntryDoesNotExist() : AltszamaErrorException("Dish entry does not exist")
 class NoAccessToOrder() : AltszamaErrorException("You have no access to this order")
+class NoAccessToOrderEntry() : AltszamaErrorException("You have no access to this order entry")
 class OrderDateIsInvalid() : AltszamaErrorException("Order date is invalid")
 class BankTransferNumberNotSpecified() : AltszamaErrorException("Bank transfer number is not specified")
 class YouCanEditOnlyYourOwnOrders() : AltszamaErrorException("You can edit only your own orders")
 class NoOrderEntriesInThisOrder() : AltszamaErrorException("There are no order entries in this order")
+
+class InvalidOrderEntryId() : AltszamaErrorException("Field orderEntry id is invalid")
+class InvalidDishEntryId() : AltszamaErrorException("Field dishEntryId is invalid")
