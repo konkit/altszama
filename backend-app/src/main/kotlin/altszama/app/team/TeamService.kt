@@ -1,6 +1,7 @@
 package altszama.app.team
 
 import altszama.app.auth.User
+import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -41,4 +42,10 @@ class TeamService {
           .map { d -> d.trim().toLowerCase() }
           .filter { d -> d.isNotBlank() }
           .flatMap { e -> teamRepository.findByUserEmails(e) }
+
+  fun findByImportUsername(usernameString: String): Optional<Team> {
+    return Optional.ofNullable(usernameString)
+      .filter(StringUtils::isNotBlank)
+      .flatMap { username -> teamRepository.findByImportUsername(username) }
+  }
 }

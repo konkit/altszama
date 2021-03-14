@@ -65,7 +65,7 @@ import Vue from "vue";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
 import ErrorHandler from "@/lib/ErrorHandler";
 import {RestaurantInfo} from "@/frontend-client";
-import {BACKEND_URL, CURRENT_DOMAIN} from "@/lib/config";
+import {CURRENT_DOMAIN} from "@/lib/config";
 
 interface RestaurantEntry {
   id: string;
@@ -118,7 +118,7 @@ export default class RestaurantIndex extends Vue {
   }
 
   getSwaggerUrl() {
-    return CURRENT_DOMAIN + "/api/swagger/swagger-ui/index.html?configUrl=/api/swagger/swagger-config"
+    return CURRENT_DOMAIN + "/api/swagger-ui/index.html?configUrl=/api/swagger/swagger-config"
   }
 
   goToRestaurant(restaurantId: string) {

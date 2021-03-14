@@ -1,19 +1,14 @@
 package altszama.app.restaurantImport
 
-import altszama.app.team.Team
 import altszama.app.team.TeamService
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.annotations.security.SecurityScheme
 import org.apache.http.HttpHeaders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 import java.nio.charset.StandardCharsets
 import java.util.*
 
@@ -21,11 +16,6 @@ data class RestaurantImportResponse(val message: String)
 
 @RestController
 @RequestMapping("/api")
-//@SecurityScheme(
-//    name = "basicAuth",
-//    type = SecuritySchemeType.HTTP,
-//    scheme = "basic"
-//)
 class RestaurantImportController {
 
   @Autowired
@@ -34,41 +24,48 @@ class RestaurantImportController {
   @Autowired
   private lateinit var teamService: TeamService
 
-  @PostMapping(value = ["/restaurantImport/{teamId}"], consumes = ["application/json"], produces = ["application/json"])
+  @PostMapping(value = ["/restaurantImport/import"], consumes = ["application/json"], produces = ["application/json"])
   @Operation(summary = "Create or update a new restaurant with all dishes", description = "")
   @SecurityRequirement(name = "basicAuth")
-  fun handlePayload(@PathVariable("teamId") teamId: String?,
-                    @RequestHeader(HttpHeaders.AUTHORIZATION) authorizationHeader: String?,
+  fun handlePayload(@RequestHeader(HttpHeaders.AUTHORIZATION) @Parameter(hidden = true) authorizationHeader: String?,
                     @RequestBody restaurantData: RestaurantImportJson): ResponseEntity<RestaurantImportResponse> {
-    val teamOpt = Optional.ofNullable(teamId).flatMap { t -> teamService.findById(t) }
+    val usernamePasswordOpt = getUsernameAndPasswordFromHeader(authorizationHeader)
 
-    return if (teamOpt.isEmpty) {
-      ResponseEntity(RestaurantImportResponse("Team does not exist"), HttpStatus.BAD_REQUEST)
+    if (usernamePasswordOpt.isEmpty) {
+      return ResponseEntity(RestaurantImportResponse("Please use Basic Auth"), HttpStatus.UNAUTHORIZED)
     } else {
-      val team = teamOpt.get()
+      val (username, password) = usernamePasswordOpt.get()
 
-      val authenticated = checkIfAuthenticated(authorizationHeader, team)
+      val teamOpt = teamService.findByImportUsername(username)
 
-      if (!authenticated) {
-        ResponseEntity(RestaurantImportResponse("Wrong credentials"), HttpStatus.UNAUTHORIZED)
+      return if (teamOpt.isEmpty) {
+        ResponseEntity(RestaurantImportResponse("Team does not exist"), HttpStatus.BAD_REQUEST)
       } else {
-        service.createFromJson(team, restaurantData)
+        val team = teamOpt.get()
 
-        ResponseEntity(RestaurantImportResponse("Import successful"), HttpStatus.CREATED)
+        val authenticated = team.importPassword == password
+
+        if (!authenticated) {
+          ResponseEntity(RestaurantImportResponse("Wrong credentials"), HttpStatus.UNAUTHORIZED)
+        } else {
+          service.createFromJson(team, restaurantData)
+
+          ResponseEntity(RestaurantImportResponse("Import successful"), HttpStatus.CREATED)
+        }
       }
     }
   }
 
-  private fun checkIfAuthenticated(authorizationHeader: String?, team: Team) =
-      Optional.ofNullable(authorizationHeader)
-          .filter { h -> h.toLowerCase().startsWith("basic") }
-          .map { h ->
-            val base64Credentials = h.substring("Basic".length).trim();
-            val credDecoded = Base64.getDecoder().decode(base64Credentials);
-            val credentials = String(credDecoded, StandardCharsets.UTF_8);
-            val (username, password) = credentials.split(":")
-            username == team.importUsername && password == team.importPassword
-          }
-          .orElseGet { false }
+  private fun getUsernameAndPasswordFromHeader(authorizationHeader: String?): Optional<Pair<String, String>> {
+    return Optional.ofNullable(authorizationHeader)
+      .filter { h -> h.toLowerCase().startsWith("basic") }
+      .map { h ->
+        val base64Credentials = h.substring("Basic".length).trim();
+        val credDecoded = Base64.getDecoder().decode(base64Credentials);
+        val credentials = String(credDecoded, StandardCharsets.UTF_8);
+        val (username, password) = credentials.split(":")
+        Pair(username, password)
+      }
+  }
 
 }

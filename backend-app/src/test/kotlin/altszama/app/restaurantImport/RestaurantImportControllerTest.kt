@@ -44,7 +44,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
   fun shouldSuccessfullyImportNewRestaurant() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
 
-    val request = post("/api/restaurantImport/${team1.id}")
+    val request = post("/api/restaurantImport/import")
         .content(restaurantImportJson)
         .contentType(MediaType.APPLICATION_JSON)
         .with(httpBasic(team1.importUsername, team1.importPassword))
@@ -71,12 +71,12 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
   @Test
   fun shouldUpdateTheCorrectRestaurantInTheCorrectTeam() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
-    val team2 = teamService.createTeam("team2.com", "team1.com")
+    val team2 = teamService.createTeam("team2.com", "team2.com")
 
     restaurantService.createRestaurant(team1, RestaurantSaveRequest(name = "Restaurant 1"))
     restaurantService.createRestaurant(team2, RestaurantSaveRequest(name = "Restaurant 1"))
 
-    val request = post("/api/restaurantImport/${team2.id}")
+    val request = post("/api/restaurantImport/import")
         .content(restaurantImportJson)
         .contentType(MediaType.APPLICATION_JSON)
         .with(httpBasic(team2.importUsername, team2.importPassword))
@@ -90,29 +90,38 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
   }
 
   @Test
-  fun shouldReturnErrorIfSuppliedTeamIdDoesNotExist() {
-    val fakeTeamId = "123456789012345678901234"
-
-    val request = post("/api/restaurantImport/${fakeTeamId}")
-        .content(restaurantImportJson)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic("", ""))
-
-    mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-  }
-
-  @Test
-  fun shouldReturnErrorIfTheLoginAndPasswordWereWrong() {
+  fun shouldReturnErrorIfTheLoginIsWrong() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team2 = teamService.createTeam("team2.com", "team1.com")
+
+    restaurantService.createRestaurant(team1, RestaurantSaveRequest(name = "Restaurant 1"))
+    restaurantService.createRestaurant(team2, RestaurantSaveRequest(name = "Restaurant 1"))
 
     val fakeUsername = "fakeusername"
     val fakePassword = "fakepassword"
 
-    val request = post("/api/restaurantImport/${team1.id}")
+    val request = post("/api/restaurantImport/import")
+      .content(restaurantImportJson)
+      .contentType(MediaType.APPLICATION_JSON)
+      .with(httpBasic(fakeUsername, fakePassword))
+
+    expectBadRequestWithMessage(request, "Team does not exist")
+  }
+
+  @Test
+  fun shouldReturnErrorIfThePasswordIsWrong() {
+    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team2 = teamService.createTeam("team2.com", "team1.com")
+
+    restaurantService.createRestaurant(team1, RestaurantSaveRequest(name = "Restaurant 1"))
+    restaurantService.createRestaurant(team2, RestaurantSaveRequest(name = "Restaurant 1"))
+
+    val fakePassword = "fakepassword"
+
+    val request = post("/api/restaurantImport/import")
         .content(restaurantImportJson)
         .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic(fakeUsername, fakePassword))
+        .with(httpBasic(team1.importUsername, fakePassword))
 
     mockMvc.perform(request)
         .andExpect(MockMvcResultMatchers.status().isUnauthorized)
