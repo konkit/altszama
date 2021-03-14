@@ -72,7 +72,7 @@ import Vue from "vue";
 import moment from "moment";
 import ErrorHandler from "@/lib/ErrorHandler";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import {DishDto, RestaurantDto} from "@/frontend-client";
+import { DishDto, RestaurantDto } from "@/frontend-client";
 
 @Component({
   components: {

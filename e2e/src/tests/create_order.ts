@@ -14,7 +14,7 @@ fixture(`Create order`)
     await tokenAuthorization.init()
   })
   .beforeEach(async t => {
-    await testEnvApi.generateJustRestaurants()
+    await testEnvApi.generateRestaurantsAndDishes()
     await t.resizeWindow(1400, 700)
   })
   .page `http://localhost:${TARGET_PORT}/orders`

@@ -10,7 +10,7 @@ export class TestEnvApi {
     return await axios.post("http://localhost:8088/api/e2e/generateEverything", {})
   }
 
-  async generateJustRestaurants() {
-    return await axios.post("http://localhost:8088/api/e2e/generateJustRestaurants", {})
+  async generateRestaurantsAndDishes() {
+    return await axios.post("http://localhost:8088/api/e2e/generateRestaurantsAndDishes", {})
   }
 }

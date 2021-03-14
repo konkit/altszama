@@ -42,29 +42,27 @@ class TestEnvironmentService {
   @Autowired
   private lateinit var teamRepository: TeamRepository
 
-  fun clearEverything() {
+  fun clearEverythingAndCreateTeam(): Team {
     dishRepository.deleteAll()
     restaurantRepository.deleteAll()
     orderEntryRepository.deleteAll()
     orderRepository.deleteAll()
     teamRepository.deleteAll()
+
+    val team = createTeam()
+
+    return team
   }
 
-  fun generateJustRestaurants() {
-    clearEverything()
-
-    val team = Team(name = "altszama.club", domain = "altszama.club", userEmails = emptyList())
-    teamRepository.save(team)
+  fun generateRestaurantsAndDishes() {
+    val team = clearEverythingAndCreateTeam()
 
     val pizzeria = createRestaurant(team, "Pizzeria")
     val chineseSpot = createRestaurant(team, "Chinese spot")
   }
 
   fun generateEverything() {
-    clearEverything()
-
-    val team = Team(name = "altszama.club", domain = "altszama.club", userEmails = emptyList())
-    teamRepository.save(team)
+    val team = clearEverythingAndCreateTeam()
 
     val user1 = userService.createNewUser("John Doe", "john.doe@altszama.club")
     val user2 = userService.createNewUser("James Bond", "james.bond@altszama.club")
@@ -85,6 +83,12 @@ class TestEnvironmentService {
     createOrderEntry(order, user1, pizzeria.dishes[0])
     createOrderEntry(order, user2, pizzeria.dishes[1])
     createOrderEntry(order, user3, pizzeria.dishes[2])
+  }
+
+  private fun createTeam(): Team {
+    val team = Team(name = "altszama.club", domain = "altszama.club", userEmails = emptyList())
+    teamRepository.save(team)
+    return team
   }
 
   private fun createRestaurant(team: Team, restaurantName: String): RestaurantWithDishes {

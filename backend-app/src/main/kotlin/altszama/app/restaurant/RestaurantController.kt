@@ -1,19 +1,11 @@
 package altszama.app.restaurant
 
-import altszama.app.auth.UserService
 import altszama.app.restaurant.dto.*
-import altszama.app.team.TeamService
 import altszama.app.utils.CurrentUserService
-import altszama.app.validation.AltszamaErrorException
-import altszama.app.validation.ErrorResponse
-import altszama.app.validation.UserDoesNotBelongToAnyTeam
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.Validator
 import org.springframework.web.bind.annotation.*
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api")

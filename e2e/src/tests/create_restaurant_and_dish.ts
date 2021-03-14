@@ -59,7 +59,14 @@ test('Create restaurant and dish, update and delete', async _ => {
 
   await ShowRestaurantView.clickCreateNewDishButton()
   await CreateDishForm.submit()
-  await CreateDishForm.expectValidationError("Name cannot be blank!")
+  await CreateDishForm.expectValidationError("Dish name cannot be blank")
+  await Toolbar.goBack()
+
+  await ShowRestaurantView.clickCreateNewDishButton()
+  await CreateDishForm.fillNameField("New dish")
+  await CreateDishForm.fillPriceField("-1,23")
+  await CreateDishForm.submit()
+  await CreateDishForm.expectValidationError("Dish price must not be negative")
   await Toolbar.goBack()
 
   await ShowRestaurantView.editDish("New dish")
