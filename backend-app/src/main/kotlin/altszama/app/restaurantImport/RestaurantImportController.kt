@@ -32,7 +32,7 @@ class RestaurantImportController {
     val usernamePasswordOpt = getUsernameAndPasswordFromHeader(authorizationHeader)
 
     if (usernamePasswordOpt.isEmpty) {
-      return ResponseEntity(RestaurantImportResponse("Please use Basic Auth"), HttpStatus.UNAUTHORIZED)
+      return ResponseEntity(RestaurantImportResponse("Please use Basic Auth with credentials provided on Restaurants page"), HttpStatus.UNAUTHORIZED)
     } else {
       val (username, password) = usernamePasswordOpt.get()
 

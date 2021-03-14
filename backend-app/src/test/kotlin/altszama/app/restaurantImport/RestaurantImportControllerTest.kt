@@ -69,6 +69,16 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
   }
 
   @Test
+  fun shouldReturnUnauthorizedResponseIfThereIsNoBasicAuthHeader() {
+    val request = post("/api/restaurantImport/import")
+      .content(restaurantImportJson)
+      .contentType(MediaType.APPLICATION_JSON)
+
+    mockMvc.perform(request)
+      .andExpect(MockMvcResultMatchers.status().isUnauthorized)
+  }
+
+  @Test
   fun shouldUpdateTheCorrectRestaurantInTheCorrectTeam() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val team2 = teamService.createTeam("team2.com", "team2.com")
