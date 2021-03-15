@@ -1,6 +1,8 @@
 package altszama.app.restaurantImport
 
 import altszama.app.team.TeamService
+import altszama.app.validation.RestaurantImportInvalidCredentials
+import altszama.app.validation.RestaurantImportNoBasicAuth
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.nio.charset.StandardCharsets
 import java.util.*
+import javax.servlet.http.HttpServletRequest
 
 data class RestaurantImportResponse(val message: String)
 
@@ -27,26 +30,29 @@ class RestaurantImportController {
   @PostMapping(value = ["/restaurantImport/import"], consumes = ["application/json"], produces = ["application/json"])
   @Operation(summary = "Create or update a new restaurant with all dishes", description = "")
   @SecurityRequirement(name = "basicAuth")
-  fun handlePayload(@RequestHeader(HttpHeaders.AUTHORIZATION) @Parameter(hidden = true) authorizationHeader: String?,
-                    @RequestBody restaurantData: RestaurantImportJson): ResponseEntity<RestaurantImportResponse> {
+  fun handlePayload(
+    @RequestHeader(HttpHeaders.AUTHORIZATION) @Parameter(hidden = true) authorizationHeader: String?,
+    @RequestBody restaurantData: RestaurantImportJson,
+    request: HttpServletRequest
+  ): ResponseEntity<RestaurantImportResponse> {
     val usernamePasswordOpt = getUsernameAndPasswordFromHeader(authorizationHeader)
 
     if (usernamePasswordOpt.isEmpty) {
-      return ResponseEntity(RestaurantImportResponse("Please use Basic Auth with credentials provided on Restaurants page"), HttpStatus.UNAUTHORIZED)
+      throw RestaurantImportNoBasicAuth()
     } else {
       val (username, password) = usernamePasswordOpt.get()
 
       val teamOpt = teamService.findByImportUsername(username)
 
       return if (teamOpt.isEmpty) {
-        ResponseEntity(RestaurantImportResponse("Team does not exist"), HttpStatus.BAD_REQUEST)
+        throw RestaurantImportInvalidCredentials()
       } else {
         val team = teamOpt.get()
 
         val authenticated = team.importPassword == password
 
         if (!authenticated) {
-          ResponseEntity(RestaurantImportResponse("Wrong credentials"), HttpStatus.UNAUTHORIZED)
+          throw RestaurantImportInvalidCredentials()
         } else {
           service.createFromJson(team, restaurantData)
 

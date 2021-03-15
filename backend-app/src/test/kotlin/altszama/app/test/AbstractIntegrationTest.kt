@@ -91,6 +91,15 @@ open class AbstractIntegrationTest() {
     Assertions.assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(expectedMessage)
   }
 
+  protected fun expectUnauthorizedWithMessage(request: MockHttpServletRequestBuilder, expectedMessage: String) {
+    val response = mockMvc.perform(request)
+      .andExpect(MockMvcResultMatchers.status().isUnauthorized)
+      .andReturn()
+      .response.contentAsString
+
+    Assertions.assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(expectedMessage)
+  }
+
   protected fun createRestaurantAndDishes(team1: Team): Pair<Restaurant, List<Dish>> {
     val sideDish1 = SideDish(name = "Side dish 1", price = 100)
     val sideDish2 = SideDish(name = "Side dish 2", price = 120)

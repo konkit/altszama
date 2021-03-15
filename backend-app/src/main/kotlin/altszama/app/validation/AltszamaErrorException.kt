@@ -1,6 +1,9 @@
 package altszama.app.validation
 
-sealed class AltszamaErrorException(override val message: String) : RuntimeException(message)
+import org.springframework.http.HttpStatus
+
+sealed class AltszamaErrorException(override val message: String,
+                                    val responseStatus: HttpStatus = HttpStatus.BAD_REQUEST) : RuntimeException(message)
 
 class RestaurantInUseException() : AltszamaErrorException("Dalete failed - delete all orders from this restaurant first")
 class NoAccessToRestaurant() : AltszamaErrorException("You have no access to this restaurant")
@@ -34,3 +37,7 @@ class NoOrderEntriesInThisOrder() : AltszamaErrorException("There are no order e
 
 class InvalidOrderEntryId() : AltszamaErrorException("Field orderEntry id is invalid")
 class InvalidDishEntryId() : AltszamaErrorException("Field dishEntryId is invalid")
+
+
+class RestaurantImportNoBasicAuth() : AltszamaErrorException("Please use Basic Auth with credentials provided on Restaurants page", HttpStatus.UNAUTHORIZED)
+class RestaurantImportInvalidCredentials() : AltszamaErrorException("Invalid credentials", HttpStatus.UNAUTHORIZED)

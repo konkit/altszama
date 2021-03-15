@@ -74,8 +74,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
       .content(restaurantImportJson)
       .contentType(MediaType.APPLICATION_JSON)
 
-    mockMvc.perform(request)
-      .andExpect(MockMvcResultMatchers.status().isUnauthorized)
+    expectUnauthorizedWithMessage(request, "Please use Basic Auth with credentials provided on Restaurants page")
   }
 
   @Test
@@ -115,7 +114,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
       .contentType(MediaType.APPLICATION_JSON)
       .with(httpBasic(fakeUsername, fakePassword))
 
-    expectBadRequestWithMessage(request, "Team does not exist")
+    expectUnauthorizedWithMessage(request, "Invalid credentials")
   }
 
   @Test
@@ -133,7 +132,6 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .with(httpBasic(team1.importUsername, fakePassword))
 
-    mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isUnauthorized)
+    expectUnauthorizedWithMessage(request, "Invalid credentials")
   }
 }
