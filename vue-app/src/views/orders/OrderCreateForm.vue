@@ -16,27 +16,18 @@
 
                   <v-divider></v-divider>
 
-                  <v-stepper-step step="2">
-                    Fill details
-                  </v-stepper-step>
+                  <v-stepper-step step="2">Fill details</v-stepper-step>
                 </v-stepper-header>
 
                 <v-stepper-items>
                   <v-stepper-content step="1">
-                    <h1>Select restaurant</h1>
-
-                    <v-autocomplete
-                        :items="restaurantsList"
-                        item-text="name"
-                        item-value="id"
-                        label="Restaurant"
-                        :value="this.restaurantsList.find(r => restaurantId === r.id)"
-                        @input="updateRestaurantId($event)"
-                    >
-                    </v-autocomplete>
-
-                    <v-btn color="primary" @click="next()">Continue</v-btn>
-                    <v-btn text @click="back()">Back</v-btn>
+                    <select-restaurant-step 
+                      :restaurantId="restaurantId" 
+                      :restaurantsList="restaurantsList"
+                      @next="next()"
+                      @back="back()"
+                      @updateRestaurantId="updateRestaurantId($event)">
+                    </select-restaurant-step>
                   </v-stepper-content>
 
                   <v-stepper-content step="2">
@@ -92,6 +83,7 @@ import NoRestaurantsGuard from "@/views/orders/components/orderCreateForm/NoRest
 import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
 import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";
 import PaymentDataFields from "@/views/orders/components/orderCreateForm/PaymentDataFields.vue";
+import SelectRestaurantStep from "@/views/orders/components/orderCreateForm/SelectRestaurantStep.vue"
 
 @Component({
   computed: {
@@ -107,7 +99,8 @@ import PaymentDataFields from "@/views/orders/components/orderCreateForm/Payment
     TimePicker,
     MoneyInput,
     LoadingView,
-    ErrorsComponent
+    ErrorsComponent,
+    SelectRestaurantStep
   }
 })
 export default class OrderCreateForm extends Vue {
@@ -231,6 +224,7 @@ export default class OrderCreateForm extends Vue {
       this.$router.back()
     }
   }
+
 }
 </script>
 
