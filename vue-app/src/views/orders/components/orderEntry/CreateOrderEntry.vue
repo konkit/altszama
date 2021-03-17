@@ -13,7 +13,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="primary" @click="submitForm">Submit</v-btn>
+        <v-btn color="primary" @click="submitForm" :disabled="isSubmitDisabled">Submit</v-btn>
         <v-btn @click="cancelEdit()">Cancel</v-btn>
       </div>
     </template>
@@ -138,6 +138,10 @@ export default class CreateOrderEntry extends Vue {
 
   get dishIdToSideDishesMap(): { [key: string]: SideDish[] } {
     return this.$store.state.showOrder.dishIdToSideDishesMap;
+  }
+
+  get isSubmitDisabled(): boolean {
+    return this.orderEntryData.dishData.kind === "NewDishData" && !this.orderEntryData.dishData.newDishName
   }
 
   updateOrderEntryData(newOrderEntryData: OrderEntryData) {

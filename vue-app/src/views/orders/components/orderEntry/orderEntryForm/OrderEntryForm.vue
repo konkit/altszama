@@ -9,8 +9,8 @@
           :items="allDishesAtOnce"
           @input="updateNewDishName($event)"
       >
-        <template v-slot:item="{ index, item }">
-          <v-list-item-content v-on="on">
+        <template v-slot:item="{ item }">
+          <v-list-item-content>
             <v-list-item-title><span class="text-wrap">{{ item.text }}</span></v-list-item-title>
             <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
           </v-list-item-content>

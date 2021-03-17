@@ -52,7 +52,9 @@ class OrderEntryService {
         createNewDish(order.restaurant, orderEntrySaveRequest.newDishName, orderEntrySaveRequest.newDishPrice)
       }
     } else {
-      dishRepository.findById(orderEntrySaveRequest.dishId!!).orElseThrow { DishDoesNotExist() }
+      Optional.ofNullable(orderEntrySaveRequest.dishId)
+        .flatMap { dishId -> dishRepository.findById(dishId) }
+        .orElseThrow { DishDoesNotExist() }
     }
 
     val sideDishes: List<SideDish> = orderEntrySaveRequest.sideDishes.mapNotNull { sideDishData ->
@@ -135,7 +137,9 @@ class OrderEntryService {
         createNewDish(orderEntry.order.restaurant, orderEntryUpdateRequest.newDishName, orderEntryUpdateRequest.newDishPrice)
       }
     } else {
-      dishRepository.findById(orderEntryUpdateRequest.dishId!!).orElseThrow { DishDoesNotExist() }
+      Optional.ofNullable(orderEntryUpdateRequest.dishId)
+        .flatMap { dishId -> dishRepository.findById(dishId) }
+        .orElseThrow { DishDoesNotExist() }
     }
 
     val sideDishes: List<SideDish> = orderEntryUpdateRequest.sideDishes.mapNotNull { sideDishData ->

@@ -363,6 +363,20 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
   }
 
   @Test()
+  fun itShouldNotAddOrderEntryIfExistingDishIdIsNull() {
+    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+
+    val (restaurant, dish) = createRestaurantAndDish(team1)
+    val order = createOrder(restaurant, user1, team1)
+
+    val createContent = createPayloadWithExistingDishAndNoSideDishesButWithNullDishIdField(order.id)
+    val request = createRequest(createContent, user1Token)
+
+    expectBadRequestWithMessage(request, "Dish does not exist")
+  }
+
+  @Test()
   fun itShouldNotAddOrderEntryIfNewDishNameIsEmpty() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
@@ -492,6 +506,16 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
     return """{
           "orderId": "${orderId}",
           "dishId": "${dishId}",
+          "additionalComments": "Some funny comment",
+          "newDish": false,
+          "sideDishes": []
+      }""".trimIndent()
+  }
+
+  private fun createPayloadWithExistingDishAndNoSideDishesButWithNullDishIdField(orderId: String): String {
+    return """{
+          "orderId": "${orderId}",
+          "dishId": null,
           "additionalComments": "Some funny comment",
           "newDish": false,
           "sideDishes": []

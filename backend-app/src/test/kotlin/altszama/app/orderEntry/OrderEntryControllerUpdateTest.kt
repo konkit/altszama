@@ -372,6 +372,38 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
   }
 
   @Test()
+  fun itShouldNotAddOrderEntryIfExistingDishIdIsNull() {
+    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+
+    val (restaurant, dishes) = createRestaurantAndDishes(team1)
+    val order = createOrder(restaurant, user1, team1)
+    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val dishEntry = orderEntry.dishEntries.first()
+
+    val createContent = createPayloadWithExistingDishAndNoSideDishesButWithNullDishIdField(orderEntry.id, dishEntry.id)
+    val request = createRequest(createContent, user1Token)
+
+    expectBadRequestWithMessage(request, "Dish does not exist")
+  }
+
+  @Test()
+  fun itShouldNotAddOrderEntryIfExistingDishEntryIdIsNull() {
+    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+
+    val (restaurant, dishes) = createRestaurantAndDishes(team1)
+    val order = createOrder(restaurant, user1, team1)
+    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val dishEntry = orderEntry.dishEntries.first()
+
+    val createContent = createPayloadWithExistingDishAndNoSideDishesButWithNullDishEntryIdField(orderEntry.id, dishEntry.dish.id)
+    val request = createRequest(createContent, user1Token)
+
+    expectBadRequestWithMessage(request, "Field dishEntryId is invalid")
+  }
+
+  @Test()
   fun itShouldNotAddOrderEntryIfNewDishNameIsEmpty() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
@@ -527,6 +559,30 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
           "dishEntryId": "${dishEntryId}",
           "dishId": "${dishId}",
           "additionalComments": "Some updated comment",
+          "newDish": false,
+          "sideDishes": []
+      }""".trimIndent()
+  }
+
+  private fun createPayloadWithExistingDishAndNoSideDishesButWithNullDishIdField(orderEntryId: String,
+                                                                                 dishEntryId: String): String {
+    return """{
+          "id": "${orderEntryId}",
+          "dishEntryId": "${dishEntryId}",
+          "dishId": null,
+          "additionalComments": "Some funny comment",
+          "newDish": false,
+          "sideDishes": []
+      }""".trimIndent()
+  }
+
+  private fun createPayloadWithExistingDishAndNoSideDishesButWithNullDishEntryIdField(orderEntryId: String,
+                                                                                 dishId: String): String {
+    return """{
+          "id": "${orderEntryId}",
+          "dishEntryId": null,
+          "dishId": "${dishId}",
+          "additionalComments": "Some funny comment",
           "newDish": false,
           "sideDishes": []
       }""".trimIndent()

@@ -69,7 +69,7 @@ export default class SelectRestaurantStep extends Vue {
 
   get filteredRestaurants() {
     const restaurants = this.filterRestaurantName != null
-      ? this.restaurantsList.filter(x => x.name.includes(this.filterRestaurantName))
+      ? this.restaurantsList.filter(x => x.name.toLowerCase().includes(this.filterRestaurantName.toLowerCase()))
       : this.restaurantsList
 
     console.log(restaurants)
