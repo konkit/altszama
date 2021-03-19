@@ -1,10 +1,10 @@
 <template>
-  <v-card :key="'entryId-' + entryId">
-    <v-card-title>
-      {{ orderEntry.username }}
-    </v-card-title>
+  <div :key="'entryId-' + entryId">
+    
+    <v-divider class="py-2"></v-divider>
 
-    <v-card-text>
+    <h3>{{ orderEntry.username }}</h3>
+
       <PaymentStatus
         :order="order"
         :order-entry="orderEntry"
@@ -76,14 +76,11 @@
           </v-list-item>
         </template>
       </v-list>
-    </v-card-text>
 
-    <v-card-actions>
       <span class="px-2 mb-2">
         <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b>
       </span>
-    </v-card-actions>
-  </v-card>
+  </div>
 </template>
 
 <script lang="ts">

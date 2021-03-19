@@ -37,9 +37,12 @@
 
         <v-row>
           <v-col>
-            <h1 class="mb-4">User entries</h1>
-          </v-col>
-          <v-col>
+            <div class="d-flex flex-row">
+            <!-- <h1 class="mb-4">User entries</h1> -->
+            <div class="mr-4 menu-link">
+              <b>See menu at &nbsp;</b>
+              <a target="_blank" :href="order.restaurantUrl">{{ order.restaurantUrl }}</a>
+            </div>
             <div class="d-flex justify-end">
               <v-btn
                   color="primary"
@@ -64,14 +67,6 @@
                 Edit order<i class="fa fa-cog" aria-hidden="true"></i>
               </v-btn>
             </div>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <div class="px-4">
-              <b>See menu at &nbsp;</b>
-              <a target="_blank" :href="order.restaurantUrl">{{ order.restaurantUrl }}</a>
             </div>
           </v-col>
         </v-row>
@@ -272,5 +267,9 @@ export default class ShowOrder extends Vue {
 <style scoped>
 .asdf-card {
   min-height: 300px;
+}
+
+.menu-link {
+  line-height: 36px;
 }
 </style>

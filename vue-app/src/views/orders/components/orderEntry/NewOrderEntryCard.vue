@@ -1,13 +1,10 @@
 <template>
-  <v-card>
-    <v-card-title>
-      {{ username }}
-    </v-card-title>
+  <div>
+    <h3>{{username }}</h3>
 
-    <v-card-text>
       <div class="user-order-col">
         <template v-if="isEntryCreating === false">
-          <v-btn color="primary" @click="createEntry()">
+          <v-btn color="primary" class="mt-3" @click="createEntry()">
             Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
           </v-btn>
         </template>
@@ -16,8 +13,7 @@
           <create-order-entry></create-order-entry>
         </template>
       </div>
-    </v-card-text>
-  </v-card>
+  </div>
 </template>
 
 <script lang="ts">

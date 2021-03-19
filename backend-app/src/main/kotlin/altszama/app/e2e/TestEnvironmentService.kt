@@ -86,7 +86,7 @@ class TestEnvironmentService {
   }
 
   private fun createTeam(): Team {
-    val team = Team(name = "altszama.club", domain = "altszama.club", userEmails = emptyList())
+    val team = Team(name = "altszama.club", domain = "altszama.club", userEmails = listOf("konkit@gmail.com"))
     teamRepository.save(team)
     return team
   }

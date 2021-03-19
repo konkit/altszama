@@ -12,10 +12,8 @@
             <v-card class="pa-8">
               <h1 class="pb-5 text-align-center">Test Login</h1>
 
-              <div class="d-flex-column">
-                <v-btn @click="logInAsUser1()">User 1</v-btn>
-                <v-btn @click="logInAsUser2()">User 2</v-btn>
-                <v-btn @click="logInAsUser3()">User 3</v-btn>
+              <div v-for="(user, i) in usersList" :key="i">
+                <v-btn @click="loginAsUser(user)">{{user.username}} ({{user.email}})</v-btn>
               </div>
 
 
@@ -41,36 +39,39 @@ import {BACKEND_URL} from "@/lib/config";
   }
 })
 export default class TestLoginView extends Vue {
+
+  usersList = []
+
+  mounted() {
+    this.getTestUsers()
+  }
+
   get height() {
     return "calc(100vh - 64px)"
   }
 
-  logInAsUser1() {
+  loginAsUser(user: any) {
     const payload = {
-      username: "John Test One",
-      email: "john1@altszama.club"
+      username: user.username,
+      email: user.email
     }
     this.doLogin(payload);
   }
 
-  logInAsUser2() {
-    const payload = {
-      username: "John Test Two",
-      email: "john2@altszama.club"
-    }
-    this.doLogin(payload);
-  }
-
-  logInAsUser3() {
-    const payload = {
-      username: "John Test Three",
-      email: "john3@altszama.club"
-    }
-    this.doLogin(payload);
+  private getTestUsers() {
+    fetch(`${BACKEND_URL}/auth/testUser/list`, {method: 'GET'})
+    .then(response => response.json())
+    .then(data => {
+      console.log("Users: ", data)
+      this.usersList = data
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   }
 
   private doLogin(payload: { email: string; username: string }) {
-    fetch(`${BACKEND_URL}/auth/testLogin`, {
+    fetch(`${BACKEND_URL}/auth/testUser/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -7,4 +7,6 @@ interface UserRepository : Repository<User, String> {
     fun findById(id: String): Optional<User>
     fun findByEmail(email: String): Optional<User>
     fun save(user: User)
+
+    fun findAll(): List<User>
 }
