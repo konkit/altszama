@@ -37,41 +37,45 @@
 
         <v-row>
           <v-col>
-            <div class="d-flex flex-row">
-            <!-- <h1 class="mb-4">User entries</h1> -->
-            <div class="mr-4 menu-link">
-              <b>See menu at &nbsp;</b>
-              <a target="_blank" :href="order.restaurantUrl">{{ order.restaurantUrl }}</a>
-            </div>
-            <div class="d-flex justify-end">
-              <v-btn
-                  color="primary"
-                  v-if="canShowPlaceOrderButton()"
-                  @click="placeOrder"
-                  :disabled="isPlaceOrderButtonDisabled()"
-              >
-                Place order &nbsp;
-                <i class="fa fa-arrow-right" aria-hidden="true"></i>
-              </v-btn>
+            <div class="d-flex flex-row flex-wrap">
+              <div class="mr-4 menu-link">
+                <b class="mr-2">See menu at &nbsp;</b>
+                <a v-if="order.restaurantUrl" target="_blank" :href="order.restaurantUrl">{{ order.restaurantUrl }}</a>
+                <i v-if="!order.restaurantUrl">Sorry, no menu url specified</i>
+              </div>
+              <div class="d-flex ml-auto">
+                <template v-if="canShowPlaceOrderButton() && isPlaceOrderButtonDisabled()">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <div v-on="on">
+                        <v-btn color="primary" :disabled="true">
+                          Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+                        </v-btn>
+                      </div>
+                    </template>
+                    <span>You cannot place an empty order. Choose a dish first.</span>
+                  </v-tooltip>
+                </template>
 
-              <v-btn
-                  color="primary"
-                  v-if="this.isOrderOwner() && this.orderState === 'ORDERED'"
-                  @click="setAsDelivered()"
-              >
-                Mark as delivered &nbsp;
-                <i class="fa fa-arrow-right" aria-hidden="true"></i>
-              </v-btn>
+                <template v-if="canShowPlaceOrderButton() && !isPlaceOrderButtonDisabled()">
+                  <v-btn color="primary" @click="placeOrder">
+                    Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+                  </v-btn>
+                </template>
 
-              <v-btn v-if="isOrderOwner()" @click="edit">
-                Edit order<i class="fa fa-cog" aria-hidden="true"></i>
-              </v-btn>
-            </div>
+                <v-btn color="primary" v-if="canShowMarkAsDeliveredButton()" @click="setAsDelivered()">
+                  Mark as delivered <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+                </v-btn>
+
+                <v-btn v-if="isOrderOwner()" @click="goToEditOrder">
+                  Edit order <i class="pl-2 fa fa-cog" aria-hidden="true"></i>
+                </v-btn>
+              </div>
             </div>
           </v-col>
         </v-row>
 
-        <template v-if="order.orderState == 'CREATED' && numberOfCurrentUserEntries === 0">
+        <template v-if="shouldDisplayNewOrderEntryCard()">
           <v-row>
             <v-col>
               <new-order-entry-card :is-entry-creating="isEntryCreating" :username="username">
@@ -161,16 +165,6 @@ export default class ShowOrder extends Vue {
     router.push({name: "OrderView", params: {id: this.orderId}});
   }
 
-  unlockOrder() {
-    this.ordersConnector
-        .setOrderAsCreated(this.$store.state.showOrder.order.id)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
-  }
-
   setAsDelivered() {
     this.ordersConnector
         .setOrderAsDelivered(this.orderId)
@@ -181,16 +175,16 @@ export default class ShowOrder extends Vue {
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
-  edit() {
+  goToEditOrder() {
     router.push({name: "OrderEditForm", params: {id: this.orderId}});
   }
 
   canShowPlaceOrderButton() {
-    return (
-        this.isOrderOwner() &&
-        (this.orderState === OrderStateEnum.CREATED ||
-            this.orderState === OrderStateEnum.ORDERING)
-    );
+    return this.isOrderOwner() && [OrderStateEnum.CREATED, OrderStateEnum.ORDERING].includes(this.orderState);
+  }
+
+  canShowMarkAsDeliveredButton() {
+    return this.isOrderOwner() && this.orderState === OrderStateEnum.ORDERED;
   }
 
   isPlaceOrderButtonDisabled() {
@@ -250,25 +244,17 @@ export default class ShowOrder extends Vue {
     return this.$store.state.modifyOrderEntry.isEntryCreating;
   }
 
-  get isEntryEdited() {
-    return this.$store.state.modifyOrderEntry.isEntryEdited;
-  }
-
   get username() {
     return this.$store.state.username;
   }
 
-  get loading() {
-    return this.$store.state.loading;
+  shouldDisplayNewOrderEntryCard() {
+    return this.order.orderState == OrderStateEnum.CREATED && this.numberOfCurrentUserEntries === 0
   }
 }
 </script>
 
 <style scoped>
-.asdf-card {
-  min-height: 300px;
-}
-
 .menu-link {
   line-height: 36px;
 }

@@ -9,9 +9,9 @@
         </v-list-item-content>
 
         <v-list-item-content>
-          <!--<v-list-item-title>-->
-          {{ this.order.orderCreatorUsername }}
-          <!--</v-list-item-title>-->
+          <div class="text-no-wrap">
+            {{ this.order.orderCreatorUsername }}
+          </div>
         </v-list-item-content>
       </v-list-item>
 
@@ -21,9 +21,7 @@
         </v-list-item-content>
 
         <v-list-item-content>
-          <!--<v-list-item-title>-->
           {{ this.order.timeOfOrder }}
-          <!--</v-list-item-title>-->
         </v-list-item-content>
       </v-list-item>
 
@@ -33,9 +31,7 @@
         </v-list-item-content>
 
         <v-list-item-content>
-          <!--<v-list-item-title>-->
           {{ this.timeOfDeliveryOrNA() }}
-          <!--</v-list-item-title>-->
         </v-list-item-content>
       </v-list-item>
     </v-list>

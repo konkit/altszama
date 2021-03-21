@@ -1,84 +1,84 @@
 <template>
   <div :key="'entryId-' + entryId">
-    
+
     <v-divider class="py-2"></v-divider>
 
-    <h3>{{ orderEntry.username }}</h3>
-
-      <PaymentStatus
+    <TitleWithPaymentStatus
+        :title="orderEntry.username"
+        :price-for-user="orderEntry.finalPrice"
         :order="order"
         :order-entry="orderEntry"
         :current-user-id="currentUserId"
         :cost-for-user="orderEntry.finalPrice"
-      ></PaymentStatus>
+    ></TitleWithPaymentStatus>
 
-      <v-list dense>
-        <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
-          <v-list-item :key="'dishEntry-' + dishEntryIndex">
-            <v-list-item-content class="index-element">
-              <div style="padding-top: 8px;">
-                <div style="min-height: 40px;">
-                  <div style="padding-top: 8px">
-                    <div style="line-height: 36px;">
-                      {{ dishEntryIndex + 1 }}.
-                    </div>
+    <v-list dense>
+      <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
+        <v-list-item :key="'dishEntry-' + dishEntryIndex">
+          <v-list-item-content class="index-element">
+            <div style="padding-top: 8px;">
+              <div style="min-height: 40px;">
+                <div style="padding-top: 8px">
+                  <div style="line-height: 36px;">
+                    {{ dishEntryIndex + 1 }}.
                   </div>
                 </div>
               </div>
-            </v-list-item-content>
+            </div>
+          </v-list-item-content>
 
-            <v-list-item-content>
-              <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
-                <edit-order-entry
+          <v-list-item-content>
+            <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
+              <edit-order-entry
                   :order-entry="orderEntry"
                   :dish-entry="dishEntry"
                   :key="'edit-order-entry-' + dishEntry.id"
-                >
-                </edit-order-entry>
-              </template>
-              <template v-else>
-                <show-order-entry
+              >
+              </edit-order-entry>
+            </template>
+            <template v-else>
+              <show-order-entry
                   :order-entry="orderEntry"
                   :dish-entry="dishEntry"
                   :current-user-id="currentUserId"
                   :key="'show-order-entry-' + dishEntry.id"
                   :index="dishEntryIndex + 1"
-                >
-                </show-order-entry>
-              </template>
-            </v-list-item-content>
-          </v-list-item>
+              >
+              </show-order-entry>
+            </template>
+          </v-list-item-content>
+        </v-list-item>
 
-          <template v-if="dishEntryIndex < orderEntry.dishEntries.length - 1">
-            <v-divider
+        <template v-if="dishEntryIndex < orderEntry.dishEntries.length - 1">
+          <v-divider
               :key="'dish-entry-divider' + dishEntryIndex"
               class="dishes-divider"
-            ></v-divider>
-          </template>
+          ></v-divider>
         </template>
+      </template>
 
-        <template v-if="order.orderState === 'CREATED' && isOrderEntryOwner(orderEntry) && isEntryEdited === false">
-          <v-list-item>
-            <v-list-item-content class="index-element">
-              <div class="py-4">{{ orderEntry.dishEntries.length + 1 }}.</div>
-            </v-list-item-content>
+      <template v-if="canAddNewEntry()">
+        <v-list-item>
+          <v-list-item-content class="index-element">
+            <div class="py-4">{{ orderEntry.dishEntries.length + 1 }}.</div>
+          </v-list-item-content>
 
-            <v-list-item-content>
-              <div v-if="isEntryCreating === false">
-                <v-btn color="primary ml-4" @click="createEntry()">
-                  Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
-                </v-btn>
-              </div>
-              <div v-if="isEntryCreating === true">
-                <create-order-entry></create-order-entry>
-              </div>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
-      </v-list>
+          <v-list-item-content>
+            <div v-if="isEntryCreating === false">
+              <v-btn color="primary ml-4" @click="createEntry()">
+                Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+              </v-btn>
+            </div>
+            <div v-if="isEntryCreating === true">
+              <create-order-entry></create-order-entry>
+            </div>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+    </v-list>
 
-      <span class="px-2 mb-2">
-        <b>Cost for user: <price :data-price="orderEntry.finalPrice" /></b>
+    <span class="px-2 mb-2">
+        <b>Cost for user: <price :data-price="orderEntry.finalPrice"/></b>
       </span>
   </div>
 </template>
@@ -88,15 +88,16 @@ import Price from "../../../commons/PriceElement.vue";
 import CreateOrderEntry from "./CreateOrderEntry.vue";
 import EditOrderEntry from "./EditOrderEntry.vue";
 import ShowOrderEntry from "./ShowOrderEntry.vue";
-import PaymentStatus from "@/views/orders/components/PaymentStatus.vue";
+import TitleWithPaymentStatus from "@/views/orders/components/PaymentStatus.vue";
 import Vue from "vue";
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../frontend-client";
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
   components: {
-    PaymentStatus,
+    TitleWithPaymentStatus,
     Price,
     CreateOrderEntry,
     EditOrderEntry,
@@ -114,7 +115,7 @@ export default class OrderEntriesCard extends Vue {
   }
 
   createEntry() {
-    this.$store.commit(`modifyOrderEntry/setDishEntryCreating`,{});
+    this.$store.commit(`modifyOrderEntry/setDishEntryCreating`, {});
   }
 
   get isEntryCreating() {
@@ -127,6 +128,10 @@ export default class OrderEntriesCard extends Vue {
 
   get dishEntryId() {
     return this.$store.state.modifyOrderEntry.dishEntryId;
+  }
+
+  canAddNewEntry() {
+    return this.order.orderState === OrderStateEnum.CREATED && this.isOrderEntryOwner() && !this.isEntryEdited
   }
 }
 </script>

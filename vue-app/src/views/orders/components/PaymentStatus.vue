@@ -1,31 +1,42 @@
 <template>
-  <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
-    <template v-if="shouldShowPaymentStatus()">
-      <span class="status-text">
-        {{ paymentStatusAsText(orderEntry) }}
-      </span>
-    </template>
+  <div class="d-flex flex-wrap">
+    <div>
+      <h3 class="title-text">{{ title }} (<price :data-price="orderEntry.finalPrice"/>)</h3>
+    </div>
 
-    <template v-if="shouldShowMarkAsPaidButton(orderEntry)">
-      <v-btn text color="primary" @click="markAsPaid(orderEntry.id)">
-        Mark as paid
-        <i class="fa fa-check" aria-hidden="true"></i>
-      </v-btn>
-    </template>
+    <div v-if="isOrderEntryOwner(orderEntry) || isOrderOwner(order)">
+      <template v-if="shouldShowPaymentStatus()">
+        <v-chip v-if="isUnpaid()" color="red" text-color="white" class="mx-2">
+          Unpaid
+        </v-chip>
 
-    <template v-if="shouldShowConfirmAsPaidButton(orderEntry)">
-      <v-btn text color="primary" @click="confirmAsPaid(orderEntry.id)">
-        Confirm as paid
-        <i class="fa fa-check" aria-hidden="true"></i>
-      </v-btn>
-    </template>
+        <v-chip v-if="isMarkedAsPaid()" color="yellow" text-color="white" class="mx-2">
+          Confirmation pending
+        </v-chip>
 
-    <template v-if="shouldShowQRCodeButton(orderEntry)">
-      <BankTransferQRCode
-          :order="order"
-          :userOrderAmount="costForUser"
-      ></BankTransferQRCode>
-    </template>
+        <v-chip v-if="isConfirmedAsPaid()" color="green" text-color="white" class="mx-2">
+          Payment confirmed
+        </v-chip>
+      </template>
+
+      <template v-if="shouldShowMarkAsPaidButton(orderEntry)">
+        <v-btn color="basic" @click="markAsPaid(orderEntry.id)">
+          Mark as paid
+          <i class="fa fa-check" aria-hidden="true"></i>
+        </v-btn>
+      </template>
+
+      <template v-if="shouldShowConfirmAsPaidButton(orderEntry)">
+        <v-btn color="basic" @click="confirmAsPaid(orderEntry.id)">
+          Confirm as paid
+          <i class="fa fa-check" aria-hidden="true"></i>
+        </v-btn>
+      </template>
+
+      <template v-if="shouldShowQRCodeButton()">
+        <BankTransferQRCode :order="order" :userOrderAmount="costForUser"></BankTransferQRCode>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -38,11 +49,14 @@ import {ParticipantsOrderEntry, ShowOrderDto} from "../../../frontend-client";
 import ErrorHandler from "@/lib/ErrorHandler";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import Price from "@/views/commons/PriceElement.vue";
 
 @Component({
-  components: {BankTransferQRCode}
+  components: {BankTransferQRCode, Price}
 })
-export default class PaymentStatus extends Vue {
+export default class TitleWithPaymentStatus extends Vue {
+  @Prop() title: string;
+  @Prop() priceForUser: string;
   @Prop() order!: ShowOrderDto;
   @Prop() orderEntry!: ParticipantsOrderEntry;
   @Prop() currentUserId!: string;
@@ -59,42 +73,25 @@ export default class PaymentStatus extends Vue {
   }
 
   shouldShowPaymentStatus() {
-    return (
-        (this.isOrderEntryOwner() || this.isOrderOwner()) &&
-        (this.order.orderState === OrderStateEnum.ORDERED ||
-            this.order.orderState === OrderStateEnum.DELIVERED)
-    );
+    return (this.isOrderEntryOwner() || this.isOrderOwner()) && this.isOrderedOrDelivered()
   }
 
   shouldShowMarkAsPaidButton() {
-    return (
-        this.order.orderState !== OrderStateEnum.CREATED &&
-        this.order.orderState !== OrderStateEnum.ORDERING &&
-        this.orderEntry.paymentStatus !==
-        ParticipantsOrderEntry.PaymentStatusEnum.MARKED &&
-        this.orderEntry.paymentStatus !==
-        ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED &&
-        this.isOrderOwner() === false
-    );
+    return this.isOrderedOrDelivered() && !this.isOrderOwner()
+        && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.UNPAID;
   }
 
   shouldShowConfirmAsPaidButton() {
-    return (
-        this.order.orderState !== OrderStateEnum.CREATED &&
-        this.order.orderState !== OrderStateEnum.ORDERING &&
-        this.orderEntry.paymentStatus !==
-        ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED &&
-        this.isOrderOwner() === true
-    );
+    return this.isOrderOwner() && this.isOrderedOrDelivered()
+        && this.orderEntry.paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
   }
 
   shouldShowQRCodeButton() {
-    return (
-        this.isOrderEntryOwner() &&
-        this.order.paymentData.paymentByBankTransfer === true &&
-        (this.order.orderState === OrderStateEnum.ORDERED ||
-            this.order.orderState === OrderStateEnum.DELIVERED)
-    );
+    return this.isOrderEntryOwner() && this.isOrderedOrDelivered() && this.order.paymentData.paymentByBankTransfer;
+  }
+
+  private isOrderedOrDelivered() {
+    return [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(this.order.orderState);
   }
 
   confirmAsPaid(orderEntryId: string) {
@@ -117,31 +114,25 @@ export default class PaymentStatus extends Vue {
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
-  paymentStatusAsText() {
-    if (
-        this.orderEntry.paymentStatus ===
-        ParticipantsOrderEntry.PaymentStatusEnum.UNPAID
-    ) {
-      return "Status: Unpaid";
-    } else if (
-        this.orderEntry.paymentStatus ===
-        ParticipantsOrderEntry.PaymentStatusEnum.MARKED
-    ) {
-      return "Status: Marked as paid";
-    } else if (
-        this.orderEntry.paymentStatus ===
-        ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED
-    ) {
-      return "Status: Payment confirmed";
-    } else {
-      return "Status: " + this.orderEntry.paymentStatus;
-    }
+  isUnpaid() {
+    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.UNPAID
+  }
+
+  isMarkedAsPaid() {
+    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.MARKED
+  }
+
+  isConfirmedAsPaid() {
+    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED
   }
 }
 </script>
 
 <style scoped>
-.status-text {
+.title-text {
+  height: 36px;
   line-height: 36px;
+
+  white-space: nowrap;
 }
 </style>

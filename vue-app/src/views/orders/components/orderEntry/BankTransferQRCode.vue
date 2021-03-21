@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialog" width="350">
     <template v-slot:activator="{ on }">
-      <v-btn text v-on="on">
-        Bank transfer QR &nbsp; <v-icon>fa-qrcode</v-icon>
+      <v-btn v-on="on">
+        Bank transfer QR <v-icon class="pl-2">fa-qrcode</v-icon>
       </v-btn>
     </template>
 
@@ -11,7 +11,7 @@
         Bank transfer QR Code
       </v-card-title>
 
-      <div class="text-align-center">
+      <div class="text-center">
         <qrcode-vue :value="generateCodeValue()" size="300"></qrcode-vue>
       </div>
 
@@ -25,10 +25,14 @@
   </v-dialog>
 </template>
 
-<script>
+<script lang="ts">
 import QrcodeVue from "qrcode.vue";
+import Vue from "vue";
+import {ShowOrderDto} from "@/frontend-client";
+import Component from "vue-class-component";
+import {Prop} from "vue-property-decorator";
 
-function formatName(inputValue) {
+function formatName(inputValue: string) {
   return inputValue
     .replace(/ą/g, "a")
     .replace(/Ą/g, "A")
@@ -51,40 +55,36 @@ function formatName(inputValue) {
     .toUpperCase();
 }
 
-function formatBankTransferNumber(inputValue) {
+function formatBankTransferNumber(inputValue: string) {
   return inputValue.replace(/ /g, "");
 }
 
-export default {
-  name: "BankTransferQRCode",
-  props: ["order", "userOrderAmount"],
-  data() {
-    return {
-      dialog: false
-    };
-  },
-  methods: {
-    generateCodeValue() {
-      const bankAccountNumber = formatBankTransferNumber(
-        this.order.bankTransferNumber
-      );
-
-      const amount = this.userOrderAmount;
-      const orderCreator = formatName(this.order.orderCreatorUsername);
-
-      const transferTitle = `AltSzama ${this.order.orderDate}`;
-
-      return `||${bankAccountNumber}|${amount}|${orderCreator}|${transferTitle}||ALTSZAMA|PLN`;
-    }
-  },
+@Component({
   components: {
     QrcodeVue
   }
-};
+})
+export default class BankTransferQRCode extends Vue {
+
+  @Prop() order: ShowOrderDto;
+  @Prop() userOrderAmount: number;
+
+  dialog = false
+
+  generateCodeValue() {
+    const bankAccountNumber = formatBankTransferNumber(
+      this.order.paymentData.bankTransferNumber
+    );
+
+    const amount = this.userOrderAmount;
+    const orderCreator = formatName(this.order.orderCreatorUsername);
+
+    const transferTitle = `AltSzama ${this.order.orderDate}`;
+
+    return `||${bankAccountNumber}|${amount}|${orderCreator}|${transferTitle}||ALTSZAMA|PLN`;
+  }
+}
 </script>
 
 <style scoped>
-.text-align-center {
-  text-align: center;
-}
 </style>
