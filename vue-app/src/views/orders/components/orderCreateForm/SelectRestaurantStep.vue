@@ -21,7 +21,7 @@
       </v-list-item>
     </v-list>
 
-     <div v-if="filteredRestaurants.length == 0" class="d-flex justify-center">
+     <div v-if="filteredRestaurants.length === 0" class="d-flex justify-center">
        <div class="empty-state">
         No results, please adjust your search criteria.
        </div>

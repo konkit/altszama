@@ -1,6 +1,6 @@
-import router from "@/router/index";
 import {
   AllOrdersResponse,
+  CreateOrderInitialData,
   EditOrderInitialData,
   OrderControllerApi,
   OrderEntryControllerApi,
@@ -11,10 +11,10 @@ import {
   OrderViewInitialData,
   SetAsOrderedResponse,
   ShowOrderResponse,
-  SideDishData
+  SideDishData,
+  TodayOrdersResponse
 } from "@/frontend-client";
 import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
-
 
 export interface OrderEntryToModify {
   orderId: string;
@@ -38,7 +38,7 @@ export default class OrdersApiConnector extends AbstractApiConnector {
     this.orderEntryApi = new OrderEntryControllerApi(configuration);
   }
 
-  saveOrderEntry(orderId: string, editedOrderEntry: OrderEntryToModify) {
+  saveOrderEntry(orderId: string, editedOrderEntry: OrderEntryToModify): Promise<string> {
     const formData: OrderEntrySaveRequest = {
       orderId: orderId,
       dishId: editedOrderEntry.dishId,
@@ -54,11 +54,7 @@ export default class OrdersApiConnector extends AbstractApiConnector {
     return this.orderEntryApi.save1(formData, this.headersWithToken());
   }
 
-  updateOrderEntry(
-    orderId: string,
-    orderEntryId: string,
-    editedOrderEntry: OrderEntryToModify
-  ) {
+  updateOrderEntry(orderId: string,orderEntryId: string,editedOrderEntry: OrderEntryToModify): Promise<string> {
     const formData: OrderEntryUpdateRequest = {
       id: orderEntryId,
       orderId: orderId,
@@ -76,12 +72,8 @@ export default class OrdersApiConnector extends AbstractApiConnector {
     return this.orderEntryApi.update1(formData, this.headersWithToken());
   }
 
-  deleteDishEntry(orderEntryId: string, dishEntryId: string) {
-    return this.orderEntryApi.delete1(
-      orderEntryId,
-      dishEntryId,
-      this.headersWithToken()
-    );
+  deleteDishEntry(orderEntryId: string, dishEntryId: string): Promise<string> {
+    return this.orderEntryApi.delete1(orderEntryId,dishEntryId,this.headersWithToken());
   }
 
   fetchOrder(orderId: string): Promise<ShowOrderResponse> {
@@ -92,7 +84,7 @@ export default class OrdersApiConnector extends AbstractApiConnector {
     return this.orderApi.allOrders(this.headersWithToken());
   }
 
-  fetchTodaysOrders() {
+  fetchTodaysOrders(): Promise<TodayOrdersResponse> {
     return this.orderApi.todayOrders(this.headersWithToken());
   }
 
@@ -100,7 +92,7 @@ export default class OrdersApiConnector extends AbstractApiConnector {
     return this.orderApi.orderViewJson(orderId, this.headersWithToken());
   }
 
-  getOrderCreateData() {
+  getOrderCreateData(): Promise<CreateOrderInitialData> {
     return this.orderApi.create(this.headersWithToken());
   }
 
@@ -108,49 +100,47 @@ export default class OrdersApiConnector extends AbstractApiConnector {
     return this.orderApi.edit(orderId, this.headersWithToken());
   }
 
-  setOrderAsCreated(orderId: string) {
+  setOrderAsCreated(orderId: string): Promise<string> {
     return this.orderApi.setAsCreated(orderId, this.headersWithToken());
   }
 
-  setOrderAsOrdered(orderId: string) {
+  setOrderAsOrdered(orderId: string): Promise<string> {
     return this.orderApi.setBackAsOrdered(orderId, this.headersWithToken());
   }
 
-  setOrderAsDelivered(orderId: string) {
+  setOrderAsDelivered(orderId: string): Promise<string> {
     return this.orderApi.setAsDelivered(orderId, this.headersWithToken());
   }
 
-  setOrderAsRejected(orderId: string) {
+  setOrderAsRejected(orderId: string): Promise<string> {
     return this.orderApi.setAsRejected(orderId, this.headersWithToken());
   }
 
-  deleteOrder(orderId: string) {
+  deleteOrder(orderId: string): Promise<string> {
     return this.orderApi._delete(orderId, this.headersWithToken());
   }
 
-  markOrderEntryAsPaid(orderEntryId: string) {
+  markOrderEntryAsPaid(orderEntryId: string): Promise<string> {
     return this.orderEntryApi.setAsMarkedAsPaid(orderEntryId,this.headersWithToken());
   }
 
-  revertToUnpaid(orderEntryId: string) {
+  revertToUnpaid(orderEntryId: string): Promise<string> {
     return this.orderEntryApi.revertToUnpaid(orderEntryId,this.headersWithToken());
   }
 
-  confirmOrderEntryAsPaid(orderEntryId: string) {
+  confirmOrderEntryAsPaid(orderEntryId: string): Promise<string> {
     return this.orderEntryApi.setAsConfirmedAsPaid(orderEntryId,this.headersWithToken());
   }
 
-  createOrder(order: OrderSaveRequest) {
+  createOrder(order: OrderSaveRequest): Promise<string> {
     return this.orderApi.save(order, this.headersWithToken());
   }
 
-  editOrder(order: OrderUpdateRequest) {
+  editOrder(order: OrderUpdateRequest): Promise<string> {
     return this.orderApi.update(order, this.headersWithToken());
   }
 
-  makeAnOrder(orderId: string, formData: SetAsOrderedResponse) {
-    return this.orderApi
-      .setAsOrdered(formData, orderId, this.headersWithToken())
-      .then(() => router.back());
+  makeAnOrder(orderId: string, formData: SetAsOrderedResponse): Promise<string> {
+    return this.orderApi.setAsOrdered(formData, orderId, this.headersWithToken())
   }
 }

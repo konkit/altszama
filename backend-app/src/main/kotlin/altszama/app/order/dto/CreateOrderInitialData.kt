@@ -1,6 +1,6 @@
 package altszama.app.order.dto
 
-import altszama.app.restaurant.Restaurant
+import altszama.app.restaurant.dto.RestaurantDto
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.format.annotation.DateTimeFormat
@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 data class CreateOrderInitialData(
-    val restaurantsList: List<Restaurant>,
+    val restaurantsList: List<RestaurantDto>,
     val orderDate: LocalDate = LocalDate.now(),
 
     @Schema(

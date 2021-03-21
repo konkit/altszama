@@ -48,50 +48,68 @@ export default class OrderStateButtons extends Vue {
   }
 
   setAsCreated() {
+    this.$store.commit("setLoadingTrue");
     this.ordersConnector
         .setOrderAsCreated(this.orderId)
         .then(() => {
-          this.$store.commit("setLoadingTrue");
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        .catch(errResponse => {
+          this.$store.commit("setLoadingFalse");
+          ErrorHandler.handleError(errResponse)
+        });
   }
 
   setAsOrdered() {
+    this.$store.commit("setLoadingTrue");
     this.ordersConnector
         .setOrderAsOrdered(this.orderId)
         .then(() => {
-          this.$store.commit("setLoadingTrue");
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        .catch(errResponse => {
+          this.$store.commit("setLoadingFalse");
+          ErrorHandler.handleError(errResponse)
+        });
   }
 
   setAsDelivered() {
+    this.$store.commit("setLoadingTrue");
     this.ordersConnector
         .setOrderAsDelivered(this.orderId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        .catch(errResponse => {
+          this.$store.commit("setLoadingFalse");
+          ErrorHandler.handleError(errResponse)
+        });
   }
 
   setAsRejected() {
+    this.$store.commit("setLoadingTrue");
     this.ordersConnector
         .setOrderAsRejected(this.orderId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
         })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        .catch(errResponse => {
+          this.$store.commit("setLoadingFalse");
+          ErrorHandler.handleError(errResponse)
+        });
   }
 
   deleteDishEntry() {
+    this.$store.commit("setLoadingTrue");
     this.ordersConnector
         .deleteOrder(this.orderId)
         .then(() => this.$router.push({name: "TodayOrders"}))
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        .catch(errResponse => {
+          this.$store.commit("setLoadingFalse");
+          ErrorHandler.handleError(errResponse)
+        });
   }
 
   placeOrder() {

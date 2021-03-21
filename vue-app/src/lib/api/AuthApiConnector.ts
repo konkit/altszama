@@ -14,7 +14,7 @@ export default class AuthApiConnector extends AbstractApiConnector {
     this.authControllerApi = new AuthControllerApi(this.createConfiguration());
   }
 
-  loginWithGoogle(returnPath = "") {
+  loginWithGoogle(returnPath = ""): Promise<void> {
     return new Promise((resolve, reject) => {
       GoogleLogin.signIn()
         .then(

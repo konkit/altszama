@@ -191,10 +191,10 @@ export interface CreateDishResponse {
 export interface CreateOrderInitialData {
     /**
      * 
-     * @type {Array<Restaurant>}
+     * @type {Array<RestaurantDto>}
      * @memberof CreateOrderInitialData
      */
-    restaurantsList: Array<Restaurant>;
+    restaurantsList: Array<RestaurantDto>;
     /**
      * 
      * @type {string}
@@ -1198,61 +1198,6 @@ export interface PushNotifSubscriptionData {
 /**
  * 
  * @export
- * @interface Restaurant
- */
-export interface Restaurant {
-    /**
-     * 
-     * @type {string}
-     * @memberof Restaurant
-     */
-    id: string;
-    /**
-     * 
-     * @type {Team}
-     * @memberof Restaurant
-     */
-    team: Team;
-    /**
-     * 
-     * @type {string}
-     * @memberof Restaurant
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Restaurant
-     */
-    telephone: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Restaurant
-     */
-    address: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Restaurant
-     */
-    url: string;
-    /**
-     * 
-     * @type {Date}
-     * @memberof Restaurant
-     */
-    lastCrawled?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof Restaurant
-     */
-    lastEdited?: Date;
-}
-/**
- * 
- * @export
  * @interface RestaurantDto
  */
 export interface RestaurantDto {
@@ -1649,49 +1594,6 @@ export interface SideDishData {
      * @memberof SideDishData
      */
     id?: string;
-}
-/**
- * 
- * @export
- * @interface Team
- */
-export interface Team {
-    /**
-     * 
-     * @type {string}
-     * @memberof Team
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Team
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Team
-     */
-    domain: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof Team
-     */
-    userEmails: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof Team
-     */
-    importUsername: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Team
-     */
-    importPassword: string;
 }
 /**
  * 

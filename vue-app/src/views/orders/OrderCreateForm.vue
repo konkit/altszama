@@ -78,7 +78,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ErrorHandler from "@/lib/ErrorHandler";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-import {OrderSaveRequest, Restaurant} from "@/frontend-client";
+import {OrderSaveRequest, RestaurantDto} from "@/frontend-client";
 import NoRestaurantsGuard from "@/views/orders/components/orderCreateForm/NoRestaurantsGuard.vue";
 import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
 import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";
@@ -104,7 +104,7 @@ import SelectRestaurantStep from "@/views/orders/components/orderCreateForm/Sele
   }
 })
 export default class OrderCreateForm extends Vue {
-  restaurantsList: Restaurant[] = [];
+  restaurantsList: RestaurantDto[] = [];
 
   stepperState = 1
 

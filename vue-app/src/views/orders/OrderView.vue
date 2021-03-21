@@ -74,9 +74,7 @@
 
               <price-summary
                   :orderDecreaseInPercent="orderDecreaseInPercent"
-                  :orderDeliveryCostPerEverybody="
-                      orderDeliveryCostPerEverybody
-                    "
+                  :orderDeliveryCostPerEverybody="orderDeliveryCostPerEverybody"
                   :basePriceSum="basePriceSum"
                   :orderDeliveryCostPerDish="orderDeliveryCostPerDish"
                   :allEatingPeopleCount="allEatingPeopleCount"
@@ -135,6 +133,7 @@ import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import ErrorHandler from "@/lib/ErrorHandler";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import {GroupedOrderEntry} from "@/frontend-client";
+import router from "@/router";
 
 @Component({
   components: {
@@ -190,11 +189,14 @@ export default class OrderView extends Vue {
   }
 
   submitForm() {
-    this.connector
-        ?.makeAnOrder(this.orderId, {
-          approxTimeOfDelivery: this.approxTimeOfDelivery.toString()
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+    this.$store.commit("setLoadingTrue");
+    const formData = {approxTimeOfDelivery: this.approxTimeOfDelivery.toString()};
+    this.connector?.makeAnOrder(this.orderId, formData)
+        .then(() => router.back())
+        .catch(errResponse => {
+          this.$store.commit("setLoadingFalse");
+          ErrorHandler.handleError(errResponse)
+        });
 
     return false;
   }

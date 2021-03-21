@@ -6,6 +6,7 @@ import altszama.app.order.dto.*
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.restaurant.RestaurantRepository
+import altszama.app.restaurant.dto.RestaurantDto
 import altszama.app.team.Team
 import altszama.app.validation.NoAccessToOrder
 import altszama.app.validation.OrderDoesNotExist
@@ -89,7 +90,7 @@ class OrderControllerDataService {
     val bankTransferNumber = lastOrderMade?.bankTransferNumber ?: ""
 
     return CreateOrderInitialData(
-            restaurantRepository.findAllByTeam(currentUserTeam),
+            restaurantRepository.findAllByTeam(currentUserTeam).map { r -> RestaurantDto.fromRestaurant(r) },
             blikPhoneNumber = blikPhoneNumber,
             bankTransferNumber = bankTransferNumber
     )
