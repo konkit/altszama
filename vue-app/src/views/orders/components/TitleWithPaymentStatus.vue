@@ -32,10 +32,6 @@
           <i class="fa fa-check" aria-hidden="true"></i>
         </v-btn>
       </template>
-
-      <template v-if="shouldShowQRCodeButton()">
-        <BankTransferQRCode :order="order" :userOrderAmount="costForUser"></BankTransferQRCode>
-      </template>
     </div>
   </div>
 </template>
@@ -84,10 +80,6 @@ export default class TitleWithPaymentStatus extends Vue {
   shouldShowConfirmAsPaidButton() {
     return this.isOrderOwner() && this.isOrderedOrDelivered()
         && this.orderEntry.paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
-  }
-
-  shouldShowQRCodeButton() {
-    return this.isOrderEntryOwner() && this.isOrderedOrDelivered() && this.order.paymentData.paymentByBankTransfer;
   }
 
   private isOrderedOrDelivered() {

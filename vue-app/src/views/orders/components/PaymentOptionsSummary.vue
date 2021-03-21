@@ -33,8 +33,9 @@
 
       <v-list-item v-if="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
         <v-list-item-content>
-          <div class="px-3 user-selectable">
+          <div class="px-3 user-selectable d-flex">
             {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
+            <BankTransferQRCode></BankTransferQRCode>
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -66,14 +67,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Prop } from "vue-property-decorator";
+import BankTransferQRCode from "@/views/orders/components/orderEntry/BankTransferQRCode.vue";
 import Component from "vue-class-component";
-import { PaymentData } from "@/frontend-client";
+import {Prop} from "vue-property-decorator";
+import {PaymentData} from "@/frontend-client";
+import Vue from "vue";
 
-@Component({})
+@Component({
+  components: {
+    BankTransferQRCode
+  }
+})
 export default class PaymentOptionsSummary extends Vue {
-  // @Prop() order;
   @Prop() paymentData!: PaymentData;
 
   formatBankAccountNr(unformattedInput: string) {

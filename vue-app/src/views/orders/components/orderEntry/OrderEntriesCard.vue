@@ -88,7 +88,7 @@ import Price from "../../../commons/PriceElement.vue";
 import CreateOrderEntry from "./CreateOrderEntry.vue";
 import EditOrderEntry from "./EditOrderEntry.vue";
 import ShowOrderEntry from "./ShowOrderEntry.vue";
-import TitleWithPaymentStatus from "@/views/orders/components/PaymentStatus.vue";
+import TitleWithPaymentStatus from "@/views/orders/components/TitleWithPaymentStatus.vue";
 import Vue from "vue";
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";

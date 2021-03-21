@@ -1,9 +1,7 @@
 <template>
-  <v-dialog v-model="dialog" width="350">
+  <v-dialog v-if="shouldShowQRCodeButton()" v-model="dialog" width="350">
     <template v-slot:activator="{ on }">
-      <v-btn v-on="on">
-        Bank transfer QR <v-icon class="pl-2">fa-qrcode</v-icon>
-      </v-btn>
+      <v-btn x-small text v-on="on"><v-icon>fa-qrcode</v-icon></v-btn>
     </template>
 
     <v-card>
@@ -27,10 +25,11 @@
 
 <script lang="ts">
 import QrcodeVue from "qrcode.vue";
+import {AllOrdersOrderDto, ParticipantsOrderEntry} from "@/frontend-client";
 import Vue from "vue";
-import {ShowOrderDto} from "@/frontend-client";
 import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
+import {ShowOrderState} from "@/store/modules/ShowOrderModule";
+import OrderStateEnum = AllOrdersOrderDto.OrderStateEnum;
 
 function formatName(inputValue: string) {
   return inputValue
@@ -66,22 +65,47 @@ function formatBankTransferNumber(inputValue: string) {
 })
 export default class BankTransferQRCode extends Vue {
 
-  @Prop() order: ShowOrderDto;
-  @Prop() userOrderAmount: number;
-
   dialog = false
 
+  get order() {
+    return this.getShowOrderState().order;
+  }
+
+  get orderEntry(): ParticipantsOrderEntry | null {
+    return this.getShowOrderState().orderEntries.find(e => e.userId === this.currentUserId);
+  }
+
+  get currentUserId(): string {
+    return this.getShowOrderState().currentUserId;
+  }
+
+  shouldShowQRCodeButton() {
+    return this.isAnyOrderEntryOwner() && this.isOrderedOrDelivered() && this.order.paymentData.paymentByBankTransfer;
+  }
+
+  userOrderAmount() {
+    return this.orderEntry?.finalPrice
+  }
+
   generateCodeValue() {
-    const bankAccountNumber = formatBankTransferNumber(
-      this.order.paymentData.bankTransferNumber
-    );
-
-    const amount = this.userOrderAmount;
+    const bankAccountNumber = formatBankTransferNumber(this.order.paymentData.bankTransferNumber);
+    const amount = this.userOrderAmount();
     const orderCreator = formatName(this.order.orderCreatorUsername);
-
     const transferTitle = `AltSzama ${this.order.orderDate}`;
 
     return `||${bankAccountNumber}|${amount}|${orderCreator}|${transferTitle}||ALTSZAMA|PLN`;
+  }
+
+  private isAnyOrderEntryOwner() {
+    return this.orderEntry != null;
+  }
+
+  private isOrderedOrDelivered() {
+    return [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(this.order.orderState);
+  }
+
+  private getShowOrderState(): ShowOrderState {
+    return this.$store.state.showOrder;
   }
 }
 </script>

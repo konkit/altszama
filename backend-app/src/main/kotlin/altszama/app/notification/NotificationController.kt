@@ -50,7 +50,7 @@ class NotificationController {
       logger.info("User not authenticated, subscription not added")
     }
 
-    return "OK"
+    return "{}"
   }
 
   @DeleteMapping("/notification/unsubscribe")
@@ -62,6 +62,6 @@ class NotificationController {
       subscriberRepository.delete(subscr)
     }
 
-    return "OK"
+    return "{}"
   }
 }
