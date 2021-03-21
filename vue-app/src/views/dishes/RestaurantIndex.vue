@@ -45,9 +45,7 @@
             <p><b>Username:</b> {{importApiUsername}}</p>
             <p><b>Password:</b> {{importApiPassword}}</p>
 
-            <a :href="getSwaggerUrl()">
-              <v-btn large bottom right>See Import API specification<v-icon class="ml-2">upload</v-icon></v-btn>
-            </a>
+            <v-btn :href="getSwaggerUrl()" large bottom right>See Import API specification<v-icon class="ml-2">upload</v-icon></v-btn>
           </v-col>
         </v-row>
       </v-container>
