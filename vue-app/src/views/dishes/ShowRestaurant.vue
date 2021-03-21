@@ -31,7 +31,7 @@
 
         <v-row>
           <v-col>
-            <div class="d-flex justify-space-between">
+            <div class="d-flex justify-space-between mt-4">
               <v-btn dark color="green" @click="goToCreateDish()">
                 Create new dish
                 <v-icon>add</v-icon>

@@ -16,7 +16,7 @@ import * as url from "url";
 import * as portableFetch from "portable-fetch";
 import { Configuration } from "./configuration";
 
-const BASE_PATH = "http://localhost:8080".replace(/\/+$/, "");
+const BASE_PATH = "http://localhost:8080/".replace(/\/+$/, "");
 
 /**
  *
@@ -577,19 +577,6 @@ export interface EditRestaurantResponse {
      * @memberof EditRestaurantResponse
      */
     url: string;
-}
-/**
- * 
- * @export
- * @interface ErrorResponse
- */
-export interface ErrorResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ErrorResponse
-     */
-    message: string;
 }
 /**
  * 
@@ -3828,6 +3815,42 @@ export const OrderEntryControllerApiFetchParamCreator = function (configuration?
         },
         /**
          * 
+         * @param {string} orderEntryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revertToUnpaid(orderEntryId: string, options: any = {}): FetchArgs {
+            // verify required parameter 'orderEntryId' is not null or undefined
+            if (orderEntryId === null || orderEntryId === undefined) {
+                throw new RequiredError('orderEntryId','Required parameter orderEntryId was null or undefined when calling revertToUnpaid.');
+            }
+            const localVarPath = `/api/order_entries/{orderEntryId}/revert_to_unpaid`
+                .replace(`{${"orderEntryId"}}`, encodeURIComponent(String(orderEntryId)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("")
+					: configuration.apiKey;
+                localVarQueryParameter[""] = localVarApiKeyValue;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {OrderEntrySaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4006,6 +4029,24 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} orderEntryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revertToUnpaid(orderEntryId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+            const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).revertToUnpaid(orderEntryId, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {OrderEntrySaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4097,6 +4138,15 @@ export const OrderEntryControllerApiFactory = function (configuration?: Configur
         },
         /**
          * 
+         * @param {string} orderEntryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revertToUnpaid(orderEntryId: string, options?: any) {
+            return OrderEntryControllerApiFp(configuration).revertToUnpaid(orderEntryId, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {OrderEntrySaveRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4151,6 +4201,17 @@ export class OrderEntryControllerApi extends BaseAPI {
      */
     public delete1(orderEntryId: string, dishEntryId: string, options?: any) {
         return OrderEntryControllerApiFp(this.configuration).delete1(orderEntryId, dishEntryId, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} orderEntryId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrderEntryControllerApi
+     */
+    public revertToUnpaid(orderEntryId: string, options?: any) {
+        return OrderEntryControllerApiFp(this.configuration).revertToUnpaid(orderEntryId, options)(this.fetch, this.basePath);
     }
 
     /**

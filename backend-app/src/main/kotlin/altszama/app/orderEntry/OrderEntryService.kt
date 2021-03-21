@@ -202,4 +202,12 @@ class OrderEntryService {
 
     orderEntryRepository.save(entry)
   }
+
+  fun setAsUnpaid(orderEntryId: String) {
+    val entry = orderEntryRepository.findById(orderEntryId).get()
+
+    entry.paymentStatus = OrderEntryPaymentStatus.UNPAID
+
+    orderEntryRepository.save(entry)
+  }
 }

@@ -58,4 +58,10 @@ class OrderEntryController {
     orderEntryService.setAsConfirmedAsPaid(orderEntryId)
     return ResponseEntity("{}", HttpStatus.OK)
   }
+
+  @PutMapping("/order_entries/{orderEntryId}/revert_to_unpaid")
+  fun revertToUnpaid(@PathVariable orderEntryId: String): ResponseEntity<String> {
+    orderEntryService.setAsUnpaid(orderEntryId)
+    return ResponseEntity("{}", HttpStatus.OK)
+  }
 }

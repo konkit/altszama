@@ -71,7 +71,7 @@ export default class BankTransferQRCode extends Vue {
     return this.getShowOrderState().order;
   }
 
-  get orderEntry(): ParticipantsOrderEntry | null {
+  get orderEntry(): ParticipantsOrderEntry | undefined {
     return this.getShowOrderState().orderEntries.find(e => e.userId === this.currentUserId);
   }
 

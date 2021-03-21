@@ -32,6 +32,13 @@
           <i class="fa fa-check" aria-hidden="true"></i>
         </v-btn>
       </template>
+
+      <template v-if="shouldShowRevertToUnpaid(orderEntry)">
+        <v-btn color="basic" @click="revertToUnpaid(orderEntry.id)">
+          Revert to unpaid
+          <i class="fa fa-check" aria-hidden="true"></i>
+        </v-btn>
+      </template>
     </div>
   </div>
 </template>
@@ -82,6 +89,11 @@ export default class TitleWithPaymentStatus extends Vue {
         && this.orderEntry.paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
   }
 
+  shouldShowRevertToUnpaid() {
+    return this.isOrderOwner() && this.isOrderedOrDelivered()
+        && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
+  }
+
   private isOrderedOrDelivered() {
     return [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(this.order.orderState);
   }
@@ -99,6 +111,16 @@ export default class TitleWithPaymentStatus extends Vue {
   markAsPaid(orderEntryId: string) {
     this.ordersConnector
         .markOrderEntryAsPaid(orderEntryId)
+        .then(() => {
+          this.$store.commit("setLoadingTrue");
+          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
+        })
+        .catch(errResponse => ErrorHandler.handleError(errResponse));
+  }
+
+  revertToUnpaid(orderEntryId: string) {
+    this.ordersConnector
+        .revertToUnpaid(orderEntryId)
         .then(() => {
           this.$store.commit("setLoadingTrue");
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);

@@ -129,17 +129,15 @@ export default class OrdersApiConnector extends AbstractApiConnector {
   }
 
   markOrderEntryAsPaid(orderEntryId: string) {
-    return this.orderEntryApi.setAsMarkedAsPaid(
-      orderEntryId,
-      this.headersWithToken()
-    );
+    return this.orderEntryApi.setAsMarkedAsPaid(orderEntryId,this.headersWithToken());
+  }
+
+  revertToUnpaid(orderEntryId: string) {
+    return this.orderEntryApi.revertToUnpaid(orderEntryId,this.headersWithToken());
   }
 
   confirmOrderEntryAsPaid(orderEntryId: string) {
-    return this.orderEntryApi.setAsConfirmedAsPaid(
-      orderEntryId,
-      this.headersWithToken()
-    );
+    return this.orderEntryApi.setAsConfirmedAsPaid(orderEntryId,this.headersWithToken());
   }
 
   createOrder(order: OrderSaveRequest) {
