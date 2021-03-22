@@ -54,7 +54,7 @@ import Price from "../../commons/PriceElement.vue";
 import Vue from "vue";
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
-import {DishDto, Restaurant} from "../../../frontend-client";
+import {DishDto, RestaurantDto} from "../../../frontend-client";
 import moment from "moment";
 import DishesApiConnector from "@/lib/api/DishesApiConnector";
 
@@ -65,7 +65,7 @@ import DishesApiConnector from "@/lib/api/DishesApiConnector";
   }
 })
 export default class ShowRestaurantDishesTable extends Vue {
-  @Prop() restaurant!: Restaurant;
+  @Prop() restaurant!: RestaurantDto;
   @Prop() dishesByCategory!: { [key: string]: Array<DishDto> };
 
   connector = new DishesApiConnector()

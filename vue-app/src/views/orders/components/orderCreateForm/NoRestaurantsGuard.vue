@@ -14,13 +14,13 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import {Restaurant} from "@/frontend-client";
+import {RestaurantDto} from "@/frontend-client";
 
 @Component({
   name: "NoRestaurantsGuard"
 })
 export default class NoRestaurantsGuard extends Vue {
-  @Prop() restaurantsList: Restaurant[];
+  @Prop() restaurantsList: RestaurantDto[];
 }
 </script>
 
