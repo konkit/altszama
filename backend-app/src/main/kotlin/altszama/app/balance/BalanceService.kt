@@ -9,39 +9,7 @@ import altszama.app.orderEntry.OrderEntryPaymentStatus
 import altszama.app.orderEntry.OrderEntryRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 
-data class OrderHistory(val entries: List<OrderHistoryEntry>)
-
-sealed class OrderHistoryEntry {
-  abstract val orderId: String
-  abstract val orderDate: LocalDate
-  abstract val orderCreator: String
-  abstract val restaurantName: String
-  abstract val kind: String
-}
-
-data class OrderHistoryCreatedEntry(
-  override val orderId: String,
-  override val orderDate: LocalDate,
-  override val orderCreator: String,
-  override val restaurantName: String,
-  val markedPaymentsTotalAmount: Int,
-  val confirmedPaymentsTotalAmount: Int,
-  val markedPaymentsCount: Int,
-  val totalAmount: Int,
-  override val kind: String = "createdEntry"
-) : OrderHistoryEntry()
-
-data class OrderHistoryParticipatedEntry(
-  override val orderId: String,
-  override val orderDate: LocalDate,
-  override val orderCreator: String,
-  override val restaurantName: String,
-  val orderEntryAmount: Int,
-  val status: OrderEntryPaymentStatus,
-  override val kind: String = "participatedEntry"
-) : OrderHistoryEntry()
 
 @Service
 class BalanceService {
@@ -55,17 +23,12 @@ class BalanceService {
   fun getOrderHistory(currentUser: User): OrderHistory {
     val ordersYouParticipatedIn = orderEntryRepository.findByUser(currentUser)
     val orderHistoryParticipatedEntries = ordersYouParticipatedIn
-      .filter { orderEntry ->
-        val orderNotCreatedByMe = orderEntry.order.orderCreator.id != currentUser.id
-        val orderAlreadyOrdered = listOf(OrderState.ORDERED, OrderState.DELIVERED)
-          .contains(orderEntry.order.orderState)
-        
-        orderNotCreatedByMe && orderAlreadyOrdered
-      }
+      .filter { orderEntry -> orderNotCreatedByMe(orderEntry, currentUser) && orderAlreadyOrdered(orderEntry.order) }
       .map { orderEntry -> createParticipatedEntry(orderEntry) }
 
     val ordersYouCreated = orderRepository.findByOrderCreator(currentUser)
     val orderHistoryCreatedEntries = ordersYouCreated
+      .filter { order -> orderAlreadyOrdered(order) }
       .map { order -> createOrderHistoryCreatedEntry(order) }
 
     val orderHistoryEntries = (orderHistoryCreatedEntries + orderHistoryParticipatedEntries)
@@ -73,6 +36,12 @@ class BalanceService {
 
     return OrderHistory(orderHistoryEntries)
   }
+
+  private fun orderAlreadyOrdered(order: Order): Boolean =
+    listOf(OrderState.ORDERED, OrderState.DELIVERED).contains(order.orderState)
+
+  private fun orderNotCreatedByMe(orderEntry: OrderEntry, currentUser: User): Boolean =
+    orderEntry.order.orderCreator.id != currentUser.id
 
   private fun createParticipatedEntry(orderEntry: OrderEntry): OrderHistoryParticipatedEntry {
     val userCount = orderEntryRepository.findByOrderId(orderEntry.order.id).size
