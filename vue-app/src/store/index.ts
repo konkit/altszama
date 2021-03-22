@@ -6,6 +6,7 @@ import {
   modifyOrderEntryModule,
   ModifyOrderEntryState
 } from "./modules/ModifyOrderEntryModule";
+import {authenticatedRoutes, notAuthenticatedRoutes} from "@/router";
 
 Vue.use(Vuex);
 
@@ -129,10 +130,10 @@ export default new Vuex.Store({
       }
     },
     shouldDisplayToolbar: state => {
-      return !["Login", "LandingPage"].includes(state.currentRouteName)
+      return authenticatedRoutes.map(r => r.name).includes(state.currentRouteName)
     },
     shouldDisplayLoginToolbar: state => {
-      return ["Login", "LandingPage"].includes(state.currentRouteName)
+      return notAuthenticatedRoutes.map(r => r.name).includes(state.currentRouteName)
     }
   },
   modules: {

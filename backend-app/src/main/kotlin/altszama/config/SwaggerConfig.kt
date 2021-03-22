@@ -55,7 +55,8 @@ open class SwaggerConfig {
         "altszama.app.restaurant",
         "altszama.app.team",
         "altszama.app.auth",
-        "altszama.app.notification"
+        "altszama.app.notification",
+        "altszama.app.balance"
     )
 
     return GroupedOpenApi.builder()

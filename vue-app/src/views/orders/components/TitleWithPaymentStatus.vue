@@ -10,32 +10,32 @@
           Unpaid
         </v-chip>
 
-        <v-chip v-if="isMarkedAsPaid()" color="yellow" text-color="white" class="mx-2">
-          Confirmation pending
-        </v-chip>
+<!--        <v-chip v-if="isMarkedAsPaid()" color="yellow" text-color="white" class="mx-2">-->
+<!--          Confirmation pending-->
+<!--        </v-chip>-->
 
         <v-chip v-if="isConfirmedAsPaid()" color="green" text-color="white" class="mx-2">
           Payment confirmed
         </v-chip>
       </template>
 
-      <template v-if="shouldShowMarkAsPaidButton(orderEntry)">
-        <v-btn color="basic" @click="markAsPaid(orderEntry.id)">
-          Mark as paid
-          <i class="fa fa-check" aria-hidden="true"></i>
-        </v-btn>
-      </template>
+<!--      <template v-if="shouldShowMarkAsPaidButton(orderEntry)">-->
+<!--        <v-btn color="basic" @click="markAsPaid(orderEntry.id)">-->
+<!--          Mark as paid-->
+<!--          <i class="fa fa-check" aria-hidden="true"></i>-->
+<!--        </v-btn>-->
+<!--      </template>-->
 
       <template v-if="shouldShowConfirmAsPaidButton(orderEntry)">
         <v-btn color="basic" @click="confirmAsPaid(orderEntry.id)">
-          Confirm as paid
+          Confirm payment
           <i class="fa fa-check" aria-hidden="true"></i>
         </v-btn>
       </template>
 
       <template v-if="shouldShowRevertToUnpaid(orderEntry)">
         <v-btn color="basic" @click="revertToUnpaid(orderEntry.id)">
-          Revert to unpaid
+          Revert to "unpaid"
           <i class="fa fa-check" aria-hidden="true"></i>
         </v-btn>
       </template>
@@ -79,18 +79,18 @@ export default class TitleWithPaymentStatus extends Vue {
     return (this.isOrderEntryOwner() || this.isOrderOwner()) && this.isOrderedOrDelivered()
   }
 
-  shouldShowMarkAsPaidButton() {
-    return this.isOrderedOrDelivered() && !this.isOrderOwner()
-        && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.UNPAID;
-  }
+  // shouldShowMarkAsPaidButton() {
+  //   return this.isOrderedOrDelivered() && !this.isOrderOwner()
+  //       && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.UNPAID;
+  // }
 
   shouldShowConfirmAsPaidButton() {
-    return this.isOrderOwner() && this.isOrderedOrDelivered()
+    return this.isOrderedOrDelivered()
         && this.orderEntry.paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
   }
 
   shouldShowRevertToUnpaid() {
-    return this.isOrderOwner() && this.isOrderedOrDelivered()
+    return this.isOrderedOrDelivered()
         && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
   }
 
@@ -108,15 +108,15 @@ export default class TitleWithPaymentStatus extends Vue {
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
-  markAsPaid(orderEntryId: string) {
-    this.ordersConnector
-        .markOrderEntryAsPaid(orderEntryId)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
-  }
+  // markAsPaid(orderEntryId: string) {
+  //   this.ordersConnector
+  //       .markOrderEntryAsPaid(orderEntryId)
+  //       .then(() => {
+  //         this.$store.commit("setLoadingTrue");
+  //         this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
+  //       })
+  //       .catch(errResponse => ErrorHandler.handleError(errResponse));
+  // }
 
   revertToUnpaid(orderEntryId: string) {
     this.ordersConnector

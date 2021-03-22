@@ -887,6 +887,122 @@ export interface OrderEntryUpdateRequest {
 /**
  * 
  * @export
+ * @interface OrderHistory
+ */
+export interface OrderHistory {
+    /**
+     * 
+     * @type {Array<OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry>}
+     * @memberof OrderHistory
+     */
+    entries: Array<OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry>;
+}
+/**
+ * 
+ * @export
+ * @interface OrderHistoryCreatedEntry
+ */
+export interface OrderHistoryCreatedEntry extends OrderHistoryEntry {
+    /**
+     * 
+     * @type {number}
+     * @memberof OrderHistoryCreatedEntry
+     */
+    markedPaymentsTotalAmount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrderHistoryCreatedEntry
+     */
+    confirmedPaymentsTotalAmount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrderHistoryCreatedEntry
+     */
+    markedPaymentsCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrderHistoryCreatedEntry
+     */
+    totalAmount: number;
+}
+/**
+ * 
+ * @export
+ * @interface OrderHistoryEntry
+ */
+export interface OrderHistoryEntry {
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    kind: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    orderDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    orderCreator: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    orderId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    restaurantName: string;
+}
+/**
+ * 
+ * @export
+ * @interface OrderHistoryParticipatedEntry
+ */
+export interface OrderHistoryParticipatedEntry extends OrderHistoryEntry {
+    /**
+     * 
+     * @type {number}
+     * @memberof OrderHistoryParticipatedEntry
+     */
+    orderEntryAmount: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryParticipatedEntry
+     */
+    status: OrderHistoryParticipatedEntry.StatusEnum;
+}
+
+/**
+ * @export
+ * @namespace OrderHistoryParticipatedEntry
+ */
+export namespace OrderHistoryParticipatedEntry {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum StatusEnum {
+        UNPAID = <any> 'UNPAID',
+        MARKED = <any> 'MARKED',
+        CONFIRMED = <any> 'CONFIRMED'
+    }
+}
+/**
+ * 
+ * @export
  * @interface OrderSaveRequest
  */
 export interface OrderSaveRequest {
@@ -1830,6 +1946,106 @@ export class AuthControllerApi extends BaseAPI {
      */
     public loginWithIdToken(authCode: string, options?: any) {
         return AuthControllerApiFp(this.configuration).loginWithIdToken(authCode, options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * BalanceControllerApi - fetch parameter creator
+ * @export
+ */
+export const BalanceControllerApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBalanceForUser(options: any = {}): FetchArgs {
+            const localVarPath = `/api/balance/getForUser`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("")
+					: configuration.apiKey;
+                localVarQueryParameter[""] = localVarApiKeyValue;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BalanceControllerApi - functional programming interface
+ * @export
+ */
+export const BalanceControllerApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBalanceForUser(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<OrderHistory> {
+            const localVarFetchArgs = BalanceControllerApiFetchParamCreator(configuration).getBalanceForUser(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * BalanceControllerApi - factory interface
+ * @export
+ */
+export const BalanceControllerApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBalanceForUser(options?: any) {
+            return BalanceControllerApiFp(configuration).getBalanceForUser(options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * BalanceControllerApi - object-oriented interface
+ * @export
+ * @class BalanceControllerApi
+ * @extends {BaseAPI}
+ */
+export class BalanceControllerApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BalanceControllerApi
+     */
+    public getBalanceForUser(options?: any) {
+        return BalanceControllerApiFp(this.configuration).getBalanceForUser(options)(this.fetch, this.basePath);
     }
 
 }

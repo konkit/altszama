@@ -13,10 +13,8 @@
               <h1 class="pb-5 text-align-center">Test Login</h1>
 
               <div v-for="(user, i) in usersList" :key="i">
-                <v-btn @click="loginAsUser(user)">{{user.username}} ({{user.email}})</v-btn>
+                <v-btn @click="loginAsUser(user)">{{ user.username }} ({{ user.email }})</v-btn>
               </div>
-
-
             </v-card>
           </v-col>
         </v-row>
@@ -60,14 +58,19 @@ export default class TestLoginView extends Vue {
 
   private getTestUsers() {
     fetch(`${BACKEND_URL}/auth/testUser/list`, {method: 'GET'})
-    .then(response => response.json())
-    .then(data => {
-      console.log("Users: ", data)
-      this.usersList = data
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json()
+        })
+        .then(data => {
+          this.usersList = data
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          this.$router.push({name: 'Login'})
+        });
   }
 
   private doLogin(payload: { email: string; username: string }) {
@@ -78,14 +81,14 @@ export default class TestLoginView extends Vue {
       },
       body: JSON.stringify(payload),
     })
-    .then(response => response.json())
-    .then(data => {
-      this.$store.commit("loginUser", {username: data.username, token: data.token})
-      this.$router.push({"name": "TodayOrders"})
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+          this.$store.commit("loginUser", {username: data.username, token: data.token})
+          this.$router.push({"name": "TodayOrders"})
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
   }
 }
 </script>

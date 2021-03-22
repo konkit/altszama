@@ -22,8 +22,7 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
     val result = balanceService.getOrderHistory(user)
 
-    assertThat(result.createdEntries).isEmpty()
-    assertThat(result.participatedEntries).isEmpty()
+    assertThat(result.entries).isEmpty()
   }
 
   @Test()
@@ -40,22 +39,14 @@ class BalanceServiceTest : AbstractIntegrationTest() {
     val expectedCreatedEntry = OrderHistoryCreatedEntry(
       order.id,
       order.orderDate,
+      order.orderCreator.username,
       order.restaurant.name,
       0,
       0,
       0,
       dishes[0].price
     )
-    assertThat(result.createdEntries).isEqualTo(listOf(expectedCreatedEntry))
-
-    val expectedParticipatedEntry = OrderHistoryParticipatedEntry(
-      orderEntry.id,
-      order.orderDate,
-      order.restaurant.name,
-      100,
-      OrderEntryPaymentStatus.UNPAID
-    )
-    assertThat(result.participatedEntries).isEqualTo(listOf(expectedParticipatedEntry))
+    assertThat(result.entries).isEqualTo(listOf(expectedCreatedEntry))
   }
 
   @Test()
@@ -71,16 +62,15 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
     val result = balanceService.getOrderHistory(user2)
 
-    assertThat(result.createdEntries).isEmpty()
-
     val expectedParticipatedEntry = OrderHistoryParticipatedEntry(
       orderEntry.id,
       order.orderDate,
+      order.orderCreator.username,
       order.restaurant.name,
       100,
       OrderEntryPaymentStatus.UNPAID
     )
-    assertThat(result.participatedEntries).isEqualTo(listOf(expectedParticipatedEntry))
+    assertThat(result.entries).isEqualTo(listOf(expectedParticipatedEntry))
   }
 
 }
