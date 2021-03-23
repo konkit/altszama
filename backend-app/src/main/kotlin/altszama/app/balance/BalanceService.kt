@@ -47,7 +47,7 @@ class BalanceService {
     val userCount = orderEntryRepository.findByOrderId(orderEntry.order.id).size
 
     return OrderHistoryParticipatedEntry(
-      orderEntry.id,
+      orderEntry.order.id,
       orderEntry.order.orderDate,
       orderEntry.order.orderCreator.username,
       orderEntry.order.restaurant.name,

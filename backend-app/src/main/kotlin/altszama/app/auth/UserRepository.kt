@@ -9,4 +9,5 @@ interface UserRepository : Repository<User, String> {
     fun save(user: User)
 
     fun findAll(): List<User>
+    fun deleteAll()
 }

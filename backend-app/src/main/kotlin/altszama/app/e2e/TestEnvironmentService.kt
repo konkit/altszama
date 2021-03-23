@@ -1,6 +1,7 @@
 package altszama.app.e2e
 
 import altszama.app.auth.User
+import altszama.app.auth.UserRepository
 import altszama.app.auth.UserService
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
@@ -8,6 +9,7 @@ import altszama.app.order.Order
 import altszama.app.order.OrderRepository
 import altszama.app.orderEntry.DishEntry
 import altszama.app.orderEntry.OrderEntry
+import altszama.app.orderEntry.OrderEntryPaymentStatus
 import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantRepository
@@ -40,6 +42,9 @@ class TestEnvironmentService {
   private lateinit var userService: UserService
 
   @Autowired
+  private lateinit var userRepository: UserRepository
+
+  @Autowired
   private lateinit var teamRepository: TeamRepository
 
   fun clearEverythingAndCreateTeam(): Team {
@@ -48,6 +53,7 @@ class TestEnvironmentService {
     orderEntryRepository.deleteAll()
     orderRepository.deleteAll()
     teamRepository.deleteAll()
+    userRepository.deleteAll()
 
     val team = createTeam()
 
@@ -105,7 +111,8 @@ class TestEnvironmentService {
     val orderEntry = OrderEntry(
         order = order,
         user = user1,
-        dishEntries = listOf(DishEntry(dish))
+        dishEntries = listOf(DishEntry(dish)),
+        paymentStatus = if (order.orderCreator.id == user1.id) OrderEntryPaymentStatus.CONFIRMED else OrderEntryPaymentStatus.UNPAID
     )
     return orderEntryRepository.save(orderEntry)
   }
