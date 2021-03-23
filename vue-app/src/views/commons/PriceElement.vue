@@ -1,12 +1,7 @@
 <template>
-  <vue-numeric
-    currency="zł"
-    separator="."
-    currency-symbol-position="suffix"
-    :value="this.dataPrice / 100"
-    :read-only="true"
-    :precision="2"
-  ></vue-numeric>
+  <span>
+    {{ valueAsString }}
+  </span>
 </template>
 
 <script lang="ts">
@@ -17,5 +12,14 @@ import Component from "vue-class-component";
 @Component({})
 export default class Price extends Vue {
   @Prop() dataPrice!: number;
+
+  valueAsString = ""
+
+  private formatter = new Intl.NumberFormat('pl-PL', {style: 'currency', currency: 'PLN'});
+
+  mounted() {
+    this.valueAsString = this.formatter.format(this.dataPrice / 100);
+  }
+
 }
 </script>

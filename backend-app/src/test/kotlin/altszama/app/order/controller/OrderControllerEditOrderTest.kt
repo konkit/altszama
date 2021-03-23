@@ -1,9 +1,12 @@
-package altszama.app.order
+package altszama.app.order.controller
 
 import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishCreateRequest
+import altszama.app.order.OrderControllerDataService
+import altszama.app.order.OrderService
 import altszama.app.order.dto.DeliveryData
+import altszama.app.order.dto.EditOrderInitialData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
 import altszama.app.orderEntry.OrderEntryService
@@ -15,13 +18,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.LocalDate
 import java.time.LocalTime
 
-class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
+class OrderControllerEditOrderTest() : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var mockMvc: MockMvc
@@ -50,14 +54,11 @@ class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
   @Autowired
   private lateinit var objectMapper: ObjectMapper
 
-  @Autowired
-  private lateinit var orderRepository: OrderRepository
-
 
   @Test
-  fun shouldSetAsCreatedSuccessfully() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user1) = createUserAndGetToken("John", "john@mail.com")
+  fun itShouldReturnEditDataSuccessfully() {
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = teamService.createTeam("team1.com", "team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -66,52 +67,55 @@ class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
     createOrderEntry(order, dish1, user1, team1)
 
-    orderService.setAsOrdered(order.id, "14:00", user1)
-    val afterOrdered = orderRepository.findById(order.id).get()
-    assertThat(afterOrdered.orderState).isEqualTo(OrderState.ORDERED)
+    val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/edit.json")
+        .contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", user1Token)
 
-    val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_created")
-      .header("Authorization", token)
+    val responseJson = mockMvc.perform(request)
+        .andExpect(MockMvcResultMatchers.status().isOk)
+        .andReturn()
+        .response.contentAsString
 
-    mockMvc.perform(request)
-      .andExpect(MockMvcResultMatchers.status().isOk)
+    val response = objectMapper.readValue(responseJson, EditOrderInitialData::class.java)
 
-    val afterSetAsCreated = orderRepository.findById(order.id).get()
-    assertThat(afterSetAsCreated.orderState).isEqualTo(OrderState.CREATED)
+    assertThat(response.order.id).isEqualTo(order.id)
+    assertThat(response.order.orderCreatorUsername).isEqualTo("James1")
+    assertThat(response.order.restaurantName).isEqualTo("Restaurant 1")
   }
 
   @Test
-  fun shouldNotSetAsCreatedIfTheOrderDoesNotExist() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user1) = createUserAndGetToken("John", "john@mail.com")
+  fun itShouldNotReturnEditDataIfOrderDoesNotExist() {
+    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
-    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_as_created")
-      .header("Authorization", token)
+    val fakeOrderId = "111111111"
+
+    val request = MockMvcRequestBuilders.get("/api/orders/${fakeOrderId}/edit.json")
+        .contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, "Order does not exist")
   }
 
   @Test
-  fun shouldNotSetAsCreatedIfTheOrderWasNotCreatedByUser() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user1) = createUserAndGetToken("John", "john@mail.com")
+  fun itShouldNotReturnEditDataIfItIsNotCreator() {
+    val user1 = userService.createNewUser("james1@team1.com", "James1")
+    val team1 = teamService.createTeam("team1.com", "team1.com")
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
 
-    orderService.setAsOrdered(order.id, "14:00", user1)
+    val (user2Token, user) = createUserAndGetToken("James2", "james2@team1.com")
 
-    val (token2, user2) = createUserAndGetToken("James", "james@mail.com")
-
-    val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_created")
-      .header("Authorization", token2)
+    val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/edit.json")
+        .contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", user2Token)
 
     expectBadRequestWithMessage(request, "You can edit only your own orders")
   }

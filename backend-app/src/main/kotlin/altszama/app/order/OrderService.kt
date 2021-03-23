@@ -217,13 +217,17 @@ class OrderService {
   }
 
   fun closePastOrders() {
-    val orderStateTreatedAsClosed = listOf(OrderState.ORDERED, OrderState.REJECTED)
+    val terminalOrderStates = listOf(OrderState.DELIVERED, OrderState.REJECTED)
     val today = LocalDate.now()
 
-    val orders = orderRepository.findByOrderStateNotInAndOrderDateBefore(orderStateTreatedAsClosed, today)
+    val orders = orderRepository.findByOrderStateNotInAndOrderDateBefore(terminalOrderStates, today)
 
     orders.forEach { order: Order ->
-      order.orderState = OrderState.ORDERED
+      if (listOf(OrderState.CREATED, OrderState.ORDERING).contains(order.orderState)) {
+        order.orderState = OrderState.REJECTED
+      } else {
+        order.orderState = OrderState.DELIVERED
+      }
       orderRepository.save(order)
     }
   }

@@ -2,7 +2,7 @@
   <v-list-item two-line :key="historyEntry.orderId" @click="goToOrder(historyEntry.orderId)">
     <v-list-item-content>
       <v-list-item-title>
-        <h3>({{ historyEntry.orderDate }}) Created order from {{ historyEntry.restaurantName }}</h3>
+        <h3>({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}</h3>
       </v-list-item-title>
       <v-list-item-subtitle>
         Payments confirmed:

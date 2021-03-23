@@ -1,8 +1,12 @@
-package altszama.app.order
+package altszama.app.order.controller
 
 import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishCreateRequest
+import altszama.app.order.OrderControllerDataService
+import altszama.app.order.OrderRepository
+import altszama.app.order.OrderService
+import altszama.app.order.OrderState
 import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
@@ -22,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.LocalDate
 import java.time.LocalTime
 
-class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
+class OrderControllerSetAsRejected() : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var mockMvc: MockMvc
@@ -56,7 +60,7 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
 
 
   @Test
-  fun shouldSetAsOrderedSuccessfully() {
+  fun shouldSetAsRejectedSuccessfully() {
     val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
     val (token, user1) = createUserAndGetToken("John", "john@mail.com")
 
@@ -73,12 +77,7 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
     createOrderEntry(order, dish1, user1, team1)
 
-    val payload = """{
-      "approxTimeOfDelivery": "14:00" 
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_ordered")
-      .content(payload)
+    val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_rejected")
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", token)
 
@@ -86,54 +85,15 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
       .andExpect(MockMvcResultMatchers.status().isOk)
 
     val afterSetAsCreated = orderRepository.findById(order.id).get()
-    assertThat(afterSetAsCreated.orderState).isEqualTo(OrderState.ORDERED)
-    assertThat(afterSetAsCreated.timeOfDelivery).isEqualTo(LocalTime.of(14, 0))
+    assertThat(afterSetAsCreated.orderState).isEqualTo(OrderState.REJECTED)
   }
 
   @Test
-  fun shouldSetAsOrderedWithoutSettingOrderDateSuccessfully() {
+  fun shouldNotSetAsRejectedIfTheOrderDoesNotExist() {
     val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
     val (token, user1) = createUserAndGetToken("John", "john@mail.com")
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
-
-    val orderSaveRequest = OrderSaveRequest(
-      restaurantId = restaurant.id,
-      orderDate = LocalDate.now(),
-      timeOfOrder = LocalTime.of(14, 0),
-      deliveryData = DeliveryData(),
-      paymentData = PaymentData()
-    )
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
-
-    val payload = """{}""".trimIndent()
-
-    val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_ordered")
-      .content(payload)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", token)
-
-    mockMvc.perform(request)
-      .andExpect(MockMvcResultMatchers.status().isOk)
-
-    val afterSetAsCreated = orderRepository.findById(order.id).get()
-    assertThat(afterSetAsCreated.orderState).isEqualTo(OrderState.ORDERED)
-    assertThat(afterSetAsCreated.timeOfDelivery).isNull()
-  }
-
-  @Test
-  fun shouldNotSetAsOrderedIfTheOrderDoesNotExist() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user1) = createUserAndGetToken("John", "john@mail.com")
-
-    val payload = """{
-      "approxTimeOfDelivery": "14:00" 
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_as_ordered")
-      .content(payload)
+    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_as_rejected")
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", token)
 
@@ -141,7 +101,7 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
   }
 
   @Test
-  fun shouldNotSetAsOrderedIfTheOrderWasNotCreatedByUser() {
+  fun shouldNotSetAsRejectedIfTheOrderWasNotCreatedByUser() {
     val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
     val (token, user1) = createUserAndGetToken("John", "john@mail.com")
 
@@ -160,45 +120,11 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
 
     val (token2, user2) = createUserAndGetToken("James", "james@mail.com")
 
-    val payload = """{
-      "approxTimeOfDelivery": "14:00" 
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_ordered")
-      .content(payload)
+    val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_rejected")
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", token2)
 
     expectBadRequestWithMessage(request, "You can edit only your own orders")
-  }
-
-  @Test
-  fun shouldNotSetAsOrderedIfThereAreNoOrderEntries() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user1) = createUserAndGetToken("John", "john@mail.com")
-
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
-
-    val orderSaveRequest = OrderSaveRequest(
-      restaurantId = restaurant.id,
-      orderDate = LocalDate.now(),
-      timeOfOrder = LocalTime.of(14, 0),
-      deliveryData = DeliveryData(),
-      paymentData = PaymentData()
-    )
-    val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-
-    val payload = """{
-      "approxTimeOfDelivery": "14:00" 
-    }""".trimIndent()
-
-    val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_as_ordered")
-      .content(payload)
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", token)
-
-    expectBadRequestWithMessage(request, "There are no order entries in this order")
   }
 
 }

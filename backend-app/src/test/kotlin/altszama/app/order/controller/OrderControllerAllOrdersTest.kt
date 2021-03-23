@@ -1,6 +1,7 @@
-package altszama.app.order
+package altszama.app.order.controller
 
 import altszama.app.auth.UserService
+import altszama.app.order.OrderService
 import altszama.app.order.dto.AllOrdersResponse
 import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest

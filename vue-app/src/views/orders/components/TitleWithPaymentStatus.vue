@@ -10,33 +10,22 @@
           Unpaid
         </v-chip>
 
-<!--        <v-chip v-if="isMarkedAsPaid()" color="yellow" text-color="white" class="mx-2">-->
-<!--          Confirmation pending-->
-<!--        </v-chip>-->
-
         <v-chip v-if="isConfirmedAsPaid()" color="green" text-color="white" class="mx-2">
           Payment confirmed
         </v-chip>
       </template>
 
-<!--      <template v-if="shouldShowMarkAsPaidButton(orderEntry)">-->
-<!--        <v-btn color="basic" @click="markAsPaid(orderEntry.id)">-->
-<!--          Mark as paid-->
-<!--          <i class="fa fa-check" aria-hidden="true"></i>-->
-<!--        </v-btn>-->
-<!--      </template>-->
-
       <template v-if="shouldShowConfirmAsPaidButton(orderEntry)">
         <v-btn color="basic" @click="confirmAsPaid(orderEntry.id)">
           Confirm payment
-          <i class="fa fa-check" aria-hidden="true"></i>
+          <i class="fa fa-check ml-2" aria-hidden="true"></i>
         </v-btn>
       </template>
 
       <template v-if="shouldShowRevertToUnpaid(orderEntry)">
         <v-btn color="basic" @click="revertToUnpaid(orderEntry.id)">
           Revert to "unpaid"
-          <i class="fa fa-check" aria-hidden="true"></i>
+          <i class="fa fa-undo ml-2" aria-hidden="true"></i>
         </v-btn>
       </template>
     </div>

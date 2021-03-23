@@ -79,11 +79,17 @@ class OrderEntryService {
       orderEntry.dishEntries = orderEntry.dishEntries + dishEntries
       orderEntry
     } else {
+      val paymentStatus = if (order.orderCreator.id == currentUser.id)
+        OrderEntryPaymentStatus.CONFIRMED
+      else
+        OrderEntryPaymentStatus.UNPAID
+
       OrderEntry(
           id = ObjectId().toHexString(),
           order = order,
           user = currentUser,
-          dishEntries = dishEntries
+          dishEntries = dishEntries,
+          paymentStatus = paymentStatus
       )
     }
 
