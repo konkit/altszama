@@ -65,10 +65,6 @@ class BalanceService {
       .filter { oe -> oe.paymentStatus == OrderEntryPaymentStatus.CONFIRMED }
       .sumBy { oe -> oe.getFinalPrice(userCount) }
 
-    val markedPayments = orderEntries
-      .filter { oe -> oe.paymentStatus == OrderEntryPaymentStatus.MARKED }
-    val markedPaymentsTotalAmount = markedPayments.sumBy { oe -> oe.getFinalPrice(userCount) }
-
     val totalAmount = Order.getTotalPrice(order, orderEntries)
 
     return OrderHistoryCreatedEntry(
@@ -76,8 +72,6 @@ class BalanceService {
       orderDate = order.orderDate,
       orderCreator = order.orderCreator.username,
       restaurantName = order.restaurant.name,
-      markedPaymentsTotalAmount = markedPaymentsTotalAmount,
-      markedPaymentsCount = markedPayments.size,
       confirmedPaymentsTotalAmount = confirmedPaymentsTotalAmount,
       totalAmount = totalAmount
     )

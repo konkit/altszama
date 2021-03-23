@@ -107,7 +107,7 @@ export default class ShowRestaurant extends Vue {
           this.dishes = response.dishes;
           this.dishesByCategory = response.dishesByCategory;
 
-          this.$store.commit("setTitle", `Restaurant ${this.restaurant!.name}`)
+          this.$store.commit("setTitle", `Restaurant ${this.restaurant.name}`)
           this.$store.commit("setLoadingFalse");
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
@@ -124,14 +124,14 @@ export default class ShowRestaurant extends Vue {
   deleteRestaurant() {
     this.connector
         .deleteRestaurant(this.restaurantId)
-        .then(response => this.$router.push({name: "RestaurantIndex"}))
+        .then(() => this.$router.push({name: "RestaurantIndex"}))
         .catch(errResponse => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
   }
 
   deleteDish(dishId: string) {
     this.connector
         .deleteDish(this.restaurant.id, dishId)
-        .then(_ => {
+        .then(() => {
           return this.connector
               .getShowRestaurantData(this.restaurantId)
               .then(response => {
@@ -139,7 +139,7 @@ export default class ShowRestaurant extends Vue {
                 this.dishes = response.dishes;
                 this.dishesByCategory = response.dishesByCategory;
 
-                this.$store.commit("setTitle", `Restaurant ${this.restaurant!.name}`)
+                this.$store.commit("setTitle", `Restaurant ${this.restaurant.name}`)
                 this.$store.commit("setLoadingFalse");
               })
         })

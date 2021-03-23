@@ -68,11 +68,6 @@ export default class TitleWithPaymentStatus extends Vue {
     return (this.isOrderEntryOwner() || this.isOrderOwner()) && this.isOrderedOrDelivered()
   }
 
-  // shouldShowMarkAsPaidButton() {
-  //   return this.isOrderedOrDelivered() && !this.isOrderOwner()
-  //       && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.UNPAID;
-  // }
-
   shouldShowConfirmAsPaidButton() {
     return this.isOrderedOrDelivered()
         && this.orderEntry.paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
@@ -97,16 +92,6 @@ export default class TitleWithPaymentStatus extends Vue {
         .catch(errResponse => ErrorHandler.handleError(errResponse));
   }
 
-  // markAsPaid(orderEntryId: string) {
-  //   this.ordersConnector
-  //       .markOrderEntryAsPaid(orderEntryId)
-  //       .then(() => {
-  //         this.$store.commit("setLoadingTrue");
-  //         this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-  //       })
-  //       .catch(errResponse => ErrorHandler.handleError(errResponse));
-  // }
-
   revertToUnpaid(orderEntryId: string) {
     this.ordersConnector
         .revertToUnpaid(orderEntryId)
@@ -119,10 +104,6 @@ export default class TitleWithPaymentStatus extends Vue {
 
   isUnpaid() {
     return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.UNPAID
-  }
-
-  isMarkedAsPaid() {
-    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.MARKED
   }
 
   isConfirmedAsPaid() {

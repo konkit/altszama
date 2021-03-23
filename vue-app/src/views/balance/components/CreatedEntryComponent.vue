@@ -42,10 +42,6 @@ export default class CreatedEntryComponent extends Vue {
   goToOrder(orderId: string) {
     this.$router.push({name: "ShowOrder", params: {id: orderId}})
   }
-
-  entriesPendingString(historyEntry: OrderHistoryCreatedEntry) {
-    return `(${historyEntry.markedPaymentsCount} entries pending confirmation - ${historyEntry.markedPaymentsTotalAmount})`
-  }
 }
 </script>
 

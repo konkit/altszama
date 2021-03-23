@@ -79,7 +79,7 @@ export default class RestaurantEditForm extends Vue {
       address: this.address
     };
 
-    this.connector!.editRestaurant(this.restaurantId, restaurant)
+    this.connector.editRestaurant(this.restaurantId, restaurant)
         .then(() => router.push({name: "ShowRestaurant", params: {id: this.restaurantId}}))
         .catch(errResponse => ErrorHandler.handleError(errResponse));
 

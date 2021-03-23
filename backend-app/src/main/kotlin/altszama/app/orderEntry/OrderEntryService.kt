@@ -191,16 +191,6 @@ class OrderEntryService {
     return dishesFromRestaurant.map { dish -> dish.id to dish.sideDishes }.toMap()
   }
 
-  fun setAsMarkedAsPaid(orderEntryId: String) {
-    val entry = orderEntryRepository.findById(orderEntryId).get()
-
-    if (entry.paymentStatus != OrderEntryPaymentStatus.CONFIRMED) {
-      entry.paymentStatus = OrderEntryPaymentStatus.MARKED
-    }
-
-    orderEntryRepository.save(entry)
-  }
-
   fun setAsConfirmedAsPaid(orderEntryId: String) {
     val entry = orderEntryRepository.findById(orderEntryId).get()
 

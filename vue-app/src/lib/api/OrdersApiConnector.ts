@@ -120,10 +120,6 @@ export default class OrdersApiConnector extends AbstractApiConnector {
     return this.orderApi._delete(orderId, this.headersWithToken());
   }
 
-  markOrderEntryAsPaid(orderEntryId: string): Promise<string> {
-    return this.orderEntryApi.setAsMarkedAsPaid(orderEntryId,this.headersWithToken());
-  }
-
   revertToUnpaid(orderEntryId: string): Promise<string> {
     return this.orderEntryApi.revertToUnpaid(orderEntryId,this.headersWithToken());
   }

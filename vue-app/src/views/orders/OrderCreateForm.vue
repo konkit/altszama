@@ -198,7 +198,7 @@ export default class OrderCreateForm extends Vue {
       paymentData: this.paymentData
     };
 
-    this.connector!.createOrder(order)
+    this.connector.createOrder(order)
         .then(() => router.push({name: "TodayOrders"}))
         .catch(errResponse => ErrorHandler.handleError(errResponse));
 

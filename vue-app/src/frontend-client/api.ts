@@ -770,7 +770,6 @@ export namespace OrderEntryDto {
      */
     export enum PaymentStatusEnum {
         UNPAID = <any> 'UNPAID',
-        MARKED = <any> 'MARKED',
         CONFIRMED = <any> 'CONFIRMED'
     }
 }
@@ -908,19 +907,7 @@ export interface OrderHistoryCreatedEntry extends OrderHistoryEntry {
      * @type {number}
      * @memberof OrderHistoryCreatedEntry
      */
-    markedPaymentsTotalAmount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof OrderHistoryCreatedEntry
-     */
     confirmedPaymentsTotalAmount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof OrderHistoryCreatedEntry
-     */
-    markedPaymentsCount: number;
     /**
      * 
      * @type {number}
@@ -945,13 +932,13 @@ export interface OrderHistoryEntry {
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    orderDate: string;
+    orderCreator: string;
     /**
      * 
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    orderCreator: string;
+    orderDate: string;
     /**
      * 
      * @type {string}
@@ -996,7 +983,6 @@ export namespace OrderHistoryParticipatedEntry {
      */
     export enum StatusEnum {
         UNPAID = <any> 'UNPAID',
-        MARKED = <any> 'MARKED',
         CONFIRMED = <any> 'CONFIRMED'
     }
 }
@@ -1245,7 +1231,6 @@ export namespace ParticipantsOrderEntry {
      */
     export enum PaymentStatusEnum {
         UNPAID = <any> 'UNPAID',
-        MARKED = <any> 'MARKED',
         CONFIRMED = <any> 'CONFIRMED'
     }
 }
@@ -4044,42 +4029,6 @@ export const OrderEntryControllerApiFetchParamCreator = function (configuration?
         },
         /**
          * 
-         * @param {string} orderEntryId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        setAsMarkedAsPaid(orderEntryId: string, options: any = {}): FetchArgs {
-            // verify required parameter 'orderEntryId' is not null or undefined
-            if (orderEntryId === null || orderEntryId === undefined) {
-                throw new RequiredError('orderEntryId','Required parameter orderEntryId was null or undefined when calling setAsMarkedAsPaid.');
-            }
-            const localVarPath = `/api/order_entries/{orderEntryId}/mark_as_paid`
-                .replace(`{${"orderEntryId"}}`, encodeURIComponent(String(orderEntryId)));
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("")
-					: configuration.apiKey;
-                localVarQueryParameter[""] = localVarApiKeyValue;
-            }
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {OrderEntryUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4201,24 +4150,6 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} orderEntryId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        setAsMarkedAsPaid(orderEntryId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
-            const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).setAsMarkedAsPaid(orderEntryId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * 
          * @param {OrderEntryUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4283,15 +4214,6 @@ export const OrderEntryControllerApiFactory = function (configuration?: Configur
         },
         /**
          * 
-         * @param {string} orderEntryId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        setAsMarkedAsPaid(orderEntryId: string, options?: any) {
-            return OrderEntryControllerApiFp(configuration).setAsMarkedAsPaid(orderEntryId, options)(fetch, basePath);
-        },
-        /**
-         * 
          * @param {OrderEntryUpdateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4352,17 +4274,6 @@ export class OrderEntryControllerApi extends BaseAPI {
      */
     public setAsConfirmedAsPaid(orderEntryId: string, options?: any) {
         return OrderEntryControllerApiFp(this.configuration).setAsConfirmedAsPaid(orderEntryId, options)(this.fetch, this.basePath);
-    }
-
-    /**
-     * 
-     * @param {string} orderEntryId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OrderEntryControllerApi
-     */
-    public setAsMarkedAsPaid(orderEntryId: string, options?: any) {
-        return OrderEntryControllerApiFp(this.configuration).setAsMarkedAsPaid(orderEntryId, options)(this.fetch, this.basePath);
     }
 
     /**

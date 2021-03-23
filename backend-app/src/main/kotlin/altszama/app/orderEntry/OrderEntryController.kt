@@ -47,12 +47,6 @@ class OrderEntryController {
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
-  @PutMapping("/order_entries/{orderEntryId}/mark_as_paid")
-  fun setAsMarkedAsPaid(@PathVariable orderEntryId: String): ResponseEntity<String> {
-    orderEntryService.setAsMarkedAsPaid(orderEntryId)
-    return ResponseEntity("{}", HttpStatus.OK)
-  }
-
   @PutMapping("/order_entries/{orderEntryId}/confirm_as_paid")
   fun setAsConfirmedAsPaid(@PathVariable orderEntryId: String): ResponseEntity<String> {
     orderEntryService.setAsConfirmedAsPaid(orderEntryId)

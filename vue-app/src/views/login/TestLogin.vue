@@ -30,6 +30,11 @@ import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import GoogleLoginButton from "@/views/login/GoogleLoginButton.vue";
 import {BACKEND_URL} from "@/lib/config";
 
+interface UserEntry {
+  username: string;
+  email: string;
+}
+
 @Component({
   components: {
     ErrorsComponent,
@@ -38,7 +43,7 @@ import {BACKEND_URL} from "@/lib/config";
 })
 export default class TestLoginView extends Vue {
 
-  usersList = []
+  usersList: UserEntry[] = [];
 
   mounted() {
     this.getTestUsers()
@@ -48,7 +53,7 @@ export default class TestLoginView extends Vue {
     return "calc(100vh - 64px)"
   }
 
-  loginAsUser(user: any) {
+  loginAsUser(user: UserEntry) {
     const payload = {
       username: user.username,
       email: user.email

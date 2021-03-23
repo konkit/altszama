@@ -18,9 +18,7 @@ data class OrderHistoryCreatedEntry(
   override val orderDate: LocalDate,
   override val orderCreator: String,
   override val restaurantName: String,
-  val markedPaymentsTotalAmount: Int,
   val confirmedPaymentsTotalAmount: Int,
-  val markedPaymentsCount: Int,
   val totalAmount: Int,
   override val kind: String = "createdEntry"
 ) : OrderHistoryEntry()

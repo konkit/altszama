@@ -78,7 +78,7 @@ export default class DishCreateForm extends Vue {
       sideDishes: sideDishes
     };
 
-    this.connector!.createDish(this.restaurantId, dishPayload)
+    this.connector.createDish(this.restaurantId, dishPayload)
         .then(() => this.$router.back())
         .catch(errResponse => ErrorHandler.handleError(errResponse));
 

@@ -140,7 +140,7 @@ export default class OrderEditForm extends Vue {
       paymentData: this.paymentData
     };
 
-    this.connector!.editOrder(order)
+    this.connector.editOrder(order)
         .then(() => {
           this.$store.commit("setLoadingTrue");
           this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});

@@ -66,10 +66,6 @@ export default class BalanceView extends Vue {
   goToOrder(orderId: string) {
     console.log("Go to orderId", orderId)
   }
-
-  entriesPendingString(historyEntry: OrderHistoryCreatedEntry) {
-    return `(${historyEntry.markedPaymentsCount} entries pending confirmation - ${historyEntry.markedPaymentsTotalAmount})`
-  }
 }
 </script>
 

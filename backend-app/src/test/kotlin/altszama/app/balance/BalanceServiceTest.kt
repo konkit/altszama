@@ -36,21 +36,22 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
     val (restaurant, dishes) = createRestaurantAndDishes(team1)
     val order = createOrder(restaurant, user, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user, team1)
+    val orderEntry1 = createOrderEntry(order, dishes[0], user, team1)
+
+    val (_, user2) = createUserAndGetToken("John", "john2@team1.com")
+    val orderEntry2 = createOrderEntry(order, dishes[0], user2, team1)
 
     orderService.setAsOrdered(order.id, "", user)
 
     val result = balanceService.getOrderHistory(user)
 
     val expectedCreatedEntry = OrderHistoryCreatedEntry(
-      order.id,
-      order.orderDate,
-      order.orderCreator.username,
-      order.restaurant.name,
-      0,
-      0,
-      0,
-      dishes[0].price
+      orderId = order.id,
+      orderDate = order.orderDate,
+      orderCreator = order.orderCreator.username,
+      restaurantName = order.restaurant.name,
+      confirmedPaymentsTotalAmount = dishes[0].price,
+      totalAmount = dishes[0].price * 2
     )
     assertThat(result.entries).isEqualTo(listOf(expectedCreatedEntry))
   }
@@ -71,12 +72,12 @@ class BalanceServiceTest : AbstractIntegrationTest() {
     val result = balanceService.getOrderHistory(user2)
 
     val expectedParticipatedEntry = OrderHistoryParticipatedEntry(
-      orderEntry.id,
-      order.orderDate,
-      order.orderCreator.username,
-      order.restaurant.name,
-      100,
-      OrderEntryPaymentStatus.UNPAID
+      orderId = orderEntry.order.id,
+      orderDate = order.orderDate,
+      orderCreator = order.orderCreator.username,
+      restaurantName = order.restaurant.name,
+      orderEntryAmount = dishes[0].price,
+      status = OrderEntryPaymentStatus.UNPAID
     )
     assertThat(result.entries).isEqualTo(listOf(expectedParticipatedEntry))
   }

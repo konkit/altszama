@@ -100,7 +100,7 @@ export default class DishEditForm extends Vue {
       sideDishes: sideDishes
     };
 
-    this.connector!.editDish(this.restaurantId, dishObj)
+    this.connector.editDish(this.restaurantId, dishObj)
         .then(() => router.back())
         .catch(errResponse => ErrorHandler.handleError(errResponse));
 
