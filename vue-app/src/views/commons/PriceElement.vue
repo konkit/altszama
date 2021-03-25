@@ -1,7 +1,5 @@
 <template>
-  <span>
-    {{ valueAsString }}
-  </span>
+  <span>{{ valueAsString }}</span>
 </template>
 
 <script lang="ts">

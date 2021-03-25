@@ -1,5 +1,4 @@
-import {Selector} from "testcafe";
-import { t } from 'testcafe';
+import {Selector, t} from "testcafe";
 
 export default class ShowRestaurantView {
 
@@ -8,12 +7,17 @@ export default class ShowRestaurantView {
   }
 
   static async dishExists(dishName: string, dishPrice: string) {
-    await t.expect(Selector("main .v-list-item .v-list-item__title").exists).ok()
-    await t.expect(Selector("main .v-list-item .v-list-item__title").textContent).contains(`${dishName} ( ${dishPrice} zł )`)
+    await t.expect(this.dishExistsSelector(dishName, dishPrice).exists).ok()
   }
 
   static async dishNotExists(dishName: string, dishPrice: string) {
-    await t.expect(Selector("main .v-list-item .v-list-item__title").withText(`${dishName} ( ${dishPrice} zł )`).exists).notOk()
+    await t.expect(this.dishExistsSelector(dishName, dishPrice).exists).notOk()
+  }
+
+  private static dishExistsSelector(dishName: string, dishPrice: string) {
+    return Selector("main .v-list-item .v-list-item__title")
+        .withText(dishName)
+        .withText(dishPrice);
   }
 
   static async editDish(dishName: string) {

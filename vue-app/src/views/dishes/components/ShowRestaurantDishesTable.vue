@@ -13,9 +13,7 @@
           <v-list-item :key="dish.id">
             <v-list-item-content>
               <v-list-item-title>
-                {{ dish.name }} (
-                <price :data-price="dish.price"></price>
-                )
+                {{ dish.name }} (<price :data-price="dish.price"></price>)
               </v-list-item-title>
 
               <v-list-item-subtitle>

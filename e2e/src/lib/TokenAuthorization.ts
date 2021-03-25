@@ -9,12 +9,13 @@ export interface TokenData {
   username: string
 }
 
-async function getToken(): Promise<TokenData> {
-  const payload = {
-    username: "John Testcafe",
-    email: "john@altszama.club"
-  }
-  const response = await axios.post(`http://localhost:${TARGET_PORT}/api/auth/testLogin`, payload)
+export interface UserData {
+  username: string;
+  email: string;
+}
+
+async function getToken(userData: UserData): Promise<TokenData> {
+  const response = await axios.post(`http://localhost:${TARGET_PORT}/api/auth/testUser/login`, userData)
 
   return response.data as TokenData
 }
@@ -28,8 +29,8 @@ export class TokenAuthorization extends RequestHook {
     super();
   }
 
-  async init() {
-    const tokenData = await getToken()
+  async init(userData: UserData) {
+    const tokenData = await getToken(userData)
     this.token = tokenData.token
   }
 
