@@ -47,28 +47,36 @@ class TestEnvironmentService {
   @Autowired
   private lateinit var teamRepository: TeamRepository
 
-  fun clearEverythingAndCreateTeam(): Team {
+  fun clearEverything() {
     dishRepository.deleteAll()
     restaurantRepository.deleteAll()
     orderEntryRepository.deleteAll()
     orderRepository.deleteAll()
     teamRepository.deleteAll()
     userRepository.deleteAll()
+  }
 
+  fun generateTeamAndUsers() {
     val team = createTeam()
 
-    return team
+    val user1 = userService.createNewUser("John Doe", "john.doe@altszama.club")
+    val user2 = userService.createNewUser("James Bond", "james.bond@altszama.club")
+    val user3 = userService.createNewUser("Jackie Chan", "jackie.chan@altszama.club")
   }
 
   fun generateRestaurantsAndDishes() {
-    val team = clearEverythingAndCreateTeam()
+    val team = createTeam()
+
+    val user1 = userService.createNewUser("John Doe", "john.doe@altszama.club")
+    val user2 = userService.createNewUser("James Bond", "james.bond@altszama.club")
+    val user3 = userService.createNewUser("Jackie Chan", "jackie.chan@altszama.club")
 
     val pizzeria = createRestaurant(team, "Pizzeria")
     val chineseSpot = createRestaurant(team, "Chinese spot")
   }
 
   fun generateEverything() {
-    val team = clearEverythingAndCreateTeam()
+    val team = createTeam()
 
     val user1 = userService.createNewUser("John Doe", "john.doe@altszama.club")
     val user2 = userService.createNewUser("James Bond", "james.bond@altszama.club")
@@ -101,7 +109,7 @@ class TestEnvironmentService {
     val restaurant = restaurantRepository.save(Restaurant(team = team, name = restaurantName))
 
     val dishes = (1..15).map { i ->
-      dishRepository.save(Dish(restaurant, name = "Dish ${i}", price = randomPrice(), category = "Category ${i/5}"))
+      dishRepository.save(Dish(restaurant, name = "Dish ${i}", price = i * 100, category = "Category ${i/5}"))
     }
 
     return RestaurantWithDishes(restaurant, dishes)
@@ -115,10 +123,6 @@ class TestEnvironmentService {
         paymentStatus = if (order.orderCreator.id == user1.id) OrderEntryPaymentStatus.CONFIRMED else OrderEntryPaymentStatus.UNPAID
     )
     return orderEntryRepository.save(orderEntry)
-  }
-
-  private fun randomPrice(): Int {
-    return Random.nextInt(15, 25) * 100
   }
 }
 

@@ -1,13 +1,15 @@
 import 'testcafe';
-import {TokenAuthorization} from "../lib/TokenAuthorization";
 import {TestEnvApi} from "../lib/TestEnvApi";
 import TodaysOrderView from "../pageObjects/TodaysOrderView";
-import Toolbar from "../pageObjects/Toolbar";
-import {Selector} from "testcafe";
+import CreateOrderView from "../pageObjects/CreateOrderView";
+import ShowOrderView from "../pageObjects/ShowOrderView";
+import OrderingView from "../pageObjects/OrderingView";
+import LoginView from "../pageObjects/LoginView";
 
 const TARGET_PORT = process.env.TARGET_PORT;
 
-const tokenAuthorization = new TokenAuthorization();
+const PARENT_URL = `http://localhost:${TARGET_PORT}`
+
 const testEnvApi = new TestEnvApi()
 
 const johnDoe = {
@@ -15,52 +17,56 @@ const johnDoe = {
     email: "john.doe@altszama.club"
 }
 
+const jamesBond = {
+    username: "James Bond",
+    email: "james.bond@altszama.club"
+}
+
 fixture(`Create order`)
-    .before(async _ => {
+    .beforeEach(async t => {
         await testEnvApi.clearEverything()
         await testEnvApi.generateRestaurantsAndDishes()
-        await tokenAuthorization.init(johnDoe)
-    })
-    .beforeEach(async t => {
         await t.resizeWindow(1400, 700)
     })
-    .page`http://localhost:${TARGET_PORT}/orders`
-    .requestHooks(tokenAuthorization);
+    .page `${PARENT_URL}/`
 
 
-test('Create order', async t => {
+test('Create order with single user', async () => {
+    await LoginView.loginAs(johnDoe.username)
+
     await TodaysOrderView.expectNoOrdersMadeYet();
-    await TodaysOrderView.clickAddNewOrderButton();
 
-    await Toolbar.toolbarShouldContain("Create new order");
+    await CreateOrderView.createOrderWithDefaultValues("Chinese spot")
 
-    await t.click(Selector(".v-list-item").withText("Chinese spot"))
+    await CreateOrderView.goToOrder("Chinese spot")
+    await ShowOrderView.addEntry("Dish 1", "1,00")
 
-    await t.click(Selector("button").withText("CONTINUE"))
+    await ShowOrderView.placeOrder()
+    await OrderingView.setAsOrdered()
+    await ShowOrderView.setAsDelivered()
+});
 
-    await t.click(Selector("button").withText("CREATE"))
+test('Create order with two users', async () => {
+    await LoginView.loginAs(johnDoe.username)
 
-    await t.expect(Selector(".v-list-item").withText("Chinese spot").withText("created by John Doe").exists).ok()
+    await TodaysOrderView.expectNoOrdersMadeYet();
 
-    await t.click(Selector(".v-list-item").withText("Chinese spot"))
+    await CreateOrderView.createOrderWithDefaultValues("Chinese spot")
 
-    await t.click(Selector("button").withText("ADD ENTRY"))
+    await CreateOrderView.goToOrder("Chinese spot")
+    await ShowOrderView.addEntry("Dish 1", "1,00")
 
-    await t.click(Selector("input#newDishName"))
-    await t.click(Selector(".v-select-list .v-list-item").withText("Dish 1"))
+    await LoginView.logout()
+    await LoginView.loginAs(jamesBond.username)
 
-    await t.click(Selector("button").withText("SUBMIT"))
+    await CreateOrderView.goToOrder("Chinese spot")
+    await ShowOrderView.addEntry("Dish 2", "2,00")
 
-    await t.expect(Selector(".v-list-item").withText("Dish 1").withText("1,00").exists).ok()
+    await LoginView.logout()
+    await LoginView.loginAs(johnDoe.username)
 
-    await t.click(Selector("button").withText("PLACE ORDER"))
-
-    await t.click(Selector("button").withText("ORDER PLACED"))
-
-    await t.expect(Selector(".v-toolbar .v-toolbar__title").innerText).match(/^\[ORDERED\].+/)
-
-    await t.click(Selector("button").withText("MARK AS DELIVERED"))
-
-    await t.expect(Selector(".v-toolbar .v-toolbar__title").innerText).match(/^\[DELIVERED\].+/)
-
+    await CreateOrderView.goToOrder("Chinese spot")
+    await ShowOrderView.placeOrder()
+    await OrderingView.setAsOrdered()
+    await ShowOrderView.setAsDelivered()
 });

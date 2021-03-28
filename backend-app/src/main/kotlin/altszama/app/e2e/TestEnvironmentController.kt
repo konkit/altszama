@@ -15,7 +15,12 @@ class TestEnvironmentController() {
 
   @RequestMapping("/clearEverything")
   fun clearEverything() {
-    testEnvironmentService.clearEverythingAndCreateTeam()
+    testEnvironmentService.clearEverything()
+  }
+
+  @RequestMapping("/generateTeamAndUsers")
+  fun generateTeamAndUsers() {
+    testEnvironmentService.generateTeamAndUsers()
   }
 
   @RequestMapping("/generateRestaurantsAndDishes")
