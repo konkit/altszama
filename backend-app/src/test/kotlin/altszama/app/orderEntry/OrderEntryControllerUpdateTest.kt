@@ -213,6 +213,66 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
   }
 
   @Test()
+  fun itShouldUpdateSomeoneElsesOrderEntryIfTheUserIsOrderCreator() {
+    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val (user2Token, user2) = createUserAndGetToken("James2", "james2@team1.com")
+
+    val (restaurant, dishes) = createRestaurantAndDishes(team1)
+    val order = createOrder(restaurant, user1, team1)
+    val orderEntry = createOrderEntry(order, dishes[0], user2, team1)
+    val dishEntry = orderEntry.dishEntries.first()
+
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(orderEntry.id, dishEntry.id, dishes[1].id, dishes[1].sideDishes[0].id!!)
+    val request = createRequest(createContent, user1Token)
+
+    mockMvc.perform(request)
+      .andExpect(MockMvcResultMatchers.status().isOk)
+
+    val orderEntriesInDb = orderEntryRepository.findByOrderId(order.id)
+
+    assertThat(orderEntriesInDb).hasSize(1)
+    assertThat(orderEntriesInDb[0].order.id).isEqualTo(order.id)
+
+    assertThat(orderEntriesInDb[0].dishEntries).hasSize(1)
+    val dishEntryFromDb = orderEntriesInDb[0].dishEntries[0]
+    assertThat(dishEntryFromDb.dish.id).isEqualTo(dishes[1].id)
+    assertThat(dishEntryFromDb.additionalComments).isEqualTo("Some updated comment")
+    assertThat(dishEntryFromDb.chosenSideDishes).isEqualTo(listOf(dishes[1].sideDishes[0]))
+  }
+
+  @Test()
+  fun itShouldUpdateSomeoneElsesOrderEntryIfOrderIsAlreadyOrderedButTheUserIsOrderCreator() {
+    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val (user2Token, user2) = createUserAndGetToken("James2", "james2@team1.com")
+
+    val (restaurant, dishes) = createRestaurantAndDishes(team1)
+    val order = createOrder(restaurant, user1, team1)
+    val orderEntry = createOrderEntry(order, dishes[0], user2, team1)
+    val dishEntry = orderEntry.dishEntries.first()
+
+    orderService.setAsOrdered(order.id, null, currentUser = user1)
+
+    val createContent = createPayloadWithExistingDishAndExistingSideDish(orderEntry.id, dishEntry.id, dishes[1].id, dishes[1].sideDishes[0].id!!)
+    val request = createRequest(createContent, user1Token)
+
+    mockMvc.perform(request)
+      .andExpect(MockMvcResultMatchers.status().isOk)
+
+    val orderEntriesInDb = orderEntryRepository.findByOrderId(order.id)
+
+    assertThat(orderEntriesInDb).hasSize(1)
+    assertThat(orderEntriesInDb[0].order.id).isEqualTo(order.id)
+
+    assertThat(orderEntriesInDb[0].dishEntries).hasSize(1)
+    val dishEntryFromDb = orderEntriesInDb[0].dishEntries[0]
+    assertThat(dishEntryFromDb.dish.id).isEqualTo(dishes[1].id)
+    assertThat(dishEntryFromDb.additionalComments).isEqualTo("Some updated comment")
+    assertThat(dishEntryFromDb.chosenSideDishes).isEqualTo(listOf(dishes[1].sideDishes[0]))
+  }
+
+  @Test()
   fun itShouldNotUpdateOrderEntryIfOrderIsAlreadyOrdered() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")

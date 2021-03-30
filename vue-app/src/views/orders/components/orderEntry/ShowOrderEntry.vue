@@ -14,7 +14,7 @@
               )
             </div>
 
-            <div class="edit-buttons" v-if="isOrderEntryOwner() && order.orderState === 'CREATED'">
+            <div class="edit-buttons" v-if="canEditOrderEntry()">
               <v-btn text icon @click="editDishEntry()">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </v-btn>
@@ -62,9 +62,10 @@ import {ShowOrderState} from "@/store/modules/ShowOrderModule";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
 import Vue from "vue";
-import {ParticipantsDishEntry, ParticipantsOrderEntry} from "../../../../frontend-client";
+import {ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto} from "../../../../frontend-client";
 import ErrorHandler from "@/lib/ErrorHandler";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
   components: {
@@ -82,6 +83,10 @@ export default class ShowOrderEntry extends Vue {
   get order() {
     const showOrderState: ShowOrderState = this.$store.state.showOrder;
     return showOrderState.order;
+  }
+
+  canEditOrderEntry() {
+    return this.isOrderOwner() || (this.isOrderEntryOwner() && this.order.orderState === OrderStateEnum.CREATED)
   }
 
   isOrderOwner() {

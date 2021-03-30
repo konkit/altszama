@@ -126,7 +126,7 @@ class OrderEntryService {
       .ofNullable(orderEntry.dishEntries.find { de -> de.id == dishEntryId })
       .orElseThrow { DishEntryDoesNotExist() }
 
-    if (orderEntry.user != currentUser) {
+    if (orderEntry.user != currentUser && orderEntry.order.orderCreator != currentUser) {
       throw NoAccessToOrderEntry()
     }
 
