@@ -5,9 +5,9 @@ export interface PriceModifierFieldsValue {
 }
 
 export interface PaymentDataFieldsValue {
-  paymentByCash: boolean,
-  paymentByBankTransfer: boolean,
-  bankTransferNumber: string,
-  paymentByBlik: boolean,
-  blikPhoneNumber: string
+  paymentByCash: boolean;
+  paymentByBankTransfer: boolean;
+  bankTransferNumber: string;
+  paymentByBlik: boolean;
+  blikPhoneNumber: string;
 }

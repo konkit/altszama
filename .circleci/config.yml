@@ -19,16 +19,11 @@ jobs:
         key: v1-gradle-cache-{{ checksum "backend-app/build.gradle" }}
 
     - run:
-        name: Build backend app
+        name: Run backend tests
         command: |
           cd ./backend-app
-          ./gradlew --console=plain clean build
+          ./gradlew --console=plain clean test
           cd ../
-
-    # - run: docker push konkit/altszama:$CIRCLE_WORKFLOW_ID
-#    - setup_remote_docker
-
-#    - run: echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USER --password-stdin
 
     - run:
         name: Build frontend app
