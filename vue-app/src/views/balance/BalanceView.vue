@@ -5,19 +5,30 @@
         <v-container>
           <v-row>
             <v-col cols="xs12">
+              <h1 class="mb-4">Your balance:</h1>
+              <template v-if="orderHistoryEntries.length === 0">
+                <p>Your order history is empty.</p>
+              </template>
+
               <h1 class="mb-4">Your order history:</h1>
 
-              <v-list>
-                <template v-for="historyEntry in orderHistoryEntries">
-                  <template v-if="historyEntry.kind === 'createdEntry'">
-                    <CreatedEntryComponent :history-entry="historyEntry" :key="historyEntry.orderId" />
-                  </template>
+              <template v-if="orderHistoryEntries.length > 0">
+                <v-list>
+                  <template v-for="historyEntry in orderHistoryEntries">
+                    <template v-if="historyEntry.kind === 'createdEntry'">
+                      <CreatedEntryComponent :history-entry="historyEntry" :key="historyEntry.orderId"/>
+                    </template>
 
-                  <template v-if="historyEntry.kind === 'participatedEntry'">
-                    <ParticipatedEntryComponent :history-entry="historyEntry" :key="historyEntry.orderId" />
+                    <template v-if="historyEntry.kind === 'participatedEntry'">
+                      <ParticipatedEntryComponent :history-entry="historyEntry" :key="historyEntry.orderId"/>
+                    </template>
                   </template>
-                </template>
-              </v-list>
+                </v-list>
+              </template>
+
+              <template v-if="orderHistoryEntries.length === 0">
+                <p>Your order history is empty.</p>
+              </template>
             </v-col>
           </v-row>
         </v-container>

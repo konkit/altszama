@@ -3,7 +3,7 @@ package altszama.app.balance
 import altszama.app.orderEntry.OrderEntryPaymentStatus
 import java.time.LocalDate
 
-data class OrderHistory(val entries: List<OrderHistoryEntry>)
+data class OrderHistory(val entries: List<OrderHistoryEntry>, val owedMoney: Map<String, Int>)
 
 sealed class OrderHistoryEntry {
   abstract val orderId: String

@@ -21,20 +21,64 @@ class BalanceService {
   private lateinit var orderEntryRepository: OrderEntryRepository
 
   fun getOrderHistory(currentUser: User): OrderHistory {
-    val ordersYouParticipatedIn = orderEntryRepository.findByUser(currentUser)
-    val orderHistoryParticipatedEntries = ordersYouParticipatedIn
-      .filter { orderEntry -> orderNotCreatedByMe(orderEntry, currentUser) && orderAlreadyOrdered(orderEntry.order) }
-      .map { orderEntry -> createParticipatedEntry(orderEntry) }
-
-    val ordersYouCreated = orderRepository.findByOrderCreator(currentUser)
-    val orderHistoryCreatedEntries = ordersYouCreated
+    val ordersUserCreated = orderRepository.findByOrderCreator(currentUser)
       .filter { order -> orderAlreadyOrdered(order) }
+
+    val orderEntriesUserParticipatedIn = orderEntryRepository.findByUser(currentUser)
+      .filter { orderEntry -> orderNotCreatedByMe(orderEntry, currentUser) && orderAlreadyOrdered(orderEntry.order) }
+
+    val orderHistoryEntries = createOrderHistoryEntries(ordersUserCreated, orderEntriesUserParticipatedIn)
+    val owedMoneyMap = createOwedMoneyMap(ordersUserCreated, orderEntriesUserParticipatedIn)
+
+    return OrderHistory(orderHistoryEntries, owedMoneyMap)
+  }
+
+  private fun createOrderHistoryEntries(
+    ordersUserCreated: List<Order>,
+    orderEntriesUserParticipatedIn: List<OrderEntry>
+  ): List<OrderHistoryEntry> {
+    val orderHistoryCreatedEntries = ordersUserCreated
       .map { order -> createOrderHistoryCreatedEntry(order) }
 
-    val orderHistoryEntries = (orderHistoryCreatedEntries + orderHistoryParticipatedEntries)
-      .sortedByDescending { it.orderDate }
+    val orderHistoryParticipatedEntries = orderEntriesUserParticipatedIn
+      .map { orderEntry -> createParticipatedEntry(orderEntry) }
 
-    return OrderHistory(orderHistoryEntries)
+    return (orderHistoryCreatedEntries + orderHistoryParticipatedEntries)
+      .sortedByDescending { it.orderDate }
+  }
+
+  private fun createOwedMoneyMap(
+    ordersUserCreated: List<Order>,
+    orderEntriesUserParticipatedIn: List<OrderEntry>
+  ): Map<String, Int> {
+    val tuples = ordersUserCreated
+      .flatMap { order ->
+        val userCount = orderEntryRepository.findByOrderId(order.id).size
+        val orderEntries = orderEntryRepository.findByOrderId(order.id)
+
+        orderEntries
+          .filter { orderEntry -> orderEntry.paymentStatus == OrderEntryPaymentStatus.UNPAID }
+          .map { orderEntry -> Pair(orderEntry.user, orderEntry.getFinalPrice(userCount)) }
+      }
+      .groupBy { pair -> pair.first }
+      .mapValues { entry -> entry.value.sumBy { pair -> pair.second } }
+      .entries
+
+    val tuples2 = orderEntriesUserParticipatedIn
+      .filter { orderEntry -> orderEntry.paymentStatus == OrderEntryPaymentStatus.UNPAID }
+      .map { orderEntry ->
+        Pair(
+          orderEntry.order.orderCreator,
+          -orderEntry.getFinalPrice(orderEntryRepository.findByOrderId(orderEntry.order.id).size)
+        )
+      }
+      .toMap()
+      .entries
+
+    return (tuples + tuples2)
+      .groupBy { it.key }
+      .map { entry -> Pair(entry.key.username, entry.value.sumBy { it.value }) }
+      .toMap()
   }
 
   private fun orderAlreadyOrdered(order: Order): Boolean =
@@ -62,8 +106,8 @@ class BalanceService {
     val orderEntries = orderEntryRepository.findByOrderId(order.id)
 
     val confirmedPaymentsTotalAmount = orderEntries
-      .filter { oe -> oe.paymentStatus == OrderEntryPaymentStatus.CONFIRMED }
-      .sumBy { oe -> oe.getFinalPrice(userCount) }
+      .filter { orderEntry -> orderEntry.paymentStatus == OrderEntryPaymentStatus.CONFIRMED }
+      .sumBy { orderEntry -> orderEntry.getFinalPrice(userCount) }
 
     val totalAmount = Order.getTotalPrice(order, orderEntries)
 
