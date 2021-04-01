@@ -6,8 +6,28 @@
           <v-row>
             <v-col cols="xs12">
               <h1 class="mb-4">Your balance:</h1>
-              <template v-if="orderHistoryEntries.length === 0">
-                <p>Your order history is empty.</p>
+              <template v-if="owedMoneyEntries.length === 0">
+                <p>No pending entries - all settled up.</p>
+              </template>
+
+              <template v-if="owedMoneyEntries.length > 0">
+                <v-list>
+                  <template v-for="([owedUsername, owedAmount], i) in owedMoneyEntries">
+                    <v-list-item two-line :key="i">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          <template v-if="owedAmount > 0">
+                            <p :key="i">You are owed <price-element :data-price="owedAmount"/> by {{owedUsername}}</p>
+                          </template>
+
+                          <template v-if="owedAmount < 0">
+                            <p :key="i">You owe <price-element :data-price="-owedAmount" /> to {{owedUsername}}</p>
+                          </template>
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </template>
+                </v-list>
               </template>
 
               <h1 class="mb-4">Your order history:</h1>
@@ -63,11 +83,13 @@ export default class BalanceView extends Vue {
   connector: BalanceApiConnector = new BalanceApiConnector();
 
   orderHistoryEntries: (OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry)[] = []
+  owedMoneyEntries: [string, number][] = []
 
   mounted() {
     this.connector.getBalanceForUser()
         .then(response => {
           this.orderHistoryEntries = response.entries
+          this.owedMoneyEntries = Object.entries(response.owedMoney)
 
           this.$store.commit("setTitle", "Your order history")
           this.$store.commit("setLoadingFalse");

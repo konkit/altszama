@@ -895,6 +895,12 @@ export interface OrderHistory {
      * @memberof OrderHistory
      */
     entries: Array<OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry>;
+    /**
+     * 
+     * @type {{ [key: string]: number; }}
+     * @memberof OrderHistory
+     */
+    owedMoney: { [key: string]: number; };
 }
 /**
  * 
@@ -926,12 +932,6 @@ export interface OrderHistoryEntry {
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    kind: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderHistoryEntry
-     */
     orderCreator: string;
     /**
      * 
@@ -939,6 +939,12 @@ export interface OrderHistoryEntry {
      * @memberof OrderHistoryEntry
      */
     orderDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    kind: string;
     /**
      * 
      * @type {string}

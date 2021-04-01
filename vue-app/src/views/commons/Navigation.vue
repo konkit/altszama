@@ -46,7 +46,7 @@
 
       <v-list-item @click="goToPath({name: 'Balance'})">
         <v-list-item-content>
-          <v-list-item-title>Your order history</v-list-item-title>
+          <v-list-item-title>Balance and order history</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
