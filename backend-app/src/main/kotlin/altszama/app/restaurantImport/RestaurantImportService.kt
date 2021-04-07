@@ -1,13 +1,11 @@
 package altszama.app.restaurantImport
 
-import altszama.app.auth.User
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.SideDish
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantRepository
 import altszama.app.team.Team
-import altszama.app.team.TeamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -61,11 +59,17 @@ class RestaurantImportService {
         } else {
           parsedPrice
         }
+        val newCategory = if ((dishData.category == null || dishData.category.isEmpty()) && dish.category.isNotBlank()) {
+          dish.category
+        } else {
+          dishData.category ?: ""
+        }
 
         val updatedDish = dish.copy(
             price = newPrice,
             sideDishes = sideDishes,
-            lastCrawled = now
+            lastCrawled = now,
+            category = newCategory
         )
 
         dishRepository.save(updatedDish)

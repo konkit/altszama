@@ -1,6 +1,9 @@
 package altszama.app.restaurantImport
 
+import altszama.app.dish.Dish
 import altszama.app.dish.DishService
+import altszama.app.dish.SideDish
+import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.TeamService
@@ -133,5 +136,58 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
         .with(httpBasic(team1.importUsername, fakePassword))
 
     expectUnauthorizedWithMessage(request, "Invalid credentials")
+  }
+
+  @Test
+  fun itShouldUpdateExistingDishesInTheRestaurant() {
+    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val (_, user1) = createUserAndGetToken("John", "john1@team1.com")
+
+    val (restaurant, dishes) = createRestaurantAndDishes(team1)
+
+    val updatedDishes = dishes.map { dish -> dish.copy(category = "Updated " + dish.category, price = dish.price * 2) }
+
+    val request = post("/api/restaurantImport/import")
+      .content(createRestaurantsJson(restaurant, updatedDishes))
+      .contentType(MediaType.APPLICATION_JSON)
+      .with(httpBasic(team1.importUsername, team1.importPassword))
+
+    mockMvc.perform(request)
+      .andExpect(MockMvcResultMatchers.status().isCreated)
+
+    val resultDishes = dishService.findAllDishesByRestaurantId(restaurant.id)
+
+    assertThat(resultDishes.size).isEqualTo(updatedDishes.size)
+
+    resultDishes.sortedBy { it.id }.zip(updatedDishes.sortedBy { it.id }).forEach { (result, expected) ->
+      assertThat(result.name).isEqualTo(expected.name)
+      assertThat(result.price).isEqualTo(expected.price)
+      assertThat(result.category).isEqualTo(expected.category)
+      assertThat(result.sideDishes).isEqualTo(expected.sideDishes)
+    }
+  }
+
+  private fun createRestaurantsJson(restaurant: Restaurant, dishes: List<Dish>): String {
+    fun sideDishJson(sidedish: SideDish) = """{ 
+      "name": "${sidedish.name}", 
+      "price": "${"%d,%02d".format(sidedish.price / 100, sidedish.price % 100)}" 
+    }""".trimIndent()
+
+    fun dishJson(dish: Dish) = """{ 
+      "name": "${dish.name}", 
+      "price": "${"%d,%02d".format(dish.price / 100, dish.price % 100)}", 
+      "sidedishes": [${dish.sideDishes.joinToString(", ") { sd -> sideDishJson(sd) }}], 
+      "category": "${dish.category}" 
+    }""".trimIndent()
+
+    return """{
+      "name": "${restaurant.name}",
+      "url": ": ${restaurant.url}: ",
+      "dishes": [
+        ${dishes.joinToString(", ") { d -> dishJson(d) }}
+      ],
+      "telephone": "123 - 123 - 123",
+      "address": "Privet Drive 4"
+    }""".trimIndent()
   }
 }
