@@ -42,8 +42,7 @@
             <h1>Import API</h1>
 
             <p>To use the Restaurant Import API, please use the following credentials: </p>
-            <p><b>Username:</b> {{importApiUsername}}</p>
-            <p><b>Password:</b> {{importApiPassword}}</p>
+            <p><b>Import API Key:</b> {{importApiKey}}</p>
 
             <v-btn :href="getSwaggerUrl()" large bottom right>See Import API specification<v-icon class="ml-2">upload</v-icon></v-btn>
           </v-col>
@@ -90,8 +89,7 @@ export default class RestaurantIndex extends Vue {
   restaurants: RestaurantInfo[] = [];
   restaurantsEntries: RestaurantEntry[] = [];
 
-  importApiUsername = ""
-  importApiPassword = ""
+  importApiKey = ""
 
   connector: DishesApiConnector = new DishesApiConnector();
 
@@ -104,8 +102,7 @@ export default class RestaurantIndex extends Vue {
               this.mapToRestaurantEntry(r)
           );
           console.log("Payload: ", payload)
-          this.importApiUsername = payload.importCredentials.username
-          this.importApiPassword = payload.importCredentials.password
+          this.importApiKey = payload.importCredentials.apiKey
 
           this.$store.commit("setTitle", "Restaurants")
           this.$store.commit("setLoadingFalse");

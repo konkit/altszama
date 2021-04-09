@@ -43,9 +43,9 @@ class TeamService {
           .filter { d -> d.isNotBlank() }
           .flatMap { e -> teamRepository.findByUserEmails(e) }
 
-  fun findByImportUsername(usernameString: String): Optional<Team> {
-    return Optional.ofNullable(usernameString)
+  fun findByImportApiKey(apiKeyString: String): Optional<Team> {
+    return Optional.ofNullable(apiKeyString)
       .filter(StringUtils::isNotBlank)
-      .flatMap { username -> teamRepository.findByImportUsername(username) }
+      .flatMap { apiKey -> teamRepository.findByImportApiKey(apiKey) }
   }
 }

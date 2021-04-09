@@ -9,12 +9,11 @@ data class Team(
     var name: String,
     var domain: String,
     var userEmails: List<String>,
-    var importUsername: String = defaultRandomValue(),
-    val importPassword: String = defaultRandomValue()
+    var importApiKey: String = defaultRandomValue()
 ) {
   companion object {
     fun defaultRandomValue(): String {
-      return RandomStringUtils.randomAlphanumeric(10)
+      return RandomStringUtils.randomAlphanumeric(20)
     }
   }
 }

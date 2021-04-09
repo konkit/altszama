@@ -25,7 +25,7 @@ class RestaurantControllerDataService {
     val restaurantInfoList = restaurantToCountMap.entries
         .map { entry -> RestaurantInfo(entry.key.id, entry.key.name, entry.key.lastCrawled, entry.key.lastEdited, entry.value) }
 
-    return IndexResponse(restaurantInfoList, ImportCredentials(team.importUsername, team.importPassword))
+    return IndexResponse(restaurantInfoList, ImportCredentials(team.importApiKey))
   }
 
   fun getShowData(currentUserTeam: Team, restaurantId: String): ShowRestaurantResponse {

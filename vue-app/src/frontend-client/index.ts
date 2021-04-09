@@ -1,7 +1,7 @@
 // tslint:disable
 /**
  * Restaurant Import API
- * To use the API pleaes use Basic Authentication with credentials specified on \"Restaurants\" page
+ * To use the API please use the Import API Key specified on \"Restaurants\" page
  *
  * OpenAPI spec version: 1.0.0
  * 

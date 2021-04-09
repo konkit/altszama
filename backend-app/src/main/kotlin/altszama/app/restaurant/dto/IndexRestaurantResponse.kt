@@ -15,4 +15,4 @@ data class RestaurantInfo(
     val dishCount: Long
 )
 
-data class ImportCredentials(val username: String, val password: String)
+data class ImportCredentials(val apiKey: String)

@@ -1,5 +1,6 @@
 package altszama.config
 
+import altszama.app.restaurantImport.RestaurantImport
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme
 import io.swagger.v3.oas.models.servers.Server
 import org.springdoc.core.GroupedOpenApi
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -26,23 +26,30 @@ open class SwaggerConfig {
 
   @Bean
   fun customOpenAPI(): OpenAPI? {
-    val components = if (environment.activeProfiles.contains("development")) {
-      Components()
-          .addSecuritySchemes("basicAuth", SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic"))
-          .addSecuritySchemes("bearerAuth", SecurityScheme().type(SecurityScheme.Type.APIKEY).scheme("bearer").bearerFormat("JWT"))
-    } else {
-      Components()
-          .addSecuritySchemes("basicAuth", SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic"))
+    val importApiSecurityScheme = SecurityScheme()
+      .type(SecurityScheme.Type.APIKEY)
+      .`in`(SecurityScheme.In.HEADER)
+      .name(RestaurantImport.headerName)
+
+    val guiApiSecurityScheme = SecurityScheme()
+      .type(SecurityScheme.Type.APIKEY)
+      .scheme("bearer")
+      .bearerFormat("JWT")
+
+    val components = Components()
+      .addSecuritySchemes("ImportApiKeyAuth", importApiSecurityScheme)
+
+    if (environment.activeProfiles.contains("development")) {
+      components.addSecuritySchemes("GuiApiAuth", guiApiSecurityScheme)
     }
 
-    val description = "To use the API pleaes use Basic Authentication with credentials specified on \"Restaurants\" page"
+    val description = "To use the API please use the Import API Key specified on \"Restaurants\" page"
 
     return OpenAPI()
         .addServersItem(Server().url(secretsConfig.backendUrl))
         .components(components)
         .info(Info().title("Restaurant Import API").description(description))
-        .addSecurityItem(
-            SecurityRequirement().addList("bearerAuth", listOf()));
+        .addSecurityItem(SecurityRequirement().addList("bearerAuth", listOf()));
   }
 
   @Bean

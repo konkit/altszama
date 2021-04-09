@@ -12,7 +12,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -48,12 +47,12 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
 
     val request = post("/api/restaurantImport/import")
-        .content(restaurantImportJson)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic(team1.importUsername, team1.importPassword))
+      .content(restaurantImportJson)
+      .contentType(MediaType.APPLICATION_JSON)
+      .header(RestaurantImport.headerName, team1.importApiKey)
 
     mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isCreated)
+      .andExpect(MockMvcResultMatchers.status().isOk)
 
     val restaurant = restaurantService.findByTeamAndName(team1, "Restaurant 1")!!
 
@@ -77,7 +76,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
       .content(restaurantImportJson)
       .contentType(MediaType.APPLICATION_JSON)
 
-    expectUnauthorizedWithMessage(request, "Please use Basic Auth with credentials provided on Restaurants page")
+    expectUnauthorizedWithMessage(request, "Please use API Key provided on Restaurants page")
   }
 
   @Test
@@ -89,12 +88,12 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
     restaurantService.createRestaurant(team2, RestaurantSaveRequest(name = "Restaurant 1"))
 
     val request = post("/api/restaurantImport/import")
-        .content(restaurantImportJson)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic(team2.importUsername, team2.importPassword))
+      .content(restaurantImportJson)
+      .contentType(MediaType.APPLICATION_JSON)
+      .header(RestaurantImport.headerName, team2.importApiKey)
 
     mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isCreated)
+      .andExpect(MockMvcResultMatchers.status().isOk)
 
     val restaurant = restaurantService.findByTeamAndName(team2, "Restaurant 1")!!
     val dishes = dishService.findAllDishesByRestaurantId(restaurant.id)
@@ -102,40 +101,21 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
   }
 
   @Test
-  fun shouldReturnErrorIfTheLoginIsWrong() {
+  fun shouldReturnErrorIfTheApiKeyIsWrong() {
     val team1 = teamService.createTeam("team1.com", "team1.com")
-    val team2 = teamService.createTeam("team2.com", "team1.com")
+    val team2 = teamService.createTeam("team2.com", "team2.com")
 
     restaurantService.createRestaurant(team1, RestaurantSaveRequest(name = "Restaurant 1"))
     restaurantService.createRestaurant(team2, RestaurantSaveRequest(name = "Restaurant 1"))
 
-    val fakeUsername = "fakeusername"
-    val fakePassword = "fakepassword"
+    val fakeApiKey = "fakeapikeyfakeapikey"
 
     val request = post("/api/restaurantImport/import")
       .content(restaurantImportJson)
       .contentType(MediaType.APPLICATION_JSON)
-      .with(httpBasic(fakeUsername, fakePassword))
+      .header(RestaurantImport.headerName, fakeApiKey)
 
-    expectUnauthorizedWithMessage(request, "Invalid credentials")
-  }
-
-  @Test
-  fun shouldReturnErrorIfThePasswordIsWrong() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val team2 = teamService.createTeam("team2.com", "team1.com")
-
-    restaurantService.createRestaurant(team1, RestaurantSaveRequest(name = "Restaurant 1"))
-    restaurantService.createRestaurant(team2, RestaurantSaveRequest(name = "Restaurant 1"))
-
-    val fakePassword = "fakepassword"
-
-    val request = post("/api/restaurantImport/import")
-        .content(restaurantImportJson)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic(team1.importUsername, fakePassword))
-
-    expectUnauthorizedWithMessage(request, "Invalid credentials")
+    expectUnauthorizedWithMessage(request, "Invalid API Key")
   }
 
   @Test
@@ -150,10 +130,10 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
     val request = post("/api/restaurantImport/import")
       .content(createRestaurantsJson(restaurant, updatedDishes))
       .contentType(MediaType.APPLICATION_JSON)
-      .with(httpBasic(team1.importUsername, team1.importPassword))
+      .header(RestaurantImport.headerName, team1.importApiKey)
 
     mockMvc.perform(request)
-      .andExpect(MockMvcResultMatchers.status().isCreated)
+      .andExpect(MockMvcResultMatchers.status().isOk)
 
     val resultDishes = dishService.findAllDishesByRestaurantId(restaurant.id)
 

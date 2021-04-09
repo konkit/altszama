@@ -39,5 +39,5 @@ class InvalidOrderEntryId() : AltszamaErrorException("Field orderEntry id is inv
 class InvalidDishEntryId() : AltszamaErrorException("Field dishEntryId is invalid")
 
 
-class RestaurantImportNoBasicAuth() : AltszamaErrorException("Please use Basic Auth with credentials provided on Restaurants page", HttpStatus.UNAUTHORIZED)
-class RestaurantImportInvalidCredentials() : AltszamaErrorException("Invalid credentials", HttpStatus.UNAUTHORIZED)
+class RestaurantImportNoApiKey() : AltszamaErrorException("Please use API Key provided on Restaurants page", HttpStatus.UNAUTHORIZED)
+class RestaurantImportInvalidApiKey() : AltszamaErrorException("Invalid API Key", HttpStatus.UNAUTHORIZED)

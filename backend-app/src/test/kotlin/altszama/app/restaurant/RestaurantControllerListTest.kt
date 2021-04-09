@@ -52,7 +52,6 @@ internal class RestaurantControllerListTest : AbstractIntegrationTest() {
     assertThat(indexResponse.restaurants).hasSize(1)
     assertThat(indexResponse.restaurants[0].name).isEqualTo("Restaurant 1")
 
-    assertThat(indexResponse.importCredentials.username).isEqualTo(team1.importUsername)
-    assertThat(indexResponse.importCredentials.password).isEqualTo(team1.importPassword)
+    assertThat(indexResponse.importCredentials.apiKey).isEqualTo(team1.importApiKey)
   }
 }
