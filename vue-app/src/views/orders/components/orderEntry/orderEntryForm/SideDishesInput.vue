@@ -102,34 +102,6 @@ export default class SideDishesInput extends Vue {
     this.$forceUpdate();
   }
 
-  // setAsNewSideDish(sdIndex: number) {
-  //   const oldItem = this.chosenSideDishes[sdIndex]
-  //   const newItem = Object.assign(oldItem, {isNew: true})
-  //
-  //   const newSideDishes: SideDishData[] = [
-  //     ...this.chosenSideDishes.slice(0, sdIndex),
-  //     newItem,
-  //     ...this.chosenSideDishes.slice(sdIndex + 1)
-  //   ]
-  //   this.updateSideDishes(newSideDishes);
-  //
-  //   this.$forceUpdate();
-  // }
-  //
-  // setAsExistingSideDish(sdIndex: number) {
-  //   const oldItem = this.chosenSideDishes[sdIndex]
-  //   const newItem = Object.assign(oldItem, {isNew: false})
-  //
-  //   const newSideDishes: SideDishData[] = [
-  //     ...this.chosenSideDishes.slice(0, sdIndex),
-  //     newItem,
-  //     ...this.chosenSideDishes.slice(sdIndex + 1)
-  //   ]
-  //   this.updateSideDishes(newSideDishes);
-  //
-  //   this.$forceUpdate();
-  // }
-
   updateNewSideDishName(sdIndex: number, newValue: string | ComboBoxItem | null) {
     if (typeof newValue === "string") {
       const oldItem = this.chosenSideDishes[sdIndex]

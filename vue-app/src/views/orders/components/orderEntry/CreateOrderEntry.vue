@@ -13,7 +13,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="primary" @click="submitForm" :disabled="isSubmitDisabled">Submit</v-btn>
+        <v-btn color="primary" @click="submitForm()">Submit</v-btn>
         <v-btn @click="cancelEdit()">Cancel</v-btn>
       </div>
     </template>
@@ -72,9 +72,12 @@ export default class CreateOrderEntry extends Vue {
     this.$store.commit("modifyOrderEntry/setEntryLoading", false)
   }
 
-  submitForm(e: Event) {
-    e.preventDefault();
+  submitForm() {
+    // Set timeout is necessary to properly handle last-minute updates in form controls
+    setTimeout(() => this.saveOrderEntry(), 0)
+  }
 
+  private saveOrderEntry() {
     const state = this.$store.state.modifyOrderEntry
 
     const orderId = state.orderId;
@@ -112,8 +115,6 @@ export default class CreateOrderEntry extends Vue {
           this.$store.dispatch(`showOrder/fetchOrderDataAction`, orderId);
         })
         .catch(errResponse => ErrorHandler.handleError(errResponse));
-
-    return false;
   }
 
   cancelEdit() {
@@ -138,11 +139,6 @@ export default class CreateOrderEntry extends Vue {
 
   get dishIdToSideDishesMap(): { [key: string]: SideDish[] } {
     return this.$store.state.showOrder.dishIdToSideDishesMap;
-  }
-
-  get isSubmitDisabled(): boolean {
-    return (this.orderEntryData.dishData.kind === "NewDishData" && !this.orderEntryData.dishData.newDishName) ||
-        (this.orderEntryData.dishData.chosenSideDishes.filter(sd => (sd.isNew == true && !sd.newSideDishName) || (sd.isNew == false && !sd.id)).length > 0)
   }
 
   updateOrderEntryData(newOrderEntryData: OrderEntryData) {
