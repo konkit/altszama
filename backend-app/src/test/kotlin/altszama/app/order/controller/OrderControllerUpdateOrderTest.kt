@@ -1,6 +1,5 @@
 package altszama.app.order.controller
 
-import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.order.OrderControllerDataService
@@ -8,12 +7,10 @@ import altszama.app.order.OrderService
 import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
-import altszama.app.orderEntry.OrderEntryService
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
-import com.fasterxml.jackson.databind.ObjectMapper
+import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,12 +28,6 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
   private lateinit var mockMvc: MockMvc
 
   @Autowired
-  private lateinit var userService: UserService
-
-  @Autowired
-  private lateinit var teamService: TeamService
-
-  @Autowired
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
@@ -46,19 +37,16 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
   private lateinit var orderService: OrderService
 
   @Autowired
-  private lateinit var orderEntryService: OrderEntryService
-
-  @Autowired
   private lateinit var orderControllerDataService: OrderControllerDataService
 
   @Autowired
-  private lateinit var objectMapper: ObjectMapper
+  private lateinit var testFactoriesService: TestFactoriesService
 
 
   @Test
   fun itShouldUpdateOrderSuccessfully() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -96,8 +84,8 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateOrderIfItDoesNotExist() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -129,8 +117,8 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateOrderIfItIsNotCreator() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (token, user1) = createUserAndGetToken("james1@team1.com", "James1")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -138,7 +126,7 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
 
-    val (user2Token, user2) = createUserAndGetToken("James2", "james2@team1.com")
+    val (user2Token, user2) = testFactoriesService.createUser2WithToken(team1)
 
     val nowDate = LocalDate.now()
     val updateContent = """{
@@ -165,8 +153,8 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateOrderIfTheOrderDateIsMissing() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -199,8 +187,8 @@ class OrderControllerUpdateOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotUpdateOrderIfTheBankTransferNumberIsMissing() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))

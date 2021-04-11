@@ -3,7 +3,6 @@ package altszama.app.balance
 import altszama.app.order.OrderService
 import altszama.app.orderEntry.OrderEntryPaymentStatus
 import altszama.app.orderEntry.OrderEntryService
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
@@ -14,9 +13,6 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var balanceService: BalanceService
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
   @Autowired
   private lateinit var orderService: OrderService

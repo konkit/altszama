@@ -6,7 +6,6 @@ import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,9 +27,6 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var restaurantService: RestaurantService
-
-  @Autowired
-  private lateinit var objectMapper: ObjectMapper
 
   @Autowired
   private lateinit var testFactoriesService: TestFactoriesService

@@ -1,21 +1,17 @@
 package altszama.app.order.controller
 
-import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishCreateRequest
-import altszama.app.order.OrderControllerDataService
 import altszama.app.order.OrderRepository
 import altszama.app.order.OrderService
 import altszama.app.order.OrderState
 import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
-import altszama.app.orderEntry.OrderEntryService
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
-import com.fasterxml.jackson.databind.ObjectMapper
+import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,12 +28,6 @@ class OrderControllerSetBackAsOrdered() : AbstractIntegrationTest() {
   private lateinit var mockMvc: MockMvc
 
   @Autowired
-  private lateinit var userService: UserService
-
-  @Autowired
-  private lateinit var teamService: TeamService
-
-  @Autowired
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
@@ -47,22 +37,16 @@ class OrderControllerSetBackAsOrdered() : AbstractIntegrationTest() {
   private lateinit var orderService: OrderService
 
   @Autowired
-  private lateinit var orderEntryService: OrderEntryService
-
-  @Autowired
-  private lateinit var orderControllerDataService: OrderControllerDataService
-
-  @Autowired
-  private lateinit var objectMapper: ObjectMapper
-
-  @Autowired
   private lateinit var orderRepository: OrderRepository
+
+  @Autowired
+  private lateinit var testFactoriesService: TestFactoriesService
 
 
   @Test
   fun shouldSetBackAsOrderedSuccessfully() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user1) = createUserAndGetToken("John", "john@mail.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -82,7 +66,7 @@ class OrderControllerSetBackAsOrdered() : AbstractIntegrationTest() {
 
     val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_back_as_ordered")
       .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", token)
+      .header("Authorization", user1Token)
 
     mockMvc.perform(request)
       .andExpect(MockMvcResultMatchers.status().isOk)
@@ -93,20 +77,20 @@ class OrderControllerSetBackAsOrdered() : AbstractIntegrationTest() {
 
   @Test
   fun shouldNotSetAsOrderedIfTheOrderDoesNotExist() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user1) = createUserAndGetToken("John", "john@mail.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_back_as_ordered")
       .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", token)
+      .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, "Order does not exist")
   }
 
   @Test
   fun shouldNotSetAsOrderedIfTheOrderWasNotCreatedByUser() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user1) = createUserAndGetToken("John", "john@mail.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -124,11 +108,11 @@ class OrderControllerSetBackAsOrdered() : AbstractIntegrationTest() {
     orderService.setAsOrdered(order.id, "14:00", user1)
     orderService.setAsDelivered(order.id, user1)
 
-    val (token2, user2) = createUserAndGetToken("James", "james@mail.com")
+    val (user2Token, user2) = testFactoriesService.createUser2WithToken(team1)
 
     val request = MockMvcRequestBuilders.put("/api/orders/${order.id}/set_back_as_ordered")
       .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", token2)
+      .header("Authorization", user2Token)
 
     expectBadRequestWithMessage(request, "You can edit only your own orders")
   }

@@ -1,6 +1,5 @@
 package altszama.app.order.controller
 
-import altszama.app.auth.UserService
 import altszama.app.order.OrderService
 import altszama.app.order.dto.AllOrdersResponse
 import altszama.app.order.dto.DeliveryData
@@ -8,7 +7,6 @@ import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -24,12 +22,6 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var mockMvc: MockMvc
-
-  @Autowired
-  private lateinit var userService: UserService
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
   @Autowired
   private lateinit var restaurantService: RestaurantService

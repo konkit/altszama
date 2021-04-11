@@ -3,7 +3,6 @@ package altszama.app.dish
 import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -22,9 +21,6 @@ internal class DishControllerEditDishTest : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var mockMvc: MockMvc
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
   @Autowired
   private lateinit var restaurantService: RestaurantService

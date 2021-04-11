@@ -1,15 +1,12 @@
 package altszama.app.order.controller
 
-import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.order.OrderControllerDataService
-import altszama.app.order.OrderService
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
-import com.fasterxml.jackson.databind.ObjectMapper
+import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,35 +23,25 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
   private lateinit var mockMvc: MockMvc
 
   @Autowired
-  private lateinit var userService: UserService
-
-  @Autowired
-  private lateinit var teamService: TeamService
-
-  @Autowired
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
   private lateinit var dishService: DishService
 
   @Autowired
-  private lateinit var orderService: OrderService
-
-  @Autowired
   private lateinit var orderControllerDataService: OrderControllerDataService
 
   @Autowired
-  private lateinit var objectMapper: ObjectMapper
+  private lateinit var testFactoriesService: TestFactoriesService
 
 
   @Test
   fun itShouldReturnSaveOrderSuccessfully() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
-
-    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -73,7 +60,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.post("/api/orders/save")
         .content(createContent)
         .contentType(MediaType.APPLICATION_JSON)
-        .header("Authorization", token)
+        .header("Authorization", user1Token)
 
     mockMvc.perform(request)
         .andExpect(MockMvcResultMatchers.status().isOk)
@@ -84,8 +71,8 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotSaveOrderIfTheRestaurantDoesNotExist() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (token, user) = createUserAndGetToken("John", "john@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -98,20 +85,20 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.post("/api/orders/save")
         .content(createContent)
         .contentType(MediaType.APPLICATION_JSON)
-        .header("Authorization", token)
+        .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, "Restaurant does not exist")
   }
 
   @Test
   fun itShouldNotSaveOrderIfUserHasNoAccessToTheRestaurant() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
-    val team2 = teamService.createTeam("team2.com", "team2.com")
-    val (token, user) = createUserAndGetToken("John", "john@team2.com")
+    val team2 = testFactoriesService.createTeam2()
+    val (user2Token, user2) = testFactoriesService.createUser2WithToken(team2)
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -124,19 +111,18 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.post("/api/orders/save")
         .content(createContent)
         .contentType(MediaType.APPLICATION_JSON)
-        .header("Authorization", token)
+        .header("Authorization", user2Token)
 
     expectBadRequestWithMessage(request, "You have no access to this restaurant")
   }
 
   @Test
   fun itShouldNotSaveOrderWithoutOrderDate() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
-
-    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -148,19 +134,18 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.post("/api/orders/save")
         .content(createContent)
         .contentType(MediaType.APPLICATION_JSON)
-        .header("Authorization", token)
+        .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, "Order date is invalid")
   }
 
   @Test
   fun itShouldNotSaveOrderWithInvalidBankTransferNumber() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
-
-    val (token, user) = createUserAndGetToken("John", "john@team1.com")
 
     val nowDate = LocalDate.now()
     val createContent = """{
@@ -179,7 +164,7 @@ class OrderControllerSaveOrderTest() : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.post("/api/orders/save")
         .content(createContent)
         .contentType(MediaType.APPLICATION_JSON)
-        .header("Authorization", token)
+        .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, "Bank transfer number is not specified")
   }

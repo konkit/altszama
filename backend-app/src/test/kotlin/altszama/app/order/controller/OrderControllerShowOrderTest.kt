@@ -1,6 +1,5 @@
 package altszama.app.order.controller
 
-import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.dish.dto.DishDto
@@ -11,8 +10,8 @@ import altszama.app.order.dto.PaymentData
 import altszama.app.order.dto.ShowOrderResponse
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.test.TestFactoriesService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
@@ -28,12 +27,6 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
   private lateinit var mockMvc: MockMvc
 
   @Autowired
-  private lateinit var userService: UserService
-
-  @Autowired
-  private lateinit var teamService: TeamService
-
-  @Autowired
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
@@ -45,11 +38,14 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
   @Autowired
   private lateinit var objectMapper: ObjectMapper
 
+  @Autowired
+  private lateinit var testFactoriesService: TestFactoriesService
+
 
   @Test
   fun itShouldShowOrderSuccessfully() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (token, orderCreator) = createUserAndGetToken("James", "james@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
 
@@ -63,10 +59,10 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
         deliveryData = DeliveryData(),
         paymentData = PaymentData()
     )
-    val order = orderService.saveOrder(orderSaveRequest, orderCreator, team1)
+    val order = orderService.saveOrder(orderSaveRequest, user1, team1)
 
     val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/show.json")
-        .header("Authorization", token)
+        .header("Authorization", user1Token)
 
     val responseJson = mockMvc.perform(request)
         .andExpect(MockMvcResultMatchers.status().isOk)
@@ -83,21 +79,21 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotShowOrderIfItDoesntExist() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (token, user) = createUserAndGetToken("John", "john@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val fakeOrderId = "111111111111111111111111"
 
     val request = MockMvcRequestBuilders.get("/api/orders/${fakeOrderId}/show.json")
-        .header("Authorization", token)
+        .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, "Order does not exist")
   }
 
   @Test
   fun itShouldNotShowOrderIfTheTeamIsWrong() {
-    val orderCreator1 = userService.createNewUser("James", "james@team1.com")
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
@@ -110,13 +106,13 @@ class OrderControllerShowOrderTest() : AbstractIntegrationTest() {
         deliveryData = DeliveryData(),
         paymentData = PaymentData()
     )
-    val order = orderService.saveOrder(orderSaveRequest, orderCreator1, team1)
+    val order = orderService.saveOrder(orderSaveRequest, user1, team1)
 
-    val team2 = teamService.createTeam("team2.com", "team2.com")
-    val (token, user) = createUserAndGetToken("John", "john@team2.com")
+    val team2 = testFactoriesService.createTeam2()
+    val (user2Token, user2) = testFactoriesService.createUser1WithToken(team2)
 
     val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/show.json")
-        .header("Authorization", token)
+        .header("Authorization", user2Token)
 
     expectBadRequestWithMessage(request, "You have no access to this order")
   }

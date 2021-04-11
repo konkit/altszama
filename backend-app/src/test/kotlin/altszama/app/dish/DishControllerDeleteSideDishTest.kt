@@ -1,10 +1,8 @@
 package altszama.app.dish
 
 import altszama.app.auth.User
-import altszama.app.auth.UserService
 import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.order.Order
-import altszama.app.order.OrderService
 import altszama.app.orderEntry.OrderEntry
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
@@ -16,7 +14,6 @@ import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import altszama.app.validation.SideDishInUse
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,16 +37,7 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
-  private lateinit var objectMapper: ObjectMapper
-
-  @Autowired
-  private lateinit var orderService: OrderService
-
-  @Autowired
   private lateinit var orderEntryService: OrderEntryService
-
-  @Autowired
-  private lateinit var userService: UserService
 
   @Autowired
   private lateinit var testFactoriesService: TestFactoriesService

@@ -1,9 +1,7 @@
 package altszama.app.order.controller
 
-import altszama.app.auth.UserService
 import altszama.app.dish.DishService
 import altszama.app.dish.dto.DishCreateRequest
-import altszama.app.order.OrderControllerDataService
 import altszama.app.order.OrderRepository
 import altszama.app.order.OrderService
 import altszama.app.order.dto.DeliveryData
@@ -14,10 +12,8 @@ import altszama.app.orderEntry.OrderEntryService
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,12 +29,6 @@ class OrderControllerDeleteOrderTest() : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var mockMvc: MockMvc
-
-  @Autowired
-  private lateinit var userService: UserService
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
   @Autowired
   private lateinit var restaurantService: RestaurantService
@@ -57,12 +47,6 @@ class OrderControllerDeleteOrderTest() : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var orderEntryService: OrderEntryService
-
-  @Autowired
-  private lateinit var orderControllerDataService: OrderControllerDataService
-
-  @Autowired
-  private lateinit var objectMapper: ObjectMapper
 
   @Autowired
   private lateinit var testFactoriesService: TestFactoriesService
