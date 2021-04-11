@@ -72,7 +72,7 @@ class OrderEntryService {
       }
     }
 
-    val dishEntries = listOf(DishEntry(dish, sideDishes, orderEntrySaveRequest.additionalComments))
+    val dishEntries = listOf(DishEntry(DishEntryDishData.fromDish(dish), sideDishes, orderEntrySaveRequest.additionalComments))
 
     val orderEntry = orderEntryRepository.findByOrderIdAndUser(order.id, currentUser)
     val savedEntry = if (orderEntry != null) {
@@ -163,7 +163,7 @@ class OrderEntryService {
       }
     }
 
-    val updatedDishEntry = DishEntry(dish, sideDishes, orderEntryUpdateRequest.additionalComments, dishEntryId)
+    val updatedDishEntry = DishEntry(DishEntryDishData.fromDish(dish), sideDishes, orderEntryUpdateRequest.additionalComments, dishEntryId)
     val dishEntries = orderEntry.dishEntries.map { entry ->
       if (entry.id != dishEntryId) entry else updatedDishEntry
     }

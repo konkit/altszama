@@ -7,10 +7,7 @@ import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.order.Order
 import altszama.app.order.OrderRepository
-import altszama.app.orderEntry.DishEntry
-import altszama.app.orderEntry.OrderEntry
-import altszama.app.orderEntry.OrderEntryPaymentStatus
-import altszama.app.orderEntry.OrderEntryRepository
+import altszama.app.orderEntry.*
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantRepository
 import altszama.app.team.Team
@@ -118,7 +115,7 @@ class TestEnvironmentService {
     val orderEntry = OrderEntry(
         order = order,
         user = user1,
-        dishEntries = listOf(DishEntry(dish)),
+        dishEntries = listOf(DishEntry(DishEntryDishData.fromDish(dish))),
         paymentStatus = if (order.orderCreator.id == user1.id) OrderEntryPaymentStatus.CONFIRMED else OrderEntryPaymentStatus.UNPAID
     )
     return orderEntryRepository.save(orderEntry)

@@ -42,7 +42,7 @@ class ShowOrderResponseTest {
 
   @Test
   fun simpleExampleWithOneEntry() {
-    val dishEntry1 = DishEntry(dish1)
+    val dishEntry1 = DishEntry.fromDish(dish1)
 
     val orderEntry1 = OrderEntry(objectId(), order, user1, listOf(dishEntry1))
 
@@ -93,10 +93,10 @@ class ShowOrderResponseTest {
   fun twoPeopleWithDeliveryCostPerAll() {
     val order = order.copy(deliveryCostPerEverybody = 1000)
 
-    val dishEntry1 = DishEntry(dish1)
-    val dishEntry2 = DishEntry(dish2)
-    val dishEntry3 = DishEntry(dish3)
-    val dishEntry4 = DishEntry(dish4)
+    val dishEntry1 = DishEntry.fromDish(dish1)
+    val dishEntry2 = DishEntry.fromDish(dish2)
+    val dishEntry3 = DishEntry.fromDish(dish3)
+    val dishEntry4 = DishEntry.fromDish(dish4)
 
     val orderEntry1 = OrderEntry(objectId(), order, user1, listOf(dishEntry1, dishEntry2))
     val orderEntry2 = OrderEntry(objectId(), order, user2, listOf(dishEntry3, dishEntry4))
@@ -187,10 +187,10 @@ class ShowOrderResponseTest {
   fun twoPeopleWithDeliveryCostPerDish() {
     val order = order.copy(deliveryCostPerDish = 100)
 
-    val dishEntry1 = DishEntry(dish1)
-    val dishEntry2 = DishEntry(dish2)
-    val dishEntry3 = DishEntry(dish3)
-    val dishEntry4 = DishEntry(dish4)
+    val dishEntry1 = DishEntry.fromDish(dish1)
+    val dishEntry2 = DishEntry.fromDish(dish2)
+    val dishEntry3 = DishEntry.fromDish(dish3)
+    val dishEntry4 = DishEntry.fromDish(dish4)
 
     val orderEntry1 = OrderEntry(objectId(), order, user1, listOf(dishEntry1, dishEntry2))
     val orderEntry2 = OrderEntry(objectId(), order, user2, listOf(dishEntry3, dishEntry4))

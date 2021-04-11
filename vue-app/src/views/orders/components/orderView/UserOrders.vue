@@ -4,9 +4,7 @@
       <template v-for="(entry, entryIndex) in groupedEntries">
         <v-list-item :key="'list-' + entryIndex">
           <v-list-item-content class="body-1">
-            <span
-              ><b>{{ entry.eatingPeopleCount }}x</b> {{ entry.dish.name }}</span
-            >
+            <span><b>{{ entry.eatingPeopleCount }}x</b> {{ entry.dishName }}</span>
           </v-list-item-content>
         </v-list-item>
 

@@ -2,10 +2,10 @@ package altszama.app.order.dto
 
 import altszama.app.auth.User
 import altszama.app.dish.Dish
-import altszama.app.dish.dto.DishDto
 import altszama.app.order.Order
 import altszama.app.order.OrderState
 import altszama.app.orderEntry.DishEntry
+import altszama.app.orderEntry.DishEntryDishData
 import altszama.app.orderEntry.OrderEntry
 import altszama.app.restaurant.Restaurant
 import altszama.app.team.Team
@@ -34,7 +34,7 @@ internal class OrderViewResponseTest {
   @Test
   fun onePersonOrdered() {
     val entriesInThisOrder = listOf(
-        OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1)))
+        OrderEntry(objectId(), order, user1, listOf(DishEntry(DishEntryDishData.fromDish(dish1))))
     )
 
     val actual = OrderViewInitialData.create(order, entriesInThisOrder)
@@ -50,7 +50,7 @@ internal class OrderViewResponseTest {
         "",
         listOf(
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish1),
+                dish1.name,
                 dish1.price,
                 1,
                 listOf(
@@ -70,8 +70,8 @@ internal class OrderViewResponseTest {
   @Test
   fun twoPeopleOrdered() {
     val entriesInThisOrder = listOf(
-        OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1))),
-        OrderEntry(objectId(), order, user2, listOf(DishEntry(dish2)))
+        OrderEntry(objectId(), order, user1, listOf(DishEntry.fromDish(dish1))),
+        OrderEntry(objectId(), order, user2, listOf(DishEntry.fromDish(dish2)))
     )
 
     val actual = OrderViewInitialData.create(order, entriesInThisOrder)
@@ -87,7 +87,7 @@ internal class OrderViewResponseTest {
         "",
         listOf(
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish1),
+                dish1.name,
                 dish1.price,
                 1,
                 listOf(
@@ -95,7 +95,7 @@ internal class OrderViewResponseTest {
                 )
             ),
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish2),
+                dish2.name,
                 dish2.price,
                 1,
                 listOf(
@@ -119,8 +119,8 @@ internal class OrderViewResponseTest {
     val order = order.copy(deliveryCostPerDish = deliveryCostPerDish)
 
     val entriesInThisOrder = listOf(
-        OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1), DishEntry(dish2))),
-        OrderEntry(objectId(), order, user2, listOf(DishEntry(dish2), DishEntry(dish3)))
+        OrderEntry(objectId(), order, user1, listOf(DishEntry.fromDish(dish1), DishEntry.fromDish(dish2))),
+        OrderEntry(objectId(), order, user2, listOf(DishEntry.fromDish(dish2), DishEntry.fromDish(dish3)))
     )
 
     val actual = OrderViewInitialData.create(order, entriesInThisOrder)
@@ -136,7 +136,7 @@ internal class OrderViewResponseTest {
         "",
         listOf(
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish1),
+              dish1.name,
                 dish1.price,
                 1,
                 listOf(
@@ -144,7 +144,7 @@ internal class OrderViewResponseTest {
                 )
             ),
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish2),
+              dish2.name,
                 2 * dish2.price,
                 2,
                 listOf(
@@ -153,7 +153,7 @@ internal class OrderViewResponseTest {
                 )
             ),
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish3),
+              dish3.name,
                 dish3.price,
                 1,
                 listOf(
@@ -184,8 +184,8 @@ internal class OrderViewResponseTest {
     val order = order.copy(deliveryCostPerEverybody = deliveryCostPerAll)
 
     val entriesInThisOrder = listOf(
-        OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1))),
-        OrderEntry(objectId(), order, user2, listOf(DishEntry(dish2)))
+        OrderEntry(objectId(), order, user1, listOf(DishEntry.fromDish(dish1))),
+        OrderEntry(objectId(), order, user2, listOf(DishEntry.fromDish(dish2)))
     )
 
     val actual = OrderViewInitialData.create(order, entriesInThisOrder)
@@ -200,7 +200,7 @@ internal class OrderViewResponseTest {
         restaurant.name,
         "", listOf(
         OrderViewInitialData.Companion.GroupedOrderEntry(
-            DishDto.fromDish(dish1),
+          dish1.name,
             dish1.price,
             1,
             listOf(
@@ -208,7 +208,7 @@ internal class OrderViewResponseTest {
             )
         ),
         OrderViewInitialData.Companion.GroupedOrderEntry(
-            DishDto.fromDish(dish2),
+          dish2.name,
             dish2.price,
             1,
             listOf(
@@ -232,8 +232,8 @@ internal class OrderViewResponseTest {
     val order = order.copy(decreaseInPercent = percentDecrease)
 
     val entriesInThisOrder = listOf(
-        OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1))),
-        OrderEntry(objectId(), order, user2, listOf(DishEntry(dish2)))
+        OrderEntry(objectId(), order, user1, listOf(DishEntry.fromDish(dish1))),
+        OrderEntry(objectId(), order, user2, listOf(DishEntry.fromDish(dish2)))
     )
 
     val actual = OrderViewInitialData.create(order, entriesInThisOrder)
@@ -249,7 +249,7 @@ internal class OrderViewResponseTest {
         "",
         listOf(
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish1),
+              dish1.name,
                 dish1.price,
                 1,
                 listOf(
@@ -257,7 +257,7 @@ internal class OrderViewResponseTest {
                 )
             ),
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish2),
+              dish2.name,
                 dish2.price,
                 1,
                 listOf(
@@ -276,8 +276,8 @@ internal class OrderViewResponseTest {
   @Test
   fun onePersonOrderedTwoSameDishes() {
     val entriesInThisOrder = listOf(
-        OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1))),
-        OrderEntry(objectId(), order, user1, listOf(DishEntry(dish1)))
+        OrderEntry(objectId(), order, user1, listOf(DishEntry.fromDish(dish1))),
+        OrderEntry(objectId(), order, user1, listOf(DishEntry.fromDish(dish1)))
     )
 
     val actual = OrderViewInitialData.create(order, entriesInThisOrder)
@@ -293,7 +293,7 @@ internal class OrderViewResponseTest {
         "",
         listOf(
             OrderViewInitialData.Companion.GroupedOrderEntry(
-                DishDto.fromDish(dish1),
+              dish1.name,
                 2 * dish1.price,
                 2,
                 listOf(

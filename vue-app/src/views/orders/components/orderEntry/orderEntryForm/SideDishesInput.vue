@@ -91,7 +91,7 @@ export default class SideDishesInput extends Vue {
 
   addSideDishEntry() {
     const sideDishToAdd: SideDishData = {
-      isNew: false,
+      isNew: true,
       newSideDishName: "",
       newSideDishPrice: 0
     };
@@ -102,38 +102,38 @@ export default class SideDishesInput extends Vue {
     this.$forceUpdate();
   }
 
-  setAsNewSideDish(sdIndex: number) {
-    const oldItem = this.chosenSideDishes[sdIndex]
-    const newItem = Object.assign(oldItem, {isNew: true})
-
-    const newSideDishes: SideDishData[] = [
-      ...this.chosenSideDishes.slice(0, sdIndex),
-      newItem,
-      ...this.chosenSideDishes.slice(sdIndex + 1)
-    ]
-    this.updateSideDishes(newSideDishes);
-
-    this.$forceUpdate();
-  }
-
-  setAsExistingSideDish(sdIndex: number) {
-    const oldItem = this.chosenSideDishes[sdIndex]
-    const newItem = Object.assign(oldItem, {isNew: false})
-
-    const newSideDishes: SideDishData[] = [
-      ...this.chosenSideDishes.slice(0, sdIndex),
-      newItem,
-      ...this.chosenSideDishes.slice(sdIndex + 1)
-    ]
-    this.updateSideDishes(newSideDishes);
-
-    this.$forceUpdate();
-  }
+  // setAsNewSideDish(sdIndex: number) {
+  //   const oldItem = this.chosenSideDishes[sdIndex]
+  //   const newItem = Object.assign(oldItem, {isNew: true})
+  //
+  //   const newSideDishes: SideDishData[] = [
+  //     ...this.chosenSideDishes.slice(0, sdIndex),
+  //     newItem,
+  //     ...this.chosenSideDishes.slice(sdIndex + 1)
+  //   ]
+  //   this.updateSideDishes(newSideDishes);
+  //
+  //   this.$forceUpdate();
+  // }
+  //
+  // setAsExistingSideDish(sdIndex: number) {
+  //   const oldItem = this.chosenSideDishes[sdIndex]
+  //   const newItem = Object.assign(oldItem, {isNew: false})
+  //
+  //   const newSideDishes: SideDishData[] = [
+  //     ...this.chosenSideDishes.slice(0, sdIndex),
+  //     newItem,
+  //     ...this.chosenSideDishes.slice(sdIndex + 1)
+  //   ]
+  //   this.updateSideDishes(newSideDishes);
+  //
+  //   this.$forceUpdate();
+  // }
 
   updateNewSideDishName(sdIndex: number, newValue: string | ComboBoxItem | null) {
     if (typeof newValue === "string") {
       const oldItem = this.chosenSideDishes[sdIndex]
-      const newItem = Object.assign(oldItem, {isNew: true, newSideDishName: newValue})
+      const newItem = {isNew: true, newSideDishName: newValue, newSideDishPrice: oldItem.newSideDishPrice || 0}
 
       const newSideDishes: SideDishData[] = [
         ...this.chosenSideDishes.slice(0, sdIndex),
@@ -142,8 +142,7 @@ export default class SideDishesInput extends Vue {
       ]
       this.updateSideDishes(newSideDishes);
     } else if (newValue != null && typeof newValue === "object") {
-      const oldItem = this.chosenSideDishes[sdIndex]
-      const newItem = Object.assign(oldItem, {isNew: false, id: newValue.value})
+      const newItem = {isNew: false, id: newValue.value}
 
       const newSideDishes: SideDishData[] = [
         ...this.chosenSideDishes.slice(0, sdIndex),
@@ -178,30 +177,30 @@ export default class SideDishesInput extends Vue {
     this.$forceUpdate();
   }
 
-  updateSideDishComboBox(sdIndex: number, sideDishId: string) {
-    const newSideDish = this.availableSideDishes.find(sd => sd.id === sideDishId);
+  // updateSideDishComboBox(sdIndex: number, sideDishId: string) {
+  //   const newSideDish = this.availableSideDishes.find(sd => sd.id === sideDishId);
+  //
+  //   const newSideDishes: SideDishData[] = [
+  //     ...this.chosenSideDishes.slice(0, sdIndex),
+  //     ...(newSideDish ? [newSideDish] : []),
+  //     ...this.chosenSideDishes.slice(sdIndex + 1)
+  //   ]
+  //   this.updateSideDishes(newSideDishes);
+  //
+  //   this.$forceUpdate();
+  // }
 
-    const newSideDishes: SideDishData[] = [
-      ...this.chosenSideDishes.slice(0, sdIndex),
-      ...(newSideDish ? [newSideDish] : []),
-      ...this.chosenSideDishes.slice(sdIndex + 1)
-    ]
-    this.updateSideDishes(newSideDishes);
-
-    this.$forceUpdate();
-  }
-
-  onSideDishTypeToggle(sdIndex: number, e: boolean) {
-    console.log("onSideDishTypeToggle: ", e);
-
-    if (e === true) {
-      this.setAsNewSideDish(sdIndex);
-    } else if (e === false) {
-      this.setAsExistingSideDish(sdIndex);
-    } else {
-      console.warn("Side dish type toggle returned wrong value");
-    }
-  }
+  // onSideDishTypeToggle(sdIndex: number, e: boolean) {
+  //   console.log("onSideDishTypeToggle: ", e);
+  //
+  //   if (e === true) {
+  //     this.setAsNewSideDish(sdIndex);
+  //   } else if (e === false) {
+  //     this.setAsExistingSideDish(sdIndex);
+  //   } else {
+  //     console.warn("Side dish type toggle returned wrong value");
+  //   }
+  // }
 
   get sideDishesItems() {
     if (this.availableSideDishes) {

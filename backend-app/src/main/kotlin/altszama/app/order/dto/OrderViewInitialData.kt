@@ -1,8 +1,6 @@
 package altszama.app.order.dto
 
-import altszama.app.dish.Dish
 import altszama.app.dish.SideDish
-import altszama.app.dish.dto.DishDto
 import altszama.app.order.Order
 import altszama.app.order.OrderState
 import altszama.app.orderEntry.OrderEntry
@@ -25,7 +23,7 @@ data class OrderViewInitialData(
     companion object {
 
         data class GroupedOrderEntry(
-                val dish: DishDto,
+                val dishName: String,
                 val price: Int,
                 val eatingPeopleCount: Int,
                 val eatingPeopleEntries: List<EatingPersonEntry>
@@ -59,9 +57,10 @@ data class OrderViewInitialData(
         }
 
         private fun createGroupedUserEntries(entries: List<OrderEntry>): List<GroupedOrderEntry> {
-            val dishesList: List<Dish> = entries
-                    .flatMap { entry -> entry.dishEntries }
-                    .map { d -> d.dish }
+          val dishIdToDishNameMap = entries
+              .flatMap { entry -> entry.dishEntries }
+              .map { d -> d.dish.id to d.dish.name }
+              .toMap()
 
             val dishIdToOrderEntriesMap: Map<String, List<OrderEntry>> = entries
                     .flatMap { entry -> entry.dishEntries.map { d -> d.dish to entry } }
@@ -85,8 +84,8 @@ data class OrderViewInitialData(
                                     dishEntriesWithCurrentDish(orderEntry).sumBy { entry -> entry.priceWithSidedishes() }
                                 }.sum()
 
-                        val dishDto = DishDto.fromDish(dishesList.find { dish -> dish.id == dishId }!!)
-                        GroupedOrderEntry(dishDto, priceSumForDish, mapEntry.value.size, eatingPersonEntries)
+                        val dishName = dishIdToDishNameMap[dishId]!!
+                        GroupedOrderEntry(dishName, priceSumForDish, mapEntry.value.size, eatingPersonEntries)
                     }
         }
     }

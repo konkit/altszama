@@ -322,6 +322,31 @@ export interface DishDto {
 /**
  * 
  * @export
+ * @interface DishEntryDishData
+ */
+export interface DishEntryDishData {
+    /**
+     * 
+     * @type {string}
+     * @memberof DishEntryDishData
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DishEntryDishData
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DishEntryDishData
+     */
+    price: number;
+}
+/**
+ * 
+ * @export
  * @interface DishEntryDto
  */
 export interface DishEntryDto {
@@ -333,10 +358,10 @@ export interface DishEntryDto {
     restaurantName: string;
     /**
      * 
-     * @type {DishDto}
+     * @type {DishEntryDishData}
      * @memberof DishEntryDto
      */
-    dish: DishDto;
+    dish: DishEntryDishData;
     /**
      * 
      * @type {Array<SideDish>}
@@ -612,10 +637,10 @@ export interface GoogleAuthSuccess {
 export interface GroupedOrderEntry {
     /**
      * 
-     * @type {DishDto}
+     * @type {string}
      * @memberof GroupedOrderEntry
      */
-    dish: DishDto;
+    dishName: string;
     /**
      * 
      * @type {number}

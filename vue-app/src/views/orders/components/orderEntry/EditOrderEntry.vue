@@ -35,7 +35,7 @@ import {ExistingDishData, NewDishData, OrderEntryData} from "@/store/modules/Mod
 import Vue from "vue";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import {DishDto, ParticipantsDishEntry, ParticipantsOrderEntry} from "../../../../frontend-client";
+import {DishDto, ParticipantsDishEntry, ParticipantsOrderEntry, SideDish} from "../../../../frontend-client";
 import {ShowOrderState} from "@/store/modules/ShowOrderModule";
 import ErrorHandler from "@/lib/ErrorHandler";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
@@ -127,19 +127,20 @@ export default class EditOrderEntry extends Vue {
     return this.$store.state.showOrder.allDishesInRestaurant;
   }
 
-  get orderEntryData() {
+  get orderEntryData(): OrderEntryData {
     return this.$store.state.modifyOrderEntry.orderEntryData;
   }
 
   get isSubmitDisabled(): boolean {
-    return this.orderEntryData.dishData.kind === "NewDishData" && !this.orderEntryData.dishData.newDishName
+    return this.orderEntryData.dishData.kind === "NewDishData" && !this.orderEntryData.dishData.newDishName ||
+        (this.orderEntryData.dishData.chosenSideDishes.filter(sd => (sd.isNew == true && !sd.newSideDishName) || (sd.isNew == false && !sd.id)).length > 0)
   }
 
   get allDishesByCategory(): { [category: string]: DishDto[] } {
     return this.$store.state.showOrder.allDishesByCategory;
   }
 
-  get dishIdToSideDishesMap() {
+  get dishIdToSideDishesMap(): { [key: string]: SideDish[] } {
     return this.$store.state.showOrder.dishIdToSideDishesMap;
   }
 

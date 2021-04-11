@@ -62,10 +62,10 @@ internal class RestaurantControllerUpdateTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldFailToUpdateRestaurantIfItDoesNotExist() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val team1 = teamService.createTeam("team1.com", "team1.com", listOf("james1@team1.com"))
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val team2 = teamService.createTeam("team2.com", "", listOf("james2@team2.com"))
+    val team2 = teamService.createTeam("team2.com", "team2.com", listOf("james2@team2.com"))
 
     val fakeRestaurantId = "111111111111111111111111"
 
@@ -87,10 +87,10 @@ internal class RestaurantControllerUpdateTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldFailToUpdateRestaurantIfTheTeamIsWrong() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val team1 = teamService.createTeam("team1.com", "team1.com", listOf("james1@team1.com"))
     val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val team2 = teamService.createTeam("team2.com", "", listOf("james2@team2.com"))
+    val team2 = teamService.createTeam("team2.com", "team2.com", listOf("james2@team2.com"))
 
     val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
 

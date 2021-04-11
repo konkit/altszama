@@ -128,7 +128,7 @@ export default class CreateOrderEntry extends Vue {
     return this.$store.state.modifyOrderEntry.loadingEntry;
   }
 
-  get orderEntryData() {
+  get orderEntryData(): OrderEntryData {
     return this.$store.state.modifyOrderEntry.orderEntryData;
   }
 
@@ -141,7 +141,8 @@ export default class CreateOrderEntry extends Vue {
   }
 
   get isSubmitDisabled(): boolean {
-    return this.orderEntryData.dishData.kind === "NewDishData" && !this.orderEntryData.dishData.newDishName
+    return (this.orderEntryData.dishData.kind === "NewDishData" && !this.orderEntryData.dishData.newDishName) ||
+        (this.orderEntryData.dishData.chosenSideDishes.filter(sd => (sd.isNew == true && !sd.newSideDishName) || (sd.isNew == false && !sd.id)).length > 0)
   }
 
   updateOrderEntryData(newOrderEntryData: OrderEntryData) {

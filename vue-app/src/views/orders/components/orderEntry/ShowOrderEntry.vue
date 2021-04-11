@@ -8,11 +8,8 @@
               {{ dishEntry.dishName }}
             </div>
 
-            <div class="dish-price">
-              (
-              <price :data-price="dishEntry.price"/>
-              )
-            </div>
+            <span class="dish-price">(<price :data-price="dishEntry.price"/>)
+            </span>
 
             <div class="edit-buttons" v-if="canEditOrderEntry()">
               <v-btn text icon @click="editDishEntry()">
@@ -33,11 +30,7 @@
             <div class="side-dish-name-and-price">
               <div class="side-dish-name">+ {{ sideDish.name }}</div>
 
-              <div class="side-dish-price">
-                &nbsp; (
-                <price :data-price="sideDish.price"/>
-                )
-              </div>
+              <span class="side-dish-price ml-2">(<price :data-price="sideDish.price"/>)</span>
             </div>
           </v-list-item-content>
         </v-list-item>

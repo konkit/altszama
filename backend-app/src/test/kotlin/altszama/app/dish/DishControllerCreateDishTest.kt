@@ -69,10 +69,10 @@ internal class DishControllerCreateDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotReturnCreateDishDataIfUserHasNoAccessToRestaurant() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
+    val team1 = teamService.createTeam("team1.com", "team1.com", listOf("james1@team1.com"))
     val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
 
-    val team2 = teamService.createTeam("team2.com", "", listOf("james2@team2.com"))
+    val team2 = teamService.createTeam("team2.com", "team2.com", listOf("james2@team2.com"))
 
     val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
 
