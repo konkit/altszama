@@ -13,8 +13,8 @@ import altszama.app.order.dto.PaymentData
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.Team
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,18 +30,18 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
   private lateinit var orderRepository: OrderRepository
 
   @Autowired
-  private lateinit var teamService: TeamService
-
-  @Autowired
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
   private lateinit var dishService: DishService
 
+  @Autowired
+  private lateinit var testFactoriesService: TestFactoriesService
+
   @Test
   fun itShouldMarkEmptyOrderAsRejectedIfItJustInCreatedState() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val order = createOrderInThePast(user1, team1)
 
@@ -54,8 +54,8 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldMarkEmptyOrderAsRejectedIfItJustInOrderingState() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val order = createOrderInThePast(user1, team1)
 
@@ -70,8 +70,8 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldMarkEmptyOrderAsDeliveredIfItWasOrdered() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val order = createOrderInThePast(user1, team1)
 
@@ -86,8 +86,8 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotChangeOrderIfItWasDelivered() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val order = createOrderInThePast(user1, team1)
 

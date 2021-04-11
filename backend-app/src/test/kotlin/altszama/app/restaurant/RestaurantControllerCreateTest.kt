@@ -1,7 +1,7 @@
 package altszama.app.restaurant
 
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.test.TestFactoriesService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -17,19 +17,19 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
   private lateinit var mockMvc: MockMvc
 
   @Autowired
-  private lateinit var teamService: TeamService
-
-  @Autowired
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
   private lateinit var objectMapper: ObjectMapper
 
+  @Autowired
+  private lateinit var testFactoriesService: TestFactoriesService
+
 
   @Test
   fun itShouldCreateRestaurantSuccessfully() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james@team1.com"))
-    val (restaurantCreatorToken, user1) = createUserAndGetToken("James", "james@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurantSaveDataJson = """{
       "name": "New Restaurant",
@@ -42,7 +42,7 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.post("/api/restaurants/save")
         .content(restaurantSaveDataJson)
         .contentType(MediaType.APPLICATION_JSON)
-        .header("Authorization", restaurantCreatorToken)
+        .header("Authorization", user1Token)
 
     mockMvc.perform(request)
         .andExpect(MockMvcResultMatchers.status().isCreated)
@@ -54,8 +54,8 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldFailToCreateRestaurantWithEmptyName() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james@team1.com"))
-    val (restaurantCreatorToken, user1) = createUserAndGetToken("James", "james@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurantSaveDataJson = """{
       "name": "",
@@ -68,7 +68,7 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.post("/api/restaurants/save")
       .content(restaurantSaveDataJson)
       .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", restaurantCreatorToken)
+      .header("Authorization", user1Token)
 
     val response = mockMvc.perform(request)
       .andExpect(MockMvcResultMatchers.status().isBadRequest)
@@ -84,8 +84,8 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldFailToCreateRestaurantWithoutName() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james@team1.com"))
-    val (restaurantCreatorToken, user1) = createUserAndGetToken("James", "james@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurantSaveDataJson = """{
       "telephone": "123123123",
@@ -97,7 +97,7 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
     val request = MockMvcRequestBuilders.post("/api/restaurants/save")
         .content(restaurantSaveDataJson)
         .contentType(MediaType.APPLICATION_JSON)
-        .header("Authorization", restaurantCreatorToken)
+        .header("Authorization", user1Token)
 
     val response = mockMvc.perform(request)
         .andExpect(MockMvcResultMatchers.status().isBadRequest)

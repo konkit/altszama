@@ -8,7 +8,6 @@ import altszama.app.order.dto.PaymentData
 import altszama.app.order.dto.TodayOrdersResponse
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -28,9 +27,6 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var userService: UserService
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
   @Autowired
   private lateinit var restaurantService: RestaurantService
@@ -117,7 +113,7 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
     orderService.saveOrder(orderSaveRequest1, user1, team1)
 
     val orderCreator2 = userService.createNewUser("James2", "james@team2.com")
-    val team2 = teamService.createTeam("team2.com", "team2.com")
+    val team2 = testFactoriesService.createTeam2()
 
     val restaurant2 = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 2"))
     val orderDate2 = LocalDate.now()
@@ -213,7 +209,7 @@ open class OrderControllerTodayOrdersTest() : AbstractIntegrationTest() {
     orderService.saveOrder(orderSaveRequest1, user1, team1)
 
     val orderCreator2 = userService.createNewUser("James", "james@team2.com")
-    val team2 = teamService.createTeam("team2.com", "team2.com")
+    val team2 = testFactoriesService.createTeam2()
 
     val restaurant2 = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 2"))
     val orderSaveRequest2 = OrderSaveRequest(

@@ -1,8 +1,8 @@
 package altszama.app.restaurant
 
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.test.TestFactoriesService
 import altszama.app.validation.NoAccessToRestaurant
 import altszama.app.validation.RestaurantDoesNotExist
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -20,19 +20,19 @@ internal class RestaurantControllerEditTest : AbstractIntegrationTest() {
   private lateinit var mockMvc: MockMvc
 
   @Autowired
-  private lateinit var teamService: TeamService
-
-  @Autowired
   private lateinit var restaurantService: RestaurantService
 
   @Autowired
   private lateinit var objectMapper: ObjectMapper
 
+  @Autowired
+  private lateinit var testFactoriesService: TestFactoriesService
+
 
   @Test
   fun itShouldShowEditRestaurantResponseSuccessfully() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
 
@@ -53,8 +53,8 @@ internal class RestaurantControllerEditTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotShowEditRestaurantResponseIfRestaurantDoesNotExist() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val fakeRestaurantId = "111111111111111111111111"
 
@@ -67,10 +67,10 @@ internal class RestaurantControllerEditTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotShowEditRestaurantResponseIfUserHasNoAccessToRestaurant() {
-    val team1 = teamService.createTeam("team1.com", "team1.com", listOf("james1@team1.com"))
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val team2 = teamService.createTeam("team2.com", "team2.com", listOf("james2@team2.com"))
+    val team2 = testFactoriesService.createTeam2()
 
     val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1"))
 

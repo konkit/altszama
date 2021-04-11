@@ -10,7 +10,6 @@ import altszama.app.orderEntry.dto.SideDishData
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.Team
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import altszama.app.validation.SideDishInUse
@@ -29,9 +28,6 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var mockMvc: MockMvc
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
   @Autowired
   private lateinit var restaurantService: RestaurantService
@@ -105,7 +101,7 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user) = testFactoriesService.createUser1WithToken(team1)
 
-    val team2 = teamService.createTeam("team2.com", "team2.com", listOf("james2@team2.com"))
+    val team2 = testFactoriesService.createTeam2()
 
     val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = listOf(SideDish(name = "Side dish 1", price = 100)))

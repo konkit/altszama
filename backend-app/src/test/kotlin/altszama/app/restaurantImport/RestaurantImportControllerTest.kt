@@ -6,8 +6,8 @@ import altszama.app.dish.SideDish
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,10 +25,10 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
   private lateinit var dishService: DishService
 
   @Autowired
-  private lateinit var teamService: TeamService
+  private lateinit var mockMvc: MockMvc
 
   @Autowired
-  private lateinit var mockMvc: MockMvc
+  private lateinit var testFactoriesService: TestFactoriesService
 
   private val restaurantImportJson = """{
       "name": "Restaurant 1",
@@ -44,7 +44,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldSuccessfullyImportNewRestaurant() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
 
     val request = post("/api/restaurantImport/import")
       .content(restaurantImportJson)
@@ -81,8 +81,8 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldUpdateTheCorrectRestaurantInTheCorrectTeam() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val team2 = teamService.createTeam("team2.com", "team2.com")
+    val team1 = testFactoriesService.createTeam1()
+    val team2 = testFactoriesService.createTeam2()
 
     restaurantService.createRestaurant(team1, RestaurantSaveRequest(name = "Restaurant 1"))
     restaurantService.createRestaurant(team2, RestaurantSaveRequest(name = "Restaurant 1"))
@@ -102,8 +102,8 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldReturnErrorIfTheApiKeyIsWrong() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val team2 = teamService.createTeam("team2.com", "team2.com")
+    val team1 = testFactoriesService.createTeam1()
+    val team2 = testFactoriesService.createTeam2()
 
     restaurantService.createRestaurant(team1, RestaurantSaveRequest(name = "Restaurant 1"))
     restaurantService.createRestaurant(team2, RestaurantSaveRequest(name = "Restaurant 1"))
@@ -120,8 +120,8 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
 
   @Test
   fun itShouldUpdateExistingDishesInTheRestaurant() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user1) = createUserAndGetToken("John", "john1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val (restaurant, dishes) = createRestaurantAndDishes(team1)
 

@@ -3,7 +3,6 @@ package altszama.app.dish
 import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
-import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
@@ -21,9 +20,6 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var mockMvc: MockMvc
-
-  @Autowired
-  private lateinit var teamService: TeamService
 
   @Autowired
   private lateinit var restaurantService: RestaurantService
@@ -126,7 +122,7 @@ internal class DishControllerUpdateDishTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user) = testFactoriesService.createUser1WithToken(team1)
 
-    val team2 = teamService.createTeam("team2.com", "team2.com", listOf("james2@team2.com"))
+    val team2 = testFactoriesService.createTeam2()
 
     val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dish1 = dishService.saveDish(team2, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
