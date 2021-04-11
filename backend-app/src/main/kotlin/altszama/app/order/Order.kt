@@ -7,8 +7,6 @@ import altszama.app.restaurant.Restaurant
 import altszama.app.team.Team
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.CompoundIndex
-import org.springframework.data.mongodb.core.index.CompoundIndexes
 import org.springframework.data.mongodb.core.index.IndexDirection
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.DBRef
@@ -18,22 +16,20 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Document()
-@CompoundIndexes(value = [
-  CompoundIndex(name = "restaurant_id_to_restaurant", def = "{'restaurant.\$id' : 1}"),
-  CompoundIndex(name = "team_id_to_team", def = "{'team.\$id' : 1}"),
-  CompoundIndex(name = "user_id_to_user", def = "{'user.\$id' : 1}")
-])
 data class Order(
   @Id
   var id: String = ObjectId().toHexString(),
 
   @DBRef
+  @Indexed()
   var team: Team,
 
   @DBRef
+  @Indexed()
   var restaurant: Restaurant,
 
   @DBRef
+  @Indexed()
   var orderCreator: User,
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")

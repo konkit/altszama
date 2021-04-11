@@ -1,5 +1,6 @@
 package altszama.config
 
+import altszama.app.dish.Dish
 import altszama.app.notification.PushNotifSubscription
 import altszama.app.order.Order
 import altszama.app.orderEntry.OrderEntry
@@ -25,6 +26,7 @@ open class DatabaseIndicesConfig() {
     val indexClasses = listOf(
       Team::class.java,
       Restaurant::class.java,
+      Dish::class.java,
       Order::class.java,
       OrderEntry::class.java,
       PushNotifSubscription::class.java
