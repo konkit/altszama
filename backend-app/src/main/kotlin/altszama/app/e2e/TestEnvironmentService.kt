@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
-import kotlin.random.Random
 
 @Service
 @Profile("development")

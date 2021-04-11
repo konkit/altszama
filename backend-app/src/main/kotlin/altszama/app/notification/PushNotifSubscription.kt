@@ -3,10 +3,15 @@ import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.jce.spec.ECPublicKeySpec
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
+import java.security.KeyFactory
+import java.security.PublicKey
+import java.security.Security
+import java.util.*
 import javax.validation.constraints.NotNull
-import java.security.*
-import java.util.Base64
 
+@Document
 data class PushNotifSubscription(
   @Id
   var id: String = "",
@@ -21,6 +26,7 @@ data class PushNotifSubscription(
   var authKey: String = "",
 
   @NotNull
+  @Indexed()
   var userId: String = ""
 ) {
 

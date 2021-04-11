@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef
 import java.time.Instant
 import javax.validation.constraints.NotNull
 
-
 data class Dish(
   @DBRef
   @NotNull
