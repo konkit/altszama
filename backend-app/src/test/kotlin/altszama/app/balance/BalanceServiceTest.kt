@@ -5,6 +5,7 @@ import altszama.app.orderEntry.OrderEntryPaymentStatus
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,10 +24,13 @@ class BalanceServiceTest : AbstractIntegrationTest() {
   @Autowired
   private lateinit var orderEntryService: OrderEntryService
 
+  @Autowired
+  private lateinit var testFactoriesService: TestFactoriesService
+
   @Test()
   fun itShouldReturnEmptyList() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user) = createUserAndGetToken("John", "john@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user = testFactoriesService.createUser1(team1)
 
     val result = balanceService.getOrderHistory(user)
 
@@ -36,15 +40,15 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldReturnProperHistoryForOneCreatedOrder() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user) = createUserAndGetToken("John1", "john@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user = testFactoriesService.createUser1(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user, team1)
-    val orderEntry1 = createOrderEntry(order, dishes[0], user, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user, team1)
+    val orderEntry1 = testFactoriesService.createOrderEntry(order, dishes[0], user, team1)
 
-    val (_, user2) = createUserAndGetToken("John2", "john2@team1.com")
-    val orderEntry2 = createOrderEntry(order, dishes[0], user2, team1)
+    val user2 = testFactoriesService.createUser2(team1)
+    val orderEntry2 = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
 
     orderService.setAsOrdered(order.id, "", user)
 
@@ -59,19 +63,19 @@ class BalanceServiceTest : AbstractIntegrationTest() {
       totalAmount = dishes[0].price * 2
     )
     assertThat(result.entries).isEqualTo(listOf(expectedCreatedEntry))
-    assertThat(result.owedMoney).isEqualTo(mapOf("John2" to dishes[0].price))
+    assertThat(result.owedMoney).isEqualTo(mapOf(user2.username to dishes[0].price))
   }
 
   @Test()
   fun itShouldReturnProperHistoryForOneParticipatedOrder() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user1) = createUserAndGetToken("John1", "john1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
 
-    val (_, user2) = createUserAndGetToken("John2", "john2@team1.com")
-    val orderEntry = createOrderEntry(order, dishes[0], user2, team1)
+    val user2 = testFactoriesService.createUser2(team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
 
     orderService.setAsOrdered(order.id, "", user1)
 
@@ -87,27 +91,27 @@ class BalanceServiceTest : AbstractIntegrationTest() {
     )
     assertThat(result.entries).isEqualTo(listOf(expectedParticipatedEntry))
 
-    assertThat(result.owedMoney).isEqualTo(mapOf("John1" to -dishes[0].price))
+    assertThat(result.owedMoney).isEqualTo(mapOf(user1.username to -dishes[0].price))
   }
 
   @Test()
   fun itShouldReturnProperHistoryForOneOrderMadeByOneUserAndAnotherMadeByAnotherOne() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user1) = createUserAndGetToken("John1", "john1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
 
-    val (_, user2) = createUserAndGetToken("John2", "john2@team1.com")
+    val user2 = testFactoriesService.createUser2(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry1 = createOrderEntry(order, dishes[0], user1, team1)
-    val orderEntry2 = createOrderEntry(order, dishes[0], user2, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry1 = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
+    val orderEntry2 = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
 
     orderService.setAsOrdered(order.id, "", user1)
 
 
-    val order2 = createOrder(restaurant, user2, team1)
-    val orderEntry3 = createOrderEntry(order2, dishes[1], user1, team1)
-    val orderEntry4 = createOrderEntry(order2, dishes[1], user2, team1)
+    val order2 = testFactoriesService.createOrder(restaurant, user2, team1)
+    val orderEntry3 = testFactoriesService.createOrderEntry(order2, dishes[1], user1, team1)
+    val orderEntry4 = testFactoriesService.createOrderEntry(order2, dishes[1], user2, team1)
 
     orderService.setAsOrdered(order2.id, "", user2)
 
@@ -130,7 +134,7 @@ class BalanceServiceTest : AbstractIntegrationTest() {
       status = OrderEntryPaymentStatus.UNPAID
     )
     assertThat(resultUser1.entries).isEqualTo(listOf(expectedCreatedEntry, expectedParticipatedEntry))
-    assertThat(resultUser1.owedMoney).isEqualTo(mapOf("John2" to dishes[0].price - dishes[1].price))
+    assertThat(resultUser1.owedMoney).isEqualTo(mapOf(user2.username to dishes[0].price - dishes[1].price))
 
 
     val resultUser2 = balanceService.getOrderHistory(user2)
@@ -151,29 +155,29 @@ class BalanceServiceTest : AbstractIntegrationTest() {
       totalAmount = dishes[1].price * 2
     )
     assertThat(resultUser2.entries).isEqualTo(listOf(expectedCreatedEntry2, expectedParticipatedEntry2))
-    assertThat(resultUser2.owedMoney).isEqualTo(mapOf("John1" to dishes[1].price - dishes[0].price))
+    assertThat(resultUser2.owedMoney).isEqualTo(mapOf(user1.username to dishes[1].price - dishes[0].price))
   }
 
   @Test()
   fun itShouldReturnProperHistoryEntriesInTwoOrdersAreAlreadyPaid() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user1) = createUserAndGetToken("John1", "john1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
 
-    val (_, user2) = createUserAndGetToken("John2", "john2@team1.com")
+    val user2 = testFactoriesService.createUser2(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry1 = createOrderEntry(order, dishes[0], user1, team1)
-    val orderEntry2 = createOrderEntry(order, dishes[0], user2, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry1 = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
+    val orderEntry2 = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
 
     orderService.setAsOrdered(order.id, "", user1)
     orderEntryService.setAsConfirmedAsPaid(orderEntry1.id)
     orderEntryService.setAsConfirmedAsPaid(orderEntry2.id)
 
 
-    val order2 = createOrder(restaurant, user2, team1)
-    val orderEntry3 = createOrderEntry(order2, dishes[1], user1, team1)
-    val orderEntry4 = createOrderEntry(order2, dishes[1], user2, team1)
+    val order2 = testFactoriesService.createOrder(restaurant, user2, team1)
+    val orderEntry3 = testFactoriesService.createOrderEntry(order2, dishes[1], user1, team1)
+    val orderEntry4 = testFactoriesService.createOrderEntry(order2, dishes[1], user2, team1)
 
     orderService.setAsOrdered(order2.id, "", user2)
     orderEntryService.setAsConfirmedAsPaid(orderEntry3.id)
@@ -224,12 +228,12 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldReturnEmptyListIfCreatedOrderIsInCreatedState() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user) = createUserAndGetToken("John", "john@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user = testFactoriesService.createUser1(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user, team1)
 
     val result = balanceService.getOrderHistory(user)
 
@@ -239,12 +243,12 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldReturnEmptyListIfCreatedOrderIsInOrderingState() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user) = createUserAndGetToken("John", "john@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user = testFactoriesService.createUser1(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user, team1)
 
     orderService.setAsOrdering(order.id, user)
 
@@ -256,12 +260,12 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldReturnEmptyListIfCreatedOrderIsInRejectedState() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user) = createUserAndGetToken("John", "john@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user = testFactoriesService.createUser1(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user, team1)
 
     orderService.setAsRejected(order.id, user)
 
@@ -273,14 +277,14 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldReturnEmptyListIfParticipatedOrderIsInCreatedState() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user1) = createUserAndGetToken("John", "john1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
 
-    val (_, user2) = createUserAndGetToken("John", "john2@team1.com")
-    val orderEntry = createOrderEntry(order, dishes[0], user2, team1)
+    val user2 = testFactoriesService.createUser2(team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
 
     val result = balanceService.getOrderHistory(user2)
 
@@ -290,14 +294,14 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldReturnEmptyListIfParticipatedOrderIsInOrderingState() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user1) = createUserAndGetToken("John", "john1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
 
-    val (_, user2) = createUserAndGetToken("John", "john2@team1.com")
-    val orderEntry = createOrderEntry(order, dishes[0], user2, team1)
+    val user2 = testFactoriesService.createUser2(team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
 
     orderService.setAsOrdering(order.id, user1)
 
@@ -309,14 +313,14 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
   @Test()
   fun itShouldReturnEmptyListIfParticipatedOrderIsInRejectedState() {
-    val team1 = teamService.createTeam("team1.com", "team1.com")
-    val (_, user1) = createUserAndGetToken("John", "john1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
 
-    val (_, user2) = createUserAndGetToken("John", "john2@team1.com")
-    val orderEntry = createOrderEntry(order, dishes[0], user2, team1)
+    val user2 = testFactoriesService.createUser2(team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
 
     orderService.setAsRejected(order.id, user1)
 

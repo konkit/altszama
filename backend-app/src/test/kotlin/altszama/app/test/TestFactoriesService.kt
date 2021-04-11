@@ -1,6 +1,5 @@
 package altszama.app.test
 
-import altszama.app.TestInitializer
 import altszama.app.auth.User
 import altszama.app.auth.UserService
 import altszama.app.dish.Dish
@@ -19,26 +18,17 @@ import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.Team
+import altszama.app.team.TeamService
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mongodb.BasicDBObject
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.stereotype.Service
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.LocalDate
 import java.time.LocalTime
 
-
-@SpringBootTest(properties = ["spring.main.allow-bean-definition-overriding=true"])
-@AutoConfigureMockMvc
-@ContextConfiguration(initializers = [TestInitializer::class])
-open class AbstractIntegrationTest() {
+@Service
+class TestFactoriesService {
 
   @Autowired
   private lateinit var mongoTemplate: MongoTemplate
@@ -64,15 +54,39 @@ open class AbstractIntegrationTest() {
   @Autowired
   private lateinit var orderEntryService: OrderEntryService
 
-  protected val fakeOrderId = "111111111111111111111111"
+  @Autowired
+  private lateinit var teamService: TeamService
 
-  @BeforeEach
-  fun beforeEach() {
-    for (collectionName in mongoTemplate.collectionNames) {
-      if (!collectionName.startsWith("system.")) {
-        mongoTemplate.getCollection(collectionName).deleteMany(BasicDBObject())
-      }
-    }
+  fun createTeam1(): Team {
+    return teamService.createTeam("team1.com", "team1.com")
+  }
+
+  fun createTeam2(): Team {
+    return teamService.createTeam("team2.com", "team2.com")
+  }
+
+  fun createUser1WithToken(team: Team): Pair<String, User> {
+    return createUserAndGetToken("John", "john@${team.domain}")
+  }
+
+  fun createUser1(team: Team): User {
+    return createUser1WithToken(team).second
+  }
+
+  fun createUser2WithToken(team: Team): Pair<String, User> {
+    return createUserAndGetToken("James", "james@${team.domain}")
+  }
+
+  fun createUser2(team: Team): User {
+    return createUser2WithToken(team).second
+  }
+
+  fun createUser3WithToken(team: Team): Pair<String, User> {
+    return createUserAndGetToken("Jack", "jack@${team.domain}")
+  }
+
+  fun createUser3(team: Team): User {
+    return createUser3WithToken(team).second
   }
 
   protected fun createUserAndGetToken(username: String, email: String): Pair<String, User> {
@@ -82,27 +96,7 @@ open class AbstractIntegrationTest() {
     return Pair(token, user)
   }
 
-  protected fun expectBadRequestWithMessage(request: MockHttpServletRequestBuilder, expectedMessage: String) {
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    Assertions.assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(expectedMessage)
-  }
-
-  protected fun expectUnauthorizedWithMessage(request: MockHttpServletRequestBuilder, expectedMessage: String) {
-    val response = mockMvc.perform(request)
-      .andExpect(MockMvcResultMatchers.status().isUnauthorized)
-      .andReturn()
-      .response.contentAsString
-
-    Assertions.assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo(expectedMessage)
-  }
-
-  /**/
-
-  protected fun createRestaurantAndDishes(team1: Team): Pair<Restaurant, List<Dish>> {
+  fun createRestaurantAndDishes(team1: Team): Pair<Restaurant, List<Dish>> {
     val sideDish1 = SideDish(name = "Side dish 1", price = 100)
     val sideDish2 = SideDish(name = "Side dish 2", price = 120)
     val sideDish3 = SideDish(name = "Side dish 3", price = 150)
@@ -126,7 +120,7 @@ open class AbstractIntegrationTest() {
     return Pair(restaurant, listOf(dish1, dish2))
   }
 
-  protected fun createOrder(restaurant: Restaurant, user1: User, team1: Team): Order {
+  fun createOrder(restaurant: Restaurant, user1: User, team1: Team): Order {
     val orderSaveRequest = OrderSaveRequest(
       restaurantId = restaurant.id,
       orderDate = LocalDate.now(),
@@ -137,7 +131,7 @@ open class AbstractIntegrationTest() {
     return orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
   }
 
-  protected fun createOrderEntry(order: Order, dish: Dish, user: User, team: Team): OrderEntry {
+  fun createOrderEntry(order: Order, dish: Dish, user: User, team: Team): OrderEntry {
     val orderEntrySaveRequest = OrderEntrySaveRequest(
       orderId = order.id,
       dishId = dish.id,

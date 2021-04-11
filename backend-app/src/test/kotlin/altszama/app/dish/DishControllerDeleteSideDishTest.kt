@@ -14,6 +14,7 @@ import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.Team
 import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.test.TestFactoriesService
 import altszama.app.validation.SideDishInUse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
@@ -50,11 +51,14 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
   @Autowired
   private lateinit var userService: UserService
 
+  @Autowired
+  private lateinit var testFactoriesService: TestFactoriesService
+
 
   @Test
   fun itShouldDeleteSideishSuccessfully() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
-    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = listOf(SideDish(name = "Side dish 1", price = 100)))
@@ -75,8 +79,8 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotDeleteSideishIfItAlreadyDoesntExist() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
-    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = emptyList())
@@ -93,8 +97,8 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotDeleteSideishIfTheDishDoesNotExist() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
-    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
 
@@ -110,8 +114,8 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotDeleteSideishIfUserHasNoAccessToRestaurant() {
-    val team1 = teamService.createTeam("team1.com", "team1.com", listOf("james1@team1.com"))
-    val (user1Token, user) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user) = testFactoriesService.createUser1WithToken(team1)
 
     val team2 = teamService.createTeam("team2.com", "team2.com", listOf("james2@team2.com"))
 
@@ -130,8 +134,8 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
   @Test
   fun itShouldNotDeleteSidedishIfItIsIsUse() {
-    val team1 = teamService.createTeam("team1.com", "", listOf("james1@team1.com"))
-    val (user1Token, user1) = createUserAndGetToken("James1", "james1@team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
     val dishCreateRequest = DishCreateRequest(
@@ -144,7 +148,7 @@ internal class DishControllerDeleteSideDishTest : AbstractIntegrationTest() {
 
     val createdSideDish = dish1.sideDishes.first()
 
-    val order = createOrder(restaurant, user1, team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
     val orderEntry = createOrderEntry(order, dish1, createdSideDish, user1, team1)
 
     val request = MockMvcRequestBuilders.delete("/api/dishes/${dish1.id}/side_dishes/${createdSideDish.id}/delete")

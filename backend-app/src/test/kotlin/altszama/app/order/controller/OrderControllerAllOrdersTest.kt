@@ -10,6 +10,7 @@ import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.TeamService
 import altszama.app.test.AbstractIntegrationTest
+import altszama.app.test.TestFactoriesService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -39,14 +40,17 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
   @Autowired
   private lateinit var objectMapper: ObjectMapper
 
+  @Autowired
+  private lateinit var testFactoriesService: TestFactoriesService
+
 
   @Test
   fun shouldReturnEmptyOrdersListIfThereAreNoOrders() {
-    val team1 = teamService.createTeam("team1.com", "", userEmails = listOf("john@mail.com"))
-    val (token, user) = createUserAndGetToken("John", "john@mail.com")
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user) = testFactoriesService.createUser1WithToken(team1)
 
     val request = MockMvcRequestBuilders.get("/api/orders/all.json")
-        .header("Authorization", token)
+        .header("Authorization", user1Token)
 
     val responseJson = mockMvc.perform(request)
         .andExpect(MockMvcResultMatchers.status().isOk)
@@ -60,8 +64,8 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldReturnOrdersIfThereAreAny() {
-    val orderCreator = userService.createNewUser("James", "james@team1.com")
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val orderCreator = testFactoriesService.createUser1(team1)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val orderDate = LocalDate.now()
@@ -74,10 +78,10 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
     )
     orderService.saveOrder(orderSaveRequest, orderCreator, team1)
 
-    val (token, user) = createUserAndGetToken("John", "john@team1.com")
+    val (user2Token, user) = testFactoriesService.createUser2WithToken(team1)
 
     val request = MockMvcRequestBuilders.get("/api/orders/all.json")
-        .header("Authorization", token)
+        .header("Authorization", user2Token)
 
     val responseJson = mockMvc.perform(request)
         .andExpect(MockMvcResultMatchers.status().isOk)
@@ -95,8 +99,8 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
 
   @Test
   fun shouldReturnOrdersFromTodayAndFromPast() {
-    val orderCreator = userService.createNewUser("James", "james@team1.com")
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val orderCreator = testFactoriesService.createUser1(team1)
 
     val restaurant1 = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val restaurant2 = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 2"))
@@ -121,7 +125,7 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
     )
     orderService.saveOrder(orderSaveRequest2, orderCreator, team1)
 
-    val (token, user) = createUserAndGetToken("John", "john@team1.com")
+    val (token, user) = testFactoriesService.createUser2WithToken(team1)
 
     val request = MockMvcRequestBuilders.get("/api/orders/all.json")
         .header("Authorization", token)
@@ -140,8 +144,8 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
   fun shouldReturnOrdersFromTheCorrectTeam() {
     val todayOrderDate = LocalDate.now()
 
-    val orderCreator1 = userService.createNewUser("James", "james@team1.com")
-    val team1 = teamService.createTeam("team1.com", "team1.com")
+    val team1 = testFactoriesService.createTeam1()
+    val orderCreator1 = testFactoriesService.createUser1(team1)
 
     val restaurant1 = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
 
@@ -154,8 +158,8 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
     )
     orderService.saveOrder(orderSaveRequest1, orderCreator1, team1)
 
-    val orderCreator2 = userService.createNewUser("James2", "james@team2.com")
-    val team2 = teamService.createTeam("team2.com", "team2.com")
+    val team2 = testFactoriesService.createTeam2()
+    val orderCreator2 = testFactoriesService.createUser2(team1)
 
     val restaurant2 = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 2"))
 
@@ -170,7 +174,7 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
 
 
 
-    val (token, user) = createUserAndGetToken("John", "john@team1.com")
+    val (token, user3) = testFactoriesService.createUser3WithToken(team1)
 
     val request = MockMvcRequestBuilders.get("/api/orders/all.json")
         .header("Authorization", token)
@@ -185,7 +189,7 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
     assertThat(response.allOrdersList).hasSize(1)
 
     assertThat(response.allOrdersList[0].restaurantName).isEqualTo("Restaurant 1")
-    assertThat(response.allOrdersList[0].orderCreatorUsername).isEqualTo("James")
+    assertThat(response.allOrdersList[0].orderCreatorUsername).isEqualTo(orderCreator1.username)
     assertThat(response.allOrdersList[0].orderDate).isEqualTo(todayOrderDate)
   }
 

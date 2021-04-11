@@ -37,9 +37,6 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
   private lateinit var orderService: OrderService
 
   @Autowired
-  private lateinit var orderEntryService: OrderEntryService
-
-  @Autowired
   private lateinit var orderEntryRepository: OrderEntryRepository
 
   @Autowired
