@@ -18,20 +18,22 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Document()
-@CompoundIndexes(value = [CompoundIndex(name = "restaurant_id_to_restaurant", def = "{'restaurant.\$id' : 1}")])
+@CompoundIndexes(value = [
+  CompoundIndex(name = "restaurant_id_to_restaurant", def = "{'restaurant.\$id' : 1}"),
+  CompoundIndex(name = "team_id_to_team", def = "{'team.\$id' : 1}"),
+  CompoundIndex(name = "user_id_to_user", def = "{'user.\$id' : 1}")
+])
 data class Order(
   @Id
   var id: String = ObjectId().toHexString(),
 
   @DBRef
-  @Indexed()
   var team: Team,
 
   @DBRef
   var restaurant: Restaurant,
 
   @DBRef
-  @Indexed()
   var orderCreator: User,
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")
