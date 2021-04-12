@@ -1,12 +1,10 @@
 package altszama.app.restaurant
 
 import altszama.app.dish.DishService
-import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.order.OrderService
 import altszama.app.order.dto.DeliveryData
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.PaymentData
-import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import altszama.app.validation.NoAccessToRestaurant
@@ -45,10 +43,7 @@ internal class RestaurantControllerDeleteTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
-
-    val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1")
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
 
     val request = MockMvcRequestBuilders.delete("/api/restaurants/${restaurant.id}/delete")
         .contentType(MediaType.APPLICATION_JSON)
@@ -60,7 +55,7 @@ internal class RestaurantControllerDeleteTest : AbstractIntegrationTest() {
         .response.contentAsString
 
     assertThat(restaurantService.findById(restaurant.id)).isEmpty
-    assertThat(dishService.findDishById(dish1.id)).isEmpty
+    dishes.forEach { dish -> assertThat(dishService.findDishById(dish.id)).isEmpty }
   }
 
   @Test
@@ -85,8 +80,7 @@ internal class RestaurantControllerDeleteTest : AbstractIntegrationTest() {
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val team2 = testFactoriesService.createTeam2()
-
-    val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team2)
 
     val request = MockMvcRequestBuilders.delete("/api/restaurants/${restaurant.id}/delete")
         .contentType(MediaType.APPLICATION_JSON)
@@ -104,13 +98,11 @@ internal class RestaurantControllerDeleteTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1", address = "Address 1"))
-    val dishCreateRequest = DishCreateRequest("Dish 1", 100, category = "Category 1", sideDishes = emptyList())
-    val dish1 = dishService.saveDish(team1, restaurant.id, dishCreateRequest)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
 
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
 
     val request = MockMvcRequestBuilders.delete("/api/restaurants/${restaurant.id}/delete")
         .contentType(MediaType.APPLICATION_JSON)

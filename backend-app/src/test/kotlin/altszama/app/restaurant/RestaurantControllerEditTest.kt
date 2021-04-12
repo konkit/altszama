@@ -1,6 +1,5 @@
 package altszama.app.restaurant
 
-import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import altszama.app.validation.NoAccessToRestaurant
@@ -34,7 +33,7 @@ internal class RestaurantControllerEditTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
 
     val request = MockMvcRequestBuilders.get("/api/restaurants/${restaurant.id}/edit.json")
         .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +71,7 @@ internal class RestaurantControllerEditTest : AbstractIntegrationTest() {
 
     val team2 = testFactoriesService.createTeam2()
 
-    val restaurant = restaurantService.createRestaurant(team2, RestaurantSaveRequest("Restaurant 1"))
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team2)
 
     val request = MockMvcRequestBuilders.get("/api/restaurants/${restaurant.id}/edit.json")
         .contentType(MediaType.APPLICATION_JSON)

@@ -2,7 +2,6 @@ package altszama.app.restaurant
 
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,9 +17,6 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var restaurantService: RestaurantService
-
-  @Autowired
-  private lateinit var objectMapper: ObjectMapper
 
   @Autowired
   private lateinit var testFactoriesService: TestFactoriesService
@@ -70,15 +66,9 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-      .andExpect(MockMvcResultMatchers.status().isBadRequest)
-      .andReturn()
-      .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Restaurant name cannot be blank")
+    expectBadRequestWithMessage(request, "Restaurant name cannot be blank")
 
     val restaurant = restaurantService.findByTeamAndName(team1, "New Restaurant")
-
     assertThat(restaurant).isNull()
   }
 
@@ -99,12 +89,7 @@ internal class RestaurantControllerCreateTest : AbstractIntegrationTest() {
         .contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", user1Token)
 
-    val response = mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest)
-        .andReturn()
-        .response.contentAsString
-
-    assertThat(objectMapper.readTree(response)["message"].asText()).isEqualTo("Restaurant name cannot be blank")
+    expectBadRequestWithMessage(request, "Restaurant name cannot be blank")
 
     val restaurant = restaurantService.findByTeamAndName(team1, "New Restaurant")
 
