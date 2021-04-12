@@ -45,7 +45,6 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
   @Autowired
   private lateinit var testFactoriesService: TestFactoriesService
 
-
   @Test()
   fun itShouldMoveToOrderingStateAndReturnOrderViewDataSuccessfully() {
     val team1 = testFactoriesService.createTeam1()
@@ -97,7 +96,7 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
 
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
-    val request = MockMvcRequestBuilders.get("/api/orders/${fakeOrderId}/order_view.json")
+    val request = MockMvcRequestBuilders.get("/api/orders/${fakeOrderId()}/order_view.json")
         .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, "Order does not exist")
@@ -157,5 +156,7 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
 
     expectBadRequestWithMessage(request, "There are no order entries in this order")
   }
+
+  private fun fakeOrderId(): String = testFactoriesService.fakeOrderId
 
 }

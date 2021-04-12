@@ -76,7 +76,7 @@ class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
 
-    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_as_created")
+    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId()}/set_as_created")
       .header("Authorization", user1Token)
 
     expectBadRequestWithMessage(request, "Order does not exist")
@@ -103,4 +103,7 @@ class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
 
     expectBadRequestWithMessage(request, "You can edit only your own orders")
   }
+
+  private fun fakeOrderId(): String = testFactoriesService.fakeOrderId
+
 }

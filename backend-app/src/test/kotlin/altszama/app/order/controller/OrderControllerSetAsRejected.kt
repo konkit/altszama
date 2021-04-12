@@ -77,7 +77,7 @@ class OrderControllerSetAsRejected() : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_as_rejected")
+    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId()}/set_as_rejected")
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", user1Token)
 
@@ -110,5 +110,7 @@ class OrderControllerSetAsRejected() : AbstractIntegrationTest() {
 
     expectBadRequestWithMessage(request, "You can edit only your own orders")
   }
+
+  private fun fakeOrderId(): String = testFactoriesService.fakeOrderId
 
 }

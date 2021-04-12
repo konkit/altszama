@@ -1,11 +1,6 @@
 package altszama.app.test
 
 import altszama.app.TestInitializer
-import altszama.app.auth.UserService
-import altszama.app.dish.DishService
-import altszama.app.order.OrderService
-import altszama.app.orderEntry.OrderEntryService
-import altszama.app.restaurant.RestaurantService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mongodb.BasicDBObject
 import org.assertj.core.api.Assertions
@@ -29,27 +24,10 @@ open class AbstractIntegrationTest() {
   private lateinit var mongoTemplate: MongoTemplate
 
   @Autowired
-  private lateinit var userService: UserService
-
-  @Autowired
   private lateinit var mockMvc: MockMvc
 
   @Autowired
   private lateinit var objectMapper: ObjectMapper
-
-  @Autowired
-  private lateinit var restaurantService: RestaurantService
-
-  @Autowired
-  private lateinit var dishService: DishService
-
-  @Autowired
-  private lateinit var orderService: OrderService
-
-  @Autowired
-  private lateinit var orderEntryService: OrderEntryService
-
-  protected val fakeOrderId = "111111111111111111111111"
 
   @BeforeEach
   fun beforeEach() {

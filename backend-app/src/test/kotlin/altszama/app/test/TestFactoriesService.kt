@@ -19,11 +19,8 @@ import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.team.Team
 import altszama.app.team.TeamService
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Service
-import org.springframework.test.web.servlet.MockMvc
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -31,16 +28,7 @@ import java.time.LocalTime
 class TestFactoriesService {
 
   @Autowired
-  private lateinit var mongoTemplate: MongoTemplate
-
-  @Autowired
   private lateinit var userService: UserService
-
-  @Autowired
-  private lateinit var mockMvc: MockMvc
-
-  @Autowired
-  private lateinit var objectMapper: ObjectMapper
 
   @Autowired
   private lateinit var restaurantService: RestaurantService
@@ -56,6 +44,8 @@ class TestFactoriesService {
 
   @Autowired
   private lateinit var teamService: TeamService
+
+  val fakeOrderId = "111111111111111111111111"
 
   fun createTeam1(): Team {
     return teamService.createTeam("team1.com", "team1.com")

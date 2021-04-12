@@ -90,7 +90,7 @@ class OrderControllerSetAsDelivered() : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_as_delivered")
+    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId()}/set_as_delivered")
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", user1Token)
 
@@ -147,5 +147,7 @@ class OrderControllerSetAsDelivered() : AbstractIntegrationTest() {
 
     expectBadRequestWithMessage(request, "There are no order entries in this order")
   }
+
+  private fun fakeOrderId(): String = testFactoriesService.fakeOrderId
 
 }

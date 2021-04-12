@@ -414,7 +414,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
 
     val (_, dish1) = createRestaurantAndDish(team1)
 
-    val createContent = createPayloadWithExistingDishAndNoSideDishes(fakeOrderId, dish1.id)
+    val createContent = createPayloadWithExistingDishAndNoSideDishes(fakeOrderId(), dish1.id)
     val request = createRequest(createContent, user1Token)
 
     expectBadRequestWithMessage(request, "Order does not exist")
@@ -568,4 +568,7 @@ class OrderEntryControllerCreateTest : AbstractIntegrationTest() {
           ]
       }""".trimIndent()
   }
+
+  private fun fakeOrderId(): String = testFactoriesService.fakeOrderId
+
 }

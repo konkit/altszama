@@ -80,7 +80,7 @@ class OrderControllerSetBackAsOrdered() : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_back_as_ordered")
+    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId()}/set_back_as_ordered")
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", user1Token)
 
@@ -116,5 +116,7 @@ class OrderControllerSetBackAsOrdered() : AbstractIntegrationTest() {
 
     expectBadRequestWithMessage(request, "You can edit only your own orders")
   }
+
+  private fun fakeOrderId(): String = testFactoriesService.fakeOrderId
 
 }

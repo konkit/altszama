@@ -120,7 +120,7 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
       "approxTimeOfDelivery": "14:00" 
     }""".trimIndent()
 
-    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId}/set_as_ordered")
+    val request = MockMvcRequestBuilders.put("/api/orders/${fakeOrderId()}/set_as_ordered")
       .content(payload)
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", user1Token)
@@ -188,5 +188,7 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
 
     expectBadRequestWithMessage(request, "There are no order entries in this order")
   }
+
+  private fun fakeOrderId(): String = testFactoriesService.fakeOrderId
 
 }
