@@ -52,7 +52,7 @@ class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
 
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     orderService.setAsOrdered(order.id, "14:00", user1)
     val afterOrdered = orderRepository.findById(order.id).get()
@@ -92,7 +92,7 @@ class OrderControllerSetAsCreated() : AbstractIntegrationTest() {
 
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     orderService.setAsOrdered(order.id, "14:00", user1)
 

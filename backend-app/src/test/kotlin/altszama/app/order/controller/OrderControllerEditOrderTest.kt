@@ -53,7 +53,7 @@ class OrderControllerEditOrderTest() : AbstractIntegrationTest() {
 
     val orderSaveRequest = OrderSaveRequest(restaurantId = restaurant.id, orderDate = LocalDate.now(), timeOfOrder = LocalTime.of(14, 0), deliveryData = DeliveryData(), paymentData = PaymentData())
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     val request = MockMvcRequestBuilders.get("/api/orders/${order.id}/edit.json")
         .contentType(MediaType.APPLICATION_JSON)

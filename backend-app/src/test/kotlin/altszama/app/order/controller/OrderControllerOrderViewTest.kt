@@ -64,7 +64,7 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
         paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, user1, team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     assertThat(order.orderState).isEqualTo(OrderState.CREATED)
 
@@ -120,7 +120,7 @@ class OrderControllerOrderViewTest () : AbstractIntegrationTest() {
         paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, user1, team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     val team2 = testFactoriesService.createTeam2()
     val (token2, user2) = testFactoriesService.createUser2WithToken(team2)

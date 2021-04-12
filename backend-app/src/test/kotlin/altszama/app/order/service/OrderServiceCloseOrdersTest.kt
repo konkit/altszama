@@ -112,7 +112,7 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
       paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     return order
   }

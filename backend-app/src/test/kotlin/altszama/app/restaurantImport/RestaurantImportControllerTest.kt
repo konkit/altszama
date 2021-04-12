@@ -123,7 +123,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
 
     val updatedDishes = dishes.map { dish -> dish.copy(category = "Updated " + dish.category, price = dish.price * 2) }
 

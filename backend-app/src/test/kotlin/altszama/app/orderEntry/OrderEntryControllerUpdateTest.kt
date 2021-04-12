@@ -46,9 +46,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val createContent =
@@ -75,9 +75,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val (user2Token, user2) = testFactoriesService.createUser2WithToken(team1)
@@ -93,9 +93,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val newSideDishName = "Side dish 4"
@@ -132,9 +132,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val newDishName = "New dish"
@@ -176,9 +176,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     orderService.setAsOrdered(order.id, null, currentUser = user1)
@@ -207,9 +207,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
     val (user2Token, user2) = testFactoriesService.createUser2WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user2, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val createContent = createPayloadWithExistingDishAndExistingSideDish(orderEntry.id, dishEntry.id, dishes[1].id, dishes[1].sideDishes[0].id!!)
@@ -236,9 +236,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
     val (user2Token, user2) = testFactoriesService.createUser2WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user2, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     orderService.setAsOrdered(order.id, null, currentUser = user1)
@@ -266,9 +266,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     orderService.setAsOrdered(order.id, null, currentUser = user1)
@@ -286,9 +286,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
     orderService.setAsOrdered(order.id, null, currentUser = user1)
     orderService.setAsDelivered(order.id, currentUser = user1)
@@ -316,9 +316,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     orderService.setAsOrdered(order.id, null, currentUser = user1)
@@ -337,9 +337,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     orderService.setAsRejected(order.id, currentUser = user1)
@@ -355,9 +355,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val createContent = createPayloadWithExistingDishAndExistingSideDish(orderEntry.id, dishEntry.id, dishes[1].id, fakeSideDishId)
@@ -371,9 +371,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val newSideDishName = "Side dish 4"
@@ -390,9 +390,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val newSideDishName = ""
@@ -409,9 +409,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val createContent = createPayloadWithExistingDishAndNoSideDishes(orderEntry.id, dishEntry.id, fakeDishId)
@@ -425,9 +425,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val createContent = createPayloadWithExistingDishAndNoSideDishesButWithNullDishIdField(orderEntry.id, dishEntry.id)
@@ -441,9 +441,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val createContent = createPayloadWithExistingDishAndNoSideDishesButWithNullDishEntryIdField(orderEntry.id, dishEntry.dish.id)
@@ -457,9 +457,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val newDishName = ""
@@ -476,9 +476,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val newDishName = "New dish"
@@ -495,7 +495,7 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
 
     val createContent = createPayloadWithExistingDishAndNoSideDishes(fakeOrderId, fakeDishEntryId, fakeDishId)
     val request = createRequest(createContent, user1Token)
@@ -509,9 +509,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
 
     val createContent = createPayloadWithExistingDishAndNoSideDishes(orderEntry.id, fakeDishEntryId, dishes[1].id)
     val request = createRequest(createContent, user1Token)
@@ -524,9 +524,9 @@ class OrderEntryControllerUpdateTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val (restaurant, dishes) = createRestaurantAndDishes(team1)
-    val order = createOrder(restaurant, user1, team1)
-    val orderEntry = createOrderEntry(order, dishes[0], user1, team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val orderEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
     val dishEntry = orderEntry.dishEntries.first()
 
     val team2 = testFactoriesService.createTeam2()

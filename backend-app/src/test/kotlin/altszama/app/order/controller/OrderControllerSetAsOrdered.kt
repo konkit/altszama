@@ -59,7 +59,7 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
       paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     val payload = """{
       "approxTimeOfDelivery": "14:00" 
@@ -94,7 +94,7 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
       paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     val payload = """{}""".trimIndent()
 
@@ -144,7 +144,7 @@ class OrderControllerSetAsOrdered() : AbstractIntegrationTest() {
       paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    createOrderEntry(order, dish1, user1, team1)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     val (user2Token, user2) = testFactoriesService.createUser2WithToken(team1)
 
