@@ -1,32 +1,34 @@
-# AltSzama - when Google Sheet is not enough
+# AltSzama
 
-App written in Spring Boot + Vue.js + MongoDB + Google Login. Its purpose is to help order food for bigger group of people.
+Order food with your colleauges and keep track of orders and payments!
 
-### How to run dev environment ?
+https://altszama.club
 
-1. Put those values as environment variables (perferably in Intellij "Edit Configuration" for Application.kt and "runVueDevServer" kotlin task):
-    - gcmSenderId - API number for receiving push notifications
-    - gcmServerKey - API key for sending Push Notifications
-    - googleClientId - Google's ClientID value
-    - googleClientSecret - Google's Client Secret value
-    - BACKEND_URL - Backend (so Kotlin app) URL. Default http://localhost:8080
+App written in Spring Boot + Vue.js + MongoDB + Google Login.
 
-2. Run the project from IDE 
-    - backend app in Kotlin via running Application.kt 
-    - frontend app in Vue via running "runVueDevServer" Gradle task
+## Environemnt variables used
+DATABASE_NAME - name of the MongoDB database
 
+DATABASE_HOST - hostname of the MongoDB database
 
-### How to run production environment ?
+DATABASE_PORT - port on which MongoDB database is running
 
-1. For production  environment, the gradle task "vueProd" first builds the frontend 
-app and then copies it to output folder so the Kotlin app is build with complete resources
+GOOGLE_CLIENT_ID - Client ID for Google Login
 
-2. Put those values as environment variables:
-- gcmSenderId - API number for receiving push notifications
-- gcmServerKey - API key for sending Push Notifications
-- spring.data.mongodb.database - MongoDB database name
-- googleClientId - Google's ClientID value
-- googleClientSecret - Google's Client Secret value
-- sentryURL - URL for sentry (saas for reporting client-side errors)
+GOOGLE_CLIENT_SECRET - Client Secret for Google Login
 
-3. "build" Gradle task should already depend on vueProd task.
+VAPID_PUBLIC_KEY - VAPID public key for Web Push Notifications
+
+VAPID_PRIVATE_KEY - VAPID private key for Web Push Notifications
+
+VAPID_SUBJECT - VAPID subject key, `mailto:youremailaddress@mail.com`
+
+VUE_APP_BACKEND_URL - URL to backend, with API path
+
+VUE_APP_SENTRY_URL - Sentry API URL
+
+ORIGIN_URL - URL to backend, with API path
+
+JWT_SIGNING_KEY - used for JWT signing
+
+spring_profiles_active - set to `development` when running locally

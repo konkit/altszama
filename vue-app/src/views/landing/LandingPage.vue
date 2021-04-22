@@ -1,20 +1,12 @@
 <template>
-<!--  <v-app>-->
-<!--    <v-main >-->
-<!--      <v-fade-transition mode="out-in">-->
-        <section>
-          <v-row no-gutters>
-            <v-col cols="12">
-              <SectionHero></SectionHero>
-              <Description></Description>
-            </v-col>
-          </v-row>
-        </section>
-<!--      </v-fade-transition>-->
-<!--    </v-main>-->
-
-<!--    <home-footer/>-->
-<!--  </v-app>-->
+  <section>
+    <v-row no-gutters>
+      <v-col cols="12">
+        <SectionHero></SectionHero>
+        <Description></Description>
+      </v-col>
+    </v-row>
+  </section>
 </template>
 
 <script>
@@ -25,7 +17,6 @@ export default {
   name: 'HomeLayout',
 
   components: {
-    // HomeFooter,
     Description,
     SectionHero
   }
@@ -33,6 +24,4 @@ export default {
 </script>
 
 <style lang="scss">
-
-
 </style>

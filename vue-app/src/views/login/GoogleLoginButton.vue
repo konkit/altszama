@@ -7,7 +7,7 @@
            type="submit"
            :disabled="loginLoaded === false"
            @click="googleSignIn"
-           x-large>
+           large>
       Login using Google Account
     </v-btn>
   </div>
