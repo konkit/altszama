@@ -6,7 +6,7 @@ https://altszama.club
 
 App written in Spring Boot + Vue.js + MongoDB + Google Login.
 
-## Environemnt variables used
+## Environemnt variables used in backend app
 DATABASE_NAME - name of the MongoDB database
 
 DATABASE_HOST - hostname of the MongoDB database
@@ -23,12 +23,16 @@ VAPID_PRIVATE_KEY - VAPID private key for Web Push Notifications
 
 VAPID_SUBJECT - VAPID subject key, `mailto:youremailaddress@mail.com`
 
-VUE_APP_BACKEND_URL - URL to backend, with API path
+ORIGIN_URL - URL to backend
+
+JWT_SIGNING_KEY - used for signing JWT tokens
+
+spring_profiles_active - set to `development` when running locally
+
+## Environemnt variables used in frontend app
+
+VUE_APP_GOOGLE_CLIENT_ID - the same as GOOGLE_CLIENT_ID
 
 VUE_APP_SENTRY_URL - Sentry API URL
 
-ORIGIN_URL - URL to backend, with API path
-
-JWT_SIGNING_KEY - used for JWT signing
-
-spring_profiles_active - set to `development` when running locally
+VUE_APP_VAPID_PUBLIC_KEY - the same as VAPID_PUBLIC_KEY

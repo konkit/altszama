@@ -2,9 +2,9 @@
   <section id="theme-features" :style="sectionStyles">
     <div class="base-section-heading text-center mb-12">
 
-      <h1 class="text-uppercase headline font-weight-bold mb-2 text-center grey--text text--darken-1">ALT SZAMA</h1>
+      <h5 class="text-h5 font-weight-bold mb-2 text-center">ALT SZAMA</h5>
 
-      <div class="mx-auto base-body body-1 grey--text text--darken-1 mb-10">
+      <div class="mx-auto base-body text-body-1 mb-10">
         <p>Ordering food is easy - you just figure out where to order from and who wants what.</p>
 
         <p>The things get complicated when you order not for 3 collegaues but 13, some people ordered the same dish

@@ -10,7 +10,7 @@
         <v-row class="d-flex justify-center align-content-center">
           <v-col cols="12" sm="8" lg="6">
             <v-card class="pa-8">
-              <h1 class="pb-5 text-align-center">Login using Google Account</h1>
+              <h1 class="text-h4 font-weight-bold pb-5 text-align-center">Login using Google Account</h1>
 
               <v-alert v-if="$store.state.errors.length === 0" outlined type="info" class="pt-5">
                 Remember to use your company's Google account to access your colleauges' orders.
@@ -19,7 +19,7 @@
               <errors-component></errors-component>
 
               <div class="d-flex justify-center">
-              <GoogleLoginButton class="py-10"></GoogleLoginButton>
+              <GoogleLoginButton class="py-5"></GoogleLoginButton>
               </div>
 
             </v-card>

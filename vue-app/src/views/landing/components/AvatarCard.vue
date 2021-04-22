@@ -7,10 +7,10 @@
         class="mb-3"
     />
 
-    <div class="horizontal title ml-6">
-      <h3 class="text-uppercase title font-weight-bold mb-3 text-left grey--text text--darken-1">{{title}}</h3>
+    <div class="horizontal text-title ml-6">
+      <h3 class="text-uppercase text-title font-weight-bold mb-3 text-left">{{title}}</h3>
 
-      <p class="mx-auto base-body body-1 grey--text text--darken-1 mb-10">
+      <p class="mx-auto base-body text-body-1 mb-10">
         {{description}}
       </p>
     </div>

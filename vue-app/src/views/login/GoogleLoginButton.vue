@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn v-if="loginPending === true" x-large disabled>Loggin in ... please wait.</v-btn>
+    <v-btn v-if="loginPending === true" large disabled>Loggin in ... please wait.</v-btn>
 
     <v-btn v-if="loginPending === false"
            color="success"

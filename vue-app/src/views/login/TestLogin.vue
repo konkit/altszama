@@ -10,7 +10,7 @@
         <v-row class="d-flex justify-center align-content-center">
           <v-col cols="12" sm="8" lg="6">
             <v-card class="pa-8">
-              <h1 class="pb-5 text-align-center">Test Login</h1>
+              <h1 class="text-h4 pb-5 text-align-center">Test Login</h1>
 
               <div v-for="(user, i) in usersList" :key="i">
                 <v-btn @click="loginAsUser(user)">{{ user.username }} ({{ user.email }})</v-btn>
@@ -28,7 +28,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import GoogleLoginButton from "@/views/login/GoogleLoginButton.vue";
-import {BACKEND_URL} from "@/lib/config";
+import {CURRENT_DOMAIN} from "@/lib/config";
 
 interface UserEntry {
   username: string;
@@ -62,7 +62,7 @@ export default class TestLoginView extends Vue {
   }
 
   private getTestUsers() {
-    fetch(`${BACKEND_URL}/auth/testUser/list`, {method: 'GET'})
+    fetch(`${CURRENT_DOMAIN}/api/auth/testUser/list`, {method: 'GET'})
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -79,7 +79,7 @@ export default class TestLoginView extends Vue {
   }
 
   private doLogin(payload: { email: string; username: string }) {
-    fetch(`${BACKEND_URL}/auth/testUser/login`, {
+    fetch(`${CURRENT_DOMAIN}/api/auth/testUser/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
