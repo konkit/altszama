@@ -15,18 +15,6 @@
     <v-list dense>
       <template v-for="(dishEntry, dishEntryIndex) in orderEntry.dishEntries">
         <v-list-item :key="'dishEntry-' + dishEntryIndex">
-          <v-list-item-content class="index-element">
-            <div style="padding-top: 8px;">
-              <div style="min-height: 40px;">
-                <div style="padding-top: 8px">
-                  <div style="line-height: 36px;">
-                    {{ dishEntryIndex + 1 }}.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </v-list-item-content>
-
           <v-list-item-content>
             <template v-if="isEntryEdited === true && dishEntryId === dishEntry.id">
               <edit-order-entry
@@ -50,23 +38,16 @@
         </v-list-item>
 
         <template v-if="dishEntryIndex < orderEntry.dishEntries.length - 1">
-          <v-divider
-              :key="'dish-entry-divider' + dishEntryIndex"
-              class="dishes-divider"
-          ></v-divider>
+          <v-divider :key="'dish-entry-divider' + dishEntryIndex" class="dishes-divider"></v-divider>
         </template>
       </template>
 
       <template v-if="canAddNewEntry()">
         <v-list-item>
-          <v-list-item-content class="index-element">
-            <div class="py-4">{{ orderEntry.dishEntries.length + 1 }}.</div>
-          </v-list-item-content>
-
           <v-list-item-content>
             <div v-if="isEntryCreating === false">
               <v-btn color="primary ml-4" @click="createEntry()">
-                Add entry &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>
+                Add entry<i class="fa fa-plus ml-2" aria-hidden="true"></i>
               </v-btn>
             </div>
             <div v-if="isEntryCreating === true">
@@ -76,10 +57,6 @@
         </v-list-item>
       </template>
     </v-list>
-
-    <span class="px-2 mb-2">
-        <b>Cost for user: <price :data-price="orderEntry.finalPrice"/></b>
-      </span>
   </div>
 </template>
 
@@ -144,7 +121,7 @@ export default class OrderEntriesCard extends Vue {
 }
 
 .dishes-divider {
-  margin-left: 54px;
-  max-width: calc(100% - 54px);
+  margin-left: 16px;
+  max-width: calc(100% - 16px);
 }
 </style>

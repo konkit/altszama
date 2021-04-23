@@ -1,13 +1,9 @@
 <template>
   <div>
     <v-list dense>
-      <div v-if="chosenSideDishes.length > 0">
-        <div v-for="(sideDish, sdIndex) in chosenSideDishes" :key="sdIndex">
-          <v-list-item>
-            <v-list-item-content class="index-element">
-              <div>{{ sdIndex + 1 }}.</div>
-            </v-list-item-content>
-
+      <template v-if="chosenSideDishes.length > 0">
+        <template v-for="(sideDish, sdIndex) in chosenSideDishes">
+          <v-list-item :key="sdIndex">
             <v-list-item-content>
               <v-layout>
                 <v-combobox
@@ -27,28 +23,25 @@
                 <MoneyInput
                     label="New side dish price"
                     :value="getPrice(sideDish)"
+                    class="money-input"
                     @input="changeNewSideDishPrice(sdIndex, $event)"
                 >
                 </MoneyInput>
 
-                <v-btn text icon @click="removeSideDish(sdIndex)">
+                <v-btn text icon @click="removeSideDish(sdIndex)" class="remove-button">
                   <span class="fa fa-remove"></span>
                 </v-btn>
               </v-layout>
             </v-list-item-content>
           </v-list-item>
-        </div>
-      </div>
+        </template>
+      </template>
 
       <v-list-item>
-        <v-list-item-content class="index-element new-sidedish-item">
-          {{ chosenSideDishes.length + 1 }}.
-        </v-list-item-content>
-
         <v-list-item-content>
           <div>
-            <v-btn text @click="addSideDishEntry()">
-              Add side dish &nbsp; <i class="fa fa-plus"></i>
+            <v-btn basic @click="addSideDishEntry()">
+              Add side dish<i class="fa fa-plus ml-2"></i>
             </v-btn>
           </div>
         </v-list-item-content>
@@ -149,31 +142,6 @@ export default class SideDishesInput extends Vue {
     this.$forceUpdate();
   }
 
-  // updateSideDishComboBox(sdIndex: number, sideDishId: string) {
-  //   const newSideDish = this.availableSideDishes.find(sd => sd.id === sideDishId);
-  //
-  //   const newSideDishes: SideDishData[] = [
-  //     ...this.chosenSideDishes.slice(0, sdIndex),
-  //     ...(newSideDish ? [newSideDish] : []),
-  //     ...this.chosenSideDishes.slice(sdIndex + 1)
-  //   ]
-  //   this.updateSideDishes(newSideDishes);
-  //
-  //   this.$forceUpdate();
-  // }
-
-  // onSideDishTypeToggle(sdIndex: number, e: boolean) {
-  //   console.log("onSideDishTypeToggle: ", e);
-  //
-  //   if (e === true) {
-  //     this.setAsNewSideDish(sdIndex);
-  //   } else if (e === false) {
-  //     this.setAsExistingSideDish(sdIndex);
-  //   } else {
-  //     console.warn("Side dish type toggle returned wrong value");
-  //   }
-  // }
-
   get sideDishesItems() {
     if (this.availableSideDishes) {
       return this.availableSideDishes.map(entry => SideDishesInput.toComboBoxItem(entry));
@@ -228,7 +196,12 @@ export default class SideDishesInput extends Vue {
   padding-top: 16px;
 }
 
-.index-element.new-sidedish-item {
-  padding-top: 18px;
+.remove-button {
+  margin-top: 16px;
+}
+
+.money-input {
+  width: 10rem;
+  flex-grow: 0;
 }
 </style>

@@ -1,5 +1,7 @@
 <template>
   <div>
+    <v-subheader>Dish:</v-subheader>
+
     <div class="d-flex fix-top-margin">
       <v-combobox
           placeholder="New dish name"
@@ -28,7 +30,11 @@
                        @change="updateChosenSideDishes($event)">
     </side-dishes-input>
 
-    <v-text-field label="Additional Comments" :value="orderEntryData.additionalComments"
+    <v-subheader>Additional comments:</v-subheader>
+
+    <v-text-field label="Additional Comments"
+                  :value="orderEntryData.additionalComments"
+                  class="fix-top-margin"
                   @input="updateAdditionalComments($event)">
     </v-text-field>
   </div>
@@ -212,7 +218,8 @@ export default class OrderEntryForm extends Vue {
 
 <style>
 .money-input {
-  width: 5rem;
+  width: 10rem;
+  flex-grow: 0;
 }
 
 .fix-top-margin {
