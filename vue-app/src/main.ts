@@ -12,8 +12,8 @@ import Vuex from "vuex";
 import "font-awesome/css/font-awesome.css";
 import "./assets/main-styles.css";
 import "./assets/global-styles.css";
-import Raven from "raven-js";
-import RavenVue from "raven-js/plugins/vue";
+import * as Sentry from "@sentry/vue";
+import { Integrations } from "@sentry/tracing";
 import {initConfig} from "@/lib/config";
 
 initConfig().then(config => {
@@ -27,19 +27,16 @@ initConfig().then(config => {
     });
 
     if (config.sentryUrl) {
-        Raven.config(config.sentryUrl)
-            .addPlugin(RavenVue, Vue)
-            .install();
+        Sentry.init({
+            Vue,
+            dsn: config.sentryUrl,
+            integrations: [new Integrations.BrowserTracing()],
 
-        Vue.config.errorHandler = function (err, vm, info) {
-            console.error(err, vm, info);
-            const options = {
-                extra: {
-                    state: JSON.stringify(store.state)
-                }
-            };
-            Raven.captureException(err, options);
-        };
+            // Set tracesSampleRate to 1.0 to capture 100%
+            // of transactions for performance monitoring.
+            // We recommend adjusting this value in production
+            tracesSampleRate: 1.0,
+        });
     }
 
 
