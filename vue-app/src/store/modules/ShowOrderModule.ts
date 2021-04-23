@@ -5,8 +5,6 @@ import {DishDto, ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse, SideDi
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 
 
-const ordersConnector = new OrdersApiConnector()
-
 export interface ShowOrderState {
   order: ShowOrderDto;
   orderEntries: ParticipantsOrderEntry[];
@@ -70,6 +68,8 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
 
   actions: {
     fetchOrderDataAction({ state, rootState }, orderId) {
+      const ordersConnector = new OrdersApiConnector()
+
       ordersConnector
         .fetchOrder(orderId)
         .then(showOrderData => {

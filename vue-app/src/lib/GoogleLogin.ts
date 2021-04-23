@@ -1,4 +1,4 @@
-import {GOOGLE_CLIENT_ID} from "@/lib/config";
+import {getConfig} from "@/lib/config";
 
 const gapiUrl = "https://apis.google.com/js/api:client.js";
 
@@ -22,7 +22,7 @@ function installClient() {
 
 function initClient() {
   const googleConfig = {
-    "client_id": GOOGLE_CLIENT_ID
+    "client_id": getConfig().googleClientId
   };
 
   return new Promise((resolve, reject) => {

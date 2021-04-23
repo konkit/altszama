@@ -8,7 +8,8 @@ import {
   IndexResponse,
   RestaurantControllerApi,
   RestaurantSaveRequest,
-  RestaurantUpdateRequest, ShowRestaurantResponse
+  RestaurantUpdateRequest,
+  ShowRestaurantResponse
 } from "@/frontend-client/api";
 import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
 

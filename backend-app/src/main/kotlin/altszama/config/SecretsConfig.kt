@@ -37,4 +37,7 @@ open class SecretsConfig {
     @Value("#{environment.ORIGIN_URL}")
     lateinit var backendUrl: String
 
+    @Value("#{environment.SENTRY_URL}")
+    lateinit var sentryUrl: String
+
 }

@@ -1,5 +1,5 @@
 import {Configuration} from "@/frontend-client";
-import {CURRENT_DOMAIN} from "@/lib/config";
+import {getConfig} from "@/lib/config";
 import store from "@/store";
 
 
@@ -7,7 +7,7 @@ export abstract class AbstractApiConnector {
 
   createConfiguration() {
     return new Configuration({
-      basePath: CURRENT_DOMAIN,
+      basePath: getConfig().currentDomain,
     });
   }
 

@@ -28,7 +28,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
 import GoogleLoginButton from "@/views/login/GoogleLoginButton.vue";
-import {CURRENT_DOMAIN} from "@/lib/config";
+import {getConfig} from "@/lib/config";
 
 interface UserEntry {
   username: string;
@@ -62,7 +62,7 @@ export default class TestLoginView extends Vue {
   }
 
   private getTestUsers() {
-    fetch(`${CURRENT_DOMAIN}/api/auth/testUser/list`, {method: 'GET'})
+    fetch(`${getConfig().currentDomain}/api/auth/testUser/list`, {method: 'GET'})
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -79,7 +79,7 @@ export default class TestLoginView extends Vue {
   }
 
   private doLogin(payload: { email: string; username: string }) {
-    fetch(`${CURRENT_DOMAIN}/api/auth/testUser/login`, {
+    fetch(`${getConfig().currentDomain}/api/auth/testUser/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

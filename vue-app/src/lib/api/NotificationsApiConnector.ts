@@ -1,7 +1,7 @@
 import store from "@/store";
-import {VAPID_PUBLIC_KEY} from "@/lib/config";
 import {NotificationControllerApi, PushNotifSubscriptionData} from "@/frontend-client";
 import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
+import {getConfig} from "@/lib/config";
 
 
 export default class NotificationsApiConnector extends AbstractApiConnector {
@@ -60,7 +60,7 @@ export default class NotificationsApiConnector extends AbstractApiConnector {
     return navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
       const subscribePayload = {
         userVisibleOnly: true,
-        applicationServerKey: VAPID_PUBLIC_KEY
+        applicationServerKey: getConfig().vapidPublicKey
       };
 
       console.log("Subscribe payload: ", subscribePayload);

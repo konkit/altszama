@@ -49,7 +49,8 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 "/api/swagger-ui/**",
                 "/api/swagger-ui.html",
                 "/api/swagger/**",
-                "/api/e2e/**"
+                "/api/e2e/**",
+                "/api/frontendConfig"
         )
 
         httpSecurity

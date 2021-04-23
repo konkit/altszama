@@ -1,9 +1,32 @@
-declare global {
-  interface Window { _env?: any }
+interface FrontendConfig {
+  currentDomain: string;
+  vapidPublicKey: string;
+  googleClientId: string;
+  sentryUrl: string;
 }
 
-export const CURRENT_DOMAIN = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "");
+let config: FrontendConfig;
 
-export const VAPID_PUBLIC_KEY = window._env?.VUE_APP_VAPID_PUBLIC_KEY || process.env.VUE_APP_VAPID_PUBLIC_KEY;
-export const GOOGLE_CLIENT_ID = window._env?.VUE_APP_GOOGLE_CLIENT_ID || process.env.VUE_APP_GOOGLE_CLIENT_ID;
-export const SENTRY_URL = window._env?.VUE_APP_SENTRY_URL || process.env.VUE_APP_SENTRY_URL;
+export function initConfig(): Promise<FrontendConfig> {
+  return new Promise(resolve => {
+    const CURRENT_DOMAIN = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "");
+    const CONFIG_URL = CURRENT_DOMAIN + "/api/frontendConfig";
+
+    fetch(CONFIG_URL)
+        .then(response => response.json())
+        .then(response => {
+          config = {
+            currentDomain: CURRENT_DOMAIN,
+            googleClientId: response.googleClientId,
+            vapidPublicKey: response.vapidPublicKey,
+            sentryUrl: response.sentryUrl,
+          };
+
+          resolve(config)
+        })
+  });
+}
+
+export function getConfig(): FrontendConfig {
+  return config;
+}
