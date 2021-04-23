@@ -2,9 +2,9 @@ fs = require('fs');
 
 contents = `
 window._env = {}
-window._env.GOOGLE_CLIENT_ID="${process.env.GOOGLE_CLIENT_ID}"
-window._env.VAPID_PUBLIC_KEY="${process.env.VAPID_PUBLIC_KEY}"
-window._env.SENTRY_URL="${process.env.SENTRY_URL}"
+window._env.VUE_APP_GOOGLE_CLIENT_ID="${process.env.VUE_APP_GOOGLE_CLIENT_ID}"
+window._env.VUE_APP_VAPID_PUBLIC_KEY="${process.env.VUE_APP_VAPID_PUBLIC_KEY}"
+window._env.VUE_APP_SENTRY_URL="${process.env.VUE_APP_SENTRY_URL}"
 `
 
 fs.writeFile('dist/env.js', contents, function (err) {
