@@ -23,6 +23,7 @@ services:
       VAPID_PUBLIC_KEY: $VAPID_PUBLIC_KEY
       VAPID_PRIVATE_KEY: $VAPID_PRIVATE_KEY
       VAPID_SUBJECT: $VAPID_SUBJECT
+      ORIGIN_URL: $ORIGIN_URL
 
   frontend:
     depends_on:
@@ -31,7 +32,6 @@ services:
     restart: always
     env_file: .env
     environment:
-      VUE_APP_BACKEND_URL: $VUE_APP_BACKEND_URL
       VUE_APP_GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
       VUE_APP_SENTRY_URL: $VUE_APP_SENTRY_URL
       VUE_APP_VAPID_PUBLIC_KEY: $VAPID_PUBLIC_KEY
