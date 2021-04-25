@@ -1,4 +1,4 @@
-interface FrontendConfig {
+export interface FrontendConfig {
   currentDomain: string;
   vapidPublicKey: string;
   googleClientId: string;
@@ -8,12 +8,20 @@ interface FrontendConfig {
 let config: FrontendConfig;
 
 export function initConfig(): Promise<FrontendConfig> {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const CURRENT_DOMAIN = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "");
     const CONFIG_URL = CURRENT_DOMAIN + "/api/frontendConfig";
 
     fetch(CONFIG_URL)
-        .then(response => response.json())
+        .then(response => {
+            console.log("Response: ", response);
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.log("Unknown error occured", response);
+                throw new Error('Unknown error occured');
+            }
+        }, err => reject(err))
         .then(response => {
           config = {
             currentDomain: CURRENT_DOMAIN,
@@ -23,7 +31,7 @@ export function initConfig(): Promise<FrontendConfig> {
           };
 
           resolve(config)
-        })
+        }, err => reject(err))
   });
 }
 

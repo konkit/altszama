@@ -66,9 +66,12 @@ export default new Vuex.Store({
     addError(state, error: any) {
       console.log("Error: ", error)
 
-      const pushError = (errorStr: string) => {
-        if (errorStr && errorStr.trim().length > 0) {
+      const pushError = (errorStr: any) => {
+        if (errorStr && typeof errorStr === "string" && errorStr.trim().length > 0) {
           state.errors.push(errorStr)
+        } else {
+          console.log("Error: ", errorStr);
+          state.errors.push("An error occured. Please try again.")
         }
       }
 

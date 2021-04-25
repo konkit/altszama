@@ -14,9 +14,10 @@ import "./assets/main-styles.css";
 import "./assets/global-styles.css";
 import * as Sentry from "@sentry/vue";
 import { Integrations } from "@sentry/tracing";
-import {initConfig} from "@/lib/config";
+import {FrontendConfig, initConfig} from "@/lib/config";
 
-initConfig().then(config => {
+
+function setupApp(config: FrontendConfig) {
     Vue.use(VueNumeric);
     Vue.use(Vuex);
     router.beforeEach(function (to, from, next) {
@@ -66,4 +67,14 @@ initConfig().then(config => {
         components: {App: App}
     });
     //# sourceMappingURL=main.js.map
-});
+}
+
+function handleConfigFetchError(err: any) {
+    const serviceUnavailableElement = document.getElementById("service-unavailable")
+    if (serviceUnavailableElement) {
+        serviceUnavailableElement.style.display = "block";
+        setTimeout(() => window.location.reload(), 3000)
+    }
+}
+
+initConfig().then(config => setupApp(config), err => handleConfigFetchError(err));
