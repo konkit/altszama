@@ -26,6 +26,7 @@ services:
       JWT_SIGNING_KEY: $JWT_SIGNING_KEY
       ORIGIN_URL: $ORIGIN_URL
       SENTRY_URL: $SENTRY_URL
+      spring_profiles_active: $spring_profiles_active
 
   frontend:
     depends_on:
