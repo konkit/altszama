@@ -60,7 +60,7 @@ test('Create order with two users', async () => {
     await LoginView.loginAs(jamesBond.username)
 
     await CreateOrderView.goToOrder("Chinese spot")
-    await ShowOrderView.addEntry("Dish 2", "2,00")
+    await ShowOrderView.addCustomEntry("Custom Dish 1", "2,50")
 
     await LoginView.logout()
     await LoginView.loginAs(johnDoe.username)

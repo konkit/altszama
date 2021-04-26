@@ -21,4 +21,23 @@ export default class ShowOrderView {
         await t.click(Selector("button").withText("MARK AS DELIVERED"))
         await t.expect(Selector(".v-toolbar .v-toolbar__title").innerText).match(/^\[DELIVERED\].+/)
     }
+
+    static async addCustomEntry(dishName: string, dishPrice: string) {
+        await t.click(Selector("button").withText("ADD ENTRY"))
+
+        let newDishNameSelector = Selector("input#newDishName");
+        await t
+            .click(newDishNameSelector)
+            .typeText(newDishNameSelector, dishName)
+
+        let moneyInputSelector = Selector(".money-input");
+        await t
+            .click(moneyInputSelector)
+            .pressKey('ctrl+a delete')
+            .typeText(moneyInputSelector, dishPrice)
+
+        await t.click(Selector("button").withText("SUBMIT"))
+
+        await t.expect(Selector(".v-list-item").withText(dishName).withText(dishPrice).exists).ok()
+    }
 }
