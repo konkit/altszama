@@ -153,11 +153,11 @@ export default class ShowOrder extends Vue {
     this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.orderId);
   }
 
-  isOrdering() {
+  isOrdering(): boolean {
     return this.order.orderState === OrderStateEnum.ORDERING;
   }
 
-  isOrderOwner() {
+  isOrderOwner(): boolean {
     return this.order.orderCreatorId === this.currentUserId;
   }
 
@@ -182,33 +182,33 @@ export default class ShowOrder extends Vue {
     router.push({name: "OrderEditForm", params: {id: this.orderId}});
   }
 
-  canShowPlaceOrderButton() {
+  canShowPlaceOrderButton(): boolean {
     return this.isOrderOwner() && [OrderStateEnum.CREATED, OrderStateEnum.ORDERING].includes(this.orderState);
   }
 
-  canShowMarkAsDeliveredButton() {
+  canShowMarkAsDeliveredButton(): boolean {
     return this.isOrderOwner() && this.orderState === OrderStateEnum.ORDERED;
   }
 
-  isPlaceOrderButtonDisabled() {
+  isPlaceOrderButtonDisabled(): boolean {
     return this.orderEntries.length === 0;
   }
 
-  allEatingPeopleCount() {
-    this.orderEntries.flatMap(e => e.dishEntries).length;
+  allEatingPeopleCount(): number {
+    return this.orderEntries.flatMap(e => e.dishEntries).length;
   }
 
-  get numberOfCurrentUserEntries() {
+  get numberOfCurrentUserEntries(): number {
     return this.orderEntries.filter(e => e.userId === this.currentUserId)
         .length;
   }
 
-  get orderState() {
+  get orderState(): OrderStateEnum {
     const showOrder: ShowOrderState = this.$store.state.showOrder;
     return showOrder.order.orderState;
   }
 
-  get order() {
+  get order(): ShowOrderDto {
     const showOrder: ShowOrderState = this.$store.state.showOrder;
     return showOrder.order;
   }
@@ -233,25 +233,25 @@ export default class ShowOrder extends Vue {
     return showOrder.currentUserId;
   }
 
-  get totalOrderPrice() {
+  get totalOrderPrice(): number {
     const showOrder: ShowOrderState = this.$store.state.showOrder;
     return showOrder.totalOrderPrice;
   }
 
-  get baseOrderPrice() {
+  get baseOrderPrice(): number {
     const showOrder: ShowOrderState = this.$store.state.showOrder;
     return showOrder.baseOrderPrice;
   }
 
-  get isEntryCreating() {
+  get isEntryCreating(): boolean {
     return this.$store.state.modifyOrderEntry.isEntryCreating;
   }
 
-  get username() {
+  get username(): string {
     return this.$store.state.username;
   }
 
-  shouldDisplayNewOrderEntryCard() {
+  shouldDisplayNewOrderEntryCard(): boolean {
     return this.order.orderState == OrderStateEnum.CREATED && this.numberOfCurrentUserEntries === 0
   }
 }

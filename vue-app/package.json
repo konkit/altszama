@@ -10,8 +10,8 @@
     "generate-config-file": "node generateProdConfigFile.js"
   },
   "dependencies": {
-    "@sentry/tracing": "^6.3.1",
-    "@sentry/vue": "^6.3.1",
+    "@sentry/tracing": "^6.9.0",
+    "@sentry/vue": "^6.9.0",
     "core-js": "^3.6.5",
     "font-awesome": "^4.7.0",
     "moment": "^2.29.1",

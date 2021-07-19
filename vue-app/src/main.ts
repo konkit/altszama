@@ -32,6 +32,7 @@ function setupApp(config: FrontendConfig) {
             Vue,
             dsn: config.sentryUrl,
             integrations: [new Integrations.BrowserTracing()],
+            tunnel: "/api/sentry",
 
             // Set tracesSampleRate to 1.0 to capture 100%
             // of transactions for performance monitoring.

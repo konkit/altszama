@@ -17,9 +17,13 @@ export default class ErrorHandler {
 
       GoogleLogin.signOut(signOutCallback, signOutCallback);
     } else if (errorResponse.status === 500) {
+      console.error(errorResponse)
       store.commit("addError", {message: "Internal error occured, please try again or contact the administrator."})
-    } else {
+    } else if (typeof errorResponse.json === "function") {
       errorResponse.json().then((body: unknown) => store.commit("addError", body))
+    } else {
+      console.error(errorResponse)
+      store.commit("addError", {message: "Internal error occured, please try again or contact the administrator."})
     }
   }
 }
