@@ -1,17 +1,27 @@
 <template>
-  <v-list-item two-line :key="historyEntry.orderId" @click="goToOrder(historyEntry.orderId)">
+  <v-list-item two-line :key="historyEntry.orderId" @click="goToOrder(historyEntry.orderId)" :class="{paid: isPaid()}">
     <v-list-item-content>
       <v-list-item-title>
         <h3>({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}</h3>
       </v-list-item-title>
       <v-list-item-subtitle>
         Payments confirmed:
-        <price-element :dataPrice="historyEntry.confirmedPaymentsTotalAmount"/>
-        /
-        <price-element :dataPrice="historyEntry.totalAmount"/>
-        <span v-if="historyEntry.markedPaymentsCount">
-          {{ entriesPendingString(historyEntry) }}
-        </span>
+
+        <v-template v-if="!isPaid()">
+          <b>
+            <price-element :dataPrice="historyEntry.confirmedPaymentsTotalAmount"/>
+            /
+            <price-element :dataPrice="historyEntry.totalAmount"/>
+          </b>
+        </v-template>
+
+        <v-template v-if="isPaid()">
+          <price-element :dataPrice="historyEntry.confirmedPaymentsTotalAmount"/>
+          /
+          <price-element :dataPrice="historyEntry.totalAmount"/>
+        </v-template>
+
+
       </v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
@@ -23,8 +33,7 @@ import Navigation from "../../commons/Navigation.vue";
 import ViewWrapper from "../../commons/ViewWrapper.vue";
 import LoadingView from "../../commons/LoadingView.vue";
 import Vue from "vue";
-import BalanceApiConnector from "@/lib/api/BalanceApiConnector";
-import {OrderHistoryCreatedEntry, OrderHistoryEntry, OrderHistoryParticipatedEntry} from "@/frontend-client";
+import {OrderHistoryCreatedEntry} from "@/frontend-client";
 import PriceElement from "@/views/commons/PriceElement.vue";
 import {Prop} from "vue-property-decorator";
 
@@ -42,8 +51,17 @@ export default class CreatedEntryComponent extends Vue {
   goToOrder(orderId: string) {
     this.$router.push({name: "ShowOrder", params: {id: orderId}})
   }
+
+  isPaid() {
+    return this.historyEntry.confirmedPaymentsTotalAmount >= this.historyEntry.totalAmount
+  }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.v-list-item.paid .v-list-item__content {
+  .v-list-item__title, .v-list-item__subtitle {
+    color: rgba(0, 0, 0, 0.38) !important;
+  }
+}
 </style>

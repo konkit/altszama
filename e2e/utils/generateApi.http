@@ -1,0 +1,6 @@
+POST http://localhost:8080/api/e2e/generateEverything
+Content-Type: application/json
+
+{}
+
+###

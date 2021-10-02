@@ -17,11 +17,11 @@
                       <v-list-item-content>
                         <v-list-item-title>
                           <template v-if="owedAmount > 0">
-                            <p :key="i">You are owed <price-element :data-price="owedAmount"/> by {{owedUsername}}</p>
+                            <p :key="i">You are owed <b><price-element :data-price="owedAmount"/></b> by <b>{{owedUsername}}</b></p>
                           </template>
 
                           <template v-if="owedAmount < 0">
-                            <p :key="i">You owe <price-element :data-price="-owedAmount" /> to {{owedUsername}}</p>
+                            <p :key="i">You owe <b><price-element :data-price="-owedAmount" /></b> to <b>{{owedUsername}}</b></p>
                           </template>
                         </v-list-item-title>
                       </v-list-item-content>
