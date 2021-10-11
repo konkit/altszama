@@ -94,6 +94,7 @@ class OrderService {
     val updatedOrder = oldOrder.copy(
         orderDate = orderUpdateRequest.orderDate!!,
         timeOfOrder = orderUpdateRequest.timeOfOrder,
+        timeOfDelivery = orderUpdateRequest.timeOfDelivery,
         decreaseInPercent = orderUpdateRequest.deliveryData.decreaseInPercent,
         deliveryCostPerEverybody = orderUpdateRequest.deliveryData.deliveryCostPerEverybody,
         deliveryCostPerDish = orderUpdateRequest.deliveryData.deliveryCostPerDish,

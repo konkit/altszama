@@ -41,7 +41,15 @@ data class ShowOrderDto(
         @DateTimeFormat(pattern = "HH:mm")
         val timeOfOrder: LocalTime?,
 
+        @Schema(
+          type = "string",
+          pattern = "[0-9][0-9]:[0-9][0-9]",
+          example = "12:00"
+        )
+        @JsonFormat(pattern = "HH:mm")
+        @DateTimeFormat(pattern = "HH:mm")
         val timeOfDelivery: LocalTime?,
+
         val orderState: OrderState,
 
         val deliveryData: DeliveryData,
