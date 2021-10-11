@@ -14,11 +14,17 @@
           <v-col>
             <v-row>
               <v-col>
-                <h3>Order time</h3>
+                <h3>Order and delivery time</h3>
                 <TimePicker
                     :value="timeOfOrder"
                     @input="updateTimeOfOrder($event)"
                     label="Order time"
+                ></TimePicker>
+
+                <TimePicker
+                    :value="timeOfDelivery"
+                    @input="updateTimeOfDelivery($event)"
+                    label="Delivery time"
                 ></TimePicker>
               </v-col>
 
@@ -82,6 +88,7 @@ export default class OrderEditForm extends Vue {
   restaurantName = "";
   orderDate = "";
   timeOfOrder = "";
+  timeOfDelivery = "";
 
   priceModifiers: PriceModifierFieldsValue = {
     decreaseInPercent: 0,
@@ -108,6 +115,7 @@ export default class OrderEditForm extends Vue {
           this.restaurantName = response.order.restaurantName;
           this.orderDate = response.order.orderDate;
           this.timeOfOrder = response.order.timeOfOrder || "";
+          this.timeOfDelivery = response.order.timeOfDelivery || "";
 
           this.priceModifiers = {
             decreaseInPercent: response.order.deliveryData.decreaseInPercent,
@@ -136,6 +144,7 @@ export default class OrderEditForm extends Vue {
       orderId: this.orderId,
       orderDate: this.orderDate,
       timeOfOrder: this.timeOfOrder,
+      timeOfDelivery: this.timeOfDelivery,
       deliveryData: this.priceModifiers,
       paymentData: this.paymentData
     };
@@ -154,6 +163,10 @@ export default class OrderEditForm extends Vue {
 
   updateTimeOfOrder(newValue: string) {
     this.timeOfOrder = newValue;
+  }
+
+  updateTimeOfDelivery(newValue: string) {
+    this.timeOfDelivery = newValue;
   }
 
   cancelEdit() {

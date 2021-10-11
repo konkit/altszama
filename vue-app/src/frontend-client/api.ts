@@ -525,10 +525,10 @@ export interface EditOrderInitialDataOrderDto {
     timeOfOrder?: string;
     /**
      * 
-     * @type {LocalTime}
+     * @type {string}
      * @memberof EditOrderInitialDataOrderDto
      */
-    timeOfDelivery?: LocalTime;
+    timeOfDelivery?: string;
     /**
      * 
      * @type {string}
@@ -957,6 +957,12 @@ export interface OrderHistoryEntry {
      * @type {string}
      * @memberof OrderHistoryEntry
      */
+    orderId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
     orderCreator: string;
     /**
      * 
@@ -964,12 +970,6 @@ export interface OrderHistoryEntry {
      * @memberof OrderHistoryEntry
      */
     orderDate: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderHistoryEntry
-     */
-    orderId: string;
     /**
      * 
      * @type {string}
@@ -1072,6 +1072,12 @@ export interface OrderUpdateRequest {
      * @memberof OrderUpdateRequest
      */
     timeOfOrder?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderUpdateRequest
+     */
+    timeOfDelivery?: string;
     /**
      * 
      * @type {DeliveryData}

@@ -25,7 +25,11 @@ data class EditOrderInitialDataOrderDto(
         @DateTimeFormat(pattern = "HH:mm")
         val timeOfOrder: LocalTime?,
 
+        @Schema(type = "string", pattern = "[0-9][0-9]:[0-9][0-9]", example = "12:00")
+        @JsonFormat(pattern = "HH:mm")
+        @DateTimeFormat(pattern = "HH:mm")
         var timeOfDelivery: LocalTime?,
+
         var orderState: OrderState,
         var deliveryData: DeliveryData,
         var paymentData: PaymentData
