@@ -23,7 +23,7 @@ function setupApp(config: FrontendConfig) {
     router.beforeEach(function (to, from, next) {
         document.title = "Alt Szama";
         store.commit("setCurrentRouteName", to.name)
-        store.commit("setDisplayBackButton", to.meta.backButton)
+        store.commit("setDisplayBackButton", to.meta?.backButton ?? false)
         next();
     });
 
