@@ -5,7 +5,7 @@ const gapiUrl = "https://apis.google.com/js/api:client.js";
 const gapi = () => (window as any).gapi as any;
 
 function installClient() {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     const script = document.createElement("script") as any;
     script.src = gapiUrl;
     script.onreadystatechange = script.onload = () => {
@@ -25,7 +25,7 @@ function initClient() {
     "client_id": getConfig().googleClientId
   };
 
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     gapi().load("auth2", () => {
       gapi().auth2.init(googleConfig);
       resolve();
@@ -35,7 +35,7 @@ function initClient() {
 
 export default {
   load() {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (gapi() === undefined) {
         installClient()
           .then(() => initClient())

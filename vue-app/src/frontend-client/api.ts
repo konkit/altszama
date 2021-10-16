@@ -951,13 +951,13 @@ export interface OrderHistoryEntry {
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    kind: string;
+    orderId: string;
     /**
      * 
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    orderId: string;
+    kind: string;
     /**
      * 
      * @type {string}
@@ -1550,10 +1550,10 @@ export interface ShowOrderDto {
     timeOfOrder?: string;
     /**
      * 
-     * @type {LocalTime}
+     * @type {string}
      * @memberof ShowOrderDto
      */
-    timeOfDelivery?: LocalTime;
+    timeOfDelivery?: string;
     /**
      * 
      * @type {string}
