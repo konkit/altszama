@@ -18,19 +18,19 @@
 </template>
 
 <script>
-  import BaseAvatar from "@/views/landing/components/BaseAvatar";
+import BaseAvatar from '@/views/landing/components/BaseAvatar';
 
-  export default {
-    name: 'AvatarCard',
+export default {
+  name: 'AvatarCard',
 
-    props: {
-      icon: String,
-      title: String,
-      description: String,
-    },
+  props: {
+    icon: String,
+    title: String,
+    description: String,
+  },
 
-    components: {
-      BaseAvatar
-    }
-  }
+  components: {
+    BaseAvatar,
+  },
+};
 </script>

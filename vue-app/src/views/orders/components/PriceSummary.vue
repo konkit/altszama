@@ -69,22 +69,27 @@
 </template>
 
 <script lang="ts">
-import Price from "@/views/commons/PriceElement.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import Price from '@/views/commons/PriceElement.vue';
 
 @Component({
   components: {
-    Price
-  }
+    Price,
+  },
 })
 export default class PriceSummary extends Vue {
   @Prop() orderDecreaseInPercent!: number;
+
   @Prop() orderDeliveryCostPerEverybody!: number;
+
   @Prop() basePriceSum!: number;
+
   @Prop() orderDeliveryCostPerDish!: number;
+
   @Prop() allEatingPeopleCount!: number;
+
   @Prop() totalPrice!: number;
 }
 </script>

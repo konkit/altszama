@@ -102,52 +102,54 @@
 </template>
 
 <script lang="ts">
-import ErrorHandler from "@/lib/ErrorHandler";
-import LoadingView from "@/views/commons/LoadingView.vue";
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import router from "@/router/index";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-import {OrderEntryDto, TodayOrderDto} from "../../frontend-client";
-import NotificationsApiConnector from "@/lib/api/NotificationsApiConnector";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import ErrorHandler from '@/lib/ErrorHandler';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import router from '@/router/index';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
+import { OrderEntryDto, TodayOrderDto } from '../../frontend-client';
+import NotificationsApiConnector from '@/lib/api/NotificationsApiConnector';
 
 @Component({
   components: {
     ViewWrapper,
     LoadingView,
     ErrorsComponent,
-  }
+  },
 })
 export default class TodayOrders extends Vue {
   currentOrderEntries: OrderEntryDto[] = [];
+
   ordersList: TodayOrderDto[] = [];
 
   connector: OrdersApiConnector = new OrdersApiConnector();
+
   notificationsConnector: NotificationsApiConnector = new NotificationsApiConnector();
 
   mounted() {
     this.notificationsConnector.initializePushNotifications();
 
     this.connector
-        .fetchTodaysOrders()
-        .then(todayOrdersData => {
-          this.currentOrderEntries = todayOrdersData.currentOrderEntries;
-          this.ordersList = todayOrdersData.ordersList;
+      .fetchTodaysOrders()
+      .then((todayOrdersData) => {
+        this.currentOrderEntries = todayOrdersData.currentOrderEntries;
+        this.ordersList = todayOrdersData.ordersList;
 
-          this.$store.commit("setTitle", "Today orders")
-          this.$store.commit("setLoadingFalse");
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        this.$store.commit('setTitle', 'Today orders');
+        this.$store.commit('setLoadingFalse');
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   goToOrder(selectedOrderId: string) {
-    router.push({name: "ShowOrder", params: {id: selectedOrderId}});
+    router.push({ name: 'ShowOrder', params: { id: selectedOrderId } });
   }
 
   goToCreateOrder() {
-    router.push({name: "OrderCreateForm"});
+    router.push({ name: 'OrderCreateForm' });
   }
 }
 </script>

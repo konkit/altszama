@@ -48,36 +48,35 @@
 </template>
 
 <script lang="ts">
-import Price from "../../commons/PriceElement.vue";
-import Vue from "vue";
-import {Prop} from "vue-property-decorator";
-import Component from "vue-class-component";
-import {DishDto, RestaurantDto} from "../../../frontend-client";
-import moment from "moment";
-import DishesApiConnector from "@/lib/api/DishesApiConnector";
-
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import moment from 'moment';
+import { DishDto, RestaurantDto } from '../../../frontend-client';
+import Price from '../../commons/PriceElement.vue';
+import DishesApiConnector from '@/lib/api/DishesApiConnector';
 
 @Component({
   components: {
-    Price
-  }
+    Price,
+  },
 })
 export default class ShowRestaurantDishesTable extends Vue {
   @Prop() restaurant!: RestaurantDto;
+
   @Prop() dishesByCategory!: { [key: string]: Array<DishDto> };
 
   connector = new DishesApiConnector()
 
   deleteDish(dishId: string) {
-    this.$emit("delete-dish", dishId)
+    this.$emit('delete-dish', dishId);
   }
 
   dateToRel(date: Date) {
     if (date) {
       return moment(date).fromNow();
-    } else {
-      return "";
     }
+    return '';
   }
 }
 </script>

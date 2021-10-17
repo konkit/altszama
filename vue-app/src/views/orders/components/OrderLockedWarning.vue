@@ -24,12 +24,12 @@
 </template>
 
 <script lang="ts">
-import router from "../../../router/index";
-import {Prop} from "vue-property-decorator";
-import Component from "vue-class-component";
-import Vue from "vue";
-import ErrorHandler from "@/lib/ErrorHandler";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import router from '../../../router/index';
+import ErrorHandler from '@/lib/ErrorHandler';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
 
 @Component({})
 export default class OrderLockedWarning extends Vue {
@@ -38,17 +38,17 @@ export default class OrderLockedWarning extends Vue {
   ordersConnector = new OrdersApiConnector()
 
   placeOrder() {
-    router.push({name: "OrderView", params: {id: this.orderId}});
+    router.push({ name: 'OrderView', params: { id: this.orderId } });
   }
 
   unlockOrder() {
     this.ordersConnector
-        .setOrderAsCreated(this.orderId)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .setOrderAsCreated(this.orderId)
+      .then(() => {
+        this.$store.commit('setLoadingTrue');
+        this.$store.dispatch('showOrder/fetchOrderDataAction', this.$store.state.showOrder.order.id);
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 }
 </script>

@@ -53,16 +53,16 @@
 </template>
 
 <script lang="ts">
-import LoadingView from "@/views/commons/LoadingView.vue";
-import router from "../../router/index";
-import moment from "moment";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import Component from "vue-class-component";
-import Vue from "vue";
-import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import ErrorHandler from "@/lib/ErrorHandler";
-import {RestaurantInfo} from "@/frontend-client";
-import {getConfig} from "@/lib/config";
+import moment from 'moment';
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import router from '../../router/index';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import DishesApiConnector from '@/lib/api/DishesApiConnector';
+import ErrorHandler from '@/lib/ErrorHandler';
+import { RestaurantInfo } from '@/frontend-client';
+import { getConfig } from '@/lib/config';
 
 interface RestaurantEntry {
   id: string;
@@ -75,61 +75,59 @@ interface RestaurantEntry {
 @Component({
   components: {
     ViewWrapper,
-    LoadingView
-  }
+    LoadingView,
+  },
 })
 export default class RestaurantIndex extends Vue {
   headers = [
-    {text: "Restaurant name", align: "left"},
-    {text: "Dish count"},
-    {text: "Last auto-updated"},
-    {text: "Last updated manually"}
+    { text: 'Restaurant name', align: 'left' },
+    { text: 'Dish count' },
+    { text: 'Last auto-updated' },
+    { text: 'Last updated manually' },
   ];
 
   restaurants: RestaurantInfo[] = [];
+
   restaurantsEntries: RestaurantEntry[] = [];
 
-  importApiKey = ""
+  importApiKey = ''
 
   connector: DishesApiConnector = new DishesApiConnector();
 
   mounted() {
     this.connector
-        .getRestaurants()
-        .then(payload => {
-          this.restaurants = payload.restaurants;
-          this.restaurantsEntries = this.restaurants.map(r =>
-              this.mapToRestaurantEntry(r)
-          );
-          console.log("Payload: ", payload)
-          this.importApiKey = payload.importCredentials.apiKey
+      .getRestaurants()
+      .then((payload) => {
+        this.restaurants = payload.restaurants;
+        this.restaurantsEntries = this.restaurants.map((r) => this.mapToRestaurantEntry(r));
+        console.log('Payload: ', payload);
+        this.importApiKey = payload.importCredentials.apiKey;
 
-          this.$store.commit("setTitle", "Restaurants")
-          this.$store.commit("setLoadingFalse");
-        })
-        .catch(errResponse => {
-          ErrorHandler.handleError(errResponse)
-        });
+        this.$store.commit('setTitle', 'Restaurants');
+        this.$store.commit('setLoadingFalse');
+      })
+      .catch((errResponse) => {
+        ErrorHandler.handleError(errResponse);
+      });
   }
 
   getSwaggerUrl() {
-    return getConfig().currentDomain + "/api/swagger-ui/index.html?configUrl=/api/swagger/swagger-config"
+    return `${getConfig().currentDomain}/api/swagger-ui/index.html?configUrl=/api/swagger/swagger-config`;
   }
 
   goToRestaurant(restaurantId: string) {
-    router.push({name: "ShowRestaurant", params: {id: restaurantId}});
+    router.push({ name: 'ShowRestaurant', params: { id: restaurantId } });
   }
 
   goToCreateRestaurant() {
-    router.push({name: "CreateRestaurant"});
+    router.push({ name: 'CreateRestaurant' });
   }
 
   dateToRel(date: Date) {
     if (date) {
       return moment(date).fromNow();
-    } else {
-      return "";
     }
+    return '';
   }
 
   private mapToRestaurantEntry(restaurant: RestaurantInfo): RestaurantEntry {
@@ -138,7 +136,7 @@ export default class RestaurantIndex extends Vue {
       name: restaurant.name,
       dishCount: restaurant.dishCount,
       lastCrawled: restaurant.lastCrawled,
-      lastEdited: restaurant.lastEdited
+      lastEdited: restaurant.lastEdited,
     };
   }
 }

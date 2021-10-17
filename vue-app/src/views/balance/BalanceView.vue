@@ -58,16 +58,16 @@
 </template>
 
 <script lang="ts">
-import Component from "vue-class-component";
-import Navigation from "../commons/Navigation.vue";
-import ViewWrapper from "../commons/ViewWrapper.vue";
-import LoadingView from "../commons/LoadingView.vue";
-import Vue from "vue";
-import BalanceApiConnector from "@/lib/api/BalanceApiConnector";
-import {OrderHistoryCreatedEntry, OrderHistoryParticipatedEntry} from "@/frontend-client";
-import PriceElement from "@/views/commons/PriceElement.vue";
-import CreatedEntryComponent from "@/views/balance/components/CreatedEntryComponent.vue";
-import ParticipatedEntryComponent from "@/views/balance/components/ParticipatedEntryComponent.vue";
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import Navigation from '../commons/Navigation.vue';
+import ViewWrapper from '../commons/ViewWrapper.vue';
+import LoadingView from '../commons/LoadingView.vue';
+import BalanceApiConnector from '@/lib/api/BalanceApiConnector';
+import { OrderHistoryCreatedEntry, OrderHistoryParticipatedEntry } from '@/frontend-client';
+import PriceElement from '@/views/commons/PriceElement.vue';
+import CreatedEntryComponent from '@/views/balance/components/CreatedEntryComponent.vue';
+import ParticipatedEntryComponent from '@/views/balance/components/ParticipatedEntryComponent.vue';
 
 @Component({
   components: {
@@ -76,28 +76,29 @@ import ParticipatedEntryComponent from "@/views/balance/components/ParticipatedE
     PriceElement,
     Navigation,
     ViewWrapper,
-    LoadingView
-  }
+    LoadingView,
+  },
 })
 export default class BalanceView extends Vue {
   connector: BalanceApiConnector = new BalanceApiConnector();
 
   orderHistoryEntries: (OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry)[] = []
+
   owedMoneyEntries: [string, number][] = []
 
   mounted() {
     this.connector.getBalanceForUser()
-        .then(response => {
-          this.orderHistoryEntries = response.entries
-          this.owedMoneyEntries = Object.entries(response.owedMoney)
+      .then((response) => {
+        this.orderHistoryEntries = response.entries;
+        this.owedMoneyEntries = Object.entries(response.owedMoney);
 
-          this.$store.commit("setTitle", "Your order history")
-          this.$store.commit("setLoadingFalse");
-        })
+        this.$store.commit('setTitle', 'Your order history');
+        this.$store.commit('setLoadingFalse');
+      });
   }
 
   goToOrder(orderId: string) {
-    console.log("Go to orderId", orderId)
+    console.log('Go to orderId', orderId);
   }
 }
 </script>

@@ -33,21 +33,20 @@
 </template>
 
 <script lang="ts">
-import Navigation from './views/commons/Navigation.vue'
-import Vue from "vue";
-import {Component} from "vue-property-decorator";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import Navigation from './views/commons/Navigation.vue';
 
 @Component({
   name: 'app',
   components: {
     Navigation,
-  }
+  },
 })
 export default class App extends Vue {
-
   mounted() {
-    const initialMasterDrawerOpened = !["xs", "sm", "md"].includes(this.$vuetify.breakpoint.name)
-    this.$store.commit("setMasterNavigationDrawerOpened", initialMasterDrawerOpened)
+    const initialMasterDrawerOpened = !['xs', 'sm', 'md'].includes(this.$vuetify.breakpoint.name);
+    this.$store.commit('setMasterNavigationDrawerOpened', initialMasterDrawerOpened);
   }
 
   shouldDisplayHamburger() {
@@ -59,7 +58,7 @@ export default class App extends Vue {
   }
 
   toggleMasterNavDrawerOpened() {
-    this.$store.commit("toggleMasterNavigationDrawerOpened");
+    this.$store.commit('toggleMasterNavigationDrawerOpened');
   }
 
   goBack() {
@@ -79,11 +78,11 @@ export default class App extends Vue {
   }
 
   get shouldDisplayToolbar() {
-    return this.$store.getters.shouldDisplayToolbar
+    return this.$store.getters.shouldDisplayToolbar;
   }
 
   get shouldDisplayLoginToolbar() {
-    return this.$store.getters.shouldDisplayLoginToolbar
+    return this.$store.getters.shouldDisplayLoginToolbar;
   }
 }
 </script>

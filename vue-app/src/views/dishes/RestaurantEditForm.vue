@@ -23,31 +23,35 @@
 </template>
 
 <script lang="ts">
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
 
-import LoadingView from "@/views/commons/LoadingView.vue";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import ErrorHandler from "@/lib/ErrorHandler";
-import router from "@/router/index";
+import LoadingView from '@/views/commons/LoadingView.vue';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import DishesApiConnector from '@/lib/api/DishesApiConnector';
+import ErrorHandler from '@/lib/ErrorHandler';
+import router from '@/router/index';
 
 @Component({
   components: {
     ViewWrapper,
     LoadingView,
-    ErrorsComponent
-  }
+    ErrorsComponent,
+  },
 })
 export default class RestaurantEditForm extends Vue {
-  restaurantId = "";
-  initialName = "";
+  restaurantId = '';
 
-  name = "";
-  url = "";
-  telephone = "";
-  address = "";
+  initialName = '';
+
+  name = '';
+
+  url = '';
+
+  telephone = '';
+
+  address = '';
 
   connector: DishesApiConnector = new DishesApiConnector();
 
@@ -55,19 +59,19 @@ export default class RestaurantEditForm extends Vue {
     this.restaurantId = this.$route.params.id;
 
     this.connector
-        .getRestaurantEditData(this.restaurantId)
-        .then(payload => {
-          this.name = payload.name;
-          this.url = payload.url;
-          this.telephone = payload.telephone;
-          this.address = payload.address;
-          this.$store.commit("setLoadingFalse");
+      .getRestaurantEditData(this.restaurantId)
+      .then((payload) => {
+        this.name = payload.name;
+        this.url = payload.url;
+        this.telephone = payload.telephone;
+        this.address = payload.address;
+        this.$store.commit('setLoadingFalse');
 
-          this.initialName = payload.name;
+        this.initialName = payload.name;
 
-          this.$store.commit("setTitle", `Edit restaurant ${this.initialName}`)
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        this.$store.commit('setTitle', `Edit restaurant ${this.initialName}`);
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   submitForm() {
@@ -76,12 +80,12 @@ export default class RestaurantEditForm extends Vue {
       name: this.name,
       url: this.url,
       telephone: this.telephone,
-      address: this.address
+      address: this.address,
     };
 
     this.connector.editRestaurant(this.restaurantId, restaurant)
-        .then(() => router.push({name: "ShowRestaurant", params: {id: this.restaurantId}}))
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .then(() => router.push({ name: 'ShowRestaurant', params: { id: this.restaurantId } }))
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
 
     return false;
   }

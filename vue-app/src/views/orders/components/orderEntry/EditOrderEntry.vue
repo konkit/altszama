@@ -27,97 +27,101 @@
 </template>
 
 <script lang="ts">
-import ErrorsComponent from "../../../commons/ErrorsComponent.vue";
-import Spinner from "../../../commons/Spinner.vue";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import ErrorsComponent from '../../../commons/ErrorsComponent.vue';
+import Spinner from '../../../commons/Spinner.vue';
 
-import OrderEntryForm from "./orderEntryForm/OrderEntryForm.vue";
-import {ExistingDishData, NewDishData, OrderEntryData} from "@/store/modules/ModifyOrderEntryModule";
-import Vue from "vue";
-import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
-import {DishDto, ParticipantsDishEntry, ParticipantsOrderEntry, SideDish} from "../../../../frontend-client";
-import {ShowOrderState} from "@/store/modules/ShowOrderModule";
-import ErrorHandler from "@/lib/ErrorHandler";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import OrderEntryForm from './orderEntryForm/OrderEntryForm.vue';
+import { ExistingDishData, NewDishData, OrderEntryData } from '@/store/modules/ModifyOrderEntryModule';
+import {
+  DishDto, ParticipantsDishEntry, ParticipantsOrderEntry, SideDish,
+} from '../../../../frontend-client';
+import { ShowOrderState } from '@/store/modules/ShowOrderModule';
+import ErrorHandler from '@/lib/ErrorHandler';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
 
 @Component({
   components: {
     ErrorsComponent,
     Spinner,
-    OrderEntryForm
-  }
+    OrderEntryForm,
+  },
 })
 export default class EditOrderEntry extends Vue {
   @Prop() index!: number;
+
   @Prop() orderEntry!: ParticipantsOrderEntry;
+
   @Prop() dishEntry!: ParticipantsDishEntry;
 
   ordersConnector = new OrdersApiConnector()
 
   created() {
-    this.$store.commit("modifyOrderEntry/setEntryLoading", true)
+    this.$store.commit('modifyOrderEntry/setEntryLoading', true);
   }
 
   mounted() {
-    this.$store.commit("clearErrors");
+    this.$store.commit('clearErrors');
 
     const showOrderState = this.$store.state.showOrder as ShowOrderState;
 
     const orderId = showOrderState.order.id;
 
-    this.$store.commit("modifyOrderEntry/setInitialEditedOrderEntry", {orderId: orderId, dishEntry: this.dishEntry});
-    this.$store.commit("modifyOrderEntry/setEntryLoading", false)
+    this.$store.commit('modifyOrderEntry/setInitialEditedOrderEntry', { orderId, dishEntry: this.dishEntry });
+    this.$store.commit('modifyOrderEntry/setEntryLoading', false);
   }
 
   submitForm() {
     // Set timeout is necessary to properly handle last-minute updates in form controls
-    setTimeout(() => this.updateOrderEntry(), 0)
+    setTimeout(() => this.updateOrderEntry(), 0);
   }
 
   private updateOrderEntry() {
-    const state = this.$store.state.modifyOrderEntry
+    const state = this.$store.state.modifyOrderEntry;
 
     const orderId = state.orderId;
 
-    let orderEntryToUpdate
+    let orderEntryToUpdate;
 
-    const dishData: (NewDishData | ExistingDishData) = state.orderEntryData.dishData
-    if (dishData.kind === "NewDishData") {
+    const dishData: (NewDishData | ExistingDishData) = state.orderEntryData.dishData;
+    if (dishData.kind === 'NewDishData') {
       orderEntryToUpdate = {
-        orderId: orderId,
-        dishId: "",
+        orderId,
+        dishId: '',
         dishEntryId: state.dishEntryId,
         additionalComments: state.orderEntryData.additionalComments,
         newDish: true,
         newDishName: dishData.newDishName,
         newDishPrice: dishData.newDishPrice,
-        chosenSideDishes: dishData.chosenSideDishes
+        chosenSideDishes: dishData.chosenSideDishes,
       };
     } else {
       orderEntryToUpdate = {
-        orderId: orderId,
+        orderId,
         dishId: dishData.dishId,
         dishEntryId: state.dishEntryId,
         additionalComments: state.orderEntryData.additionalComments,
         newDish: false,
-        newDishName: "",
+        newDishName: '',
         newDishPrice: 0,
-        chosenSideDishes: dishData.chosenSideDishes
+        chosenSideDishes: dishData.chosenSideDishes,
       };
     }
 
     this.ordersConnector
-        .updateOrderEntry(orderId, this.orderEntry.id, orderEntryToUpdate)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-          this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`, {});
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, orderId);
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .updateOrderEntry(orderId, this.orderEntry.id, orderEntryToUpdate)
+      .then(() => {
+        this.$store.commit('setLoadingTrue');
+        this.$store.commit('modifyOrderEntry/cancelDishEntryModification', {});
+        this.$store.dispatch('showOrder/fetchOrderDataAction', orderId);
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   cancelEdit() {
-    this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});
+    this.$store.commit('modifyOrderEntry/cancelDishEntryModification', {});
   }
 
   get loadingEntry() {
@@ -141,7 +145,7 @@ export default class EditOrderEntry extends Vue {
   }
 
   updateOrderEntryData(newOrderEntryData: OrderEntryData) {
-    this.$store.commit("modifyOrderEntry/updateOrderEntryData", newOrderEntryData)
+    this.$store.commit('modifyOrderEntry/updateOrderEntryData', newOrderEntryData);
   }
 }
 </script>

@@ -1,1 +1,1 @@
-declare module "vue-numeric";
+declare module 'vue-numeric';

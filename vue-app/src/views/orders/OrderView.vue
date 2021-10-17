@@ -122,18 +122,18 @@
 </template>
 
 <script lang="ts">
-import LoadingView from "@/views/commons/LoadingView.vue";
-import PriceSummary from "@/views/orders/components/PriceSummary.vue";
-import TimePicker from "@/views/commons/TimePicker.vue";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import UserOrders from "@/views/orders/components/orderView/UserOrders.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-import ErrorHandler from "@/lib/ErrorHandler";
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import {GroupedOrderEntry} from "@/frontend-client";
-import router from "@/router";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import PriceSummary from '@/views/orders/components/PriceSummary.vue';
+import TimePicker from '@/views/commons/TimePicker.vue';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import UserOrders from '@/views/orders/components/orderView/UserOrders.vue';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
+import ErrorHandler from '@/lib/ErrorHandler';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import { GroupedOrderEntry } from '@/frontend-client';
+import router from '@/router';
 
 @Component({
   components: {
@@ -142,23 +142,33 @@ import router from "@/router";
     TimePicker,
     PriceSummary,
     LoadingView,
-    ErrorsComponent
-  }
+    ErrorsComponent,
+  },
 })
 export default class OrderView extends Vue {
-  orderId = "";
+  orderId = '';
 
-  orderState = "";
+  orderState = '';
+
   orderDecreaseInPercent = 0;
+
   orderDeliveryCostPerEverybody = 0;
+
   orderDeliveryCostPerDish = 0;
-  restaurantName = "";
-  restaurantTelephone = "";
+
+  restaurantName = '';
+
+  restaurantTelephone = '';
+
   groupedEntries: GroupedOrderEntry[] = [];
+
   allEatingPeopleCount = 0;
+
   basePriceSum = 0;
+
   totalPrice = 0;
-  approxTimeOfDelivery = "12:00";
+
+  approxTimeOfDelivery = '12:00';
 
   connector: OrdersApiConnector = new OrdersApiConnector();
 
@@ -166,37 +176,34 @@ export default class OrderView extends Vue {
     this.orderId = this.$route.params.id;
 
     this.connector
-        .fetchOrderView(this.orderId)
-        .then(responseObj => {
-          this.orderState = responseObj.orderState.toString();
-          this.orderDecreaseInPercent =
-              responseObj.orderDeliveryData.decreaseInPercent;
-          this.orderDeliveryCostPerEverybody =
-              responseObj.orderDeliveryData.deliveryCostPerEverybody;
-          this.orderDeliveryCostPerDish =
-              responseObj.orderDeliveryData.deliveryCostPerDish;
-          this.restaurantName = responseObj.restaurantName;
-          this.restaurantTelephone = responseObj.restaurantTelephone;
-          this.groupedEntries = responseObj.groupedEntries;
-          this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
-          this.basePriceSum = responseObj.basePriceSum;
-          this.totalPrice = responseObj.totalPrice;
+      .fetchOrderView(this.orderId)
+      .then((responseObj) => {
+        this.orderState = responseObj.orderState.toString();
+        this.orderDecreaseInPercent = responseObj.orderDeliveryData.decreaseInPercent;
+        this.orderDeliveryCostPerEverybody = responseObj.orderDeliveryData.deliveryCostPerEverybody;
+        this.orderDeliveryCostPerDish = responseObj.orderDeliveryData.deliveryCostPerDish;
+        this.restaurantName = responseObj.restaurantName;
+        this.restaurantTelephone = responseObj.restaurantTelephone;
+        this.groupedEntries = responseObj.groupedEntries;
+        this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
+        this.basePriceSum = responseObj.basePriceSum;
+        this.totalPrice = responseObj.totalPrice;
 
-          this.$store.commit("setLoadingFalse");
-          this.$store.commit("setTitle", `Ordering from ${this.restaurantName}`)
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        this.$store.commit('setLoadingFalse');
+        this.$store.commit('setTitle', `Ordering from ${this.restaurantName}`);
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   submitForm() {
-    this.$store.commit("setLoadingTrue");
-    const formData = {approxTimeOfDelivery: this.approxTimeOfDelivery.toString()};
+    this.$store.commit('setLoadingTrue');
+    const formData = { approxTimeOfDelivery: this.approxTimeOfDelivery.toString() };
     this.connector?.makeAnOrder(this.orderId, formData)
-        .then(() => router.back())
-        .catch(errResponse => {
-          this.$store.commit("setLoadingFalse");
-          ErrorHandler.handleError(errResponse)
-        });
+      .then(() => router.back())
+      .catch((errResponse) => {
+        this.$store.commit('setLoadingFalse');
+        ErrorHandler.handleError(errResponse);
+      });
 
     return false;
   }
@@ -207,20 +214,20 @@ export default class OrderView extends Vue {
 
   unlockOrder() {
     this.connector
-        .setOrderAsCreated(this.orderId)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-        })
-        .then(() => this.$router.back())
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .setOrderAsCreated(this.orderId)
+      .then(() => {
+        this.$store.commit('setLoadingTrue');
+      })
+      .then(() => this.$router.back())
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   get isStateOrdering() {
-    return this.orderState === "ORDERING";
+    return this.orderState === 'ORDERING';
   }
 
   get isStateNotOrdering() {
-    return this.orderState !== "ORDERING";
+    return this.orderState !== 'ORDERING';
   }
 }
 </script>

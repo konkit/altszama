@@ -50,25 +50,28 @@
 </template>
 
 <script lang="ts">
-import Price from "../../../commons/PriceElement.vue";
-import {ShowOrderState} from "@/store/modules/ShowOrderModule";
-import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
-import Vue from "vue";
-import {ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto} from "../../../../frontend-client";
-import ErrorHandler from "@/lib/ErrorHandler";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import Vue from 'vue';
+import { ShowOrderState } from '@/store/modules/ShowOrderModule';
+import Price from '../../../commons/PriceElement.vue';
+import { ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto } from '../../../../frontend-client';
+import ErrorHandler from '@/lib/ErrorHandler';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
   components: {
-    Price
-  }
+    Price,
+  },
 })
 export default class ShowOrderEntry extends Vue {
   @Prop() index!: number;
+
   @Prop() orderEntry!: ParticipantsOrderEntry;
+
   @Prop() dishEntry!: ParticipantsDishEntry;
+
   @Prop() currentUserId!: string;
 
   ordersConnector = new OrdersApiConnector()
@@ -79,7 +82,7 @@ export default class ShowOrderEntry extends Vue {
   }
 
   canEditOrderEntry() {
-    return this.isOrderOwner() || (this.isOrderEntryOwner() && this.order.orderState === OrderStateEnum.CREATED)
+    return this.isOrderOwner() || (this.isOrderEntryOwner() && this.order.orderState === OrderStateEnum.CREATED);
   }
 
   isOrderOwner() {
@@ -92,22 +95,22 @@ export default class ShowOrderEntry extends Vue {
 
   editDishEntry() {
     this.$store.commit(
-        `modifyOrderEntry/setDishEntryEditing`,
-        {
-          orderEntryId: this.orderEntry.id,
-          dishEntryId: this.dishEntry.id
-        }
+      'modifyOrderEntry/setDishEntryEditing',
+      {
+        orderEntryId: this.orderEntry.id,
+        dishEntryId: this.dishEntry.id,
+      },
     );
   }
 
   deleteDishEntry() {
     this.ordersConnector
-        .deleteDishEntry(this.orderEntry.id, this.dishEntry.id)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .deleteDishEntry(this.orderEntry.id, this.dishEntry.id)
+      .then(() => {
+        this.$store.commit('setLoadingTrue');
+        this.$store.dispatch('showOrder/fetchOrderDataAction', this.$store.state.showOrder.order.id);
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 }
 </script>

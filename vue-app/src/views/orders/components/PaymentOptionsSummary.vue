@@ -67,16 +67,16 @@
 </template>
 
 <script lang="ts">
-import BankTransferQRCode from "@/views/orders/components/orderEntry/BankTransferQRCode.vue";
-import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
-import {PaymentData} from "@/frontend-client";
-import Vue from "vue";
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import Vue from 'vue';
+import { PaymentData } from '@/frontend-client';
+import BankTransferQRCode from '@/views/orders/components/orderEntry/BankTransferQRCode.vue';
 
 @Component({
   components: {
-    BankTransferQRCode
-  }
+    BankTransferQRCode,
+  },
 })
 export default class PaymentOptionsSummary extends Vue {
   @Prop() paymentData!: PaymentData;
@@ -86,10 +86,10 @@ export default class PaymentOptionsSummary extends Vue {
       const input = unformattedInput.trim();
 
       if (input.length === 26) {
-        let result = input.slice(0, 2) + " ";
+        let result = `${input.slice(0, 2)} `;
 
         for (let i = 2; i < input.length; i += 4) {
-          result += input.slice(i, i + 4) + " ";
+          result += `${input.slice(i, i + 4)} `;
         }
 
         return result;
@@ -106,7 +106,7 @@ export default class PaymentOptionsSummary extends Vue {
       if (input.length >= 9) {
         return `${input.slice(0, input.length - 6)} ${input.slice(
           input.length - 6,
-          input.length - 3
+          input.length - 3,
         )} ${input.slice(input.length - 3, input.length)}`;
       }
     }

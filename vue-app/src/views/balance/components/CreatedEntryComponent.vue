@@ -21,39 +21,38 @@
           <price-element :dataPrice="historyEntry.totalAmount"/>
         </v-template>
 
-
       </v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
 </template>
 
 <script lang="ts">
-import Component from "vue-class-component";
-import Navigation from "../../commons/Navigation.vue";
-import ViewWrapper from "../../commons/ViewWrapper.vue";
-import LoadingView from "../../commons/LoadingView.vue";
-import Vue from "vue";
-import {OrderHistoryCreatedEntry} from "@/frontend-client";
-import PriceElement from "@/views/commons/PriceElement.vue";
-import {Prop} from "vue-property-decorator";
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Navigation from '../../commons/Navigation.vue';
+import ViewWrapper from '../../commons/ViewWrapper.vue';
+import LoadingView from '../../commons/LoadingView.vue';
+import { OrderHistoryCreatedEntry } from '@/frontend-client';
+import PriceElement from '@/views/commons/PriceElement.vue';
 
 @Component({
   components: {
     PriceElement,
     Navigation,
     ViewWrapper,
-    LoadingView
-  }
+    LoadingView,
+  },
 })
 export default class CreatedEntryComponent extends Vue {
   @Prop() historyEntry: OrderHistoryCreatedEntry
 
   goToOrder(orderId: string) {
-    this.$router.push({name: "ShowOrder", params: {id: orderId}})
+    this.$router.push({ name: 'ShowOrder', params: { id: orderId } });
   }
 
   isPaid() {
-    return this.historyEntry.confirmedPaymentsTotalAmount >= this.historyEntry.totalAmount
+    return this.historyEntry.confirmedPaymentsTotalAmount >= this.historyEntry.totalAmount;
   }
 }
 </script>

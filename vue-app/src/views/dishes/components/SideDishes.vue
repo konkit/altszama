@@ -45,25 +45,28 @@
 </template>
 
 <script lang="ts">
-import Price from "../../commons/PriceElement.vue";
-import MoneyInput from "../../commons/MoneyInput.vue";
-import Vue from "vue";
-import { Prop } from "vue-property-decorator";
-import Component from "vue-class-component";
-import { SideDish } from "@/frontend-client";
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import MoneyInput from '../../commons/MoneyInput.vue';
+import Price from '../../commons/PriceElement.vue';
+import { SideDish } from '@/frontend-client';
 
 @Component({
   components: {
     MoneyInput,
-    Price
-  }
+    Price,
+  },
 })
 export default class SideDishes extends Vue {
   @Prop() initialSideDishes!: SideDish[];
 
   sideDishes: SideDish[] = [];
-  newSideDishName = "";
+
+  newSideDishName = '';
+
   newSideDishPrice = 0;
+
   sideDishFormVisible = false;
 
   mounted() {
@@ -73,7 +76,7 @@ export default class SideDishes extends Vue {
   addSideDish() {
     const newSideDish: SideDish = {
       name: this.newSideDishName,
-      price: this.newSideDishPrice
+      price: this.newSideDishPrice,
     };
 
     this.sideDishes.push(newSideDish);
@@ -81,7 +84,7 @@ export default class SideDishes extends Vue {
   }
 
   removeSideDish(sideDishId: string) {
-    this.sideDishes = this.sideDishes.filter(sd => sd.id !== sideDishId);
+    this.sideDishes = this.sideDishes.filter((sd) => sd.id !== sideDishId);
   }
 
   setSideDishFormVisible(isVisible: boolean) {

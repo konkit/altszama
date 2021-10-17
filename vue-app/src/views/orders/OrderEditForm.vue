@@ -54,20 +54,20 @@
 </template>
 
 <script lang="ts">
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import LoadingView from "@/views/commons/LoadingView.vue";
-import MoneyInput from "@/views/commons/MoneyInput.vue";
-import TimePicker from "@/views/commons/TimePicker.vue";
-import OrderStateButtons from "@/views/orders/components/OrderStateButtons.vue";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-import ErrorHandler from "@/lib/ErrorHandler";
-import {OrderUpdateRequest} from "@/frontend-client";
-import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
-import PaymentDataFields from "@/views/orders/components/orderCreateForm/PaymentDataFields.vue";
-import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import MoneyInput from '@/views/commons/MoneyInput.vue';
+import TimePicker from '@/views/commons/TimePicker.vue';
+import OrderStateButtons from '@/views/orders/components/OrderStateButtons.vue';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
+import ErrorHandler from '@/lib/ErrorHandler';
+import { OrderUpdateRequest } from '@/frontend-client';
+import PriceModifiersFields from '@/views/orders/components/orderCreateForm/PriceModifiersFields.vue';
+import PaymentDataFields from '@/views/orders/components/orderCreateForm/PaymentDataFields.vue';
+import { PaymentDataFieldsValue, PriceModifierFieldsValue } from '@/views/orders/components/orderCreateForm/model';
 
 @Component({
   components: {
@@ -78,30 +78,35 @@ import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/c
     LoadingView,
     ErrorsComponent,
     PriceModifiersFields,
-    PaymentDataFields
-  }
+    PaymentDataFields,
+  },
 })
 export default class OrderEditForm extends Vue {
   // Order
-  orderId = "";
-  restaurantId = "";
-  restaurantName = "";
-  orderDate = "";
-  timeOfOrder = "";
-  timeOfDelivery = "";
+  orderId = '';
+
+  restaurantId = '';
+
+  restaurantName = '';
+
+  orderDate = '';
+
+  timeOfOrder = '';
+
+  timeOfDelivery = '';
 
   priceModifiers: PriceModifierFieldsValue = {
     decreaseInPercent: 0,
     deliveryCostPerEverybody: 0,
-    deliveryCostPerDish: 0
+    deliveryCostPerDish: 0,
   }
 
   paymentData: PaymentDataFieldsValue = {
     paymentByCash: true,
     paymentByBankTransfer: false,
-    bankTransferNumber: "",
+    bankTransferNumber: '',
     paymentByBlik: false,
-    blikPhoneNumber: ""
+    blikPhoneNumber: '',
   }
 
   connector: OrdersApiConnector = new OrdersApiConnector();
@@ -110,31 +115,31 @@ export default class OrderEditForm extends Vue {
     this.orderId = this.$route.params.id;
 
     this.connector
-        .getOrderEditData(this.orderId)
-        .then(response => {
-          this.restaurantName = response.order.restaurantName;
-          this.orderDate = response.order.orderDate;
-          this.timeOfOrder = response.order.timeOfOrder || "";
-          this.timeOfDelivery = response.order.timeOfDelivery || "";
+      .getOrderEditData(this.orderId)
+      .then((response) => {
+        this.restaurantName = response.order.restaurantName;
+        this.orderDate = response.order.orderDate;
+        this.timeOfOrder = response.order.timeOfOrder || '';
+        this.timeOfDelivery = response.order.timeOfDelivery || '';
 
-          this.priceModifiers = {
-            decreaseInPercent: response.order.deliveryData.decreaseInPercent,
-            deliveryCostPerEverybody: response.order.deliveryData.deliveryCostPerEverybody,
-            deliveryCostPerDish: response.order.deliveryData.deliveryCostPerDish
-          }
+        this.priceModifiers = {
+          decreaseInPercent: response.order.deliveryData.decreaseInPercent,
+          deliveryCostPerEverybody: response.order.deliveryData.deliveryCostPerEverybody,
+          deliveryCostPerDish: response.order.deliveryData.deliveryCostPerDish,
+        };
 
-          this.paymentData = {
-            paymentByCash: response.order.paymentData.paymentByCash,
-            paymentByBankTransfer: response.order.paymentData.paymentByBankTransfer,
-            bankTransferNumber: response.order.paymentData.bankTransferNumber || "",
-            paymentByBlik:  response.order.paymentData.paymentByBlik,
-            blikPhoneNumber: response.order.paymentData.blikPhoneNumber || ""
-          }
+        this.paymentData = {
+          paymentByCash: response.order.paymentData.paymentByCash,
+          paymentByBankTransfer: response.order.paymentData.paymentByBankTransfer,
+          bankTransferNumber: response.order.paymentData.bankTransferNumber || '',
+          paymentByBlik: response.order.paymentData.paymentByBlik,
+          blikPhoneNumber: response.order.paymentData.blikPhoneNumber || '',
+        };
 
-          this.$store.commit("setTitle", `Edit order from ${response.order.restaurantName}`)
-          this.$store.commit("setLoadingFalse");
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        this.$store.commit('setTitle', `Edit order from ${response.order.restaurantName}`);
+        this.$store.commit('setLoadingFalse');
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   submitForm(e: Event) {
@@ -146,17 +151,17 @@ export default class OrderEditForm extends Vue {
       timeOfOrder: this.timeOfOrder,
       timeOfDelivery: this.timeOfDelivery,
       deliveryData: this.priceModifiers,
-      paymentData: this.paymentData
+      paymentData: this.paymentData,
     };
 
     this.connector.editOrder(order)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-          this.$store.commit(`modifyOrderEntry/cancelDishEntryModification`,{});
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.orderId);
-          this.$router.back();
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .then(() => {
+        this.$store.commit('setLoadingTrue');
+        this.$store.commit('modifyOrderEntry/cancelDishEntryModification', {});
+        this.$store.dispatch('showOrder/fetchOrderDataAction', this.orderId);
+        this.$router.back();
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
 
     return false;
   }
@@ -170,7 +175,7 @@ export default class OrderEditForm extends Vue {
   }
 
   cancelEdit() {
-    this.$store.commit("modifyOrderEntry/cancelDishEntryModification",{});
+    this.$store.commit('modifyOrderEntry/cancelDishEntryModification', {});
   }
 
   get loading() {

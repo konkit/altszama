@@ -27,11 +27,11 @@
 </template>
 
 <script lang="ts">
-import router from "../../../router";
-import Component from "vue-class-component";
-import Vue from "vue";
-import ErrorHandler from "@/lib/ErrorHandler";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import router from '../../../router';
+import ErrorHandler from '@/lib/ErrorHandler';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
 
 @Component({})
 export default class OrderStateButtons extends Vue {
@@ -48,76 +48,76 @@ export default class OrderStateButtons extends Vue {
   }
 
   setAsCreated() {
-    this.$store.commit("setLoadingTrue");
+    this.$store.commit('setLoadingTrue');
     this.ordersConnector
-        .setOrderAsCreated(this.orderId)
-        .then(() => {
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => {
-          this.$store.commit("setLoadingFalse");
-          ErrorHandler.handleError(errResponse)
-        });
+      .setOrderAsCreated(this.orderId)
+      .then(() => {
+        this.$store.dispatch('showOrder/fetchOrderDataAction', this.$store.state.showOrder.order.id);
+      })
+      .catch((errResponse) => {
+        this.$store.commit('setLoadingFalse');
+        ErrorHandler.handleError(errResponse);
+      });
   }
 
   setAsOrdered() {
-    this.$store.commit("setLoadingTrue");
+    this.$store.commit('setLoadingTrue');
     this.ordersConnector
-        .setOrderAsOrdered(this.orderId)
-        .then(() => {
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => {
-          this.$store.commit("setLoadingFalse");
-          ErrorHandler.handleError(errResponse)
-        });
+      .setOrderAsOrdered(this.orderId)
+      .then(() => {
+        this.$store.dispatch('showOrder/fetchOrderDataAction', this.$store.state.showOrder.order.id);
+      })
+      .catch((errResponse) => {
+        this.$store.commit('setLoadingFalse');
+        ErrorHandler.handleError(errResponse);
+      });
   }
 
   setAsDelivered() {
-    this.$store.commit("setLoadingTrue");
+    this.$store.commit('setLoadingTrue');
     this.ordersConnector
-        .setOrderAsDelivered(this.orderId)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => {
-          this.$store.commit("setLoadingFalse");
-          ErrorHandler.handleError(errResponse)
-        });
+      .setOrderAsDelivered(this.orderId)
+      .then(() => {
+        this.$store.commit('setLoadingTrue');
+        this.$store.dispatch('showOrder/fetchOrderDataAction', this.$store.state.showOrder.order.id);
+      })
+      .catch((errResponse) => {
+        this.$store.commit('setLoadingFalse');
+        ErrorHandler.handleError(errResponse);
+      });
   }
 
   setAsRejected() {
-    this.$store.commit("setLoadingTrue");
+    this.$store.commit('setLoadingTrue');
     this.ordersConnector
-        .setOrderAsRejected(this.orderId)
-        .then(() => {
-          this.$store.commit("setLoadingTrue");
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => {
-          this.$store.commit("setLoadingFalse");
-          ErrorHandler.handleError(errResponse)
-        });
+      .setOrderAsRejected(this.orderId)
+      .then(() => {
+        this.$store.commit('setLoadingTrue');
+        this.$store.dispatch('showOrder/fetchOrderDataAction', this.$store.state.showOrder.order.id);
+      })
+      .catch((errResponse) => {
+        this.$store.commit('setLoadingFalse');
+        ErrorHandler.handleError(errResponse);
+      });
   }
 
   deleteDishEntry() {
-    this.$store.commit("setLoadingTrue");
+    this.$store.commit('setLoadingTrue');
     this.ordersConnector
-        .deleteOrder(this.orderId)
-        .then(() => this.$router.push({name: "TodayOrders"}))
-        .catch(errResponse => {
-          this.$store.commit("setLoadingFalse");
-          ErrorHandler.handleError(errResponse)
-        });
+      .deleteOrder(this.orderId)
+      .then(() => this.$router.push({ name: 'TodayOrders' }))
+      .catch((errResponse) => {
+        this.$store.commit('setLoadingFalse');
+        ErrorHandler.handleError(errResponse);
+      });
   }
 
   placeOrder() {
-    router.push({name: "OrderView", params: {id: this.orderId}});
+    router.push({ name: 'OrderView', params: { id: this.orderId } });
   }
 
   edit() {
-    router.push({name: "OrderEditForm", params: {id: this.orderId}});
+    router.push({ name: 'OrderEditForm', params: { id: this.orderId } });
   }
 }
 </script>

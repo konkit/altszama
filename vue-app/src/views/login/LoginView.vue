@@ -31,20 +31,20 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import GoogleLoginButton from "@/views/login/GoogleLoginButton.vue";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import GoogleLoginButton from '@/views/login/GoogleLoginButton.vue';
 
 @Component({
   components: {
     ErrorsComponent,
-    GoogleLoginButton
-  }
+    GoogleLoginButton,
+  },
 })
 export default class LoginView extends Vue {
   get height() {
-    return "calc(100vh - 64px)"
+    return 'calc(100vh - 64px)';
   }
 }
 </script>

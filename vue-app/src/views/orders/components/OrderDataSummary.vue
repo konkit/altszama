@@ -39,10 +39,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Prop } from "vue-property-decorator";
-import Component from "vue-class-component";
-import { ShowOrderDto } from "../../../frontend-client";
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import { ShowOrderDto } from '../../../frontend-client';
 
 @Component({})
 export default class OrderDataSummary extends Vue {
@@ -51,9 +51,8 @@ export default class OrderDataSummary extends Vue {
   timeOfDeliveryOrNA() {
     if (this.order.timeOfDelivery != null) {
       return this.order.timeOfDelivery;
-    } else {
-      return "As ASAP as possible";
     }
+    return 'As ASAP as possible';
   }
 }
 </script>

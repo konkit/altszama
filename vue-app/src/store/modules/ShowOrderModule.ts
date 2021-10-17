@@ -1,9 +1,10 @@
-import ErrorHandler from "../../lib/ErrorHandler";
-import {Module} from "vuex";
-import {RootState} from "@/store";
-import {DishDto, ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse, SideDish} from "@/frontend-client";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-
+import { Module } from 'vuex';
+import ErrorHandler from '../../lib/ErrorHandler';
+import { RootState } from '@/store';
+import {
+  DishDto, ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse, SideDish,
+} from '@/frontend-client';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
 
 export interface ShowOrderState {
   order: ShowOrderDto;
@@ -18,34 +19,34 @@ export interface ShowOrderState {
 
 const showOrderState: ShowOrderState = {
   order: {
-    id: "",
-    restaurantId: "",
-    restaurantName: "",
-    restaurantUrl: "",
-    orderCreatorId: "",
-    orderCreatorUsername: "",
-    orderDate: "",
+    id: '',
+    restaurantId: '',
+    restaurantName: '',
+    restaurantUrl: '',
+    orderCreatorId: '',
+    orderCreatorUsername: '',
+    orderDate: '',
     orderState: ShowOrderDto.OrderStateEnum.CREATED,
     deliveryData: {
       decreaseInPercent: 0,
       deliveryCostPerDish: 0,
-      deliveryCostPerEverybody: 0
+      deliveryCostPerEverybody: 0,
     },
     paymentData: {
       paymentByCash: false,
       paymentByBankTransfer: false,
       paymentByBlik: false,
-      bankTransferNumber: "",
-      blikPhoneNumber: ""
-    }
+      bankTransferNumber: '',
+      blikPhoneNumber: '',
+    },
   },
   orderEntries: [],
-  currentUserId: "",
+  currentUserId: '',
   allDishesInRestaurant: [],
   allDishesByCategory: {},
   dishIdToSideDishesMap: {},
   totalOrderPrice: 0,
-  baseOrderPrice: 0
+  baseOrderPrice: 0,
 };
 
 export const showOrderModule: Module<ShowOrderState, RootState> = {
@@ -63,21 +64,21 @@ export const showOrderModule: Module<ShowOrderState, RootState> = {
       state.dishIdToSideDishesMap = payload.dishIdToSideDishesMap;
       state.totalOrderPrice = payload.totalOrderPrice;
       state.baseOrderPrice = payload.baseOrderPrice;
-    }
+    },
   },
 
   actions: {
     fetchOrderDataAction({ state, rootState }, orderId) {
-      const ordersConnector = new OrdersApiConnector()
+      const ordersConnector = new OrdersApiConnector();
 
       ordersConnector
         .fetchOrder(orderId)
-        .then(showOrderData => {
-          this.commit("showOrder/loadShowOrderData",showOrderData);
-          this.commit("setLoadingFalse");
-          this.commit("setTitle", `[${state.order.orderState}] Order from ${state.order.restaurantName} (${state.order.orderDate})`)
+        .then((showOrderData) => {
+          this.commit('showOrder/loadShowOrderData', showOrderData);
+          this.commit('setLoadingFalse');
+          this.commit('setTitle', `[${state.order.orderState}] Order from ${state.order.restaurantName} (${state.order.orderDate})`);
         })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        .catch((errResponse) => ErrorHandler.handleError(errResponse));
     },
-  }
+  },
 };

@@ -21,8 +21,8 @@
 
                 <v-stepper-items>
                   <v-stepper-content step="1">
-                    <select-restaurant-step 
-                      :restaurantId="restaurantId" 
+                    <select-restaurant-step
+                      :restaurantId="restaurantId"
                       :restaurantsList="restaurantsList"
                       @next="next()"
                       @back="back()"
@@ -68,28 +68,28 @@
 </template>
 
 <script lang="ts">
-import router from "@/router/index";
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import LoadingView from "@/views/commons/LoadingView.vue";
-import MoneyInput from "@/views/commons/MoneyInput.vue";
-import TimePicker from "@/views/commons/TimePicker.vue";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import ErrorHandler from "@/lib/ErrorHandler";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-import {OrderSaveRequest, RestaurantDto} from "@/frontend-client";
-import NoRestaurantsGuard from "@/views/orders/components/orderCreateForm/NoRestaurantsGuard.vue";
-import PriceModifiersFields from "@/views/orders/components/orderCreateForm/PriceModifiersFields.vue";
-import {PaymentDataFieldsValue, PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";
-import PaymentDataFields from "@/views/orders/components/orderCreateForm/PaymentDataFields.vue";
-import SelectRestaurantStep from "@/views/orders/components/orderCreateForm/SelectRestaurantStep.vue"
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import router from '@/router/index';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import MoneyInput from '@/views/commons/MoneyInput.vue';
+import TimePicker from '@/views/commons/TimePicker.vue';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import ErrorHandler from '@/lib/ErrorHandler';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
+import { OrderSaveRequest, RestaurantDto } from '@/frontend-client';
+import NoRestaurantsGuard from '@/views/orders/components/orderCreateForm/NoRestaurantsGuard.vue';
+import PriceModifiersFields from '@/views/orders/components/orderCreateForm/PriceModifiersFields.vue';
+import { PaymentDataFieldsValue, PriceModifierFieldsValue } from '@/views/orders/components/orderCreateForm/model';
+import PaymentDataFields from '@/views/orders/components/orderCreateForm/PaymentDataFields.vue';
+import SelectRestaurantStep from '@/views/orders/components/orderCreateForm/SelectRestaurantStep.vue';
 
 @Component({
   computed: {
     loading() {
       return this.$store.state.loading;
-    }
+    },
   },
   components: {
     PaymentDataFields,
@@ -100,8 +100,8 @@ import SelectRestaurantStep from "@/views/orders/components/orderCreateForm/Sele
     MoneyInput,
     LoadingView,
     ErrorsComponent,
-    SelectRestaurantStep
-  }
+    SelectRestaurantStep,
+  },
 })
 export default class OrderCreateForm extends Vue {
   restaurantsList: RestaurantDto[] = [];
@@ -109,74 +109,75 @@ export default class OrderCreateForm extends Vue {
   stepperState = 1
 
   // Order
-  restaurantId = "";
-  orderDate = "";
-  timeOfOrder = "";
+  restaurantId = '';
+
+  orderDate = '';
+
+  timeOfOrder = '';
 
   priceModifiers: PriceModifierFieldsValue = {
     decreaseInPercent: 0,
     deliveryCostPerEverybody: 0,
-    deliveryCostPerDish: 0
+    deliveryCostPerDish: 0,
   }
 
   paymentData: PaymentDataFieldsValue = {
     paymentByCash: true,
     paymentByBankTransfer: false,
-    bankTransferNumber: "",
+    bankTransferNumber: '',
     paymentByBlik: false,
-    blikPhoneNumber: ""
+    blikPhoneNumber: '',
   }
 
   connector: OrdersApiConnector = new OrdersApiConnector();
 
   created() {
-    this.$store.commit("setLoadingTrue");
+    this.$store.commit('setLoadingTrue');
   }
 
   mounted() {
     this.connector
-        .getOrderCreateData()
-        .then(response => {
-          const restaurantId =
-              (response.restaurantsList &&
-                  response.restaurantsList[0] &&
-                  response.restaurantsList[0].id) ||
-              "";
+      .getOrderCreateData()
+      .then((response) => {
+        const restaurantId = (response.restaurantsList
+                  && response.restaurantsList[0]
+                  && response.restaurantsList[0].id)
+              || '';
 
-          this.restaurantsList = response.restaurantsList;
+        this.restaurantsList = response.restaurantsList;
 
-          this.restaurantId = restaurantId;
-          this.orderDate = response.orderDate;
-          this.timeOfOrder = response.timeOfOrder;
+        this.restaurantId = restaurantId;
+        this.orderDate = response.orderDate;
+        this.timeOfOrder = response.timeOfOrder;
 
-          this.priceModifiers = {
-            decreaseInPercent: 0,
-            deliveryCostPerEverybody: 0,
-            deliveryCostPerDish: 0
-          }
+        this.priceModifiers = {
+          decreaseInPercent: 0,
+          deliveryCostPerEverybody: 0,
+          deliveryCostPerDish: 0,
+        };
 
-          this.paymentData = {
-            paymentByCash: true,
-            paymentByBankTransfer: false,
-            bankTransferNumber: "",
-            paymentByBlik: false,
-            blikPhoneNumber: ""
-          }
+        this.paymentData = {
+          paymentByCash: true,
+          paymentByBankTransfer: false,
+          bankTransferNumber: '',
+          paymentByBlik: false,
+          blikPhoneNumber: '',
+        };
 
-          if (response.bankTransferNumber) {
-            this.paymentData.paymentByBankTransfer = true;
-            this.paymentData.bankTransferNumber = response.bankTransferNumber;
-          }
+        if (response.bankTransferNumber) {
+          this.paymentData.paymentByBankTransfer = true;
+          this.paymentData.bankTransferNumber = response.bankTransferNumber;
+        }
 
-          if (response.blikPhoneNumber) {
-            this.paymentData.paymentByBlik = true;
-            this.paymentData.blikPhoneNumber = response.blikPhoneNumber;
-          }
+        if (response.blikPhoneNumber) {
+          this.paymentData.paymentByBlik = true;
+          this.paymentData.blikPhoneNumber = response.blikPhoneNumber;
+        }
 
-          this.$store.commit("setTitle", "Create new order")
-          this.$store.commit("setLoadingFalse");
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        this.$store.commit('setTitle', 'Create new order');
+        this.$store.commit('setLoadingFalse');
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   updateRestaurantId(newValue: string) {
@@ -195,18 +196,18 @@ export default class OrderCreateForm extends Vue {
       orderDate: this.orderDate,
       timeOfOrder: this.timeOfOrder,
       deliveryData: this.priceModifiers,
-      paymentData: this.paymentData
+      paymentData: this.paymentData,
     };
 
     this.connector.createOrder(order)
-        .then(() => router.push({name: "TodayOrders"}))
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .then(() => router.push({ name: 'TodayOrders' }))
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
 
     return false;
   }
 
   cancelEdit() {
-    this.$store.commit("modifyOrderEntry/cancelDishEntryModification",{});
+    this.$store.commit('modifyOrderEntry/cancelDishEntryModification', {});
   }
 
   get loading() {
@@ -214,17 +215,16 @@ export default class OrderCreateForm extends Vue {
   }
 
   next() {
-    this.stepperState = this.stepperState + 1
+    this.stepperState += 1;
   }
 
   back() {
     if (this.stepperState > 1) {
-      this.stepperState -= 1
+      this.stepperState -= 1;
     } else {
-      this.$router.back()
+      this.$router.back();
     }
   }
-
 }
 </script>
 

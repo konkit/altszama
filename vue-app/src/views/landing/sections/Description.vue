@@ -30,32 +30,32 @@
 </template>
 
 <script>
-import AvatarCard from "@/views/landing/components/AvatarCard";
+import AvatarCard from '@/views/landing/components/AvatarCard';
 
 export default {
   name: 'Description',
-  components: {AvatarCard},
+  components: { AvatarCard },
   data: () => ({
     features: [
       {
         title: '1. Create and share a new order sheet',
         icon: 'mdi-folder-plus',
-        description: "Decide where are we ordering from and create a new order. Share it with your collegaues just like you would share a Google Sheet, where everybody write their choice."
+        description: 'Decide where are we ordering from and create a new order. Share it with your collegaues just like you would share a Google Sheet, where everybody write their choice.',
       },
       {
         title: '2. Select your food, wait for others',
         icon: 'mdi-silverware',
-        description: "Everybody write their choice."
+        description: 'Everybody write their choice.',
       },
       {
         title: '3. Call the restaurant and make an order',
         icon: 'mdi-phone',
-        description: "A special view simplifies the order, the same dishes are grouped, so the order making is as fast and easy.",
+        description: 'A special view simplifies the order, the same dishes are grouped, so the order making is as fast and easy.',
       },
       {
         title: '4. Notify others when the order arrives',
         icon: 'mdi-bell',
-        description: "Web push notifications are used to let your colleagues know, that the food has arrived.",
+        description: 'Web push notifications are used to let your colleagues know, that the food has arrived.',
       },
       {
         title: '5. Payments',
@@ -65,7 +65,7 @@ export default {
       {
         title: '6. Repeat',
         icon: 'mdi-history',
-        description: "Another day, different restaurant?",
+        description: 'Another day, different restaurant?',
       },
     ],
   }),
@@ -73,15 +73,15 @@ export default {
   computed: {
     sectionStyles() {
       const space = this.$vuetify.breakpoint.mdAndUp
-          ? 96
-          : 96 / 2
+        ? 96
+        : 96 / 2;
 
       return {
         padding: `${space}px 0`,
-      }
+      };
     },
   },
-}
+};
 </script>
 
 <style lang="scss">

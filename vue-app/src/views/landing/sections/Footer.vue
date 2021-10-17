@@ -22,12 +22,12 @@
 </template>
 
 <script>
-  export default {
-    name: 'HomeFooter',
+export default {
+  name: 'HomeFooter',
 
-    data: () => ({
-    }),
-  }
+  data: () => ({
+  }),
+};
 </script>
 
 <style>

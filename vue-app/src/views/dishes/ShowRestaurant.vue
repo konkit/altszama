@@ -62,37 +62,39 @@
 </template>
 
 <script lang="ts">
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import ShowRestaurantDishesTable from "./components/ShowRestaurantDishesTable.vue";
-import LoadingView from "@/views/commons/LoadingView.vue";
-import router from "../../router/index";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import Component from "vue-class-component";
-import Vue from "vue";
-import moment from "moment";
-import ErrorHandler from "@/lib/ErrorHandler";
-import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import { DishDto, RestaurantDto } from "@/frontend-client";
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import moment from 'moment';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import ShowRestaurantDishesTable from './components/ShowRestaurantDishesTable.vue';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import router from '../../router/index';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import ErrorHandler from '@/lib/ErrorHandler';
+import DishesApiConnector from '@/lib/api/DishesApiConnector';
+import { DishDto, RestaurantDto } from '@/frontend-client';
 
 @Component({
   components: {
     ViewWrapper,
     LoadingView,
     ErrorsComponent,
-    ShowRestaurantDishesTable
-  }
+    ShowRestaurantDishesTable,
+  },
 })
 export default class ShowRestaurant extends Vue {
-  restaurantId = "";
+  restaurantId = '';
 
   restaurant: RestaurantDto = {
-    id: "",
-    name: "",
-    url: "",
-    telephone: "",
-    address: ""
+    id: '',
+    name: '',
+    url: '',
+    telephone: '',
+    address: '',
   }
+
   dishes: DishDto[] = []
+
   dishesByCategory: { [key: string]: DishDto[] } = {}
 
   connector = new DishesApiConnector()
@@ -101,57 +103,54 @@ export default class ShowRestaurant extends Vue {
     this.restaurantId = this.$route.params.id;
 
     this.connector
-        .getShowRestaurantData(this.restaurantId)
-        .then(response => {
-          this.restaurant = response.restaurant;
-          this.dishes = response.dishes;
-          this.dishesByCategory = response.dishesByCategory;
+      .getShowRestaurantData(this.restaurantId)
+      .then((response) => {
+        this.restaurant = response.restaurant;
+        this.dishes = response.dishes;
+        this.dishesByCategory = response.dishesByCategory;
 
-          this.$store.commit("setTitle", `Restaurant ${this.restaurant.name}`)
-          this.$store.commit("setLoadingFalse");
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        this.$store.commit('setTitle', `Restaurant ${this.restaurant.name}`);
+        this.$store.commit('setLoadingFalse');
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   goToCreateDish() {
-    router.push({name: "DishCreateForm", params: {id: this.restaurantId}})
+    router.push({ name: 'DishCreateForm', params: { id: this.restaurantId } });
   }
 
   editRestaurant() {
-    router.push({name: "RestaurantEditForm", params: {id: this.restaurantId}})
+    router.push({ name: 'RestaurantEditForm', params: { id: this.restaurantId } });
   }
 
   deleteRestaurant() {
     this.connector
-        .deleteRestaurant(this.restaurantId)
-        .then(() => this.$router.push({name: "RestaurantIndex"}))
-        .catch(errResponse => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
+      .deleteRestaurant(this.restaurantId)
+      .then(() => this.$router.push({ name: 'RestaurantIndex' }))
+      .catch((errResponse) => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
   }
 
   deleteDish(dishId: string) {
     this.connector
-        .deleteDish(this.restaurant.id, dishId)
-        .then(() => {
-          return this.connector
-              .getShowRestaurantData(this.restaurantId)
-              .then(response => {
-                this.restaurant = response.restaurant;
-                this.dishes = response.dishes;
-                this.dishesByCategory = response.dishesByCategory;
+      .deleteDish(this.restaurant.id, dishId)
+      .then(() => this.connector
+        .getShowRestaurantData(this.restaurantId)
+        .then((response) => {
+          this.restaurant = response.restaurant;
+          this.dishes = response.dishes;
+          this.dishesByCategory = response.dishesByCategory;
 
-                this.$store.commit("setTitle", `Restaurant ${this.restaurant.name}`)
-                this.$store.commit("setLoadingFalse");
-              })
-        })
-        .catch(errResponse => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
+          this.$store.commit('setTitle', `Restaurant ${this.restaurant.name}`);
+          this.$store.commit('setLoadingFalse');
+        }))
+      .catch((errResponse) => errResponse.text().then((errorMessage: string) => ErrorHandler.handleError(errorMessage)));
   }
 
   dateToRel(date: Date) {
     if (date) {
       return moment(date).fromNow();
-    } else {
-      return "";
     }
+    return '';
   }
 }
 </script>

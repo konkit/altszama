@@ -21,32 +21,35 @@
 </template>
 
 <script lang="ts">
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import Vue from "vue";
-import {Prop} from "vue-property-decorator";
-import Component from "vue-class-component";
-import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import ErrorHandler from "@/lib/ErrorHandler";
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import DishesApiConnector from '@/lib/api/DishesApiConnector';
+import ErrorHandler from '@/lib/ErrorHandler';
 
 @Component({
   components: {
     ViewWrapper,
-    ErrorsComponent
-  }
+    ErrorsComponent,
+  },
 })
 export default class RestaurantCreateForm extends Vue {
   @Prop() restaurantName!: string;
 
-  name = "";
-  url = "";
-  telephone = "";
-  address = "";
+  name = '';
+
+  url = '';
+
+  telephone = '';
+
+  address = '';
 
   connector: DishesApiConnector = new DishesApiConnector();
 
   mounted() {
-    this.$store.commit("setTitle", "Create restaurant")
+    this.$store.commit('setTitle', 'Create restaurant');
   }
 
   submitForm() {
@@ -54,12 +57,12 @@ export default class RestaurantCreateForm extends Vue {
       name: this.name,
       url: this.url,
       telephone: this.telephone,
-      address: this.address
+      address: this.address,
     };
 
     this.connector.saveRestaurant(restaurant)
-        .then(() => this.$router.back())
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .then(() => this.$router.back())
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   updateName(newValue: string) {

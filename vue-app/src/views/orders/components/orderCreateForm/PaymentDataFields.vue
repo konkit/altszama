@@ -39,36 +39,36 @@
 </template>
 
 <script lang="ts">
-import MoneyInput from "@/views/commons/MoneyInput.vue"
-import {PaymentDataFieldsValue} from "@/views/orders/components/orderCreateForm/model";
-import Vue from "vue";
-import {Prop} from "vue-property-decorator";
-import Component from "vue-class-component";
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import { PaymentDataFieldsValue } from '@/views/orders/components/orderCreateForm/model';
+import MoneyInput from '@/views/commons/MoneyInput.vue';
 
 @Component({
-  components: {MoneyInput}
+  components: { MoneyInput },
 })
 export default class PaymentDataFields extends Vue {
   @Prop() paymentData: PaymentDataFieldsValue
 
   updatePaymentByCash(newValue: string) {
-    this.$emit("input", Object.assign(this.paymentData, {paymentByCash: newValue}))
+    this.$emit('input', Object.assign(this.paymentData, { paymentByCash: newValue }));
   }
 
   updatePaymentByBankTransfer(newValue: string) {
-    this.$emit("input", Object.assign(this.paymentData, {paymentByBankTransfer: newValue}))
+    this.$emit('input', Object.assign(this.paymentData, { paymentByBankTransfer: newValue }));
   }
 
   updatePaymentByBlik(newValue: string) {
-    this.$emit("input", Object.assign(this.paymentData, {paymentByBlik: newValue}))
+    this.$emit('input', Object.assign(this.paymentData, { paymentByBlik: newValue }));
   }
 
   updateBankTransferNumber(newValue: string) {
-    this.$emit("input", Object.assign(this.paymentData, {bankTransferNumber: newValue}))
+    this.$emit('input', Object.assign(this.paymentData, { bankTransferNumber: newValue }));
   }
 
   updateBlikPhoneNumber(newValue: string) {
-    this.$emit("input", Object.assign(this.paymentData, {blikPhoneNumber: newValue}))
+    this.$emit('input', Object.assign(this.paymentData, { blikPhoneNumber: newValue }));
   }
 }
 </script>

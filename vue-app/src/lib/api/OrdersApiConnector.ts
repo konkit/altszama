@@ -12,9 +12,9 @@ import {
   SetAsOrderedResponse,
   ShowOrderResponse,
   SideDishData,
-  TodayOrdersResponse
-} from "@/frontend-client";
-import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
+  TodayOrdersResponse,
+} from '@/frontend-client';
+import { AbstractApiConnector } from '@/lib/api/AbstractApiConnector';
 
 export interface OrderEntryToModify {
   orderId: string;
@@ -29,51 +29,48 @@ export interface OrderEntryToModify {
 
 export default class OrdersApiConnector extends AbstractApiConnector {
   private readonly orderApi: OrderControllerApi;
+
   private readonly orderEntryApi: OrderEntryControllerApi;
 
   constructor() {
-    super()
-    const configuration = this.createConfiguration()
+    super();
+    const configuration = this.createConfiguration();
     this.orderApi = new OrderControllerApi(configuration);
     this.orderEntryApi = new OrderEntryControllerApi(configuration);
   }
 
   saveOrderEntry(orderId: string, editedOrderEntry: OrderEntryToModify): Promise<string> {
     const formData: OrderEntrySaveRequest = {
-      orderId: orderId,
+      orderId,
       dishId: editedOrderEntry.dishId,
       newDish: editedOrderEntry.newDish,
       newDishName: editedOrderEntry.newDishName,
       newDishPrice: editedOrderEntry.newDishPrice,
       additionalComments: editedOrderEntry.additionalComments,
-      sideDishes: editedOrderEntry.chosenSideDishes.map(sd =>
-        Object.assign(sd, { newSideDishPrice: sd.newSideDishPrice })
-      )
+      sideDishes: editedOrderEntry.chosenSideDishes.map((sd) => Object.assign(sd, { newSideDishPrice: sd.newSideDishPrice })),
     };
 
     return this.orderEntryApi.save1(formData, this.headersWithToken());
   }
 
-  updateOrderEntry(orderId: string,orderEntryId: string,editedOrderEntry: OrderEntryToModify): Promise<string> {
+  updateOrderEntry(orderId: string, orderEntryId: string, editedOrderEntry: OrderEntryToModify): Promise<string> {
     const formData: OrderEntryUpdateRequest = {
       id: orderEntryId,
-      orderId: orderId,
+      orderId,
       dishEntryId: editedOrderEntry.dishEntryId,
       dishId: editedOrderEntry.dishId,
       newDish: editedOrderEntry.newDish,
       newDishName: editedOrderEntry.newDishName,
       newDishPrice: editedOrderEntry.newDishPrice,
       additionalComments: editedOrderEntry.additionalComments,
-      sideDishes: editedOrderEntry.chosenSideDishes.map(sd =>
-        Object.assign({}, sd, { newSideDishPrice: sd.newSideDishPrice })
-      )
+      sideDishes: editedOrderEntry.chosenSideDishes.map((sd) => ({ ...sd, newSideDishPrice: sd.newSideDishPrice })),
     };
 
     return this.orderEntryApi.update1(formData, this.headersWithToken());
   }
 
   deleteDishEntry(orderEntryId: string, dishEntryId: string): Promise<string> {
-    return this.orderEntryApi.delete1(orderEntryId,dishEntryId,this.headersWithToken());
+    return this.orderEntryApi.delete1(orderEntryId, dishEntryId, this.headersWithToken());
   }
 
   fetchOrder(orderId: string): Promise<ShowOrderResponse> {
@@ -121,11 +118,11 @@ export default class OrdersApiConnector extends AbstractApiConnector {
   }
 
   revertToUnpaid(orderEntryId: string): Promise<string> {
-    return this.orderEntryApi.revertToUnpaid(orderEntryId,this.headersWithToken());
+    return this.orderEntryApi.revertToUnpaid(orderEntryId, this.headersWithToken());
   }
 
   confirmOrderEntryAsPaid(orderEntryId: string): Promise<string> {
-    return this.orderEntryApi.setAsConfirmedAsPaid(orderEntryId,this.headersWithToken());
+    return this.orderEntryApi.setAsConfirmedAsPaid(orderEntryId, this.headersWithToken());
   }
 
   createOrder(order: OrderSaveRequest): Promise<string> {
@@ -137,6 +134,6 @@ export default class OrdersApiConnector extends AbstractApiConnector {
   }
 
   makeAnOrder(orderId: string, formData: SetAsOrderedResponse): Promise<string> {
-    return this.orderApi.setAsOrdered(formData, orderId, this.headersWithToken())
+    return this.orderApi.setAsOrdered(formData, orderId, this.headersWithToken());
   }
 }

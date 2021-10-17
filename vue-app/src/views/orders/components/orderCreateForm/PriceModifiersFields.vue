@@ -29,29 +29,28 @@
 </template>
 
 <script lang="ts">
-import MoneyInput from "@/views/commons/MoneyInput.vue"
-import {PriceModifierFieldsValue} from "@/views/orders/components/orderCreateForm/model";
-import Vue from "vue";
-import {Prop} from "vue-property-decorator";
-import Component from "vue-class-component";
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import { PriceModifierFieldsValue } from '@/views/orders/components/orderCreateForm/model';
+import MoneyInput from '@/views/commons/MoneyInput.vue';
 
 @Component({
-  components: {MoneyInput}
+  components: { MoneyInput },
 })
 export default class PriceModifiersFields extends Vue {
   @Prop() priceModifiers: PriceModifierFieldsValue
 
   updateDecreaseInPercent(newValue: number) {
-    this.$emit("input", Object.assign(this.priceModifiers, {decreaseInPercent: newValue}))
+    this.$emit('input', Object.assign(this.priceModifiers, { decreaseInPercent: newValue }));
   }
 
   updateDeliveryCostPerEverybody(newValue: number) {
-    this.$emit("input", Object.assign(this.priceModifiers, {deliveryCostPerEverybody: newValue}))
+    this.$emit('input', Object.assign(this.priceModifiers, { deliveryCostPerEverybody: newValue }));
   }
 
   updateDeliveryCostPerDish(newValue: number) {
-    this.$emit("input", Object.assign(this.priceModifiers, {deliveryCostPerDish: newValue}))
-
+    this.$emit('input', Object.assign(this.priceModifiers, { deliveryCostPerDish: newValue }));
   }
 }
 </script>

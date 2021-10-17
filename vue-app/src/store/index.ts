@@ -1,12 +1,12 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import {showOrderModule, ShowOrderState} from "./modules/ShowOrderModule";
+import { showOrderModule, ShowOrderState } from './modules/ShowOrderModule';
 import {
   modifyOrderEntryModule,
-  ModifyOrderEntryState
-} from "./modules/ModifyOrderEntryModule";
-import {authenticatedRoutes, notAuthenticatedRoutes} from "@/router";
+  ModifyOrderEntryState,
+} from './modules/ModifyOrderEntryModule';
+import { authenticatedRoutes, notAuthenticatedRoutes } from '@/router';
 
 Vue.use(Vuex);
 
@@ -21,19 +21,18 @@ export interface RootState {
   currentRouteName: string;
   pushNotificationEnabled: boolean;
 
-
   showOrder?: ShowOrderState;
   modifyOrderEntry?: ModifyOrderEntryState;
 }
 
 const rootState: RootState = {
   loading: false,
-  username: localStorage.getItem("username") || "",
-  token: localStorage.getItem("token") || "",
+  username: localStorage.getItem('username') || '',
+  token: localStorage.getItem('token') || '',
   errors: [],
   masterNavDrawerOpened: false,
-  title: "AltSzama",
-  currentRouteName: "LandingPage",
+  title: 'AltSzama',
+  currentRouteName: 'LandingPage',
   displayBackButton: false,
   pushNotificationEnabled: false,
 } as RootState;
@@ -49,52 +48,48 @@ export default new Vuex.Store({
     },
     loginUser(state, payload) {
       state.username = payload.username;
-      localStorage.setItem("username", payload.username);
+      localStorage.setItem('username', payload.username);
 
       state.token = payload.token;
-      localStorage.setItem("token", payload.token);
+      localStorage.setItem('token', payload.token);
     },
     logoutUser(state) {
-      state.username = "";
-      localStorage.setItem("username", "");
+      state.username = '';
+      localStorage.setItem('username', '');
 
-      state.token = "";
-      localStorage.setItem("token", "");
+      state.token = '';
+      localStorage.setItem('token', '');
 
-      state.pushNotificationEnabled = false
+      state.pushNotificationEnabled = false;
     },
     addError(state, error: any) {
-      console.log("Error: ", error)
+      console.log('Error: ', error);
 
       const pushError = (errorStr: any) => {
-        if (errorStr && typeof errorStr === "string" && errorStr.trim().length > 0) {
-          state.errors.push(errorStr)
+        if (errorStr && typeof errorStr === 'string' && errorStr.trim().length > 0) {
+          state.errors.push(errorStr);
         } else {
-          console.log("Error: ", errorStr);
-          state.errors.push("An error occured. Please try again.")
+          console.log('Error: ', errorStr);
+          state.errors.push('An error occured. Please try again.');
         }
-      }
+      };
 
       if (error instanceof Array) {
-        error.forEach(errorStr => pushError(errorStr));
-      } else if (typeof error == "object" && error.messages !== undefined) {
-        error.messages.forEach((errorStr: string) =>
-          pushError(errorStr)
-        );
-      } else if (typeof error == "object" && error.exception !== undefined) {
-        pushError("Error: " + error.exception + " occured!");
-      } else if (typeof error == "object" && error.message !== undefined) {
+        error.forEach((errorStr) => pushError(errorStr));
+      } else if (typeof error === 'object' && error.messages !== undefined) {
+        error.messages.forEach((errorStr: string) => pushError(errorStr));
+      } else if (typeof error === 'object' && error.exception !== undefined) {
+        pushError(`Error: ${error.exception} occured!`);
+      } else if (typeof error === 'object' && error.message !== undefined) {
         pushError(error.message);
-      } else if (typeof error == "object" && error.body?.message !== undefined) {
+      } else if (typeof error === 'object' && error.body?.message !== undefined) {
         pushError(error.body.message);
-      } else if (typeof error == "object" && error.body?.messages !== undefined) {
-        error.body.messages.forEach((errorStr: string) =>
-          pushError(errorStr)
-        );
-      } else if (typeof error == "object" && error.statusText !== undefined) {
+      } else if (typeof error === 'object' && error.body?.messages !== undefined) {
+        error.body.messages.forEach((errorStr: string) => pushError(errorStr));
+      } else if (typeof error === 'object' && error.statusText !== undefined) {
         pushError(error.statusText);
       } else {
-        console.log("Error: ", error);
+        console.log('Error: ', error);
         pushError(error);
       }
     },
@@ -111,37 +106,32 @@ export default new Vuex.Store({
       state.masterNavDrawerOpened = !state.masterNavDrawerOpened;
     },
     setTitle(state, value) {
-      document.title = `${value} | AltSzama`
-      state.title = value
+      document.title = `${value} | AltSzama`;
+      state.title = value;
     },
     setDisplayBackButton(state, value) {
-      state.displayBackButton = value
+      state.displayBackButton = value;
     },
     setCurrentRouteName(state, value) {
-      state.currentRouteName = value
+      state.currentRouteName = value;
     },
     setPushNotificationEnabled(state, value) {
-      state.pushNotificationEnabled = value
-    }
+      state.pushNotificationEnabled = value;
+    },
   },
   getters: {
-    titleText: state => {
+    titleText: (state) => {
       if (state.loading === true) {
-        return "Loading ...";
-      } else {
-        return state.title;
+        return 'Loading ...';
       }
+      return state.title;
     },
-    shouldDisplayToolbar: state => {
-      return authenticatedRoutes.map(r => r.name).includes(state.currentRouteName)
-    },
-    shouldDisplayLoginToolbar: state => {
-      return notAuthenticatedRoutes.map(r => r.name).includes(state.currentRouteName)
-    }
+    shouldDisplayToolbar: (state) => authenticatedRoutes.map((r) => r.name).includes(state.currentRouteName),
+    shouldDisplayLoginToolbar: (state) => notAuthenticatedRoutes.map((r) => r.name).includes(state.currentRouteName),
   },
   modules: {
     // Orders
     showOrder: showOrderModule,
     modifyOrderEntry: modifyOrderEntryModule,
-  }
+  },
 });

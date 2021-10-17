@@ -14,15 +14,15 @@
 </template>
 
 <script lang="ts">
-import GoogleLogin from "@/lib/GoogleLogin";
-import Vue from "vue";
-import Component from "vue-class-component";
-import AuthApiConnector from "@/lib/api/AuthApiConnector";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import GoogleLogin from '@/lib/GoogleLogin';
+import AuthApiConnector from '@/lib/api/AuthApiConnector';
 
 @Component({})
 export default class GoogleLoginButton extends Vue {
-
   loginLoaded = false
+
   loginPending = false
 
   connector: AuthApiConnector = new AuthApiConnector()
@@ -35,15 +35,15 @@ export default class GoogleLoginButton extends Vue {
     if (this.loginLoaded) {
       this.loginPending = true;
 
-      let returnPath = "";
+      let returnPath = '';
       if (this.$route.query.returnPath) {
         returnPath = this.$route.query.returnPath as string;
       }
 
-      this.connector?.loginWithGoogle(returnPath).catch(e => {
-        this.$store.commit("clearErrors");
+      this.connector?.loginWithGoogle(returnPath).catch((e) => {
+        this.$store.commit('clearErrors');
         if (e) {
-          this.$store.commit("addError", e);
+          this.$store.commit('addError', e);
         }
         this.loginPending = false;
       });

@@ -1,10 +1,8 @@
-import {Configuration} from "@/frontend-client";
-import {getConfig} from "@/lib/config";
-import store from "@/store";
-
+import { Configuration } from '@/frontend-client';
+import { getConfig } from '@/lib/config';
+import store from '@/store';
 
 export abstract class AbstractApiConnector {
-
   createConfiguration() {
     return new Configuration({
       basePath: getConfig().currentDomain,
@@ -12,7 +10,6 @@ export abstract class AbstractApiConnector {
   }
 
   headersWithToken() {
-    return { headers: { Authorization: "Bearer " + store.state.token } };
+    return { headers: { Authorization: `Bearer ${store.state.token}` } };
   }
-
 }

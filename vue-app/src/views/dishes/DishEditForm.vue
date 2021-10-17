@@ -30,17 +30,17 @@
 </template>
 
 <script lang="ts">
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import SideDishes from "./components/SideDishes.vue";
-import LoadingView from "@/views/commons/LoadingView.vue";
-import MoneyInput from "@/views/commons/MoneyInput.vue";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import ErrorHandler from "@/lib/ErrorHandler";
-import DishesApiConnector from "@/lib/api/DishesApiConnector";
-import Component from "vue-class-component";
-import Vue from "vue";
-import router from "../../router/index";
-import {DishUpdateRequest, SideDish} from "../../frontend-client";
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import SideDishes from './components/SideDishes.vue';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import MoneyInput from '@/views/commons/MoneyInput.vue';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import ErrorHandler from '@/lib/ErrorHandler';
+import DishesApiConnector from '@/lib/api/DishesApiConnector';
+import router from '../../router/index';
+import { DishUpdateRequest, SideDish } from '../../frontend-client';
 
 @Component({
   components: {
@@ -48,16 +48,22 @@ import {DishUpdateRequest, SideDish} from "../../frontend-client";
     MoneyInput,
     LoadingView,
     ErrorsComponent,
-    SideDishes
-  }
+    SideDishes,
+  },
 })
 export default class DishEditForm extends Vue {
-  restaurantId = "";
-  dishId = "";
-  name = "";
+  restaurantId = '';
+
+  dishId = '';
+
+  name = '';
+
   price = 0;
-  category = "";
+
+  category = '';
+
   categories: string[] = [];
+
   initialSideDishes: SideDish[] = [];
 
   connector: DishesApiConnector = new DishesApiConnector();
@@ -67,29 +73,29 @@ export default class DishEditForm extends Vue {
     this.dishId = this.$route.params.dishId;
 
     this.connector
-        .getDishEditData(this.restaurantId, this.dishId)
-        .then(dishData => {
-          this.name = dishData.dish.name;
-          this.price = dishData.dish.price;
-          this.category = dishData.dish.category;
+      .getDishEditData(this.restaurantId, this.dishId)
+      .then((dishData) => {
+        this.name = dishData.dish.name;
+        this.price = dishData.dish.price;
+        this.category = dishData.dish.category;
 
-          this.initialSideDishes = dishData.dish.sideDishes;
-          this.categories = dishData.categories;
+        this.initialSideDishes = dishData.dish.sideDishes;
+        this.categories = dishData.categories;
 
-          this.$store.commit("setTitle", "Edit dish")
-          this.$store.commit("setLoadingFalse");
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        this.$store.commit('setTitle', 'Edit dish');
+        this.$store.commit('setLoadingFalse');
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   submitForm() {
     const dish = {
       name: this.name,
       price: this.price,
-      category: this.category
+      category: this.category,
     };
     const sideDishesElement: SideDishes = this.$refs
-        .sideDishesElement as SideDishes;
+      .sideDishesElement as SideDishes;
     const sideDishes = sideDishesElement.getSideDishes();
 
     const dishObj: DishUpdateRequest = {
@@ -97,12 +103,12 @@ export default class DishEditForm extends Vue {
       name: dish.name,
       price: dish.price,
       category: dish.category,
-      sideDishes: sideDishes
+      sideDishes,
     };
 
     this.connector.editDish(this.restaurantId, dishObj)
-        .then(() => router.back())
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+      .then(() => router.back())
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
 
     return false;
   }

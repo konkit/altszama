@@ -1,12 +1,12 @@
-import {getConfig} from "@/lib/config";
+import { getConfig } from '@/lib/config';
 
-const gapiUrl = "https://apis.google.com/js/api:client.js";
+const gapiUrl = 'https://apis.google.com/js/api:client.js';
 
 const gapi = () => (window as any).gapi as any;
 
 function installClient() {
   return new Promise<void>((resolve, reject) => {
-    const script = document.createElement("script") as any;
+    const script = document.createElement('script') as any;
     script.src = gapiUrl;
     script.onreadystatechange = script.onload = () => {
       const readyState: any = (script as any).readyState;
@@ -16,17 +16,17 @@ function installClient() {
         }, 500);
       }
     };
-    document.getElementsByTagName("head")[0].appendChild(script);
+    document.getElementsByTagName('head')[0].appendChild(script);
   });
 }
 
 function initClient() {
   const googleConfig = {
-    "client_id": getConfig().googleClientId
+    client_id: getConfig().googleClientId,
   };
 
   return new Promise<void>((resolve, reject) => {
-    gapi().load("auth2", () => {
+    gapi().load('auth2', () => {
       gapi().auth2.init(googleConfig);
       resolve();
     });
@@ -56,7 +56,7 @@ export default {
     return new Promise((resolve, reject) => {
       gapi().auth2
         .getAuthInstance()
-        .grantOfflineAccess({ "redirect_uri": "postmessage" })
+        .grantOfflineAccess({ redirect_uri: 'postmessage' })
         .then((response: any) => resolve(response.code as string))
         .catch((error: any) => reject(error));
     });
@@ -66,16 +66,16 @@ export default {
     if (gapi() && gapi().auth2) {
       const signOutResult: Promise<any> = gapi().auth2
         .getAuthInstance()
-        .signOut()
+        .signOut();
 
       signOutResult
         .then(
           () => successCallback(),
-          error => errorCallback(error)
+          (error) => errorCallback(error),
         );
     } else {
       // no gapi object, just assume we are logged out
       successCallback();
     }
-  }
+  },
 };

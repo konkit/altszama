@@ -16,32 +16,32 @@
 </template>
 
 <script lang="ts">
-import Component from "vue-class-component";
-import Navigation from "../../commons/Navigation.vue";
-import ViewWrapper from "../../commons/ViewWrapper.vue";
-import LoadingView from "../../commons/LoadingView.vue";
-import Vue from "vue";
-import {OrderHistoryParticipatedEntry} from "@/frontend-client";
-import PriceElement from "@/views/commons/PriceElement.vue";
-import {Prop} from "vue-property-decorator";
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Navigation from '../../commons/Navigation.vue';
+import ViewWrapper from '../../commons/ViewWrapper.vue';
+import LoadingView from '../../commons/LoadingView.vue';
+import { OrderHistoryParticipatedEntry } from '@/frontend-client';
+import PriceElement from '@/views/commons/PriceElement.vue';
 
 @Component({
   components: {
     PriceElement,
     Navigation,
     ViewWrapper,
-    LoadingView
-  }
+    LoadingView,
+  },
 })
 export default class ParticipatedEntryComponent extends Vue {
   @Prop() historyEntry: OrderHistoryParticipatedEntry
 
   goToOrder(orderId: string) {
-    this.$router.push({name: "ShowOrder", params: {id: orderId}})
+    this.$router.push({ name: 'ShowOrder', params: { id: orderId } });
   }
 
   isPaid() {
-    return this.historyEntry.status === OrderHistoryParticipatedEntry.StatusEnum.CONFIRMED
+    return this.historyEntry.status === OrderHistoryParticipatedEntry.StatusEnum.CONFIRMED;
   }
 }
 </script>

@@ -1,16 +1,16 @@
-import Vue from 'vue'
-import Vuetify from 'vuetify'
+import Vue from 'vue';
+import Vuetify from 'vuetify';
 import {
   VCol,
   VRow,
-} from 'vuetify/lib'
+} from 'vuetify/lib';
 
 Vue.use(Vuetify, {
   components: {
     VCol,
     VRow,
   },
-})
+});
 
 const vuetify = new Vuetify({
   theme: {

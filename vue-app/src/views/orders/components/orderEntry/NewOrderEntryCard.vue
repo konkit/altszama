@@ -17,22 +17,23 @@
 </template>
 
 <script lang="ts">
-import CreateOrderEntry from "@/views/orders/components/orderEntry/CreateOrderEntry.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import CreateOrderEntry from '@/views/orders/components/orderEntry/CreateOrderEntry.vue';
 
 @Component({
   components: {
-    CreateOrderEntry
-  }
+    CreateOrderEntry,
+  },
 })
 export default class NewOrderEntryCard extends Vue {
   @Prop() username!: string;
+
   @Prop() isEntryCreating!: boolean;
 
   createEntry() {
-    this.$store.commit(`modifyOrderEntry/setDishEntryCreating`,{});
+    this.$store.commit('modifyOrderEntry/setDishEntryCreating', {});
   }
 }
 </script>

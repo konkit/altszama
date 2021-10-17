@@ -24,15 +24,15 @@
 export default {
   name: 'SectionHero',
   provide: {
-    theme: {isDark: false},
+    theme: { isDark: false },
   },
 
   computed: {
     height() {
-      return "calc(100vh - 128px)"
+      return 'calc(100vh - 128px)';
     },
   },
-}
+};
 </script>
 
 <style>

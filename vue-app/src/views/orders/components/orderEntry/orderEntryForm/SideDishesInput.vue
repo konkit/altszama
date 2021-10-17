@@ -51,11 +51,11 @@
 </template>
 
 <script lang="ts">
-import MoneyInput from "@/views/commons/MoneyInput.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import {SideDish, SideDishData} from "../../../../../frontend-client";
-import {Prop} from "vue-property-decorator";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import { SideDish, SideDishData } from '../../../../../frontend-client';
+import MoneyInput from '@/views/commons/MoneyInput.vue';
 
 interface ComboBoxItem {
   text: string;
@@ -65,18 +65,19 @@ interface ComboBoxItem {
 
 @Component({
   components: {
-    MoneyInput
-  }
+    MoneyInput,
+  },
 })
 export default class SideDishesInput extends Vue {
   @Prop() chosenSideDishes: SideDishData[]
+
   @Prop() availableSideDishes: SideDish[]
 
   removeSideDish(sideDishIndex: number) {
     const newSideDishes: SideDishData[] = [
       ...this.chosenSideDishes.slice(0, sideDishIndex),
-      ...this.chosenSideDishes.slice(sideDishIndex + 1)
-    ]
+      ...this.chosenSideDishes.slice(sideDishIndex + 1),
+    ];
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -85,35 +86,35 @@ export default class SideDishesInput extends Vue {
   addSideDishEntry() {
     const sideDishToAdd: SideDishData = {
       isNew: true,
-      newSideDishName: "",
-      newSideDishPrice: 0
+      newSideDishName: '',
+      newSideDishPrice: 0,
     };
 
-    const newSideDishes: SideDishData[] = [...this.chosenSideDishes, sideDishToAdd]
+    const newSideDishes: SideDishData[] = [...this.chosenSideDishes, sideDishToAdd];
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
   }
 
   updateNewSideDishName(sdIndex: number, newValue: string | ComboBoxItem | null) {
-    if (typeof newValue === "string") {
-      const oldItem = this.chosenSideDishes[sdIndex]
-      const newItem = {isNew: true, newSideDishName: newValue, newSideDishPrice: oldItem.newSideDishPrice || 0}
+    if (typeof newValue === 'string') {
+      const oldItem = this.chosenSideDishes[sdIndex];
+      const newItem = { isNew: true, newSideDishName: newValue, newSideDishPrice: oldItem.newSideDishPrice || 0 };
 
       const newSideDishes: SideDishData[] = [
         ...this.chosenSideDishes.slice(0, sdIndex),
         newItem,
-        ...this.chosenSideDishes.slice(sdIndex + 1)
-      ]
+        ...this.chosenSideDishes.slice(sdIndex + 1),
+      ];
       this.updateSideDishes(newSideDishes);
-    } else if (newValue != null && typeof newValue === "object") {
-      const newItem = {isNew: false, id: newValue.value}
+    } else if (newValue != null && typeof newValue === 'object') {
+      const newItem = { isNew: false, id: newValue.value };
 
       const newSideDishes: SideDishData[] = [
         ...this.chosenSideDishes.slice(0, sdIndex),
         newItem,
-        ...this.chosenSideDishes.slice(sdIndex + 1)
-      ]
+        ...this.chosenSideDishes.slice(sdIndex + 1),
+      ];
       this.updateSideDishes(newSideDishes);
     }
 
@@ -121,22 +122,22 @@ export default class SideDishesInput extends Vue {
   }
 
   changeNewSideDishPrice(sdIndex: number, newValue: number) {
-    const oldItem: SideDishData = this.chosenSideDishes[sdIndex]
+    const oldItem: SideDishData = this.chosenSideDishes[sdIndex];
 
-    let newSideDishName
+    let newSideDishName;
     if (oldItem.isNew) {
-      newSideDishName = oldItem.newSideDishName
+      newSideDishName = oldItem.newSideDishName;
     } else {
-      newSideDishName = this.availableSideDishes.find(sd => sd.id === oldItem.id)?.name ?? ""
+      newSideDishName = this.availableSideDishes.find((sd) => sd.id === oldItem.id)?.name ?? '';
     }
 
-    const newItem: SideDishData = Object.assign(oldItem, {isNew: true, newSideDishName: newSideDishName, newSideDishPrice: newValue})
+    const newItem: SideDishData = Object.assign(oldItem, { isNew: true, newSideDishName, newSideDishPrice: newValue });
 
     const newSideDishes: SideDishData[] = [
       ...this.chosenSideDishes.slice(0, sdIndex),
       newItem,
-      ...this.chosenSideDishes.slice(sdIndex + 1)
-    ]
+      ...this.chosenSideDishes.slice(sdIndex + 1),
+    ];
     this.updateSideDishes(newSideDishes);
 
     this.$forceUpdate();
@@ -144,42 +145,39 @@ export default class SideDishesInput extends Vue {
 
   get sideDishesItems() {
     if (this.availableSideDishes) {
-      return this.availableSideDishes.map(entry => SideDishesInput.toComboBoxItem(entry));
-    } else {
-      return []
+      return this.availableSideDishes.map((entry) => SideDishesInput.toComboBoxItem(entry));
     }
+    return [];
   }
 
   getName(item: SideDishData): string | ComboBoxItem | undefined {
     if (item.isNew) {
-      return item.newSideDishName!
-    } else {
-      const sideDish = this.availableSideDishes.find(d => d.id === item.id)
-
-      return sideDish ? SideDishesInput.toComboBoxItem(sideDish) : undefined
+      return item.newSideDishName!;
     }
+    const sideDish = this.availableSideDishes.find((d) => d.id === item.id);
+
+    return sideDish ? SideDishesInput.toComboBoxItem(sideDish) : undefined;
   }
 
   getPrice(item: SideDishData) {
     if (item.isNew) {
-      return item.newSideDishPrice
-    } else {
-      return this.availableSideDishes.find(d => d.id === item.id)?.price
+      return item.newSideDishPrice;
     }
+    return this.availableSideDishes.find((d) => d.id === item.id)?.price;
   }
 
   private static toComboBoxItem(entry: SideDish): ComboBoxItem {
-    const price = (entry.price / 100).toLocaleString("pl-PL", {style: "currency",currency: "PLN"});
+    const price = (entry.price / 100).toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' });
 
     return {
       text: `${entry.name}`,
       value: entry.id!,
-      subtitle: `Price: ${price}`
+      subtitle: `Price: ${price}`,
     };
   }
 
   private updateSideDishes(newSideDishes: SideDishData[]) {
-    this.$emit("change", newSideDishes)
+    this.$emit('change', newSideDishes);
   }
 }
 </script>

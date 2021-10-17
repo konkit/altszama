@@ -10,17 +10,17 @@
 </template>
 
 <script>
-import Description from "@/views/landing/sections/Description";
-import SectionHero from "@/views/landing/sections/Hero";
+import Description from '@/views/landing/sections/Description';
+import SectionHero from '@/views/landing/sections/Hero';
 
 export default {
   name: 'HomeLayout',
 
   components: {
     Description,
-    SectionHero
-  }
-}
+    SectionHero,
+  },
+};
 </script>
 
 <style lang="scss">

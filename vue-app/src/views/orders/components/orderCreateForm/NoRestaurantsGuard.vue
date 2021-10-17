@@ -11,13 +11,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
-import {RestaurantDto} from "@/frontend-client";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import { RestaurantDto } from '@/frontend-client';
 
 @Component({
-  name: "NoRestaurantsGuard"
+  name: 'NoRestaurantsGuard',
 })
 export default class NoRestaurantsGuard extends Vue {
   @Prop() restaurantsList: RestaurantDto[];

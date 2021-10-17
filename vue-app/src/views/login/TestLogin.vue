@@ -24,11 +24,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import GoogleLoginButton from "@/views/login/GoogleLoginButton.vue";
-import {getConfig} from "@/lib/config";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import GoogleLoginButton from '@/views/login/GoogleLoginButton.vue';
+import { getConfig } from '@/lib/config';
 
 interface UserEntry {
   username: string;
@@ -38,44 +38,43 @@ interface UserEntry {
 @Component({
   components: {
     ErrorsComponent,
-    GoogleLoginButton
-  }
+    GoogleLoginButton,
+  },
 })
 export default class TestLoginView extends Vue {
-
   usersList: UserEntry[] = [];
 
   mounted() {
-    this.getTestUsers()
+    this.getTestUsers();
   }
 
   get height() {
-    return "calc(100vh - 64px)"
+    return 'calc(100vh - 64px)';
   }
 
   loginAsUser(user: UserEntry) {
     const payload = {
       username: user.username,
-      email: user.email
-    }
+      email: user.email,
+    };
     this.doLogin(payload);
   }
 
   private getTestUsers() {
-    fetch(`${getConfig().currentDomain}/api/auth/testUser/list`, {method: 'GET'})
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json()
-        })
-        .then(data => {
-          this.usersList = data
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          this.$router.push({name: 'Login'})
-        });
+    fetch(`${getConfig().currentDomain}/api/auth/testUser/list`, { method: 'GET' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        this.usersList = data;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        this.$router.push({ name: 'Login' });
+      });
   }
 
   private doLogin(payload: { email: string; username: string }) {
@@ -86,14 +85,14 @@ export default class TestLoginView extends Vue {
       },
       body: JSON.stringify(payload),
     })
-        .then(response => response.json())
-        .then(data => {
-          this.$store.commit("loginUser", {username: data.username, token: data.token})
-          this.$router.push({"name": "TodayOrders"})
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+      .then((response) => response.json())
+      .then((data) => {
+        this.$store.commit('loginUser', { username: data.username, token: data.token });
+        this.$router.push({ name: 'TodayOrders' });
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }
 }
 </script>

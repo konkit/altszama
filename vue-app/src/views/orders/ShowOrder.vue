@@ -109,21 +109,21 @@
 </template>
 
 <script lang="ts">
-import LoadingView from "@/views/commons/LoadingView.vue";
-import {ShowOrderState} from "@/store/modules/ShowOrderModule";
-import router from "@/router/index";
-import PriceSummary from "@/views/orders/components/PriceSummary.vue";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import OrderEntriesCard from "@/views/orders/components/orderEntry/OrderEntriesCard.vue";
-import NewOrderEntryCard from "@/views/orders/components/orderEntry/NewOrderEntryCard.vue";
-import OrderDataSummary from "@/views/orders/components/OrderDataSummary.vue";
-import PaymentOptionsSummary from "@/views/orders/components/PaymentOptionsSummary.vue";
-import OrderLockedWarning from "@/views/orders/components/OrderLockedWarning.vue";
-import Component from "vue-class-component";
-import Vue from "vue";
-import {ParticipantsOrderEntry, ShowOrderDto} from "../../frontend-client";
-import ErrorHandler from "@/lib/ErrorHandler";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import { ShowOrderState } from '@/store/modules/ShowOrderModule';
+import router from '@/router/index';
+import PriceSummary from '@/views/orders/components/PriceSummary.vue';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import OrderEntriesCard from '@/views/orders/components/orderEntry/OrderEntriesCard.vue';
+import NewOrderEntryCard from '@/views/orders/components/orderEntry/NewOrderEntryCard.vue';
+import OrderDataSummary from '@/views/orders/components/OrderDataSummary.vue';
+import PaymentOptionsSummary from '@/views/orders/components/PaymentOptionsSummary.vue';
+import OrderLockedWarning from '@/views/orders/components/OrderLockedWarning.vue';
+import { ParticipantsOrderEntry, ShowOrderDto } from '../../frontend-client';
+import ErrorHandler from '@/lib/ErrorHandler';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -135,11 +135,11 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     OrderEntriesCard,
     ViewWrapper,
     PriceSummary,
-    LoadingView
-  }
+    LoadingView,
+  },
 })
 export default class ShowOrder extends Vue {
-  orderId = "";
+  orderId = '';
 
   ordersConnector = new OrdersApiConnector()
 
@@ -149,8 +149,8 @@ export default class ShowOrder extends Vue {
   }
 
   fetchOrder() {
-    this.$store.commit("setLoadingTrue");
-    this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.orderId);
+    this.$store.commit('setLoadingTrue');
+    this.$store.dispatch('showOrder/fetchOrderDataAction', this.orderId);
   }
 
   isOrdering(): boolean {
@@ -162,24 +162,24 @@ export default class ShowOrder extends Vue {
   }
 
   placeOrder() {
-    router.push({name: "OrderView", params: {id: this.orderId}});
+    router.push({ name: 'OrderView', params: { id: this.orderId } });
   }
 
   setAsDelivered() {
-    this.$store.commit("setLoadingTrue");
+    this.$store.commit('setLoadingTrue');
     this.ordersConnector
-        .setOrderAsDelivered(this.orderId)
-        .then(() => {
-          this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-        })
-        .catch(errResponse => {
-          this.$store.commit("setLoadingFalse");
-          ErrorHandler.handleError(errResponse)
-        });
+      .setOrderAsDelivered(this.orderId)
+      .then(() => {
+        this.$store.dispatch('showOrder/fetchOrderDataAction', this.$store.state.showOrder.order.id);
+      })
+      .catch((errResponse) => {
+        this.$store.commit('setLoadingFalse');
+        ErrorHandler.handleError(errResponse);
+      });
   }
 
   goToEditOrder() {
-    router.push({name: "OrderEditForm", params: {id: this.orderId}});
+    router.push({ name: 'OrderEditForm', params: { id: this.orderId } });
   }
 
   canShowPlaceOrderButton(): boolean {
@@ -195,12 +195,12 @@ export default class ShowOrder extends Vue {
   }
 
   allEatingPeopleCount(): number {
-    return this.orderEntries.flatMap(e => e.dishEntries).length;
+    return this.orderEntries.flatMap((e) => e.dishEntries).length;
   }
 
   get numberOfCurrentUserEntries(): number {
-    return this.orderEntries.filter(e => e.userId === this.currentUserId)
-        .length;
+    return this.orderEntries.filter((e) => e.userId === this.currentUserId)
+      .length;
   }
 
   get orderState(): OrderStateEnum {
@@ -220,12 +220,12 @@ export default class ShowOrder extends Vue {
 
   get yourOrderEntries(): ParticipantsOrderEntry[] {
     const showOrder: ShowOrderState = this.$store.state.showOrder;
-    return showOrder.orderEntries.filter(e => e.userId === this.currentUserId);
+    return showOrder.orderEntries.filter((e) => e.userId === this.currentUserId);
   }
 
   get otherUsersOrderEntries(): ParticipantsOrderEntry[] {
     const showOrder: ShowOrderState = this.$store.state.showOrder;
-    return showOrder.orderEntries.filter(e => e.userId !== this.currentUserId);
+    return showOrder.orderEntries.filter((e) => e.userId !== this.currentUserId);
   }
 
   get currentUserId(): string {
@@ -252,7 +252,7 @@ export default class ShowOrder extends Vue {
   }
 
   shouldDisplayNewOrderEntryCard(): boolean {
-    return this.order.orderState == OrderStateEnum.CREATED && this.numberOfCurrentUserEntries === 0
+    return this.order.orderState == OrderStateEnum.CREATED && this.numberOfCurrentUserEntries === 0;
   }
 }
 </script>

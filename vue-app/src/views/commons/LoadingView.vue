@@ -13,19 +13,19 @@
 </template>
 
 <script lang="ts">
-import ErrorsComponent from "./ErrorsComponent.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import ErrorsComponent from './ErrorsComponent.vue';
 
 @Component({
   components: {
-    ErrorsComponent
-  }
+    ErrorsComponent,
+  },
 })
 export default class LoadingView extends Vue {
   created() {
-    this.$store.commit("clearErrors");
-    this.$store.commit("setLoadingTrue");
+    this.$store.commit('clearErrors');
+    this.$store.commit('setLoadingTrue');
   }
 
   get loading() {

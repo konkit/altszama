@@ -33,49 +33,49 @@
 </template>
 
 <script lang="ts">
-import LoadingView from "@/views/commons/LoadingView.vue";
-import router from "@/router/index";
-import ViewWrapper from "@/views/commons/ViewWrapper.vue";
-import Vue from "vue";
-import Component from "vue-class-component";
-import ErrorHandler from "@/lib/ErrorHandler";
-import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
-import {AllOrdersOrderDto} from "@/frontend-client";
-import Navigation from "@/views/commons/Navigation.vue";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import LoadingView from '@/views/commons/LoadingView.vue';
+import router from '@/router/index';
+import ViewWrapper from '@/views/commons/ViewWrapper.vue';
+import ErrorHandler from '@/lib/ErrorHandler';
+import OrdersApiConnector from '@/lib/api/OrdersApiConnector';
+import { AllOrdersOrderDto } from '@/frontend-client';
+import Navigation from '@/views/commons/Navigation.vue';
 
 @Component({
   components: {
     Navigation,
     ViewWrapper,
-    LoadingView
-  }
+    LoadingView,
+  },
 })
 export default class AllOrders extends Vue {
   allOrdersList: AllOrdersOrderDto[] = [];
 
   headers = [
-    {text: "Date", align: "left", value: "date"},
-    {text: "Restaurant", value: "restaurant"},
-    {text: "Status", value: "status"},
-    {text: "Order creator", value: "orderCreator"}
+    { text: 'Date', align: 'left', value: 'date' },
+    { text: 'Restaurant', value: 'restaurant' },
+    { text: 'Status', value: 'status' },
+    { text: 'Order creator', value: 'orderCreator' },
   ];
 
   connector: OrdersApiConnector = new OrdersApiConnector();
 
   mounted() {
     this.connector
-        .fetchAllOrders()
-        .then(allOrdersList => {
-          this.allOrdersList = allOrdersList.allOrdersList;
+      .fetchAllOrders()
+      .then((allOrdersList) => {
+        this.allOrdersList = allOrdersList.allOrdersList;
 
-          this.$store.commit("setTitle", "All orders")
-          this.$store.commit("setLoadingFalse");
-        })
-        .catch(errResponse => ErrorHandler.handleError(errResponse));
+        this.$store.commit('setTitle', 'All orders');
+        this.$store.commit('setLoadingFalse');
+      })
+      .catch((errResponse) => ErrorHandler.handleError(errResponse));
   }
 
   goToOrder(selectedOrderId: string) {
-    router.push({name: "ShowOrder", params: {id: selectedOrderId}});
+    router.push({ name: 'ShowOrder', params: { id: selectedOrderId } });
   }
 }
 </script>

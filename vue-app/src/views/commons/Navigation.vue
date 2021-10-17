@@ -58,16 +58,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import {RawLocation} from "vue-router";
-import store from "@/store";
-import router from "@/router";
-import GoogleLogin from "@/lib/GoogleLogin";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { RawLocation } from 'vue-router';
+import store from '@/store';
+import router from '@/router';
+import GoogleLogin from '@/lib/GoogleLogin';
 
-@Component({name: "Navigation"})
+@Component({ name: 'Navigation' })
 export default class Navigation extends Vue {
-
   get username() {
     return this.$store.state.username;
   }
@@ -77,30 +76,30 @@ export default class Navigation extends Vue {
   }
 
   get shouldDisplayNavigation() {
-    return this.$store.getters.shouldDisplayToolbar
+    return this.$store.getters.shouldDisplayToolbar;
   }
 
   logout(): void {
-    store.commit("logoutUser");
+    store.commit('logoutUser');
 
-    store.commit("setPushNotificationEnabled", false);
+    store.commit('setPushNotificationEnabled', false);
 
-    const signOutCallback = () => router.push({name: "Login"});
+    const signOutCallback = () => router.push({ name: 'Login' });
     GoogleLogin.signOut(signOutCallback, signOutCallback);
   }
 
   goToPath(path: RawLocation) {
-    this.$router.push(path).catch(err => {
+    this.$router.push(path).catch((err) => {
       /* NOP */
-    })
+    });
   }
 
   setMasterNavDrawerOpened(newValue: boolean) {
-    this.$store.commit("setMasterNavigationDrawerOpened", newValue);
+    this.$store.commit('setMasterNavigationDrawerOpened', newValue);
   }
 
   get shouldDisplayToolbar() {
-    return this.$store.getters.shouldDisplayToolbar
+    return this.$store.getters.shouldDisplayToolbar;
   }
 }
 </script>

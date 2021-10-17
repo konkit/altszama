@@ -89,16 +89,16 @@
 </template>
 
 <script lang="ts">
-import { Prop } from "vue-property-decorator";
-import Component from "vue-class-component";
-import Vue from "vue";
-import ErrorsComponent from "@/views/commons/ErrorsComponent.vue";
-import { GroupedOrderEntry } from "@/frontend-client";
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import Vue from 'vue';
+import ErrorsComponent from '@/views/commons/ErrorsComponent.vue';
+import { GroupedOrderEntry } from '@/frontend-client';
 
 @Component({
   components: {
-    ErrorsComponent
-  }
+    ErrorsComponent,
+  },
 })
 export default class UserOrders extends Vue {
   @Prop() groupedEntries!: GroupedOrderEntry[];

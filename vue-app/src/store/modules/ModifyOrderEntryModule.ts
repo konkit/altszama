@@ -1,16 +1,16 @@
-import {Module} from "vuex";
-import {RootState} from "@/store";
-import {SideDishData} from "@/frontend-client";
+import { Module } from 'vuex';
+import { RootState } from '@/store';
+import { SideDishData } from '@/frontend-client';
 
 export interface NewDishData {
-  kind: "NewDishData";
+  kind: 'NewDishData';
   newDishName: string;
   newDishPrice: number;
   chosenSideDishes: SideDishData[];
 }
 
 export interface ExistingDishData {
-  kind: "ExistingDishData";
+  kind: 'ExistingDishData';
   dishId: string;
   chosenSideDishes: SideDishData[];
 }
@@ -37,34 +37,34 @@ const modifyOrderEntryState: ModifyOrderEntryState = {
 
   isEntryCreating: false,
   isEntryEdited: false,
-  orderEntryId: "",
-  dishEntryId: "",
-  orderId: "",
+  orderEntryId: '',
+  dishEntryId: '',
+  orderId: '',
 
   orderEntryData: {
     dishData: {
-      kind: "NewDishData",
-      newDishName: "",
+      kind: 'NewDishData',
+      newDishName: '',
       newDishPrice: 0,
-      chosenSideDishes: []
+      chosenSideDishes: [],
     },
-    additionalComments: "",
-  }
+    additionalComments: '',
+  },
 };
 
-export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
+export const modifyOrderEntryModule: Module<ModifyOrderEntryState, RootState> = {
   namespaced: true,
 
   state: modifyOrderEntryState,
   mutations: {
     setEntryLoading(state, newValue: boolean) {
-      state.loadingEntry = newValue
+      state.loadingEntry = newValue;
     },
     setDishEntryCreating(state) {
       state.isEntryCreating = true;
       state.isEntryEdited = false;
-      state.orderEntryId = "";
-      state.dishEntryId = "";
+      state.orderEntryId = '';
+      state.dishEntryId = '';
     },
     setDishEntryEditing(state, payload) {
       state.isEntryCreating = false;
@@ -75,37 +75,37 @@ export const modifyOrderEntryModule: Module<ModifyOrderEntryState,RootState> = {
     cancelDishEntryModification(state) {
       state.isEntryCreating = false;
       state.isEntryEdited = false;
-      state.orderEntryId = "";
-      state.dishEntryId = "";
+      state.orderEntryId = '';
+      state.dishEntryId = '';
     },
     setInitialCreateOrderEntry(state, { orderId, dishId }) {
-      state.orderId = orderId
+      state.orderId = orderId;
 
       state.orderEntryData = {
         dishData: {
-          kind: "NewDishData",
-          newDishName: "",
+          kind: 'NewDishData',
+          newDishName: '',
           newDishPrice: 0,
-          chosenSideDishes: []
+          chosenSideDishes: [],
         },
-        additionalComments: "",
-      }
+        additionalComments: '',
+      };
     },
     setInitialEditedOrderEntry(state, { orderId, dishEntry }) {
-      state.orderId = orderId
+      state.orderId = orderId;
       state.dishEntryId = dishEntry.id;
 
       state.orderEntryData = {
         dishData: {
-          kind: "ExistingDishData",
+          kind: 'ExistingDishData',
           dishId: dishEntry.dishId,
-          chosenSideDishes: dishEntry.sideDishes || []
+          chosenSideDishes: dishEntry.sideDishes || [],
         },
         additionalComments: dishEntry.comments,
-      }
+      };
     },
     updateOrderEntryData(state, newValue) {
-      state.orderEntryData = newValue
-    }
-  }
+      state.orderEntryData = newValue;
+    },
+  },
 };

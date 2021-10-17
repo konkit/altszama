@@ -61,15 +61,15 @@
 </template>
 
 <script lang="ts">
-import Price from "../../../commons/PriceElement.vue";
-import CreateOrderEntry from "./CreateOrderEntry.vue";
-import EditOrderEntry from "./EditOrderEntry.vue";
-import ShowOrderEntry from "./ShowOrderEntry.vue";
-import TitleWithPaymentStatus from "@/views/orders/components/TitleWithPaymentStatus.vue";
-import Vue from "vue";
-import {Prop} from "vue-property-decorator";
-import Component from "vue-class-component";
-import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../frontend-client";
+import Vue from 'vue';
+import { Prop } from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import Price from '../../../commons/PriceElement.vue';
+import CreateOrderEntry from './CreateOrderEntry.vue';
+import EditOrderEntry from './EditOrderEntry.vue';
+import ShowOrderEntry from './ShowOrderEntry.vue';
+import TitleWithPaymentStatus from '@/views/orders/components/TitleWithPaymentStatus.vue';
+import { ParticipantsOrderEntry, ShowOrderDto } from '../../../../frontend-client';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -78,13 +78,16 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     Price,
     CreateOrderEntry,
     EditOrderEntry,
-    ShowOrderEntry
-  }
+    ShowOrderEntry,
+  },
 })
 export default class OrderEntriesCard extends Vue {
   @Prop() order!: ShowOrderDto;
+
   @Prop() orderEntry!: ParticipantsOrderEntry;
+
   @Prop() entryId!: string;
+
   @Prop() currentUserId!: string;
 
   isOrderEntryOwner() {
@@ -92,7 +95,7 @@ export default class OrderEntriesCard extends Vue {
   }
 
   createEntry() {
-    this.$store.commit(`modifyOrderEntry/setDishEntryCreating`, {});
+    this.$store.commit('modifyOrderEntry/setDishEntryCreating', {});
   }
 
   get isEntryCreating() {
@@ -108,7 +111,7 @@ export default class OrderEntriesCard extends Vue {
   }
 
   canAddNewEntry() {
-    return this.order.orderState === OrderStateEnum.CREATED && this.isOrderEntryOwner() && !this.isEntryEdited
+    return this.order.orderState === OrderStateEnum.CREATED && this.isOrderEntryOwner() && !this.isEntryEdited;
   }
 }
 </script>

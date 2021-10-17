@@ -9,24 +9,24 @@ import {
   RestaurantControllerApi,
   RestaurantSaveRequest,
   RestaurantUpdateRequest,
-  ShowRestaurantResponse
-} from "@/frontend-client/api";
-import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
-
+  ShowRestaurantResponse,
+} from '@/frontend-client/api';
+import { AbstractApiConnector } from '@/lib/api/AbstractApiConnector';
 
 export default class DishesApiConnector extends AbstractApiConnector {
   private readonly restaurantApi: RestaurantControllerApi;
+
   private readonly dishApi: DishControllerApi;
 
   constructor() {
-    super()
-    const configuration = this.createConfiguration()
+    super();
+    const configuration = this.createConfiguration();
     this.restaurantApi = new RestaurantControllerApi(configuration);
     this.dishApi = new DishControllerApi(configuration);
   }
 
   getRestaurants(): Promise<IndexResponse> {
-    return this.restaurantApi.indexRestaurants(this.headersWithToken())
+    return this.restaurantApi.indexRestaurants(this.headersWithToken());
   }
 
   getShowRestaurantData(restaurantId: string): Promise<ShowRestaurantResponse> {
@@ -46,7 +46,7 @@ export default class DishesApiConnector extends AbstractApiConnector {
   }
 
   deleteRestaurant(restaurantId: string): Promise<string> {
-    return this.restaurantApi.deleteRestaurant(restaurantId,this.headersWithToken());
+    return this.restaurantApi.deleteRestaurant(restaurantId, this.headersWithToken());
   }
 
   getDishCreateData(restaurantId: string): Promise<CreateDishResponse> {
@@ -57,7 +57,7 @@ export default class DishesApiConnector extends AbstractApiConnector {
     return this.dishApi.saveDish(formData, restaurantId, this.headersWithToken());
   }
 
-  getDishEditData(restaurantId: string,dishId: string): Promise<EditDishResponse> {
+  getDishEditData(restaurantId: string, dishId: string): Promise<EditDishResponse> {
     return this.dishApi.editDish(restaurantId, dishId, this.headersWithToken());
   }
 

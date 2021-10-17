@@ -27,15 +27,15 @@
 export default {
   name: 'BaseAvatar',
 
-    props: {
-      // color: String,
-      icon: String,
-      // outlined: Boolean,
-      size: {
-        type: [Number, String],
-        default: 56,
-      },
+  props: {
+    // color: String,
+    icon: String,
+    // outlined: Boolean,
+    size: {
+      type: [Number, String],
+      default: 56,
     },
+  },
 
   data: () => ({
     multiply: 6,
@@ -45,21 +45,21 @@ export default {
     classes() {
       return [
         'base-avatar--outlined',
-      ]
+      ];
     },
     outlineSize() {
-      return Number(this.size) + (this.size / this.multiply)
+      return Number(this.size) + (this.size / this.multiply);
     },
     styles() {
-      const margin = this.size / (this.multiply * 2)
+      const margin = this.size / (this.multiply * 2);
 
       return {
         // Aligns the outline content with the content
         margin: `-${margin}px 0 0 -${margin}px`,
-      }
+      };
     },
   },
-}
+};
 </script>
 
 <style lang="scss">

@@ -27,16 +27,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Prop, Watch } from "vue-property-decorator";
-import Component from "vue-class-component";
+import Vue from 'vue';
+import { Prop, Watch } from 'vue-property-decorator';
+import Component from 'vue-class-component';
 
 @Component({})
 export default class TimePicker extends Vue {
   @Prop() value!: string;
+
   @Prop() label!: string;
 
   time: string | null = null;
+
   modal2 = false;
 
   mounted() {
@@ -44,11 +46,11 @@ export default class TimePicker extends Vue {
   }
 
   inputEvent(event: Event) {
-    console.log("event: ", event);
-    this.$emit("input", event);
+    console.log('event: ', event);
+    this.$emit('input', event);
   }
 
-  @Watch("value")
+  @Watch('value')
   onPropertyChanged(value: string, oldValue: string) {
     this.time = value;
   }

@@ -40,39 +40,41 @@
 </template>
 
 <script lang="ts">
-import { RestaurantDto } from "@/frontend-client";
-import Vue from "vue";
-import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import { RestaurantDto } from '@/frontend-client';
 
 @Component({})
 export default class SelectRestaurantStep extends Vue {
   @Prop() restaurantId: string;
+
   @Prop() restaurantsList: RestaurantDto[];
 
   restaurantsPage = 1;
+
   pageSize = 5;
 
-  filterRestaurantName = ""
+  filterRestaurantName = ''
 
   updateRestaurantId(newValue: string) {
-    this.$emit("updateRestaurantId", newValue);
+    this.$emit('updateRestaurantId', newValue);
   }
 
   next() {
-    this.$emit("next");
+    this.$emit('next');
   }
 
   back() {
-    this.$emit("back");
+    this.$emit('back');
   }
 
   get filteredRestaurants() {
     const restaurants = this.filterRestaurantName != null
-      ? this.restaurantsList.filter(x => x.name.toLowerCase().includes(this.filterRestaurantName.toLowerCase()))
-      : this.restaurantsList
+      ? this.restaurantsList.filter((x) => x.name.toLowerCase().includes(this.filterRestaurantName.toLowerCase()))
+      : this.restaurantsList;
 
-    console.log(restaurants)
+    console.log(restaurants);
 
     return restaurants;
   }
@@ -82,7 +84,7 @@ export default class SelectRestaurantStep extends Vue {
     let rangeEnd = this.restaurantsPage * this.pageSize;
 
     if (rangeStart >= this.filteredRestaurants.length) {
-      this.restaurantsPage = 1
+      this.restaurantsPage = 1;
       rangeStart = (this.restaurantsPage - 1) * this.pageSize;
       rangeEnd = this.restaurantsPage * this.pageSize;
     }
