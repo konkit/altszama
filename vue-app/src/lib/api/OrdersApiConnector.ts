@@ -14,7 +14,7 @@ import {
   SideDishData,
   TodayOrdersResponse,
 } from '@/frontend-client';
-import { AbstractApiConnector } from '@/lib/api/AbstractApiConnector';
+import AbstractApiConnector from '@/lib/api/AbstractApiConnector';
 
 export interface OrderEntryToModify {
   orderId: string;

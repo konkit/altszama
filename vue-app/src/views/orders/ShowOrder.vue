@@ -252,7 +252,7 @@ export default class ShowOrder extends Vue {
   }
 
   shouldDisplayNewOrderEntryCard(): boolean {
-    return this.order.orderState == OrderStateEnum.CREATED && this.numberOfCurrentUserEntries === 0;
+    return this.order.orderState === OrderStateEnum.CREATED && this.numberOfCurrentUserEntries === 0;
   }
 }
 </script>

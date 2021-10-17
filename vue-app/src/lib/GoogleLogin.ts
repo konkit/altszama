@@ -8,7 +8,8 @@ function installClient() {
   return new Promise<void>((resolve, reject) => {
     const script = document.createElement('script') as any;
     script.src = gapiUrl;
-    script.onreadystatechange = script.onload = () => {
+
+    const onloadFunc = () => {
       const readyState: any = (script as any).readyState;
       if (!readyState || /loaded|complete/.test(readyState)) {
         setTimeout(() => {
@@ -16,6 +17,9 @@ function installClient() {
         }, 500);
       }
     };
+    script.onreadystatechange = onloadFunc;
+    script.onload = onloadFunc;
+
     document.getElementsByTagName('head')[0].appendChild(script);
   });
 }

@@ -1,6 +1,6 @@
 import store from '@/store';
 import { NotificationControllerApi, PushNotifSubscriptionData } from '@/frontend-client';
-import { AbstractApiConnector } from '@/lib/api/AbstractApiConnector';
+import AbstractApiConnector from '@/lib/api/AbstractApiConnector';
 import { getConfig } from '@/lib/config';
 
 export default class NotificationsApiConnector extends AbstractApiConnector {
@@ -23,7 +23,7 @@ export default class NotificationsApiConnector extends AbstractApiConnector {
     }
   }
 
-  initialiseState() {
+  initialiseState(): void {
     if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
       console.warn("Notifications aren't supported.");
       return;
@@ -40,7 +40,7 @@ export default class NotificationsApiConnector extends AbstractApiConnector {
       return;
     }
 
-    return navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+    navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
       serviceWorkerRegistration.pushManager
         .getSubscription()
         .then((subscription) => {

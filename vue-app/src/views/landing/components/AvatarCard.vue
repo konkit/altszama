@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import BaseAvatar from '@/views/landing/components/BaseAvatar';
+import BaseAvatar from '@/views/landing/components/BaseAvatar.vue';
 
 export default {
   name: 'AvatarCard',

@@ -9,7 +9,7 @@ let config: FrontendConfig;
 
 export function initConfig(): Promise<FrontendConfig> {
   return new Promise((resolve, reject) => {
-    const CURRENT_DOMAIN = `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}`;
+    const CURRENT_DOMAIN = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
     const CONFIG_URL = `${CURRENT_DOMAIN}/api/frontendConfig`;
 
     fetch(CONFIG_URL)

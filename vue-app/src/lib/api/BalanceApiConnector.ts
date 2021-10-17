@@ -1,4 +1,4 @@
-import { AbstractApiConnector } from '@/lib/api/AbstractApiConnector';
+import AbstractApiConnector from '@/lib/api/AbstractApiConnector';
 import { BalanceControllerApi, OrderHistory } from '@/frontend-client';
 
 export default class BalanceApiConnector extends AbstractApiConnector {

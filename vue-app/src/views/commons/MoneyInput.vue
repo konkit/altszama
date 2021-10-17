@@ -25,19 +25,19 @@ function fromString(a: string) {
   }
 
   if (str.length === 1) {
-    return parseInt(str[0]) * 100;
+    return parseInt(str[0], 10) * 100;
   }
 
-  const wholePart = parseInt(str[0].trim()) * 100;
+  const wholePart = parseInt(str[0].trim(), 10) * 100;
 
   const fractionPartString = str[1].trim();
   let fractionPart = 0;
   if (fractionPartString.length === 0) {
     fractionPart = 0;
   } else if (fractionPartString.length === 1) {
-    fractionPart = parseInt(fractionPartString) * 10;
+    fractionPart = parseInt(fractionPartString, 10) * 10;
   } else {
-    fractionPart = parseInt(str[1].trim().substr(0, 2));
+    fractionPart = parseInt(str[1].trim().substr(0, 2), 10);
   }
 
   return wholePart + fractionPart;

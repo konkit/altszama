@@ -1,1 +1,4 @@
 src/frontend-client/*
+vue.config.js
+src/lib/custom-service-worker.js
+src/lib/CustomPolyfills.js

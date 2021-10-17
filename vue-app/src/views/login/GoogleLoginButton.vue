@@ -28,10 +28,12 @@ export default class GoogleLoginButton extends Vue {
   connector: AuthApiConnector = new AuthApiConnector()
 
   mounted() {
-    GoogleLogin.load().then(() => (this.loginLoaded = true));
+    GoogleLogin.load().then(() => {
+      this.loginLoaded = true;
+    });
   }
 
-  googleSignIn() {
+  googleSignIn(): void {
     if (this.loginLoaded) {
       this.loginPending = true;
 
@@ -40,6 +42,7 @@ export default class GoogleLoginButton extends Vue {
         returnPath = this.$route.query.returnPath as string;
       }
 
+      // eslint-disable-next-line no-unused-expressions
       this.connector?.loginWithGoogle(returnPath).catch((e) => {
         this.$store.commit('clearErrors');
         if (e) {

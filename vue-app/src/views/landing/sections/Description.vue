@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import AvatarCard from '@/views/landing/components/AvatarCard';
+import AvatarCard from '@/views/landing/components/AvatarCard.vue';
 
 export default {
   name: 'Description',

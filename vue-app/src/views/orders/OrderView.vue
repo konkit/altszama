@@ -198,6 +198,8 @@ export default class OrderView extends Vue {
   submitForm() {
     this.$store.commit('setLoadingTrue');
     const formData = { approxTimeOfDelivery: this.approxTimeOfDelivery.toString() };
+
+    // eslint-disable-next-line no-unused-expressions
     this.connector?.makeAnOrder(this.orderId, formData)
       .then(() => router.back())
       .catch((errResponse) => {

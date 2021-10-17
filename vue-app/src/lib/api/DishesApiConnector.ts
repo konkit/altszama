@@ -11,7 +11,7 @@ import {
   RestaurantUpdateRequest,
   ShowRestaurantResponse,
 } from '@/frontend-client/api';
-import { AbstractApiConnector } from '@/lib/api/AbstractApiConnector';
+import AbstractApiConnector from '@/lib/api/AbstractApiConnector';
 
 export default class DishesApiConnector extends AbstractApiConnector {
   private readonly restaurantApi: RestaurantControllerApi;
