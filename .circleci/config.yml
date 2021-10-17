@@ -19,19 +19,9 @@ jobs:
         key: v1-gradle-cache-{{ checksum "backend-app/build.gradle" }}
 
     - run:
-        name: Run backend tests
+        name: Build docker images
         command: |
-          cd ./backend-app
-          ./gradlew --console=plain clean test
-          cd ../
-
-    - run:
-        name: Build frontend app
-        command: |
-          cd ./vue-app
-          npm install
-          npm run build
-          cd ../
+          bash buildDockerImages.sh
 
     - save_cache:
         paths:
