@@ -11,6 +11,7 @@ set -o pipefail
 
 
 export TARGET_PORT=8099
+export DOCKER_TAG="latest-${CIRCLE_BRANCH}"
 
 docker-compose -p TEST up -d
 
