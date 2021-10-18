@@ -32,7 +32,7 @@ export DOCKER_TAG="latest-${CIRCLE_BRANCH}"
 
 docker-compose -p TEST up -d
 
-sleep 5
+sleep 60
 
 cd ./e2e
 
