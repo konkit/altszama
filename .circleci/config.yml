@@ -23,7 +23,7 @@ jobs:
         name: Build docker images
         command: |
           set -e
-          bash buildDockerImages.sh
+          ./buildDockerImages.sh
 
     - save_cache:
         paths:
