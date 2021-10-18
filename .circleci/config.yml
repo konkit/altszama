@@ -44,7 +44,7 @@ jobs:
     docker:
       - image: cimg/node:15.0.1-browsers
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
       - checkout
       - setup_remote_docker
       - run:
@@ -72,7 +72,9 @@ workflows:
   build-and-deploy:
     jobs:
     - test
-    - testE2E
+    - testE2E:
+        requires:
+        - test
     - deploy:
         requires:
         - test
