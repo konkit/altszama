@@ -36,7 +36,8 @@ sleep 5
 
 cd ./e2e
 
-npx --yes testcafe chrome:headless src/tests/ --speed=0.7
+npm install
+npm run testcafe:all -- chrome:headless --speed=0.7
 
 cd ../
 
