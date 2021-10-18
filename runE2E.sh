@@ -27,6 +27,7 @@ if [ ! -f ".env" ]; then
 fi
 
 
+export TARGET_HOST="127.0.0.1"
 export TARGET_PORT=8099
 export DOCKER_TAG="latest-${CIRCLE_BRANCH}"
 
