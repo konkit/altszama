@@ -11,7 +11,6 @@ jobs:
 
     steps:
     - checkout
-    - setup_remote_docker
 
     - restore_cache:
         key: v1-gradle-wrapper-{{ checksum "backend-app/gradle/wrapper/gradle-wrapper.properties" }}
@@ -19,10 +18,14 @@ jobs:
     - restore_cache:
         key: v1-gradle-cache-{{ checksum "backend-app/build.gradle" }}
 
+    - setup_remote_docker
+
+    - run: |
+        echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+
     - run:
         name: Build docker images
         command: |
-          set -e
           ./buildDockerImages.sh
 
     - save_cache:
