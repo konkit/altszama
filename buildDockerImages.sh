@@ -24,7 +24,7 @@ docker push konkit/altszama-reverse-proxy:${TAG}
 cd ../
 
 cd ./backend-app || return 1
-./gradlew bootBuildImage --imageName=konkit/altszama-backend:${TAG} .
+./gradlew bootBuildImage --imageName=konkit/altszama-backend:${TAG}
 docker push konkit/altszama-backend:${TAG}
 cd ../
 
