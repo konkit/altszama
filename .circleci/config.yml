@@ -40,8 +40,7 @@ jobs:
 
   testE2E:
     docker:
-      - image: cimg/openjdk:11.0-node
-      - image: circleci/mongo:4.2.3
+      - image: cimg/node:16.11.1-browsers
 
     steps:
       - checkout
