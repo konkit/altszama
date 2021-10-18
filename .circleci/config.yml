@@ -28,11 +28,6 @@ jobs:
         command: |
           ./buildDockerImages.sh
 
-    - run:
-        name: Run e2e tests
-        command: |
-          ./runE2E.sh
-
     - save_cache:
         paths:
         - ~/.gradle/wrapper
@@ -42,6 +37,19 @@ jobs:
         paths:
         - ~/.gradle/caches
         key: v1-gradle-cache-{{ checksum "backend-app/build.gradle" }}
+
+  testE2E:
+    docker:
+      - image: cimg/openjdk:11.0-node
+      - image: circleci/mongo:4.2.3
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Run e2e tests
+          command: |
+            ./runE2E.sh
 
   deploy:
     machine:
@@ -63,6 +71,7 @@ workflows:
   build-and-deploy:
     jobs:
     - test
+    - testE2E
     - deploy:
         requires:
         - test

@@ -11,8 +11,8 @@ set -o pipefail
 
 # Fill .env file if it doesn't exist
 if [ ! -f ".env" ]; then
-  echo "DATABASE_NAME=$DATABASE_NAME" >> .env
   echo "DATABASE_HOST=$DATABASE_HOST" >> .env
+  echo "DATABASE_NAME=$DATABASE_NAME" >> .env
   echo "DATABASE_PORT=$DATABASE_PORT" >> .env
   echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> .env
   echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .env
