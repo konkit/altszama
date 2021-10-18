@@ -36,7 +36,7 @@ sleep 5
 
 cd ./e2e
 
-npx testcafe chrome:headless src/tests/ --speed=0.7
+npx --yes testcafe chrome:headless src/tests/ --speed=0.7
 
 cd ../
 
