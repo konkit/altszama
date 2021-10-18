@@ -1,6 +1,6 @@
-version: 2
+version: '2.1'
 orbs:
-  browser-tools: circleci/browser-tools@1.1.0
+  browser-tools: circleci/browser-tools@1.2.3
 jobs:
   test:
     environment:
@@ -42,7 +42,7 @@ jobs:
 
   testE2E:
     docker:
-      - image: cimg/node:15.0.1-browsers
+      - image: 'cimg/node:13.12-browser'
     steps:
       - browser-tools/install-browser-tools
       - checkout
