@@ -28,6 +28,11 @@ jobs:
         command: |
           ./buildDockerImages.sh
 
+    - run:
+        name: Run e2e tests
+        command: |
+          ./runE2E.sh
+
     - save_cache:
         paths:
         - ~/.gradle/wrapper

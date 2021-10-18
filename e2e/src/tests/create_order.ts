@@ -26,7 +26,7 @@ fixture(`Create order`)
     .beforeEach(async t => {
         await testEnvApi.clearEverything()
         await testEnvApi.generateRestaurantsAndDishes()
-        await t.resizeWindow(1400, 700)
+        await t.resizeWindow(1400, 800)
     })
     .page `${PARENT_URL}/`
 
