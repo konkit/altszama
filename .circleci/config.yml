@@ -1,4 +1,6 @@
 version: 2
+orbs:
+  browser-tools: circleci/browser-tools@1.1.0
 jobs:
   test:
     environment:
@@ -43,6 +45,7 @@ jobs:
       - image: cimg/node:16.11.1-browsers
 
     steps:
+      - browser-tools/install-browser-tools
       - checkout
       - setup_remote_docker
       - run:
