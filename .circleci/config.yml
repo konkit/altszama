@@ -42,8 +42,7 @@ jobs:
 
   testE2E:
     docker:
-      - image: cimg/node:16.11.1-browsers
-
+      - image: cimg/node:15.0.1-browsers
     steps:
       - browser-tools/install-browser-tools
       - checkout
