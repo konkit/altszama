@@ -72,9 +72,7 @@ workflows:
   build-and-deploy:
     jobs:
     - test
-    - testE2E:
-        requires:
-        - test
+    - testE2E
     - deploy:
         requires:
         - test
