@@ -42,7 +42,7 @@ jobs:
 
   testE2E:
     docker:
-      - image: 'cimg/node:13.12-browser'
+      - image: 'cimg/node:13.12-browsers'
     steps:
       - browser-tools/install-browser-tools
       - checkout
