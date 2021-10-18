@@ -23,6 +23,7 @@ if [ ! -f ".env" ]; then
   echo "JWT_SIGNING_KEY=$JWT_SIGNING_KEY" >> .env
   echo "SENTRY_URL=$SENTRY_URL" >> .env
   echo "SERVER_PORT=$SERVER_PORT" >> .env
+  echo "spring_profiles_active=$spring_profiles_active" >> .env
 fi
 
 
