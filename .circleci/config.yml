@@ -40,17 +40,17 @@ jobs:
         - ~/.gradle/caches
         key: v1-gradle-cache-{{ checksum "backend-app/build.gradle" }}
 
-  testE2E:
-    docker:
-      - image: cimg/node:15.0.1-browsers
-    steps:
-      - browser-tools/install-chrome
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Run e2e tests
-          command: |
-            ./runE2E.sh
+#  testE2E:
+#    docker:
+#      - image: cimg/node:15.0.1-browsers
+#    steps:
+#      - browser-tools/install-chrome
+#      - checkout
+#      - setup_remote_docker
+#      - run:
+#          name: Run e2e tests
+#          command: |
+#            ./runE2E.sh
 
   deploy:
     machine:
@@ -72,11 +72,11 @@ workflows:
   build-and-deploy:
     jobs:
     - test
-    - testE2E
+#    - testE2E
     - deploy:
         requires:
         - test
-        - testE2E
+#        - testE2E
         filters:
           branches:
             only: master
