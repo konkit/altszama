@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "testcafe:all": "testcafe chrome src/tests/ --debug-on-fail"
+    "testcafe:all": "testcafe chrome src/tests/"
   },
   "keywords": [],
   "author": "",

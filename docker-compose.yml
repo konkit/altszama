@@ -11,7 +11,7 @@ services:
   backend:
     depends_on:
       - db
-    image: "altszama-backend"
+    image: "konkit/altszama-backend:${DOCKER_TAG:-latest-master}"
     restart: always
     env_file: .env
     environment:
@@ -31,14 +31,14 @@ services:
   frontend:
     depends_on:
       - backend
-    image: "altszama-frontend"
+    image: "konkit/altszama-frontend:${DOCKER_TAG:-latest-master}"
     restart: always
 
   reverse-proxy:
     depends_on:
       - backend
       - frontend
-    image: "altszama-reverse-proxy"
+    image: "konkit/altszama-reverse-proxy:${DOCKER_TAG:-latest-master}"
     ports:
       - "127.0.0.1:${TARGET_PORT}:80"
 

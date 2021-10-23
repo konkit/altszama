@@ -6,9 +6,10 @@ import ShowOrderView from "../pageObjects/ShowOrderView";
 import OrderingView from "../pageObjects/OrderingView";
 import LoginView from "../pageObjects/LoginView";
 
+const TARGET_HOST = process.env.TARGET_HOST || "127.0.0.1";
 const TARGET_PORT = process.env.TARGET_PORT;
 
-const PARENT_URL = `http://localhost:${TARGET_PORT}`
+const PARENT_URL = `http://${TARGET_HOST}:${TARGET_PORT}`
 
 const testEnvApi = new TestEnvApi()
 
@@ -26,7 +27,7 @@ fixture(`Create order`)
     .beforeEach(async t => {
         await testEnvApi.clearEverything()
         await testEnvApi.generateRestaurantsAndDishes()
-        await t.resizeWindow(1400, 700)
+        await t.resizeWindow(1400, 800)
     })
     .page `${PARENT_URL}/`
 

@@ -1,4 +1,6 @@
-version: 2
+version: '2.1'
+orbs:
+  browser-tools: circleci/browser-tools@1.2.3
 jobs:
   test:
     environment:
@@ -18,20 +20,15 @@ jobs:
     - restore_cache:
         key: v1-gradle-cache-{{ checksum "backend-app/build.gradle" }}
 
-    - run:
-        name: Run backend tests
-        command: |
-          cd ./backend-app
-          ./gradlew --console=plain clean test
-          cd ../
+    - setup_remote_docker
+
+    - run: |
+        echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
 
     - run:
-        name: Build frontend app
+        name: Build docker images
         command: |
-          cd ./vue-app
-          npm install
-          npm run build
-          cd ../
+          ./buildDockerImages.sh
 
     - save_cache:
         paths:
@@ -42,6 +39,18 @@ jobs:
         paths:
         - ~/.gradle/caches
         key: v1-gradle-cache-{{ checksum "backend-app/build.gradle" }}
+
+#  testE2E:
+#    docker:
+#      - image: cimg/node:15.0.1-browsers
+#    steps:
+#      - browser-tools/install-chrome
+#      - checkout
+#      - setup_remote_docker
+#      - run:
+#          name: Run e2e tests
+#          command: |
+#            ./runE2E.sh
 
   deploy:
     machine:
@@ -63,9 +72,11 @@ workflows:
   build-and-deploy:
     jobs:
     - test
+#    - testE2E
     - deploy:
         requires:
         - test
+#        - testE2E
         filters:
           branches:
             only: master

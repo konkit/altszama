@@ -12,16 +12,17 @@ import EditDishForm from "../pageObjects/EditDishForm";
 import EditRestaurantForm from "../pageObjects/EditRestaurantForm";
 import LoginView from "../pageObjects/LoginView";
 
+const TARGET_HOST = process.env.TARGET_HOST || "127.0.0.1";
 const TARGET_PORT = process.env.TARGET_PORT;
 
-const testEnvApi = new TestEnvApi()
+const PARENT_URL = `http://${TARGET_HOST}:${TARGET_PORT}`
 
+const testEnvApi = new TestEnvApi();
 
 const johnDoe = {
     username: "John Doe",
     email: "john.doe@altszama.club"
 }
-
 
 fixture(`Create restaurant and dish`)
     .before(async _ => {
@@ -31,7 +32,7 @@ fixture(`Create restaurant and dish`)
     .beforeEach(async t => {
         await t.resizeWindow(1400, 700)
     })
-    .page`http://localhost:${TARGET_PORT}`
+    .page `${PARENT_URL}/`
 
 
 test('Create restaurant and dish, update and delete', async () => {
