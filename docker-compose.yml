@@ -6,25 +6,24 @@ services:
     volumes:
       - altszama-mongodb-volume:/data/db
     restart: always
-    env_file: .env
 
   backend:
     depends_on:
       - db
     image: "konkit/altszama-backend:${DOCKER_TAG:-latest-master}"
     restart: always
-    env_file: .env
     environment:
-      DATABASE_NAME: $DATABASE_NAME
       DATABASE_HOST: $DATABASE_HOST
+      DATABASE_NAME: $DATABASE_NAME
       DATABASE_PORT: $DATABASE_PORT
       GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
       GOOGLE_CLIENT_SECRET: $GOOGLE_CLIENT_SECRET
+      JWT_SIGNING_KEY: $JWT_SIGNING_KEY
+      ORIGIN_URL: $ORIGIN_URL
+      SERVER_PORT: $SERVER_PORT
       VAPID_PUBLIC_KEY: $VAPID_PUBLIC_KEY
       VAPID_PRIVATE_KEY: $VAPID_PRIVATE_KEY
       VAPID_SUBJECT: $VAPID_SUBJECT
-      JWT_SIGNING_KEY: $JWT_SIGNING_KEY
-      ORIGIN_URL: $ORIGIN_URL
       SENTRY_URL: $SENTRY_URL
       spring_profiles_active: $spring_profiles_active
 

@@ -10,36 +10,25 @@ set -o errexit
 set -o pipefail
 
 # Fill .env file if it doesn't exist
-if [ ! -f ".env" ]; then
-  echo "DATABASE_HOST=$DATABASE_HOST" >> .env
-  echo "DATABASE_NAME=$DATABASE_NAME" >> .env
-  echo "DATABASE_PORT=$DATABASE_PORT" >> .env
-  echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> .env
-  echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .env
-  echo "VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY" >> .env
-  echo "VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY" >> .env
-  echo "VAPID_SUBJECT=$VAPID_SUBJECT" >> .env
-  echo "ORIGIN_URL=$ORIGIN_URL" >> .env
-  echo "JWT_SIGNING_KEY=$JWT_SIGNING_KEY" >> .env
-  echo "SENTRY_URL=$SENTRY_URL" >> .env
-  echo "SERVER_PORT=$SERVER_PORT" >> .env
-  echo "spring_profiles_active=$spring_profiles_active" >> .env
+if [ ! -f ".env-test" ]; then
+  echo ".env-test file not found"
+  exit 1
 fi
 
+export TARGET_PORT=18099
+export DOCKER_TAG="latest-${CURRENT_BRANCH-master}"
 
-export TARGET_HOST="127.0.0.1"
-export TARGET_PORT=8099
-export DOCKER_TAG="latest-${CIRCLE_BRANCH}"
+docker-compose -p TESTE2E --env-file=".env-test" up -d
 
-docker-compose -p TEST up -d
+function cleanup {
+  docker-compose -p TESTE2E down
+}
+trap cleanup EXIT
 
-sleep 60
+sleep 30
 
-cd ./e2e
-
-npm install
-npm run testcafe:all -- chrome:headless --speed=0.7
-
-cd ../
-
-docker-compose -p TEST down
+docker run \
+   -e "TARGET_HOST=reverse-proxy" \
+   -e "TARGET_PORT=80" \
+   --network=teste2e_default  \
+   -it "konkit/altszama-e2e:$DOCKER_TAG" 'chromium:headless --speed=0.7' /app/src/tests
