@@ -10,15 +10,15 @@ set -o errexit
 set -o pipefail
 
 # Fill .env file if it doesn't exist
-if [ ! -f ".env-test" ]; then
-  echo ".env-test file not found"
+if [ ! -f ".envtest" ]; then
+  echo ".envtest file not found"
   exit 1
 fi
 
 export TARGET_PORT=18099
 export DOCKER_TAG="latest-${CURRENT_BRANCH-master}"
 
-docker-compose -p TESTE2E --env-file=".env-test" up -d
+docker-compose -p TESTE2E --env-file=".envtest" up -d
 
 function cleanup {
   docker-compose -p TESTE2E down

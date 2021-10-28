@@ -46,6 +46,25 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+
+      - run:
+          name: Create .envtest file
+          command: |
+            touch .envtest
+            echo "DATABASE_HOST=$DATABASE_HOST" >> .envtest
+            echo "DATABASE_NAME=$DATABASE_NAME" >> .envtest
+            echo "DATABASE_PORT=$DATABASE_PORT" >> .envtest
+            echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> .envtest
+            echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .envtest
+            echo "JWT_SIGNING_KEY=$JWT_SIGNING_KEY" >> .envtest
+            echo "ORIGIN_URL=$ORIGIN_URL" >> .envtest
+            echo "SERVER_PORT=$SERVER_PORT" >> .envtest
+            echo "VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY" >> .envtest
+            echo "VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY" >> .envtest
+            echo "VAPID_SUBJECT=$VAPID_SUBJECT" >> .envtest
+            echo "SENTRY_URL=$SENTRY_URL" >> .envtest
+            echo "spring_profiles_active=$spring_profiles_active" >> .envtest
+
       - run:
           name: Run e2e tests
           command: |
