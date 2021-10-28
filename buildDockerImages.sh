@@ -11,7 +11,7 @@ set -o pipefail
 
 
 
-TAG="latest-${CIRCLE_BRANCH}"
+TAG="latest-${CURRENT_BRANCH}"
 
 cd ./vue-app || return 1
 docker build -t konkit/altszama-frontend:${TAG} .
@@ -26,5 +26,10 @@ cd ../
 cd ./backend-app || return 1
 ./gradlew bootBuildImage --imageName=konkit/altszama-backend:${TAG}
 docker push konkit/altszama-backend:${TAG}
+cd ../
+
+cd ./e2e || return 1
+docker build -t konkit/altszama-e2e:${TAG} .
+docker push konkit/altszama-e2e:${TAG}
 cd ../
 

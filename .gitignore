@@ -1,6 +1,7 @@
 .idea/
 **/.env
 .env
+.env-test
 .circleci/*.iml
 k8s/*.iml
 .DS_Store
