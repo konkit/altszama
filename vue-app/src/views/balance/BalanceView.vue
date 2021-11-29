@@ -13,19 +13,21 @@
               <template v-if="owedMoneyEntries.length > 0">
                 <v-list>
                   <template v-for="([owedUsername, owedAmount], i) in owedMoneyEntries">
-                    <v-list-item two-line :key="i">
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          <template v-if="owedAmount > 0">
-                            <p :key="i">You are owed <b><price-element :data-price="owedAmount"/></b> by <b>{{owedUsername}}</b></p>
-                          </template>
+                    <template v-if="owedAmount !== 0">
+                      <v-list-item two-line :key="i">
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            <template v-if="owedAmount > 0">
+                              <p :key="i">You are owed <b><price-element :data-price="owedAmount"/></b> by <b>{{owedUsername}}</b></p>
+                            </template>
 
-                          <template v-if="owedAmount < 0">
-                            <p :key="i">You owe <b><price-element :data-price="-owedAmount" /></b> to <b>{{owedUsername}}</b></p>
-                          </template>
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
+                            <template v-if="owedAmount < 0">
+                              <p :key="i">You owe <b><price-element :data-price="-owedAmount" /></b> to <b>{{owedUsername}}</b></p>
+                            </template>
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </template>
                   </template>
                 </v-list>
               </template>
