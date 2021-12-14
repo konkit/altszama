@@ -125,6 +125,9 @@ import {ParticipantsOrderEntry, ShowOrderDto} from "../../frontend-client";
 import ErrorHandler from "@/lib/ErrorHandler";
 import OrdersApiConnector from "@/lib/api/OrdersApiConnector";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import store from "@/store";
+
+import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 
 @Component({
   components: {
@@ -146,6 +149,16 @@ export default class ShowOrder extends Vue {
   mounted() {
     this.orderId = this.$route.params.id;
     this.fetchOrder();
+
+    const es = new EventSourcePolyfill('/api/orders/sse', { headers: { Authorization: "Bearer " + this.$store.state.token } });
+
+    const listener = function (event: any) {
+      const type = event.type;
+      console.log(type + ": " + (type === "message" ? event.data : es.url))
+    };
+    es.addEventListener("open", listener);
+    es.addEventListener("message", listener);
+    es.addEventListener("error", listener);
   }
 
   fetchOrder() {

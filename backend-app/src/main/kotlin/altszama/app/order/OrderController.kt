@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
+import java.time.LocalDateTime
+import java.util.concurrent.Executors
 import javax.validation.Valid
+
 
 @RestController
 @RequestMapping("/api")
@@ -131,5 +135,22 @@ class OrderController {
     val currentUser = userService.currentUser()
     orderService.setAsRejected(orderId, currentUser)
     return ResponseEntity("{}", HttpStatus.OK)
+  }
+
+  var nonBlockingService = Executors.newCachedThreadPool()
+
+  @GetMapping("/orders/sse")
+  fun handleSse(): SseEmitter? {
+    val emitter = SseEmitter()
+    nonBlockingService.execute {
+      try {
+        emitter.send("/sse" + " @ " + LocalDateTime.now().toString())
+        // we could send more events
+        emitter.complete()
+      } catch (ex: Exception) {
+        emitter.completeWithError(ex)
+      }
+    }
+    return emitter
   }
 }
