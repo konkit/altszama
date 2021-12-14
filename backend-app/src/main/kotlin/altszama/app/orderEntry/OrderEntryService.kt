@@ -4,6 +4,7 @@ import altszama.app.auth.User
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.SideDish
+import altszama.app.order.OrderEmitterService
 import altszama.app.order.OrderRepository
 import altszama.app.order.OrderState
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
@@ -29,6 +30,9 @@ class OrderEntryService {
 
   @Autowired
   private lateinit var dishRepository: DishRepository
+
+  @Autowired
+  private lateinit var orderEmitterService: OrderEmitterService
 
 
   fun saveEntry(currentUser: User, currentUserTeam: Team, orderEntrySaveRequest: OrderEntrySaveRequest): OrderEntry {
@@ -93,6 +97,7 @@ class OrderEntryService {
       )
     }
 
+    orderEmitterService.emitOrderEntryChanged(order.id)
     return orderEntryRepository.save(savedEntry)
   }
 
@@ -170,6 +175,7 @@ class OrderEntryService {
 
     val updatedEntry = orderEntry.copy(dishEntries = dishEntries)
 
+    orderEmitterService.emitOrderEntryChanged(updatedEntry.order.id)
     orderEntryRepository.save(updatedEntry)
   }
 
@@ -178,6 +184,7 @@ class OrderEntryService {
 
     val updatedDishEntries = orderEntry.dishEntries.filter { entry -> entry.id != dishEntryId }
 
+    orderEmitterService.emitOrderEntryChanged(orderEntry.order.id)
     if (updatedDishEntries.isEmpty()) {
       orderEntryRepository.deleteById(orderEntryId)
     } else {

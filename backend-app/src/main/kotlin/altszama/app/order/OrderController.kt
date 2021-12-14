@@ -29,6 +29,8 @@ class OrderController {
   @Autowired
   private lateinit var orderControllerDataService: OrderControllerDataService
 
+  @Autowired
+  private lateinit var orderEmitterService: OrderEmitterService
 
   @GetMapping("/orders/today.json")
   fun todayOrders(): TodayOrdersResponse {
@@ -137,20 +139,8 @@ class OrderController {
     return ResponseEntity("{}", HttpStatus.OK)
   }
 
-  var nonBlockingService = Executors.newCachedThreadPool()
-
   @GetMapping("/orders/sse")
   fun handleSse(): SseEmitter? {
-    val emitter = SseEmitter()
-    nonBlockingService.execute {
-      try {
-        emitter.send("/sse" + " @ " + LocalDateTime.now().toString())
-        // we could send more events
-        emitter.complete()
-      } catch (ex: Exception) {
-        emitter.completeWithError(ex)
-      }
-    }
-    return emitter
+    return orderEmitterService.getEmitter()
   }
 }
