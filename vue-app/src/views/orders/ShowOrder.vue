@@ -146,19 +146,20 @@ export default class ShowOrder extends Vue {
 
   ordersConnector = new OrdersApiConnector()
 
+  es: any | null = null
+
   mounted() {
     this.orderId = this.$route.params.id;
     this.fetchOrder();
+    this.handleOrderChangeSSE();
+  }
 
-    const es = new EventSourcePolyfill('/api/orders/sse', { headers: { Authorization: "Bearer " + this.$store.state.token } });
-
-    const listener = function (event: any) {
-      const type = event.type;
-      console.log(type + ": " + (type === "message" ? event.data : es.url))
-    };
-    es.addEventListener("open", listener);
-    es.addEventListener("message", listener);
-    es.addEventListener("error", listener);
+  // Lifecycle method, so unlike IntelliJ shows it, it is used
+  /* exported beforeDestroy */
+  beforeDestroy() {
+    if (this.es != null) {
+      this.es.close();
+    }
   }
 
   fetchOrder() {
@@ -209,6 +210,26 @@ export default class ShowOrder extends Vue {
 
   allEatingPeopleCount(): number {
     return this.orderEntries.flatMap(e => e.dishEntries).length;
+  }
+
+  private handleOrderChangeSSE() {
+    this.es = new EventSourcePolyfill('/api/orders/sse', {headers: {Authorization: "Bearer " + this.$store.state.token}});
+
+    // const controlListener = function (event: any) {
+    //   const type = event.type;
+    //   console.log(type + ": " + (type === "message" ? event.data : es.url))
+    // };
+
+    const eventListener = (event: any) => {
+      const data = JSON.parse(event.data)
+      if (data.orderId === this.orderId) {
+        this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.orderId);
+      }
+    };
+
+    // es.addEventListener("open", controlListener);
+    this.es.addEventListener("message", eventListener);
+    // es.addEventListener("error", controlListener);
   }
 
   get numberOfCurrentUserEntries(): number {

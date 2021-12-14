@@ -46,7 +46,7 @@ class OrderEmitterService {
     emittersList.add(emitter)
 
     emitter.onCompletion {
-      logger.info("Emitter completed. Removing from queue")
+      logger.info("Emitter completed. Removing from queue.")
       emittersList.remove(emitter)
     }
 
