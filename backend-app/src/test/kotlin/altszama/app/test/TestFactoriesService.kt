@@ -90,9 +90,9 @@ class TestFactoriesService {
     val sideDish1 = SideDish(name = "Side dish 1", price = 100)
     val sideDish2 = SideDish(name = "Side dish 2", price = 120)
     val sideDish3 = SideDish(name = "Side dish 3", price = 150)
+    val sideDishesList = listOf(sideDish1, sideDish2, sideDish3)
 
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
-    val sideDishesList = listOf(sideDish1, sideDish2, sideDish3)
     val dishCreateRequest1 = DishCreateRequest(
       "Dish 1",
       100,

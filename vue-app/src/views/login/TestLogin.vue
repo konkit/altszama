@@ -12,9 +12,14 @@
             <v-card class="pa-8">
               <h1 class="text-h4 pb-5 text-align-center">Test Login</h1>
 
-              <div v-for="(user, i) in usersList" :key="i">
+              <div v-for="(user, i) in usersList.slice((page_number - 1) * 10, page_number * 10)" :key="i">
                 <v-btn @click="loginAsUser(user)">{{ user.username }} ({{ user.email }})</v-btn>
               </div>
+
+              <v-pagination
+                  v-model="page_number"
+                  :length="Math.ceil(usersList.length / 10)"
+              ></v-pagination>
             </v-card>
           </v-col>
         </v-row>
@@ -45,6 +50,8 @@ export default class TestLoginView extends Vue {
 
   usersList: UserEntry[] = [];
 
+  page_number = 1
+
   mounted() {
     this.getTestUsers()
   }
@@ -69,8 +76,8 @@ export default class TestLoginView extends Vue {
           }
           return response.json()
         })
-        .then(data => {
-          this.usersList = data
+        .then((data: UserEntry[]) => {
+          this.usersList = data.sort((a, b) => a.username.localeCompare(b.username))
         })
         .catch((error) => {
           console.error('Error:', error);

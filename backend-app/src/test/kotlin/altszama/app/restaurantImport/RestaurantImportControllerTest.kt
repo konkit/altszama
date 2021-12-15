@@ -3,9 +3,11 @@ package altszama.app.restaurantImport
 import altszama.app.dish.Dish
 import altszama.app.dish.DishService
 import altszama.app.dish.SideDish
+import altszama.app.dish.dto.DishCreateRequest
 import altszama.app.restaurant.Restaurant
 import altszama.app.restaurant.RestaurantService
 import altszama.app.restaurant.dto.RestaurantSaveRequest
+import altszama.app.team.Team
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import org.assertj.core.api.Assertions.assertThat
@@ -43,7 +45,7 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
     }""".trimIndent()
 
   @Test
-  fun shouldSuccessfullyImportNewRestaurant() {
+  fun shouldSuccessfullyImportCompletelyNewRestaurant() {
     val team1 = testFactoriesService.createTeam1()
 
     val request = post("/api/restaurantImport/import")
@@ -55,7 +57,6 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
       .andExpect(MockMvcResultMatchers.status().isOk)
 
     val restaurant = restaurantService.findByTeamAndName(team1, "Restaurant 1")!!
-
     assertThat(restaurant.name).isEqualTo("Restaurant 1")
 
     val dishes = dishService.findAllDishesByRestaurantId(restaurant.id)
@@ -64,6 +65,10 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
     assertThat(dishes[0].name).isEqualTo("Dish 1")
     assertThat(dishes[0].price).isEqualTo(100)
     assertThat(dishes[0].sideDishes).hasSize(1)
+
+    assertThat(dishes[1].name).isEqualTo("Dish 2")
+    assertThat(dishes[1].price).isEqualTo(200)
+    assertThat(dishes[1].sideDishes).hasSize(0)
 
     assertThat(dishes[2].name).isEqualTo("Dish 3")
     assertThat(dishes[2].price).isEqualTo(0)
@@ -121,7 +126,6 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
   @Test
   fun itShouldUpdateExistingDishesInTheRestaurant() {
     val team1 = testFactoriesService.createTeam1()
-    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
     val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
 
@@ -145,6 +149,58 @@ class RestaurantImportControllerTest() : AbstractIntegrationTest() {
       assertThat(result.category).isEqualTo(expected.category)
       assertThat(result.sideDishes).isEqualTo(expected.sideDishes)
     }
+  }
+
+  @Test
+  fun itShouldKeepTheOrderOfTheExistingDishesInTheRestaurant() {
+    val team1 = testFactoriesService.createTeam1()
+
+    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
+    createDish(2, 120, team1, restaurant)
+    createDish(3, 0, team1, restaurant)
+
+    val request = post("/api/restaurantImport/import")
+      .content(restaurantImportJson)
+      .contentType(MediaType.APPLICATION_JSON)
+      .header(RestaurantImport.headerName, team1.importApiKey)
+
+    mockMvc.perform(request)
+      .andExpect(MockMvcResultMatchers.status().isOk)
+
+    val resultDishes = dishService.findAllDishesByRestaurantId(restaurant.id)
+
+    assertThat(resultDishes.size).isEqualTo(3)
+
+    assertThat(resultDishes[0].name).isEqualTo("Dish 1")
+    assertThat(resultDishes[0].price).isEqualTo(100)
+    assertThat(resultDishes[0].sideDishes).hasSize(1)
+
+    assertThat(resultDishes[1].name).isEqualTo("Dish 2")
+    assertThat(resultDishes[1].price).isEqualTo(200)
+    assertThat(resultDishes[1].sideDishes).hasSize(0)
+
+    assertThat(resultDishes[2].name).isEqualTo("Dish 3")
+    assertThat(resultDishes[2].price).isEqualTo(0)
+    assertThat(resultDishes[2].sideDishes).hasSize(0)
+  }
+
+  private fun createDish(
+    dishNumber: Int,
+    price: Int,
+    team1: Team,
+    restaurant: Restaurant
+  ): Dish {
+    val sideDishesList = (1 to 3).toList().map { i ->
+      SideDish(name = "Side dish $i", price = 100)
+    }
+
+    val dishCreateRequest1 = DishCreateRequest(
+      "Dish ${dishNumber}",
+      price,
+      category = "Category 1",
+      sideDishes = sideDishesList
+    )
+    return dishService.saveDish(team1, restaurant.id, dishCreateRequest1)
   }
 
   private fun createRestaurantsJson(restaurant: Restaurant, dishes: List<Dish>): String {

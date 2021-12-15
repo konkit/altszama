@@ -41,7 +41,7 @@ class RestaurantImportService {
 
       val dishesToRemove = currentDishes.toMutableList()
 
-      restaurantData.dishes.forEach { dishData ->
+      restaurantData.dishes.forEachIndexed { index, dishData ->
         val dishFromExistingList = currentDishes.firstOrNull { dish -> dish.name == dishData.name }
 
         if (dishFromExistingList != null) {
@@ -69,7 +69,8 @@ class RestaurantImportService {
             price = newPrice,
             sideDishes = sideDishes,
             lastCrawled = now,
-            category = newCategory
+            category = newCategory,
+            orderingIndex = index
         )
 
         dishRepository.save(updatedDish)

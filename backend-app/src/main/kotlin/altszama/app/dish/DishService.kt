@@ -33,7 +33,7 @@ class DishService {
   }
 
   fun findAllDishesByRestaurantId(restaurantId: String): List<Dish> {
-    return dishRepository.findByRestaurantId(restaurantId)
+    return dishRepository.findByRestaurantIdOrderByOrderingIndex(restaurantId)
   }
 
   fun getAllCategoriesByRestaurantId(restaurantId: String): List<String> {

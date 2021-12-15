@@ -31,5 +31,8 @@ data class Dish(
 
   var lastCrawled: Instant? = null,
 
-  var lastEdited: Instant? = null
+  var lastEdited: Instant? = null,
+
+  @Transient
+  var orderingIndex: Int? = 0
 )
