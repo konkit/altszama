@@ -55,7 +55,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="paymentData.paymentByBankTransfer && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
+      <v-list-item v-if="paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
         <v-list-item-content>
           <div class="px-3 user-selectable">
             {{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}
