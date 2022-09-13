@@ -90,13 +90,13 @@ workflows:
   build-and-deploy:
     jobs:
     - test
-    - testE2E:
-        requires:
-        - test
+#     - testE2E:
+#         requires:
+#         - test
     - deploy:
         requires:
         - test
-        - testE2E
+#         - testE2E
         filters:
           branches:
             only: master
