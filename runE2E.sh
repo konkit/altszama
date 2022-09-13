@@ -18,10 +18,10 @@ fi
 export TARGET_PORT=18099
 export DOCKER_TAG="latest-${CURRENT_BRANCH-master}"
 
-docker-compose -p TESTE2E --env-file=".envtest" up -d
+docker-compose -p teste2e --env-file=".envtest" up -d
 
 function cleanup {
-  docker-compose -p TESTE2E down
+  docker-compose -p teste2e down
 }
 trap cleanup EXIT
 
