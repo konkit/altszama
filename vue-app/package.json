@@ -26,7 +26,7 @@
     "vue-select": "^3.10.8",
     "vue-simple-upload": "^0.1.6",
     "vue-text-mask": "^6.1.2",
-    "vuetify": "^2.4.5",
+    "vuetify": "^2.6.10",
     "vuex": "^3.6.2",
     "webpack-pwa-manifest": "^4.2.0"
   },
