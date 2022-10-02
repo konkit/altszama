@@ -5,17 +5,16 @@ import altszama.app.auth.AuthUserInfo
 import altszama.app.auth.UserService
 import altszama.app.team.Team
 import altszama.app.team.TeamService
-import altszama.config.SecretsConfig
 import arrow.core.Either
 import arrow.core.computations.either
-import com.google.api.services.oauth2.model.Userinfoplus
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 
 sealed class GoogleAuthResult
-data class GoogleAuthSuccess(val userInfo: AuthUserInfo) : GoogleAuthResult()
+data class GoogleAuthSuccess(val userInfo: AuthUserInfo, val userEmail: String) : GoogleAuthResult()
 data class GoogleAuthError(val message: String) : GoogleAuthResult()
 
 
@@ -36,26 +35,24 @@ class GoogleLoginService() {
   @Autowired
   private lateinit var googleLoginApiService: GoogleLoginApiService
 
-
-  suspend fun verifyTokenAndGetUserInfo(authCode: String): Either<GoogleAuthError, GoogleAuthSuccess> {
+  suspend fun verifyUser(idToken: String): Either<GoogleAuthError, GoogleAuthSuccess> {
     return either {
-      val accessTokenResponse = googleLoginApiService.fetchAccessToken(authCode).bind()
-      val tokenVerified = googleLoginApiService.verifyGoogleToken(accessTokenResponse.idToken).bind()
-      val userinfo = googleLoginApiService.fetchUserInfo(accessTokenResponse).bind()
-      val team = findUserTeam(userinfo).bind()
+      val verifiedToken: GoogleIdToken = googleLoginApiService.verifyGoogleToken(idToken).bind()
+      val tokenPayload: GoogleIdToken.Payload = verifiedToken.payload
+      val team = findUserTeam(tokenPayload.email).bind()
 
-      logger.info("User ${userinfo.name} (<${userinfo.email}>) just logged in")
+      logger.info("User ${tokenPayload.email} (<${tokenPayload.email}>) just logged in")
 
-      val authInfo = userService.createJwtTokenFromUserInfo(userinfo.name, userinfo.email)
+      val authInfo = userService.createJwtTokenFromUserInfo(tokenPayload.get("name").toString(), tokenPayload.email)
 
       activityEventService.saveUserLogin(authInfo.userId)
 
-      GoogleAuthSuccess(authInfo)
+      GoogleAuthSuccess(authInfo, tokenPayload.email)
     }
   }
 
-  private fun findUserTeam(userinfo: Userinfoplus): Either<GoogleAuthError, Team> {
-    val teamOpt = teamService.findByEmail(userinfo.email)
+  private fun findUserTeam(email: String): Either<GoogleAuthError, Team> {
+    val teamOpt = teamService.findByEmail(email)
 
     return if (teamOpt.isPresent) {
       Either.right(teamOpt.get())

@@ -1,6 +1,5 @@
 import store from "../store";
 import router from "../router";
-import GoogleLogin from "./GoogleLogin";
 
 export default class ErrorHandler {
   static handleError(errorResponse: any) {
@@ -12,10 +11,7 @@ export default class ErrorHandler {
       store.commit("logoutUser");
       store.commit("setPushNotificationEnabled", false);
 
-      const signOutCallback =
-        () => router.push({name: "Login", query: {returnPath: fullRoutePath}});
-
-      GoogleLogin.signOut(signOutCallback, signOutCallback);
+      router.push({name: "Login", query: {returnPath: fullRoutePath}});
     } else if (errorResponse.status === 500) {
       console.error(errorResponse)
       store.commit("addError", {message: "Internal error occured, please try again or contact the administrator."})

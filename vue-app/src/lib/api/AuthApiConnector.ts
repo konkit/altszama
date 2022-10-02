@@ -1,7 +1,6 @@
 import store from "@/store";
 import router from "@/router";
-import GoogleLogin from "@/lib/GoogleLogin";
-import {AuthControllerApi} from "@/frontend-client";
+import {AuthControllerApi, GooglePayload} from "@/frontend-client";
 import {AbstractApiConnector} from "@/lib/api/AbstractApiConnector";
 
 
@@ -14,48 +13,34 @@ export default class AuthApiConnector extends AbstractApiConnector {
     this.authControllerApi = new AuthControllerApi(this.createConfiguration());
   }
 
-  loginWithGoogle(returnPath = ""): Promise<void> {
+  loginWithGoogle(googlePayload: GooglePayload, returnPath = ""): Promise<void> {
     return new Promise((resolve, reject) => {
-      GoogleLogin.signIn()
+      return this.authControllerApi.loginWithReceivedJwt(googlePayload)
         .then(
-          authCode => {
-            this.authControllerApi.loginWithIdToken(authCode)
-              .then(
-                response => {
-                  store.commit("loginUser", {
-                    username: response.userInfo.username,
-                    token: response.userInfo.token
-                  });
+          response => {
+            store.commit("loginUser", {
+              username: response.userInfo.username,
+              userEmail: response.userEmail,
+              token: response.userInfo.token
+            });
 
-                  if (returnPath.length > 0) {
-                    router.push({path: returnPath});
-                  } else {
-                    router.push({name: "TodayOrders"});
-                  }
+            if (returnPath.length > 0) {
+              router.push({path: returnPath});
+            } else {
+              router.push({name: "TodayOrders"});
+            }
 
-                  resolve();
-                },
-                errorResponse => {
-                  errorResponse.json().then((error: unknown) => reject(error))
-                }
-              );
+            resolve();
           },
-          err => {
-            console.log("Google login sign in error: ", err)
-            reject()
+          errorResponse => {
+            try {
+              errorResponse.json().then((error: unknown) => reject(error), (error: unknown) => reject(error))
+            } catch {
+              errorResponse.text().then((error: unknown) => reject(error), (error: unknown) => reject(error))
+            }
           }
-        )
+        );
     });
-  }
-
-  doLogout() {
-    store.commit("logoutUser");
-    const signOutCallback = () => router.push({name: "Login"});
-    GoogleLogin.signOut(signOutCallback, signOutCallback);
-  }
-
-  setPushNotificationEnabled(newVal: boolean) {
-    store.commit("setPushNotificationEnabled", newVal)
   }
 }
 

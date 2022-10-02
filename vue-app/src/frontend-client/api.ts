@@ -628,6 +628,37 @@ export interface GoogleAuthSuccess {
      * @memberof GoogleAuthSuccess
      */
     userInfo: AuthUserInfo;
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleAuthSuccess
+     */
+    userEmail: string;
+}
+/**
+ * 
+ * @export
+ * @interface GooglePayload
+ */
+export interface GooglePayload {
+    /**
+     * 
+     * @type {string}
+     * @memberof GooglePayload
+     */
+    credential: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GooglePayload
+     */
+    clientId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GooglePayload
+     */
+    selectBy: string;
 }
 /**
  * 
@@ -951,13 +982,7 @@ export interface OrderHistoryEntry {
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    kind: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderHistoryEntry
-     */
-    orderId: string;
+    restaurantName: string;
     /**
      * 
      * @type {string}
@@ -975,7 +1000,13 @@ export interface OrderHistoryEntry {
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    restaurantName: string;
+    kind: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    orderId: string;
 }
 /**
  * 
@@ -1550,10 +1581,10 @@ export interface ShowOrderDto {
     timeOfOrder?: string;
     /**
      * 
-     * @type {LocalTime}
+     * @type {string}
      * @memberof ShowOrderDto
      */
-    timeOfDelivery?: LocalTime;
+    timeOfDelivery?: string;
     /**
      * 
      * @type {string}
@@ -1730,6 +1761,19 @@ export interface SideDishData {
 /**
  * 
  * @export
+ * @interface SseEmitter
+ */
+export interface SseEmitter {
+    /**
+     * 
+     * @type {number}
+     * @memberof SseEmitter
+     */
+    timeout?: number;
+}
+/**
+ * 
+ * @export
  * @interface TodayOrderDto
  */
 export interface TodayOrderDto {
@@ -1869,14 +1913,14 @@ export const AuthControllerApiFetchParamCreator = function (configuration?: Conf
     return {
         /**
          * 
-         * @param {string} authCode 
+         * @param {GooglePayload} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginWithIdToken(authCode: string, options: any = {}): FetchArgs {
-            // verify required parameter 'authCode' is not null or undefined
-            if (authCode === null || authCode === undefined) {
-                throw new RequiredError('authCode','Required parameter authCode was null or undefined when calling loginWithIdToken.');
+        loginWithReceivedJwt(body: GooglePayload, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling loginWithReceivedJwt.');
             }
             const localVarPath = `/api/auth/googleLogin/authorizationCode`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -1884,14 +1928,14 @@ export const AuthControllerApiFetchParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (authCode !== undefined) {
-                localVarQueryParameter['authCode'] = authCode;
-            }
+            localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"GooglePayload" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
 
             return {
                 url: url.format(localVarUrlObj),
@@ -1909,12 +1953,12 @@ export const AuthControllerApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} authCode 
+         * @param {GooglePayload} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginWithIdToken(authCode: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GoogleAuthSuccess> {
-            const localVarFetchArgs = AuthControllerApiFetchParamCreator(configuration).loginWithIdToken(authCode, options);
+        loginWithReceivedJwt(body: GooglePayload, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GoogleAuthSuccess> {
+            const localVarFetchArgs = AuthControllerApiFetchParamCreator(configuration).loginWithReceivedJwt(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1936,12 +1980,12 @@ export const AuthControllerApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
-         * @param {string} authCode 
+         * @param {GooglePayload} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginWithIdToken(authCode: string, options?: any) {
-            return AuthControllerApiFp(configuration).loginWithIdToken(authCode, options)(fetch, basePath);
+        loginWithReceivedJwt(body: GooglePayload, options?: any) {
+            return AuthControllerApiFp(configuration).loginWithReceivedJwt(body, options)(fetch, basePath);
         },
     };
 };
@@ -1955,13 +1999,13 @@ export const AuthControllerApiFactory = function (configuration?: Configuration,
 export class AuthControllerApi extends BaseAPI {
     /**
      * 
-     * @param {string} authCode 
+     * @param {GooglePayload} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthControllerApi
      */
-    public loginWithIdToken(authCode: string, options?: any) {
-        return AuthControllerApiFp(this.configuration).loginWithIdToken(authCode, options)(this.fetch, this.basePath);
+    public loginWithReceivedJwt(body: GooglePayload, options?: any) {
+        return AuthControllerApiFp(this.configuration).loginWithReceivedJwt(body, options)(this.fetch, this.basePath);
     }
 
 }
@@ -2799,6 +2843,28 @@ export const OrderControllerApiFetchParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        handleSse(options: any = {}): FetchArgs {
+            const localVarPath = `/api/orders/sse`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} orderId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3195,6 +3261,23 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        handleSse(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SseEmitter> {
+            const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).handleSse(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {string} orderId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3436,6 +3519,14 @@ export const OrderControllerApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        handleSse(options?: any) {
+            return OrderControllerApiFp(configuration).handleSse(options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {string} orderId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3583,6 +3674,16 @@ export class OrderControllerApi extends BaseAPI {
      */
     public edit(orderId: string, options?: any) {
         return OrderControllerApiFp(this.configuration).edit(orderId, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrderControllerApi
+     */
+    public handleSse(options?: any) {
+        return OrderControllerApiFp(this.configuration).handleSse(options)(this.fetch, this.basePath);
     }
 
     /**

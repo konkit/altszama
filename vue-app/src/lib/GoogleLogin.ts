@@ -1,13 +1,12 @@
 import {getConfig} from "@/lib/config";
+import {GooglePayload} from "@/frontend-client";
 
-const gapiUrl = "https://apis.google.com/js/api:client.js";
-
-const gapi = () => (window as any).gapi as any;
+const gsiClientSrc = "https://accounts.google.com/gsi/client";
 
 function installClient() {
   return new Promise((resolve, reject) => {
     const script = document.createElement("script") as any;
-    script.src = gapiUrl;
+    script.src = gsiClientSrc;
     script.onreadystatechange = script.onload = () => {
       const readyState: any = (script as any).readyState;
       if (!readyState || /loaded|complete/.test(readyState)) {
@@ -20,62 +19,35 @@ function installClient() {
   });
 }
 
-function initClient() {
-  const googleConfig = {
-    "client_id": getConfig().googleClientId
-  };
-
-  return new Promise((resolve, reject) => {
-    gapi().load("auth2", () => {
-      gapi().auth2.init(googleConfig);
-      resolve();
-    });
-  });
-}
-
 export default {
-  load() {
+  load(): Promise<string> {
     return new Promise((resolve, reject) => {
-      if (gapi() === undefined) {
-        installClient()
-          .then(() => initClient())
-          .then(() => {
-            resolve();
-          });
-      } else if (gapi() !== undefined && gapi().auth2 === undefined) {
-        initClient().then(() => {
-          resolve();
+      installClient()
+        .then(() => {
+          const googleClientId = getConfig().googleClientId
+          resolve(googleClientId);
         });
-      } else {
-        resolve();
-      }
     });
   },
 
-  signIn(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      gapi().auth2
-        .getAuthInstance()
-        .grantOfflineAccess({ "redirect_uri": "postmessage" })
-        .then((response: any) => resolve(response.code as string))
-        .catch((error: any) => reject(error));
+  initializeGoogleLogin(googleClientId: string, callback: (payload: GooglePayload) => unknown) {
+    (window as any).google.accounts.id.initialize({
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      client_id: googleClientId,
+      callback: (payload: GooglePayload) => callback(payload)
     });
   },
 
-  signOut(successCallback: any, errorCallback: any) {
-    if (gapi() && gapi().auth2) {
-      const signOutResult: Promise<any> = gapi().auth2
-        .getAuthInstance()
-        .signOut()
+  renderGoogleLoginButton(googleButtonWrapperDiv: Vue | Vue[] | Element | Element[]) {
+    (window as any).google.accounts.id.renderButton(
+      googleButtonWrapperDiv,
+      {theme: "outline", size: "large"}
+    );
+  },
 
-      signOutResult
-        .then(
-          () => successCallback(),
-          error => errorCallback(error)
-        );
-    } else {
-      // no gapi object, just assume we are logged out
-      successCallback();
-    }
+  signOut(userEmail: string, successCallback: any) {
+    (window as any).google.accounts.id.revoke(userEmail, () => {
+      successCallback()
+    });
   }
 };
