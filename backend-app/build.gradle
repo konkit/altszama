@@ -93,7 +93,7 @@ dependencies {
 
   // Google OAuth2
   compile("com.google.apis:google-api-services-oauth2:v2-rev65-1.17.0-rc")
-  compile("com.google.api-client:google-api-client:1.23.0")
+  compile("com.google.api-client:google-api-client:2.0.0")
 
   // JJWT
   compile("io.jsonwebtoken:jjwt:0.9.0")

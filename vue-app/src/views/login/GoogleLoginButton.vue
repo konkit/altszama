@@ -1,16 +1,12 @@
 <template>
   <div>
-    <v-btn v-if="loginPending === true" large disabled>Loggin in ... please wait.</v-btn>
+    <div v-if="loginPending === true">Loggin in ... please wait.</div>
 
-    <v-btn v-if="loginPending === false"
-           color="success"
-           type="submit"
-           :disabled="loginLoaded === false"
-           @click="googleSignIn"
-           large>
-      Login using Google Account
-    </v-btn>
+    <div>
+      <div ref="googleSignInButtonDiv"></div>
+    </div>
   </div>
+
 </template>
 
 <script lang="ts">
@@ -18,6 +14,9 @@ import GoogleLogin from "@/lib/GoogleLogin";
 import Vue from "vue";
 import Component from "vue-class-component";
 import AuthApiConnector from "@/lib/api/AuthApiConnector";
+import {GooglePayload} from "@/frontend-client";
+import {getConfig} from "@/lib/config";
+
 
 @Component({})
 export default class GoogleLoginButton extends Vue {
@@ -28,26 +27,31 @@ export default class GoogleLoginButton extends Vue {
   connector: AuthApiConnector = new AuthApiConnector()
 
   mounted() {
-    GoogleLogin.load().then(() => (this.loginLoaded = true));
+    const googleClientId = getConfig().googleClientId
+
+    GoogleLogin.load().then(() => {
+      this.loginLoaded = true;
+
+      GoogleLogin.initializeGoogleLogin(googleClientId, (payload) => this.doSignin(payload));
+      GoogleLogin.renderGoogleLoginButton(this.$refs.googleSignInButtonDiv);
+    });
   }
 
-  googleSignIn() {
-    if (this.loginLoaded) {
-      this.loginPending = true;
+  doSignin(payload: GooglePayload) {
+    this.loginPending = true;
 
-      let returnPath = "";
-      if (this.$route.query.returnPath) {
-        returnPath = this.$route.query.returnPath as string;
-      }
+    let returnPath = "";
+    if (this.$route.query.returnPath) {
+      returnPath = this.$route.query.returnPath as string;
+    }
 
-      this.connector?.loginWithGoogle(returnPath).catch(e => {
-        this.$store.commit("clearErrors");
+    this.connector?.loginWithGoogle(payload, returnPath)
+      .catch(e => {
         if (e) {
-          this.$store.commit("addError", e);
+          this.$store.commit("replaceError", e);
         }
         this.loginPending = false;
       });
-    }
   }
 }
 </script>

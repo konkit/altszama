@@ -6,13 +6,15 @@ import {
   modifyOrderEntryModule,
   ModifyOrderEntryState
 } from "./modules/ModifyOrderEntryModule";
-import {authenticatedRoutes, notAuthenticatedRoutes} from "@/router";
+import router, {authenticatedRoutes, notAuthenticatedRoutes} from "@/router";
+import GoogleLogin from "@/lib/GoogleLogin";
 
 Vue.use(Vuex);
 
 export interface RootState {
   loading: boolean;
   username: string;
+  userEmail: string;
   token: string;
   errors: string[];
   masterNavDrawerOpened: boolean;
@@ -29,6 +31,7 @@ export interface RootState {
 const rootState: RootState = {
   loading: false,
   username: localStorage.getItem("username") || "",
+  userEmail: localStorage.getItem("userEmail") || "",
   token: localStorage.getItem("token") || "",
   errors: [],
   masterNavDrawerOpened: false,
@@ -37,6 +40,41 @@ const rootState: RootState = {
   displayBackButton: false,
   pushNotificationEnabled: false,
 } as RootState;
+
+// Add error logic, common both for adding another error and for replacing one
+function addError(state: RootState, error: any) {
+  const pushError = (errorStr: any) => {
+    if (errorStr && typeof errorStr === "string" && errorStr.trim().length > 0) {
+      state.errors.push(errorStr)
+    } else {
+      console.log("Error: ", errorStr);
+      state.errors.push("An error occured. Please try again.")
+    }
+  }
+
+  if (error instanceof Array) {
+    error.forEach(errorStr => pushError(errorStr));
+  } else if (typeof error == "object" && error.messages !== undefined) {
+    error.messages.forEach((errorStr: string) =>
+      pushError(errorStr)
+    );
+  } else if (typeof error == "object" && error.exception !== undefined) {
+    pushError("Error: " + error.exception + " occured!");
+  } else if (typeof error == "object" && error.message !== undefined) {
+    pushError(error.message);
+  } else if (typeof error == "object" && error.body?.message !== undefined) {
+    pushError(error.body.message);
+  } else if (typeof error == "object" && error.body?.messages !== undefined) {
+    error.body.messages.forEach((errorStr: string) =>
+      pushError(errorStr)
+    );
+  } else if (typeof error == "object" && error.statusText !== undefined) {
+    pushError(error.statusText);
+  } else {
+    console.log("Error: ", error);
+    pushError(error);
+  }
+}
 
 export default new Vuex.Store({
   state: rootState,
@@ -49,54 +87,33 @@ export default new Vuex.Store({
     },
     loginUser(state, payload) {
       state.username = payload.username;
+      state.userEmail = payload.userEmail;
       localStorage.setItem("username", payload.username);
+      localStorage.setItem("userEmail", payload.userEmail);
 
       state.token = payload.token;
       localStorage.setItem("token", payload.token);
     },
     logoutUser(state) {
+      const userEmail = state.userEmail;
+      state.userEmail = "";
       state.username = "";
       localStorage.setItem("username", "");
 
       state.token = "";
       localStorage.setItem("token", "");
 
+      const signOutCallback = () => router.push({name: "Login"});
+      GoogleLogin.signOut(userEmail, signOutCallback);
+
       state.pushNotificationEnabled = false
     },
     addError(state, error: any) {
-      console.log("Error: ", error)
-
-      const pushError = (errorStr: any) => {
-        if (errorStr && typeof errorStr === "string" && errorStr.trim().length > 0) {
-          state.errors.push(errorStr)
-        } else {
-          console.log("Error: ", errorStr);
-          state.errors.push("An error occured. Please try again.")
-        }
-      }
-
-      if (error instanceof Array) {
-        error.forEach(errorStr => pushError(errorStr));
-      } else if (typeof error == "object" && error.messages !== undefined) {
-        error.messages.forEach((errorStr: string) =>
-          pushError(errorStr)
-        );
-      } else if (typeof error == "object" && error.exception !== undefined) {
-        pushError("Error: " + error.exception + " occured!");
-      } else if (typeof error == "object" && error.message !== undefined) {
-        pushError(error.message);
-      } else if (typeof error == "object" && error.body?.message !== undefined) {
-        pushError(error.body.message);
-      } else if (typeof error == "object" && error.body?.messages !== undefined) {
-        error.body.messages.forEach((errorStr: string) =>
-          pushError(errorStr)
-        );
-      } else if (typeof error == "object" && error.statusText !== undefined) {
-        pushError(error.statusText);
-      } else {
-        console.log("Error: ", error);
-        pushError(error);
-      }
+      addError(state, error)
+    },
+    replaceError(state, error: any) {
+      state.errors = [];
+      addError(state, error);
     },
     clearErrorAtIndex(state, index) {
       state.errors.splice(index, 1);

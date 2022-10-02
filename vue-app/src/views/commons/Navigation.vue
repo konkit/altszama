@@ -82,11 +82,7 @@ export default class Navigation extends Vue {
 
   logout(): void {
     store.commit("logoutUser");
-
     store.commit("setPushNotificationEnabled", false);
-
-    const signOutCallback = () => router.push({name: "Login"});
-    GoogleLogin.signOut(signOutCallback, signOutCallback);
   }
 
   goToPath(path: RawLocation) {

@@ -32,8 +32,7 @@
   },
   "devDependencies": {
     "@types/event-source-polyfill": "^1.0.0",
-    "@types/gapi": "0.0.39",
-    "@types/gapi.auth2": "0.0.52",
+    "@types/google.accounts": "^0.0.2",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
