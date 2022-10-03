@@ -7,14 +7,12 @@ import {
   ModifyOrderEntryState
 } from "./modules/ModifyOrderEntryModule";
 import router, {authenticatedRoutes, notAuthenticatedRoutes} from "@/router";
-import GoogleLogin from "@/lib/GoogleLogin";
 
 Vue.use(Vuex);
 
 export interface RootState {
   loading: boolean;
   username: string;
-  userEmail: string;
   token: string;
   errors: string[];
   masterNavDrawerOpened: boolean;
@@ -31,7 +29,6 @@ export interface RootState {
 const rootState: RootState = {
   loading: false,
   username: localStorage.getItem("username") || "",
-  userEmail: localStorage.getItem("userEmail") || "",
   token: localStorage.getItem("token") || "",
   errors: [],
   masterNavDrawerOpened: false,
@@ -87,26 +84,20 @@ export default new Vuex.Store({
     },
     loginUser(state, payload) {
       state.username = payload.username;
-      state.userEmail = payload.userEmail;
       localStorage.setItem("username", payload.username);
-      localStorage.setItem("userEmail", payload.userEmail);
 
       state.token = payload.token;
       localStorage.setItem("token", payload.token);
     },
     logoutUser(state) {
-      const userEmail = state.userEmail;
-      state.userEmail = "";
       state.username = "";
       localStorage.setItem("username", "");
 
       state.token = "";
       localStorage.setItem("token", "");
 
-      const signOutCallback = () => router.push({name: "Login"});
-      GoogleLogin.signOut(userEmail, signOutCallback);
-
       state.pushNotificationEnabled = false
+      router.push({name: "Login"});
     },
     addError(state, error: any) {
       addError(state, error)

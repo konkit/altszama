@@ -20,7 +20,6 @@ export default class AuthApiConnector extends AbstractApiConnector {
           response => {
             store.commit("loginUser", {
               username: response.userInfo.username,
-              userEmail: response.userEmail,
               token: response.userInfo.token
             });
 

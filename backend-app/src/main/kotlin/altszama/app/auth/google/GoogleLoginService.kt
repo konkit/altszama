@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 
 
 sealed class GoogleAuthResult
-data class GoogleAuthSuccess(val userInfo: AuthUserInfo, val userEmail: String) : GoogleAuthResult()
+data class GoogleAuthSuccess(val userInfo: AuthUserInfo) : GoogleAuthResult()
 data class GoogleAuthError(val message: String) : GoogleAuthResult()
 
 
@@ -47,7 +47,7 @@ class GoogleLoginService() {
 
       activityEventService.saveUserLogin(authInfo.userId)
 
-      GoogleAuthSuccess(authInfo, tokenPayload.email)
+      GoogleAuthSuccess(authInfo)
     }
   }
 

@@ -44,10 +44,4 @@ export default {
       {theme: "outline", size: "large"}
     );
   },
-
-  signOut(userEmail: string, successCallback: any) {
-    (window as any).google.accounts.id.revoke(userEmail, () => {
-      successCallback()
-    });
-  }
 };
