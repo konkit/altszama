@@ -628,12 +628,6 @@ export interface GoogleAuthSuccess {
      * @memberof GoogleAuthSuccess
      */
     userInfo: AuthUserInfo;
-    /**
-     * 
-     * @type {string}
-     * @memberof GoogleAuthSuccess
-     */
-    userEmail: string;
 }
 /**
  * 
@@ -982,19 +976,7 @@ export interface OrderHistoryEntry {
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    restaurantName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderHistoryEntry
-     */
-    orderCreator: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrderHistoryEntry
-     */
-    orderDate: string;
+    orderId: string;
     /**
      * 
      * @type {string}
@@ -1006,7 +988,19 @@ export interface OrderHistoryEntry {
      * @type {string}
      * @memberof OrderHistoryEntry
      */
-    orderId: string;
+    orderDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    orderCreator: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderHistoryEntry
+     */
+    restaurantName: string;
 }
 /**
  * 
