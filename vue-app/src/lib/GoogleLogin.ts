@@ -4,7 +4,7 @@ import {GooglePayload} from "@/frontend-client";
 const gsiClientSrc = "https://accounts.google.com/gsi/client";
 
 function installClient() {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     const script = document.createElement("script") as any;
     script.src = gsiClientSrc;
     script.onreadystatechange = script.onload = () => {

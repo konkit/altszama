@@ -13,7 +13,7 @@
  */
 
 import * as url from "url";
-import * as portableFetch from "portable-fetch";
+import * as isomorphicFetch from "isomorphic-fetch";
 import { Configuration } from "./configuration";
 
 const BASE_PATH = "http://localhost:8080/".replace(/\/+$/, "");
@@ -56,7 +56,7 @@ export interface FetchArgs {
 export class BaseAPI {
     protected configuration: Configuration;
 
-    constructor(configuration?: Configuration, protected basePath: string = BASE_PATH, protected fetch: FetchAPI = portableFetch) {
+    constructor(configuration?: Configuration, protected basePath: string = BASE_PATH, protected fetch: FetchAPI = isomorphicFetch) {
         if (configuration) {
             this.configuration = configuration;
             this.basePath = configuration.basePath || this.basePath;
@@ -1953,7 +1953,7 @@ export const AuthControllerApiFp = function(configuration?: Configuration) {
          */
         loginWithReceivedJwt(body: GooglePayload, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GoogleAuthSuccess> {
             const localVarFetchArgs = AuthControllerApiFetchParamCreator(configuration).loginWithReceivedJwt(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2047,7 +2047,7 @@ export const BalanceControllerApiFp = function(configuration?: Configuration) {
          */
         getBalanceForUser(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<OrderHistory> {
             const localVarFetchArgs = BalanceControllerApiFetchParamCreator(configuration).getBalanceForUser(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2316,7 +2316,7 @@ export const DishControllerApiFp = function(configuration?: Configuration) {
          */
         createDish(restaurantId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateDishResponse> {
             const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).createDish(restaurantId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2334,7 +2334,7 @@ export const DishControllerApiFp = function(configuration?: Configuration) {
          */
         deleteDish(dishId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).deleteDish(dishId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2353,7 +2353,7 @@ export const DishControllerApiFp = function(configuration?: Configuration) {
          */
         deleteSideDish(dishId: string, sideDishId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).deleteSideDish(dishId, sideDishId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2372,7 +2372,7 @@ export const DishControllerApiFp = function(configuration?: Configuration) {
          */
         editDish(restaurantId: string, dishId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<EditDishResponse> {
             const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).editDish(restaurantId, dishId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2391,7 +2391,7 @@ export const DishControllerApiFp = function(configuration?: Configuration) {
          */
         saveDish(body: DishCreateRequest, restaurantId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).saveDish(body, restaurantId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2410,7 +2410,7 @@ export const DishControllerApiFp = function(configuration?: Configuration) {
          */
         updateDish(body: DishUpdateRequest, restaurantId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = DishControllerApiFetchParamCreator(configuration).updateDish(body, restaurantId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2644,7 +2644,7 @@ export const NotificationControllerApiFp = function(configuration?: Configuratio
          */
         addSubscriber(body: PushNotifSubscriptionData, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = NotificationControllerApiFetchParamCreator(configuration).addSubscriber(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -2661,7 +2661,7 @@ export const NotificationControllerApiFp = function(configuration?: Configuratio
          */
         removeSubscriber(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = NotificationControllerApiFetchParamCreator(configuration).removeSubscriber(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3191,7 +3191,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         _delete(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration)._delete(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3208,7 +3208,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         allOrders(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<AllOrdersResponse> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).allOrders(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3225,7 +3225,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         create(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateOrderInitialData> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).create(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3243,7 +3243,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         edit(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<EditOrderInitialData> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).edit(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3260,7 +3260,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         handleSse(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SseEmitter> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).handleSse(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3278,7 +3278,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         orderViewJson(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<OrderViewInitialData> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).orderViewJson(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3296,7 +3296,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         save(body: OrderSaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).save(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3314,7 +3314,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         setAsCreated(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsCreated(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3332,7 +3332,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         setAsDelivered(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsDelivered(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3351,7 +3351,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         setAsOrdered(body: SetAsOrderedResponse, orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsOrdered(body, orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3369,7 +3369,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         setAsOrdering(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsOrdering(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3387,7 +3387,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         setAsRejected(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setAsRejected(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3405,7 +3405,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         setBackAsOrdered(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).setBackAsOrdered(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3423,7 +3423,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         show(orderId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ShowOrderResponse> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).show(orderId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3440,7 +3440,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         todayOrders(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<TodayOrdersResponse> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).todayOrders(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3458,7 +3458,7 @@ export const OrderControllerApiFp = function(configuration?: Configuration) {
          */
         update(body: OrderUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderControllerApiFetchParamCreator(configuration).update(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3978,7 +3978,7 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
          */
         delete1(orderEntryId: string, dishEntryId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).delete1(orderEntryId, dishEntryId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -3996,7 +3996,7 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
          */
         revertToUnpaid(orderEntryId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).revertToUnpaid(orderEntryId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4014,7 +4014,7 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
          */
         save1(body: OrderEntrySaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).save1(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4032,7 +4032,7 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
          */
         setAsConfirmedAsPaid(orderEntryId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).setAsConfirmedAsPaid(orderEntryId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4050,7 +4050,7 @@ export const OrderEntryControllerApiFp = function(configuration?: Configuration)
          */
         update1(body: OrderEntryUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = OrderEntryControllerApiFetchParamCreator(configuration).update1(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4373,7 +4373,7 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
          */
         deleteRestaurant(restaurantId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).deleteRestaurant(restaurantId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4391,7 +4391,7 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
          */
         editRestaurant(restaurantId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<EditRestaurantResponse> {
             const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).editRestaurant(restaurantId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4408,7 +4408,7 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
          */
         indexRestaurants(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<IndexResponse> {
             const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).indexRestaurants(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4426,7 +4426,7 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
          */
         saveRestaurant(body: RestaurantSaveRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).saveRestaurant(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4444,7 +4444,7 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
          */
         showRestaurant(restaurantId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ShowRestaurantResponse> {
             const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).showRestaurant(restaurantId, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
@@ -4462,7 +4462,7 @@ export const RestaurantControllerApiFp = function(configuration?: Configuration)
          */
         updateRestaurant(body: RestaurantUpdateRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
             const localVarFetchArgs = RestaurantControllerApiFetchParamCreator(configuration).updateRestaurant(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+            return (fetch: FetchAPI = isomorphicFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
