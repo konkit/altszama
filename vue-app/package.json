@@ -39,7 +39,7 @@
     "@vue/cli-plugin-typescript": "5.0.8",
     "@vue/cli-plugin-vuex": "5.0.8",
     "@vue/cli-service": "5.0.8",
-    "copy-webpack-plugin": "4.5.4",
+    "copy-webpack-plugin": "11.0.0",
     "lodash": "^4.17.20",
     "sass": "~1.32.6",
     "sass-loader": "^8.0.2",
