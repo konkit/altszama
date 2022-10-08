@@ -34,13 +34,12 @@ module.exports = {
           theme_color: "#4DBA87",
           orientation: "portrait",
         }),
-        new CopyWebpackPlugin([
-          {
+        new CopyWebpackPlugin({
+          patterns: [
             // copy custom service worker
-            from: './src/lib/custom-service-worker.js',
-            to: './[name].js'
-          }
-        ]),
+            { from: './src/lib/custom-service-worker.js', to: './[name].js'}
+          ]
+        }),
       ],
     }
   },
