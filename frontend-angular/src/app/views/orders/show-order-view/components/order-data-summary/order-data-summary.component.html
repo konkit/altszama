@@ -1,12 +1,18 @@
 <div>
-  <div>Who will order?</div>
-  <div class="text-no-wrap">
-    {{ this.order.orderCreatorUsername }}
+  <div class="py-2">
+    <div>Who will order?</div>
+    <div class="text-no-wrap">
+      {{ this.order.orderCreatorUsername }}
+    </div>
   </div>
 
-  <div>When?</div>
-  <div>{{ this.order.timeOfOrder }}</div>
+  <div class="py-2">
+    <div>When?</div>
+    <div>{{ this.order.timeOfOrder }}</div>
+  </div>
 
-  <div>When it'll arrive?</div>
-  <div>{{ this.timeOfDeliveryOrNA() }}</div>
+  <div class="py-2">
+    <div>When it'll arrive?</div>
+    <div>{{ this.timeOfDeliveryOrNA() }}</div>
+  </div>
 </div>

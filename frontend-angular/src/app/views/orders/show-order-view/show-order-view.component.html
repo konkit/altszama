@@ -1,30 +1,23 @@
-<h1 class="text-2xl font-bold">Order details</h1>
+<h1 class="text-3xl pb-5 font-bold">Order details</h1>
 
 <div *ngIf="shouldShowOrderLockedWarning()">
   <div>TODO order locked warning</div>
 </div>
 
-<div *ngIf="order$ | async as orderResponse">
+<div *ngIf="orderResponse$ | async as orderResponse">
   <div class="grid grid-cols-3">
     <div>
+      <h2 class="text-2xl">Order details</h2>
       <app-order-data-summary [order]="orderResponse.order"></app-order-data-summary>
     </div>
 
     <div>
-      <h1>Price summary</h1>
-
-      <app-price-summary [orderDecreaseInPercent]="this.orderResponse.order.deliveryData.decreaseInPercent"
-                         [orderDeliveryCostPerEverybody]="this.orderResponse.order.deliveryData.deliveryCostPerEverybody"
-                         [orderDeliveryCostPerDish]="this.orderResponse.order.deliveryData.deliveryCostPerDish"
-                         [basePriceSum]="this.orderResponse.baseOrderPrice"
-                         [allEatingPeopleCount]="allEatingPeopleCount(this.orderResponse)"
-                         [totalPrice]="this.orderResponse.totalOrderPrice">
-      </app-price-summary>
+      <h2 class="text-2xl">Price summary</h2>
+      <app-price-summary [showOrderResponse]="orderResponse"></app-price-summary>
     </div>
 
     <div>
-      <h1>Payment options</h1>
-
+      <h2 class="text-2xl">Payment options</h2>
       <app-payment-options-summary [showOrderResponse]="orderResponse"></app-payment-options-summary>
     </div>
   </div>
@@ -34,7 +27,7 @@
       <div class="d-flex flex-row flex-wrap">
         <div class="mr-4 menu-link">
           <b class="mr-2">See menu at &nbsp;</b>
-          <a *ngIf="orderResponse.order.restaurantUrl" target="_blank"
+          <a class="text-indigo-500" *ngIf="orderResponse.order.restaurantUrl" target="_blank"
              [href]="orderResponse.order.restaurantUrl">{{ orderResponse.order.restaurantUrl }}</a>
           <i *ngIf="!orderResponse.order.restaurantUrl">Sorry, no menu url specified</i>
         </div>

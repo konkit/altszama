@@ -1,5 +1,5 @@
 <div>
-  <div class="payment-entry">
+  <div class="payment-entry py-2">
     <div class="chip" *ngIf="paymentData.paymentByCash === true" color="green" text-color="white">
       Payment by cash &nbsp; <fa-icon [icon]="faCheck" class="ml-2"></fa-icon>
     </div>
@@ -7,7 +7,7 @@
       Payment by cash &nbsp; <fa-icon [icon]="faTimes" class="ml-2"></fa-icon>
     </div>
   </div>
-  <div class="payment-entry">
+  <div class="payment-entry py-2">
     <div class="chip" *ngIf="paymentData.paymentByBankTransfer === true" color="green" text-color="white">
       Payment by bank transfer <fa-icon [icon]="faCheck" class="ml-2"></fa-icon>
     </div>
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <div class="payment-entry">
+  <div class="payment-entry py-2">
     <div class="chip" *ngIf="paymentData.paymentByBlik === true" color="green" text-color="white">
       Payment by BLIK &nbsp; <fa-icon [icon]="faCheck" class="ml-2"></fa-icon>
     </div>

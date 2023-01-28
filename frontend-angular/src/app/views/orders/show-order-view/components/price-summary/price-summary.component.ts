@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {DeliveryData, ShowOrderResponse} from "../../../../../../frontend-client";
 
 @Component({
   selector: 'app-price-summary',
@@ -6,10 +7,21 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./price-summary.component.scss']
 })
 export class PriceSummaryComponent {
-  @Input() orderDecreaseInPercent!: number;
-  @Input() orderDeliveryCostPerEverybody!: number;
-  @Input() basePriceSum!: number;
-  @Input() orderDeliveryCostPerDish!: number;
-  @Input() allEatingPeopleCount!: number;
-  @Input() totalPrice!: number;
+  @Input() showOrderResponse!: ShowOrderResponse
+
+  get deliveryData() {
+    return this.showOrderResponse.order.deliveryData
+  }
+
+  get basePriceSum() {
+    return this.showOrderResponse.baseOrderPrice
+  }
+
+  get totalPrice() {
+    return this.showOrderResponse.totalOrderPrice
+  }
+
+  get allEatingPeopleCount() {
+    return this.showOrderResponse.orderEntries.flatMap(e => e.dishEntries).length;
+  }
 }

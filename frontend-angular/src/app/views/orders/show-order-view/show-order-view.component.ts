@@ -10,11 +10,11 @@ import {map, Observable, switchMap} from "rxjs";
 })
 export class ShowOrderViewComponent implements OnInit {
 
-  order$: Observable<ShowOrderResponse>
+  orderResponse$: Observable<ShowOrderResponse>
 
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService) {
-    this.order$ = this.route.params.pipe(
+    this.orderResponse$ = this.route.params.pipe(
       switchMap(params => {
         return this.orderControllerService.show(params["id"])
       }),
