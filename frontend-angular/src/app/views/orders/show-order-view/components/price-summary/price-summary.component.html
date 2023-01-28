@@ -1,0 +1,34 @@
+<div>
+  <div>Base price :</div>
+  <div>{{basePriceSum | price}}</div>
+
+  <hr/>
+
+  <div *ngIf="orderDecreaseInPercent === 0 && orderDeliveryCostPerEverybody === 0 && orderDeliveryCostPerDish === 0">
+    <div></div>
+    <div><span class="unbreakable"><i>No price modifiers</i></span></div>
+  </div>
+
+  <div *ngIf="orderDecreaseInPercent !== 0">
+    <div>Price decrease :</div>
+    <span class="unbreakable">- {{ orderDecreaseInPercent }} %</span>
+  </div>
+
+  <div *ngIf="orderDeliveryCostPerEverybody !== 0">
+    <div>Delivery :</div>
+    <div><span class="unbreakable" >+ {{ orderDeliveryCostPerEverybody | price }}</span></div>
+  </div>
+
+
+  <div *ngIf="orderDeliveryCostPerDish !== 0">
+    <div>Delivery per dish:</div>
+    <div><span class="unbreakable">+ {{orderDeliveryCostPerDish | price}} * {{ allEatingPeopleCount || 0 }}</span></div>
+  </div>
+
+  <hr />
+
+  <div>
+    <div>Total:</div>
+    <div>{{totalPrice | price}}</div>
+  </div>
+</div>

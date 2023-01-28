@@ -1,0 +1,12 @@
+<div>
+  <div>Who will order?</div>
+  <div class="text-no-wrap">
+    {{ this.order.orderCreatorUsername }}
+  </div>
+
+  <div>When?</div>
+  <div>{{ this.order.timeOfOrder }}</div>
+
+  <div>When it'll arrive?</div>
+  <div>{{ this.timeOfDeliveryOrNA() }}</div>
+</div>

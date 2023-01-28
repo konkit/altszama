@@ -1,0 +1,36 @@
+<div>
+  <div class="payment-entry">
+    <div class="chip" *ngIf="paymentData.paymentByCash === true" color="green" text-color="white">
+      Payment by cash &nbsp; <fa-icon [icon]="faCheck" class="ml-2"></fa-icon>
+    </div>
+    <div class="chip" *ngIf="paymentData.paymentByCash === false" color="red" text-color="white">
+      Payment by cash &nbsp; <fa-icon [icon]="faTimes" class="ml-2"></fa-icon>
+    </div>
+  </div>
+  <div class="payment-entry">
+    <div class="chip" *ngIf="paymentData.paymentByBankTransfer === true" color="green" text-color="white">
+      Payment by bank transfer <fa-icon [icon]="faCheck" class="ml-2"></fa-icon>
+    </div>
+    <div class="chip" *ngIf="paymentData.paymentByBankTransfer === false" color="red" text-color="white">
+      Payment by bank transfer <fa-icon [icon]="faTimes" class="ml-2"></fa-icon>
+    </div>
+    <div class="px-3 user-selectable flex" *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
+      {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
+      <app-bank-transfer-qrcode [showOrderResponse]="showOrderResponse"></app-bank-transfer-qrcode>
+    </div>
+  </div>
+
+  <div class="payment-entry">
+    <div class="chip" *ngIf="paymentData.paymentByBlik === true" color="green" text-color="white">
+      Payment by BLIK &nbsp; <fa-icon [icon]="faCheck" class="ml-2"></fa-icon>
+    </div>
+    <div class="chip" *ngIf="paymentData.paymentByBlik === false" color="red" text-color="white">
+      Payment by BLIK &nbsp; <fa-icon [icon]="faTimes" class="ml-2"></fa-icon>
+    </div>
+    <div *ngIf="paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
+      <div class="px-3 user-selectable">
+        {{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}
+      </div>
+    </div>
+  </div>
+</div>

@@ -23,6 +23,12 @@ import {
 } from './views/login/login-view/components/google-login-button/google-login-button.component';
 import {AuthInterceptor} from "./interceptor/auth.interceptor";
 import {FrontendConfigService} from "./service/frontend-config.service";
+import { OrderDataSummaryComponent } from './views/orders/show-order-view/components/order-data-summary/order-data-summary.component';
+import { PriceSummaryComponent } from './views/orders/show-order-view/components/price-summary/price-summary.component';
+import { PaymentOptionsSummaryComponent } from './views/orders/show-order-view/components/payment-options-summary/payment-options-summary.component';
+import {PricePipe} from "./components/pipes/price.pipe";
+import { BankTransferQRCodeComponent } from './views/orders/show-order-view/components/price-summary/bank-transfer-qrcode/bank-transfer-qrcode.component';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   declarations: [
@@ -41,12 +47,18 @@ import {FrontendConfigService} from "./service/frontend-config.service";
     LayoutOneComponent,
     AuthenticatedLayoutComponent,
     GoogleLoginButtonComponent,
+    OrderDataSummaryComponent,
+    PriceSummaryComponent,
+    PaymentOptionsSummaryComponent,
+    PricePipe,
+    BankTransferQRCodeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ApiModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   providers: [
     {

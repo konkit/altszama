@@ -1,10 +1,101 @@
-<div class="main-content flex flex-col flex-grow p-4">
-  <h1 class="font-bold text-2xl text-gray-700">Order</h1>
+<h1 class="text-2xl font-bold">Order details</h1>
 
-  <div
-    class="flex flex-col flex-grow border-4 border-gray-400 border-dashed bg-white rounded mt-4"
-  >
+<div *ngIf="shouldShowOrderLockedWarning()">
+  <div>TODO order locked warning</div>
+</div>
 
+<div *ngIf="order$ | async as orderResponse">
+  <div class="grid grid-cols-3">
+    <div>
+      <app-order-data-summary [order]="orderResponse.order"></app-order-data-summary>
+    </div>
 
+    <div>
+      <h1>Price summary</h1>
+
+      <app-price-summary [orderDecreaseInPercent]="this.orderResponse.order.deliveryData.decreaseInPercent"
+                         [orderDeliveryCostPerEverybody]="this.orderResponse.order.deliveryData.deliveryCostPerEverybody"
+                         [orderDeliveryCostPerDish]="this.orderResponse.order.deliveryData.deliveryCostPerDish"
+                         [basePriceSum]="this.orderResponse.baseOrderPrice"
+                         [allEatingPeopleCount]="allEatingPeopleCount(this.orderResponse)"
+                         [totalPrice]="this.orderResponse.totalOrderPrice">
+      </app-price-summary>
+    </div>
+
+    <div>
+      <h1>Payment options</h1>
+
+      <app-payment-options-summary [showOrderResponse]="orderResponse"></app-payment-options-summary>
+    </div>
   </div>
+
+  <div>
+    <div>
+      <div class="d-flex flex-row flex-wrap">
+        <div class="mr-4 menu-link">
+          <b class="mr-2">See menu at &nbsp;</b>
+          <a *ngIf="orderResponse.order.restaurantUrl" target="_blank"
+             [href]="orderResponse.order.restaurantUrl">{{ orderResponse.order.restaurantUrl }}</a>
+          <i *ngIf="!orderResponse.order.restaurantUrl">Sorry, no menu url specified</i>
+        </div>
+        <div class="d-flex ml-auto">
+          <!--                <template *ngIf="canShowPlaceOrderButton() && isPlaceOrderButtonDisabled()">-->
+          <!--                  <v-tooltip bottom>-->
+          <!--                    <template v-slot:activator="{ on }">-->
+          <!--                      <div v-on="on">-->
+          <!--                        <v-btn color="primary" :disabled="true">-->
+          <!--                          Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>-->
+          <!--                        </v-btn>-->
+          <!--                      </div>-->
+          <!--                    </template>-->
+          <!--                    <span>You cannot place an empty order. Choose a dish first.</span>-->
+          <!--                  </v-tooltip>-->
+          <!--                </template>-->
+
+          <!--                <template *ngIf="canShowPlaceOrderButton() && !isPlaceOrderButtonDisabled()">-->
+          <!--                  <v-btn color="primary" @click="placeOrder">-->
+          <!--                    Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>-->
+          <!--                  </v-btn>-->
+          <!--                </template>-->
+
+          <!--                <v-btn color="primary" *ngIf="canShowMarkAsDeliveredButton()" @click="setAsDelivered()">-->
+          <!--                  Mark as delivered <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>-->
+          <!--                </v-btn>-->
+
+          <!--                <v-btn *ngIf="isOrderOwner()" @click="goToEditOrder">-->
+          <!--                  Edit order <i class="pl-2 fa fa-cog" aria-hidden="true"></i>-->
+          <!--                </v-btn>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--        <template *ngIf="shouldDisplayNewOrderEntryCard()">-->
+  <!--          <div>-->
+  <!--            <div>-->
+  <!--              <new-order-entry-card :is-entry-creating="isEntryCreating" :username="username">-->
+  <!--              </new-order-entry-card>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </template>-->
+
+  <!--        <template v-for="(orderEntry, entryId) in this.yourOrderEntries">-->
+  <!--          <div :key="orderEntry.id + entryId">-->
+  <!--            <div>-->
+  <!--              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId"-->
+  <!--                                :current-user-id="currentUserId">-->
+  <!--              </OrderEntriesCard>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </template>-->
+
+  <!--        <template v-for="(orderEntry, entryId) in this.otherUsersOrderEntries">-->
+  <!--          <div :key="orderEntry.id + entryId">-->
+  <!--            <div>-->
+  <!--              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId"-->
+  <!--                                :current-user-id="currentUserId">-->
+  <!--              </OrderEntriesCard>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </template>-->
 </div>

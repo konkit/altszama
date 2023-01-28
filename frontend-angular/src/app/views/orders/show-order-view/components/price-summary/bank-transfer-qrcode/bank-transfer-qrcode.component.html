@@ -1,0 +1,20 @@
+<div class="dialog" *ngIf="shouldShowQRCodeButton()" v-model="dialog" width="350">
+<!--  <template v-slot:activator="{ on }">-->
+<!--    <v-btn x-small text v-on="on"><v-icon>fa-qrcode</v-icon></v-btn>-->
+<!--  </template>-->
+
+  <div class="card">
+    <div>
+      Bank transfer QR Code
+    </div>
+
+
+    <div class="text-center">
+<!--      <qrcode-vue :value="generateCodeValue()" size="300"></qrcode-vue>-->
+    </div>
+
+    <div class="actions">
+      <button color="primary">Close</button>
+    </div>
+  </div>
+</div>

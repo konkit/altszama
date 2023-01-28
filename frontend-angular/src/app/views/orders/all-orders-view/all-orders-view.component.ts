@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AllOrdersOrderDto, AllOrdersResponse, OrderControllerService} from "../../../../frontend-client";
-import {catchError, map, Observable} from "rxjs";
+import {AllOrdersOrderDto, OrderControllerService} from "../../../../frontend-client";
+import {map, Observable} from "rxjs";
 
 @Component({
   selector: 'app-all-orders-view',
