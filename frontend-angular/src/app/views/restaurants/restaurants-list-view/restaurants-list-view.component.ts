@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {map, Observable} from "rxjs";
+import {RestaurantControllerService, RestaurantInfo} from "../../../../frontend-client";
 
 @Component({
   selector: 'app-restaurants-list-view',
@@ -6,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./restaurants-list-view.component.scss']
 })
 export class RestaurantsListViewComponent {
+  allRestaurants$: Observable<RestaurantInfo[]>;
 
+  constructor(private api: RestaurantControllerService) {
+    this.allRestaurants$ = this.api.indexRestaurants().pipe(
+      map(r => r.restaurants)
+    )
+  }
 }
