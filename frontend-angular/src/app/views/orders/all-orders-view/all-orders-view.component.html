@@ -1,7 +1,31 @@
 <h1 class="font-bold text-2xl text-gray-700">All Orders</h1>
 
-<div
-  class="flex flex-col flex-grow border-4 border-gray-400 border-dashed bg-white rounded mt-4"
->
-  {{allOrders$ | async | json}}
+
+<div class="relative overflow-x-auto mt-10">
+  <table class="w-full text-sm text-left">
+    <thead class="text-xs uppercase">
+    <tr class="bg-gray-200">
+      <th scope="col" class="px-6 py-3">Date</th>
+      <th scope="col" class="px-6 py-3">Restaurant</th>
+      <th scope="col" class="px-6 py-3">Status</th>
+      <th scope="col" class="px-6 py-3">Order creator</th>
+    </tr>
+    </thead>
+    <tbody *ngIf="allOrders$ | async as allOrders">
+      <tr *ngFor="let order of allOrders" class="bg-white border-b cursor-pointer hover:bg-gray-50">
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-light">
+          {{order.orderDate}}
+        </th>
+        <td class="px-6 py-4">
+          {{order.restaurantName}}
+        </td>
+        <td class="px-6 py-4">
+          {{order.orderState}}
+        </td>
+        <td class="px-6 py-4">
+          {{order.orderCreatorUsername}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
