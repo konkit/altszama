@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AuthControllerService, AuthUserInfo, GooglePayload} from "../../frontend-client";
-import {GoogleLoginService} from "./google-login.service";
 import {FrontendConfigService} from "./frontend-config.service";
-import {BehaviorSubject, Observable, ReplaySubject, take} from "rxjs";
+import {tap} from "rxjs";
 import {Router} from "@angular/router";
 
 
@@ -11,34 +10,33 @@ import {Router} from "@angular/router";
 })
 export class AuthService {
 
-  constructor(    private authControllerService: AuthControllerService,
-                  private googleLoginService: GoogleLoginService,
-                  private frontendConfigService: FrontendConfigService,
-                  private router: Router) {
-    // const dataFromLocalStorage: string | null = localStorage.getItem("loggedUserData");
-    // if (dataFromLocalStorage != null) {
-    //   this.loggedUser.next(JSON.parse(dataFromLocalStorage))
-    // }
+  private defaultLoginPath = "/orders";
+  private defaultLogoutPath = "/login";
+
+  constructor(private authControllerService: AuthControllerService,
+              private frontendConfigService: FrontendConfigService,
+              private router: Router) {
   }
 
   loginWithGoogle(googlePayload: GooglePayload, returnPath = "") {
-    return this.authControllerService.loginWithReceivedJwt(googlePayload).subscribe(response => {
-      localStorage.setItem("loggedUserData", JSON.stringify(response.userInfo));
+    return this.authControllerService.loginWithReceivedJwt(googlePayload)
+      .pipe(
+        tap(response => {
+          localStorage.setItem("loggedUserData", JSON.stringify(response.userInfo));
 
-      //TODO
-      // if (returnPath.length > 0) {
-      //   router.push({path: returnPath});
-      // } else {
-      //   router.push({name: "TodayOrders"});
-      // }
+          if (returnPath.length > 0) {
+            this.router.navigate([returnPath])
+          } else {
 
-      this.router.navigate(["/orders"])
-    })
+            this.router.navigate([this.defaultLoginPath])
+          }
+        })
+      )
   }
 
   loginAsTestUser(data: AuthUserInfo) {
     localStorage.setItem("loggedUserData", JSON.stringify(data));
-    this.router.navigate(["/orders"]);
+    this.router.navigate([this.defaultLoginPath]);
   }
 
   getLoggedUser(): AuthUserInfo | null {
@@ -50,7 +48,8 @@ export class AuthService {
     }
   }
 
-  logout() {
+  logoutAndNavigateToLoginPage() {
     localStorage.removeItem("loggedUserData");
+    this.router.navigate([this.defaultLogoutPath]);
   }
 }

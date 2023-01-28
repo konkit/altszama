@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -22,6 +22,7 @@ import {
   GoogleLoginButtonComponent
 } from './views/login/login-view/components/google-login-button/google-login-button.component';
 import {AuthInterceptor} from "./interceptor/auth.interceptor";
+import {FrontendConfigService} from "./service/frontend-config.service";
 
 @NgModule({
   declarations: [
@@ -49,8 +50,18 @@ import {AuthInterceptor} from "./interceptor/auth.interceptor";
   ],
   providers: [
     {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [FrontendConfigService],
+      useFactory: (frontendConfigService: FrontendConfigService) => {
+        return () => {
+          //Make sure to return a promise!
+          return frontendConfigService.initConfig();
+        };
+      }
+    },
+    {
       provide: BASE_PATH,
-      // multi: true,
       useFactory: () => {
         return location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "");
       }
