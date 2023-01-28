@@ -75,6 +75,7 @@ dependencies {
   compile('org.springframework.boot:spring-boot-starter-web')
   compile("org.springframework.boot:spring-boot-devtools")
   implementation 'org.springframework.boot:spring-boot-starter-validation'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator:2.6.1'
 
   // Security
   compile("org.springframework.security:spring-security-config")
@@ -110,7 +111,6 @@ dependencies {
 //    kapt    "io.arrow-kt:arrow-meta:$arrow_version"
 
   // Metrics
-  implementation 'org.springframework.boot:spring-boot-starter-actuator:2.6.1'
   implementation 'io.micrometer:micrometer-registry-prometheus:1.8.0'
 
   compile 'org.springdoc:springdoc-openapi-ui:1.4.2'

@@ -1,0 +1,15 @@
+<div class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
+  <app-sidebar class="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-indigo-500"></app-sidebar>
+  <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
+
+    <div class="main-content flex flex-col flex-grow p-4">
+      <router-outlet></router-outlet>
+    </div>
+
+    <footer class="footer px-4 py-6">
+      <div class="footer-content">
+        <p class="text-sm text-gray-600 text-center">© Brandname 2020. All rights reserved. <a href="https://twitter.com/iaminos">by iAmine</a></p>
+      </div>
+    </footer>
+  </main>
+</div>

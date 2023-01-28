@@ -1,0 +1,62 @@
+<aside class="sidebar w-64 md:shadow bg-indigo-500">
+  <div class="sidebar-header flex items-center justify-center py-4">
+    <div class="inline-flex">
+      <a href="#" class="inline-flex flex-row items-center">
+        <span class="leading-10 text-gray-100 text-2xl font-bold ml-1 uppercase">AltSzama</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="sidebar-content px-4 py-6">
+    <ul class="flex flex-col w-full">
+      <li class="my-px">
+        <a
+          routerLink="/orders"
+          class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-700 bg-gray-100"
+        >
+          <span class="ml-3">Today's Orders</span>
+        </a>
+      </li>
+      <li class="my-px">
+        <a
+          routerLink="/orders/all"
+          class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        >
+          <span class="ml-3">All Orders</span>
+        </a>
+      </li>
+      <li class="my-px">
+        <a
+          routerLink="/restaurants"
+          class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        >
+          <span class="ml-3">Restaurants</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="sidebar-footer px-4 py-6">
+    <ul class="flex flex-col w-full">
+      <li class="my-px">
+        <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Account</span>
+      </li>
+      <li class="my-px">
+        <a
+          routerLink="/balance"
+          class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        >
+          <span class="ml-3">Balance</span>
+        </a>
+      </li>
+      <li class="my-px">
+        <a
+          href="#"
+          class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+        >
+          <span class="ml-3">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
