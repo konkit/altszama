@@ -1,7 +1,47 @@
+<div class="main-content flex flex-col flex-grow p-4">
   <h1 class="font-bold text-2xl text-gray-700">Restaurants</h1>
 
-  <div
-    class="flex flex-col flex-grow border-4 border-gray-400 border-dashed bg-white rounded mt-4"
-  >
-    {{allRestaurants$ | async | json}}
+  <div class="relative overflow-x-auto mt-10" *ngIf="indexResponse$ | async as payload">
+    <table class="w-full text-sm text-left">
+      <thead class="text-xs uppercase">
+      <tr class="bg-gray-200">
+        <th scope="col" class="px-6 py-3">Restaurant name</th>
+        <th scope="col" class="px-6 py-3">Dish count</th>
+        <th scope="col" class="px-6 py-3">Last auto-updated</th>
+        <th scope="col" class="px-6 py-3">Last updated manually</th>
+      </tr>
+      </thead>
+      <tbody >
+      <tr *ngFor="let restaurant of payload.restaurants" [routerLink]="['/restaurants/', restaurant.id]"
+          class="bg-white border-b cursor-pointer hover:bg-gray-50">
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-light">
+          {{restaurant.name}}
+        </th>
+        <td class="px-6 py-4">
+          {{restaurant.dishCount}}
+        </td>
+        <td class="px-6 py-4">
+          {{restaurant.lastCrawled}}
+        </td>
+        <td class="px-6 py-4">
+          {{restaurant.lastEdited}}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="px-3 py-3">
+      <h1 class="text-3xl py-3">Import API</h1>
+
+      <p>To use the Restaurant Import API, please use the following credentials: </p>
+      <p><b>Import API Key:</b> {{payload.importCredentials.apiKey}}</p>
+
+      <ng-container *ngIf="getSwaggerUrl() | async as swaggerUrl">
+        <a [href]="swaggerUrl">
+          <button class="button">See Import API specification<fa-icon [icon]="faUpload" class="ml-2"></fa-icon></button>
+        </a>
+      </ng-container>
+    </div>
   </div>
+
+</div>

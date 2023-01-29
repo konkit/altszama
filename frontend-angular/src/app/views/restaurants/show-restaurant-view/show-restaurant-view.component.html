@@ -1,10 +1,59 @@
 <div class="main-content flex flex-col flex-grow p-4">
-  <h1 class="font-bold text-2xl text-gray-700">Restaurant</h1>
 
-  <div
-    class="flex flex-col flex-grow border-4 border-gray-400 border-dashed bg-white rounded mt-4"
-  >
+  <ng-container *ngIf="restaurant$ | async as restaurantResponse">
+    <h1 class="font-bold text-2xl text-gray-700">Restaurant {{restaurantResponse.restaurant.name}}</h1>
+
+    <div
+      class="flex flex-col flex-grow bg-white rounded mt-4 p-5"
+    >
+      <div>
+        <p><b>Address : </b> {{ restaurantResponse.restaurant.address }}</p>
+
+        <p>
+          <b>URL : </b>
+          <a target="_blank" [href]="restaurantResponse.restaurant.url">{{ restaurantResponse.restaurant.url }}</a>
+        </p>
+
+        <p>
+          <b>Telephone number:</b> {{ restaurantResponse.restaurant.telephone }}
+        </p>
+
+        <p>
+          <b>Last auto-updated:</b>
+          {{ dateToRel(restaurantResponse.restaurant.lastCrawled) }}
+        </p>
+
+        <p>
+          <b>Last updated manually:</b>
+          {{ dateToRel(restaurantResponse.restaurant.lastEdited) }}
+        </p>
+      </div>
+
+      <hr/>
+
+      <div class="d-flex justify-space-between mt-4">
+        <button dark color="green" (click)="goToCreateDish()">
+          Create new dish
+          <fa-icon [icon]="faAdd"></fa-icon>
+        </button>
+
+        <button (click)="editRestaurant()">
+          Edit restaurant&nbsp;<fa-icon [icon]="faPencil"></fa-icon>
+        </button>
+
+        <button color="error" (click)="deleteRestaurant()">
+          Delete restaurant&nbsp;<fa-icon [icon]="faTimes"></fa-icon>
+        </button>
+      </div>
+
+      <app-show-restaurant-dishes-table [restaurant]="restaurantResponse.restaurant"
+                                        [dishesByCategory]="restaurantResponse.dishesByCategory"
+                                        (deleteDish)="deleteDish($event)">
+      </app-show-restaurant-dishes-table>
 
 
-  </div>
+    </div>
+  </ng-container>
+
+
 </div>

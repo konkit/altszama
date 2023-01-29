@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {map, Observable} from "rxjs";
-import {RestaurantControllerService, RestaurantInfo} from "../../../../frontend-client";
+import {IndexResponse, RestaurantControllerService, RestaurantInfo} from "../../../../frontend-client";
+import {FrontendConfigService} from "../../../service/frontend-config.service";
+import {faUpload} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-restaurants-list-view',
@@ -8,11 +10,19 @@ import {RestaurantControllerService, RestaurantInfo} from "../../../../frontend-
   styleUrls: ['./restaurants-list-view.component.scss']
 })
 export class RestaurantsListViewComponent {
-  allRestaurants$: Observable<RestaurantInfo[]>;
+  indexResponse$: Observable<IndexResponse>;
 
-  constructor(private api: RestaurantControllerService) {
-    this.allRestaurants$ = this.api.indexRestaurants().pipe(
-      map(r => r.restaurants)
-    )
+  faUpload = faUpload
+
+  constructor(private restaurantControllerService: RestaurantControllerService,
+              private frontendConfigService: FrontendConfigService) {
+    this.indexResponse$ = this.restaurantControllerService.indexRestaurants()
+  }
+
+
+  getSwaggerUrl(): Observable<string> {
+    return this.frontendConfigService.getConfig().pipe(map(config => {
+      return config.currentDomain + "/api/swagger-ui/index.html?configUrl=/api/swagger/swagger-config"
+    }))
   }
 }

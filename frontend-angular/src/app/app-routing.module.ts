@@ -58,7 +58,7 @@ export const authenticatedRoutes: Routes = [
     component: RestaurantsListViewComponent,
   },
   {
-    path: "restaurants/show/:id",
+    path: "restaurants/:id",
     title: "ShowRestaurant",
     component: ShowRestaurantViewComponent,
   },
