@@ -1,7 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {OrderControllerService, ShowOrderDto, ShowOrderResponse} from "../../../../frontend-client";
-import {ActivatedRoute} from "@angular/router";
+import {
+  OrderControllerService,
+  ParticipantsOrderEntry,
+  ShowOrderDto,
+  ShowOrderResponse
+} from "../../../../frontend-client";
+import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable, switchMap} from "rxjs";
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
   selector: 'app-show-order-view',
@@ -13,6 +19,7 @@ export class ShowOrderViewComponent implements OnInit {
   orderResponse$: Observable<ShowOrderResponse>
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private orderControllerService: OrderControllerService) {
     this.orderResponse$ = this.route.params.pipe(
       switchMap(params => {
@@ -22,14 +29,10 @@ export class ShowOrderViewComponent implements OnInit {
   }
 
   ngOnInit() {
-
   }
 
   shouldShowOrderLockedWarning() {
     return false;
   }
 
-  allEatingPeopleCount(orderResponse: ShowOrderResponse) {
-    return orderResponse.orderEntries.flatMap(e => e.dishEntries).length;
-  }
 }

@@ -29,6 +29,10 @@ import { PaymentOptionsSummaryComponent } from './views/orders/show-order-view/c
 import {PricePipe} from "./components/pipes/price.pipe";
 import { BankTransferQRCodeComponent } from './views/orders/show-order-view/components/price-summary/bank-transfer-qrcode/bank-transfer-qrcode.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import { OrderEntriesListComponent } from './views/orders/show-order-view/components/order-entries-list/order-entries-list.component';
+import { OrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/order-entry-card/order-entry-card.component';
+import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/components/order-entries-list/title-with-payment-status/title-with-payment-status.component';
+import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/show-order-entry/show-order-entry.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +56,10 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     PaymentOptionsSummaryComponent,
     PricePipe,
     BankTransferQRCodeComponent,
+    OrderEntriesListComponent,
+    OrderEntryCardComponent,
+    TitleWithPaymentStatusComponent,
+    ShowOrderEntryComponent,
   ],
   imports: [
     BrowserModule,

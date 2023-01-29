@@ -63,32 +63,5 @@
     </div>
   </div>
 
-  <!--        <template *ngIf="shouldDisplayNewOrderEntryCard()">-->
-  <!--          <div>-->
-  <!--            <div>-->
-  <!--              <new-order-entry-card :is-entry-creating="isEntryCreating" :username="username">-->
-  <!--              </new-order-entry-card>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </template>-->
-
-  <!--        <template v-for="(orderEntry, entryId) in this.yourOrderEntries">-->
-  <!--          <div :key="orderEntry.id + entryId">-->
-  <!--            <div>-->
-  <!--              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId"-->
-  <!--                                :current-user-id="currentUserId">-->
-  <!--              </OrderEntriesCard>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </template>-->
-
-  <!--        <template v-for="(orderEntry, entryId) in this.otherUsersOrderEntries">-->
-  <!--          <div :key="orderEntry.id + entryId">-->
-  <!--            <div>-->
-  <!--              <OrderEntriesCard :order="order" :order-entry="orderEntry" :entry-id="entryId"-->
-  <!--                                :current-user-id="currentUserId">-->
-  <!--              </OrderEntriesCard>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </template>-->
+  <app-order-entries-list [showOrderResponse]="orderResponse"></app-order-entries-list>
 </div>

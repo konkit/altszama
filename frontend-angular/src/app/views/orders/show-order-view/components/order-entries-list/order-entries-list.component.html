@@ -1,0 +1,28 @@
+<!--<div *ngIf="shouldDisplayNewOrderEntryCard()">-->
+<!--  <div>-->
+<!--    <div>-->
+<!--      <app-new-order-entry-card [isEntryCreating]="isEntryCreating" [username]="username">-->
+<!--      </app-new-order-entry-card>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div *ngFor="let orderEntry of this.yourOrderEntries; let entryId = index">
+  <div>
+    <app-order-entry-card [order]="showOrderResponse.order"
+                          [orderEntry]="orderEntry"
+                          [entryId]="entryId"
+                          [currentUserId]="currentUserId">
+    </app-order-entry-card>
+  </div>
+</div>
+
+<div *ngFor="let orderEntry of this.otherUsersOrderEntries; let entryId = index">
+  <div>
+    <app-order-entry-card [order]="showOrderResponse.order"
+                          [orderEntry]="orderEntry"
+                          [entryId]="entryId"
+                          [currentUserId]="currentUserId">
+    </app-order-entry-card>
+  </div>
+</div>

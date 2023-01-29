@@ -1,0 +1,31 @@
+<div class="d-flex flex-wrap">
+  <div>
+    <h3 class="title-text">{{ title }} ({{orderEntry.finalPrice | price}})</h3>
+  </div>
+
+  <div *ngIf="isOrderEntryOwner() || isOrderOwner()">
+    <div *ngIf="shouldShowPaymentStatus()">
+      <div class="chip mx-2" *ngIf="isUnpaid()" color="red" text-color="white">
+        Unpaid
+      </div>
+
+      <div class="chip mx-2" *ngIf="isConfirmedAsPaid()" color="green" text-color="white">
+        Payment confirmed
+      </div>
+    </div>
+
+    <div *ngIf="shouldShowConfirmAsPaidButton()">
+      <button color="basic" (click)="confirmAsPaid(orderEntry.id)">
+        Confirm payment
+        <i class="fa fa-check ml-2" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div *ngIf="shouldShowRevertToUnpaid()">
+      <button color="basic" (click)="revertToUnpaid(orderEntry.id)">
+        Revert to "unpaid"
+        <i class="fa fa-undo ml-2" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>

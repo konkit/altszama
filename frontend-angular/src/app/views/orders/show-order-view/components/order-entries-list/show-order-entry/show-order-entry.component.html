@@ -1,0 +1,42 @@
+<div class="show-order-entry-wrapper">
+  <div>
+    <div>
+        <div class="dish-name-and-edit-buttons">
+          <div class="dish-name-text">
+            {{ dishEntry.dishName }}
+          </div>
+
+          <span class="dish-price">({{dishEntry.price | price}})
+            </span>
+
+          <div class="edit-buttons" *ngIf="canEditOrderEntry()">
+            <button (click)="editDishEntry()">
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+            </button>
+
+            <button (click)="deleteDishEntry()">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    <div *ngFor="let sideDish of dishEntry.sideDishes">
+      <div>
+          <div class="side-dish-name-and-price">
+            <div class="side-dish-name">+ {{ sideDish.name }}</div>
+
+            <span class="side-dish-price ml-2">({{sideDish.price | price}})</span>
+          </div>
+      </div>
+    </div>
+
+    <div *ngIf="dishEntry.comments.length > 0">
+      <div>
+          <div class="dish-comments py-2">
+            Additional comments: {{ dishEntry.comments }}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
