@@ -1,10 +1,13 @@
-<h1 class="text-3xl pb-5 font-bold">Order details</h1>
-
-<div *ngIf="shouldShowOrderLockedWarning()">
-  <div>TODO order locked warning</div>
-</div>
-
 <div *ngIf="orderResponse$ | async as orderResponse">
+
+  <h1 class="text-3xl pb-5 font-bold">
+    [{{orderResponse.order.orderState}}] Order from {{orderResponse.order.restaurantName}} ({{orderResponse.order.orderDate}})
+  </h1>
+
+  <div *ngIf="shouldShowOrderLockedWarning()">
+    <div>TODO order locked warning</div>
+  </div>
+
   <div class="grid grid-cols-3">
     <div>
       <h2 class="text-2xl">Order details</h2>
@@ -23,9 +26,8 @@
   </div>
 
   <div>
-    <div>
-      <div class="d-flex flex-row flex-wrap">
-        <div class="mr-4 menu-link">
+    <div class="flex flex-row flex-wrap">
+        <div class="mr-4 py-5">
           <b class="mr-2">See menu at &nbsp;</b>
           <a class="text-indigo-500" *ngIf="orderResponse.order.restaurantUrl" target="_blank"
              [href]="orderResponse.order.restaurantUrl">{{ orderResponse.order.restaurantUrl }}</a>
@@ -60,7 +62,6 @@
           <!--                </v-btn>-->
         </div>
       </div>
-    </div>
   </div>
 
   <app-order-entries-list [showOrderResponse]="orderResponse"></app-order-entries-list>
