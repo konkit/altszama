@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import {map, Observable} from "rxjs";
-import {AllOrdersOrderDto, OrderControllerService, TodayOrderDto} from "../../../../frontend-client";
+import {
+  AllOrdersOrderDto,
+  OrderControllerService,
+  TodayOrderDto,
+  TodayOrdersResponse
+} from "../../../../frontend-client";
+import {faAdd} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-todays-order-view',
@@ -9,12 +15,20 @@ import {AllOrdersOrderDto, OrderControllerService, TodayOrderDto} from "../../..
 })
 export class TodaysOrderViewComponent {
 
-  todaysOrders$: Observable<TodayOrderDto[]>;
+  todaysOrders$: Observable<TodayOrdersResponse>;
+
+  faAdd = faAdd
 
   constructor(private api: OrderControllerService) {
-    this.todaysOrders$ = this.api.todayOrders().pipe(
-      map(r => r.ordersList)
-    )
+    this.todaysOrders$ = this.api.todayOrders()
+  }
+
+  goToOrder(selectedOrderId: string) {
+    // router.push({name: "ShowOrder", params: {id: selectedOrderId}});
+  }
+
+  goToCreateOrder() {
+    // router.push({name: "OrderCreateForm"});
   }
 
 }

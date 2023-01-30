@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DishDto, RestaurantDto} from "../../../../../frontend-client";
 import * as moment from "moment";
 
+import {faTimes, faPencil} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-show-restaurant-dishes-table',
@@ -13,6 +14,9 @@ export class ShowRestaurantDishesTableComponent {
   @Input() dishesByCategory!: { [key: string]: Array<DishDto> };
 
   @Output() deleteDish: EventEmitter<string> = new EventEmitter();
+
+  faTimes = faTimes
+  faPencil = faPencil;
 
   sendDeleteDish(dishId: string) {
     this.deleteDish.emit(dishId)

@@ -1,7 +1,83 @@
-<h1 class="font-bold text-2xl text-gray-700">Todays Orders</h1>
+<app-view-wrapper title="Today's Orders">
+  <div *ngIf="todaysOrders$ | async as todayOrders">
+    <div>
+      <h1 class="mb-4 text-3xl">Your orders today:</h1>
 
-<div
-  class="flex flex-col flex-grow border-4 border-gray-400 border-dashed bg-white rounded mt-4"
->
-  {{todaysOrders$ | async | json}}
-</div>
+      <div *ngIf="todayOrders.currentOrderEntries.length > 0">
+        <ng-container *ngFor="let orderEntry of todayOrders.currentOrderEntries">
+          <ng-container *ngFor="let dishEntry of orderEntry.dishEntries">
+            <div (click)="goToOrder(orderEntry.orderId)">
+              <div class="cursor-pointer">
+                <b>{{ dishEntry.dish.name }}</b>
+                from
+                <b>{{ dishEntry.restaurantName }}</b>
+                (STATUS: {{ orderEntry.orderState }})
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div *ngIf="todayOrders.currentOrderEntries.length == 0">
+        <div>
+          You haven't ordered anything today yet.
+        </div>
+      </div>
+
+      <hr class="my-5"/>
+
+      <h1 class="text-3xl">Orders:</h1>
+
+      <!--              <errors-component/>-->
+
+      <div class="py-5">
+        <ng-container *ngIf="todayOrders.ordersList.length > 0">
+          <div (click)="goToOrder(order.id)" *ngFor="let order of todayOrders.ordersList">
+            <div class="cursor-pointer">
+              <div class="flex flex-row">
+                <div class="order-data-wrapper text-ellipsis overflow-hidden">
+                  <b>{{ order.restaurantName }}</b> (created by {{ order.orderCreatorUsername }})
+                </div>
+
+                <div class="order-state-wrapper flex flex-row">
+                  <div class="orderState" [ngClass]="{matchingState: order.orderState === 'CREATED'}">
+                    CREATED
+                  </div>
+
+                  <div class="orderState" [ngClass]="{matchingState: order.orderState === 'ORDERING'}">
+                    ORDERING RIGHT NOW
+                  </div>
+
+                  <div class="orderState" [ngClass]="{matchingState: order.orderState === 'ORDERED'}">
+                    ORDERED
+                  </div>
+
+                  <div class="orderState" [ngClass]="{matchingState:order.orderState === 'DELIVERED'}">
+                    DELIVERED
+                  </div>
+                </div>
+              </div>
+
+<!--              TODO: Version for mobiles-->
+<!--              <div>-->
+<!--                <div>-->
+<!--                  <b>{{ order.restaurantName }}</b> (created by {{ order.orderCreatorUsername }})-->
+<!--                </div>-->
+<!--                <div>Status: {{ order.orderState }}</div>-->
+<!--              </div>-->
+            </div>
+          </div>
+        </ng-container>
+
+        <div *ngIf="todayOrders.ordersList.length === 0">
+          <div>No orders yet</div>
+        </div>
+      </div>
+
+      <app-button (click)="goToCreateOrder()">
+        Add new order
+        <fa-icon [icon]="faAdd"></fa-icon>
+      </app-button>
+    </div>
+  </div>
+</app-view-wrapper>

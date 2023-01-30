@@ -34,6 +34,8 @@ import { OrderEntryCardComponent } from './views/orders/show-order-view/componen
 import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/components/order-entries-list/title-with-payment-status/title-with-payment-status.component';
 import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/show-order-entry/show-order-entry.component';
 import { ShowRestaurantDishesTableComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/show-restaurant-dishes-table.component';
+import { ViewWrapperComponent } from './components/view-wrapper/view-wrapper.component';
+import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +64,8 @@ import { ShowRestaurantDishesTableComponent } from './views/restaurants/show-res
     TitleWithPaymentStatusComponent,
     ShowOrderEntryComponent,
     ShowRestaurantDishesTableComponent,
+    ViewWrapperComponent,
+    ButtonComponent,
   ],
   imports: [
     BrowserModule,

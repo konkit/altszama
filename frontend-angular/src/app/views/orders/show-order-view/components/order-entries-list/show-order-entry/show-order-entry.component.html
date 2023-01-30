@@ -10,13 +10,13 @@
             </span>
 
         <div class="ml-2" *ngIf="canEditOrderEntry()">
-          <button (click)="editDishEntry()">
+          <app-button (click)="editDishEntry()">
             <i class="fa fa-pencil" aria-hidden="true"></i>
-          </button>
+          </app-button>
 
-          <button (click)="deleteDishEntry()">
+          <app-button (click)="deleteDishEntry()">
             <i class="fa fa-times" aria-hidden="true"></i>
-          </button>
+          </app-button>
         </div>
       </div>
     </div>

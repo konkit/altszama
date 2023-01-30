@@ -1,0 +1,20 @@
+.orderState {
+  @apply ml-5;
+}
+
+.orderState.matchingState {
+  @apply font-bold text-gray-900;
+}
+
+.orderState {
+  @apply text-gray-400;
+}
+
+.wide-order-status {
+  display: flex;
+  flex-direction: row;
+}
+
+.order-state-wrapper {
+  @apply ml-10;
+}

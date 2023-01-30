@@ -1,7 +1,5 @@
-<div class="main-content flex flex-col flex-grow p-4">
-  <h1 class="font-bold text-2xl text-gray-700">Restaurants</h1>
-
-  <div class="relative overflow-x-auto mt-10" *ngIf="indexResponse$ | async as payload">
+<app-view-wrapper title="Restaurants">
+  <div *ngIf="indexResponse$ | async as payload">
     <table class="w-full text-sm text-left">
       <thead class="text-xs uppercase">
       <tr class="bg-gray-200">
@@ -38,10 +36,9 @@
 
       <ng-container *ngIf="getSwaggerUrl() | async as swaggerUrl">
         <a [href]="swaggerUrl">
-          <button class="button">See Import API specification<fa-icon [icon]="faUpload" class="ml-2"></fa-icon></button>
+          <app-button class="button">See Import API specification<fa-icon [icon]="faUpload" class="ml-2"></fa-icon></app-button>
         </a>
       </ng-container>
     </div>
   </div>
-
-</div>
+</app-view-wrapper>

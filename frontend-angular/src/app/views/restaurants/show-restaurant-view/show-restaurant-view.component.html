@@ -1,11 +1,6 @@
-<div class="main-content flex flex-col flex-grow p-4">
-
-  <ng-container *ngIf="restaurant$ | async as restaurantResponse">
-    <h1 class="font-bold text-2xl text-gray-700">Restaurant {{restaurantResponse.restaurant.name}}</h1>
-
-    <div
-      class="flex flex-col flex-grow bg-white rounded mt-4 p-5"
-    >
+<ng-container *ngIf="restaurant$ | async as restaurantResponse">
+  <app-view-wrapper [title]="'Restaurant ' + restaurantResponse.restaurant.name">
+    <div class="flex flex-col flex-grow bg-white rounded p-5">
       <div>
         <p><b>Address : </b> {{ restaurantResponse.restaurant.address }}</p>
 
@@ -32,18 +27,18 @@
       <hr/>
 
       <div class="d-flex justify-space-between mt-4">
-        <button dark color="green" (click)="goToCreateDish()">
+        <app-button dark color="green" (click)="goToCreateDish()">
           Create new dish
           <fa-icon [icon]="faAdd"></fa-icon>
-        </button>
+        </app-button>
 
-        <button (click)="editRestaurant()">
+        <app-button (click)="editRestaurant()">
           Edit restaurant&nbsp;<fa-icon [icon]="faPencil"></fa-icon>
-        </button>
+        </app-button>
 
-        <button color="error" (click)="deleteRestaurant()">
+        <app-button color="error" (click)="deleteRestaurant()">
           Delete restaurant&nbsp;<fa-icon [icon]="faTimes"></fa-icon>
-        </button>
+        </app-button>
       </div>
 
       <app-show-restaurant-dishes-table [restaurant]="restaurantResponse.restaurant"
@@ -53,7 +48,5 @@
 
 
     </div>
-  </ng-container>
-
-
-</div>
+  </app-view-wrapper>
+</ng-container>

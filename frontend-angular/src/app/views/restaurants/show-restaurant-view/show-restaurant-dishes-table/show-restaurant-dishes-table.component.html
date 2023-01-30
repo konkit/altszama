@@ -21,14 +21,14 @@
 
         <span class="edit-buttons">
 <!--          <router-link :to="{name: 'DishEditForm', params: {id: restaurant.id, dishId: dish.id}}">-->
-<!--            <button text icon class="edit-button">-->
-<!--              <i class="fa fa-pencil" aria-hidden="true"></i>-->
-<!--            </button>-->
+            <app-button class="edit-button">
+              <fa-icon [icon]="faPencil"></fa-icon>
+            </app-button>
 <!--          </router-link>-->
 
-          <button (click)="sendDeleteDish(dish.id)" class="delete-button">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </button>
+          <app-button (click)="sendDeleteDish(dish.id)" class="delete-button">
+            <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>
+          </app-button>
         </span>
       </div>
     </div>

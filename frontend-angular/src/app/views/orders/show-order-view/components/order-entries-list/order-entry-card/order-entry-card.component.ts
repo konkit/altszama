@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../frontend-client";
 import {OrderEntryService} from "../../../../../../service/order-entry.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-order-entry-card',
@@ -13,6 +14,8 @@ export class OrderEntryCardComponent {
   @Input() orderEntry!: ParticipantsOrderEntry;
   @Input() entryId!: number;
   @Input() currentUserId!: string;
+
+  faPlus = faPlus
 
   constructor(private orderEntryService: OrderEntryService) {
   }
