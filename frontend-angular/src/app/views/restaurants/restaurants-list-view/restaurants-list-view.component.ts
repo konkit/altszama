@@ -3,6 +3,7 @@ import {map, Observable} from "rxjs";
 import {IndexResponse, RestaurantControllerService, RestaurantInfo} from "../../../../frontend-client";
 import {FrontendConfigService} from "../../../service/frontend-config.service";
 import {faUpload} from "@fortawesome/free-solid-svg-icons";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-restaurants-list-view',
@@ -15,8 +16,11 @@ export class RestaurantsListViewComponent {
   faUpload = faUpload
 
   constructor(private restaurantControllerService: RestaurantControllerService,
-              private frontendConfigService: FrontendConfigService) {
-    this.indexResponse$ = this.restaurantControllerService.indexRestaurants()
+              private frontendConfigService: FrontendConfigService,
+              private route: ActivatedRoute) {
+    this.indexResponse$ = this.route.data.pipe(
+      map(r => r['response'])
+    )
   }
 
 

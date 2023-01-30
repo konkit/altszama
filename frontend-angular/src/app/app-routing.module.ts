@@ -3,13 +3,18 @@ import { RouterModule, Routes } from '@angular/router';
 import {LandingPageViewComponent} from "./views/landing/landing-page-view/landing-page-view.component";
 import {LoginViewComponent} from "./views/login/login-view/login-view.component";
 import {TestLoginViewComponent} from "./views/login/test-login-view/test-login-view.component";
-import {TodaysOrderViewComponent} from "./views/orders/todays-order-view/todays-order-view.component";
+import {TodayOrdersViewComponent} from "./views/orders/today-orders-view/today-orders-view.component";
 import {ShowOrderViewComponent} from "./views/orders/show-order-view/show-order-view.component";
 import {AllOrdersViewComponent} from "./views/orders/all-orders-view/all-orders-view.component";
 import {RestaurantsListViewComponent} from "./views/restaurants/restaurants-list-view/restaurants-list-view.component";
 import {ShowRestaurantViewComponent} from "./views/restaurants/show-restaurant-view/show-restaurant-view.component";
 import {BalanceViewComponent} from "./views/balance/balance-view/balance-view.component";
 import {MakeAnOrderViewComponent} from "./views/orders/make-an-order-view/make-an-order-view.component";
+import {TodayOrdersResolver} from "./views/orders/today-orders-view/today-orders.resolver";
+import {ShowOrderResolver} from "./views/orders/show-order-view/show-order.resolver";
+import {AllOrdersResolver} from "./views/orders/all-orders-view/all-orders.resolver";
+import {RestaurantsListResolver} from "./views/restaurants/restaurants-list-view/restaurants-list.resolver";
+import {ShowRestaurantResolver} from "./views/restaurants/show-restaurant-view/show-restaurant.resolver";
 
 
 export const notAuthenticatedRoutes: Routes = [
@@ -35,12 +40,18 @@ export const authenticatedRoutes: Routes = [
   {
     path: "orders",
     title: "TodayOrders",
-    component: TodaysOrderViewComponent,
+    component: TodayOrdersViewComponent,
+    resolve: {
+      response: TodayOrdersResolver
+    }
   },
   {
     path: "orders/show/:id",
     title: "ShowOrder",
     component: ShowOrderViewComponent,
+    resolve: {
+      response: ShowOrderResolver
+    }
   },
   {
     path: "orders/:id/make_an_order",
@@ -51,16 +62,25 @@ export const authenticatedRoutes: Routes = [
     path: "orders/all",
     title: "AllOrders",
     component: AllOrdersViewComponent,
+    resolve: {
+      response: AllOrdersResolver
+    }
   },
   {
     path: "restaurants",
     title: "RestaurantIndex",
     component: RestaurantsListViewComponent,
+    resolve: {
+      response: RestaurantsListResolver
+    }
   },
   {
     path: "restaurants/:id",
     title: "ShowRestaurant",
     component: ShowRestaurantViewComponent,
+    resolve: {
+      response: ShowRestaurantResolver
+    }
   },
   {
     path: "balance",

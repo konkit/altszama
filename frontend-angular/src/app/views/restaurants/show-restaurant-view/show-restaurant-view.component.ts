@@ -22,10 +22,7 @@ export class ShowRestaurantViewComponent implements OnInit {
   constructor(private api: RestaurantControllerService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.restaurant$ = this.route.params.pipe(
-      map(x => x["id"]),
-      switchMap(restaurantId => this.api.showRestaurant(restaurantId))
-    )
+    this.restaurant$ = this.route.data.pipe(map(r => r['response']))
   }
 
   ngOnInit() {

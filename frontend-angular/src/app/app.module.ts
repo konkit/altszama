@@ -10,7 +10,7 @@ import {TestLoginViewComponent} from './views/login/test-login-view/test-login-v
 import {AllOrdersViewComponent} from './views/orders/all-orders-view/all-orders-view.component';
 import {MakeAnOrderViewComponent} from './views/orders/make-an-order-view/make-an-order-view.component';
 import {ShowOrderViewComponent} from './views/orders/show-order-view/show-order-view.component';
-import {TodaysOrderViewComponent} from './views/orders/todays-order-view/todays-order-view.component';
+import {TodayOrdersViewComponent} from './views/orders/today-orders-view/today-orders-view.component';
 import {RestaurantsListViewComponent} from './views/restaurants/restaurants-list-view/restaurants-list-view.component';
 import {ShowRestaurantViewComponent} from './views/restaurants/show-restaurant-view/show-restaurant-view.component';
 import {SidebarComponent} from './components/sidebar/sidebar.component';
@@ -47,7 +47,7 @@ import { ButtonComponent } from './components/button/button.component';
     AllOrdersViewComponent,
     MakeAnOrderViewComponent,
     ShowOrderViewComponent,
-    TodaysOrderViewComponent,
+    TodayOrdersViewComponent,
     RestaurantsListViewComponent,
     ShowRestaurantViewComponent,
     SidebarComponent,

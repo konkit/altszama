@@ -21,11 +21,7 @@ export class ShowOrderViewComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private orderControllerService: OrderControllerService) {
-    this.orderResponse$ = this.route.params.pipe(
-      switchMap(params => {
-        return this.orderControllerService.show(params["id"])
-      }),
-    )
+    this.orderResponse$ = this.route.data.pipe(map(r => r['response']))
   }
 
   ngOnInit() {

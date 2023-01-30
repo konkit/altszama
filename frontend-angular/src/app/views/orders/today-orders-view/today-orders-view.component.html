@@ -6,13 +6,11 @@
       <div *ngIf="todayOrders.currentOrderEntries.length > 0">
         <ng-container *ngFor="let orderEntry of todayOrders.currentOrderEntries">
           <ng-container *ngFor="let dishEntry of orderEntry.dishEntries">
-            <div (click)="goToOrder(orderEntry.orderId)">
-              <div class="cursor-pointer">
+            <div (click)="goToOrder(orderEntry.orderId)" class="cursor-pointer">
                 <b>{{ dishEntry.dish.name }}</b>
                 from
                 <b>{{ dishEntry.restaurantName }}</b>
                 (STATUS: {{ orderEntry.orderState }})
-              </div>
             </div>
           </ng-container>
         </ng-container>
