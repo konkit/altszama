@@ -1,25 +1,27 @@
 <div>
   <div>
-    <div *ngFor="let categoryAndDishes of this.dishesByCategory | keyvalue">
-      <span *ngIf="categoryAndDishes.key"> Category: {{ categoryAndDishes.key }} </span>
-      <span *ngIf="categoryAndDishes.key == null">No category</span>
+    <div *ngFor="let categoryAndDishes of this.dishesByCategory | keyvalue" class="mt-10">
+      <span *ngIf="categoryAndDishes.key" class="text-gray-400"> Category: {{ categoryAndDishes.key }} </span>
+      <span *ngIf="categoryAndDishes.key == null" class="text-gray-400">No category</span>
 
-      <div *ngFor="let dish of categoryAndDishes.value">
+      <div *ngFor="let dish of categoryAndDishes.value" class="flex flex-row py-2 my-2 border-t-2">
         <div>
-          {{ dish.name }} ({{dish.price | price}})
+          <div>
+            {{ dish.name }} ({{dish.price | price}})
+          </div>
+
+          <div class="subtitle text-gray-400">
+            <span *ngIf="dish.lastCrawled != null">
+              auto-updated {{ dateToRel(dish.lastCrawled) }}
+            </span>
+
+            <span *ngIf="dish.lastCrawled == null">
+              updated manually
+            </span>
+          </div>
         </div>
 
-        <div class="subtitle">
-          <span *ngIf="dish.lastCrawled != null">
-            auto-updated {{ dateToRel(dish.lastCrawled) }}
-          </span>
-
-          <span *ngIf="dish.lastCrawled == null">
-            updated manually
-          </span>
-        </div>
-
-        <span class="edit-buttons">
+        <div class="edit-buttons ml-auto">
 <!--          <router-link :to="{name: 'DishEditForm', params: {id: restaurant.id, dishId: dish.id}}">-->
             <app-button class="edit-button">
               <fa-icon [icon]="faPencil"></fa-icon>
@@ -29,7 +31,7 @@
           <app-button (click)="sendDeleteDish(dish.id)" class="delete-button">
             <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>
           </app-button>
-        </span>
+        </div>
       </div>
     </div>
   </div>

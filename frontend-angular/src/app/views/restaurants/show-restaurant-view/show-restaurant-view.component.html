@@ -6,7 +6,7 @@
 
         <p>
           <b>URL : </b>
-          <a target="_blank" [href]="restaurantResponse.restaurant.url">{{ restaurantResponse.restaurant.url }}</a>
+          <a target="_blank" class="text-indigo-500" [href]="restaurantResponse.restaurant.url">{{ restaurantResponse.restaurant.url }}</a>
         </p>
 
         <p>
@@ -26,18 +26,18 @@
 
       <hr/>
 
-      <div class="d-flex justify-space-between mt-4">
-        <app-button dark color="green" (click)="goToCreateDish()">
+      <div class="flex flex-row mt-4">
+        <app-button dark color="green" (click)="goToCreateDish()" class="mr-3">
           Create new dish
-          <fa-icon [icon]="faAdd"></fa-icon>
+          <fa-icon [icon]="faAdd" class="ml-3"></fa-icon>
         </app-button>
 
-        <app-button (click)="editRestaurant()">
-          Edit restaurant&nbsp;<fa-icon [icon]="faPencil"></fa-icon>
+        <app-button (click)="editRestaurant()" class="mr-3">
+          Edit restaurant&nbsp;<fa-icon [icon]="faPencil" class="ml-3"></fa-icon>
         </app-button>
 
         <app-button color="error" (click)="deleteRestaurant()">
-          Delete restaurant&nbsp;<fa-icon [icon]="faTimes"></fa-icon>
+          Delete restaurant&nbsp;<fa-icon [icon]="faTimes" class="ml-3"></fa-icon>
         </app-button>
       </div>
 
