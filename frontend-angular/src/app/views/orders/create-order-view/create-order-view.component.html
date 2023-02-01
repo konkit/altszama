@@ -1,0 +1,52 @@
+<app-view-wrapper title="Create Order">
+  <div *ngIf="fullRestaurantsList.length === 0">
+    <h1 class="my-4">There are no restaurants, please create one first</h1>
+  </div>
+
+  <div *ngIf="fullRestaurantsList.length > 0">
+    <div *ngIf="stepperState == 1">
+      <div *ngIf="filteredRestaurantsList$ | async as restaurantsList">
+
+        <input type="text" [value]="restaurantsFilter" (input)="filterChanged($event)"
+               placeholder="Filter restaurants by name"/>
+
+        <div *ngFor="let restaurant of restaurantsList" (click)="selectRestaurantId(restaurant.id)" [ngClass]="{'selected': restaurantId == restaurant.id}">
+          {{restaurant.name}}
+        </div>
+      </div>
+
+      <app-button (click)="back()">Back</app-button>
+      <app-button (click)="next()">Next</app-button>
+    </div>
+
+    <div *ngIf="stepperState == 2">
+      <h1>Fill details</h1>
+
+      <div>
+        <div>
+          <h3>Order time</h3>
+            <input name="hour" />:<input name="minute" />
+
+          <!--            <TimePicker-->
+          <!--              :value="timeOfOrder"-->
+          <!--              @input="updateTimeOfOrder($event)"-->
+          <!--              label="Order time"-->
+          <!--            ></TimePicker>-->
+        </div>
+
+        <div>
+          <!--            <PriceModifiersFields :price-modifiers="priceModifiers"-->
+          <!--                                  @input="(newPriceModifiers) => {priceModifiers = newPriceModifiers}"/>-->
+        </div>
+
+        <div>
+          <!--            <PaymentDataFields :payment-data="paymentData"-->
+          <!--                               @input="(newPaymentData) => {paymentData = newPaymentData}"/>-->
+        </div>
+      </div>
+
+      <app-button (click)="back()">Back</app-button>
+      <app-button (click)="submitForm($event)">Create</app-button>
+    </div>
+  </div>
+</app-view-wrapper>

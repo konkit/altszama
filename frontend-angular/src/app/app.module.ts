@@ -36,6 +36,7 @@ import { ShowOrderEntryComponent } from './views/orders/show-order-view/componen
 import { ShowRestaurantDishesTableComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/show-restaurant-dishes-table.component';
 import { ViewWrapperComponent } from './components/view-wrapper/view-wrapper.component';
 import { ButtonComponent } from './components/button/button.component';
+import { CreateOrderViewComponent } from './views/orders/create-order-view/create-order-view.component';
 
 @NgModule({
   declarations: [
@@ -66,13 +67,14 @@ import { ButtonComponent } from './components/button/button.component';
     ShowRestaurantDishesTableComponent,
     ViewWrapperComponent,
     ButtonComponent,
+    CreateOrderViewComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ApiModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   providers: [
     {

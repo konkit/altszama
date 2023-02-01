@@ -1,7 +1,7 @@
 <app-view-wrapper title="Today's Orders">
   <div *ngIf="todaysOrders$ | async as todayOrders">
     <div>
-      <h1 class="mb-4 text-3xl">Your orders today:</h1>
+      <h1 class="mb-4 text-2xl">Your orders today:</h1>
 
       <div *ngIf="todayOrders.currentOrderEntries.length > 0">
         <ng-container *ngFor="let orderEntry of todayOrders.currentOrderEntries">
@@ -24,7 +24,7 @@
 
       <hr class="my-5"/>
 
-      <h1 class="text-3xl">Orders:</h1>
+      <h1 class="text-2xl">Orders:</h1>
 
       <!--              <errors-component/>-->
 

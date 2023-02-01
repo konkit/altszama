@@ -15,6 +15,8 @@ import {ShowOrderResolver} from "./views/orders/show-order-view/show-order.resol
 import {AllOrdersResolver} from "./views/orders/all-orders-view/all-orders.resolver";
 import {RestaurantsListResolver} from "./views/restaurants/restaurants-list-view/restaurants-list.resolver";
 import {ShowRestaurantResolver} from "./views/restaurants/show-restaurant-view/show-restaurant.resolver";
+import {CreateOrderViewComponent} from "./views/orders/create-order-view/create-order-view.component";
+import {CreateOrderResolver} from "./views/orders/create-order-view/create-order.resolver";
 
 
 export const notAuthenticatedRoutes: Routes = [
@@ -51,6 +53,14 @@ export const authenticatedRoutes: Routes = [
     component: ShowOrderViewComponent,
     resolve: {
       response: ShowOrderResolver
+    }
+  },
+  {
+    path: "orders/create",
+    title: "CreateOrder",
+    component: CreateOrderViewComponent,
+    resolve: {
+      response: CreateOrderResolver
     }
   },
   {
