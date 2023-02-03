@@ -4,49 +4,110 @@
   </div>
 
   <div *ngIf="fullRestaurantsList.length > 0">
-    <div *ngIf="stepperState == 1">
-      <div *ngIf="filteredRestaurantsList$ | async as restaurantsList">
 
-        <input type="text" [value]="restaurantsFilter" (input)="filterChanged($event)"
-               placeholder="Filter restaurants by name"/>
+    <mat-stepper [linear]="true" #stepper>
+      <mat-step>
+        <div *ngIf="filteredRestaurantsList$ | async as restaurantsList">
 
-        <div *ngFor="let restaurant of restaurantsList" (click)="selectRestaurantId(restaurant.id)" [ngClass]="{'selected': restaurantId == restaurant.id}">
-          {{restaurant.name}}
-        </div>
-      </div>
+          <input type="text" [value]="restaurantsFilter" (input)="filterChanged($event)"
+                 placeholder="Filter restaurants by name"/>
 
-      <app-button (click)="back()">Back</app-button>
-      <app-button (click)="next()">Next</app-button>
-    </div>
-
-    <div *ngIf="stepperState == 2">
-      <h1>Fill details</h1>
-
-      <div>
-        <div>
-          <h3>Order time</h3>
-            <input name="hour" />:<input name="minute" />
-
-          <!--            <TimePicker-->
-          <!--              :value="timeOfOrder"-->
-          <!--              @input="updateTimeOfOrder($event)"-->
-          <!--              label="Order time"-->
-          <!--            ></TimePicker>-->
+          <div *ngFor="let restaurant of restaurantsList"
+               (click)="this.orderForm.controls.restaurantId.setValue(restaurant.id)"
+               [ngClass]="{'selected': this.orderForm.controls.restaurantId.value === restaurant.id}">
+            {{restaurant.name}}
+          </div>
         </div>
 
-        <div>
-          <!--            <PriceModifiersFields :price-modifiers="priceModifiers"-->
-          <!--                                  @input="(newPriceModifiers) => {priceModifiers = newPriceModifiers}"/>-->
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button color="primary" matStepperNext>Next</button>
+      </mat-step>
+
+
+      <mat-step>
+        <h1>Fill details</h1>
+
+        <div class="flex flex-row justify-around">
+          <div [formGroup]="orderForm">
+            <h3>Order time</h3>
+
+            <mat-form-field>
+              <input matInput
+                     [formControl]="orderForm.controls.timeOfOrder"
+                     placeholder="16:00"
+                     label="Order time"
+              />
+              <mat-icon matSuffix>
+                watch_later
+              </mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <h3>Payment</h3>
+            <div>
+              <mat-form-field>
+                <mat-label>Price decrease (in percent)</mat-label>
+                <input matInput [formControl]="orderForm.controls.deliveryData.controls.decreaseInPercent"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field>
+                <mat-label>Delivery cost (total)</mat-label>
+                <input matInput [formControl]="orderForm.controls.deliveryData.controls.deliveryCostPerEverybody"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field>
+                <mat-label>Delivery cost (per dish)</mat-label>
+                <input matInput [formControl]="orderForm.controls.deliveryData.controls.deliveryCostPerDish"/>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <h3>Payment</h3>
+
+            <div>
+              <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByCash">
+                Payment by cash
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByBankTransfer">
+                Payment by bank transfer
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-form-field>
+                <mat-label>Bank transfer number</mat-label>
+                <input matInput [formControl]="orderForm.controls.paymentData.controls.bankTransferNumber"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByBlik">
+                Payment by BLIK
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-form-field>
+                <mat-label>BLIK phone number</mat-label>
+                <input matInput [formControl]="orderForm.controls.paymentData.controls.blikPhoneNumber"/>
+              </mat-form-field>
+            </div>
+          </div>
+
         </div>
 
-        <div>
-          <!--            <PaymentDataFields :payment-data="paymentData"-->
-          <!--                               @input="(newPaymentData) => {paymentData = newPaymentData}"/>-->
-        </div>
-      </div>
-
-      <app-button (click)="back()">Back</app-button>
-      <app-button (click)="submitForm($event)">Create</app-button>
-    </div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button color="primary" (click)="submitForm($event)">Next</button>
+      </mat-step>
+    </mat-stepper>
   </div>
 </app-view-wrapper>

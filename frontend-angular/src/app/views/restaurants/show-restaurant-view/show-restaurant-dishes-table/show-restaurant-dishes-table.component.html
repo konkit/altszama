@@ -23,14 +23,14 @@
 
         <div class="edit-buttons ml-auto">
 <!--          <router-link :to="{name: 'DishEditForm', params: {id: restaurant.id, dishId: dish.id}}">-->
-            <app-button class="edit-button">
+            <button mat-button color="primary">
               <fa-icon [icon]="faPencil"></fa-icon>
-            </app-button>
+            </button>
 <!--          </router-link>-->
 
-          <app-button (click)="sendDeleteDish(dish.id)" class="delete-button">
+          <button mat-button (click)="sendDeleteDish(dish.id)" color="warn">
             <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>
-          </app-button>
+          </button>
         </div>
       </div>
     </div>

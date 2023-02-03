@@ -1,31 +1,28 @@
 <app-view-wrapper title="Restaurants">
   <div *ngIf="indexResponse$ | async as payload">
-    <table class="w-full text-sm text-left">
-      <thead class="text-xs uppercase">
-      <tr class="bg-gray-200">
-        <th scope="col" class="px-6 py-3">Restaurant name</th>
-        <th scope="col" class="px-6 py-3">Dish count</th>
-        <th scope="col" class="px-6 py-3">Last auto-updated</th>
-        <th scope="col" class="px-6 py-3">Last updated manually</th>
-      </tr>
-      </thead>
-      <tbody >
-      <tr *ngFor="let restaurant of payload.restaurants" [routerLink]="['/restaurants/', restaurant.id]"
-          class="bg-white border-b cursor-pointer hover:bg-gray-50">
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-light">
-          {{restaurant.name}}
-        </th>
-        <td class="px-6 py-4">
-          {{restaurant.dishCount}}
-        </td>
-        <td class="px-6 py-4">
-          {{restaurant.lastCrawled}}
-        </td>
-        <td class="px-6 py-4">
-          {{restaurant.lastEdited}}
-        </td>
-      </tr>
-      </tbody>
+    <table mat-table [dataSource]="payload.restaurants" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dishCount">
+        <th mat-header-cell *matHeaderCellDef> Dish Count </th>
+        <td mat-cell *matCellDef="let element"> {{element.dishCount}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastCrawled">
+        <th mat-header-cell *matHeaderCellDef> Last Crawled </th>
+        <td mat-cell *matCellDef="let element"> {{element.lastCrawled}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastEdited">
+        <th mat-header-cell *matHeaderCellDef> Last Edited </th>
+        <td mat-cell *matCellDef="let element"> {{element.lastEdited}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
     <div class="px-3 py-3">
@@ -36,7 +33,7 @@
 
       <ng-container *ngIf="getSwaggerUrl() | async as swaggerUrl">
         <a [href]="swaggerUrl">
-          <app-button class="button">See Import API specification<fa-icon [icon]="faUpload" class="ml-2"></fa-icon></app-button>
+          <button color="primary" mat-button>See Import API specification<fa-icon [icon]="faUpload" class="ml-2"></fa-icon></button>
         </a>
       </ng-container>
     </div>

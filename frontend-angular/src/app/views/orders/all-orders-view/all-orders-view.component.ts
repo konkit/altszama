@@ -10,6 +10,8 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class AllOrdersViewComponent implements OnInit {
 
+  displayedColumns: string[] = ['orderDate', 'restaurantName', 'orderState', 'orderCreatorUsername'];
+
   allOrders$: Observable<AllOrdersOrderDto[]>;
 
   constructor(private api: OrderControllerService, private route: ActivatedRoute) {

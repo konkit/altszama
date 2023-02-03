@@ -1,29 +1,29 @@
 <app-view-wrapper title="All Orders">
-  <table class="w-full text-sm text-left">
-    <thead class="text-xs uppercase">
-    <tr class="bg-gray-200">
-      <th scope="col" class="px-6 py-3">Date</th>
-      <th scope="col" class="px-6 py-3">Restaurant</th>
-      <th scope="col" class="px-6 py-3">Status</th>
-      <th scope="col" class="px-6 py-3">Order creator</th>
-    </tr>
-    </thead>
-    <tbody *ngIf="allOrders$ | async as allOrders">
-    <tr *ngFor="let order of allOrders" [routerLink]="['/orders/show', order.id]"
-        class="bg-white border-b cursor-pointer hover:bg-gray-50">
-      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-light">
-        {{order.orderDate}}
-      </th>
-      <td class="px-6 py-4">
-        {{order.restaurantName}}
-      </td>
-      <td class="px-6 py-4">
-        {{order.orderState}}
-      </td>
-      <td class="px-6 py-4">
-        {{order.orderCreatorUsername}}
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <ng-container *ngIf="allOrders$ | async as payload">
+
+    <table mat-table [dataSource]="payload" class="mat-elevation-z8">
+      <ng-container matColumnDef="orderDate">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element"> {{element.orderDate}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="restaurantName">
+        <th mat-header-cell *matHeaderCellDef>Restaurant</th>
+        <td mat-cell *matCellDef="let element"> {{element.restaurantName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="orderState">
+        <th mat-header-cell *matHeaderCellDef>State</th>
+        <td mat-cell *matCellDef="let element"> {{element.orderState}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="orderCreatorUsername">
+        <th mat-header-cell *matHeaderCellDef>Order creator</th>
+        <td mat-cell *matCellDef="let element"> {{element.orderCreatorUsername}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </ng-container>
 </app-view-wrapper>

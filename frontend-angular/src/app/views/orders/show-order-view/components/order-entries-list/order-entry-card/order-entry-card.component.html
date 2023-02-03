@@ -37,9 +37,9 @@
 
     <div *ngIf="canAddNewEntry()">
           <div *ngIf="isEntryCreating === false">
-            <app-button class="ml-4" (click)="createEntry()">
+            <button mat-button color="primary" class="ml-4" (click)="createEntry()">
               Add entry<fa-icon [icon]="faPlus" class="fa ml-2"></fa-icon>
-            </app-button>
+            </button>
           </div>
           <div *ngIf="isEntryCreating === true">
 <!--            <create-order-entry></create-order-entry>-->

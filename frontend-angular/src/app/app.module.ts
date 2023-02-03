@@ -35,8 +35,19 @@ import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/
 import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/show-order-entry/show-order-entry.component';
 import { ShowRestaurantDishesTableComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/show-restaurant-dishes-table.component';
 import { ViewWrapperComponent } from './components/view-wrapper/view-wrapper.component';
-import { ButtonComponent } from './components/button/button.component';
 import { CreateOrderViewComponent } from './views/orders/create-order-view/create-order-view.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatButtonModule} from "@angular/material/button";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatInputModule} from "@angular/material/input";
+import {MatMomentDateModule} from "@angular/material-moment-adapter";
+import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
+import {MatIconModule} from "@angular/material/icon";
+import {MatStepperModule} from "@angular/material/stepper";
+import {MatTableModule} from "@angular/material/table";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
@@ -66,7 +77,6 @@ import { CreateOrderViewComponent } from './views/orders/create-order-view/creat
     ShowOrderEntryComponent,
     ShowRestaurantDishesTableComponent,
     ViewWrapperComponent,
-    ButtonComponent,
     CreateOrderViewComponent,
   ],
   imports: [
@@ -75,6 +85,19 @@ import { CreateOrderViewComponent } from './views/orders/create-order-view/creat
     ApiModule,
     HttpClientModule,
     FontAwesomeModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatMomentDateModule,
+    NgxMatTimepickerModule,
+    MatIconModule,
+    MatStepperModule,
+    MatTableModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
   ],
   providers: [
     {

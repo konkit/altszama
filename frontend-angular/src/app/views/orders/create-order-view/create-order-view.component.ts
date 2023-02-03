@@ -7,6 +7,7 @@ import {
   OrderSaveRequest,
   RestaurantDto
 } from "../../../../frontend-client";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 
 export interface PriceModifierFieldsValue {
   decreaseInPercent: number;
@@ -32,26 +33,38 @@ export class CreateOrderViewComponent implements OnInit {
   fullRestaurantsList: RestaurantDto[] = [];
   filteredRestaurantsList$ = new BehaviorSubject<RestaurantDto[]>([]);
 
-  stepperState: number = 1
+  fb = new FormBuilder()
+  orderForm = this.fb.nonNullable.group({
+    restaurantId: this.fb.nonNullable.control(""),
+    orderDate: this.fb.nonNullable.control(""),
+    timeOfOrder: this.fb.nonNullable.control("14:00"),
+    deliveryData: this.fb.nonNullable.group({
+      decreaseInPercent: this.fb.nonNullable.control(0),
+      deliveryCostPerEverybody:  this.fb.nonNullable.control(0),
+      deliveryCostPerDish:  this.fb.nonNullable.control(0),
+    }),
+    paymentData: this.fb.nonNullable.group<PaymentDataFieldsValue>({
+      paymentByCash: true,
+      paymentByBankTransfer: false,
+      bankTransferNumber: "",
+      paymentByBlik: false,
+      blikPhoneNumber: ""
+    })
+  })
 
-  // Order
-  restaurantId = "";
-  orderDate = "";
-  timeOfOrder = "";
+  // priceModifiersFormGroup = this.fb.nonNullable.group({
+  //   decreaseInPercent: this.fb.nonNullable.control(0),
+  //   deliveryCostPerEverybody:  this.fb.nonNullable.control(0),
+  //   deliveryCostPerDish:  this.fb.nonNullable.control(0),
+  // })
 
-  priceModifiers: PriceModifierFieldsValue = {
-    decreaseInPercent: 0,
-    deliveryCostPerEverybody: 0,
-    deliveryCostPerDish: 0
-  }
-
-  paymentData: PaymentDataFieldsValue = {
-    paymentByCash: true,
-    paymentByBankTransfer: false,
-    bankTransferNumber: "",
-    paymentByBlik: false,
-    blikPhoneNumber: ""
-  }
+  // paymentDataFormGroup =this.fb.nonNullable.group<PaymentDataFieldsValue>({
+  //   paymentByCash: true,
+  //   paymentByBankTransfer: false,
+  //   bankTransferNumber: "",
+  //   paymentByBlik: false,
+  //   blikPhoneNumber: ""
+  // })
 
   createOrderInitialData$: Observable<CreateOrderInitialData>
   restaurantsFilter: string = "";
@@ -73,32 +86,32 @@ export class CreateOrderViewComponent implements OnInit {
       this.fullRestaurantsList = response.restaurantsList;
       this.filteredRestaurantsList$.next(this.fullRestaurantsList);
 
-      this.restaurantId = restaurantId;
-      this.orderDate = response.orderDate;
-      this.timeOfOrder = response.timeOfOrder;
-
-      this.priceModifiers = {
-        decreaseInPercent: 0,
-        deliveryCostPerEverybody: 0,
-        deliveryCostPerDish: 0
-      }
-
-      this.paymentData = {
-        paymentByCash: true,
-        paymentByBankTransfer: false,
-        bankTransferNumber: "",
-        paymentByBlik: false,
-        blikPhoneNumber: ""
-      }
+      this.orderForm.setValue({
+        restaurantId: restaurantId,
+        orderDate: response.orderDate,
+        timeOfOrder: response.timeOfOrder,
+        deliveryData: {
+          decreaseInPercent: 0,
+          deliveryCostPerEverybody: 0,
+          deliveryCostPerDish: 0
+        },
+        paymentData: {
+          paymentByCash: true,
+          paymentByBankTransfer: false,
+          bankTransferNumber: "",
+          paymentByBlik: false,
+          blikPhoneNumber: ""
+        }
+      })
 
       if (response.bankTransferNumber) {
-        this.paymentData.paymentByBankTransfer = true;
-        this.paymentData.bankTransferNumber = response.bankTransferNumber;
+        this.orderForm.controls.paymentData.controls.paymentByBankTransfer.setValue(true);
+        this.orderForm.controls.paymentData.controls.bankTransferNumber.setValue(response.bankTransferNumber);
       }
 
       if (response.blikPhoneNumber) {
-        this.paymentData.paymentByBlik = true;
-        this.paymentData.blikPhoneNumber = response.blikPhoneNumber;
+        this.orderForm.controls.paymentData.controls.paymentByBlik.setValue(true);
+        this.orderForm.controls.paymentData.controls.blikPhoneNumber.setValue(response.blikPhoneNumber);
       }
     })
   }
@@ -114,26 +127,25 @@ export class CreateOrderViewComponent implements OnInit {
     }
   }
 
-
-  updateRestaurantId(newValue: string) {
-    this.restaurantId = newValue;
-  }
-
-  updateTimeOfOrder(newValue: string) {
-    this.timeOfOrder = newValue;
-  }
-
   submitForm(e: Event) {
     e.preventDefault();
 
-
-
     const order: OrderSaveRequest = {
-      restaurantId: this.restaurantId,
-      orderDate: this.orderDate,
-      timeOfOrder: this.timeOfOrder,
-      deliveryData: this.priceModifiers,
-      paymentData: this.paymentData
+      restaurantId: this.orderForm.controls.restaurantId.value,
+      orderDate: this.orderForm.controls.orderDate.value,
+      timeOfOrder: this.orderForm.controls.timeOfOrder.value,
+      deliveryData: {
+        decreaseInPercent: this.orderForm.controls.deliveryData.controls.decreaseInPercent.value,
+        deliveryCostPerEverybody: this.orderForm.controls.deliveryData.controls.deliveryCostPerEverybody.value,
+        deliveryCostPerDish: this.orderForm.controls.deliveryData.controls.deliveryCostPerDish.value,
+      },
+      paymentData: {
+        paymentByCash: this.orderForm.controls.paymentData.controls.paymentByCash.value,
+        paymentByBankTransfer: this.orderForm.controls.paymentData.controls.paymentByBankTransfer.value,
+        bankTransferNumber: this.orderForm.controls.paymentData.controls.bankTransferNumber.value,
+        paymentByBlik: this.orderForm.controls.paymentData.controls.paymentByBlik.value,
+        blikPhoneNumber: this.orderForm.controls.paymentData.controls.blikPhoneNumber.value,
+      }
     };
 
     this.orderControllerService.save(order).subscribe({
@@ -148,21 +160,4 @@ export class CreateOrderViewComponent implements OnInit {
     // this.$store.commit("modifyOrderEntry/cancelDishEntryModification",{});
   }
 
-  next() {
-    if (this.stepperState == 1) {
-      this.stepperState = 2
-    }
-  }
-
-  back() {
-    if (this.stepperState > 1) {
-      this.stepperState -= 1
-    } else {
-      this.router.navigate(["/orders/today"])
-    }
-  }
-
-  selectRestaurantId(id: string) {
-    this.restaurantId = id
-  }
 }

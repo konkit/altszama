@@ -4,6 +4,7 @@ import {IndexResponse, RestaurantControllerService, RestaurantInfo} from "../../
 import {FrontendConfigService} from "../../../service/frontend-config.service";
 import {faUpload} from "@fortawesome/free-solid-svg-icons";
 import {ActivatedRoute} from "@angular/router";
+import {DataSource} from "@angular/cdk/collections";
 
 @Component({
   selector: 'app-restaurants-list-view',
@@ -14,6 +15,8 @@ export class RestaurantsListViewComponent {
   indexResponse$: Observable<IndexResponse>;
 
   faUpload = faUpload
+
+  displayedColumns: string[] = ['name', 'dishCount', 'lastCrawled', 'lastEdited'];
 
   constructor(private restaurantControllerService: RestaurantControllerService,
               private frontendConfigService: FrontendConfigService,

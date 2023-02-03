@@ -40,7 +40,7 @@ export const notAuthenticatedRoutes: Routes = [
 
 export const authenticatedRoutes: Routes = [
   {
-    path: "orders",
+    path: "orders/today",
     title: "TodayOrders",
     component: TodayOrdersViewComponent,
     resolve: {
