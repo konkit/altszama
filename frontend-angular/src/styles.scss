@@ -5,3 +5,9 @@
 
 //html, body { height: 100%; }
 //body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+table.clickable-table {
+  tr.mat-mdc-row:hover {
+    @apply bg-gray-50 cursor-pointer;
+  }
+}
