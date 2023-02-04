@@ -49,6 +49,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     MatCheckboxModule,
     MatSlideToggleModule,
     MatPaginatorModule,
+    MatListModule,
   ],
   providers: [
     {

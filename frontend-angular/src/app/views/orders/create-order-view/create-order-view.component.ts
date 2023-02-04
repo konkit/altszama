@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {BehaviorSubject, map, Observable, take} from "rxjs";
+import {BehaviorSubject, map, merge, Observable, of, startWith, Subscription, switchMap, take} from "rxjs";
 import {
   CreateOrderInitialData,
   OrderControllerService,
@@ -8,30 +8,23 @@ import {
   RestaurantDto
 } from "../../../../frontend-client";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-
-export interface PriceModifierFieldsValue {
-  decreaseInPercent: number;
-  deliveryCostPerEverybody: number;
-  deliveryCostPerDish: number;
-}
-
-export interface PaymentDataFieldsValue {
-  paymentByCash: boolean;
-  paymentByBankTransfer: boolean;
-  bankTransferNumber: string;
-  paymentByBlik: boolean;
-  blikPhoneNumber: string;
-}
+import {MatPaginator} from "@angular/material/paginator";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-create-order-view',
   templateUrl: './create-order-view.component.html',
   styleUrls: ['./create-order-view.component.scss']
 })
-export class CreateOrderViewComponent implements OnInit {
+export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   fullRestaurantsList: RestaurantDto[] = [];
   filteredRestaurantsList$ = new BehaviorSubject<RestaurantDto[]>([]);
+
+  subscriptions = new Subscription();
+
+  createOrderInitialData$: Observable<CreateOrderInitialData>
+  restaurantsFilter: string = "";
 
   fb = new FormBuilder()
   orderForm = this.fb.nonNullable.group({
@@ -40,10 +33,10 @@ export class CreateOrderViewComponent implements OnInit {
     timeOfOrder: this.fb.nonNullable.control("14:00"),
     deliveryData: this.fb.nonNullable.group({
       decreaseInPercent: this.fb.nonNullable.control(0),
-      deliveryCostPerEverybody:  this.fb.nonNullable.control(0),
-      deliveryCostPerDish:  this.fb.nonNullable.control(0),
+      deliveryCostPerEverybody: this.fb.nonNullable.control(0),
+      deliveryCostPerDish: this.fb.nonNullable.control(0),
     }),
-    paymentData: this.fb.nonNullable.group<PaymentDataFieldsValue>({
+    paymentData: this.fb.nonNullable.group({
       paymentByCash: true,
       paymentByBankTransfer: false,
       bankTransferNumber: "",
@@ -52,22 +45,9 @@ export class CreateOrderViewComponent implements OnInit {
     })
   })
 
-  // priceModifiersFormGroup = this.fb.nonNullable.group({
-  //   decreaseInPercent: this.fb.nonNullable.control(0),
-  //   deliveryCostPerEverybody:  this.fb.nonNullable.control(0),
-  //   deliveryCostPerDish:  this.fb.nonNullable.control(0),
-  // })
-
-  // paymentDataFormGroup =this.fb.nonNullable.group<PaymentDataFieldsValue>({
-  //   paymentByCash: true,
-  //   paymentByBankTransfer: false,
-  //   bankTransferNumber: "",
-  //   paymentByBlik: false,
-  //   blikPhoneNumber: ""
-  // })
-
-  createOrderInitialData$: Observable<CreateOrderInitialData>
-  restaurantsFilter: string = "";
+  restaurantsTableDataSource = new MatTableDataSource();
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  displayedColumns = [];
 
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
@@ -77,43 +57,61 @@ export class CreateOrderViewComponent implements OnInit {
 
   ngOnInit() {
     this.createOrderInitialData$.pipe(take(1)).subscribe(response => {
-      const restaurantId =
-        (response.restaurantsList &&
-          response.restaurantsList[0] &&
-          response.restaurantsList[0].id) ||
-        "";
-
       this.fullRestaurantsList = response.restaurantsList;
       this.filteredRestaurantsList$.next(this.fullRestaurantsList);
 
-      this.orderForm.setValue({
-        restaurantId: restaurantId,
-        orderDate: response.orderDate,
-        timeOfOrder: response.timeOfOrder,
-        deliveryData: {
-          decreaseInPercent: 0,
-          deliveryCostPerEverybody: 0,
-          deliveryCostPerDish: 0
-        },
-        paymentData: {
-          paymentByCash: true,
-          paymentByBankTransfer: false,
-          bankTransferNumber: "",
-          paymentByBlik: false,
-          blikPhoneNumber: ""
-        }
-      })
+      this.restaurantsTableDataSource.data = this.fullRestaurantsList;
+      this.setOrderFormInitialValue(response);
+    })
 
-      if (response.bankTransferNumber) {
-        this.orderForm.controls.paymentData.controls.paymentByBankTransfer.setValue(true);
-        this.orderForm.controls.paymentData.controls.bankTransferNumber.setValue(response.bankTransferNumber);
-      }
+    const sub = this.filteredRestaurantsList$.subscribe(neeRestaurants => {
+      this.restaurantsTableDataSource.data = neeRestaurants
+    })
+    this.subscriptions.add(sub);
+  }
 
-      if (response.blikPhoneNumber) {
-        this.orderForm.controls.paymentData.controls.paymentByBlik.setValue(true);
-        this.orderForm.controls.paymentData.controls.blikPhoneNumber.setValue(response.blikPhoneNumber);
+  private setOrderFormInitialValue(response: CreateOrderInitialData) {
+    const restaurantId =
+      (response.restaurantsList &&
+        response.restaurantsList[0] &&
+        response.restaurantsList[0].id) ||
+      "";
+
+    this.orderForm.setValue({
+      restaurantId: restaurantId,
+      orderDate: response.orderDate,
+      timeOfOrder: response.timeOfOrder,
+      deliveryData: {
+        decreaseInPercent: 0,
+        deliveryCostPerEverybody: 0,
+        deliveryCostPerDish: 0
+      },
+      paymentData: {
+        paymentByCash: true,
+        paymentByBankTransfer: false,
+        bankTransferNumber: "",
+        paymentByBlik: false,
+        blikPhoneNumber: ""
       }
     })
+
+    if (response.bankTransferNumber) {
+      this.orderForm.controls.paymentData.controls.paymentByBankTransfer.setValue(true);
+      this.orderForm.controls.paymentData.controls.bankTransferNumber.setValue(response.bankTransferNumber);
+    }
+
+    if (response.blikPhoneNumber) {
+      this.orderForm.controls.paymentData.controls.paymentByBlik.setValue(true);
+      this.orderForm.controls.paymentData.controls.blikPhoneNumber.setValue(response.blikPhoneNumber);
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.restaurantsTableDataSource.paginator = this.paginator;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe()
   }
 
   filterChanged(newFilterEvent: Event) {
@@ -123,7 +121,15 @@ export class CreateOrderViewComponent implements OnInit {
     } else {
       this.restaurantsFilter = newFilter
 
-      this.filteredRestaurantsList$.next(this.fullRestaurantsList.filter(x => x.name.startsWith(this.restaurantsFilter)))
+      this.filteredRestaurantsList$.next(
+        this.fullRestaurantsList.filter(x => {
+          if (x.name == null) {
+            return false;
+          } else {
+            return x.name.toLowerCase().startsWith(this.restaurantsFilter.toLowerCase())
+          }
+        })
+      )
     }
   }
 
@@ -159,5 +165,6 @@ export class CreateOrderViewComponent implements OnInit {
   cancelEdit() {
     // this.$store.commit("modifyOrderEntry/cancelDishEntryModification",{});
   }
+
 
 }

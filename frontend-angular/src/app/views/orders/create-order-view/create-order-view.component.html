@@ -5,19 +5,30 @@
 
   <div *ngIf="fullRestaurantsList.length > 0">
 
-    <mat-stepper [linear]="true" #stepper>
-      <mat-step>
-        <div *ngIf="filteredRestaurantsList$ | async as restaurantsList">
+    <mat-vertical-stepper [linear]="true" #stepper>
+      <mat-step [stepControl]="this.orderForm.controls.restaurantId">
+        <ng-template matStepLabel>Select restaurant</ng-template>
 
-          <input type="text" [value]="restaurantsFilter" (input)="filterChanged($event)"
+        <mat-form-field class="w-full">
+          <input matInput [value]="restaurantsFilter" (input)="filterChanged($event)"
                  placeholder="Filter restaurants by name"/>
+        </mat-form-field>
 
-          <div *ngFor="let restaurant of restaurantsList"
-               (click)="this.orderForm.controls.restaurantId.setValue(restaurant.id)"
-               [ngClass]="{'selected': this.orderForm.controls.restaurantId.value === restaurant.id}">
-            {{restaurant.name}}
-          </div>
-        </div>
+        <table mat-table [dataSource]="restaurantsTableDataSource" class="clickable-table">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Restaurant Name</th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+
+          <tr mat-row *matRowDef="let row; columns: ['name'];"
+              [ngClass]="{'selected': this.orderForm.controls.restaurantId.value === row.id}"
+              (click)="this.orderForm.controls.restaurantId.setValue(row.id)"></tr>
+        </table>
+
+        <mat-paginator [pageSize]="5"
+                       showFirstLastButtons
+                       aria-label="Select page">
+        </mat-paginator>
 
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button color="primary" matStepperNext>Next</button>
@@ -25,10 +36,10 @@
 
 
       <mat-step>
-        <h1>Fill details</h1>
+        <ng-template matStepLabel>Fill details</ng-template>
 
-        <div class="flex flex-row justify-around">
-          <div [formGroup]="orderForm">
+        <div class="flex flex-row">
+          <div [formGroup]="orderForm" class="mr-20">
             <h3>Order time</h3>
 
             <mat-form-field>
@@ -43,8 +54,8 @@
             </mat-form-field>
           </div>
 
-          <div>
-            <h3>Payment</h3>
+          <div class="mr-20">
+            <h3>Price modifiers</h3>
             <div>
               <mat-form-field>
                 <mat-label>Price decrease (in percent)</mat-label>
@@ -108,6 +119,6 @@
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button color="primary" (click)="submitForm($event)">Next</button>
       </mat-step>
-    </mat-stepper>
+    </mat-vertical-stepper>
   </div>
 </app-view-wrapper>

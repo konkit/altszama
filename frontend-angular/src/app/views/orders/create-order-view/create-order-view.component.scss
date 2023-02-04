@@ -1,3 +1,7 @@
 .selected {
-  @apply font-bold;
+  @apply bg-indigo-400;
+}
+
+.mat-mdc-row.selected:hover {
+  @apply bg-indigo-400;
 }
