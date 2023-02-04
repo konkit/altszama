@@ -41,7 +41,7 @@ export const notAuthenticatedRoutes = [
 
 export const authenticatedRoutes = [
   {
-    path: "/orders",
+    path: "/orders/today",
     name: "TodayOrders",
     component: TodayOrders,
     meta: {backButton: false}

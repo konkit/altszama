@@ -10,7 +10,7 @@ import {Router} from "@angular/router";
 })
 export class AuthService {
 
-  private defaultLoginPath = "/orders";
+  private defaultLoginPath = "/orders/today";
   private defaultLogoutPath = "/login";
 
   constructor(private authControllerService: AuthControllerService,
