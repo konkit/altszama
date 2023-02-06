@@ -50,6 +50,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatListModule} from "@angular/material/list";
+import { CreateRestaurantViewComponent } from './views/restaurants/create-restaurant-view/create-restaurant-view.component';
+import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import {MatListModule} from "@angular/material/list";
     ShowRestaurantDishesTableComponent,
     ViewWrapperComponent,
     CreateOrderViewComponent,
+    CreateRestaurantViewComponent,
+    ButtonComponent,
   ],
   imports: [
     BrowserModule,

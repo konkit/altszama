@@ -1,4 +1,8 @@
 <div>
+  <app-button color="primary" (click)="goToCreateDish()" class="mr-3" [icon]="faAdd">
+    Create new dish
+  </app-button>
+
   <div>
     <div *ngFor="let categoryAndDishes of this.dishesByCategory | keyvalue" class="mt-10">
       <span *ngIf="categoryAndDishes.key" class="text-gray-400"> Category: {{ categoryAndDishes.key }} </span>

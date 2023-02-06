@@ -15,17 +15,15 @@
     </div>
 
     <div *ngIf="shouldShowConfirmAsPaidButton()">
-      <button mat-button color="basic" (click)="confirmAsPaid(orderEntry.id)">
+      <app-button (click)="confirmAsPaid(orderEntry.id)" [icon]="faCheck">
         Confirm payment
-        <i class="fa fa-check ml-2" aria-hidden="true"></i>
-      </button>
+      </app-button>
     </div>
 
     <div *ngIf="shouldShowRevertToUnpaid()">
-      <button mat-button color="basic" (click)="revertToUnpaid(orderEntry.id)">
+      <app-button (click)="revertToUnpaid(orderEntry.id)" [icon]="faUndo">
         Revert to "unpaid"
-        <i class="fa fa-undo ml-2" aria-hidden="true"></i>
-      </button>
+      </app-button>
     </div>
   </div>
 </div>

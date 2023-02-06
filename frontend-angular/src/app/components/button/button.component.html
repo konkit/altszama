@@ -1,0 +1,6 @@
+<button mat-button mat-raised-button [color]="color" [disabled]="disabled">
+  <ng-content></ng-content>
+  <ng-container *ngIf="icon != null">
+    <fa-icon [icon]="icon" class="ml-2"></fa-icon>
+  </ng-container>
+</button>

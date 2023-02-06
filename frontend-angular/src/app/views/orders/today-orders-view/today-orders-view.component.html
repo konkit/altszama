@@ -72,10 +72,9 @@
         </div>
       </div>
 
-      <button mat-button color="primary" (click)="goToCreateOrder()">
+      <app-button [icon]="faAdd" color="primary" (click)="goToCreateOrder()">
         Add new order
-        <fa-icon [icon]="faAdd"></fa-icon>
-      </button>
+      </app-button>
     </div>
   </div>
 </app-view-wrapper>

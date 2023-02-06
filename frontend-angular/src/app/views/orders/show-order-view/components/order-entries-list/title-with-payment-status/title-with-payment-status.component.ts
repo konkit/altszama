@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {faUndo, faCheck} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-title-with-payment-status',
@@ -14,6 +15,8 @@ export class TitleWithPaymentStatusComponent {
   @Input() orderEntry!: ParticipantsOrderEntry;
   @Input() currentUserId!: string;
   @Input() costForUser!: number;
+  faUndo = faUndo;
+  faCheck = faCheck;
 
   isOrderOwner() {
     return this.order.orderCreatorId === this.currentUserId;

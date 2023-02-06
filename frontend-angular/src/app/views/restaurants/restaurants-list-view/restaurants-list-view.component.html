@@ -1,5 +1,9 @@
 <app-view-wrapper title="Restaurants">
   <div *ngIf="indexResponse$ | async as payload">
+    <div class="pb-5">
+      <app-button color="primary" routerLink="/restaurants/create">Create new restaurant<fa-icon [icon]="faPlus" class="ml-3"></fa-icon></app-button>
+    </div>
+
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 clickable-table">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -38,7 +42,7 @@
 
       <ng-container *ngIf="getSwaggerUrl() | async as swaggerUrl">
         <a [href]="swaggerUrl">
-          <button color="primary" mat-button>See Import API specification<fa-icon [icon]="faUpload" class="ml-2"></fa-icon></button>
+          <app-button color="primary" [icon]="faUpload">See Import API specification</app-button>
         </a>
       </ng-container>
     </div>

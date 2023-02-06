@@ -1,45 +1,84 @@
 <ng-container *ngIf="restaurant$ | async as restaurantResponse">
   <app-view-wrapper [title]="'Restaurant ' + restaurantResponse.restaurant.name">
     <div class="flex flex-col flex-grow bg-white rounded p-5">
-      <div>
-        <p><b>Address : </b> {{ restaurantResponse.restaurant.address }}</p>
 
-        <p>
-          <b>URL : </b>
-          <a target="_blank" class="text-indigo-500" [href]="restaurantResponse.restaurant.url">{{ restaurantResponse.restaurant.url }}</a>
-        </p>
+        <div class="flex flex-row mt-4">
+          <app-button (click)="editRestaurant()" [disabled]="restaurantEdited" class="mr-3" [icon]="faPencil">
+            Edit restaurant
+          </app-button>
 
-        <p>
-          <b>Telephone number:</b> {{ restaurantResponse.restaurant.telephone }}
-        </p>
+          <app-button color="warn" (click)="deleteRestaurant()" [disabled]="restaurantEdited" [icon]="faTimes">
+            Delete restaurant
+          </app-button>
+        </div>
 
-        <p>
-          <b>Last auto-updated:</b>
-          {{ dateToRel(restaurantResponse.restaurant.lastCrawled) }}
-        </p>
+      <ng-container *ngIf="restaurantEdited == false">
+        <div class="py-5">
+          <p><b>Address : </b> {{ restaurantResponse.restaurant.address }}</p>
 
-        <p>
-          <b>Last updated manually:</b>
-          {{ dateToRel(restaurantResponse.restaurant.lastEdited) }}
-        </p>
+          <p>
+            <b>URL : </b>
+            <a target="_blank" class="text-indigo-500"
+               [href]="restaurantResponse.restaurant.url">{{ restaurantResponse.restaurant.url }}</a>
+          </p>
+
+          <p>
+            <b>Telephone number:</b> {{ restaurantResponse.restaurant.telephone }}
+          </p>
+
+          <p>
+            <b>Last auto-updated:</b>
+            {{ dateToRel(restaurantResponse.restaurant.lastCrawled) }}
+          </p>
+
+          <p>
+            <b>Last updated manually:</b>
+            {{ dateToRel(restaurantResponse.restaurant.lastEdited) }}
+          </p>
+        </div>
+      </ng-container>
+
+      <div *ngIf="restaurantEdited == true" class="py-5">
+        <div>
+          <form [formGroup]="restaurantEditFormGroup">
+            <div>
+              <mat-form-field  class="w-full">
+                <mat-label>Name:</mat-label>
+                <input matInput [formControl]="restaurantEditFormGroup.controls.name"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field class="w-full">
+                <mat-label>Address:</mat-label>
+                <input matInput [formControl]="restaurantEditFormGroup.controls.address"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field class="w-full">
+                <mat-label>Url:</mat-label>
+                <input matInput [formControl]="restaurantEditFormGroup.controls.url"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field class="w-full">
+                <mat-label>Telephone:</mat-label>
+                <input matInput [formControl]="restaurantEditFormGroup.controls.telephone"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <app-button (click)="cancelEdit()">Cancel</app-button>
+              <app-button (click)="submitEdit()" color="primary">Submit</app-button>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <hr/>
+      <mat-divider></mat-divider>
 
-      <div class="flex flex-row mt-4">
-        <button mat-button color="primary" (click)="goToCreateDish()" class="mr-3">
-          Create new dish
-          <fa-icon [icon]="faAdd" class="ml-3"></fa-icon>
-        </button>
-
-        <button mat-button (click)="editRestaurant()" class="mr-3">
-          Edit restaurant&nbsp;<fa-icon [icon]="faPencil" class="ml-3"></fa-icon>
-        </button>
-
-        <button mat-button color="warn" (click)="deleteRestaurant()">
-          Delete restaurant&nbsp;<fa-icon [icon]="faTimes" class="ml-3"></fa-icon>
-        </button>
-      </div>
 
       <app-show-restaurant-dishes-table [restaurant]="restaurantResponse.restaurant"
                                         [dishesByCategory]="restaurantResponse.dishesByCategory"

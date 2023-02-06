@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {map, Observable} from "rxjs";
 import {IndexResponse, RestaurantControllerService, RestaurantInfo} from "../../../../frontend-client";
 import {FrontendConfigService} from "../../../service/frontend-config.service";
-import {faUpload} from "@fortawesome/free-solid-svg-icons";
+import {faUpload, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {ActivatedRoute} from "@angular/router";
 import {DataSource} from "@angular/cdk/collections";
 import {MatTableDataSource} from "@angular/material/table";
@@ -17,6 +17,7 @@ export class RestaurantsListViewComponent implements OnInit, AfterViewInit {
   indexResponse$: Observable<IndexResponse>;
 
   faUpload = faUpload
+  faPlus = faPlus;
 
   displayedColumns: string[] = ['name', 'dishCount', 'lastCrawled', 'lastEdited'];
 
