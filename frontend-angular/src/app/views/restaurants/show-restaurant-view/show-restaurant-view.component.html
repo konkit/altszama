@@ -2,39 +2,46 @@
   <app-view-wrapper [title]="'Restaurant ' + restaurantResponse.restaurant.name">
     <div class="flex flex-col flex-grow bg-white rounded p-5">
 
-        <div class="flex flex-row mt-4">
-          <app-button (click)="editRestaurant()" [disabled]="restaurantEdited" class="mr-3" [icon]="faPencil">
-            Edit restaurant
-          </app-button>
+      <div class="flex flex-row mt-4">
+        <app-button (click)="editRestaurant()" [disabled]="restaurantEdited" class="mr-3" [icon]="faPencil">
+          Edit restaurant
+        </app-button>
 
-          <app-button color="warn" (click)="deleteRestaurant()" [disabled]="restaurantEdited" [icon]="faTimes">
-            Delete restaurant
-          </app-button>
-        </div>
+        <app-button color="warn" (click)="deleteRestaurant()" [disabled]="restaurantEdited" [icon]="faTimes">
+          Delete restaurant
+        </app-button>
+      </div>
 
       <ng-container *ngIf="restaurantEdited == false">
         <div class="py-5">
-          <p><b>Address : </b> {{ restaurantResponse.restaurant.address }}</p>
+          <mat-list>
+            <mat-list-item>
+              <b>Address : </b>
+              {{ restaurantResponse.restaurant.address }}
+            </mat-list-item>
 
-          <p>
-            <b>URL : </b>
-            <a target="_blank" class="text-indigo-500"
-               [href]="restaurantResponse.restaurant.url">{{ restaurantResponse.restaurant.url }}</a>
-          </p>
+            <mat-list-item>
+              <b>URL : </b>
+              <a target="_blank" class="text-indigo-500" [href]="restaurantResponse.restaurant.url">
+                {{ restaurantResponse.restaurant.url }}
+              </a>
+            </mat-list-item>
 
-          <p>
-            <b>Telephone number:</b> {{ restaurantResponse.restaurant.telephone }}
-          </p>
+            <mat-list-item>
+              <b>Telephone number:</b>
+              {{ restaurantResponse.restaurant.telephone }}
+            </mat-list-item>
 
-          <p>
-            <b>Last auto-updated:</b>
-            {{ dateToRel(restaurantResponse.restaurant.lastCrawled) }}
-          </p>
+            <mat-list-item>
+              <b>Last auto-updated:</b>
+              {{ dateToRel(restaurantResponse.restaurant.lastCrawled) }}
+            </mat-list-item>
 
-          <p>
-            <b>Last updated manually:</b>
-            {{ dateToRel(restaurantResponse.restaurant.lastEdited) }}
-          </p>
+            <mat-list-item>
+              <b>Last updated manually:</b>
+              {{ dateToRel(restaurantResponse.restaurant.lastEdited) }}
+            </mat-list-item>
+          </mat-list>
         </div>
       </ng-container>
 
@@ -42,7 +49,7 @@
         <div>
           <form [formGroup]="restaurantEditFormGroup">
             <div>
-              <mat-form-field  class="w-full">
+              <mat-form-field class="w-full">
                 <mat-label>Name:</mat-label>
                 <input matInput [formControl]="restaurantEditFormGroup.controls.name"/>
               </mat-form-field>
