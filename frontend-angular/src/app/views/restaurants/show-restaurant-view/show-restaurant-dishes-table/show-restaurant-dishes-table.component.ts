@@ -3,6 +3,7 @@ import {DishDto, RestaurantDto} from "../../../../../frontend-client";
 import * as moment from "moment";
 
 import {faTimes, faPencil, faAdd} from "@fortawesome/free-solid-svg-icons";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-show-restaurant-dishes-table',
@@ -15,9 +16,16 @@ export class ShowRestaurantDishesTableComponent {
 
   @Output() deleteDish: EventEmitter<string> = new EventEmitter();
 
+  creatingDish: boolean = false
+
   faTimes = faTimes
   faPencil = faPencil;
   faAdd = faAdd;
+
+
+
+  constructor(private fb: FormBuilder) {
+  }
 
   sendDeleteDish(dishId: string) {
     this.deleteDish.emit(dishId)
@@ -31,7 +39,15 @@ export class ShowRestaurantDishesTableComponent {
     }
   }
 
-  goToCreateDish() {
+  createDish() {
+    this.creatingDish = true
+  }
+
+  cancelCreatingDish() {
+    this.creatingDish = false
+  }
+
+  submitCreateDishForm() {
 
   }
 }

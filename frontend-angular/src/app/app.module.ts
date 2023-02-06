@@ -52,6 +52,9 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatListModule} from "@angular/material/list";
 import { CreateRestaurantViewComponent } from './views/restaurants/create-restaurant-view/create-restaurant-view.component';
 import { ButtonComponent } from './components/button/button.component';
+import {MatSelectModule} from "@angular/material/select";
+import { CreateDishFormComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/create-dish-form/create-dish-form.component';
+import { MoneyInputComponent } from './components/money-input/money-input.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +87,8 @@ import { ButtonComponent } from './components/button/button.component';
     CreateOrderViewComponent,
     CreateRestaurantViewComponent,
     ButtonComponent,
+    CreateDishFormComponent,
+    MoneyInputComponent,
   ],
   imports: [
     BrowserModule,
@@ -106,6 +111,7 @@ import { ButtonComponent } from './components/button/button.component';
     MatSlideToggleModule,
     MatPaginatorModule,
     MatListModule,
+    MatSelectModule,
   ],
   providers: [
     {

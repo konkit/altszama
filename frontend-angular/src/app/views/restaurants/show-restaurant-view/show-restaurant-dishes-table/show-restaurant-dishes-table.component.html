@@ -1,7 +1,11 @@
 <div>
-  <app-button color="primary" (click)="goToCreateDish()" class="mr-3" [icon]="faAdd">
+  <app-button *ngIf="creatingDish == false" color="primary" (click)="createDish()" class="mr-3" [icon]="faAdd">
     Create new dish
   </app-button>
+
+  <div *ngIf="creatingDish == true">
+    <app-create-dish-form [restaurantId]="restaurant.id"></app-create-dish-form>
+  </div>
 
   <div>
     <div *ngFor="let categoryAndDishes of this.dishesByCategory | keyvalue" class="mt-10">
@@ -26,11 +30,11 @@
         </div>
 
         <div class="edit-buttons ml-auto">
-<!--          <router-link :to="{name: 'DishEditForm', params: {id: restaurant.id, dishId: dish.id}}">-->
-            <button mat-button color="primary">
-              <fa-icon [icon]="faPencil"></fa-icon>
-            </button>
-<!--          </router-link>-->
+          <!--          <router-link :to="{name: 'DishEditForm', params: {id: restaurant.id, dishId: dish.id}}">-->
+          <button mat-button color="primary">
+            <fa-icon [icon]="faPencil"></fa-icon>
+          </button>
+          <!--          </router-link>-->
 
           <button mat-button (click)="sendDeleteDish(dish.id)" color="warn">
             <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>

@@ -1,0 +1,44 @@
+<ng-container *ngIf="createData$ != null">
+  <ng-container *ngIf="createData$ | async as createData">
+
+    <form [formGroup]="createDishForm">
+
+      <div>{{createDishForm.value | json}}</div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput [formControl]="createDishForm.controls.name"/>
+        </mat-form-field>
+      </div>
+
+      <div>
+
+<!--      <mat-form-field>-->
+<!--        <mat-label>Price</mat-label>-->
+        <app-money-input [formControl]="createDishForm.controls.price"></app-money-input>
+<!--      </mat-form-field>-->
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Category</mat-label>
+          <mat-select [formControl]="createDishForm.controls.category">
+            <mat-option *ngFor="let category of createData.categories" [value]="category">
+              {{category}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!--      <div>-->
+      <!--        <side-dishes ref="sideDishesElement"></side-dishes>-->
+      <!--      </div>-->
+
+      <div class="mb-4">
+        <app-button color="primary" (click)="submitCreateDishForm()">Create</app-button>
+        <app-button (click)="cancelCreatingDish()">Cancel</app-button>
+      </div>
+    </form>
+  </ng-container>
+</ng-container>
