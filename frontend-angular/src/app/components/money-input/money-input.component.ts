@@ -1,7 +1,7 @@
-import {Component, DoCheck, ElementRef, HostBinding, Injector, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, HostBinding, Injector, Input} from '@angular/core';
 import {ControlValueAccessor, NgControl} from "@angular/forms";
 import {MatFormFieldControl} from "@angular/material/form-field";
-import {BehaviorSubject, Subject, take, tap} from 'rxjs';
+import {BehaviorSubject, Subject, take} from 'rxjs';
 import {coerceBooleanProperty} from "@angular/cdk/coercion";
 import {FocusMonitor} from "@angular/cdk/a11y";
 
@@ -13,7 +13,7 @@ import {FocusMonitor} from "@angular/cdk/a11y";
     {provide: MatFormFieldControl, useExisting: MoneyInputComponent}
   ]
 })
-export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldControl<number>, OnInit, OnDestroy, DoCheck {
+export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldControl<number> {
 
   /**
    * MatFormFieldControl related
@@ -123,15 +123,6 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
     });
   }
 
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-  }
-
-  ngDoCheck(): void {
-  }
-
   /**
    * Handling conversion
    */
@@ -159,8 +150,6 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
 
           this.onChanged(valueAsNumber)
           this.value = valueAsNumber
-
-          console.log("this.elementRef.nativeElement.value", this.elementRef.nativeElement)
         }
       })
   }
