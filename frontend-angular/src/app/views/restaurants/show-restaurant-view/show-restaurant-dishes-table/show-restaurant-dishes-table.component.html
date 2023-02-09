@@ -1,10 +1,12 @@
 <div>
-  <app-button *ngIf="creatingDish == false" color="primary" (click)="createDish()" class="mr-3" [icon]="faAdd">
-    Create new dish
-  </app-button>
+  <div class="pt-5">
+    <app-button *ngIf="creatingDish == false" color="primary" (click)="createDish()" class="mr-3" [icon]="faAdd">
+      Create new dish
+    </app-button>
+  </div>
 
   <div *ngIf="creatingDish == true">
-    <app-create-dish-form [restaurantId]="restaurant.id"></app-create-dish-form>
+    <app-create-dish-form [restaurantId]="restaurant.id" (editSucceded)="onDishCreateSucceded()" (editCancelled)="onDishCreateCancel()"></app-create-dish-form>
   </div>
 
   <div>
@@ -36,7 +38,7 @@
           </button>
           <!--          </router-link>-->
 
-          <button mat-button (click)="sendDeleteDish(dish.id)" color="warn">
+          <button mat-button (click)="onDishDelete(dish.id)" color="warn">
             <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>
           </button>
         </div>

@@ -89,7 +89,7 @@
 
       <app-show-restaurant-dishes-table [restaurant]="restaurantResponse.restaurant"
                                         [dishesByCategory]="restaurantResponse.dishesByCategory"
-                                        (deleteDish)="deleteDish($event)">
+                                        (refreshDishes)="onRefreshDishes()">
       </app-show-restaurant-dishes-table>
 
 

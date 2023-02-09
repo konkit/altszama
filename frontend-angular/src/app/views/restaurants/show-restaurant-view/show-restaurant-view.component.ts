@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {RestaurantControllerService, ShowRestaurantResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
-import {map, Observable, switchMap, take, tap} from "rxjs";
+import {EMPTY, map, Observable, switchMap, take, tap} from "rxjs";
 import {faAdd, faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import * as moment from "moment";
 import {FormBuilder} from "@angular/forms";
@@ -94,10 +94,6 @@ export class ShowRestaurantViewComponent implements OnInit {
     ).subscribe()
   }
 
-  deleteDish($event: any) {
-
-  }
-
   setRestaurantEdited(newValue: boolean) {
     console.trace(newValue)
     this.restaurantEdited = newValue;
@@ -108,6 +104,13 @@ export class ShowRestaurantViewComponent implements OnInit {
       return moment(date).fromNow();
     } else {
       return "";
+    }
+  }
+
+  onRefreshDishes() {
+    let id = this.route.snapshot.paramMap.get('id');
+    if (id != null) {
+      this.restaurant$ = this.restaurantControllerService.showRestaurant(id);
     }
   }
 }

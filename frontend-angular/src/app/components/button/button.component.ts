@@ -11,6 +11,7 @@ export class ButtonComponent {
   @Input() color: ThemePalette
   @Input() icon?: IconProp
   @Input() disabled: boolean = false
+  @Input() type: string = ""
 
 
 

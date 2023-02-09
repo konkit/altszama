@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {DishDto, RestaurantDto} from "../../../../../frontend-client";
+import {DishControllerService, DishDto, RestaurantDto} from "../../../../../frontend-client";
 import * as moment from "moment";
 
 import {faTimes, faPencil, faAdd} from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +14,7 @@ export class ShowRestaurantDishesTableComponent {
   @Input() restaurant!: RestaurantDto;
   @Input() dishesByCategory!: { [key: string]: Array<DishDto> };
 
-  @Output() deleteDish: EventEmitter<string> = new EventEmitter();
+  @Output() refreshDishes = new EventEmitter<void>();
 
   creatingDish: boolean = false
 
@@ -24,11 +24,13 @@ export class ShowRestaurantDishesTableComponent {
 
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private dishControllerService: DishControllerService) {
   }
 
-  sendDeleteDish(dishId: string) {
-    this.deleteDish.emit(dishId)
+  onDishDelete(dishId: string) {
+    this.dishControllerService.deleteDish(dishId).subscribe(response => {
+      this.refresh()
+    })
   }
 
   dateToRel(date: Date) {
@@ -43,11 +45,16 @@ export class ShowRestaurantDishesTableComponent {
     this.creatingDish = true
   }
 
-  cancelCreatingDish() {
+  onDishCreateCancel() {
     this.creatingDish = false
   }
 
-  submitCreateDishForm() {
+  onDishCreateSucceded() {
+    this.creatingDish = false
+    this.refresh()
+  }
 
+  refresh() {
+    this.refreshDishes.emit()
   }
 }

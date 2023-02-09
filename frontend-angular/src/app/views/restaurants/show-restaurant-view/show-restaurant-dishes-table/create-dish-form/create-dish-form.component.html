@@ -1,23 +1,17 @@
 <ng-container *ngIf="createData$ != null">
-  <ng-container *ngIf="createData$ | async as createData">
+  <div class="flex flex-row" *ngIf="createData$ | async as createData">
 
-    <form [formGroup]="createDishForm">
-
-      <div>{{createDishForm.value | json}}</div>
-
+    <form [formGroup]="createDishForm" (ngSubmit)="submitCreateDishForm()">
       <div>
         <mat-form-field>
           <mat-label>Name</mat-label>
           <input matInput [formControl]="createDishForm.controls.name"/>
         </mat-form-field>
-      </div>
 
-      <div>
-
-      <mat-form-field>
-        <mat-label>Price</mat-label>
-        <app-money-input [formControl]="createDishForm.controls.price"></app-money-input>
-      </mat-form-field>
+        <mat-form-field>
+          <mat-label>Price</mat-label>
+          <app-money-input [formControl]="createDishForm.controls.price"></app-money-input>
+        </mat-form-field>
       </div>
 
       <div>
@@ -36,9 +30,9 @@
       <!--      </div>-->
 
       <div class="mb-4">
-        <app-button color="primary" (click)="submitCreateDishForm()">Create</app-button>
-        <app-button (click)="cancelCreatingDish()">Cancel</app-button>
+        <app-button color="primary" type="submit">Create</app-button>
+        <app-button (click)="cancelCreatingDish()" type="cancel">Cancel</app-button>
       </div>
     </form>
-  </ng-container>
+  </div>
 </ng-container>
