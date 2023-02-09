@@ -2,5 +2,5 @@
        (input)="onInput($event)"
        (blur)="onBlur()"
        (click)="onTouched()"
-       [value]="stringValue"
+       [value]="stringValue$ | async"
 />
