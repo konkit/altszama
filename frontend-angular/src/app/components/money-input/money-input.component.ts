@@ -1,7 +1,7 @@
 import {Component, DoCheck, ElementRef, HostBinding, Injector, Input, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, NgControl} from "@angular/forms";
 import {MatFormFieldControl} from "@angular/material/form-field";
-import {BehaviorSubject, Subject, take} from 'rxjs';
+import {BehaviorSubject, Subject, take, tap} from 'rxjs';
 import {coerceBooleanProperty} from "@angular/cdk/coercion";
 import {FocusMonitor} from "@angular/cdk/a11y";
 
@@ -102,6 +102,7 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
   };
   onTouched: any = (t: any) => {
     console.log("On Touched: ", t)
+    this.errorState = false;
   };
 
   ngControl: NgControl
@@ -140,18 +141,28 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
   }
 
   onBlur() {
-    this.newStringValue$.pipe(take(1)).subscribe(newStringValue => {
-      let valueAsNumber = this.fromString(newStringValue);
-      let newCalculatedValue = this.calcNewValue(valueAsNumber, this.currency);
+    this.newStringValue$.pipe(take(1))
+      .subscribe(newStringValue => {
+        let valueAsNumber = this.fromString(newStringValue);
 
-      this.stringValue$.next(newCalculatedValue)
-      this.newStringValue$.next(newCalculatedValue)
+        this.stateChanges.next()
 
-      this.onChanged(valueAsNumber)
-      this.value = valueAsNumber
+        if (valueAsNumber == null) {
+          this.errorState = true;
+        } else {
+          this.errorState = false;
 
-      console.log("this.elementRef.nativeElement.value", this.elementRef.nativeElement)
-    })
+          let newCalculatedValue = this.calcNewValue(valueAsNumber, this.currency);
+
+          this.stringValue$.next(newCalculatedValue)
+          this.newStringValue$.next(newCalculatedValue)
+
+          this.onChanged(valueAsNumber)
+          this.value = valueAsNumber
+
+          console.log("this.elementRef.nativeElement.value", this.elementRef.nativeElement)
+        }
+      })
   }
 
   /**
@@ -182,21 +193,21 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
    * Helpers
    */
 
-  private fromString(a: string): number {
+  private fromString(a: string): number | null {
     if (!a) {
-      return 0;
+      return null;
     }
 
     const str = a.split(",");
 
     if (str.length === 0) {
-      return 0;
+      return null;
     }
 
     if (str.length === 1) {
       let parsedNumber = parseInt(str[0]) * 100;
       if (isNaN(parsedNumber)) {
-        return 0;
+        return null;
       }
       return parsedNumber;
     }
