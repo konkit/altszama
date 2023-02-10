@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {RestaurantControllerService, ShowRestaurantResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
-import {EMPTY, map, Observable, switchMap, take, tap} from "rxjs";
-import {faAdd, faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {filter, Observable, switchMap, take, tap} from "rxjs";
+import {faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import * as moment from "moment";
-import {FormBuilder} from "@angular/forms";
+import {NonNullableFormBuilder} from "@angular/forms";
+import {RestaurantEditorState, RestaurantFormService} from "./service/restaurant-form.service";
+import {isNotNull} from "../../../lib/utils";
 
 
 @Component({
@@ -16,10 +18,14 @@ export class ShowRestaurantViewComponent implements OnInit {
 
   restaurant$: Observable<ShowRestaurantResponse>
 
+  id: string
+
   faPencil = faPencil;
   faTimes = faTimes;
 
-  restaurantEdited = false;
+  restaurantState$: Observable<RestaurantEditorState>
+  RestaurantEditorState = RestaurantEditorState
+
   restaurantEditFormGroup = this.fb.group({
     name: "",
     address: "",
@@ -29,58 +35,40 @@ export class ShowRestaurantViewComponent implements OnInit {
 
   constructor(private restaurantControllerService: RestaurantControllerService,
               private router: Router,
-              private fb: FormBuilder,
+              private fb: NonNullableFormBuilder,
+              private restaurantFormService: RestaurantFormService,
               private route: ActivatedRoute) {
-    this.restaurant$ = this.route.data.pipe(map(r => r['response']))
+    this.id = this.route.snapshot.paramMap.get('id')!;
+    this.restaurant$ = this.restaurantFormService.showRestaurantResponse.asObservable().pipe(filter(isNotNull));
+    this.restaurantState$ = this.restaurantFormService.editorStateSubject.asObservable()
   }
 
   ngOnInit() {
 
   }
 
-
-
   editRestaurant() {
-    this.restaurant$.pipe(take(1)).subscribe(response => {
-      this.restaurantEditFormGroup.controls.name.setValue(response.restaurant.name)
-      this.restaurantEditFormGroup.controls.url.setValue(response.restaurant.url)
-      this.restaurantEditFormGroup.controls.address.setValue(response.restaurant.address)
-      this.restaurantEditFormGroup.controls.telephone.setValue(response.restaurant.telephone)
-      this.setRestaurantEdited(true)
+    this.restaurantControllerService.editRestaurant(this.id).subscribe(({id, ...value}) => {
+      this.restaurantEditFormGroup.setValue(value)
+      this.restaurantFormService.setEditorState(RestaurantEditorState.EDITING_RESTAURANT)
     })
   }
 
   submitEdit() {
-    const formValue = this.restaurantEditFormGroup.value;
+    if (this.restaurantEditFormGroup.valid) {
+      const formValue = this.restaurantEditFormGroup.getRawValue();
 
-    this.restaurant$.pipe(
-      take(1),
-      switchMap(payload => {
-        let restaurantId = payload.restaurant.id;
-
-        let body = {
-          id: restaurantId,
-          name: formValue.name || "",
-          url: formValue.url || "",
-          address: formValue.address || "",
-          telephone: formValue.telephone || ""
-        };
-
-        return this.restaurantControllerService.updateRestaurant(body)
-          .pipe(tap(() => {
-            this.setRestaurantEdited(false)
-            this.router.navigate(['/restaurants/', restaurantId], {onSameUrlNavigation: "reload"})
-          }))
-      })
-    ).subscribe()
+      this.restaurantControllerService.updateRestaurant({id: this.id, ...formValue})
+        .pipe(tap(() => this.onRefresh())
+      ).subscribe()
+    }
   }
 
   cancelEdit() {
-    this.setRestaurantEdited(false)
+    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
   }
 
   deleteRestaurant() {
-
     this.restaurant$.pipe(
       take(1),
       switchMap(payload => {
@@ -94,11 +82,6 @@ export class ShowRestaurantViewComponent implements OnInit {
     ).subscribe()
   }
 
-  setRestaurantEdited(newValue: boolean) {
-    console.trace(newValue)
-    this.restaurantEdited = newValue;
-  }
-
   dateToRel(date?: Date) {
     if (date) {
       return moment(date).fromNow();
@@ -107,10 +90,9 @@ export class ShowRestaurantViewComponent implements OnInit {
     }
   }
 
-  onRefreshDishes() {
+  onRefresh() {
+    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
     let id = this.route.snapshot.paramMap.get('id');
-    if (id != null) {
-      this.restaurant$ = this.restaurantControllerService.showRestaurant(id);
-    }
+    this.restaurantFormService.loadRestaurant(id!)
   }
 }

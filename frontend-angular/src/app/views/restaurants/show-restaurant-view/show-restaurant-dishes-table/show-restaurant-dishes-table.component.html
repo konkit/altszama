@@ -1,11 +1,11 @@
 <div>
   <div class="pt-5">
-    <app-button *ngIf="creatingDish == false" color="primary" (click)="createDish()" class="mr-3" [icon]="faAdd">
+    <app-button *ngIf="restaurantEditorState != RestaurantEditorState.CREATING_DISH" [disabled]="restaurantEditorState != RestaurantEditorState.IDLE" color="primary" (click)="createDish()" class="mr-3" [icon]="faAdd">
       Create new dish
     </app-button>
   </div>
 
-  <div *ngIf="creatingDish == true">
+  <div *ngIf="restaurantEditorState == RestaurantEditorState.CREATING_DISH">
     <app-create-dish-form [restaurantId]="restaurant.id" (editSucceded)="onDishCreateSucceded()" (editCancelled)="onDishCreateCancel()"></app-create-dish-form>
   </div>
 

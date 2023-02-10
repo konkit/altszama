@@ -2,8 +2,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DishControllerService, DishDto, RestaurantDto} from "../../../../../frontend-client";
 import * as moment from "moment";
 
-import {faTimes, faPencil, faAdd} from "@fortawesome/free-solid-svg-icons";
-import {FormBuilder} from "@angular/forms";
+import {faAdd, faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {RestaurantEditorState, RestaurantFormService} from "../service/restaurant-form.service";
 
 @Component({
   selector: 'app-show-restaurant-dishes-table',
@@ -11,12 +11,13 @@ import {FormBuilder} from "@angular/forms";
   styleUrls: ['./show-restaurant-dishes-table.component.scss']
 })
 export class ShowRestaurantDishesTableComponent {
+  @Input() restaurantEditorState!: RestaurantEditorState
   @Input() restaurant!: RestaurantDto;
   @Input() dishesByCategory!: { [key: string]: Array<DishDto> };
 
   @Output() refreshDishes = new EventEmitter<void>();
 
-  creatingDish: boolean = false
+  RestaurantEditorState = RestaurantEditorState
 
   faTimes = faTimes
   faPencil = faPencil;
@@ -24,7 +25,7 @@ export class ShowRestaurantDishesTableComponent {
 
 
 
-  constructor(private dishControllerService: DishControllerService) {
+  constructor(private dishControllerService: DishControllerService, private restaurantFormService: RestaurantFormService) {
   }
 
   onDishDelete(dishId: string) {
@@ -42,15 +43,15 @@ export class ShowRestaurantDishesTableComponent {
   }
 
   createDish() {
-    this.creatingDish = true
+    this.restaurantFormService.setEditorState(RestaurantEditorState.CREATING_DISH)
   }
 
   onDishCreateCancel() {
-    this.creatingDish = false
+    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
   }
 
   onDishCreateSucceded() {
-    this.creatingDish = false
+    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
     this.refresh()
   }
 
