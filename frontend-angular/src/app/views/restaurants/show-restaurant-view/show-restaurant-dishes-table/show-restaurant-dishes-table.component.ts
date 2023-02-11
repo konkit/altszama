@@ -4,6 +4,9 @@ import * as moment from "moment";
 
 import {faAdd, faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {RestaurantEditorState, RestaurantFormService} from "../service/restaurant-form.service";
+import {MatDialog} from "@angular/material/dialog";
+import {DeleteDishConfirmModalComponent} from "./delete-dish-confirm-modal/delete-dish-confirm-modal.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-show-restaurant-dishes-table',
@@ -27,13 +30,28 @@ export class ShowRestaurantDishesTableComponent {
 
 
 
-  constructor(private dishControllerService: DishControllerService, private restaurantFormService: RestaurantFormService) {
+  constructor(private dishControllerService: DishControllerService,
+              private restaurantFormService: RestaurantFormService,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
   }
 
   onDishDelete(dishId: string) {
-    this.dishControllerService.deleteDish(dishId).subscribe(response => {
-      this.refresh()
-    })
+    this.dialog.open(DeleteDishConfirmModalComponent, {
+      width: '250px',
+    }).afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.dishControllerService.deleteDish(dishId).subscribe(response => {
+          this.refresh()
+        })
+
+        this.snackBar.open('Deleted!', '', {
+          duration: 2000,
+        });
+      }
+    });
+
+
   }
 
   dateToRel(date: Date) {

@@ -56,6 +56,9 @@ import {MatSelectModule} from "@angular/material/select";
 import { CreateDishFormComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/create-dish-form/create-dish-form.component';
 import { MoneyInputComponent } from './components/money-input/money-input.component';
 import { EditDishFormComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/edit-dish-form/edit-dish-form.component';
+import { DeleteDishConfirmModalComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/delete-dish-confirm-modal/delete-dish-confirm-modal.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -91,6 +94,7 @@ import { EditDishFormComponent } from './views/restaurants/show-restaurant-view/
     CreateDishFormComponent,
     MoneyInputComponent,
     EditDishFormComponent,
+    DeleteDishConfirmModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -114,6 +118,8 @@ import { EditDishFormComponent } from './views/restaurants/show-restaurant-view/
     MatPaginatorModule,
     MatListModule,
     MatSelectModule,
+    MatDialogModule,
+    MatSnackBarModule,
   ],
   providers: [
     {
