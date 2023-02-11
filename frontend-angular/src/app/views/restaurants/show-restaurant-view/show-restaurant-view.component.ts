@@ -17,6 +17,7 @@ import {isNotNull} from "../../../lib/utils";
 export class ShowRestaurantViewComponent implements OnInit {
 
   restaurant$: Observable<ShowRestaurantResponse>
+  editedDishId$: Observable<string>;
 
   id: string
 
@@ -41,6 +42,7 @@ export class ShowRestaurantViewComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id')!;
     this.restaurant$ = this.restaurantFormService.showRestaurantResponse.asObservable().pipe(filter(isNotNull));
     this.restaurantState$ = this.restaurantFormService.editorStateSubject.asObservable()
+    this.editedDishId$ = this.restaurantFormService.editedDishId.asObservable()
   }
 
   ngOnInit() {

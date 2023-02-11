@@ -4,11 +4,13 @@
       <div class="flex flex-col flex-grow bg-white rounded p-5">
 
         <div class="flex flex-row mt-4">
-          <app-button (click)="editRestaurant()" [disabled]="restaurantState != RestaurantEditorState.IDLE" class="mr-3" [icon]="faPencil">
+          <app-button (click)="editRestaurant()" [disabled]="restaurantState != RestaurantEditorState.IDLE"
+                      class="mr-3" [icon]="faPencil">
             Edit restaurant
           </app-button>
 
-          <app-button color="warn" (click)="deleteRestaurant()" [disabled]="restaurantState != RestaurantEditorState.IDLE" [icon]="faTimes">
+          <app-button color="warn" (click)="deleteRestaurant()"
+                      [disabled]="restaurantState != RestaurantEditorState.IDLE" [icon]="faTimes">
             Delete restaurant
           </app-button>
         </div>
@@ -91,6 +93,7 @@
         <app-show-restaurant-dishes-table [restaurant]="restaurantResponse.restaurant"
                                           [dishesByCategory]="restaurantResponse.dishesByCategory"
                                           [restaurantEditorState]="restaurantState"
+                                          [editedDishId]="editedDishId$ | async"
                                           (refreshDishes)="onRefresh()">
         </app-show-restaurant-dishes-table>
 

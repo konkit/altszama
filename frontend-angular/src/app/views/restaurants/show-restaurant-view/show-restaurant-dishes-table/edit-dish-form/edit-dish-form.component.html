@@ -1,0 +1,38 @@
+<ng-container *ngIf="editData$ != null">
+  <div class="flex flex-row" *ngIf="editData$ | async as editData">
+
+    <form [formGroup]="editDishForm" (ngSubmit)="submitEditDishForm()">
+      <div>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput [formControl]="editDishForm.controls.name"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Price</mat-label>
+          <app-money-input [formControl]="editDishForm.controls.price"></app-money-input>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Category</mat-label>
+          <mat-select [formControl]="editDishForm.controls.category">
+            <mat-option *ngFor="let category of editData.categories" [value]="category">
+              {{category}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!--      <div>-->
+      <!--        <side-dishes ref="sideDishesElement"></side-dishes>-->
+      <!--      </div>-->
+
+      <div class="mb-4">
+        <app-button color="primary" type="submit">Update</app-button>
+        <app-button (click)="cancelEditingDish()" type="cancel">Cancel</app-button>
+      </div>
+    </form>
+  </div>
+</ng-container>

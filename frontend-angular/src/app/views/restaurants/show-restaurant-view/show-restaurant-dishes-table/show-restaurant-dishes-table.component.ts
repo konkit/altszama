@@ -12,6 +12,8 @@ import {RestaurantEditorState, RestaurantFormService} from "../service/restauran
 })
 export class ShowRestaurantDishesTableComponent {
   @Input() restaurantEditorState!: RestaurantEditorState
+  @Input() editedDishId!: string | null;
+
   @Input() restaurant!: RestaurantDto;
   @Input() dishesByCategory!: { [key: string]: Array<DishDto> };
 
@@ -57,5 +59,18 @@ export class ShowRestaurantDishesTableComponent {
 
   refresh() {
     this.refreshDishes.emit()
+  }
+
+  onDishEditCancel() {
+    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
+  }
+
+  onDishEditSucceeded() {
+    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
+    this.refresh()
+  }
+
+  setDishAsEdited(dishId: string) {
+    this.restaurantFormService.setDishAsEdited(dishId)
   }
 }

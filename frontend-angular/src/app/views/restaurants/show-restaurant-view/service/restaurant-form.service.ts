@@ -16,6 +16,8 @@ export class RestaurantFormService {
 
   editorStateSubject = new BehaviorSubject<RestaurantEditorState>(RestaurantEditorState.IDLE)
 
+  editedDishId = new BehaviorSubject<string>("")
+
   showRestaurantResponse = new BehaviorSubject<ShowRestaurantResponse | null>(null)
 
 
@@ -30,5 +32,10 @@ export class RestaurantFormService {
       this.restaurantControllerService.showRestaurant(id)
         .subscribe(response => this.showRestaurantResponse.next(response))
     }
+  }
+
+  setDishAsEdited(dishId: string) {
+    this.editedDishId.next(dishId)
+    this.setEditorState(RestaurantEditorState.EDITING_DISH)
   }
 }

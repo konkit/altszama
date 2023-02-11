@@ -12,8 +12,8 @@ export class CreateDishFormComponent implements OnInit {
 
   @Input() restaurantId!: string
 
-  @Output() editSucceded = new EventEmitter<void>()
-  @Output() editCancelled = new EventEmitter<void>()
+  @Output() createSucceded = new EventEmitter<void>()
+  @Output() createCancelled = new EventEmitter<void>()
 
   createDishForm = this.fb.group({
     name: "",
@@ -37,12 +37,12 @@ export class CreateDishFormComponent implements OnInit {
       console.log(body)
       this.dishControllerService.saveDish(body, this.restaurantId).subscribe(response => {
         console.log(response)
-        this.editSucceded.emit()
+        this.createSucceded.emit()
       })
     }
   }
 
   cancelCreatingDish() {
-    this.editCancelled.emit()
+    this.createCancelled.emit()
   }
 }

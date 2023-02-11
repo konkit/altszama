@@ -6,7 +6,7 @@
   </div>
 
   <div *ngIf="restaurantEditorState == RestaurantEditorState.CREATING_DISH">
-    <app-create-dish-form [restaurantId]="restaurant.id" (editSucceded)="onDishCreateSucceded()" (editCancelled)="onDishCreateCancel()"></app-create-dish-form>
+    <app-create-dish-form [restaurantId]="restaurant.id" (createSucceded)="onDishCreateSucceded()" (createCancelled)="onDishCreateCancel()"></app-create-dish-form>
   </div>
 
   <div>
@@ -15,7 +15,11 @@
       <span *ngIf="categoryAndDishes.key == null" class="text-gray-400">No category</span>
 
       <div *ngFor="let dish of categoryAndDishes.value" class="flex flex-row py-2 my-2 border-t-2">
-        <div>
+        <div *ngIf="restaurantEditorState == RestaurantEditorState.EDITING_DISH && editedDishId == dish.id">
+          <app-edit-dish-form [restaurantId]="restaurant.id" [dishId]="dish.id" (editCancelled)="onDishEditCancel()" (editSucceded)="onDishEditSucceeded()"></app-edit-dish-form>
+        </div>
+
+        <div *ngIf="restaurantEditorState != RestaurantEditorState.EDITING_DISH || editedDishId != dish.id">
           <div>
             {{ dish.name }} ({{dish.price | price}})
           </div>
@@ -33,7 +37,7 @@
 
         <div class="edit-buttons ml-auto">
           <!--          <router-link :to="{name: 'DishEditForm', params: {id: restaurant.id, dishId: dish.id}}">-->
-          <button mat-button color="primary">
+          <button mat-button color="primary" (click)="setDishAsEdited(dish.id)">
             <fa-icon [icon]="faPencil"></fa-icon>
           </button>
           <!--          </router-link>-->

@@ -55,6 +55,7 @@ import { ButtonComponent } from './components/button/button.component';
 import {MatSelectModule} from "@angular/material/select";
 import { CreateDishFormComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/create-dish-form/create-dish-form.component';
 import { MoneyInputComponent } from './components/money-input/money-input.component';
+import { EditDishFormComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/edit-dish-form/edit-dish-form.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { MoneyInputComponent } from './components/money-input/money-input.compon
     ButtonComponent,
     CreateDishFormComponent,
     MoneyInputComponent,
+    EditDishFormComponent,
   ],
   imports: [
     BrowserModule,
