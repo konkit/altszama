@@ -7,13 +7,10 @@ import * as moment from "moment";
 import {NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantEditorState, RestaurantFormService} from "./service/restaurant-form.service";
 import {isNotNull} from "../../../lib/utils";
-import {
-  DeleteDishConfirmModalComponent
-} from "./show-restaurant-dishes-table/delete-dish-confirm-modal/delete-dish-confirm-modal.component";
 import {MatDialog} from "@angular/material/dialog";
 import {
-  DeleteRestaurantConfirmModalComponent
-} from "./delete-restaurant-confirm-modal/delete-restaurant-confirm-modal.component";
+  DeleteConfirmationModalComponent
+} from "../../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 
 
 @Component({
@@ -93,8 +90,11 @@ export class ShowRestaurantViewComponent implements OnInit {
   }
 
   onRestaurantDelete() {
-    this.dialog.open(DeleteRestaurantConfirmModalComponent, {
+    this.dialog.open(DeleteConfirmationModalComponent, {
       width: '250px',
+      data: {
+        content: "Are you sure you want to delete this restaurant?"
+      }
     }).afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.restaurant$.pipe(

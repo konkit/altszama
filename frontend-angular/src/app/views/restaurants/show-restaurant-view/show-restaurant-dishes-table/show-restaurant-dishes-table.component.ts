@@ -5,8 +5,10 @@ import * as moment from "moment";
 import {faAdd, faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {RestaurantEditorState, RestaurantFormService} from "../service/restaurant-form.service";
 import {MatDialog} from "@angular/material/dialog";
-import {DeleteDishConfirmModalComponent} from "./delete-dish-confirm-modal/delete-dish-confirm-modal.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {
+  DeleteConfirmationModalComponent
+} from "../../../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 
 @Component({
   selector: 'app-show-restaurant-dishes-table',
@@ -37,8 +39,11 @@ export class ShowRestaurantDishesTableComponent {
   }
 
   onDishDelete(dishId: string) {
-    this.dialog.open(DeleteDishConfirmModalComponent, {
+    this.dialog.open(DeleteConfirmationModalComponent, {
       width: '250px',
+      data: {
+        content: "Are you sure you want to delete this dish?"
+      }
     }).afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.dishControllerService.deleteDish(dishId).subscribe(response => {
