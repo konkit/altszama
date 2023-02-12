@@ -1,16 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {RestaurantControllerService, ShowRestaurantResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
-import {filter, Observable, switchMap, take, tap} from "rxjs";
-import {faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {EMPTY, filter, Observable, switchMap, take, tap} from "rxjs";
+import {faAdd, faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import * as moment from "moment";
 import {NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantEditorState, RestaurantFormService} from "./service/restaurant-form.service";
 import {isNotNull} from "../../../lib/utils";
 import {MatDialog} from "@angular/material/dialog";
-import {
-  DeleteConfirmationModalComponent
-} from "../../../components/delete-confirmation-modal/delete-confirmation-modal.component";
+import {DialogService} from "../../../service/dialog.service";
 
 
 @Component({
@@ -23,28 +21,21 @@ export class ShowRestaurantViewComponent implements OnInit {
   restaurant$: Observable<ShowRestaurantResponse>
   editedDishId$: Observable<string>;
 
-  id: string
+  restaurantState$: Observable<RestaurantEditorState>
 
   faPencil = faPencil;
   faTimes = faTimes;
-
-  restaurantState$: Observable<RestaurantEditorState>
+  faAdd = faAdd;
   RestaurantEditorState = RestaurantEditorState
 
-  restaurantEditFormGroup = this.fb.group({
-    name: "",
-    address: "",
-    url: "",
-    telephone: "",
-  })
 
   constructor(private restaurantControllerService: RestaurantControllerService,
               private router: Router,
               private fb: NonNullableFormBuilder,
               private restaurantFormService: RestaurantFormService,
+              private dialogService: DialogService,
               private dialog: MatDialog,
               private route: ActivatedRoute) {
-    this.id = this.route.snapshot.paramMap.get('id')!;
     this.restaurant$ = this.restaurantFormService.showRestaurantResponse.asObservable().pipe(filter(isNotNull));
     this.restaurantState$ = this.restaurantFormService.editorStateSubject.asObservable()
     this.editedDishId$ = this.restaurantFormService.editedDishId.asObservable()
@@ -54,61 +45,49 @@ export class ShowRestaurantViewComponent implements OnInit {
 
   }
 
-  editRestaurant() {
-    this.restaurantControllerService.editRestaurant(this.id).subscribe(({id, ...value}) => {
-      this.restaurantEditFormGroup.setValue(value)
-      this.restaurantFormService.setEditorState(RestaurantEditorState.EDITING_RESTAURANT)
-    })
-  }
-
-  submitEdit() {
-    if (this.restaurantEditFormGroup.valid) {
-      const formValue = this.restaurantEditFormGroup.getRawValue();
-
-      this.restaurantControllerService.updateRestaurant({id: this.id, ...formValue})
-        .pipe(tap(() => this.onRefresh())
-      ).subscribe()
-    }
-  }
-
-  cancelEdit() {
-    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
-  }
-
-  dateToRel(date?: Date) {
-    if (date) {
-      return moment(date).fromNow();
-    } else {
-      return "";
-    }
-  }
-
   onRefresh() {
-    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
-    let id = this.route.snapshot.paramMap.get('id');
-    this.restaurantFormService.loadRestaurant(id!)
+    let restaurantId = this.route.snapshot.paramMap.get('id');
+    this.restaurantFormService.refresh(restaurantId!)
   }
 
-  onRestaurantDelete() {
-    this.dialog.open(DeleteConfirmationModalComponent, {
-      width: '250px',
-      data: {
-        content: "Are you sure you want to delete this restaurant?"
-      }
-    }).afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.restaurant$.pipe(
-          take(1),
-          switchMap(payload => {
-            let restaurantId = payload.restaurant.id;
+  editRestaurant() {
+    this.restaurantFormService.setEditorState(RestaurantEditorState.EDITING_RESTAURANT)
+  }
 
-            return this.restaurantControllerService.deleteRestaurant(restaurantId)
-              .pipe(tap(() => {
-                this.router.navigate(['/restaurants/'], {onSameUrlNavigation: "reload"})
-              }))
-          })
-        ).subscribe()
-      }
-    });
+  deleteRestaurant() {
+    this.dialogService.displayDeleteDialog("Are you sure you want to delete this restaurant?")
+      .afterClosed()
+      .pipe(
+        switchMap(confirmed => {
+          if (confirmed) {
+            return this.restaurant$.pipe(
+              take(1),
+              switchMap(payload => {
+                let restaurantId = payload.restaurant.id;
+
+                return this.restaurantControllerService.deleteRestaurant(restaurantId)
+                  .pipe(tap(() => {
+                    this.router.navigate(['/restaurants/'], {onSameUrlNavigation: "reload"})
+                  }))
+              })
+            )
+          } else {
+            return EMPTY;
+          }
+        })
+      )
+      .subscribe()
+  }
+
+  createDish() {
+    this.restaurantFormService.setEditorState(RestaurantEditorState.CREATING_DISH)
+  }
+
+  onDishCreateCancel() {
+    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
+  }
+
+  onDishCreateSucceded() {
+    this.onRefresh()
   }
 }

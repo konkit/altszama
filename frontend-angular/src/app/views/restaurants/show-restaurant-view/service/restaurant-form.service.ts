@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, EMPTY, Observable} from "rxjs";
 import {RestaurantControllerService, ShowRestaurantResponse} from "../../../../../frontend-client";
+import {ActivatedRoute} from "@angular/router";
 
 export enum RestaurantEditorState {
   IDLE = 1,
@@ -37,5 +38,10 @@ export class RestaurantFormService {
   setDishAsEdited(dishId: string) {
     this.editedDishId.next(dishId)
     this.setEditorState(RestaurantEditorState.EDITING_DISH)
+  }
+
+  refresh(restaurantId: string) {
+      this.setEditorState(RestaurantEditorState.IDLE)
+      this.loadRestaurant(restaurantId)
   }
 }

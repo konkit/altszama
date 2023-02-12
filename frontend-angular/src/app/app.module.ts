@@ -33,7 +33,7 @@ import { OrderEntriesListComponent } from './views/orders/show-order-view/compon
 import { OrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/order-entry-card/order-entry-card.component';
 import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/components/order-entries-list/title-with-payment-status/title-with-payment-status.component';
 import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/show-order-entry/show-order-entry.component';
-import { ShowRestaurantDishesTableComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/show-restaurant-dishes-table.component';
+import { ShowRestaurantDishesTableComponent } from './views/restaurants/show-restaurant-view/components/show-restaurant-dishes-table/show-restaurant-dishes-table.component';
 import { ViewWrapperComponent } from './components/view-wrapper/view-wrapper.component';
 import { CreateOrderViewComponent } from './views/orders/create-order-view/create-order-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -53,12 +53,15 @@ import {MatListModule} from "@angular/material/list";
 import { CreateRestaurantViewComponent } from './views/restaurants/create-restaurant-view/create-restaurant-view.component';
 import { ButtonComponent } from './components/button/button.component';
 import {MatSelectModule} from "@angular/material/select";
-import { CreateDishFormComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/create-dish-form/create-dish-form.component';
+import { CreateDishFormComponent } from './views/restaurants/show-restaurant-view/components/create-dish-form/create-dish-form.component';
 import { MoneyInputComponent } from './components/money-input/money-input.component';
-import { EditDishFormComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/edit-dish-form/edit-dish-form.component';
+import { EditDishFormComponent } from './views/restaurants/show-restaurant-view/components/edit-dish-form/edit-dish-form.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import { DeleteConfirmationModalComponent } from './components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { RelativeDatePipe } from './components/pipes/date-to-rel.pipe';
+import { RestaurantDetailsComponent } from './views/restaurants/show-restaurant-view/components/restaurant-details/restaurant-details.component';
+import { EditRestaurantFormComponent } from './views/restaurants/show-restaurant-view/components/edit-restaurant-form/edit-restaurant-form.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +98,9 @@ import { DeleteConfirmationModalComponent } from './components/delete-confirmati
     MoneyInputComponent,
     EditDishFormComponent,
     DeleteConfirmationModalComponent,
+    RelativeDatePipe,
+    RestaurantDetailsComponent,
+    EditRestaurantFormComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,100 +1,53 @@
 <ng-container *ngIf="restaurant$ | async as restaurantResponse">
-  <ng-container *ngIf="restaurantState$ | async as restaurantState">
+  <ng-container *ngIf="restaurantState$ | async as restaurantEditorState">
     <app-view-wrapper [title]="'Restaurant ' + restaurantResponse.restaurant.name">
       <div class="flex flex-col flex-grow bg-white rounded p-5">
 
-        <div class="flex flex-row mt-4">
-          <app-button (click)="editRestaurant()" [disabled]="restaurantState != RestaurantEditorState.IDLE"
+        <div class="flex flex-row p-3">
+          <app-button (click)="editRestaurant()" [disabled]="restaurantEditorState != RestaurantEditorState.IDLE"
                       class="mr-3" [icon]="faPencil">
             Edit restaurant
           </app-button>
 
-          <app-button color="warn" (click)="onRestaurantDelete()"
-                      [disabled]="restaurantState != RestaurantEditorState.IDLE" [icon]="faTimes">
+          <app-button color="warn" (click)="deleteRestaurant()"
+                      [disabled]="restaurantEditorState != RestaurantEditorState.IDLE" [icon]="faTimes">
             Delete restaurant
           </app-button>
         </div>
 
-        <ng-container *ngIf="restaurantState != RestaurantEditorState.EDITING_RESTAURANT">
-          <div class="py-5">
-            <mat-list>
-              <mat-list-item>
-                <b>Address : </b>
-                {{ restaurantResponse.restaurant.address }}
-              </mat-list-item>
-
-              <mat-list-item>
-                <b>URL : </b>
-                <a target="_blank" class="text-indigo-500" [href]="restaurantResponse.restaurant.url">
-                  {{ restaurantResponse.restaurant.url }}
-                </a>
-              </mat-list-item>
-
-              <mat-list-item>
-                <b>Telephone number:</b>
-                {{ restaurantResponse.restaurant.telephone }}
-              </mat-list-item>
-
-              <mat-list-item>
-                <b>Last auto-updated:</b>
-                {{ dateToRel(restaurantResponse.restaurant.lastCrawled) }}
-              </mat-list-item>
-
-              <mat-list-item>
-                <b>Last updated manually:</b>
-                {{ dateToRel(restaurantResponse.restaurant.lastEdited) }}
-              </mat-list-item>
-            </mat-list>
-          </div>
+        <ng-container *ngIf="restaurantEditorState != RestaurantEditorState.EDITING_RESTAURANT">
+          <app-restaurant-details [restaurant]="restaurantResponse.restaurant"></app-restaurant-details>
         </ng-container>
 
-        <div *ngIf="restaurantState == RestaurantEditorState.EDITING_RESTAURANT" class="py-5">
-          <div>
-            <form [formGroup]="restaurantEditFormGroup">
-              <div>
-                <mat-form-field class="w-full">
-                  <mat-label>Name:</mat-label>
-                  <input matInput [formControl]="restaurantEditFormGroup.controls.name"/>
-                </mat-form-field>
-              </div>
-
-              <div>
-                <mat-form-field class="w-full">
-                  <mat-label>Address:</mat-label>
-                  <input matInput [formControl]="restaurantEditFormGroup.controls.address"/>
-                </mat-form-field>
-              </div>
-
-              <div>
-                <mat-form-field class="w-full">
-                  <mat-label>Url:</mat-label>
-                  <input matInput [formControl]="restaurantEditFormGroup.controls.url"/>
-                </mat-form-field>
-              </div>
-
-              <div>
-                <mat-form-field class="w-full">
-                  <mat-label>Telephone:</mat-label>
-                  <input matInput [formControl]="restaurantEditFormGroup.controls.telephone"/>
-                </mat-form-field>
-              </div>
-
-              <div>
-                <app-button (click)="cancelEdit()">Cancel</app-button>
-                <app-button (click)="submitEdit()" color="primary">Submit</app-button>
-              </div>
-            </form>
-          </div>
+        <div *ngIf="restaurantEditorState == RestaurantEditorState.EDITING_RESTAURANT" class="py-5">
+          <app-edit-restaurant-form [restaurantId]="restaurantResponse.restaurant.id"></app-edit-restaurant-form>
         </div>
 
         <mat-divider></mat-divider>
 
+        <div>
+          <div class="p-3 mt-3">
+            <app-button *ngIf="restaurantEditorState != RestaurantEditorState.CREATING_DISH"
+                        [disabled]="restaurantEditorState != RestaurantEditorState.IDLE"
+                        color="primary"
+                        (click)="createDish()"
+                        class="mr-3" [icon]="faAdd">
+              Create new dish
+            </app-button>
+          </div>
+
+          <div *ngIf="restaurantEditorState == RestaurantEditorState.CREATING_DISH">
+            <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id"
+                                  (createSucceded)="onDishCreateSucceded()"
+                                  (createCancelled)="onDishCreateCancel()"></app-create-dish-form>
+          </div>
+        </div>
+
 
         <app-show-restaurant-dishes-table [restaurant]="restaurantResponse.restaurant"
                                           [dishesByCategory]="restaurantResponse.dishesByCategory"
-                                          [restaurantEditorState]="restaurantState"
-                                          [editedDishId]="editedDishId$ | async"
-                                          (refreshDishes)="onRefresh()">
+                                          [restaurantEditorState]="restaurantEditorState"
+                                          [editedDishId]="editedDishId$ | async">
         </app-show-restaurant-dishes-table>
 
 
