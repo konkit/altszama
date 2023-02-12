@@ -50,8 +50,6 @@ export class ShowRestaurantDishesTableComponent {
         });
       }
     });
-
-
   }
 
   dateToRel(date: Date) {

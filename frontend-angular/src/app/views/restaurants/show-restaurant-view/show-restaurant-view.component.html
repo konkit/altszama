@@ -9,7 +9,7 @@
             Edit restaurant
           </app-button>
 
-          <app-button color="warn" (click)="deleteRestaurant()"
+          <app-button color="warn" (click)="onRestaurantDelete()"
                       [disabled]="restaurantState != RestaurantEditorState.IDLE" [icon]="faTimes">
             Delete restaurant
           </app-button>

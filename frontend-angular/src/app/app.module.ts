@@ -59,6 +59,7 @@ import { EditDishFormComponent } from './views/restaurants/show-restaurant-view/
 import { DeleteDishConfirmModalComponent } from './views/restaurants/show-restaurant-view/show-restaurant-dishes-table/delete-dish-confirm-modal/delete-dish-confirm-modal.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import { DeleteRestaurantConfirmModalComponent } from './views/restaurants/show-restaurant-view/delete-restaurant-confirm-modal/delete-restaurant-confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
     MoneyInputComponent,
     EditDishFormComponent,
     DeleteDishConfirmModalComponent,
+    DeleteRestaurantConfirmModalComponent,
   ],
   imports: [
     BrowserModule,

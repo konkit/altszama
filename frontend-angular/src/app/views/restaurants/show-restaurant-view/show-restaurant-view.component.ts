@@ -7,6 +7,13 @@ import * as moment from "moment";
 import {NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantEditorState, RestaurantFormService} from "./service/restaurant-form.service";
 import {isNotNull} from "../../../lib/utils";
+import {
+  DeleteDishConfirmModalComponent
+} from "./show-restaurant-dishes-table/delete-dish-confirm-modal/delete-dish-confirm-modal.component";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  DeleteRestaurantConfirmModalComponent
+} from "./delete-restaurant-confirm-modal/delete-restaurant-confirm-modal.component";
 
 
 @Component({
@@ -38,6 +45,7 @@ export class ShowRestaurantViewComponent implements OnInit {
               private router: Router,
               private fb: NonNullableFormBuilder,
               private restaurantFormService: RestaurantFormService,
+              private dialog: MatDialog,
               private route: ActivatedRoute) {
     this.id = this.route.snapshot.paramMap.get('id')!;
     this.restaurant$ = this.restaurantFormService.showRestaurantResponse.asObservable().pipe(filter(isNotNull));
@@ -70,20 +78,6 @@ export class ShowRestaurantViewComponent implements OnInit {
     this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
   }
 
-  deleteRestaurant() {
-    this.restaurant$.pipe(
-      take(1),
-      switchMap(payload => {
-        let restaurantId = payload.restaurant.id;
-
-        return this.restaurantControllerService.deleteRestaurant(restaurantId)
-          .pipe(tap(() => {
-            this.router.navigate(['/restaurants/'], {onSameUrlNavigation: "reload"})
-          }))
-      })
-    ).subscribe()
-  }
-
   dateToRel(date?: Date) {
     if (date) {
       return moment(date).fromNow();
@@ -96,5 +90,25 @@ export class ShowRestaurantViewComponent implements OnInit {
     this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
     let id = this.route.snapshot.paramMap.get('id');
     this.restaurantFormService.loadRestaurant(id!)
+  }
+
+  onRestaurantDelete() {
+    this.dialog.open(DeleteRestaurantConfirmModalComponent, {
+      width: '250px',
+    }).afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.restaurant$.pipe(
+          take(1),
+          switchMap(payload => {
+            let restaurantId = payload.restaurant.id;
+
+            return this.restaurantControllerService.deleteRestaurant(restaurantId)
+              .pipe(tap(() => {
+                this.router.navigate(['/restaurants/'], {onSameUrlNavigation: "reload"})
+              }))
+          })
+        ).subscribe()
+      }
+    });
   }
 }
