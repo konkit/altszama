@@ -16,6 +16,7 @@ open class Application {
   @EventListener(ApplicationReadyEvent::class)
   fun afterStartup() {
     Locale.setDefault(Locale.forLanguageTag("pl_PL"))
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
   }
 
 }
