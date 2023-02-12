@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { EditRestaurantResponse } from '../model/editRestaurantResponse';
 import { IndexResponse } from '../model/indexResponse';
+import { RestaurantDto } from '../model/restaurantDto';
 import { RestaurantSaveRequest } from '../model/restaurantSaveRequest';
 import { RestaurantUpdateRequest } from '../model/restaurantUpdateRequest';
 import { ShowRestaurantResponse } from '../model/showRestaurantResponse';
@@ -184,9 +185,9 @@ export class RestaurantControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public saveRestaurant(body: RestaurantSaveRequest, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public saveRestaurant(body: RestaurantSaveRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public saveRestaurant(body: RestaurantSaveRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public saveRestaurant(body: RestaurantSaveRequest, observe?: 'body', reportProgress?: boolean): Observable<RestaurantDto>;
+    public saveRestaurant(body: RestaurantSaveRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RestaurantDto>>;
+    public saveRestaurant(body: RestaurantSaveRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RestaurantDto>>;
     public saveRestaurant(body: RestaurantSaveRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -213,7 +214,7 @@ export class RestaurantControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<string>('post',`${this.basePath}/api/restaurants/save`,
+        return this.httpClient.request<RestaurantDto>('post',`${this.basePath}/api/restaurants/save`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

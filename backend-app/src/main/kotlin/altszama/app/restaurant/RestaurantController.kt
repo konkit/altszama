@@ -34,10 +34,10 @@ class RestaurantController {
   }
 
   @PostMapping("/restaurants/save")
-  fun saveRestaurant(@RequestBody saveRequest: RestaurantSaveRequest): ResponseEntity<String> {
+  fun saveRestaurant(@RequestBody saveRequest: RestaurantSaveRequest): ResponseEntity<RestaurantDto> {
     val currentUserTeam = currentUserService.getCurrentUserTeam()
-    restaurantService.createRestaurant(currentUserTeam, saveRequest)
-    return ResponseEntity("{}", HttpStatus.CREATED)
+    val restaurant = restaurantService.createRestaurant(currentUserTeam, saveRequest)
+    return ResponseEntity(RestaurantDto.fromRestaurant(restaurant), HttpStatus.CREATED)
   }
 
   @GetMapping("/restaurants/{restaurantId}/edit.json")

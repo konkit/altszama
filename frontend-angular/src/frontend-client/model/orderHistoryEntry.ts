@@ -11,9 +11,9 @@
  */
 
 export interface OrderHistoryEntry { 
+    orderId: string;
+    kind: string;
     orderCreator: string;
     orderDate: string;
     restaurantName: string;
-    orderId: string;
-    kind: string;
 }

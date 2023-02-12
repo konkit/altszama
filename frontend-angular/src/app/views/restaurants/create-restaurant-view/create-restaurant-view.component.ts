@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
-import {switchMap, take, tap} from "rxjs";
+import {tap} from "rxjs";
 import {RestaurantControllerService} from "../../../../frontend-client";
 
 @Component({
@@ -31,8 +31,8 @@ export class CreateRestaurantViewComponent {
     };
 
     return this.restaurantControllerService.saveRestaurant(body)
-      .pipe(tap(restaurantId => {
-        this.router.navigate(['/restaurants/', restaurantId], {onSameUrlNavigation: "reload"})
+      .pipe(tap(restaurant => {
+        this.router.navigate(['/restaurants/', restaurant.id], {onSameUrlNavigation: "reload"})
       })).subscribe()
   }
 
