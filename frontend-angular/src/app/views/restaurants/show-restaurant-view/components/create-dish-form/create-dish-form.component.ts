@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, NgForm, NonNullableFormBuilder} from "@angular/forms";
 import {Observable} from "rxjs";
 import {CreateDishResponse, DishControllerService, DishCreateRequest} from "../../../../../../frontend-client";
+import {RestaurantEditorState, RestaurantFormService} from "../../service/restaurant-form.service";
 
 @Component({
   selector: 'app-create-dish-form',
@@ -13,7 +14,6 @@ export class CreateDishFormComponent implements OnInit {
   @Input() restaurantId!: string
 
   @Output() createSucceded = new EventEmitter<void>()
-  @Output() createCancelled = new EventEmitter<void>()
 
   createDishForm = this.fb.group({
     name: "",
@@ -24,7 +24,9 @@ export class CreateDishFormComponent implements OnInit {
 
   createData$: Observable<CreateDishResponse> | null = null
 
-  constructor(private fb: NonNullableFormBuilder, private dishControllerService: DishControllerService) {
+  constructor(private fb: NonNullableFormBuilder,
+              private dishControllerService: DishControllerService,
+              private restaurantFormService: RestaurantFormService) {
   }
 
   ngOnInit() {
@@ -43,6 +45,6 @@ export class CreateDishFormComponent implements OnInit {
   }
 
   cancelCreatingDish() {
-    this.createCancelled.emit()
+    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
   }
 }

@@ -8,16 +8,19 @@ import {EMPTY, switchMap} from "rxjs";
 import {DialogService} from "../../../../../service/dialog.service";
 
 @Component({
-  selector: 'app-show-restaurant-dishes-table',
-  templateUrl: './show-restaurant-dishes-table.component.html',
-  styleUrls: ['./show-restaurant-dishes-table.component.scss']
+  selector: 'app-restaurant-category-entries',
+  templateUrl: './restaurant-category-entries.component.html',
+  styleUrls: ['./restaurant-category-entries.component.scss']
 })
-export class ShowRestaurantDishesTableComponent {
+export class RestaurantCategoryEntriesComponent {
   @Input() restaurantEditorState!: RestaurantEditorState
   @Input() editedDishId!: string | null;
 
   @Input() restaurant!: RestaurantDto;
-  @Input() dishesByCategory!: { [key: string]: Array<DishDto> };
+  // @Input() dishesByCategory!: { [key: string]: Array<DishDto> };
+
+  @Input() category!: string
+  @Input() dishes!: DishDto[]
 
   RestaurantEditorState = RestaurantEditorState
 
@@ -53,9 +56,6 @@ export class ShowRestaurantDishesTableComponent {
     } else {
       return "";
     }
-  }
-  onDishEditCancel() {
-    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
   }
 
   onDishEditSucceeded() {

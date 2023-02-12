@@ -4,13 +4,15 @@
       <div class="flex flex-col flex-grow bg-white rounded p-5">
 
         <div class="flex flex-row p-3">
-          <app-button (click)="editRestaurant()" [disabled]="restaurantEditorState != RestaurantEditorState.IDLE"
+          <app-button (click)="editRestaurant()"
+                      [disabled]="restaurantEditorState != RestaurantEditorState.IDLE"
                       class="mr-3" [icon]="faPencil">
             Edit restaurant
           </app-button>
 
           <app-button color="warn" (click)="deleteRestaurant()"
-                      [disabled]="restaurantEditorState != RestaurantEditorState.IDLE" [icon]="faTimes">
+                      [disabled]="restaurantEditorState != RestaurantEditorState.IDLE"
+                      [icon]="faTimes">
             Delete restaurant
           </app-button>
         </div>
@@ -38,17 +40,19 @@
 
           <div *ngIf="restaurantEditorState == RestaurantEditorState.CREATING_DISH">
             <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id"
-                                  (createSucceded)="onDishCreateSucceded()"
-                                  (createCancelled)="onDishCreateCancel()"></app-create-dish-form>
+                                  (createSucceded)="onDishCreateSucceded()"></app-create-dish-form>
           </div>
         </div>
 
 
-        <app-show-restaurant-dishes-table [restaurant]="restaurantResponse.restaurant"
-                                          [dishesByCategory]="restaurantResponse.dishesByCategory"
+        <div *ngFor="let categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue" class="dish-entry-container">
+          <app-restaurant-category-entries [restaurant]="restaurantResponse.restaurant"
+                                          [category]="categoryAndDishes.key"
+                                          [dishes]="categoryAndDishes.value"
                                           [restaurantEditorState]="restaurantEditorState"
                                           [editedDishId]="editedDishId$ | async">
-        </app-show-restaurant-dishes-table>
+          </app-restaurant-category-entries>
+        </div>
 
 
       </div>

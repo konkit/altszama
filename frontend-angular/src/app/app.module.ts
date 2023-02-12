@@ -33,7 +33,7 @@ import { OrderEntriesListComponent } from './views/orders/show-order-view/compon
 import { OrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/order-entry-card/order-entry-card.component';
 import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/components/order-entries-list/title-with-payment-status/title-with-payment-status.component';
 import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/show-order-entry/show-order-entry.component';
-import { ShowRestaurantDishesTableComponent } from './views/restaurants/show-restaurant-view/components/show-restaurant-dishes-table/show-restaurant-dishes-table.component';
+import { RestaurantCategoryEntriesComponent } from './views/restaurants/show-restaurant-view/components/restaurant-category-entries/restaurant-category-entries.component';
 import { ViewWrapperComponent } from './components/view-wrapper/view-wrapper.component';
 import { CreateOrderViewComponent } from './views/orders/create-order-view/create-order-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -89,7 +89,7 @@ import { EditRestaurantFormComponent } from './views/restaurants/show-restaurant
     OrderEntryCardComponent,
     TitleWithPaymentStatusComponent,
     ShowOrderEntryComponent,
-    ShowRestaurantDishesTableComponent,
+    RestaurantCategoryEntriesComponent,
     ViewWrapperComponent,
     CreateOrderViewComponent,
     CreateRestaurantViewComponent,

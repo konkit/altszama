@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
-import {BehaviorSubject, EMPTY, Observable} from "rxjs";
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from "rxjs";
 import {RestaurantControllerService, ShowRestaurantResponse} from "../../../../../frontend-client";
-import {ActivatedRoute} from "@angular/router";
 
 export enum RestaurantEditorState {
   IDLE = 1,

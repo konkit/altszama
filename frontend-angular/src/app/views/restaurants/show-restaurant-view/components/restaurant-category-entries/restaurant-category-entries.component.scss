@@ -3,13 +3,13 @@
   @apply p-3 mt-3
 }
 
-.dish-entry-container {
-  @apply p-3
-}
-
-.dish-entry-container:not(:first-child) {
-  @apply mt-3
-}
+//.dish-entry-container {
+//  @apply p-3
+//}
+//
+//.dish-entry-container:not(:first-child) {
+//  @apply mt-3
+//}
 
 .dish-entry {
   @apply flex flex-row py-2 border-t-2;
