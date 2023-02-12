@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
-import {tap} from "rxjs";
+import {switchMap} from "rxjs";
 
 interface RestaurantDetails {
   name: string,
@@ -38,13 +38,12 @@ export class EditRestaurantFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.restaurantControllerService.editRestaurant(this.restaurantId).subscribe(({id, ...value}) => {
-      this.restaurantEditFormGroup.setValue(value)
-    })
+    this.restaurantControllerService.editRestaurant(this.restaurantId)
+      .subscribe(({id, ...value}) => this.restaurantEditFormGroup.setValue(value))
   }
 
   cancel() {
-    this.restaurantFormService.refreshRestaurantData()
+    this.restaurantFormService.refreshRestaurantData().subscribe()
   }
 
   submit() {
@@ -52,7 +51,9 @@ export class EditRestaurantFormComponent implements OnInit {
       const formValue = this.restaurantEditFormGroup.getRawValue();
 
       this.restaurantControllerService.updateRestaurant({id: this.restaurantId, ...formValue})
-        .pipe(tap(() => this.restaurantFormService.refreshRestaurantData()))
+        .pipe(
+          switchMap(() => this.restaurantFormService.refreshRestaurantData())
+        )
         .subscribe()
     }
   }

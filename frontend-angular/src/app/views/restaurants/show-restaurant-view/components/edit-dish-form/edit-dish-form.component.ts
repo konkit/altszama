@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Observable, shareReplay, take} from "rxjs";
+import {Observable, shareReplay, switchMap, take} from "rxjs";
 import {DishControllerService, DishDto, EditDishResponse, SideDish} from "../../../../../../frontend-client";
 import {NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
@@ -45,14 +45,13 @@ export class EditDishFormComponent {
   submitForm() {
     if (this.editDishForm.valid) {
       let body = this.editDishForm.getRawValue()
-      console.log(body)
-      this.dishControllerService.updateDish(body, this.restaurantId).subscribe(response => {
-        this.restaurantFormService.refreshRestaurantData()
-      })
+      this.dishControllerService.updateDish(body, this.restaurantId)
+        .pipe(switchMap(() => this.restaurantFormService.refreshRestaurantData()))
+        .subscribe()
     }
   }
 
   cancel() {
-    this.restaurantFormService.refreshRestaurantData()
+    this.restaurantFormService.refreshRestaurantData().subscribe()
   }
 }

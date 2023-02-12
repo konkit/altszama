@@ -1,21 +1,27 @@
 <ng-container *ngIf="createData$ != null">
-  <div class="flex flex-row" *ngIf="createData$ | async as createData">
 
-    <form [formGroup]="createDishForm" (ngSubmit)="submitForm()">
-      <div>
-        <mat-form-field>
-          <mat-label>Name</mat-label>
-          <input matInput [formControl]="createDishForm.controls.name"/>
-        </mat-form-field>
+  <mat-error>{{createDishForm.errors}}</mat-error>
 
-        <mat-form-field>
-          <mat-label>Price</mat-label>
-          <app-money-input [formControl]="createDishForm.controls.price"></app-money-input>
-        </mat-form-field>
+  <div class="flex flex-row w-full" *ngIf="createData$ | async as createData">
+    <form [formGroup]="createDishForm" (ngSubmit)="submitForm()" class="w-full">
+      <div class="flex flex-row">
+        <div class="flex-grow">
+          <mat-form-field class="w-full">
+            <mat-label>Name</mat-label>
+            <input matInput [formControl]="createDishForm.controls.name"/>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <mat-label>Price</mat-label>
+            <app-money-input [formControl]="createDishForm.controls.price"></app-money-input>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div>
-        <mat-form-field>
+      <div class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>Category</mat-label>
           <mat-select [formControl]="createDishForm.controls.category">
             <mat-option *ngFor="let category of createData.categories" [value]="category">
@@ -31,7 +37,7 @@
 
       <div class="mb-4">
         <app-button color="primary" type="submit">Create</app-button>
-        <app-button (click)="cancel()" type="cancel">Cancel</app-button>
+        <app-button (click)="cancel()" type="button">Cancel</app-button>
       </div>
     </form>
   </div>

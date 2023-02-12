@@ -29,6 +29,10 @@ export class RestaurantCategoryEntriesComponent {
               private dialogService: DialogService) {
   }
 
+  editDish(dishId: string) {
+    this.restaurantFormService.setDishAsEdited(dishId)
+  }
+
   deleteDish(dishId: string) {
     this.dialogService.displayDeleteDialog("Are you sure you want to delete this dish?")
       .afterClosed()
@@ -39,26 +43,9 @@ export class RestaurantCategoryEntriesComponent {
           } else {
             return EMPTY
           }
-        })
+        }),
+        switchMap(() => this.restaurantFormService.refreshRestaurantData())
       )
-      .subscribe(() => {
-        this.restaurantFormService.refreshRestaurantData()
-      });
-  }
-
-  dateToRel(date: Date) {
-    if (date) {
-      return moment(date).fromNow();
-    } else {
-      return "";
-    }
-  }
-
-  onDishEditSucceeded() {
-    this.restaurantFormService.refreshRestaurantData()
-  }
-
-  editDish(dishId: string) {
-    this.restaurantFormService.setDishAsEdited(this.restaurant.id, dishId)
+      .subscribe();
   }
 }

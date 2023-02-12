@@ -13,7 +13,7 @@
 
     <div class="subtitle text-gray-400">
       <span *ngIf="dish.lastCrawled != null">
-        auto-updated {{ dateToRel(dish.lastCrawled) }}
+        auto-updated {{ dish.lastCrawled | relativeDate }}
       </span>
 
       <span *ngIf="dish.lastCrawled == null">

@@ -29,7 +29,7 @@ export class ShowRestaurantViewComponent implements OnInit {
               private router: Router,
               private restaurantFormService: RestaurantFormService,
               private dialogService: DialogService) {
-    this.restaurant$ = this.restaurantFormService.restaurantData.asObservable().pipe(filter(isNotNull));
+    this.restaurant$ = this.restaurantFormService.loadedRestaurantData.asObservable().pipe(filter(isNotNull));
     this.restaurantState$ = this.restaurantFormService.editorStateSubject.asObservable()
   }
 
@@ -67,6 +67,6 @@ export class ShowRestaurantViewComponent implements OnInit {
   }
 
   createDish(restaurantId: string) {
-    this.restaurantFormService.setDishAsCreated(restaurantId)
+    this.restaurantFormService.setDishAsCreated()
   }
 }

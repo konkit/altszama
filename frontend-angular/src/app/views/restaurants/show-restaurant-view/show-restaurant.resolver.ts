@@ -16,13 +16,6 @@ export class ShowRestaurantResolver implements Resolve<string> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string> {
     let id = route.paramMap.get('id');
-    // if (id != null) {
-    //   return this.restaurantControllerService.showRestaurant(id);
-    // } else {
-    //   return EMPTY;
-    // }
-
-    this.restaurantFormService.loadRestaurantData(id!)
-    return of("x");
+    return this.restaurantFormService.loadRestaurantData(id!)
   }
 }

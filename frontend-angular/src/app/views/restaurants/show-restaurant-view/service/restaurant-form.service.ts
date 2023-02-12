@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, take} from "rxjs";
+import {BehaviorSubject, EMPTY, Observable, ReplaySubject, switchMap, take, tap, throwError} from "rxjs";
 import {RestaurantControllerService, ShowRestaurantResponse} from "../../../../../frontend-client";
 import {RestaurantEditorState} from "./restaurant-editor-state";
 
@@ -10,36 +10,42 @@ export class RestaurantFormService {
 
   editorStateSubject = new BehaviorSubject<RestaurantEditorState>({name: "IDLE"})
 
-  restaurantData = new BehaviorSubject<ShowRestaurantResponse | null>(null)
+  loadedRestaurantData = new ReplaySubject<ShowRestaurantResponse>(1)
 
   constructor(private restaurantControllerService: RestaurantControllerService) {
   }
 
-  loadRestaurantData(restaurantId: string) {
+  loadRestaurantData(restaurantId: string): Observable<any> {
     if (restaurantId != null) {
-      this.restaurantControllerService.showRestaurant(restaurantId)
-        .subscribe(response => this.restaurantData.next(response))
+      return this.restaurantControllerService.showRestaurant(restaurantId)
+        .pipe(
+          tap(response => this.loadedRestaurantData.next(response))
+        )
+    } else {
+      return throwError(() => new Error(`Missing restaurant ID`));
     }
   }
 
   setRestaurantAsEdited(restaurantId: string) {
-    this.editorStateSubject.next({name: "EDITING_RESTAURANT", restaurantId: restaurantId})
+    this.editorStateSubject.next({name: "EDITING_RESTAURANT"})
   }
 
-  setDishAsCreated(restaurantId: string) {
-    this.editorStateSubject.next({name: "CREATING_DISH", restaurantId: restaurantId})
+  setDishAsCreated() {
+    this.editorStateSubject.next({name: "CREATING_DISH"})
   }
 
-  setDishAsEdited(restaurantId: string, dishId: string) {
-    this.editorStateSubject.next({name: "EDITING_DISH", restaurantId: restaurantId, dishId: dishId})
+  setDishAsEdited(dishId: string) {
+    this.editorStateSubject.next({name: "EDITING_DISH", dishId: dishId})
   }
 
-  refreshRestaurantData() {
-    let editorStateValue = this.editorStateSubject.value;
-    if (editorStateValue.name != "IDLE") {
-      let restaurantId = editorStateValue.restaurantId
-      this.loadRestaurantData(restaurantId)
-      this.editorStateSubject.next({name: "IDLE"})
-    }
+  refreshRestaurantData(): Observable<void> {
+    return this.loadedRestaurantData
+      .pipe(
+        take(1),
+        switchMap(restaurantData => {
+          return this.loadRestaurantData(restaurantData.restaurant.id)
+        }),
+        tap(() => this.editorStateSubject.next({name: "IDLE"}))
+      )
   }
 }

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NonNullableFormBuilder} from "@angular/forms";
-import {Observable} from "rxjs";
+import {BehaviorSubject, catchError, Observable, of, switchMap} from "rxjs";
 import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
 
@@ -34,14 +34,19 @@ export class CreateDishFormComponent implements OnInit {
   submitForm() {
     if (this.createDishForm.valid) {
       let body = this.createDishForm.getRawValue()
-      console.log(body)
-      this.dishControllerService.saveDish(body, this.restaurantId).subscribe(response => {
-        this.restaurantFormService.refreshRestaurantData()
-      })
+      this.dishControllerService.saveDish(body, this.restaurantId)
+        .pipe(
+          switchMap(() => this.restaurantFormService.refreshRestaurantData()),
+          catchError(e => {
+            this.createDishForm.setErrors(e)
+            return of("")
+          })
+        )
+        .subscribe()
     }
   }
 
   cancel() {
-    this.restaurantFormService.refreshRestaurantData()
+    this.restaurantFormService.refreshRestaurantData().subscribe()
   }
 }
