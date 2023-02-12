@@ -22,7 +22,7 @@ export class ShowRestaurantResolver implements Resolve<string> {
     //   return EMPTY;
     // }
 
-    this.restaurantFormService.loadRestaurant(id!)
+    this.restaurantFormService.loadRestaurantData(id!)
     return of("x");
   }
 }

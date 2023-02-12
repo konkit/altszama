@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, NgForm, NonNullableFormBuilder} from "@angular/forms";
+import {Component, Input, OnInit} from '@angular/core';
+import {NonNullableFormBuilder} from "@angular/forms";
 import {Observable} from "rxjs";
-import {CreateDishResponse, DishControllerService, DishCreateRequest} from "../../../../../../frontend-client";
-import {RestaurantEditorState, RestaurantFormService} from "../../service/restaurant-form.service";
+import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
+import {RestaurantFormService} from "../../service/restaurant-form.service";
 
 @Component({
   selector: 'app-create-dish-form',
@@ -12,8 +12,6 @@ import {RestaurantEditorState, RestaurantFormService} from "../../service/restau
 export class CreateDishFormComponent implements OnInit {
 
   @Input() restaurantId!: string
-
-  @Output() createSucceded = new EventEmitter<void>()
 
   createDishForm = this.fb.group({
     name: "",
@@ -33,18 +31,17 @@ export class CreateDishFormComponent implements OnInit {
     this.createData$ = this.dishControllerService.createDish(this.restaurantId)
   }
 
-  submitCreateDishForm() {
+  submitForm() {
     if (this.createDishForm.valid) {
       let body = this.createDishForm.getRawValue()
       console.log(body)
       this.dishControllerService.saveDish(body, this.restaurantId).subscribe(response => {
-        console.log(response)
-        this.createSucceded.emit()
+        this.restaurantFormService.refreshRestaurantData()
       })
     }
   }
 
-  cancelCreatingDish() {
-    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
+  cancel() {
+    this.restaurantFormService.refreshRestaurantData()
   }
 }

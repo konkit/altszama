@@ -1,35 +1,33 @@
 <span class="text-gray-400"> Category: {{ category || "No Category" }} </span>
 
 <div *ngFor="let dish of dishes" class="dish-entry">
-  <div *ngIf="restaurantEditorState == RestaurantEditorState.EDITING_DISH && editedDishId == dish.id">
-    <app-edit-dish-form [restaurantId]="restaurant.id"
-                        [dishId]="dish.id"
-                        (editSucceded)="onDishEditSucceeded()">
+  <div *ngIf="restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id">
+    <app-edit-dish-form [restaurantId]="restaurant.id" [dishId]="dish.id">
     </app-edit-dish-form>
   </div>
 
-  <div *ngIf="restaurantEditorState != RestaurantEditorState.EDITING_DISH || editedDishId != dish.id">
+  <div *ngIf="restaurantEditorState.name != 'EDITING_DISH' || restaurantEditorState.dishId != dish.id">
     <div>
       {{ dish.name }} ({{dish.price | price}})
     </div>
 
     <div class="subtitle text-gray-400">
-            <span *ngIf="dish.lastCrawled != null">
-              auto-updated {{ dateToRel(dish.lastCrawled) }}
-            </span>
+      <span *ngIf="dish.lastCrawled != null">
+        auto-updated {{ dateToRel(dish.lastCrawled) }}
+      </span>
 
       <span *ngIf="dish.lastCrawled == null">
-              updated manually
-            </span>
+        updated manually
+      </span>
     </div>
   </div>
 
   <div class="edit-buttons">
-    <button mat-button color="primary" (click)="setDishAsEdited(dish.id)">
+    <button mat-button color="primary" (click)="editDish(dish.id)">
       <fa-icon [icon]="faPencil"></fa-icon>
     </button>
 
-    <button mat-button (click)="onDishDelete(dish.id)" color="warn">
+    <button mat-button (click)="deleteDish(dish.id)" color="warn">
       <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>
     </button>
   </div>

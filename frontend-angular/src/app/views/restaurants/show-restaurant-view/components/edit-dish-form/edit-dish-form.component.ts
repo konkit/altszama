@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Observable, shareReplay, take} from "rxjs";
 import {DishControllerService, DishDto, EditDishResponse, SideDish} from "../../../../../../frontend-client";
 import {NonNullableFormBuilder} from "@angular/forms";
-import {RestaurantEditorState, RestaurantFormService} from "../../service/restaurant-form.service";
+import {RestaurantFormService} from "../../service/restaurant-form.service";
 
 @Component({
   selector: 'app-edit-dish-form',
@@ -12,8 +12,6 @@ import {RestaurantEditorState, RestaurantFormService} from "../../service/restau
 export class EditDishFormComponent {
   @Input() restaurantId!: string
   @Input() dishId!: string
-
-  @Output() editSucceded = new EventEmitter<void>()
 
   editDishForm = this.fb.group({
     id: "",
@@ -44,18 +42,17 @@ export class EditDishFormComponent {
     })
   }
 
-  submitEditDishForm() {
+  submitForm() {
     if (this.editDishForm.valid) {
       let body = this.editDishForm.getRawValue()
       console.log(body)
       this.dishControllerService.updateDish(body, this.restaurantId).subscribe(response => {
-        console.log(response)
-        this.editSucceded.emit()
+        this.restaurantFormService.refreshRestaurantData()
       })
     }
   }
 
-  cancelEditingDish() {
-    this.restaurantFormService.setEditorState(RestaurantEditorState.IDLE)
+  cancel() {
+    this.restaurantFormService.refreshRestaurantData()
   }
 }

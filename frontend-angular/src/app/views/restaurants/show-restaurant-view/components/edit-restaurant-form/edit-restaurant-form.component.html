@@ -1,5 +1,5 @@
 <div>
-  <form [formGroup]="restaurantEditFormGroup">
+  <form [formGroup]="restaurantEditFormGroup" (ngSubmit)="submit()">
     <div>
       <mat-form-field class="w-full">
         <mat-label>Name:</mat-label>
@@ -29,8 +29,8 @@
     </div>
 
     <div>
-      <app-button (click)="cancelEdit()">Cancel</app-button>
-      <app-button (click)="submitEdit()" color="primary">Submit</app-button>
+      <app-button color="primary" type="submit">Update</app-button>
+      <app-button (click)="cancel()" type="cancel">Cancel</app-button>
     </div>
   </form>
 </div>

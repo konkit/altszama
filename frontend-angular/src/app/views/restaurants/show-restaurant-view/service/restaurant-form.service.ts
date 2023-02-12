@@ -1,46 +1,45 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, take} from "rxjs";
 import {RestaurantControllerService, ShowRestaurantResponse} from "../../../../../frontend-client";
-
-export enum RestaurantEditorState {
-  IDLE = 1,
-  EDITING_RESTAURANT,
-  CREATING_DISH,
-  EDITING_DISH
-}
+import {RestaurantEditorState} from "./restaurant-editor-state";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RestaurantFormService {
 
-  editorStateSubject = new BehaviorSubject<RestaurantEditorState>(RestaurantEditorState.IDLE)
+  editorStateSubject = new BehaviorSubject<RestaurantEditorState>({name: "IDLE"})
 
-  editedDishId = new BehaviorSubject<string>("")
+  restaurantData = new BehaviorSubject<ShowRestaurantResponse | null>(null)
 
-  showRestaurantResponse = new BehaviorSubject<ShowRestaurantResponse | null>(null)
-
-
-  constructor(private restaurantControllerService: RestaurantControllerService) { }
-
-  setEditorState(newState: RestaurantEditorState) {
-    this.editorStateSubject.next(newState)
+  constructor(private restaurantControllerService: RestaurantControllerService) {
   }
 
-  loadRestaurant(id: string) {
-    if (id != null) {
-      this.restaurantControllerService.showRestaurant(id)
-        .subscribe(response => this.showRestaurantResponse.next(response))
+  loadRestaurantData(restaurantId: string) {
+    if (restaurantId != null) {
+      this.restaurantControllerService.showRestaurant(restaurantId)
+        .subscribe(response => this.restaurantData.next(response))
     }
   }
 
-  setDishAsEdited(dishId: string) {
-    this.editedDishId.next(dishId)
-    this.setEditorState(RestaurantEditorState.EDITING_DISH)
+  setRestaurantAsEdited(restaurantId: string) {
+    this.editorStateSubject.next({name: "EDITING_RESTAURANT", restaurantId: restaurantId})
   }
 
-  refresh(restaurantId: string) {
-      this.setEditorState(RestaurantEditorState.IDLE)
-      this.loadRestaurant(restaurantId)
+  setDishAsCreated(restaurantId: string) {
+    this.editorStateSubject.next({name: "CREATING_DISH", restaurantId: restaurantId})
+  }
+
+  setDishAsEdited(restaurantId: string, dishId: string) {
+    this.editorStateSubject.next({name: "EDITING_DISH", restaurantId: restaurantId, dishId: dishId})
+  }
+
+  refreshRestaurantData() {
+    let editorStateValue = this.editorStateSubject.value;
+    if (editorStateValue.name != "IDLE") {
+      let restaurantId = editorStateValue.restaurantId
+      this.loadRestaurantData(restaurantId)
+      this.editorStateSubject.next({name: "IDLE"})
+    }
   }
 }

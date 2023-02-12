@@ -3,9 +3,10 @@ import {DishControllerService, DishDto, RestaurantDto} from "../../../../../../f
 import * as moment from "moment";
 
 import {faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
-import {RestaurantEditorState, RestaurantFormService} from "../../service/restaurant-form.service";
+import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {EMPTY, switchMap} from "rxjs";
 import {DialogService} from "../../../../../service/dialog.service";
+import {RestaurantEditorState} from "../../service/restaurant-editor-state";
 
 @Component({
   selector: 'app-restaurant-category-entries',
@@ -14,15 +15,10 @@ import {DialogService} from "../../../../../service/dialog.service";
 })
 export class RestaurantCategoryEntriesComponent {
   @Input() restaurantEditorState!: RestaurantEditorState
-  @Input() editedDishId!: string | null;
-
   @Input() restaurant!: RestaurantDto;
-  // @Input() dishesByCategory!: { [key: string]: Array<DishDto> };
 
   @Input() category!: string
   @Input() dishes!: DishDto[]
-
-  RestaurantEditorState = RestaurantEditorState
 
   faTimes = faTimes
   faPencil = faPencil;
@@ -33,7 +29,7 @@ export class RestaurantCategoryEntriesComponent {
               private dialogService: DialogService) {
   }
 
-  onDishDelete(dishId: string) {
+  deleteDish(dishId: string) {
     this.dialogService.displayDeleteDialog("Are you sure you want to delete this dish?")
       .afterClosed()
       .pipe(
@@ -46,7 +42,7 @@ export class RestaurantCategoryEntriesComponent {
         })
       )
       .subscribe(() => {
-        this.restaurantFormService.refresh(this.restaurant.id)
+        this.restaurantFormService.refreshRestaurantData()
       });
   }
 
@@ -59,10 +55,10 @@ export class RestaurantCategoryEntriesComponent {
   }
 
   onDishEditSucceeded() {
-    this.restaurantFormService.refresh(this.restaurant.id)
+    this.restaurantFormService.refreshRestaurantData()
   }
 
-  setDishAsEdited(dishId: string) {
-    this.restaurantFormService.setDishAsEdited(dishId)
+  editDish(dishId: string) {
+    this.restaurantFormService.setDishAsEdited(this.restaurant.id, dishId)
   }
 }

@@ -1,7 +1,7 @@
 <ng-container *ngIf="createData$ != null">
   <div class="flex flex-row" *ngIf="createData$ | async as createData">
 
-    <form [formGroup]="createDishForm" (ngSubmit)="submitCreateDishForm()">
+    <form [formGroup]="createDishForm" (ngSubmit)="submitForm()">
       <div>
         <mat-form-field>
           <mat-label>Name</mat-label>
@@ -31,7 +31,7 @@
 
       <div class="mb-4">
         <app-button color="primary" type="submit">Create</app-button>
-        <app-button (click)="cancelCreatingDish()" type="cancel">Cancel</app-button>
+        <app-button (click)="cancel()" type="cancel">Cancel</app-button>
       </div>
     </form>
   </div>

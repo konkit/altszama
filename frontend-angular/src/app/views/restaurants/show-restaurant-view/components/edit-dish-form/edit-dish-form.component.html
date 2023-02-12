@@ -1,7 +1,7 @@
 <ng-container *ngIf="editData$ != null">
   <div class="flex flex-row" *ngIf="editData$ | async as editData">
 
-    <form [formGroup]="editDishForm" (ngSubmit)="submitEditDishForm()">
+    <form [formGroup]="editDishForm" (ngSubmit)="submitForm()">
       <div>
         <mat-form-field>
           <mat-label>Name</mat-label>
@@ -31,7 +31,7 @@
 
       <div class="mb-4">
         <app-button color="primary" type="submit">Update</app-button>
-        <app-button (click)="cancelEditingDish()" type="cancel">Cancel</app-button>
+        <app-button (click)="cancel()" type="cancel">Cancel</app-button>
       </div>
     </form>
   </div>

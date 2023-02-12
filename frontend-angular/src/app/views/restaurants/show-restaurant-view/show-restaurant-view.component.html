@@ -4,24 +4,24 @@
       <div class="flex flex-col flex-grow bg-white rounded p-5">
 
         <div class="flex flex-row p-3">
-          <app-button (click)="editRestaurant()"
-                      [disabled]="restaurantEditorState != RestaurantEditorState.IDLE"
+          <app-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
+                      [disabled]="restaurantEditorState.name != 'IDLE'"
                       class="mr-3" [icon]="faPencil">
             Edit restaurant
           </app-button>
 
           <app-button color="warn" (click)="deleteRestaurant()"
-                      [disabled]="restaurantEditorState != RestaurantEditorState.IDLE"
+                      [disabled]="restaurantEditorState.name != 'IDLE'"
                       [icon]="faTimes">
             Delete restaurant
           </app-button>
         </div>
 
-        <ng-container *ngIf="restaurantEditorState != RestaurantEditorState.EDITING_RESTAURANT">
+        <ng-container *ngIf="restaurantEditorState.name != 'EDITING_RESTAURANT'">
           <app-restaurant-details [restaurant]="restaurantResponse.restaurant"></app-restaurant-details>
         </ng-container>
 
-        <div *ngIf="restaurantEditorState == RestaurantEditorState.EDITING_RESTAURANT" class="py-5">
+        <div *ngIf="restaurantEditorState.name == 'EDITING_RESTAURANT'" class="py-5">
           <app-edit-restaurant-form [restaurantId]="restaurantResponse.restaurant.id"></app-edit-restaurant-form>
         </div>
 
@@ -29,28 +29,28 @@
 
         <div>
           <div class="p-3 mt-3">
-            <app-button *ngIf="restaurantEditorState != RestaurantEditorState.CREATING_DISH"
-                        [disabled]="restaurantEditorState != RestaurantEditorState.IDLE"
+            <app-button *ngIf="restaurantEditorState.name != 'CREATING_DISH'"
+                        [disabled]="restaurantEditorState.name != 'IDLE'"
                         color="primary"
-                        (click)="createDish()"
+                        (click)="createDish(restaurantResponse.restaurant.id)"
                         class="mr-3" [icon]="faAdd">
               Create new dish
             </app-button>
           </div>
 
-          <div *ngIf="restaurantEditorState == RestaurantEditorState.CREATING_DISH">
-            <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id"
-                                  (createSucceded)="onDishCreateSucceded()"></app-create-dish-form>
+          <div *ngIf="restaurantEditorState.name == 'CREATING_DISH'">
+            <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id">
+            </app-create-dish-form>
           </div>
         </div>
 
 
-        <div *ngFor="let categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue" class="dish-entry-container">
+        <div *ngFor="let categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue"
+             class="dish-entry-container">
           <app-restaurant-category-entries [restaurant]="restaurantResponse.restaurant"
-                                          [category]="categoryAndDishes.key"
-                                          [dishes]="categoryAndDishes.value"
-                                          [restaurantEditorState]="restaurantEditorState"
-                                          [editedDishId]="editedDishId$ | async">
+                                           [category]="categoryAndDishes.key"
+                                           [dishes]="categoryAndDishes.value"
+                                           [restaurantEditorState]="restaurantEditorState">
           </app-restaurant-category-entries>
         </div>
 
