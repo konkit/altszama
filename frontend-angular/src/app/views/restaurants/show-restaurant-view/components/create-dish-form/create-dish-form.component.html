@@ -4,7 +4,7 @@
 
   <div class="flex flex-row w-full" *ngIf="createData$ | async as createData">
     <form [formGroup]="createDishForm" (ngSubmit)="submitForm()" class="w-full">
-      <div class="flex flex-row">
+      <div class="flex flex-col">
         <div class="flex-grow">
           <mat-form-field class="w-full">
             <mat-label>Name</mat-label>
@@ -36,7 +36,7 @@
       <!--      </div>-->
 
       <div class="mb-4">
-        <app-button color="primary" type="submit">Create</app-button>
+        <app-button color="primary" type="submit">Submit</app-button>
         <app-button (click)="cancel()" type="button">Cancel</app-button>
       </div>
     </form>

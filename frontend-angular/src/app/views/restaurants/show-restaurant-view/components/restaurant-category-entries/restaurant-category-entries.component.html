@@ -1,7 +1,7 @@
 <span class="text-gray-400"> Category: {{ category || "No Category" }} </span>
 
 <div *ngFor="let dish of dishes" class="dish-entry">
-  <div *ngIf="restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id">
+  <div *ngIf="restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id" class="w-full">
     <app-edit-dish-form [restaurantId]="restaurant.id" [dishId]="dish.id">
     </app-edit-dish-form>
   </div>
@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <div class="edit-buttons">
+  <div class="edit-buttons" *ngIf="restaurantEditorState.name === 'IDLE'">
     <button mat-button color="primary" (click)="editDish(dish.id)">
       <fa-icon [icon]="faPencil"></fa-icon>
     </button>
