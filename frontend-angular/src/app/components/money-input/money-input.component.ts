@@ -134,6 +134,7 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
 
         if (valueAsNumber == null) {
           this.errorState = true;
+          this.ngControl.control?.setErrors({invalidFormat: true})
         } else {
           this.errorState = false;
 
