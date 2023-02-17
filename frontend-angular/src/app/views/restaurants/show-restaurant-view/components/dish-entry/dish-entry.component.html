@@ -1,0 +1,25 @@
+<div>
+  <div>
+    {{ dish.name }} ({{dish.price | price}})
+  </div>
+
+  <div class="subtitle text-gray-400">
+      <span *ngIf="dish.lastCrawled != null">
+        auto-updated {{ dish.lastCrawled | relativeDate }}
+      </span>
+
+    <span *ngIf="dish.lastCrawled == null">
+        updated manually
+      </span>
+  </div>
+</div>
+
+<div class="edit-buttons" *ngIf="restaurantEditorState.name != 'EDITING_DISH' || restaurantEditorState.dishId != dish.id">
+  <button mat-button color="primary" (click)="editDish()" [disabled]="restaurantEditorState.name != 'IDLE'">
+    <fa-icon [icon]="faPencil"></fa-icon>
+  </button>
+
+  <button mat-button (click)="deleteDish()" color="warn" [disabled]="restaurantEditorState.name != 'IDLE'">
+    <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>
+  </button>
+</div>

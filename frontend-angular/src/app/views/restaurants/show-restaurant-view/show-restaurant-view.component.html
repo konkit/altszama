@@ -29,7 +29,7 @@
 
         <div>
           <div class="p-3">
-            <app-button *ngIf="restaurantEditorState.name != 'CREATING_DISH'"
+            <app-button *ngIf="restaurantEditorState.name != 'CREATING_DISH'; else createDishForm"
                         [disabled]="restaurantEditorState.name != 'IDLE'"
                         color="primary"
                         (click)="createDish(restaurantResponse.restaurant.id)"
@@ -38,23 +38,31 @@
             </app-button>
           </div>
 
-          <div *ngIf="restaurantEditorState.name == 'CREATING_DISH'">
+          <ng-template #createDishForm>
             <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id">
             </app-create-dish-form>
-          </div>
+          </ng-template>
         </div>
-
 
         <div *ngFor="let categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue"
              class="dish-entry-container">
-          <app-restaurant-category-entries [restaurant]="restaurantResponse.restaurant"
-                                           [category]="categoryAndDishes.key"
-                                           [dishes]="categoryAndDishes.value"
-                                           [restaurantEditorState]="restaurantEditorState">
-          </app-restaurant-category-entries>
+          <span class="text-gray-400"> Category: {{ categoryAndDishes.key || "No Category" }} </span>
+
+          <div *ngFor="let dish of categoryAndDishes.value" class="border-t-2">
+            <div *ngIf="restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id; else dishEntry"
+                 class="w-full">
+              <app-edit-dish-form [restaurantId]="restaurantResponse.restaurant.id" [dishId]="dish.id">
+              </app-edit-dish-form>
+            </div>
+
+            <ng-template #dishEntry>
+              <app-dish-entry [restaurant]="restaurantResponse.restaurant"
+                              [dish]="dish"
+                              [restaurantEditorState]="restaurantEditorState">
+              </app-dish-entry>
+            </ng-template>
+          </div>
         </div>
-
-
       </div>
     </app-view-wrapper>
   </ng-container>

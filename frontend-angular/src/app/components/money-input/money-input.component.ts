@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostBinding, Injector, Input} from '@angular/core';
+import {Component, ElementRef, HostBinding, Injector, Input, Optional, Self} from '@angular/core';
 import {ControlValueAccessor, NgControl} from "@angular/forms";
 import {MatFormFieldControl} from "@angular/material/form-field";
 import {BehaviorSubject, Subject, take} from 'rxjs';
@@ -10,7 +10,7 @@ import {FocusMonitor} from "@angular/cdk/a11y";
   templateUrl: './money-input.component.html',
   styleUrls: ['./money-input.component.scss'],
   providers: [
-    {provide: MatFormFieldControl, useExisting: MoneyInputComponent}
+    {provide: MatFormFieldControl, useExisting: MoneyInputComponent},
   ]
 })
 export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldControl<number> {
@@ -85,10 +85,7 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
     return false;
   }
 
-
-  /**
-   * Money input related
-   */
+  @Input() public disabled: boolean = false;
 
   @Input() currency: string = "zł"
 
@@ -96,7 +93,6 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
   stringValue$ = new BehaviorSubject<string>("0,00zł");
   newStringValue$ = new BehaviorSubject<string>("0,00zł");
 
-  public disabled: boolean = false;
   onChanged: any = (c: any) => {
     console.log("On Changed: ", c)
   };
@@ -105,14 +101,12 @@ export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldCo
     this.errorState = false;
   };
 
-  ngControl: NgControl
-
   constructor(
     private injector: Injector,
     private focusMonitor: FocusMonitor,
     private elementRef: ElementRef<HTMLInputElement>,
+    @Optional() @Self() public ngControl: NgControl,
   ) {
-    this.ngControl = this.injector.get(NgControl);
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }

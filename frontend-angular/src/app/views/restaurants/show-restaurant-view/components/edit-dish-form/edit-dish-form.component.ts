@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {catchError, Observable, of, shareReplay, switchMap, take} from "rxjs";
 import {DishControllerService, DishDto, EditDishResponse, SideDish} from "../../../../../../frontend-client";
 import {NonNullableFormBuilder} from "@angular/forms";
@@ -9,7 +9,7 @@ import {RestaurantFormService} from "../../service/restaurant-form.service";
   templateUrl: './edit-dish-form.component.html',
   styleUrls: ['./edit-dish-form.component.scss']
 })
-export class EditDishFormComponent {
+export class EditDishFormComponent implements OnInit {
   @Input() restaurantId!: string
   @Input() dishId!: string
 

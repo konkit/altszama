@@ -33,7 +33,6 @@ import { OrderEntriesListComponent } from './views/orders/show-order-view/compon
 import { OrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/order-entry-card/order-entry-card.component';
 import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/components/order-entries-list/title-with-payment-status/title-with-payment-status.component';
 import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/show-order-entry/show-order-entry.component';
-import { RestaurantCategoryEntriesComponent } from './views/restaurants/show-restaurant-view/components/restaurant-category-entries/restaurant-category-entries.component';
 import { ViewWrapperComponent } from './components/view-wrapper/view-wrapper.component';
 import { CreateOrderViewComponent } from './views/orders/create-order-view/create-order-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -62,6 +61,8 @@ import { DeleteConfirmationModalComponent } from './components/delete-confirmati
 import { RelativeDatePipe } from './components/pipes/date-to-rel.pipe';
 import { RestaurantDetailsComponent } from './views/restaurants/show-restaurant-view/components/restaurant-details/restaurant-details.component';
 import { EditRestaurantFormComponent } from './views/restaurants/show-restaurant-view/components/edit-restaurant-form/edit-restaurant-form.component';
+import {DishEntryComponent} from "./views/restaurants/show-restaurant-view/components/dish-entry/dish-entry.component";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -89,7 +90,7 @@ import { EditRestaurantFormComponent } from './views/restaurants/show-restaurant
     OrderEntryCardComponent,
     TitleWithPaymentStatusComponent,
     ShowOrderEntryComponent,
-    RestaurantCategoryEntriesComponent,
+    DishEntryComponent,
     ViewWrapperComponent,
     CreateOrderViewComponent,
     CreateRestaurantViewComponent,
@@ -126,6 +127,7 @@ import { EditRestaurantFormComponent } from './views/restaurants/show-restaurant
     MatSelectModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     {

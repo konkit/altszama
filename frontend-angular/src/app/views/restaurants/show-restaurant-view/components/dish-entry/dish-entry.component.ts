@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {DishControllerService, DishDto, RestaurantDto} from "../../../../../../frontend-client";
-import * as moment from "moment";
 
 import {faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
@@ -9,16 +8,15 @@ import {DialogService} from "../../../../../service/dialog.service";
 import {RestaurantEditorState} from "../../service/restaurant-editor-state";
 
 @Component({
-  selector: 'app-restaurant-category-entries',
-  templateUrl: './restaurant-category-entries.component.html',
-  styleUrls: ['./restaurant-category-entries.component.scss']
+  selector: 'app-dish-entry',
+  templateUrl: './dish-entry.component.html',
+  styleUrls: ['./dish-entry.component.scss']
 })
-export class RestaurantCategoryEntriesComponent {
+export class DishEntryComponent {
   @Input() restaurantEditorState!: RestaurantEditorState
   @Input() restaurant!: RestaurantDto;
-
-  @Input() category!: string
-  @Input() dishes!: DishDto[]
+  @Input() dish!: DishDto
+  @Input() disabled: boolean = false;
 
   faTimes = faTimes
   faPencil = faPencil;
@@ -29,17 +27,17 @@ export class RestaurantCategoryEntriesComponent {
               private dialogService: DialogService) {
   }
 
-  editDish(dishId: string) {
-    this.restaurantFormService.setDishAsEdited(dishId)
+  editDish() {
+    this.restaurantFormService.setDishAsEdited(this.dish.id)
   }
 
-  deleteDish(dishId: string) {
+  deleteDish() {
     this.dialogService.displayDeleteDialog("Are you sure you want to delete this dish?")
       .afterClosed()
       .pipe(
         switchMap(confirmed => {
           if (confirmed) {
-            return this.dishControllerService.deleteDish(dishId)
+            return this.dishControllerService.deleteDish(this.dish.id)
           } else {
             return EMPTY
           }

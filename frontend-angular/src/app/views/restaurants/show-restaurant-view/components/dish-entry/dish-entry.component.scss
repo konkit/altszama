@@ -1,0 +1,11 @@
+.new-dish-button-container {
+  @apply p-3 mt-3
+}
+
+:host {
+  @apply flex flex-row py-2;
+}
+
+.edit-buttons {
+  @apply ml-auto flex-shrink-0;
+}
