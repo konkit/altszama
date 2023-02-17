@@ -1,67 +1,11 @@
-<ng-container *ngIf="editData$ != null; else spinner">
-
-  <mat-error>{{editDishForm.errors}}</mat-error>
-
-  <div class="flex flex-row w-full" *ngIf="editData$ | async as editData; else spinner">
-
-    <form [formGroup]="editDishForm" (ngSubmit)="submitForm()" class="w-full">
-      <div class="flex flex-col">
-        <div class="flex-grow">
-          <mat-form-field class="w-full">
-            <mat-label>Name</mat-label>
-            <input matInput [formControl]="editDishForm.controls.name"/>
-          </mat-form-field>
-        </div>
-
-        <div>
-          <mat-form-field>
-            <mat-label>Price</mat-label>
-            <app-money-input [formControl]="editDishForm.controls.price"></app-money-input>
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="w-full">
-        <mat-form-field class="w-full">
-          <mat-label>Category</mat-label>
-          <mat-select [formControl]="editDishForm.controls.category">
-            <mat-option *ngFor="let category of editData.categories" [value]="category">
-              {{category}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <!--      <div>-->
-      <!--        <side-dishes ref="sideDishesElement"></side-dishes>-->
-      <!--      </div>-->
-
-      <div class="mb-4">
-        <app-button color="primary" type="submit">Submit</app-button>
-        <app-button (click)="cancel()" type="button">Cancel</app-button>
-      </div>
-    </form>
-  </div>
+<ng-container *ngIf="modifyDishData$ | async as modifyDishData; else spinner">
+  <app-dish-form [categories]="modifyDishData.categories"
+                 [dishForm]="dishForm"
+                 (onCancel)="cancel()"
+                 (onSubmit)="submitForm()"
+  ></app-dish-form>
 </ng-container>
 
 <ng-template #spinner>
-  <div class="flex flex-col">
-    <div class="flex-grow">
-      <mat-form-field class="w-full">
-        <input matInput [disabled]="true" />
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field>
-        <app-money-input [disabled]="true"></app-money-input>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="w-full">
-    <mat-form-field class="w-full">
-      <input matInput [disabled]="true"/>
-    </mat-form-field>
-  </div>
+  <app-dish-form-placeholder></app-dish-form-placeholder>
 </ng-template>

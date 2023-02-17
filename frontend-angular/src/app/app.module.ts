@@ -63,6 +63,8 @@ import { RestaurantDetailsComponent } from './views/restaurants/show-restaurant-
 import { EditRestaurantFormComponent } from './views/restaurants/show-restaurant-view/components/edit-restaurant-form/edit-restaurant-form.component';
 import {DishEntryComponent} from "./views/restaurants/show-restaurant-view/components/dish-entry/dish-entry.component";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { DishFormComponent } from './views/restaurants/show-restaurant-view/components/dish-form/dish-form.component';
+import { DishFormPlaceholderComponent } from './views/restaurants/show-restaurant-view/components/dish-form-placeholder/dish-form-placeholder.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +104,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     RelativeDatePipe,
     RestaurantDetailsComponent,
     EditRestaurantFormComponent,
+    DishFormComponent,
+    DishFormPlaceholderComponent,
   ],
   imports: [
     BrowserModule,
