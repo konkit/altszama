@@ -30,9 +30,41 @@
       </mat-form-field>
     </div>
 
-    <!--      <div>-->
-    <!--        <side-dishes ref="sideDishesElement"></side-dishes>-->
-    <!--      </div>-->
+
+    <div class="pb-10">
+      <h3>Side dishes:</h3>
+
+      <div *ngIf="dishForm.controls.sideDishes.length > 0">
+        <div *ngFor="let sdControl of dishForm.controls.sideDishes.controls; let i = index">
+          <div class="flex flex-row">
+            <div class="index-number">{{i+1}}.</div>
+            <div class="flex-grow">
+              <mat-form-field class="w-full">
+                <mat-label>Name</mat-label>
+                <input matInput [formControl]="sdControl.controls.name"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field>
+                <mat-label>Price</mat-label>
+                <app-money-input [formControl]="sdControl.controls.price"></app-money-input>
+              </mat-form-field>
+            </div>
+            <div class="delete-button">
+              <button mat-button (click)="deleteSideDish(i)" color="warn">
+                <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <app-button (click)="addSideDish()" type="button" [icon]="faAdd">Add SideDish</app-button>
+      </div>
+
+    </div>
 
     <div class="mb-4">
       <app-button color="primary" type="submit">Submit</app-button>

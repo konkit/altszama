@@ -1,13 +1,18 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DishDto, SideDish} from "../../../../../../frontend-client";
-import {FormArray, FormBuilder, FormControl, FormGroup, NonNullableFormBuilder} from "@angular/forms";
-import {catchError, of, switchMap} from "rxjs";
+import {SideDish} from "../../../../../../frontend-client";
+import {FormArray, FormControl, FormGroup, NonNullableFormBuilder} from "@angular/forms";
+import {faAdd, faTimes} from "@fortawesome/free-solid-svg-icons";
 
 export interface DishForm {
   name: FormControl<string>
   price: FormControl<number>
   category: FormControl<string>
-  sideDishes: FormArray<FormControl<SideDish>>
+  sideDishes: FormArray<FormGroup<SideDishForm>>
+}
+
+export interface SideDishForm {
+  name: FormControl<string>
+  price: FormControl<number>
 }
 
 export interface DishFormData {
@@ -30,8 +35,10 @@ export class DishFormComponent implements OnInit {
 
   @Output() onCancel = new EventEmitter<void>()
   @Output() onSubmit = new EventEmitter<void>()
+  faAdd = faAdd
+  faTimes = faTimes;
 
-  constructor() {}
+  constructor(private fb: NonNullableFormBuilder) {}
 
   ngOnInit() {
   }
@@ -42,5 +49,14 @@ export class DishFormComponent implements OnInit {
 
   cancel() {
     this.onCancel.emit()
+  }
+
+  addSideDish() {
+    let control = this.fb.group({name: "", price: 0})
+    this.dishForm.controls.sideDishes.push(control)
+  }
+
+  deleteSideDish(index: number) {
+    this.dishForm.controls.sideDishes.removeAt(index)
   }
 }

@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NonNullableFormBuilder, Validators} from "@angular/forms";
+import {FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
 import {catchError, Observable, of, switchMap} from "rxjs";
-import {CreateDishResponse, DishControllerService, SideDish} from "../../../../../../frontend-client";
+import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
+import {SideDishForm} from "../dish-form/dish-form.component";
 
 @Component({
   selector: 'app-create-dish-form',
@@ -17,7 +18,7 @@ export class CreateDishFormComponent implements OnInit {
     name: ["", Validators.required],
     price: 0,
     category: "",
-    sideDishes: this.fb.array<SideDish[]>([])
+    sideDishes: this.fb.array<FormGroup<SideDishForm>>([])
   })
 
   modifyDishData$: Observable<CreateDishResponse> | null = null

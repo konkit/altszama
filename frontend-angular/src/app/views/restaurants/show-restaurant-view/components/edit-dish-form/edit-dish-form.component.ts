@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {catchError, Observable, of, shareReplay, switchMap, take} from "rxjs";
-import {DishControllerService, DishDto, EditDishResponse, SideDish} from "../../../../../../frontend-client";
-import {NonNullableFormBuilder} from "@angular/forms";
+import {DishControllerService, EditDishResponse} from "../../../../../../frontend-client";
+import {FormGroup, NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
-import {DishFormData} from "../dish-form/dish-form.component";
+import {DishForm, SideDishForm} from "../dish-form/dish-form.component";
 
 @Component({
   selector: 'app-edit-dish-form',
@@ -14,11 +14,11 @@ export class EditDishFormComponent implements OnInit {
   @Input() restaurantId!: string
   @Input() dishId!: string
 
-  dishForm = this.fb.group({
-    name: "",
-    price: 0,
-    category: "",
-    sideDishes: this.fb.array<SideDish[]>([])
+  dishForm: FormGroup<DishForm> = this.fb.group({
+    name: this.fb.control(""),
+    price: this.fb.control(0),
+    category: this.fb.control(""),
+    sideDishes: this.fb.array<FormGroup<SideDishForm>>([])
   })
 
   modifyDishData$: Observable<EditDishResponse> | null = null
@@ -31,19 +31,32 @@ export class EditDishFormComponent implements OnInit {
   ngOnInit() {
     this.modifyDishData$ = this.dishControllerService.editDish(this.restaurantId, this.dishId).pipe(shareReplay())
     this.modifyDishData$.pipe(take(1)).subscribe(response => {
-      let initialFormData: DishFormData = {
+
+      console.log("response: ", response)
+
+      let initialFormData = {
         name: response.dish.name,
         price: response.dish.price,
         category: response.dish.category,
-        sideDishes: response.dish.sideDishes
+        sideDishes: []
       }
       this.dishForm.setValue(initialFormData)
+
+      let sideDishControls = response.dish.sideDishes
+        .map(sd => this.fb.group({
+          name: sd.name,
+          price: sd.price
+        }));
+      this.dishForm.controls.sideDishes = this.fb.array(sideDishControls)
     })
   }
 
   submitForm() {
     if (this.dishForm.valid) {
       let body = {id: this.dishId, ...this.dishForm.getRawValue()}
+
+      console.log("Body: ", body)
+
       this.dishControllerService.updateDish(body, this.restaurantId)
         .pipe(
           switchMap(() => this.restaurantFormService.refreshRestaurantData()),

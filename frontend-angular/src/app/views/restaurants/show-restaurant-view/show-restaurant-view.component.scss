@@ -1,7 +1,3 @@
 .dish-entry-container {
   @apply p-3
 }
-
-.dish-entry-container:not(:first-child) {
-  @apply mt-3
-}
