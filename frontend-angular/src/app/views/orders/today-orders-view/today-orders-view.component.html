@@ -30,41 +30,48 @@
 
       <div class="py-5">
         <ng-container *ngIf="todayOrders.ordersList.length > 0">
-          <div (click)="goToOrder(order.id)" *ngFor="let order of todayOrders.ordersList">
-            <div class="cursor-pointer">
-              <div class="flex flex-row">
-                <div class="order-data-wrapper text-ellipsis overflow-hidden">
-                  <b>{{ order.restaurantName }}</b> (created by {{ order.orderCreatorUsername }})
+
+          <table mat-table [dataSource]="todayOrders.ordersList" class="clickable-table">
+            <ng-container matColumnDef="orderData">
+              <td mat-cell *matCellDef="let element">
+                <b>{{ element.restaurantName }}</b> (created by {{ element.orderCreatorUsername }})
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="created">
+              <td mat-cell *matCellDef="let element">
+                <div class="orderState" [ngClass]="{matchingState: element.orderState === 'CREATED'}">
+                  CREATED
                 </div>
+              </td>
+            </ng-container>
 
-                <div class="order-state-wrapper flex flex-row">
-                  <div class="orderState" [ngClass]="{matchingState: order.orderState === 'CREATED'}">
-                    CREATED
-                  </div>
-
-                  <div class="orderState" [ngClass]="{matchingState: order.orderState === 'ORDERING'}">
-                    ORDERING RIGHT NOW
-                  </div>
-
-                  <div class="orderState" [ngClass]="{matchingState: order.orderState === 'ORDERED'}">
-                    ORDERED
-                  </div>
-
-                  <div class="orderState" [ngClass]="{matchingState:order.orderState === 'DELIVERED'}">
-                    DELIVERED
-                  </div>
+            <ng-container matColumnDef="ordering">
+              <td mat-cell *matCellDef="let element">
+                <div class="orderState" [ngClass]="{matchingState: element.orderState === 'ORDERING'}">
+                  ORDERING RIGHT NOW
                 </div>
-              </div>
+              </td>
+            </ng-container>
 
-<!--              TODO: Version for mobiles-->
-<!--              <div>-->
-<!--                <div>-->
-<!--                  <b>{{ order.restaurantName }}</b> (created by {{ order.orderCreatorUsername }})-->
-<!--                </div>-->
-<!--                <div>Status: {{ order.orderState }}</div>-->
-<!--              </div>-->
-            </div>
-          </div>
+            <ng-container matColumnDef="ordered">
+              <td mat-cell *matCellDef="let element">
+                <div class="orderState" [ngClass]="{matchingState: element.orderState === 'ORDERED'}">
+                  ORDERED
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delivered">
+              <td mat-cell *matCellDef="let element">
+                <div class="orderState" [ngClass]="{matchingState: element.orderState === 'DELIVERED'}">
+                  DELIVERED
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-row *matRowDef="let row; columns: ['orderData', 'created', 'ordering', 'ordered', 'delivered' ];" [routerLink]="['/orders/show', row.id]"></tr>
+          </table>
         </ng-container>
 
         <div *ngIf="todayOrders.ordersList.length === 0">

@@ -1,7 +1,3 @@
-.orderState {
-  @apply ml-5;
-}
-
 .orderState.matchingState {
   @apply font-bold text-gray-900;
 }
@@ -17,4 +13,20 @@
 
 .order-state-wrapper {
   @apply ml-10;
+}
+
+.mat-column-created {
+  width: 5rem;
+}
+
+.mat-column-ordering {
+  width: 11.5rem;
+}
+
+.mat-column-ordered {
+  width: 1rem;
+}
+
+.mat-column-delivered {
+  width: 5rem;
 }
