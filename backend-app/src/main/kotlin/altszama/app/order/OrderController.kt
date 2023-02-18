@@ -67,12 +67,12 @@ class OrderController {
   }
 
   @PostMapping("/orders/save")
-  fun save(@RequestBody @Valid orderSaveRequest: OrderSaveRequest): ResponseEntity<String> {
+  fun save(@RequestBody @Valid orderSaveRequest: OrderSaveRequest): ResponseEntity<OrderSaveResponse> {
     val currentUser = userService.currentUser()
     val currentUserTeam = currentUserService.getCurrentUserTeam()
 
-    orderService.saveOrder(orderSaveRequest, currentUser, currentUserTeam)
-    return ResponseEntity("{}", HttpStatus.OK)
+    val order = orderService.saveOrder(orderSaveRequest, currentUser, currentUserTeam)
+    return ResponseEntity(OrderSaveResponse(order.id), HttpStatus.OK)
   }
 
   @GetMapping("/orders/{orderId}/edit.json")

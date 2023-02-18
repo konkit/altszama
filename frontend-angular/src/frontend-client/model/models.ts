@@ -29,6 +29,7 @@ export * from './orderHistoryCreatedEntry';
 export * from './orderHistoryEntry';
 export * from './orderHistoryParticipatedEntry';
 export * from './orderSaveRequest';
+export * from './orderSaveResponse';
 export * from './orderUpdateRequest';
 export * from './orderViewInitialData';
 export * from './participantsDishEntry';

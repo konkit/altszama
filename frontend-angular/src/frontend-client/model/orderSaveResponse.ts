@@ -10,10 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface OrderHistoryEntry { 
-    orderCreator: string;
-    orderDate: string;
-    restaurantName: string;
+export interface OrderSaveResponse { 
     orderId: string;
-    kind: string;
 }

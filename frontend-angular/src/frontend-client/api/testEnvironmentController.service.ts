@@ -79,7 +79,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('patch',`${this.basePath}/api/e2e/clearEverything`,
+        return this.httpClient.request<any>('post',`${this.basePath}/api/e2e/clearEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -114,7 +114,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('options',`${this.basePath}/api/e2e/clearEverything`,
+        return this.httpClient.request<any>('patch',`${this.basePath}/api/e2e/clearEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -149,7 +149,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('put',`${this.basePath}/api/e2e/clearEverything`,
+        return this.httpClient.request<any>('delete',`${this.basePath}/api/e2e/clearEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -184,7 +184,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('head',`${this.basePath}/api/e2e/clearEverything`,
+        return this.httpClient.request<any>('options',`${this.basePath}/api/e2e/clearEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -219,7 +219,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/e2e/clearEverything`,
+        return this.httpClient.request<any>('get',`${this.basePath}/api/e2e/clearEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -254,7 +254,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('delete',`${this.basePath}/api/e2e/clearEverything`,
+        return this.httpClient.request<any>('put',`${this.basePath}/api/e2e/clearEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -289,7 +289,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/e2e/clearEverything`,
+        return this.httpClient.request<any>('head',`${this.basePath}/api/e2e/clearEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -324,7 +324,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('patch',`${this.basePath}/api/e2e/generateEverything`,
+        return this.httpClient.request<any>('post',`${this.basePath}/api/e2e/generateEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -359,7 +359,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('options',`${this.basePath}/api/e2e/generateEverything`,
+        return this.httpClient.request<any>('patch',`${this.basePath}/api/e2e/generateEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -394,7 +394,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('put',`${this.basePath}/api/e2e/generateEverything`,
+        return this.httpClient.request<any>('delete',`${this.basePath}/api/e2e/generateEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -429,7 +429,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('head',`${this.basePath}/api/e2e/generateEverything`,
+        return this.httpClient.request<any>('options',`${this.basePath}/api/e2e/generateEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -464,7 +464,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/e2e/generateEverything`,
+        return this.httpClient.request<any>('get',`${this.basePath}/api/e2e/generateEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -499,7 +499,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('delete',`${this.basePath}/api/e2e/generateEverything`,
+        return this.httpClient.request<any>('put',`${this.basePath}/api/e2e/generateEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -534,7 +534,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/e2e/generateEverything`,
+        return this.httpClient.request<any>('head',`${this.basePath}/api/e2e/generateEverything`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -569,7 +569,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('patch',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
+        return this.httpClient.request<any>('post',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -604,7 +604,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('options',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
+        return this.httpClient.request<any>('patch',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -639,7 +639,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('put',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
+        return this.httpClient.request<any>('delete',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -674,7 +674,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('head',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
+        return this.httpClient.request<any>('options',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -709,7 +709,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
+        return this.httpClient.request<any>('get',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -744,7 +744,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('delete',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
+        return this.httpClient.request<any>('put',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -779,7 +779,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
+        return this.httpClient.request<any>('head',`${this.basePath}/api/e2e/generateRestaurantsAndDishes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -814,7 +814,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('patch',`${this.basePath}/api/e2e/generateTeamAndUsers`,
+        return this.httpClient.request<any>('post',`${this.basePath}/api/e2e/generateTeamAndUsers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -849,7 +849,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('options',`${this.basePath}/api/e2e/generateTeamAndUsers`,
+        return this.httpClient.request<any>('patch',`${this.basePath}/api/e2e/generateTeamAndUsers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -884,7 +884,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('put',`${this.basePath}/api/e2e/generateTeamAndUsers`,
+        return this.httpClient.request<any>('delete',`${this.basePath}/api/e2e/generateTeamAndUsers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -919,7 +919,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('head',`${this.basePath}/api/e2e/generateTeamAndUsers`,
+        return this.httpClient.request<any>('options',`${this.basePath}/api/e2e/generateTeamAndUsers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -954,7 +954,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/e2e/generateTeamAndUsers`,
+        return this.httpClient.request<any>('get',`${this.basePath}/api/e2e/generateTeamAndUsers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -989,7 +989,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('delete',`${this.basePath}/api/e2e/generateTeamAndUsers`,
+        return this.httpClient.request<any>('put',`${this.basePath}/api/e2e/generateTeamAndUsers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1024,7 +1024,7 @@ export class TestEnvironmentControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/e2e/generateTeamAndUsers`,
+        return this.httpClient.request<any>('head',`${this.basePath}/api/e2e/generateTeamAndUsers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

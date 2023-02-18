@@ -21,6 +21,7 @@ import { AllOrdersResponse } from '../model/allOrdersResponse';
 import { CreateOrderInitialData } from '../model/createOrderInitialData';
 import { EditOrderInitialData } from '../model/editOrderInitialData';
 import { OrderSaveRequest } from '../model/orderSaveRequest';
+import { OrderSaveResponse } from '../model/orderSaveResponse';
 import { OrderUpdateRequest } from '../model/orderUpdateRequest';
 import { OrderViewInitialData } from '../model/orderViewInitialData';
 import { SetAsOrderedResponse } from '../model/setAsOrderedResponse';
@@ -302,9 +303,9 @@ export class OrderControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public save(body: OrderSaveRequest, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public save(body: OrderSaveRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public save(body: OrderSaveRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public save(body: OrderSaveRequest, observe?: 'body', reportProgress?: boolean): Observable<OrderSaveResponse>;
+    public save(body: OrderSaveRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrderSaveResponse>>;
+    public save(body: OrderSaveRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrderSaveResponse>>;
     public save(body: OrderSaveRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -331,7 +332,7 @@ export class OrderControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<string>('post',`${this.basePath}/api/orders/save`,
+        return this.httpClient.request<OrderSaveResponse>('post',`${this.basePath}/api/orders/save`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

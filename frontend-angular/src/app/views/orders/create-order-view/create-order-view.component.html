@@ -30,7 +30,7 @@
                        aria-label="Select page">
         </mat-paginator>
 
-        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button matStepperPrevious (click)="backToTodayOrders()">Back</button>
         <button mat-raised-button color="primary" matStepperNext>Next</button>
       </mat-step>
 
@@ -116,8 +116,8 @@
 
         </div>
 
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button color="primary" (click)="submitForm($event)">Next</button>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" (click)="submitForm($event)">Create</button>
       </mat-step>
     </mat-vertical-stepper>
   </div>
