@@ -10,7 +10,7 @@
             Edit restaurant
           </app-button>
 
-          <app-button color="warn" (click)="deleteRestaurant()"
+          <app-button color="warn" (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
                       [disabled]="restaurantEditorState.name != 'IDLE'"
                       [icon]="faTimes">
             Delete restaurant
@@ -32,7 +32,7 @@
             <app-button *ngIf="restaurantEditorState.name != 'CREATING_DISH'; else createDishForm"
                         [disabled]="restaurantEditorState.name != 'IDLE'"
                         color="primary"
-                        (click)="createDish(restaurantResponse.restaurant.id)"
+                        (click)="createDish()"
                         class="mr-3" [icon]="faAdd">
               Create new dish
             </app-button>

@@ -16,15 +16,12 @@ export class DishEntryComponent {
   @Input() restaurantEditorState!: RestaurantEditorState
   @Input() restaurant!: RestaurantDto;
   @Input() dish!: DishDto
-  @Input() disabled: boolean = false;
 
   faTimes = faTimes
   faPencil = faPencil;
 
 
-  constructor(private dishControllerService: DishControllerService,
-              private restaurantFormService: RestaurantFormService,
-              private dialogService: DialogService) {
+  constructor(private restaurantFormService: RestaurantFormService) {
   }
 
   editDish() {
@@ -32,18 +29,6 @@ export class DishEntryComponent {
   }
 
   deleteDish() {
-    this.dialogService.displayDeleteDialog("Are you sure you want to delete this dish?")
-      .afterClosed()
-      .pipe(
-        switchMap(confirmed => {
-          if (confirmed) {
-            return this.dishControllerService.deleteDish(this.dish.id)
-          } else {
-            return EMPTY
-          }
-        }),
-        switchMap(() => this.restaurantFormService.refreshRestaurantData())
-      )
-      .subscribe();
+    this.restaurantFormService.deleteDish(this.dish.id)
   }
 }
