@@ -68,7 +68,6 @@ import { DishFormPlaceholderComponent } from './views/restaurants/show-restauran
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { NewOrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/new-order-entry-card/new-order-entry-card.component';
 import { CreateOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/create-order-entry/create-order-entry.component';
-import { OrderEntryFormComponent } from './views/orders/show-order-view/components/order-entries-list/order-entry-form/order-entry-form.component';
 
 @NgModule({
   declarations: [
@@ -112,7 +111,6 @@ import { OrderEntryFormComponent } from './views/orders/show-order-view/componen
     DishFormPlaceholderComponent,
     NewOrderEntryCardComponent,
     CreateOrderEntryComponent,
-    OrderEntryFormComponent,
   ],
   imports: [
     BrowserModule,

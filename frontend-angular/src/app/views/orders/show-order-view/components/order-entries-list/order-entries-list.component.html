@@ -1,7 +1,10 @@
 <div *ngIf="viewState.shouldDisplayNewOrderEntryCard">
   <div>
     <div>
-      <app-new-order-entry-card [isEntryCreating]="isEntryCreating" [username]="username">
+      <app-new-order-entry-card [isEntryCreating]="modifyOrderEntryState.isEntryCreating"
+                                [username]="viewState.username"
+                                [modifyOrderEntryState]="modifyOrderEntryState"
+                                [showOrderResponse]="showOrderResponse" (refreshRequest)="onRefreshRequest()">
       </app-new-order-entry-card>
     </div>
   </div>
@@ -12,7 +15,8 @@
     <app-order-entry-card [order]="showOrderResponse.order"
                           [orderEntry]="orderEntry"
                           [entryId]="entryId"
-                          [currentUserId]="currentUserId">
+                          [currentUserId]="this.showOrderResponse.currentUserId"
+                          [modifyOrderEntryState]="modifyOrderEntryState">
     </app-order-entry-card>
   </div>
 </div>
@@ -22,7 +26,8 @@
     <app-order-entry-card [order]="showOrderResponse.order"
                           [orderEntry]="orderEntry"
                           [entryId]="entryId"
-                          [currentUserId]="currentUserId">
+                          [currentUserId]="this.showOrderResponse.currentUserId"
+                          [modifyOrderEntryState]="modifyOrderEntryState">
     </app-order-entry-card>
   </div>
 </div>

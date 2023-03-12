@@ -3,6 +3,9 @@ import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../fronten
 import {OrderEntryService} from "../../../../../../service/order-entry.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {ModifyOrderEntryState, ShowOrderViewService} from "../../../service/show-order-view.service";
+import {Observable} from "rxjs";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-order-entry-card',
@@ -10,14 +13,27 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
   styleUrls: ['./order-entry-card.component.scss']
 })
 export class OrderEntryCardComponent {
+
+
   @Input() order!: ShowOrderDto;
   @Input() orderEntry!: ParticipantsOrderEntry;
   @Input() entryId!: number;
   @Input() currentUserId!: string;
 
+  @Input() modifyOrderEntryState!: ModifyOrderEntryState
+
   faPlus = faPlus
 
-  constructor(private orderEntryService: OrderEntryService) {
+
+  formGroup = this.fb.group({
+    name: "",
+    price: 0,
+    additionalComments: ""
+  })
+
+  constructor(private orderEntryService: OrderEntryService,
+              private showOrderViewService: ShowOrderViewService,
+              private fb: FormBuilder) {
   }
 
   isOrderEntryOwner() {
@@ -29,15 +45,15 @@ export class OrderEntryCardComponent {
   }
 
   get isEntryCreating() {
-    return this.orderEntryService.isModifiedEntryCreating()
+    return this.modifyOrderEntryState.isEntryCreating
   }
 
   get isEntryEdited() {
-    return this.orderEntryService.isModifiedEntryEdited()
+    return this.modifyOrderEntryState.isEntryEdited
   }
 
   get dishEntryId(): string {
-    return this.orderEntryService.getModifiedDishEntryId();
+    return this.modifyOrderEntryState.dishEntryId
   }
 
   canAddNewEntry() {

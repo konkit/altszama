@@ -3,6 +3,8 @@ import {OrderControllerService, ShowOrderDto, ShowOrderResponse} from "../../../
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable} from "rxjs";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {ModifyOrderEntryState, ShowOrderViewService} from "./service/show-order-view.service";
+import {AuthService} from "../../../service/auth.service";
 
 export interface ShowOrderViewState {
   canShowPlaceOrderButton: boolean
@@ -12,6 +14,7 @@ export interface ShowOrderViewState {
   isOrderOwner: boolean,
   allEatingPeopleCount: number,
   numberOfCurrentUserEntries: number,
+  username: string,
 }
 
 @Component({
@@ -23,13 +26,17 @@ export class ShowOrderViewComponent implements OnInit {
 
   orderResponse$: Observable<ShowOrderResponse>
   showOrderViewState$: Observable<ShowOrderViewState>
+  modifyOrderEntryState$: Observable<ModifyOrderEntryState>;
+
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private orderControllerService: OrderControllerService) {
-    this.orderResponse$ = this.route.data.pipe(map(r => r['response']))
-
+              private orderControllerService: OrderControllerService,
+              private showOrderViewService: ShowOrderViewService,
+              private authService: AuthService) {
+    this.orderResponse$ = this.showOrderViewService.orderResponseAsObservable()
     this.showOrderViewState$ = this.createShowOrderViewStateObservable()
+    this.modifyOrderEntryState$ = this.showOrderViewService.modifyOrderEntryStateAsObservable()
   }
 
   ngOnInit() {
@@ -64,6 +71,7 @@ export class ShowOrderViewComponent implements OnInit {
           isOrderOwner: isOrderOwner,
           allEatingPeopleCount: allEatingPeopleCount,
           numberOfCurrentUserEntries: numberOfCurrentUserEntries,
+          username: this.authService.getLoggedUser()!.username,
         }
         return obj
       })
@@ -80,5 +88,10 @@ export class ShowOrderViewComponent implements OnInit {
 
   setAsDelivered() {
 
+  }
+
+  onRefreshRequest() {
+    let id = this.route.snapshot.paramMap.get('id')!;
+    this.showOrderViewService.loadOrderResponse(id).subscribe();
   }
 }

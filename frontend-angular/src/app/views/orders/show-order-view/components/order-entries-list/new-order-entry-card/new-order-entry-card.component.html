@@ -1,0 +1,17 @@
+<div>
+  <h3>{{username }}</h3>
+
+  <div class="user-order-col">
+    <ng-container *ngIf="isEntryCreating === false">
+      <app-button color="primary" class="mt-3" (click)="createEntry()" [icon]="faPlus">
+        Add entry
+      </app-button>
+    </ng-container>
+
+    <ng-container *ngIf="isEntryCreating === true">
+      <app-create-order-entry [orderResponse]="showOrderResponse"
+                              [modifyOrderEntryState]="modifyOrderEntryState"
+      (refreshRequest)="onRefreshRequest()"></app-create-order-entry>
+    </ng-container>
+  </div>
+</div>
