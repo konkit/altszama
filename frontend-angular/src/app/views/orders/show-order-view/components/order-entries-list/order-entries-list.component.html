@@ -1,11 +1,11 @@
-<!--<div *ngIf="shouldDisplayNewOrderEntryCard()">-->
-<!--  <div>-->
-<!--    <div>-->
-<!--      <app-new-order-entry-card [isEntryCreating]="isEntryCreating" [username]="username">-->
-<!--      </app-new-order-entry-card>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
+<div *ngIf="viewState.shouldDisplayNewOrderEntryCard">
+  <div>
+    <div>
+      <app-new-order-entry-card [isEntryCreating]="isEntryCreating" [username]="username">
+      </app-new-order-entry-card>
+    </div>
+  </div>
+</div>
 
 <div *ngFor="let orderEntry of this.yourOrderEntries; let entryId = index">
   <div>

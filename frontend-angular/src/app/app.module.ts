@@ -65,6 +65,10 @@ import {DishEntryComponent} from "./views/restaurants/show-restaurant-view/compo
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { DishFormComponent } from './views/restaurants/show-restaurant-view/components/dish-form/dish-form.component';
 import { DishFormPlaceholderComponent } from './views/restaurants/show-restaurant-view/components/dish-form-placeholder/dish-form-placeholder.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import { NewOrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/new-order-entry-card/new-order-entry-card.component';
+import { CreateOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/create-order-entry/create-order-entry.component';
+import { OrderEntryFormComponent } from './views/orders/show-order-view/components/order-entries-list/order-entry-form/order-entry-form.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +110,9 @@ import { DishFormPlaceholderComponent } from './views/restaurants/show-restauran
     EditRestaurantFormComponent,
     DishFormComponent,
     DishFormPlaceholderComponent,
+    NewOrderEntryCardComponent,
+    CreateOrderEntryComponent,
+    OrderEntryFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -132,6 +139,7 @@ import { DishFormPlaceholderComponent } from './views/restaurants/show-restauran
     MatDialogModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
   ],
   providers: [
     {

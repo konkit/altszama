@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {ShowOrderViewState} from "../../show-order-view.component";
 
 @Component({
   selector: 'app-order-entries-list',
@@ -10,15 +11,11 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 export class OrderEntriesListComponent {
 
   @Input() showOrderResponse!: ShowOrderResponse
+  @Input() viewState!: ShowOrderViewState
 
-
-  isOrdering(): boolean {
-    return this.showOrderResponse.order.orderState === OrderStateEnum.ORDERING;
-  }
-
-  isOrderOwner(): boolean {
-    return this.showOrderResponse.order.orderCreatorId === this.currentUserId;
-  }
+  // isOrderOwner(): boolean {
+  //   return this.showOrderResponse.order.orderCreatorId === this.currentUserId;
+  // }
 
   // placeOrder() {
   //   this.router.navigate(["/make_an_order/", this.showOrderResponse.order.id])
@@ -42,11 +39,11 @@ export class OrderEntriesListComponent {
   }
 
   canShowPlaceOrderButton(): boolean {
-    return this.isOrderOwner() && [OrderStateEnum.CREATED, OrderStateEnum.ORDERING].includes(this.showOrderResponse.order.orderState);
+    return this.viewState.isOrderOwner && [OrderStateEnum.CREATED, OrderStateEnum.ORDERING].includes(this.showOrderResponse.order.orderState);
   }
 
   canShowMarkAsDeliveredButton(): boolean {
-    return this.isOrderOwner() && this.showOrderResponse.order.orderState === OrderStateEnum.ORDERED;
+    return this.viewState.isOrderOwner && this.showOrderResponse.order.orderState === OrderStateEnum.ORDERED;
   }
 
   isPlaceOrderButtonDisabled(): boolean {
