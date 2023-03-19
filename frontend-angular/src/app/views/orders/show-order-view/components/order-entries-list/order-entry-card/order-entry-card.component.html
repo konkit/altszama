@@ -44,9 +44,7 @@
       <div *ngIf="isEntryCreating === true">
         <app-create-order-entry
           [orderResponse]="showOrderResponse"
-          [modifyOrderEntryState]="modifyOrderEntryState"
-          (refreshRequest)="onRefreshRequest()"
-        >
+          [modifyOrderEntryState]="modifyOrderEntryState">
         </app-create-order-entry>
       </div>
     </div>

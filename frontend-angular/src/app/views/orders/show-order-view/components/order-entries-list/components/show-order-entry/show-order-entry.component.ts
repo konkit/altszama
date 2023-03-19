@@ -1,6 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 
 @Component({
   selector: 'app-show-order-entry',
@@ -13,6 +15,12 @@ export class ShowOrderEntryComponent {
   @Input() orderEntry!: ParticipantsOrderEntry;
   @Input() dishEntry!: ParticipantsDishEntry;
   @Input() currentUserId!: string;
+  faPencil = faPencil;
+  faTimes = faTimes;
+
+  constructor(private showOrderViewService: ShowOrderViewService) {
+
+  }
 
   canEditOrderEntry() {
     return this.isOrderOwner() || (this.isOrderEntryOwner() && this.order.orderState === OrderStateEnum.CREATED)
@@ -27,22 +35,12 @@ export class ShowOrderEntryComponent {
   }
 
   editDishEntry() {
-    // this.$store.commit(
-    //   `modifyOrderEntry/setDishEntryEditing`,
-    //   {
-    //     orderEntryId: this.orderEntry.id,
-    //     dishEntryId: this.dishEntry.id
-    //   }
-    // );
+    let params = {orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id};
+    this.showOrderViewService.setDishEntryEditing(params)
   }
 
   deleteDishEntry() {
-    // this.ordersConnector
-    //   .deleteDishEntry(this.orderEntry.id, this.dishEntry.id)
-    //   .then(() => {
-    //     this.$store.commit("setLoadingTrue");
-    //     this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-    //   })
-    //   .catch(errResponse => ErrorHandler.handleError(errResponse));
+    let params = {orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id};
+    this.showOrderViewService.deleteDishEntry(params).subscribe()
   }
 }

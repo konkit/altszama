@@ -17,8 +17,6 @@ export class NewOrderEntryCardComponent {
   @Input() isEntryCreating!: boolean
   @Input() username!: string;
 
-  @Output() refreshRequest = new EventEmitter<void>()
-
   faPlus = faPlus;
 
   constructor(private showOrderViewService: ShowOrderViewService) {
@@ -26,9 +24,5 @@ export class NewOrderEntryCardComponent {
 
   createEntry() {
     this.showOrderViewService.setDishEntryCreating()
-  }
-
-  onRefreshRequest() {
-    this.refreshRequest.emit()
   }
 }

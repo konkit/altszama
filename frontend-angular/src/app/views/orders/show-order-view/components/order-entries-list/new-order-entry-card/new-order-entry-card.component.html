@@ -11,8 +11,7 @@
     <ng-container *ngIf="isEntryCreating === true">
       <app-create-order-entry
         [orderResponse]="showOrderResponse"
-        [modifyOrderEntryState]="modifyOrderEntryState"
-        (refreshRequest)="onRefreshRequest()">
+        [modifyOrderEntryState]="modifyOrderEntryState">
       </app-create-order-entry>
     </ng-container>
   </div>

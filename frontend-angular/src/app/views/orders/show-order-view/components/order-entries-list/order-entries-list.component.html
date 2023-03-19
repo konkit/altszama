@@ -4,8 +4,7 @@
       <app-new-order-entry-card [isEntryCreating]="modifyOrderEntryState.isEntryCreating"
                                 [username]="viewState.username"
                                 [modifyOrderEntryState]="modifyOrderEntryState"
-                                [showOrderResponse]="showOrderResponse"
-                                (refreshRequest)="onRefreshRequest()">
+                                [showOrderResponse]="showOrderResponse">
       </app-new-order-entry-card>
     </div>
   </div>
@@ -19,9 +18,7 @@
       [orderEntry]="orderEntry"
       [entryId]="entryId"
       [currentUserId]="this.showOrderResponse.currentUserId"
-      [modifyOrderEntryState]="modifyOrderEntryState"
-      (refreshRequest)="onRefreshRequest()"
-    >
+      [modifyOrderEntryState]="modifyOrderEntryState">
     </app-order-entry-card>
   </div>
 </div>
@@ -34,9 +31,7 @@
       [orderEntry]="orderEntry"
       [entryId]="entryId"
       [currentUserId]="this.showOrderResponse.currentUserId"
-      [modifyOrderEntryState]="modifyOrderEntryState"
-      (refreshRequest)="onRefreshRequest()"
-    >
+      [modifyOrderEntryState]="modifyOrderEntryState">
     </app-order-entry-card>
   </div>
 </div>

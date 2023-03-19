@@ -6,16 +6,15 @@
           {{ dishEntry.dishName }}
         </div>
 
-        <span class="ml-2">({{dishEntry.price | price}})
-            </span>
+        <span class="ml-2">({{dishEntry.price | price}})</span>
 
         <div class="ml-2" *ngIf="canEditOrderEntry()">
           <button mat-button color="primary" (click)="editDishEntry()">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
+            <fa-icon [icon]="faPencil"></fa-icon>
           </button>
 
           <button mat-button color="warn" (click)="deleteDishEntry()">
-            <i class="fa fa-times" aria-hidden="true"></i>
+            <fa-icon [icon]="faTimes"></fa-icon>
           </button>
         </div>
       </div>
@@ -23,16 +22,16 @@
 
     <div *ngFor="let sideDish of dishEntry.sideDishes">
       <div class="">
-          <div class="side-dish-name">+ {{ sideDish.name }}</div>
+        <div class="side-dish-name">+ {{ sideDish.name }}</div>
 
-          <span class="side-dish-price ml-2">({{sideDish.price | price}})</span>
-        </div>
+        <span class="side-dish-price ml-2">({{sideDish.price | price}})</span>
+      </div>
     </div>
 
     <div *ngIf="dishEntry.comments.length > 0">
       <div class="py-2">
-          Additional comments: {{ dishEntry.comments }}
-        </div>
+        Additional comments: {{ dishEntry.comments }}
+      </div>
     </div>
   </div>
 </div>

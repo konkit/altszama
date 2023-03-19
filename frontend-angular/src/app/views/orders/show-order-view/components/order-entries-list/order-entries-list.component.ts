@@ -16,8 +16,6 @@ export class OrderEntriesListComponent {
   @Input() viewState!: ShowOrderViewState
   @Input() modifyOrderEntryState!: ModifyOrderEntryState
 
-  @Output() refreshRequest = new EventEmitter<void>()
-
   constructor(private showOrderViewService: ShowOrderViewService,
               private authService: AuthService) {
   }
@@ -123,7 +121,4 @@ export class OrderEntriesListComponent {
   //   return true
   //   // return this.order.orderState == OrderStateEnum.CREATED && this.numberOfCurrentUserEntries === 0
   // }
-  onRefreshRequest() {
-    this.refreshRequest.emit();
-  }
 }

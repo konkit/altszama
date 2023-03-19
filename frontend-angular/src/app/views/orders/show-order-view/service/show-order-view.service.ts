@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, EMPTY, filter, map, Observable, tap} from "rxjs";
+import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
 import {
   OrderControllerService,
   OrderEntryControllerService,
+  OrderEntrySaveRequest,
   ShowOrderResponse,
   SideDishData
 } from "../../../../../frontend-client";
@@ -54,7 +55,8 @@ export class ShowOrderViewService {
 
   modifyOrderEntryState = new BehaviorSubject<ModifyOrderEntryState>(initialModifyOrderEntryState)
 
-  constructor(private orderControllerService: OrderControllerService) {
+  constructor(private orderControllerService: OrderControllerService,
+              private orderEntryControllerService: OrderEntryControllerService) {
   }
 
   loadOrderResponse(id: string | null): Observable<ShowOrderResponse> {
@@ -167,4 +169,33 @@ export class ShowOrderViewService {
     return "0";
   }
 
+  deleteDishEntry(params: { orderEntryId: string; dishEntryId: string}): Observable<void> {
+    return this.orderEntryControllerService.delete1(params.orderEntryId, params.dishEntryId)
+      .pipe(
+        switchMap(() => {
+          return this.reloadOrderResponse()
+        }),
+      )
+  }
+
+  reloadOrderResponse(): Observable<void> {
+      return this.orderResponse.pipe(
+        take(1),
+        map(r => r!.order.id),
+        switchMap( orderId => {
+          return this.loadOrderResponse(orderId)
+        }),
+        map(() => void 0)
+    )
+  }
+
+  saveOrderEntry(orderEntryToSave: OrderEntrySaveRequest): Observable<void> {
+    return this.orderEntryControllerService
+      .save1(orderEntryToSave)
+      .pipe(
+        tap(() => this.setEntryLoading(true)),
+        tap(() => this.cancelDishEntryModification()),
+        switchMap(() => this.reloadOrderResponse()),
+      )
+  }
 }

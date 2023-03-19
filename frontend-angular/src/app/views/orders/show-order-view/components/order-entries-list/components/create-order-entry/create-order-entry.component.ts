@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {of} from "rxjs";
 import {
   OrderEntryControllerService,
@@ -17,8 +17,6 @@ export class CreateOrderEntryComponent implements OnInit {
 
   @Input() orderResponse!: ShowOrderResponse
   @Input() modifyOrderEntryState!: ModifyOrderEntryState
-
-  @Output() refreshRequest = new EventEmitter<void>();
 
   formGroup = this.fb.nonNullable.group({
     name: "",
@@ -65,17 +63,12 @@ export class CreateOrderEntryComponent implements OnInit {
       sideDishes: [],
     };
 
-    // TODO: add autosuggest
-    // TODO: add detecting already selected dish, thus deduplicating
+    // TODO(konkit): add autosuggest
+    // TODO(konkit): add detecting already selected dish, thus deduplicating
 
-    this.orderEntryControllerService
-      .save1(orderEntryToSave)
+    this.showOrderViewService.saveOrderEntry(orderEntryToSave)
       .subscribe({
-        next: () => {
-          this.showOrderViewService.setEntryLoading(true)
-          this.showOrderViewService.cancelDishEntryModification()
-          this.refreshRequest.emit()
-        },
+        next: () => {},
         error: error => {
           this.formGroup.setErrors(error)
           return of("")
