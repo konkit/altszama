@@ -3,7 +3,7 @@ import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} f
 import {
   OrderControllerService,
   OrderEntryControllerService,
-  OrderEntrySaveRequest, OrderEntryUpdateRequest, ParticipantsDishEntry,
+  OrderEntryUpdateRequest,
   ShowOrderResponse,
   SideDishData
 } from "../../../../../frontend-client";
@@ -161,7 +161,7 @@ export class ShowOrderViewService {
     return "0";
   }
 
-  deleteDishEntry(params: { orderEntryId: string; dishEntryId: string}): Observable<void> {
+  deleteDishEntry(params: { orderEntryId: string; dishEntryId: string }): Observable<void> {
     return this.orderEntryControllerService.delete1(params.orderEntryId, params.dishEntryId)
       .pipe(
         switchMap(() => {
@@ -171,17 +171,34 @@ export class ShowOrderViewService {
   }
 
   reloadOrderResponse(): Observable<void> {
-      return this.orderResponse.pipe(
-        take(1),
-        map(r => r!.order.id),
-        switchMap( orderId => {
-          return this.loadOrderResponse(orderId)
-        }),
-        map(() => void 0)
+    return this.orderResponse.pipe(
+      take(1),
+      map(r => r!.order.id),
+      switchMap(orderId => {
+        return this.loadOrderResponse(orderId)
+      }),
+      map(() => void 0)
     )
   }
 
-  saveOrderEntry(orderEntryToSave: OrderEntrySaveRequest): Observable<void> {
+  saveOrderEntry(params: {
+    orderId: string,
+    formValue: {
+      name: string,
+      price: number,
+      additionalComments: string,
+    }
+  }): Observable<void> {
+    let orderEntryToSave = {
+      orderId: params.orderId,
+      dishId: "",
+      newDish: true,
+      newDishName: params.formValue.name,
+      newDishPrice: params.formValue.price,
+      additionalComments: params.formValue.additionalComments,
+      sideDishes: [],
+    };
+
     return this.orderEntryControllerService
       .save1(orderEntryToSave)
       .pipe(
@@ -191,7 +208,54 @@ export class ShowOrderViewService {
       )
   }
 
-  updateOrderEntry(orderEntryToUpdate: OrderEntryUpdateRequest): Observable<void> {
+  updateOrderEntry(params: {
+    orderId: string,
+    orderEntryId: string,
+    dishEntryId: string,
+    formValue: { additionalComments: string, name: string, price: number }
+  }): Observable<void> {
+    let orderEntryToUpdate: OrderEntryUpdateRequest
+    orderEntryToUpdate = {
+      id: params.orderEntryId,
+      orderId: params.orderId,
+      dishEntryId: params.dishEntryId,
+      newDish: true,
+      dishId: "",
+      additionalComments: params.formValue.additionalComments,
+      newDishName: params.formValue.name,
+      newDishPrice: params.formValue.price,
+      sideDishes: [],
+    };
+
+    return this.doUpdateOrderEntry(orderEntryToUpdate)
+
+    // const dishData: (NewDishData | ExistingDishData) = state.orderEntryData.dishData
+    // if (dishData.kind === "NewDishData") {
+    //   orderEntryToUpdate = {
+    //     orderId: orderId,
+    //     dishId: "",
+    //     dishEntryId: state.dishEntryId,
+    //     additionalComments: state.orderEntryData.additionalComments,
+    //     newDish: true,
+    //     newDishName: dishData.newDishName,
+    //     newDishPrice: dishData.newDishPrice,
+    //     chosenSideDishes: dishData.chosenSideDishes
+    //   };
+    // } else {
+    //   orderEntryToUpdate = {
+    //     orderId: orderId,
+    //     dishId: dishData.dishId,
+    //     dishEntryId: state.dishEntryId,
+    //     additionalComments: state.orderEntryData.additionalComments,
+    //     newDish: false,
+    //     newDishName: "",
+    //     newDishPrice: 0,
+    //     chosenSideDishes: dishData.chosenSideDishes
+    //   };
+    // }
+  }
+
+  private doUpdateOrderEntry(orderEntryToUpdate: OrderEntryUpdateRequest): Observable<void> {
     return this.orderEntryControllerService
       .update1(orderEntryToUpdate)
       .pipe(

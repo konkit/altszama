@@ -51,21 +51,19 @@ export class CreateOrderEntryComponent implements OnInit {
   }
 
   private saveOrderEntry() {
-    let orderEntryToSave: OrderEntrySaveRequest
-    orderEntryToSave = {
-      orderId: this.orderResponse.order.id,
-      dishId: "",
-      additionalComments: this.formGroup.controls.additionalComments.value,
-      newDish: true,
-      newDishName: this.formGroup.controls.name.value,
-      newDishPrice: this.formGroup.controls.price.value,
-      sideDishes: [],
-    };
-
     // TODO(konkit): add autosuggest
     // TODO(konkit): add detecting already selected dish, thus deduplicating
 
-    this.showOrderViewService.saveOrderEntry(orderEntryToSave)
+    let params = {
+      orderId: this.orderResponse.order.id,
+      formValue: {
+        name: this.formGroup.controls.name.value,
+        price: this.formGroup.controls.price.value,
+        additionalComments: this.formGroup.controls.additionalComments.value
+      }
+    };
+
+    this.showOrderViewService.saveOrderEntry(params)
       .subscribe({
         next: () => {},
         error: error => {

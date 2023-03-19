@@ -50,47 +50,18 @@ export class EditOrderEntryComponent implements OnInit {
   }
 
   updateOrderEntry() {
-    let orderEntryToUpdate: OrderEntryUpdateRequest
-    orderEntryToUpdate = {
-      id: this.orderEntry.id,
+    let params = {
       orderId: this.orderResponse.order.id,
-      dishId: "",
+      orderEntryId: this.orderEntry.id,
       dishEntryId: this.dishEntry.id,
-      additionalComments: this.formGroup.controls.additionalComments.value,
-      newDish: true,
-      newDishName: this.formGroup.controls.name.value,
-      newDishPrice: this.formGroup.controls.price.value,
-      sideDishes: [],
+      formValue: {
+        additionalComments: this.formGroup.controls.additionalComments.value,
+        name: this.formGroup.controls.name.value,
+        price: this.formGroup.controls.price.value,
+      },
     };
 
-    // let orderEntryToUpdate
-
-    // const dishData: (NewDishData | ExistingDishData) = state.orderEntryData.dishData
-    // if (dishData.kind === "NewDishData") {
-    //   orderEntryToUpdate = {
-    //     orderId: orderId,
-    //     dishId: "",
-    //     dishEntryId: state.dishEntryId,
-    //     additionalComments: state.orderEntryData.additionalComments,
-    //     newDish: true,
-    //     newDishName: dishData.newDishName,
-    //     newDishPrice: dishData.newDishPrice,
-    //     chosenSideDishes: dishData.chosenSideDishes
-    //   };
-    // } else {
-    //   orderEntryToUpdate = {
-    //     orderId: orderId,
-    //     dishId: dishData.dishId,
-    //     dishEntryId: state.dishEntryId,
-    //     additionalComments: state.orderEntryData.additionalComments,
-    //     newDish: false,
-    //     newDishName: "",
-    //     newDishPrice: 0,
-    //     chosenSideDishes: dishData.chosenSideDishes
-    //   };
-    // }
-
-    this.showOrderViewService.updateOrderEntry(orderEntryToUpdate)
+    this.showOrderViewService.updateOrderEntry(params)
       .subscribe({
         next: () => {},
         error: error => {
