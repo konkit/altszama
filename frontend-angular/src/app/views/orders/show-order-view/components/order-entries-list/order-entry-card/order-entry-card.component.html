@@ -42,7 +42,12 @@
         </app-button>
       </div>
       <div *ngIf="isEntryCreating === true">
-        <app-create-order-entry [modifyOrderEntryState]="modifyOrderEntryState"></app-create-order-entry>
+        <app-create-order-entry
+          [orderResponse]="showOrderResponse"
+          [modifyOrderEntryState]="modifyOrderEntryState"
+          (refreshRequest)="onRefreshRequest()"
+        >
+        </app-create-order-entry>
       </div>
     </div>
   </div>

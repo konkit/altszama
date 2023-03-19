@@ -9,9 +9,11 @@
     </ng-container>
 
     <ng-container *ngIf="isEntryCreating === true">
-      <app-create-order-entry [orderResponse]="showOrderResponse"
-                              [modifyOrderEntryState]="modifyOrderEntryState"
-      (refreshRequest)="onRefreshRequest()"></app-create-order-entry>
+      <app-create-order-entry
+        [orderResponse]="showOrderResponse"
+        [modifyOrderEntryState]="modifyOrderEntryState"
+        (refreshRequest)="onRefreshRequest()">
+      </app-create-order-entry>
     </ng-container>
   </div>
 </div>

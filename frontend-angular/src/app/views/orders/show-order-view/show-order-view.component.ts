@@ -91,6 +91,7 @@ export class ShowOrderViewComponent implements OnInit {
   }
 
   onRefreshRequest() {
+    console.log("show-order-view.onRefreshRequest")
     let id = this.route.snapshot.paramMap.get('id')!;
     this.showOrderViewService.loadOrderResponse(id).subscribe();
   }

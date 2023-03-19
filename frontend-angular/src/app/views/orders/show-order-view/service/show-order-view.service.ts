@@ -152,4 +152,19 @@ export class ShowOrderViewService {
   //     .catch(errResponse => ErrorHandler.handleError(errResponse));
   // }
 
+  isModifiedEntryCreating(): boolean {
+    // return this.$store.state.modifyOrderEntry.isEntryCreating;
+    return false;
+  }
+
+  isModifiedEntryEdited(): boolean {
+    // return this.$store.state.modifyOrderEntry.isEntryEdited;
+    return false;
+  }
+
+  getModifiedDishEntryId(): string {
+    // return this.$store.state.modifyOrderEntry.dishEntryId;
+    return "0";
+  }
+
 }

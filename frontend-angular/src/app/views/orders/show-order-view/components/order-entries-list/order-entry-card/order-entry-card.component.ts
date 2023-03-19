@@ -1,6 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../frontend-client";
-import {OrderEntryService} from "../../../../../../service/order-entry.service";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {ModifyOrderEntryState, ShowOrderViewService} from "../../../service/show-order-view.service";
@@ -14,7 +13,7 @@ import {FormBuilder} from "@angular/forms";
 })
 export class OrderEntryCardComponent {
 
-
+  @Input() showOrderResponse!: ShowOrderResponse
   @Input() order!: ShowOrderDto;
   @Input() orderEntry!: ParticipantsOrderEntry;
   @Input() entryId!: number;
@@ -30,9 +29,9 @@ export class OrderEntryCardComponent {
     price: 0,
     additionalComments: ""
   })
+  @Output() refreshRequest = new EventEmitter<void>()
 
-  constructor(private orderEntryService: OrderEntryService,
-              private showOrderViewService: ShowOrderViewService,
+  constructor(private showOrderViewService: ShowOrderViewService,
               private fb: FormBuilder) {
   }
 
@@ -41,7 +40,7 @@ export class OrderEntryCardComponent {
   }
 
   createEntry() {
-    this.orderEntryService.setDishEntryCreating()
+    this.showOrderViewService.setDishEntryCreating()
   }
 
   get isEntryCreating() {
@@ -58,5 +57,10 @@ export class OrderEntryCardComponent {
 
   canAddNewEntry() {
     return this.order.orderState === OrderStateEnum.CREATED && this.isOrderEntryOwner() && !this.isEntryEdited
+  }
+
+  onRefreshRequest() {
+    console.log("order-entry-card.onRefreshRequest")
+    this.refreshRequest.emit()
   }
 }
