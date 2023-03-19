@@ -11,12 +11,13 @@
 
     <div *ngFor="let dishEntry of orderEntry.dishEntries; let dishEntryIndex = index;">
       <div *ngIf="isEntryEdited === true && dishEntryId === dishEntry.id">
-        <!--            <edit-order-entry-->
-        <!--              :order-entry="orderEntry"-->
-        <!--              :dish-entry="dishEntry"-->
-        <!--              :key="'edit-order-entry-' + dishEntry.id"-->
-        <!--            >-->
-        <!--            </edit-order-entry>-->
+                    <app-edit-order-entry
+                      [orderResponse]="showOrderResponse"
+                      [modifyOrderEntryState]="modifyOrderEntryState"
+                      [orderEntry]="orderEntry"
+                      [dishEntry]="dishEntry"
+                    >
+                    </app-edit-order-entry>
       </div>
       <div *ngIf="!(isEntryEdited === true && dishEntryId === dishEntry.id)">
         <app-show-order-entry

@@ -1,0 +1,48 @@
+<div>
+  <!--  <ng-container *ngIf="this.loadingEntry === false">-->
+  <!--    <errors-component/>-->
+
+
+  <form [formGroup]="formGroup">
+    <mat-error>{{formGroup.errors}}</mat-error>
+
+    <div>
+      <div>Dish:</div>
+
+      <div class="d-flex fix-top-margin">
+        <mat-form-field>
+          <mat-label>New dish name</mat-label>
+          <input matInput [formControl]="formGroup.controls.name" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <app-money-input [formControl]="formGroup.controls.price"></app-money-input>
+        </mat-form-field>
+      </div>
+
+      <div>Side dishes:</div>
+
+      <!--  <side-dishes-input :chosen-side-dishes="orderEntryData.dishData.chosenSideDishes"-->
+      <!--                     :available-side-dishes="availableSideDishes"-->
+      <!--                     @change="updateChosenSideDishes($event)">-->
+      <!--  </side-dishes-input>-->
+
+      <mat-form-field>
+        <mat-label>Additional Comments</mat-label>
+        <textarea matInput [formControl]="formGroup.controls.additionalComments"></textarea>
+      </mat-form-field>
+    </div>
+
+    <hr/>
+
+    <app-button color="primary" (click)="submitForm()">Submit</app-button>
+    <app-button (click)="cancelEdit()">Cancel</app-button>
+  </form>
+  <!--  </ng-container>-->
+
+  <!--  <ng-container *ngIf="this.loadingEntry === true">-->
+  <!--    <div class="justify-content-center">-->
+  <!--      <spinner></spinner>-->
+  <!--    </div>-->
+  <!--  </ng-container>-->
+</div>

@@ -3,7 +3,7 @@ import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} f
 import {
   OrderControllerService,
   OrderEntryControllerService,
-  OrderEntrySaveRequest,
+  OrderEntrySaveRequest, OrderEntryUpdateRequest, ParticipantsDishEntry,
   ShowOrderResponse,
   SideDishData
 } from "../../../../../frontend-client";
@@ -19,6 +19,7 @@ export interface NewDishData {
 export interface ExistingDishData {
   kind: "ExistingDishData";
   dishId: string;
+  dishEntryId: string;
   chosenSideDishes: SideDishData[];
 }
 
@@ -79,15 +80,6 @@ export class ShowOrderViewService {
 
   modifyOrderEntryStateAsObservable() {
     return this.modifyOrderEntryState.asObservable()
-  }
-
-
-  setInitialCreateOrderEntry(param: { orderId: string; dishId: any }) {
-    this.modifyOrderEntryState.next(
-      {
-        ...this.modifyOrderEntryState.value,
-      }
-    )
   }
 
   setEntryLoading(newValue: boolean) {
@@ -192,6 +184,16 @@ export class ShowOrderViewService {
   saveOrderEntry(orderEntryToSave: OrderEntrySaveRequest): Observable<void> {
     return this.orderEntryControllerService
       .save1(orderEntryToSave)
+      .pipe(
+        tap(() => this.setEntryLoading(true)),
+        tap(() => this.cancelDishEntryModification()),
+        switchMap(() => this.reloadOrderResponse()),
+      )
+  }
+
+  updateOrderEntry(orderEntryToUpdate: OrderEntryUpdateRequest): Observable<void> {
+    return this.orderEntryControllerService
+      .update1(orderEntryToUpdate)
       .pipe(
         tap(() => this.setEntryLoading(true)),
         tap(() => this.cancelDishEntryModification()),

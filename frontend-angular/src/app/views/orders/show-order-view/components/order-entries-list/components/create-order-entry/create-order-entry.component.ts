@@ -42,7 +42,6 @@ export class CreateOrderEntryComponent implements OnInit {
       dishId = null;
     }
 
-    this.showOrderViewService.setInitialCreateOrderEntry({orderId: orderId, dishId: dishId})
     this.showOrderViewService.setEntryLoading(false)
   }
 
