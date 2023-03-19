@@ -33,9 +33,6 @@ export interface ModifyOrderEntryState {
   isEntryEdited: boolean;
   orderEntryId: string;
   dishEntryId: string;
-  orderId: string;
-
-  orderEntryData: OrderEntryData;
 }
 
 const initialModifyOrderEntryState: ModifyOrderEntryState = {
@@ -45,17 +42,6 @@ const initialModifyOrderEntryState: ModifyOrderEntryState = {
   isEntryEdited: false,
   orderEntryId: "",
   dishEntryId: "",
-  orderId: "",
-
-  orderEntryData: {
-    dishData: {
-      kind: "NewDishData",
-      newDishName: "",
-      newDishPrice: 0,
-      chosenSideDishes: []
-    },
-    additionalComments: "",
-  }
 };
 
 
@@ -98,16 +84,6 @@ export class ShowOrderViewService {
     this.modifyOrderEntryState.next(
       {
         ...this.modifyOrderEntryState.value,
-        orderId: param.orderId,
-        orderEntryData: {
-          dishData: {
-            kind: "NewDishData",
-            newDishName: "",
-            newDishPrice: 0,
-            chosenSideDishes: []
-          },
-          additionalComments: "",
-        }
       }
     )
   }
@@ -161,7 +137,6 @@ export class ShowOrderViewService {
     this.modifyOrderEntryState.next(
       {
         ...this.modifyOrderEntryState.value,
-        orderEntryData: newValue,
       }
     )
   }

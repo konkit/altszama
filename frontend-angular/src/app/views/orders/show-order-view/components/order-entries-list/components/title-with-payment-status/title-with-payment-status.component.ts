@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../frontend-client";
+import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {faUndo, faCheck} from "@fortawesome/free-solid-svg-icons";
 
