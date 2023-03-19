@@ -68,7 +68,7 @@ export const authenticatedRoutes: Routes = [
   },
   {
     path: "orders/:id/make_an_order",
-    title: "OrderView",
+    title: "MakeAnOrderView",
     component: MakeAnOrderViewComponent,
   },
   {

@@ -1,32 +1,32 @@
 <div>
   <div class="py-2">
   <div>Base price :</div>
-  <div>{{basePriceSum | price}}</div>
+  <div>{{priceSummaryInput.basePriceSum | price}}</div>
   </div>
 
-  <div class="py-2" *ngIf="deliveryData.decreaseInPercent === 0 && deliveryData.deliveryCostPerEverybody === 0 && deliveryData.deliveryCostPerDish === 0">
+  <div class="py-2" *ngIf="priceSummaryInput.deliveryData.decreaseInPercent === 0 && priceSummaryInput.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryInput.deliveryData.deliveryCostPerDish === 0">
     <div></div>
     <div><span class="unbreakable"><i>No price modifiers</i></span></div>
   </div>
 
-  <div class="py-2" *ngIf="deliveryData.decreaseInPercent !== 0">
+  <div class="py-2" *ngIf="priceSummaryInput.deliveryData.decreaseInPercent !== 0">
     <div>Price decrease :</div>
-    <span class="unbreakable">- {{ deliveryData.decreaseInPercent }} %</span>
+    <span class="unbreakable">- {{ priceSummaryInput.deliveryData.decreaseInPercent }} %</span>
   </div>
 
-  <div class="py-2" *ngIf="deliveryData.deliveryCostPerEverybody !== 0">
+  <div class="py-2" *ngIf="priceSummaryInput.deliveryData.deliveryCostPerEverybody !== 0">
     <div>Delivery :</div>
-    <div><span class="unbreakable" >+ {{ deliveryData.deliveryCostPerEverybody | price }}</span></div>
+    <div><span class="unbreakable" >+ {{ priceSummaryInput.deliveryData.deliveryCostPerEverybody | price }}</span></div>
   </div>
 
 
-  <div class="py-2" *ngIf="deliveryData.deliveryCostPerDish !== 0">
+  <div class="py-2" *ngIf="priceSummaryInput.deliveryData.deliveryCostPerDish !== 0">
     <div>Delivery per dish:</div>
-    <div><span class="unbreakable">+ {{deliveryData.deliveryCostPerDish | price}} * {{ allEatingPeopleCount || 0 }}</span></div>
+    <div><span class="unbreakable">+ {{priceSummaryInput.deliveryData.deliveryCostPerDish | price}} * {{ priceSummaryInput.allEatingPeopleCount || 0 }}</span></div>
   </div>
 
   <div class="py-2">
     <div>Total:</div>
-    <div>{{totalPrice | price}}</div>
+    <div>{{priceSummaryInput.totalPrice | price}}</div>
   </div>
 </div>

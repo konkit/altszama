@@ -1,10 +1,114 @@
-<div class="main-content flex flex-col flex-grow p-4">
-  <h1 class="font-bold text-2xl text-gray-700">Make An Order</h1>
+<!--<app-view-wrapper-->
+<!--  [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + '(' + orderResponse.order.orderDate + ')'">-->
+<ng-container *ngIf="response$ | async as response">
+  <ng-container *ngIf="priceSummaryInput$ | async as priceSummaryInput">
+    <app-view-wrapper title="Making an order">
 
-  <div
-    class="flex flex-col flex-grow border-4 border-gray-400 border-dashed bg-white rounded mt-4"
-  >
+      <ng-container *ngIf="response.orderState === 'ORDERING'">
+        <div>
+          <fa-icon [icon]="faLock"></fa-icon>
+
+          <p><strong>The order is locked!</strong></p>
+
+          <p>Order is now locked, so no one should order anything else now.</p>
+
+          <p>
+            <app-button color="primary" (click)="unlockOrder()">
+              Unlock
+            </app-button>
+          </p>
+        </div>
 
 
-  </div>
-</div>
+        <div>
+          <div>
+            <div cols="8">
+              <h1>Call the place!</h1>
+
+              <div>
+                <p>
+                  Now please call the restaurant, make an order and then
+                  enter approximate delivery time and click "Order placed"
+                </p>
+              </div>
+
+              <div>
+                <div *ngIf="response.restaurantTelephone.length > 0; else notelephone" class="align-center">
+                  <b>tel. {{ response.restaurantTelephone }}</b>
+                </div>
+
+                <ng-template #notelephone>
+                  <div class="align-center">
+                    <b>Telephone number not specified, sorry :/</b>
+                  </div>
+                </ng-template>
+              </div>
+
+              <div class="justify-space-around">
+                <div class="align-center align-self-center">
+                  <div class=" delivery-time-wrapper">
+                    <!--                  <TimePicker-->
+                    <!--                    :value="approxTimeOfDelivery"-->
+                    <!--                    @input="updateApproxTimeOfDelivery($event)"-->
+                    <!--                    label="Approximate time of delivery"-->
+                    <!--                  ></TimePicker>-->
+                  </div>
+                </div>
+
+                <div class="align-center align-self-center">
+                  <app-button color="primary" (click)="submitForm()" [icon]="faArrowRight">
+                    Order placed!
+                  </app-button>
+                </div>
+              </div>
+            </div>
+
+            <div cols="4">
+              <h1>Cost summary</h1>
+
+              <app-price-summary [priceSummaryInput]="priceSummaryInput">
+              </app-price-summary>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <div cols="xs12">
+              <h1>Dishes:</h1>
+
+              <app-user-orders [groupedEntries]="response.groupedEntries"></app-user-orders>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="response.orderState !== 'ORDERING'">
+        <div>
+          <div>
+            <div cols="xs12">
+              <div>
+                <div>
+                  <h1>Ordering from {{ response.restaurantName }}</h1>
+                  <h4>Sorry, the order is empty</h4>
+                  <p>
+                    <app-button (click)="goBack()" class="hidden-xs-only">
+                      <fa-icon [icon]="faArrowBack"></fa-icon>
+                    </app-button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+    </app-view-wrapper>
+  </ng-container>
+</ng-container>
+
+
+
+
+
+

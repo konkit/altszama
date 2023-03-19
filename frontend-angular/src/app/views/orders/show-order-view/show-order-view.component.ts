@@ -6,10 +6,11 @@ import {
   ShowOrderResponse
 } from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
-import {map, Observable} from "rxjs";
+import {map, Observable, take} from "rxjs";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {ModifyOrderEntryState, ShowOrderViewService} from "./service/show-order-view.service";
 import {AuthService} from "../../../service/auth.service";
+import {PriceSummaryInput} from "./components/price-summary/price-summary.component";
 
 export interface ShowOrderViewState {
   canShowPlaceOrderButton: boolean
@@ -22,6 +23,7 @@ export interface ShowOrderViewState {
   username: string,
   yourOrderEntries: ParticipantsOrderEntry[],
   otherUsersOrderEntries: ParticipantsOrderEntry[],
+  priceSummaryInput: PriceSummaryInput;
 }
 
 @Component({
@@ -69,8 +71,15 @@ export class ShowOrderViewComponent implements OnInit {
         let numberOfCurrentUserEntries = orderEntries.filter(e => e.userId === currentUserId).length;
         let shouldDisplayNewOrderEntryCard =  order.orderState == OrderStateEnum.CREATED && numberOfCurrentUserEntries === 0
 
+        let username = this.authService.getLoggedUser()!.username;
         let yourOrderEntries = orderEntries.filter(e => e.userId === currentUserId);
         let otherUsersOrderEntries = orderEntries.filter(e => e.userId !== currentUserId);
+        let priceSummaryInput: PriceSummaryInput = {
+          deliveryData: r.order.deliveryData,
+          basePriceSum: r.baseOrderPrice,
+          totalPrice: r.totalOrderPrice,
+          allEatingPeopleCount: r.orderEntries.flatMap(e => e.dishEntries).length,
+        }
 
 
         let obj: ShowOrderViewState = {
@@ -81,9 +90,10 @@ export class ShowOrderViewComponent implements OnInit {
           isOrderOwner: isOrderOwner,
           allEatingPeopleCount: allEatingPeopleCount,
           numberOfCurrentUserEntries: numberOfCurrentUserEntries,
-          username: this.authService.getLoggedUser()!.username,
+          username: username,
           yourOrderEntries: yourOrderEntries,
           otherUsersOrderEntries: otherUsersOrderEntries,
+          priceSummaryInput: priceSummaryInput,
         }
         return obj
       })
@@ -91,23 +101,21 @@ export class ShowOrderViewComponent implements OnInit {
   }
 
   placeOrder() {
-    // this.router.navigate(["/make_an_order/", this.showOrderResponse.order.id])
+    this.router.navigate(["/orders", this.getOrderId(), "make_an_order"])
   }
 
   goToEditOrder() {
-
+    console.error("goToEditOrder not implemented yet!")
   }
 
   setAsDelivered() {
-    //   this.$store.commit("setLoadingTrue");
-    //   this.ordersConnector
-    //     .setOrderAsDelivered(this.orderId)
-    //     .then(() => {
-    //       this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.showOrderResponse.order.id);
-    //     })
-    //     .catch(errResponse => {
-    //       this.$store.commit("setLoadingFalse");
-    //       ErrorHandler.handleError(errResponse)
-    //     });
+    this.orderControllerService.setAsDelivered(this.getOrderId())
+      .subscribe({
+        next: () => this.showOrderViewService.reloadOrderResponse(),
+      })
+  }
+
+  getOrderId() {
+    return this.route.snapshot.paramMap.get('id')!
   }
 }

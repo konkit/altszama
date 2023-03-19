@@ -1,0 +1,56 @@
+  <div>
+    <mat-list dense>
+      <ng-container *ngFor="let entry of groupedEntries; let entryIndex = index">
+        <mat-list-item>
+          <span><b>{{ entry.eatingPeopleCount }}x</b> {{ entry.dishName }}</span>
+        </mat-list-item>
+
+        <mat-list *ngIf="entry.eatingPeopleEntries.length > 0">
+          <ng-container *ngFor="let eatingPersonEntry of entry.eatingPeopleEntries; let i = index">
+            <mat-list-item>
+              <div class="user-row">
+                <div class="username">
+                  {{ i + 1 }}. {{ eatingPersonEntry.username }}
+                </div>
+
+                <div class="sidedishes mx-4">
+                  <mat-list>
+                    <ng-container *ngIf="eatingPersonEntry.comments.length > 0">
+                      <div>Additional comments:</div>
+
+                      <mat-list-item>
+                        {{ eatingPersonEntry.comments }}
+                      </mat-list-item>
+                    </ng-container>
+
+                    <ng-container *ngIf="eatingPersonEntry.sideDishes.length > 0">
+                      <div>Side dishes:</div>
+
+                      <ng-container *ngFor="let sd of eatingPersonEntry.sideDishes; let j = index">
+                        <mat-list-item :key="'entry-' + i + '-side-dish-' + j">
+                            {{ sd.name }}
+                        </mat-list-item>
+
+                        <ng-container *ngIf="j < eatingPersonEntry.sideDishes.length - 1">
+                          <hr class="custom-margin-divider" />
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </mat-list>
+                </div>
+              </div>
+            </mat-list-item>
+
+            <ng-container *ngIf="i < entry.eatingPeopleEntries.length - 1">
+              <hr class="custom-margin-divider" />
+            </ng-container>
+          </ng-container>
+        </mat-list>
+
+        <ng-container *ngIf="entryIndex < groupedEntries.length - 1">
+          <hr class="custom-margin-divider" />
+        </ng-container>
+
+      </ng-container>
+    </mat-list>
+  </div>
