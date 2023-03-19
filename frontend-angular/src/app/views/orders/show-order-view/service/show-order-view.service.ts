@@ -4,46 +4,28 @@ import {
   OrderControllerService,
   OrderEntryControllerService,
   OrderEntryUpdateRequest,
-  ShowOrderResponse,
-  SideDishData
+  ShowOrderResponse
 } from "../../../../../frontend-client";
 
-
-export interface NewDishData {
-  kind: "NewDishData";
-  newDishName: string;
-  newDishPrice: number;
-  chosenSideDishes: SideDishData[];
-}
-
-export interface ExistingDishData {
-  kind: "ExistingDishData";
-  dishId: string;
-  dishEntryId: string;
-  chosenSideDishes: SideDishData[];
-}
-
-export interface OrderEntryData {
-  dishData: NewDishData | ExistingDishData;
-  additionalComments: string;
-}
 
 export interface ModifyOrderEntryState {
   loadingEntry: boolean;
 
-  isEntryCreating: boolean;
-  isEntryEdited: boolean;
   orderEntryId: string;
   dishEntryId: string;
+
+  isEntryCreating: boolean;
+  isEntryEdited: boolean;
 }
 
 const initialModifyOrderEntryState: ModifyOrderEntryState = {
   loadingEntry: false,
 
-  isEntryCreating: false,
-  isEntryEdited: false,
   orderEntryId: "",
   dishEntryId: "",
+
+  isEntryCreating: false,
+  isEntryEdited: false,
 };
 
 
@@ -125,40 +107,6 @@ export class ShowOrderViewService {
         dishEntryId: "",
       }
     )
-  }
-
-  updateOrderEntryData(newValue: OrderEntryData) {
-    this.modifyOrderEntryState.next(
-      {
-        ...this.modifyOrderEntryState.value,
-      }
-    )
-  }
-
-  // fetchOrderDataAction(orderId) {
-  //   this.orderControllerService
-  //     .fetchOrder(orderId)
-  //     .then(showOrderData => {
-  //       this.commit("showOrder/loadShowOrderData",showOrderData);
-  //       this.commit("setLoadingFalse");
-  //       this.commit("setTitle", `[${state.order.orderState}] Order from ${state.order.restaurantName} (${state.order.orderDate})`)
-  //     })
-  //     .catch(errResponse => ErrorHandler.handleError(errResponse));
-  // }
-
-  isModifiedEntryCreating(): boolean {
-    // return this.$store.state.modifyOrderEntry.isEntryCreating;
-    return false;
-  }
-
-  isModifiedEntryEdited(): boolean {
-    // return this.$store.state.modifyOrderEntry.isEntryEdited;
-    return false;
-  }
-
-  getModifiedDishEntryId(): string {
-    // return this.$store.state.modifyOrderEntry.dishEntryId;
-    return "0";
   }
 
   deleteDishEntry(params: { orderEntryId: string; dishEntryId: string }): Observable<void> {

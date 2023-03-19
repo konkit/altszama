@@ -12,7 +12,6 @@ import {ShowOrderViewState} from "../../../show-order-view.component";
 export class NewOrderEntryCardComponent {
 
   @Input() showOrderResponse!: ShowOrderResponse
-  @Input() modifyOrderEntryState!: ModifyOrderEntryState
 
   @Input() isEntryCreating!: boolean
   @Input() username!: string;

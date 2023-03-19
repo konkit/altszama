@@ -1,11 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {of} from "rxjs";
-import {
-  OrderEntryControllerService,
-  OrderEntrySaveRequest,
-  ShowOrderResponse
-} from "../../../../../../../../frontend-client";
-import {ModifyOrderEntryState, ShowOrderViewService} from "../../../../service/show-order-view.service";
+import {OrderEntryControllerService, ShowOrderResponse} from "../../../../../../../../frontend-client";
+import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import {FormBuilder} from "@angular/forms";
 
 @Component({
@@ -16,7 +12,6 @@ import {FormBuilder} from "@angular/forms";
 export class CreateOrderEntryComponent implements OnInit {
 
   @Input() orderResponse!: ShowOrderResponse
-  @Input() modifyOrderEntryState!: ModifyOrderEntryState
 
   formGroup = this.fb.nonNullable.group({
     name: "",
@@ -31,17 +26,6 @@ export class CreateOrderEntryComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.$store.commit("clearErrors");
-
-    const orderId = this.orderResponse.order.id;
-
-    let dishId;
-    if (this.orderResponse.allDishesInRestaurant.length > 0) {
-      dishId = this.orderResponse.allDishesInRestaurant[0].id;
-    } else {
-      dishId = null;
-    }
-
     this.showOrderViewService.setEntryLoading(false)
   }
 

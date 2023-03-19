@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {
-  OrderEntryUpdateRequest,
   ParticipantsDishEntry,
   ParticipantsOrderEntry,
   ShowOrderResponse
@@ -33,8 +32,6 @@ export class EditOrderEntryComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.$store.commit("clearErrors");
-
     this.showOrderViewService.setEntryLoading(false)
 
     this.formGroup.setValue({

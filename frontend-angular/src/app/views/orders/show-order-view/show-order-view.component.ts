@@ -1,5 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {OrderControllerService, ShowOrderDto, ShowOrderResponse} from "../../../../frontend-client";
+import {
+  OrderControllerService,
+  ParticipantsOrderEntry,
+  ShowOrderDto,
+  ShowOrderResponse
+} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map, Observable} from "rxjs";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
@@ -15,6 +20,8 @@ export interface ShowOrderViewState {
   allEatingPeopleCount: number,
   numberOfCurrentUserEntries: number,
   username: string,
+  yourOrderEntries: ParticipantsOrderEntry[],
+  otherUsersOrderEntries: ParticipantsOrderEntry[],
 }
 
 @Component({
@@ -62,6 +69,9 @@ export class ShowOrderViewComponent implements OnInit {
         let numberOfCurrentUserEntries = orderEntries.filter(e => e.userId === currentUserId).length;
         let shouldDisplayNewOrderEntryCard =  order.orderState == OrderStateEnum.CREATED && numberOfCurrentUserEntries === 0
 
+        let yourOrderEntries = orderEntries.filter(e => e.userId === currentUserId);
+        let otherUsersOrderEntries = orderEntries.filter(e => e.userId !== currentUserId);
+
 
         let obj: ShowOrderViewState = {
           canShowPlaceOrderButton: canShowPlaceOrderButton,
@@ -72,6 +82,8 @@ export class ShowOrderViewComponent implements OnInit {
           allEatingPeopleCount: allEatingPeopleCount,
           numberOfCurrentUserEntries: numberOfCurrentUserEntries,
           username: this.authService.getLoggedUser()!.username,
+          yourOrderEntries: yourOrderEntries,
+          otherUsersOrderEntries: otherUsersOrderEntries,
         }
         return obj
       })
@@ -79,7 +91,7 @@ export class ShowOrderViewComponent implements OnInit {
   }
 
   placeOrder() {
-
+    // this.router.navigate(["/make_an_order/", this.showOrderResponse.order.id])
   }
 
   goToEditOrder() {
@@ -87,6 +99,15 @@ export class ShowOrderViewComponent implements OnInit {
   }
 
   setAsDelivered() {
-
+    //   this.$store.commit("setLoadingTrue");
+    //   this.ordersConnector
+    //     .setOrderAsDelivered(this.orderId)
+    //     .then(() => {
+    //       this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.showOrderResponse.order.id);
+    //     })
+    //     .catch(errResponse => {
+    //       this.$store.commit("setLoadingFalse");
+    //       ErrorHandler.handleError(errResponse)
+    //     });
   }
 }
