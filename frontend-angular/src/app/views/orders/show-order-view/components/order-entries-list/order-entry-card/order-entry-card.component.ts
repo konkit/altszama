@@ -2,7 +2,6 @@ import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../../frontend-client";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {ModifyOrderEntryState, ShowOrderViewService} from "../../../service/show-order-view.service";
-import {FormBuilder} from "@angular/forms";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({

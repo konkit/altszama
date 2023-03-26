@@ -4,9 +4,29 @@ import {
   OrderControllerService,
   OrderEntryControllerService,
   OrderEntryUpdateRequest,
+  ParticipantsOrderEntry,
+  ShowOrderDto,
   ShowOrderResponse
 } from "../../../../../frontend-client";
+import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
+import {AuthService} from "../../../../service/auth.service";
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
+
+export interface ShowOrderViewState {
+  canShowPlaceOrderButton: boolean
+  isPlaceOrderButtonDisabled: boolean
+  canShowMarkAsDeliveredButton: boolean
+  shouldDisplayNewOrderEntryCard: boolean
+  shouldShowQRCodeButton: boolean,
+  isOrderOwner: boolean,
+  allEatingPeopleCount: number,
+  numberOfCurrentUserEntries: number,
+  username: string,
+  yourOrderEntries: ParticipantsOrderEntry[],
+  otherUsersOrderEntries: ParticipantsOrderEntry[],
+  priceSummaryInput: PriceSummaryInput;
+}
 
 export interface ModifyOrderEntryState {
   loadingEntry: boolean;
@@ -38,8 +58,11 @@ export class ShowOrderViewService {
 
   modifyOrderEntryState = new BehaviorSubject<ModifyOrderEntryState>(initialModifyOrderEntryState)
 
+  showOrderViewState$: Observable<ShowOrderViewState> = this.createShowOrderViewStateObservable()
+
   constructor(private orderControllerService: OrderControllerService,
-              private orderEntryControllerService: OrderEntryControllerService) {
+              private orderEntryControllerService: OrderEntryControllerService,
+              private authService: AuthService) {
   }
 
   loadOrderResponse(id: string | null): Observable<ShowOrderResponse> {
@@ -62,6 +85,62 @@ export class ShowOrderViewService {
 
   modifyOrderEntryStateAsObservable() {
     return this.modifyOrderEntryState.asObservable()
+  }
+
+  getShowOrderViewState(): Observable<ShowOrderViewState> {
+    return this.showOrderViewState$;
+  }
+
+  private createShowOrderViewStateObservable() {
+    return this.orderResponse.pipe(
+      filter(isNonNullGuard),
+      map(r => {
+        let order = r.order
+        let orderState = r.order.orderState
+        let orderEntries = r.orderEntries
+        let currentUserId = r.currentUserId
+
+        let isOrderOwner = order.orderCreatorId === currentUserId;
+        let canShowPlaceOrderButton = isOrderOwner && [OrderStateEnum.CREATED, OrderStateEnum.ORDERING].includes(order.orderState)
+        let canShowMarkAsDeliveredButton = isOrderOwner && orderState === OrderStateEnum.ORDERED;
+        let isPlaceOrderButtonDisabled = orderEntries.length === 0;
+
+        let username = this.authService.getLoggedUser()!.username;
+        let yourOrderEntries = orderEntries.filter(e => e.userId === currentUserId);
+        let otherUsersOrderEntries = orderEntries.filter(e => e.userId !== currentUserId);
+
+        let allEatingPeopleCount = orderEntries.flatMap(e => e.dishEntries).length;
+        let numberOfCurrentUserEntries = yourOrderEntries.length;
+        let shouldDisplayNewOrderEntryCard = order.orderState == OrderStateEnum.CREATED && numberOfCurrentUserEntries === 0
+
+        let isAnyOrderEntryOwner = numberOfCurrentUserEntries > 0
+        let isOrderedOrDelivered = [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(order.orderState);
+        let shouldShowQRCodeButton = isAnyOrderEntryOwner && isOrderedOrDelivered && order.paymentData.paymentByBankTransfer;
+
+        let priceSummaryInput: PriceSummaryInput = {
+          deliveryData: r.order.deliveryData,
+          basePriceSum: r.baseOrderPrice,
+          totalPrice: r.totalOrderPrice,
+          allEatingPeopleCount: r.orderEntries.flatMap(e => e.dishEntries).length,
+        }
+
+        let obj: ShowOrderViewState = {
+          canShowPlaceOrderButton: canShowPlaceOrderButton,
+          isPlaceOrderButtonDisabled: isPlaceOrderButtonDisabled,
+          canShowMarkAsDeliveredButton: canShowMarkAsDeliveredButton,
+          shouldDisplayNewOrderEntryCard: shouldDisplayNewOrderEntryCard,
+          shouldShowQRCodeButton: shouldShowQRCodeButton,
+          isOrderOwner: isOrderOwner,
+          allEatingPeopleCount: allEatingPeopleCount,
+          numberOfCurrentUserEntries: numberOfCurrentUserEntries,
+          username: username,
+          yourOrderEntries: yourOrderEntries,
+          otherUsersOrderEntries: otherUsersOrderEntries,
+          priceSummaryInput: priceSummaryInput,
+        }
+        return obj
+      })
+    );
   }
 
   setEntryLoading(newValue: boolean) {
@@ -212,4 +291,15 @@ export class ShowOrderViewService {
         switchMap(() => this.reloadOrderResponse()),
       )
   }
+
+  setAsDelivered(orderId: string) {
+    this.orderControllerService.setAsDelivered(orderId)
+      .subscribe({
+        next: () => this.reloadOrderResponse(),
+      })
+  }
+}
+
+function isNonNullGuard<T>(value: T): value is NonNullable<T> {
+  return value != null;
 }

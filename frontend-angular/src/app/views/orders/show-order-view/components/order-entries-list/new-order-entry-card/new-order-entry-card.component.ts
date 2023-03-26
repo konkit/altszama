@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
-import {ModifyOrderEntryState, ShowOrderViewService} from "../../../service/show-order-view.service";
+import {ShowOrderViewService} from "../../../service/show-order-view.service";
 import {ShowOrderResponse} from "../../../../../../../frontend-client";
-import {ShowOrderViewState} from "../../../show-order-view.component";
 
 @Component({
   selector: 'app-new-order-entry-card',

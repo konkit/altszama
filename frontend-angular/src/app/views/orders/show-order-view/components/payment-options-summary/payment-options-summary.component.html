@@ -16,7 +16,7 @@
     </div>
     <div class="px-3 user-selectable flex" *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
       {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
-      <app-bank-transfer-qrcode [showOrderResponse]="showOrderResponse"></app-bank-transfer-qrcode>
+        <fa-icon *ngIf="shouldShowQRCodeButton" (click)="showQrModal()" [icon]="faQrcode" size="lg" class="cursor-pointer ml-2" matTooltip="Show QR code"></fa-icon>
     </div>
   </div>
 

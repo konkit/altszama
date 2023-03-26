@@ -1,22 +1,37 @@
-import {Component, Input} from '@angular/core';
-import {PaymentData, ShowOrderResponse} from "../../../../../../frontend-client";
-import {faCheck, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {Component, Input, OnInit} from '@angular/core';
+import {ParticipantsOrderEntry, PaymentData, ShowOrderResponse} from "../../../../../../frontend-client";
+import {faCheck, faQrcode, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  BankTransferQrcodeModal,
+  QrcodeModalInput
+} from "./bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
+import {ShowOrderViewState} from "../../service/show-order-view.service";
 
 @Component({
   selector: 'app-payment-options-summary',
   templateUrl: './payment-options-summary.component.html',
   styleUrls: ['./payment-options-summary.component.scss']
 })
-export class PaymentOptionsSummaryComponent {
+export class PaymentOptionsSummaryComponent implements OnInit {
 
   @Input() showOrderResponse!: ShowOrderResponse
+  @Input() paymentData!: PaymentData
+  @Input() viewState!: ShowOrderViewState
+
+  shouldShowQRCodeButton: any;
 
   faCheck = faCheck
   faTimes = faTimes
+  faQrcode = faQrcode
 
-  get paymentData() {
-    return this.showOrderResponse.order.paymentData
+  constructor(private dialog: MatDialog) {
   }
+
+  ngOnInit() {
+    this.shouldShowQRCodeButton = this.viewState.shouldShowQRCodeButton
+  }
+
 
   formatBankAccountNr(unformattedInput: string) {
     if (unformattedInput) {
@@ -51,4 +66,13 @@ export class PaymentOptionsSummaryComponent {
     return unformattedInput;
   }
 
+  showQrModal() {
+    let data: QrcodeModalInput = {
+      paymentData: this.showOrderResponse.order.paymentData,
+      yourOrderEntries: this.viewState.yourOrderEntries,
+      orderCreatorUsername: this.showOrderResponse.order.orderCreatorUsername,
+      orderDate: this.showOrderResponse.order.orderDate
+    }
+    this.dialog.open(BankTransferQrcodeModal, { width: '300px', data: data })
+  }
 }

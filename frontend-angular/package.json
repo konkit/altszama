@@ -26,6 +26,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.2.1",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@techiediaries/ngx-qrcode": "^9.1.0",
     "moment": "^2.29.4",
     "ngx-mat-timepicker": "^15.1.2",
     "rxjs": "~7.8.0",

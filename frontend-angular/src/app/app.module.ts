@@ -27,7 +27,6 @@ import { OrderDataSummaryComponent } from './views/orders/show-order-view/compon
 import { PriceSummaryComponent } from './views/orders/show-order-view/components/price-summary/price-summary.component';
 import { PaymentOptionsSummaryComponent } from './views/orders/show-order-view/components/payment-options-summary/payment-options-summary.component';
 import {PricePipe} from "./components/pipes/price.pipe";
-import { BankTransferQRCodeComponent } from './views/orders/show-order-view/components/price-summary/bank-transfer-qrcode/bank-transfer-qrcode.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import { OrderEntriesListComponent } from './views/orders/show-order-view/components/order-entries-list/order-entries-list.component';
 import { OrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/order-entry-card/order-entry-card.component';
@@ -70,6 +69,10 @@ import { NewOrderEntryCardComponent } from './views/orders/show-order-view/compo
 import { CreateOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/create-order-entry/create-order-entry.component';
 import { EditOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/edit-order-entry/edit-order-entry.component';
 import { UserOrdersComponent } from './views/orders/make-an-order-view/components/user-orders/user-orders.component';
+import {
+  BankTransferQrcodeModal
+} from "./views/orders/show-order-view/components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 @NgModule({
   declarations: [
@@ -92,7 +95,7 @@ import { UserOrdersComponent } from './views/orders/make-an-order-view/component
     PriceSummaryComponent,
     PaymentOptionsSummaryComponent,
     PricePipe,
-    BankTransferQRCodeComponent,
+    BankTransferQrcodeModal,
     OrderEntriesListComponent,
     OrderEntryCardComponent,
     TitleWithPaymentStatusComponent,
@@ -142,6 +145,7 @@ import { UserOrdersComponent } from './views/orders/make-an-order-view/component
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    NgxQRCodeModule,
   ],
   providers: [
     {

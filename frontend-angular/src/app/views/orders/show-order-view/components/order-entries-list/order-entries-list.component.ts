@@ -1,9 +1,6 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../frontend-client";
-import {ShowOrderViewState} from "../../show-order-view.component";
-import {ModifyOrderEntryState, ShowOrderViewService} from "../../service/show-order-view.service";
-import {AuthService} from "../../../../../service/auth.service";
-import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {Component, Input} from '@angular/core';
+import {ShowOrderResponse} from "../../../../../../frontend-client";
+import {ModifyOrderEntryState, ShowOrderViewState} from "../../service/show-order-view.service";
 
 @Component({
   selector: 'app-order-entries-list',

@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>Bank transfer QR Code</h2>
+<mat-dialog-content>
+  <p>Scan this QR code with your bank application to autofill the bank transfer data.</p>
+  <ngx-qrcode [elementType]="qrElementType" [value]="generateCodeValue()">
+  </ngx-qrcode>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <app-button color="primary" (click)="closeModal()">Done</app-button>
+</mat-dialog-actions>
