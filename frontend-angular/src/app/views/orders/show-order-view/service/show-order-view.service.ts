@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
 import {
   OrderControllerService,
-  OrderEntryControllerService,
+  OrderEntryControllerService, OrderEntrySaveRequest,
   OrderEntryUpdateRequest,
   ParticipantsOrderEntry,
   ShowOrderDto,
@@ -11,7 +11,6 @@ import {
 import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
 import {AuthService} from "../../../../service/auth.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
-
 
 export interface ShowOrderViewState {
   canShowPlaceOrderButton: boolean
@@ -208,24 +207,43 @@ export class ShowOrderViewService {
     )
   }
 
-  saveOrderEntry(params: {
+  saveOrderEntryWithNewDish(params: {
     orderId: string,
-    formValue: {
-      name: string,
-      price: number,
-      additionalComments: string,
-    }
+    dishName: string,
+    dishPrice: number,
+    additionalComments: string,
   }): Observable<void> {
     let orderEntryToSave = {
       orderId: params.orderId,
       dishId: "",
+      additionalComments: params.additionalComments,
       newDish: true,
-      newDishName: params.formValue.name,
-      newDishPrice: params.formValue.price,
-      additionalComments: params.formValue.additionalComments,
+      newDishName: params.dishName,
+      newDishPrice: params.dishPrice,
       sideDishes: [],
     };
 
+    return this.doSaveOrderEntry(orderEntryToSave);
+  }
+
+  saveOrderEntryWithExistingDish(params: {
+    orderId: string,
+    dishId: string,
+    additionalComments: string,
+  }): Observable<void> {
+    let orderEntryToSave = {
+      orderId: params.orderId,
+      dishId: params.dishId,
+      additionalComments: params.additionalComments,
+      newDish: false,
+      newDishName: "",
+      newDishPrice: 0,
+      sideDishes: [],
+    };
+    return this.doSaveOrderEntry(orderEntryToSave);
+  }
+
+  private doSaveOrderEntry(orderEntryToSave: OrderEntrySaveRequest) {
     return this.orderEntryControllerService
       .save1(orderEntryToSave)
       .pipe(

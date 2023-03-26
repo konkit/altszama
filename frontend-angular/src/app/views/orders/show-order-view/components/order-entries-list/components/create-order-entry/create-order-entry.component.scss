@@ -1,0 +1,9 @@
+@use '@angular/material' as mat;
+
+// Use the default configuration.
+$my-typography: mat.define-typography-config();
+@include mat.typography-hierarchy($my-typography);
+
+.subtitle {
+    @include mat.typography-level($my-typography, 'subtitle-2');
+}

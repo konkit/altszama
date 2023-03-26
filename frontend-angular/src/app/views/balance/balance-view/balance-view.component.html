@@ -1,8 +1,46 @@
-  <h1 class="font-bold text-2xl text-gray-700">Balance</h1>
+<!--<ng-container *ngIf="orderResponse$ | async as orderResponse">-->
+<app-view-wrapper title="Balance">
 
-  <div
-    class="flex flex-col flex-grow border-4 border-gray-400 border-dashed bg-white rounded mt-4"
-  >
+  <div>
+    <div>
+      <div>
+        <h1 class="mb-4">Your balance:</h1>
+        <div *ngIf="owedMoneyEntries.length === 0">
+          <p>No pending entries - all settled up.</p>
+        </div>
 
+        <div *ngIf="owedMoneyEntries.length > 0">
+          <mat-list>
+            <mat-list-item *ngFor="let owedUsernameAndAmount of owedMoneyEntries">
+              <div *ngIf="owedUsernameAndAmount[1] > 0">
+                <p>You are owed <b>
+                  {{owedUsernameAndAmount[1] | price}}
+                </b> by <b>{{owedUsernameAndAmount[0]}}</b></p>
+              </div>
 
+              <div *ngIf="owedUsernameAndAmount[1] < 0">
+                <p>You owe <b>
+                  {{-owedUsernameAndAmount[1] | price}}
+                </b> to <b>{{owedUsernameAndAmount[0]}}</b></p>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+
+        <h1 class="mb-4">Your order history:</h1>
+
+        <div *ngIf="orderHistoryEntries.length > 0">
+          <mat-list>
+            <mat-list-item *ngFor="let historyEntry of orderHistoryEntries">
+              <app-balance-entry [historyEntry]="historyEntry"></app-balance-entry>
+            </mat-list-item>
+          </mat-list>
+        </div>
+
+        <div *ngIf="orderHistoryEntries.length === 0">
+          <p>Your order history is empty.</p>
+        </div>
+      </div>
+    </div>
   </div>
+</app-view-wrapper>
