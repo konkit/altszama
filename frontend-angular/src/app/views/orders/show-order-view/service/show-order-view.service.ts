@@ -298,6 +298,10 @@ export class ShowOrderViewService {
         next: () => this.reloadOrderResponse(),
       })
   }
+
+  deleteOrder(orderId: string): Observable<string> {
+    return this.orderControllerService._delete(orderId)
+  }
 }
 
 function isNonNullGuard<T>(value: T): value is NonNullable<T> {

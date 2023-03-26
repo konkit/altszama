@@ -59,7 +59,7 @@ export class RestaurantFormService {
   }
 
   deleteDish(dishId: string) {
-    this.dialogService.displayDeleteDialog("Are you sure you want to delete this dish?")
+    this.dialogService.displayDeleteDialog("Delete dish?", "Are you sure you want to delete this dish?")
       .afterClosed()
       .pipe(
         switchMap(confirmed => {
@@ -75,7 +75,7 @@ export class RestaurantFormService {
   }
 
   deleteRestaurant(restaurantId: string) {
-    this.dialogService.displayDeleteDialog("Are you sure you want to delete this restaurant?")
+    this.dialogService.displayDeleteDialog("Delete restaurant?", "Are you sure you want to delete this restaurant?")
       .afterClosed()
       .pipe(
         switchMap(confirmed => {

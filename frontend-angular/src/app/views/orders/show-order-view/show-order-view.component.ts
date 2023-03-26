@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
 import {ShowOrderResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable} from "rxjs";
+import {EMPTY, Observable, switchMap, tap} from "rxjs";
 import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "./service/show-order-view.service";
-
+import {faCog, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {DialogService} from "../../../service/dialog.service";
 
 @Component({
   selector: 'app-show-order-view',
@@ -15,11 +16,14 @@ export class ShowOrderViewComponent {
   orderResponse$: Observable<ShowOrderResponse>
   showOrderViewState$: Observable<ShowOrderViewState>
   modifyOrderEntryState$: Observable<ModifyOrderEntryState>;
+  faCog = faCog;
+  faTimes = faTimes;
 
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private showOrderViewService: ShowOrderViewService) {
+              private showOrderViewService: ShowOrderViewService,
+              private dialogService: DialogService) {
     this.orderResponse$ = this.showOrderViewService.orderResponseAsObservable()
     this.showOrderViewState$ = this.showOrderViewService.getShowOrderViewState();
     this.modifyOrderEntryState$ = this.showOrderViewService.modifyOrderEntryStateAsObservable()
@@ -41,7 +45,27 @@ export class ShowOrderViewComponent {
     this.showOrderViewService.setAsDelivered(this.getOrderId())
   }
 
-  getOrderId() {
+  getOrderId(): string {
     return this.route.snapshot.paramMap.get('id')!
+  }
+
+  deleteOrder() {
+    this.dialogService.displayDeleteDialog("Delete order?", "Are you sure you want to delete this order?")
+      .afterClosed()
+      .pipe(
+        switchMap(confirmed => {
+          if (confirmed) {
+            return this.showOrderViewService.deleteOrder(this.getOrderId())
+              .pipe(
+                tap(() => {
+                  this.router.navigate(['/orders/all'], {onSameUrlNavigation: "reload"})
+                })
+              )
+          } else {
+            return EMPTY;
+          }
+        })
+      )
+      .subscribe()
   }
 }

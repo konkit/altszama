@@ -2,6 +2,7 @@ import {Component, Inject, Input} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 export interface DeleteConfirmationInput {
+  title: string
   content :string
 }
 
@@ -12,12 +13,14 @@ export interface DeleteConfirmationInput {
 })
 export class DeleteConfirmationModalComponent {
 
+  title: string = "Confirm delete";
   content: string = "Are you sure you want to delete?";
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: DeleteConfirmationInput,
     private dialogRef: MatDialogRef<DeleteConfirmationModalComponent>
   ) {
+    this.title = data.title;
     this.content = data.content;
   }
 
