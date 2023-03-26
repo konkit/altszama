@@ -20,6 +20,8 @@ import {CreateOrderResolver} from "./views/orders/create-order-view/create-order
 import {
   CreateRestaurantViewComponent
 } from "./views/restaurants/create-restaurant-view/create-restaurant-view.component";
+import {EditOrderViewComponent} from "./views/orders/edit-order-view/edit-order-view.component";
+import {EditOrderResolver} from "./views/orders/edit-order-view/edit-order.resolver";
 
 
 export const notAuthenticatedRoutes: Routes = [
@@ -51,14 +53,6 @@ export const authenticatedRoutes: Routes = [
     }
   },
   {
-    path: "orders/show/:id",
-    title: "ShowOrder",
-    component: ShowOrderViewComponent,
-    resolve: {
-      response: ShowOrderResolver
-    }
-  },
-  {
     path: "orders/create",
     title: "CreateOrder",
     component: CreateOrderViewComponent,
@@ -70,6 +64,22 @@ export const authenticatedRoutes: Routes = [
     path: "orders/:id/make_an_order",
     title: "MakeAnOrderView",
     component: MakeAnOrderViewComponent,
+  },
+  {
+    path: "orders/:id/show",
+    title: "ShowOrder",
+    component: ShowOrderViewComponent,
+    resolve: {
+      response: ShowOrderResolver
+    }
+  },
+  {
+    path: "orders/:id/edit",
+    title: "EditOrderView",
+    component: EditOrderViewComponent,
+    resolve: {
+      response: EditOrderResolver
+    }
   },
   {
     path: "orders/all",

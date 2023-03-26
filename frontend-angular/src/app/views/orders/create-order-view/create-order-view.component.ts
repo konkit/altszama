@@ -155,7 +155,7 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
     };
 
     this.orderControllerService.save(order).subscribe({
-      next: r => this.router.navigate(["/orders/show", r.orderId]),
+      next: r => this.router.navigate(["/orders", r.orderId, 'show']),
       error: err => console.log(err)
     })
 

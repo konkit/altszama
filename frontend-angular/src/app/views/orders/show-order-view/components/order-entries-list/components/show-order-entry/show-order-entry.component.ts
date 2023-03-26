@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
-import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
   selector: 'app-show-order-entry',
@@ -15,23 +15,17 @@ export class ShowOrderEntryComponent {
   @Input() orderEntry!: ParticipantsOrderEntry;
   @Input() dishEntry!: ParticipantsDishEntry;
   @Input() currentUserId!: string;
+
   faPencil = faPencil;
   faTimes = faTimes;
 
   constructor(private showOrderViewService: ShowOrderViewService) {
-
   }
 
   canEditOrderEntry() {
-    return this.isOrderOwner() || (this.isOrderEntryOwner() && this.order.orderState === OrderStateEnum.CREATED)
-  }
-
-  isOrderOwner() {
-    return this.order.orderCreatorId === this.currentUserId;
-  }
-
-  isOrderEntryOwner() {
-    return this.orderEntry.userId === this.currentUserId;
+    let isOrderOwner = this.order.orderCreatorId === this.currentUserId;
+    let isOrderEntryOwner = this.orderEntry.userId === this.currentUserId;
+    return isOrderOwner || (isOrderEntryOwner && this.order.orderState === OrderStateEnum.CREATED)
   }
 
   editDishEntry() {

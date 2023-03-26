@@ -83,6 +83,6 @@ export class MakeAnOrderViewComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(["/orders/show", this.getOrderId()])
+    this.router.navigate(["/orders", this.getOrderId(), 'show'])
   }
 }

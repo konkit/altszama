@@ -34,7 +34,7 @@ export class ShowOrderViewComponent {
   }
 
   goToEditOrder() {
-    console.error("goToEditOrder not implemented yet!")
+    this.router.navigate(["/orders", this.getOrderId(), "edit"])
   }
 
   setAsDelivered() {

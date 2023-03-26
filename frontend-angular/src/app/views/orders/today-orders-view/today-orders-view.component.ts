@@ -25,7 +25,7 @@ export class TodayOrdersViewComponent {
   }
 
   goToOrder(selectedOrderId: string) {
-    return this.router.navigate(["/orders/show/", selectedOrderId]);
+    return this.router.navigate(["/orders/", selectedOrderId, 'show']);
     // router.push({name: "ShowOrder", params: {id: selectedOrderId}});
   }
 

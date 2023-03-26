@@ -73,6 +73,7 @@ import {
   BankTransferQrcodeModal
 } from "./views/orders/show-order-view/components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { EditOrderViewComponent } from './views/orders/edit-order-view/edit-order-view.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
     CreateOrderEntryComponent,
     EditOrderEntryComponent,
     UserOrdersComponent,
+    EditOrderViewComponent,
   ],
   imports: [
     BrowserModule,
