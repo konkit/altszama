@@ -1,45 +1,8 @@
 <div>
-  <form [formGroup]="formGroup">
-    <mat-error>{{formGroup.errors}}</mat-error>
-
-    <div>
-      <div class="d-flex fix-top-margin">
-        <mat-form-field class="w-full">
-          <mat-label>Dish</mat-label>
-          <input matInput [formControl]="formGroup.controls.dish" [matAutocomplete]="auto" />
-
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onDishSelected($event.option.value)' [displayWith]="displayFn">
-            <mat-option *ngFor="let dish of filteredDishes | async" [value]="dish">
-              <div>{{dish.name}}</div>
-              <div class="subtitle">
-                Price: {{dish.price | price}}, auto-updated {{ dish.lastCrawled | relativeDate }}
-              </div>
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Price</mat-label>
-          <app-money-input [formControl]="formGroup.controls.price"></app-money-input>
-        </mat-form-field>
-      </div>
-
-      <div>Side dishes:</div>
-
-      <!--  <side-dishes-input :chosen-side-dishes="orderEntryData.dishData.chosenSideDishes"-->
-      <!--                     :available-side-dishes="availableSideDishes"-->
-      <!--                     @change="updateChosenSideDishes($event)">-->
-      <!--  </side-dishes-input>-->
-
-      <mat-form-field>
-        <mat-label>Additional Comments</mat-label>
-        <textarea matInput [formControl]="formGroup.controls.additionalComments"></textarea>
-      </mat-form-field>
-    </div>
-
-    <hr/>
-
-    <app-button color="primary" (click)="submitForm()">Submit</app-button>
-    <app-button (click)="cancelEdit()">Cancel</app-button>
-  </form>
+  <app-order-entry-form
+    [formGroup]="formGroup"
+    [dishes]="orderResponse.allDishesInRestaurant"
+    (onSubmit)="onSubmit()"
+    (onCancel)="onCancel()">
+  </app-order-entry-form>
 </div>

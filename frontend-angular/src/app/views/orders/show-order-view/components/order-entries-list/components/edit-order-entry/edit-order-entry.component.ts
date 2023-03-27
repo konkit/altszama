@@ -47,6 +47,7 @@ export class EditOrderEntryComponent implements OnInit {
   }
 
   updateOrderEntry() {
+    //TODO(konkit): Reuse autocomplete from create
     let params = {
       orderId: this.orderResponse.order.id,
       orderEntryId: this.orderEntry.id,

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {map, Observable, of, startWith} from "rxjs";
-import {DishDto, OrderEntryControllerService, ShowOrderResponse} from "../../../../../../../../frontend-client";
+import {DishDto, ShowOrderResponse} from "../../../../../../../../frontend-client";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 
@@ -13,14 +13,12 @@ export class CreateOrderEntryComponent implements OnInit {
 
   @Input() orderResponse!: ShowOrderResponse
 
-
   dishes!: DishDto[]
-  filteredDishes!: Observable<DishDto[]>;
 
-  formGroup = this.fb.nonNullable.group({
-    dish: this.fb.nonNullable.control<DishDto | string>('', {}),
-    price: this.fb.nonNullable.control<number>(0, {}),
-    additionalComments: this.fb.nonNullable.control<string>('', {}),
+  formGroup: FormGroup<{additionalComments: FormControl<string>, dish: FormControl<DishDto | string>, price: FormControl<number>}> = this.fb.nonNullable.group({
+    dish: this.fb.nonNullable.control<DishDto | string>(''),
+    price: this.fb.nonNullable.control<number>(0),
+    additionalComments: this.fb.nonNullable.control<string>(''),
   });
 
   constructor(private showOrderViewService: ShowOrderViewService,
@@ -30,30 +28,15 @@ export class CreateOrderEntryComponent implements OnInit {
 
   ngOnInit() {
     this.dishes = this.orderResponse.allDishesInRestaurant
-    this.filteredDishes = this.formGroup.controls.dish.valueChanges.pipe(
-      startWith(''),
-      map(nameOrDish => {
-        let filterPhrase
-        if (typeof nameOrDish == "object") {
-          let dish: DishDto = nameOrDish
-          filterPhrase = dish.name
-        } else {
-          filterPhrase = nameOrDish || ''
-        }
-        return this._filter(filterPhrase)
-      }),
-    );
     this.showOrderViewService.setEntryLoading(false)
   }
 
-  private _filter(value: string): DishDto[] {
-    const filterValue = value.toLowerCase();
-    return this.dishes.filter(dish => dish.name.toLowerCase().includes(filterValue));
+  onSubmit() {
+    this.saveOrderEntry()
   }
 
-  submitForm() {
-    // Set timeout is necessary to properly handle last-minute updates in form controls
-    setTimeout(() => this.saveOrderEntry(), 0)
+  onCancel() {
+    this.showOrderViewService.cancelDishEntryModification()
   }
 
   private saveOrderEntry() {
@@ -89,18 +72,5 @@ export class CreateOrderEntryComponent implements OnInit {
           }
         })
     }
-  }
-
-  cancelEdit() {
-    this.showOrderViewService.cancelDishEntryModification()
-  }
-
-  onDishSelected(dish: DishDto) {
-    console.log("On dish selected", dish)
-    this.formGroup.controls.price.setValue(dish.price)
-  }
-
-  displayFn(dish: DishDto): string {
-    return dish && dish.name ? dish.name : '';
   }
 }

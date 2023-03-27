@@ -76,6 +76,7 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { EditOrderViewComponent } from './views/orders/edit-order-view/edit-order-view.component';
 import { BalanceEntryComponent } from './views/balance/balance-view/components/balance-entry/balance-entry.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { OrderEntryFormComponent } from './views/orders/show-order-view/components/order-entries-list/components/order-entry-form/order-entry-form.component';
 
 @NgModule({
   declarations: [
@@ -123,6 +124,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
     UserOrdersComponent,
     EditOrderViewComponent,
     BalanceEntryComponent,
+    OrderEntryFormComponent,
   ],
   imports: [
     BrowserModule,
