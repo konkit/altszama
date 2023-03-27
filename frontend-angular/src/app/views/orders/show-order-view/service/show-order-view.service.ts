@@ -253,11 +253,13 @@ export class ShowOrderViewService {
       )
   }
 
-  updateOrderEntry(params: {
+  updateOrderEntryWithNewDish(params: {
     orderId: string,
     orderEntryId: string,
     dishEntryId: string,
-    formValue: { additionalComments: string, name: string, price: number }
+    dishName: string,
+    dishPrice: number,
+    additionalComments: string,
   }): Observable<void> {
     let orderEntryToUpdate: OrderEntryUpdateRequest
     orderEntryToUpdate = {
@@ -266,13 +268,58 @@ export class ShowOrderViewService {
       dishEntryId: params.dishEntryId,
       newDish: true,
       dishId: "",
-      additionalComments: params.formValue.additionalComments,
-      newDishName: params.formValue.name,
-      newDishPrice: params.formValue.price,
+      additionalComments: params.additionalComments,
+      newDishName: params.dishName,
+      newDishPrice: params.dishPrice,
       sideDishes: [],
     };
 
     return this.doUpdateOrderEntry(orderEntryToUpdate)
+  }
+
+  updateOrderEntryWithExistingDish(params: {
+    orderId: string,
+    orderEntryId: string,
+    dishEntryId: string,
+    dishId: string,
+    additionalComments: string,
+  }): Observable<void> {
+    let orderEntryToUpdate: OrderEntryUpdateRequest
+    orderEntryToUpdate = {
+      id: params.orderEntryId,
+      orderId: params.orderId,
+      dishEntryId: params.dishEntryId,
+      newDish: false,
+      dishId: params.dishId,
+      additionalComments: params.additionalComments,
+      newDishName: "",
+      newDishPrice: 0,
+      sideDishes: [],
+    };
+
+    return this.doUpdateOrderEntry(orderEntryToUpdate)
+  }
+
+  // updateOrderEntry(params: {
+  //   orderId: string,
+  //   orderEntryId: string,
+  //   dishEntryId: string,
+  //   formValue: { additionalComments: string, name: string, price: number }
+  // }): Observable<void> {
+  //   let orderEntryToUpdate: OrderEntryUpdateRequest
+  //   orderEntryToUpdate = {
+  //     id: params.orderEntryId,
+  //     orderId: params.orderId,
+  //     dishEntryId: params.dishEntryId,
+  //     newDish: true,
+  //     dishId: "",
+  //     additionalComments: params.formValue.additionalComments,
+  //     newDishName: params.formValue.name,
+  //     newDishPrice: params.formValue.price,
+  //     sideDishes: [],
+  //   };
+  //
+  //   return this.doUpdateOrderEntry(orderEntryToUpdate)
 
     // const dishData: (NewDishData | ExistingDishData) = state.orderEntryData.dishData
     // if (dishData.kind === "NewDishData") {
@@ -298,7 +345,6 @@ export class ShowOrderViewService {
     //     chosenSideDishes: dishData.chosenSideDishes
     //   };
     // }
-  }
 
   private doUpdateOrderEntry(orderEntryToUpdate: OrderEntryUpdateRequest): Observable<void> {
     return this.orderEntryControllerService
