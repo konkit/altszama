@@ -24,6 +24,7 @@ export interface ShowOrderViewState {
   username: string,
   yourOrderEntries: ParticipantsOrderEntry[],
   otherUsersOrderEntries: ParticipantsOrderEntry[],
+  yourAndOtherUsersOrderEntries: ParticipantsOrderEntry[],
   priceSummaryInput: PriceSummaryInput;
 }
 
@@ -135,6 +136,7 @@ export class ShowOrderViewService {
           username: username,
           yourOrderEntries: yourOrderEntries,
           otherUsersOrderEntries: otherUsersOrderEntries,
+          yourAndOtherUsersOrderEntries: [...yourOrderEntries, ...otherUsersOrderEntries],
           priceSummaryInput: priceSummaryInput,
         }
         return obj

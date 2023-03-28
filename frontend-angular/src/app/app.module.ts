@@ -29,7 +29,6 @@ import { PaymentOptionsSummaryComponent } from './views/orders/show-order-view/c
 import {PricePipe} from "./components/pipes/price.pipe";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import { OrderEntriesListComponent } from './views/orders/show-order-view/components/order-entries-list/order-entries-list.component';
-import { OrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/order-entry-card/order-entry-card.component';
 import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/components/order-entries-list/components/title-with-payment-status/title-with-payment-status.component';
 import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/show-order-entry/show-order-entry.component';
 import { ViewWrapperComponent } from './components/view-wrapper/view-wrapper.component';
@@ -65,7 +64,6 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { DishFormComponent } from './views/restaurants/show-restaurant-view/components/dish-form/dish-form.component';
 import { DishFormPlaceholderComponent } from './views/restaurants/show-restaurant-view/components/dish-form-placeholder/dish-form-placeholder.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
-import { NewOrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/new-order-entry-card/new-order-entry-card.component';
 import { CreateOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/create-order-entry/create-order-entry.component';
 import { EditOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/edit-order-entry/edit-order-entry.component';
 import { UserOrdersComponent } from './views/orders/make-an-order-view/components/user-orders/user-orders.component';
@@ -101,7 +99,6 @@ import { OrderEntryFormComponent } from './views/orders/show-order-view/componen
     PricePipe,
     BankTransferQrcodeModal,
     OrderEntriesListComponent,
-    OrderEntryCardComponent,
     TitleWithPaymentStatusComponent,
     ShowOrderEntryComponent,
     DishEntryComponent,
@@ -118,7 +115,6 @@ import { OrderEntryFormComponent } from './views/orders/show-order-view/componen
     EditRestaurantFormComponent,
     DishFormComponent,
     DishFormPlaceholderComponent,
-    NewOrderEntryCardComponent,
     CreateOrderEntryComponent,
     EditOrderEntryComponent,
     UserOrdersComponent,

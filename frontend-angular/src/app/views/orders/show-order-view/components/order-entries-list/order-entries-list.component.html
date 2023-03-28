@@ -1,28 +1,68 @@
 <div *ngIf="viewState.shouldDisplayNewOrderEntryCard">
-      <app-new-order-entry-card [isEntryCreating]="modifyOrderEntryState.isEntryCreating"
-                                [username]="viewState.username"
-                                [showOrderResponse]="showOrderResponse">
-      </app-new-order-entry-card>
+  <h3>{{ viewState.username }}</h3>
+
+  <div>
+    <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === false">
+      <app-button color="primary" class="mt-3" (click)="createEntry()" [icon]="faPlus">
+        Add entry
+      </app-button>
+    </ng-container>
+
+    <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === true">
+      <app-create-order-entry [orderResponse]="showOrderResponse"></app-create-order-entry>
+    </ng-container>
+  </div>
 </div>
 
-<div *ngFor="let orderEntry of viewState.yourOrderEntries; let entryId = index">
-    <app-order-entry-card
-      [showOrderResponse]="showOrderResponse"
+<div *ngFor="let orderEntry of viewState.yourAndOtherUsersOrderEntries">
+  <div class="border-b my-3">
+    <app-title-with-payment-status
+      [title]="orderEntry.username"
+      [priceForUser]="orderEntry.finalPrice"
       [order]="showOrderResponse.order"
       [orderEntry]="orderEntry"
-      [entryId]="entryId"
-      [currentUserId]="this.showOrderResponse.currentUserId"
-      [modifyOrderEntryState]="modifyOrderEntryState">
-    </app-order-entry-card>
-</div>
+      [currentUserId]="showOrderResponse.currentUserId"
+      [costForUser]="orderEntry.finalPrice"
+    ></app-title-with-payment-status>
 
-<div *ngFor="let orderEntry of viewState.otherUsersOrderEntries; let entryId = index">
-    <app-order-entry-card
-      [showOrderResponse]="showOrderResponse"
-      [order]="showOrderResponse.order"
-      [orderEntry]="orderEntry"
-      [entryId]="entryId"
-      [currentUserId]="this.showOrderResponse.currentUserId"
-      [modifyOrderEntryState]="modifyOrderEntryState">
-    </app-order-entry-card>
+    <div *ngFor="let dishEntry of orderEntry.dishEntries; let dishEntryIndex = index;">
+      <div *ngIf="modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id">
+        <app-edit-order-entry
+          [orderResponse]="showOrderResponse"
+          [modifyOrderEntryState]="modifyOrderEntryState"
+          [orderEntry]="orderEntry"
+          [dishEntry]="dishEntry"
+        >
+        </app-edit-order-entry>
+      </div>
+
+      <div *ngIf="!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)">
+        <app-show-order-entry
+          [order]="showOrderResponse.order"
+          [orderEntry]="orderEntry"
+          [dishEntry]="dishEntry"
+          [currentUserId]="showOrderResponse.currentUserId"
+          [index]="dishEntryIndex + 1"
+        >
+        </app-show-order-entry>
+      </div>
+
+      <div *ngIf="dishEntryIndex < orderEntry.dishEntries.length - 1">
+        <hr/>
+        <!--        <v-divider :key="'dish-entry-divider' + dishEntryIndex" class="dishes-divider"></v-divider>-->
+      </div>
+    </div>
+
+    <div *ngIf="canAddNewEntry(orderEntry)">
+      <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
+        <app-button color="primary" class="ml-4" (click)="createEntry()" [icon]="faPlus">
+          Add entry
+        </app-button>
+      </div>
+      <div *ngIf="modifyOrderEntryState.isEntryCreating === true">
+        <app-create-order-entry [orderResponse]="showOrderResponse"></app-create-order-entry>
+      </div>
+    </div>
+  </div>
+
 </div>
