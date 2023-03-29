@@ -1,7 +1,6 @@
 <!--<ng-container *ngIf="orderResponse$ | async as orderResponse">-->
 <app-view-wrapper title="Balance">
-
-  <div>
+  <div *ngIf="isLoading == false; else spinner">
     <div>
       <div>
         <h1 class="mb-4">Your balance:</h1>
@@ -31,8 +30,10 @@
 
         <div *ngIf="orderHistoryEntries.length > 0">
           <mat-list>
-            <mat-list-item *ngFor="let historyEntry of orderHistoryEntries">
-              <app-balance-entry [historyEntry]="historyEntry"></app-balance-entry>
+            <mat-list-item matListItemLine *ngFor="let historyEntry of orderHistoryEntries">
+              <div>
+                <app-balance-entry [historyEntry]="historyEntry"></app-balance-entry>
+              </div>
             </mat-list-item>
           </mat-list>
         </div>
@@ -43,4 +44,8 @@
       </div>
     </div>
   </div>
+
+  <ng-template #spinner>
+    <mat-spinner></mat-spinner>
+  </ng-template>
 </app-view-wrapper>

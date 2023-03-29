@@ -20,16 +20,15 @@
 <div *ngIf="isParticipatedEntry(historyEntry)">
   <div (click)="goToOrder(historyEntry.orderId)" [ngClass]="{paid: isParticipatedEntryPaid(historyEntry)}">
     <div>
-      <div>
-        <h3>({{ historyEntry.orderDate }}) {{ historyEntry.orderCreator }} ordered from {{
-          historyEntry.restaurantName
-          }}</h3>
-      </div>
-      <div>
-        Amount:
-        {{ historyEntry.orderEntryAmount | price }}
-        ({{ historyEntry.status }})
-      </div>
+      <h3>({{ historyEntry.orderDate }}) {{ historyEntry.orderCreator }} ordered from {{
+        historyEntry.restaurantName
+        }}</h3>
+    </div>
+
+    <div>
+      Amount:
+      {{ historyEntry.orderEntryAmount | price }}
+      ({{ historyEntry.status }})
     </div>
   </div>
 </div>
