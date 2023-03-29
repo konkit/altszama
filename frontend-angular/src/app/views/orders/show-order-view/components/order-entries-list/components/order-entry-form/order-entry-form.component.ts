@@ -1,7 +1,30 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {DishDto} from "../../../../../../../../frontend-client";
-import {map, Observable, startWith} from "rxjs";
+import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {DishDto, SideDish} from "../../../../../../../../frontend-client";
+import {filter, map, Observable, startWith} from "rxjs";
+
+export interface OrderEntryFormType {
+  dish: FormControl<DishDto | string>
+  price: FormControl<number>
+  additionalComments: FormControl<string>
+  chosenSideDishes: FormArray<FormGroup<SideDishForm>>
+}
+
+export interface OrderEntryFormValue {
+  dish: DishDto | string
+  price: number
+  additionalComments: string
+}
+
+export interface SideDishForm {
+  sideDish: FormControl<string | SideDish>
+  price: FormControl<number>
+}
+
+export interface SideDishValue {
+  name: string
+  price: number
+}
 
 @Component({
   selector: 'app-order-entry-form',
@@ -9,7 +32,7 @@ import {map, Observable, startWith} from "rxjs";
   styleUrls: ['./order-entry-form.component.scss']
 })
 export class OrderEntryFormComponent implements OnInit {
-  @Input() formGroup!: FormGroup<{additionalComments: FormControl<string>, dish: FormControl<DishDto | string>, price: FormControl<number>}>
+  @Input() formGroup!: FormGroup<OrderEntryFormType>
 
   @Input() dishes!: DishDto[]
 
@@ -17,8 +40,16 @@ export class OrderEntryFormComponent implements OnInit {
   @Output() onCancel = new EventEmitter<void>()
 
   filteredDishes!: Observable<DishDto[]>;
+  availableSideDishes$!: Observable<Array<SideDish>>;
 
   ngOnInit() {
+    this.availableSideDishes$ = this.formGroup.controls.dish.valueChanges
+      .pipe(
+        startWith(this.formGroup.controls.dish.value),
+        filter(isDishDto),
+        map(x => x.sideDishes)
+      )
+
     this.filteredDishes = this.formGroup.controls.dish.valueChanges.pipe(
       startWith(''),
       map(nameOrDish => {
@@ -32,6 +63,10 @@ export class OrderEntryFormComponent implements OnInit {
         return this._filter(filterPhrase)
       }),
     );
+
+    function isDishDto(value: string | DishDto): value is DishDto {
+      return typeof value === "object";
+    }
   }
 
 

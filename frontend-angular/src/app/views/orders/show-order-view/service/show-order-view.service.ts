@@ -6,11 +6,12 @@ import {
   OrderEntryUpdateRequest,
   ParticipantsOrderEntry,
   ShowOrderDto,
-  ShowOrderResponse
+  ShowOrderResponse, SideDishData
 } from "../../../../../frontend-client";
 import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
 import {AuthService} from "../../../../service/auth.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {SideDishValue} from "../components/order-entries-list/components/order-entry-form/order-entry-form.component";
 
 export interface ShowOrderViewState {
   canShowPlaceOrderButton: boolean
@@ -214,6 +215,7 @@ export class ShowOrderViewService {
     dishName: string,
     dishPrice: number,
     additionalComments: string,
+    sideDishes: Array<SideDishData>,
   }): Observable<void> {
     let orderEntryToSave = {
       orderId: params.orderId,
@@ -222,7 +224,7 @@ export class ShowOrderViewService {
       newDish: true,
       newDishName: params.dishName,
       newDishPrice: params.dishPrice,
-      sideDishes: [],
+      sideDishes: params.sideDishes,
     };
 
     return this.doSaveOrderEntry(orderEntryToSave);
@@ -232,6 +234,7 @@ export class ShowOrderViewService {
     orderId: string,
     dishId: string,
     additionalComments: string,
+    sideDishes: Array<SideDishData>,
   }): Observable<void> {
     let orderEntryToSave = {
       orderId: params.orderId,
@@ -240,7 +243,7 @@ export class ShowOrderViewService {
       newDish: false,
       newDishName: "",
       newDishPrice: 0,
-      sideDishes: [],
+      sideDishes: params.sideDishes,
     };
     return this.doSaveOrderEntry(orderEntryToSave);
   }
@@ -262,6 +265,7 @@ export class ShowOrderViewService {
     dishName: string,
     dishPrice: number,
     additionalComments: string,
+    sideDishes: Array<SideDishData>,
   }): Observable<void> {
     let orderEntryToUpdate: OrderEntryUpdateRequest
     orderEntryToUpdate = {
@@ -273,7 +277,7 @@ export class ShowOrderViewService {
       additionalComments: params.additionalComments,
       newDishName: params.dishName,
       newDishPrice: params.dishPrice,
-      sideDishes: [],
+      sideDishes: params.sideDishes,
     };
 
     return this.doUpdateOrderEntry(orderEntryToUpdate)
@@ -285,6 +289,7 @@ export class ShowOrderViewService {
     dishEntryId: string,
     dishId: string,
     additionalComments: string,
+    sideDishes: Array<SideDishData>,
   }): Observable<void> {
     let orderEntryToUpdate: OrderEntryUpdateRequest
     orderEntryToUpdate = {
@@ -296,57 +301,11 @@ export class ShowOrderViewService {
       additionalComments: params.additionalComments,
       newDishName: "",
       newDishPrice: 0,
-      sideDishes: [],
+      sideDishes: params.sideDishes,
     };
 
     return this.doUpdateOrderEntry(orderEntryToUpdate)
   }
-
-  // updateOrderEntry(params: {
-  //   orderId: string,
-  //   orderEntryId: string,
-  //   dishEntryId: string,
-  //   formValue: { additionalComments: string, name: string, price: number }
-  // }): Observable<void> {
-  //   let orderEntryToUpdate: OrderEntryUpdateRequest
-  //   orderEntryToUpdate = {
-  //     id: params.orderEntryId,
-  //     orderId: params.orderId,
-  //     dishEntryId: params.dishEntryId,
-  //     newDish: true,
-  //     dishId: "",
-  //     additionalComments: params.formValue.additionalComments,
-  //     newDishName: params.formValue.name,
-  //     newDishPrice: params.formValue.price,
-  //     sideDishes: [],
-  //   };
-  //
-  //   return this.doUpdateOrderEntry(orderEntryToUpdate)
-
-    // const dishData: (NewDishData | ExistingDishData) = state.orderEntryData.dishData
-    // if (dishData.kind === "NewDishData") {
-    //   orderEntryToUpdate = {
-    //     orderId: orderId,
-    //     dishId: "",
-    //     dishEntryId: state.dishEntryId,
-    //     additionalComments: state.orderEntryData.additionalComments,
-    //     newDish: true,
-    //     newDishName: dishData.newDishName,
-    //     newDishPrice: dishData.newDishPrice,
-    //     chosenSideDishes: dishData.chosenSideDishes
-    //   };
-    // } else {
-    //   orderEntryToUpdate = {
-    //     orderId: orderId,
-    //     dishId: dishData.dishId,
-    //     dishEntryId: state.dishEntryId,
-    //     additionalComments: state.orderEntryData.additionalComments,
-    //     newDish: false,
-    //     newDishName: "",
-    //     newDishPrice: 0,
-    //     chosenSideDishes: dishData.chosenSideDishes
-    //   };
-    // }
 
   private doUpdateOrderEntry(orderEntryToUpdate: OrderEntryUpdateRequest): Observable<void> {
     return this.orderEntryControllerService

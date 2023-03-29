@@ -25,10 +25,10 @@
 
     <div>Side dishes:</div>
 
-    <!--  <side-dishes-input :chosen-side-dishes="orderEntryData.dishData.chosenSideDishes"-->
-    <!--                     :available-side-dishes="availableSideDishes"-->
-    <!--                     @change="updateChosenSideDishes($event)">-->
-    <!--  </side-dishes-input>-->
+      <app-side-dishes-input
+        [availableSideDishes]="availableSideDishes$ | async"
+        [chosenSideDishes]="formGroup.controls.chosenSideDishes">
+      </app-side-dishes-input>
 
     <mat-form-field>
       <mat-label>Additional Comments</mat-label>
