@@ -210,45 +210,7 @@ export class ShowOrderViewService {
     )
   }
 
-  saveOrderEntryWithNewDish(params: {
-    orderId: string,
-    dishName: string,
-    dishPrice: number,
-    additionalComments: string,
-    sideDishes: Array<SideDishData>,
-  }): Observable<void> {
-    let orderEntryToSave = {
-      orderId: params.orderId,
-      dishId: "",
-      additionalComments: params.additionalComments,
-      newDish: true,
-      newDishName: params.dishName,
-      newDishPrice: params.dishPrice,
-      sideDishes: params.sideDishes,
-    };
-
-    return this.doSaveOrderEntry(orderEntryToSave);
-  }
-
-  saveOrderEntryWithExistingDish(params: {
-    orderId: string,
-    dishId: string,
-    additionalComments: string,
-    sideDishes: Array<SideDishData>,
-  }): Observable<void> {
-    let orderEntryToSave = {
-      orderId: params.orderId,
-      dishId: params.dishId,
-      additionalComments: params.additionalComments,
-      newDish: false,
-      newDishName: "",
-      newDishPrice: 0,
-      sideDishes: params.sideDishes,
-    };
-    return this.doSaveOrderEntry(orderEntryToSave);
-  }
-
-  private doSaveOrderEntry(orderEntryToSave: OrderEntrySaveRequest) {
+  doSaveOrderEntry(orderEntryToSave: OrderEntrySaveRequest) {
     return this.orderEntryControllerService
       .save1(orderEntryToSave)
       .pipe(
@@ -258,56 +220,7 @@ export class ShowOrderViewService {
       )
   }
 
-  updateOrderEntryWithNewDish(params: {
-    orderId: string,
-    orderEntryId: string,
-    dishEntryId: string,
-    dishName: string,
-    dishPrice: number,
-    additionalComments: string,
-    sideDishes: Array<SideDishData>,
-  }): Observable<void> {
-    let orderEntryToUpdate: OrderEntryUpdateRequest
-    orderEntryToUpdate = {
-      id: params.orderEntryId,
-      orderId: params.orderId,
-      dishEntryId: params.dishEntryId,
-      newDish: true,
-      dishId: "",
-      additionalComments: params.additionalComments,
-      newDishName: params.dishName,
-      newDishPrice: params.dishPrice,
-      sideDishes: params.sideDishes,
-    };
-
-    return this.doUpdateOrderEntry(orderEntryToUpdate)
-  }
-
-  updateOrderEntryWithExistingDish(params: {
-    orderId: string,
-    orderEntryId: string,
-    dishEntryId: string,
-    dishId: string,
-    additionalComments: string,
-    sideDishes: Array<SideDishData>,
-  }): Observable<void> {
-    let orderEntryToUpdate: OrderEntryUpdateRequest
-    orderEntryToUpdate = {
-      id: params.orderEntryId,
-      orderId: params.orderId,
-      dishEntryId: params.dishEntryId,
-      newDish: false,
-      dishId: params.dishId,
-      additionalComments: params.additionalComments,
-      newDishName: "",
-      newDishPrice: 0,
-      sideDishes: params.sideDishes,
-    };
-
-    return this.doUpdateOrderEntry(orderEntryToUpdate)
-  }
-
-  private doUpdateOrderEntry(orderEntryToUpdate: OrderEntryUpdateRequest): Observable<void> {
+  doUpdateOrderEntry(orderEntryToUpdate: OrderEntryUpdateRequest): Observable<void> {
     return this.orderEntryControllerService
       .update1(orderEntryToUpdate)
       .pipe(

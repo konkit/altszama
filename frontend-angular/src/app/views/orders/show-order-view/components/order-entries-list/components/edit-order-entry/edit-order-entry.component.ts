@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {
-  DishDto,
+  DishDto, OrderEntryUpdateRequest,
   ParticipantsDishEntry,
   ParticipantsOrderEntry,
   ShowOrderResponse,
@@ -56,48 +56,42 @@ export class EditOrderEntryComponent implements OnInit {
 
   private updateOrderEntry() {
     //TODO(konkit): Refactor
-    //TODO(konkit): Add sidedishes
 
+    let orderEntryToUpdate: OrderEntryUpdateRequest
     if (typeof this.formGroup.controls.dish.value === "object") {
-      let sideDishes = this.asSideDishArray(this.formGroup.controls.chosenSideDishes);
-      let params = {
+      orderEntryToUpdate = {
+        id:  this.orderEntry.id,
         orderId: this.orderResponse.order.id,
-        orderEntryId: this.orderEntry.id,
         dishEntryId: this.dishEntry.id,
-        additionalComments: this.formGroup.controls.additionalComments.value,
+        newDish: false,
         dishId: this.formGroup.controls.dish.value.id,
-        sideDishes: sideDishes,
-      }
-
-      this.showOrderViewService.updateOrderEntryWithExistingDish(params)
-        .subscribe({
-          next: () => {},
-          error: error => {
-            this.formGroup.setErrors(error)
-            return of("")
-          }
-        })
-    } else {
-      let sideDishes = this.asSideDishArray(this.formGroup.controls.chosenSideDishes);
-      let params = {
-        orderId: this.orderResponse.order.id,
-        orderEntryId: this.orderEntry.id,
-        dishEntryId: this.dishEntry.id,
-        dishName: this.formGroup.controls.dish.value,
-        dishPrice: this.formGroup.controls.price.value,
         additionalComments: this.formGroup.controls.additionalComments.value,
-        sideDishes: sideDishes,
+        newDishName: "",
+        newDishPrice: 0,
+        sideDishes: this.asSideDishArray(this.formGroup.controls.chosenSideDishes),
       };
-
-      this.showOrderViewService.updateOrderEntryWithNewDish(params)
-        .subscribe({
-          next: () => {},
-          error: error => {
-            this.formGroup.setErrors(error)
-            return of("")
-          }
-        })
+    } else {
+      orderEntryToUpdate = {
+        id: this.orderEntry.id,
+        orderId: this.orderResponse.order.id,
+        dishEntryId: this.dishEntry.id,
+        newDish: true,
+        dishId: "",
+        additionalComments: this.formGroup.controls.additionalComments.value,
+        newDishName: this.formGroup.controls.dish.value,
+        newDishPrice: this.formGroup.controls.price.value,
+        sideDishes: this.asSideDishArray(this.formGroup.controls.chosenSideDishes),
+      };
     }
+
+    this.showOrderViewService.doUpdateOrderEntry(orderEntryToUpdate)
+      .subscribe({
+        next: () => {},
+        error: error => {
+          this.formGroup.setErrors(error)
+          return of("")
+        }
+      })
   }
 
   //TODO: deduplicate
