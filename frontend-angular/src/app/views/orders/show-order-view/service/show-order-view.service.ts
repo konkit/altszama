@@ -2,16 +2,18 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
 import {
   OrderControllerService,
-  OrderEntryControllerService, OrderEntrySaveRequest,
+  OrderEntryControllerService,
+  OrderEntrySaveRequest,
   OrderEntryUpdateRequest,
   ParticipantsOrderEntry,
   ShowOrderDto,
-  ShowOrderResponse, SideDishData
+  ShowOrderResponse
 } from "../../../../../frontend-client";
 import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
 import {AuthService} from "../../../../service/auth.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
-import {SideDishValue} from "../components/order-entries-list/components/order-entry-form/order-entry-form.component";
+
+//TODO: Clear state on entry
 
 export interface ShowOrderViewState {
   canShowPlaceOrderButton: boolean

@@ -4,41 +4,42 @@
   </div>
 
   <div *ngIf="fullRestaurantsList.length > 0">
-
     <mat-vertical-stepper [linear]="true" #stepper>
       <mat-step [stepControl]="this.orderForm.controls.restaurantId">
         <ng-template matStepLabel>Select restaurant</ng-template>
 
-        <mat-form-field class="w-full">
-          <input matInput [value]="restaurantsFilter" (input)="filterChanged($event)"
-                 placeholder="Filter restaurants by name"/>
-        </mat-form-field>
+        <div class="py-4">
+          <mat-form-field class="w-full">
+            <input matInput [value]="restaurantsFilter" (input)="filterChanged($event)"
+                   placeholder="Filter restaurants by name"/>
+          </mat-form-field>
 
-        <table mat-table [dataSource]="restaurantsTableDataSource" class="clickable-table">
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Restaurant Name</th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
+          <table mat-table [dataSource]="restaurantsTableDataSource" class="clickable-table">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Restaurant Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
 
-          <tr mat-row *matRowDef="let row; columns: ['name'];"
-              [ngClass]="{'selected': this.orderForm.controls.restaurantId.value === row.id}"
-              (click)="this.orderForm.controls.restaurantId.setValue(row.id)"></tr>
-        </table>
+            <tr mat-row *matRowDef="let row; columns: ['name'];"
+                [ngClass]="{'selected': this.orderForm.controls.restaurantId.value === row.id}"
+                (click)="this.orderForm.controls.restaurantId.setValue(row.id)"></tr>
+          </table>
 
-        <mat-paginator [pageSize]="5"
-                       showFirstLastButtons
-                       aria-label="Select page">
-        </mat-paginator>
+          <mat-paginator [pageSize]="5"
+                         showFirstLastButtons
+                         aria-label="Select page">
+          </mat-paginator>
 
-        <button mat-raised-button matStepperPrevious (click)="backToTodayOrders()">Back</button>
-        <button mat-raised-button color="primary" matStepperNext>Next</button>
+          <button mat-raised-button matStepperPrevious (click)="backToTodayOrders()">Back</button>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
       </mat-step>
 
 
       <mat-step>
         <ng-template matStepLabel>Fill details</ng-template>
 
-        <div class="flex flex-row">
+        <div class="flex flex-row py-4">
           <div [formGroup]="orderForm" class="mr-20">
             <h3>Order time</h3>
 
@@ -81,26 +82,26 @@
           <div>
             <h3>Payment</h3>
 
-            <div>
+            <div class="pb-8">
               <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByCash">
                 Payment by cash
               </mat-slide-toggle>
             </div>
 
-            <div>
+            <div class="pb-4">
               <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByBankTransfer">
                 Payment by bank transfer
               </mat-slide-toggle>
             </div>
 
-            <div>
+            <div class="pb-4">
               <mat-form-field>
                 <mat-label>Bank transfer number</mat-label>
                 <input matInput [formControl]="orderForm.controls.paymentData.controls.bankTransferNumber"/>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="pb-4">
               <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByBlik">
                 Payment by BLIK
               </mat-slide-toggle>

@@ -11,19 +11,19 @@
         <div class="flex flex-row py-3" *ngIf="viewState.isOrderOwner">
           <div class="flex">
             <ng-container *ngIf="viewState.canShowPlaceOrderButton && viewState.isPlaceOrderButtonDisabled">
-              <app-button class="mr-3" [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
-                Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+              <app-button class="mr-3" [disabled]="true" [icon]="faArrowRight" matTooltip="You cannot place an empty order. Choose a dish first.">
+                Place order
               </app-button>
             </ng-container>
 
             <ng-container *ngIf="viewState.canShowPlaceOrderButton && !viewState.isPlaceOrderButtonDisabled">
-              <app-button class="mr-3" color="primary" (click)="placeOrder()">
-                Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+              <app-button class="mr-3" color="primary" (click)="placeOrder()" [icon]="faArrowRight">
+                Place order
               </app-button>
             </ng-container>
 
-            <app-button class="mr-3" color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()">
-              Mark as delivered <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+            <app-button class="mr-3" color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()" [icon]="faArrowRight">
+              Mark as delivered
             </app-button>
 
             <app-button class="mr-3" (click)="goToEditOrder()" [icon]="faPencil">

@@ -1,15 +1,17 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {BehaviorSubject, map, merge, Observable, of, startWith, Subscription, switchMap, take} from "rxjs";
+import {BehaviorSubject, map, Observable, Subscription, take} from "rxjs";
 import {
   CreateOrderInitialData,
   OrderControllerService,
   OrderSaveRequest,
   RestaurantDto
 } from "../../../../frontend-client";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
+
+//TODO - display error when the tiem format is invalid
 
 @Component({
   selector: 'app-create-order-view',
