@@ -76,6 +76,9 @@ import { BalanceEntryComponent } from './views/balance/balance-view/components/b
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { OrderEntryFormComponent } from './views/orders/show-order-view/components/order-entries-list/components/order-entry-form/order-entry-form.component';
 import { SideDishesInputComponent } from './views/orders/show-order-view/components/order-entries-list/components/side-dishes-input/side-dishes-input.component';
+import {
+  OrderStateButtonsComponent
+} from "./views/orders/edit-order-view/components/order-state-buttons/order-state-buttons.component";
 
 @NgModule({
   declarations: [
@@ -123,6 +126,7 @@ import { SideDishesInputComponent } from './views/orders/show-order-view/compone
     BalanceEntryComponent,
     OrderEntryFormComponent,
     SideDishesInputComponent,
+    OrderStateButtonsComponent,
   ],
   imports: [
     BrowserModule,

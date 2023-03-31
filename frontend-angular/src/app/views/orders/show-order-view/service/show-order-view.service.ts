@@ -232,9 +232,10 @@ export class ShowOrderViewService {
 
   setAsDelivered(orderId: string) {
     this.orderControllerService.setAsDelivered(orderId)
-      .subscribe({
-        next: () => this.reloadOrderResponse(),
-      })
+      .pipe(
+        switchMap(() => this.reloadOrderResponse())
+      )
+      .subscribe()
   }
 
   deleteOrder(orderId: string): Observable<string> {

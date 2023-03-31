@@ -1,6 +1,7 @@
 <div>
   <app-order-entry-form
     [dishes]="orderResponse.allDishesInRestaurant"
+    [initialValue]="initialValue"
     (onSubmit)="onSubmit($event)"
     (onCancel)="onCancel()">
   </app-order-entry-form>

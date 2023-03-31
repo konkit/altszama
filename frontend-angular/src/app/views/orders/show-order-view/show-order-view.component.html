@@ -8,14 +8,34 @@
           <div>TODO order locked warning</div>
         </div>
 
-        <div class="flex flex-row p-3" *ngIf="viewState.isOrderOwner">
-          <app-button (click)="goToEditOrder()" [icon]="faCog">
-            Edit order
-          </app-button>
+        <div class="flex flex-row py-3" *ngIf="viewState.isOrderOwner">
+          <div class="flex">
+            <ng-container *ngIf="viewState.canShowPlaceOrderButton && viewState.isPlaceOrderButtonDisabled">
+              <app-button [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
+                Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+              </app-button>
+            </ng-container>
 
-          <app-button color="warn" (click)="deleteOrder()" [icon]="faTimes">
-            Delete order <i class="pl-2 fa fa-cog" aria-hidden="true"></i>
-          </app-button>
+            <ng-container *ngIf="viewState.canShowPlaceOrderButton && !viewState.isPlaceOrderButtonDisabled">
+              <app-button color="primary" (click)="placeOrder()">
+                Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+              </app-button>
+            </ng-container>
+
+            <app-button color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()">
+              Mark as delivered <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
+            </app-button>
+          </div>
+
+          <div class="flex ml-auto">
+            <app-button (click)="goToEditOrder()" [icon]="faCog">
+              Edit order
+            </app-button>
+
+            <app-button color="warn" (click)="deleteOrder()" [icon]="faTimes">
+              Delete order <i class="pl-2 fa fa-cog" aria-hidden="true"></i>
+            </app-button>
+          </div>
         </div>
 
         <div class="grid grid-cols-3">
@@ -31,7 +51,9 @@
 
           <div>
             <h2 class="text-2xl">Payment options</h2>
-            <app-payment-options-summary [paymentData]="orderResponse.order.paymentData" [showOrderResponse]="orderResponse" [viewState]="viewState"></app-payment-options-summary>
+            <app-payment-options-summary [paymentData]="orderResponse.order.paymentData"
+                                         [showOrderResponse]="orderResponse"
+                                         [viewState]="viewState"></app-payment-options-summary>
           </div>
         </div>
 
@@ -42,27 +64,6 @@
               <a class="text-indigo-500" *ngIf="orderResponse.order.restaurantUrl" target="_blank"
                  [href]="orderResponse.order.restaurantUrl">{{ orderResponse.order.restaurantUrl }}</a>
               <i *ngIf="!orderResponse.order.restaurantUrl">Sorry, no menu url specified</i>
-            </div>
-            <div class="d-flex ml-auto">
-              <ng-container *ngIf="viewState.canShowPlaceOrderButton && viewState.isPlaceOrderButtonDisabled">
-                <app-button [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
-                  Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
-                </app-button>
-              </ng-container>
-
-              <ng-container *ngIf="viewState.canShowPlaceOrderButton && !viewState.isPlaceOrderButtonDisabled">
-                <app-button color="primary" (click)="placeOrder()">
-                  Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
-                </app-button>
-              </ng-container>
-
-              <app-button color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()">
-                Mark as delivered <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
-              </app-button>
-
-<!--              <app-button *ngIf="viewState.isOrderOwner" (click)="goToEditOrder()">-->
-<!--                Edit order <i class="pl-2 fa fa-cog" aria-hidden="true"></i>-->
-<!--              </app-button>-->
             </div>
           </div>
         </div>

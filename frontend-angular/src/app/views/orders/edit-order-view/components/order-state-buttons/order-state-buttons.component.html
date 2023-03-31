@@ -1,0 +1,25 @@
+<div>
+  <app-button
+    color="primary"
+    *ngIf="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'"
+    (click)="setAsCreated()"
+  >
+    <i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Mark back as un-ordered
+  </app-button>
+
+  <app-button
+    color="primary"
+    *ngIf="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'"
+    (click)="setAsOrdered()"
+  >
+    <i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Back to ordered
+  </app-button>
+
+  <app-button color="warn" (click)="setAsRejected()">
+    Mark as rejected&nbsp;<i class="fa fa-ban" aria-hidden="true"></i>
+  </app-button>
+
+  <app-button color="warn" (click)="deleteOrder()">
+    Delete &nbsp;<i class="fa fa-times" aria-hidden="true"></i>
+  </app-button>
+</div>

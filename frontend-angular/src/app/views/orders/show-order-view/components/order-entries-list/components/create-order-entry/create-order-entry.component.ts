@@ -16,7 +16,12 @@ export class CreateOrderEntryComponent implements OnInit {
 
   dishes!: DishDto[]
 
-  initialValue!: InitialOrderEntryFormValue
+  initialValue: InitialOrderEntryFormValue = {
+    dish: "",
+    price: 0,
+    additionalComments: "",
+    chosenSideDishes: [],
+  }
 
 
   constructor(private showOrderViewService: ShowOrderViewService,
@@ -27,13 +32,6 @@ export class CreateOrderEntryComponent implements OnInit {
   ngOnInit() {
     this.dishes = this.orderResponse.allDishesInRestaurant
     this.showOrderViewService.setEntryLoading(false)
-
-    this.initialValue = {
-      dish: "",
-      price: 0,
-      additionalComments: "",
-      chosenSideDishes: [],
-    }
   }
 
   onSubmit(orderEntry: OrderEntryFormValue) {

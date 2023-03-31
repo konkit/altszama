@@ -1,4 +1,8 @@
 <app-view-wrapper title="Update Order">
+  <div class="flex pt-2 pb-3">
+    <app-order-state-buttons [orderId]="orderId" [orderState]="(editOrderInitialData$ | async)!.order.orderState"></app-order-state-buttons>
+  </div>
+
   <div class="flex flex-row">
     <div [formGroup]="orderForm" class="mr-20">
       <h3>Order time</h3>
