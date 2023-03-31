@@ -2,8 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {of} from "rxjs";
 import {DishDto, OrderEntrySaveRequest, ShowOrderResponse} from "../../../../../../../../frontend-client";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
-import {OrderEntryFormType, SideDishForm} from "../order-entry-form/order-entry-form.component";
+import {FormBuilder} from "@angular/forms";
+import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-form/order-entry-form.component";
 
 @Component({
   selector: 'app-create-order-entry',
@@ -16,12 +16,8 @@ export class CreateOrderEntryComponent implements OnInit {
 
   dishes!: DishDto[]
 
-  formGroup: FormGroup<OrderEntryFormType> = this.fb.nonNullable.group({
-    dish: this.fb.nonNullable.control<DishDto | string>(''),
-    price: this.fb.nonNullable.control<number>(0),
-    additionalComments: this.fb.nonNullable.control<string>(''),
-    chosenSideDishes: this.fb.nonNullable.array<FormGroup<SideDishForm>>([])
-  });
+  initialValue!: InitialOrderEntryFormValue
+
 
   constructor(private showOrderViewService: ShowOrderViewService,
               private fb: FormBuilder) {
@@ -31,73 +27,48 @@ export class CreateOrderEntryComponent implements OnInit {
   ngOnInit() {
     this.dishes = this.orderResponse.allDishesInRestaurant
     this.showOrderViewService.setEntryLoading(false)
+
+    this.initialValue = {
+      dish: "",
+      price: 0,
+      additionalComments: "",
+      chosenSideDishes: [],
+    }
   }
 
-  private saveOrderEntry() {
+  onSubmit(orderEntry: OrderEntryFormValue) {
     let orderEntryToSave: OrderEntrySaveRequest
-    if (typeof this.formGroup.controls.dish.value === "object") {
+    if (orderEntry.kind === "Existing") {
       orderEntryToSave = {
         newDish: false,
         orderId: this.orderResponse.order.id,
-        dishId: this.formGroup.controls.dish.value.id,
-        additionalComments: this.formGroup.controls.additionalComments.value,
+        dishId: orderEntry.dish.id,
+        additionalComments: orderEntry.additionalComments,
         newDishName: "",
         newDishPrice: 0,
-        sideDishes: this.asSideDishArray(this.formGroup.controls.chosenSideDishes),
+        sideDishes: orderEntry.chosenSideDishes,
       };
     } else {
       orderEntryToSave = {
         newDish: true,
         orderId: this.orderResponse.order.id,
         dishId: "",
-        additionalComments: this.formGroup.controls.additionalComments.value,
-        newDishName: this.formGroup.controls.dish.value,
-        newDishPrice: this.formGroup.controls.price.value,
-        sideDishes: this.asSideDishArray(this.formGroup.controls.chosenSideDishes),
+        additionalComments: orderEntry.additionalComments,
+        newDishName: orderEntry.dishName,
+        newDishPrice: orderEntry.price,
+        sideDishes: orderEntry.chosenSideDishes,
       };
     }
 
     this.showOrderViewService.doSaveOrderEntry(orderEntryToSave)
       .subscribe({
-        next: () => {},
+        next: () => {
+        },
         error: error => {
-          this.formGroup.setErrors(error)
+          // this.formGroup.setErrors(error) TODO - set an error somewhere
           return of("")
         }
       })
-  }
-
-  private asSideDishArray(formArray: FormArray<FormGroup<SideDishForm>>) {
-    return formArray.value.map(formValue => {
-      if (typeof formValue.sideDish === "object") {
-        if (formValue.sideDish.price === formValue.price) {
-          return {
-            id: formValue.sideDish.id,
-            isNew: false,
-            newSideDishName: "",
-            newSideDishPrice: 0
-          }
-        } else {
-          return {
-            id: "",
-            isNew: true,
-            newSideDishName: formValue.sideDish.name,
-            newSideDishPrice: formValue.price
-          }
-        }
-      } else {
-        return {
-          id: "",
-          isNew: true,
-          newSideDishName: formValue.sideDish,
-          newSideDishPrice: formValue.price
-        }
-      }
-    });
-  }
-
-  onSubmit() {
-    this.saveOrderEntry()
   }
 
   onCancel() {

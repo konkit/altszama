@@ -1,15 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {
-  DishDto, OrderEntryUpdateRequest,
+  OrderEntryUpdateRequest,
   ParticipantsDishEntry,
   ParticipantsOrderEntry,
-  ShowOrderResponse,
-  SideDish
+  ShowOrderResponse
 } from "../../../../../../../../frontend-client";
 import {ModifyOrderEntryState, ShowOrderViewService} from "../../../../service/show-order-view.service";
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
 import {of} from "rxjs";
-import {OrderEntryFormType, SideDishForm} from "../order-entry-form/order-entry-form.component";
+import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-form/order-entry-form.component";
 
 
 @Component({
@@ -24,12 +23,7 @@ export class EditOrderEntryComponent implements OnInit {
   @Input() orderEntry!: ParticipantsOrderEntry
   @Input() dishEntry!: ParticipantsDishEntry
 
-  formGroup: FormGroup<OrderEntryFormType> = this.fb.nonNullable.group({
-    dish: this.fb.nonNullable.control<DishDto | string>(''),
-    price: this.fb.nonNullable.control<number>(0),
-    additionalComments: this.fb.nonNullable.control<string>(''),
-    chosenSideDishes: this.fb.nonNullable.array<FormGroup<SideDishForm>>([])
-  });
+  initialValue!: InitialOrderEntryFormValue
 
   constructor(private fb: FormBuilder,
               private showOrderViewService: ShowOrderViewService) {
@@ -37,38 +31,29 @@ export class EditOrderEntryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.showOrderViewService.setEntryLoading(false)
-
-    this.formGroup.setValue({
+    this.initialValue = {
       dish: this.orderResponse.allDishesInRestaurant.find(x => x.id == this.dishEntry.dishId) || "",
       price: this.dishEntry.price,
       additionalComments: this.dishEntry.comments,
-      chosenSideDishes: [],
-    })
-
-    let sideDishControls = this.dishEntry.sideDishes
-      .map(sd => this.fb.nonNullable.group({
-        sideDish: this.fb.nonNullable.control<string | SideDish>(sd.name),
-        price: this.fb.nonNullable.control(sd.price)
-      }));
-    this.formGroup.controls.chosenSideDishes = this.fb.nonNullable.array(sideDishControls)
+      chosenSideDishes: this.dishEntry.sideDishes,
+    }
   }
 
-  private updateOrderEntry() {
+  onSubmit(orderEntry: OrderEntryFormValue) {
     //TODO(konkit): Refactor
 
     let orderEntryToUpdate: OrderEntryUpdateRequest
-    if (typeof this.formGroup.controls.dish.value === "object") {
+    if (orderEntry.kind === "Existing") {
       orderEntryToUpdate = {
-        id:  this.orderEntry.id,
+        id: this.orderEntry.id,
         orderId: this.orderResponse.order.id,
         dishEntryId: this.dishEntry.id,
         newDish: false,
-        dishId: this.formGroup.controls.dish.value.id,
-        additionalComments: this.formGroup.controls.additionalComments.value,
+        dishId: orderEntry.dish.id,
+        additionalComments: orderEntry.additionalComments,
         newDishName: "",
         newDishPrice: 0,
-        sideDishes: this.asSideDishArray(this.formGroup.controls.chosenSideDishes),
+        sideDishes: orderEntry.chosenSideDishes,
       };
     } else {
       orderEntryToUpdate = {
@@ -77,55 +62,22 @@ export class EditOrderEntryComponent implements OnInit {
         dishEntryId: this.dishEntry.id,
         newDish: true,
         dishId: "",
-        additionalComments: this.formGroup.controls.additionalComments.value,
-        newDishName: this.formGroup.controls.dish.value,
-        newDishPrice: this.formGroup.controls.price.value,
-        sideDishes: this.asSideDishArray(this.formGroup.controls.chosenSideDishes),
+        additionalComments: orderEntry.additionalComments,
+        newDishName: orderEntry.dishName,
+        newDishPrice: orderEntry.price,
+        sideDishes: orderEntry.chosenSideDishes,
       };
     }
 
     this.showOrderViewService.doUpdateOrderEntry(orderEntryToUpdate)
       .subscribe({
-        next: () => {},
+        next: () => {
+        },
         error: error => {
-          this.formGroup.setErrors(error)
+          // this.formGroup.setErrors(error) TODO - set an error somewhere
           return of("")
         }
       })
-  }
-
-  //TODO: deduplicate
-  private asSideDishArray(formArray: FormArray<FormGroup<SideDishForm>>) {
-    return formArray.value.map(formValue => {
-      if (typeof formValue.sideDish === "object") {
-        if (formValue.sideDish.price === formValue.price) {
-          return {
-            id: formValue.sideDish.id,
-            isNew: false,
-            newSideDishName: "",
-            newSideDishPrice: 0
-          }
-        } else {
-          return {
-            id: "",
-            isNew: true,
-            newSideDishName: formValue.sideDish.name,
-            newSideDishPrice: formValue.price
-          }
-        }
-      } else {
-        return {
-          id: "",
-          isNew: true,
-          newSideDishName: formValue.sideDish,
-          newSideDishPrice: formValue.price
-        }
-      }
-    });
-  }
-
-  onSubmit() {
-    this.updateOrderEntry()
   }
 
   onCancel() {

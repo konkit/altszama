@@ -1,8 +1,8 @@
 <div>
   <app-order-entry-form
-    [formGroup]="formGroup"
     [dishes]="orderResponse.allDishesInRestaurant"
-    (onSubmit)="onSubmit()"
+    [initialValue]="initialValue"
+    (onSubmit)="onSubmit($event)"
     (onCancel)="onCancel()">
   </app-order-entry-form>
 </div>
