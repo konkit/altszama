@@ -1,20 +1,20 @@
 <app-view-wrapper title="Today's Orders">
-  <div *ngIf="todaysOrders$ | async as todayOrders">
+  <div *ngIf="todaysOrders$ | async as todayOrders" class="mt-10">
     <div>
-      <h1 class="mb-4 text-2xl">Your orders today:</h1>
+      <h2 class="mb-4">You ordered:</h2>
 
-      <div *ngIf="todayOrders.currentOrderEntries.length > 0">
+      <mat-action-list *ngIf="todayOrders.currentOrderEntries.length > 0">
         <ng-container *ngFor="let orderEntry of todayOrders.currentOrderEntries">
           <ng-container *ngFor="let dishEntry of orderEntry.dishEntries">
-            <div (click)="goToOrder(orderEntry.orderId)" class="cursor-pointer">
-                <b>{{ dishEntry.dish.name }}</b>
-                from
-                <b>{{ dishEntry.restaurantName }}</b>
-                (STATUS: {{ orderEntry.orderState }})
-            </div>
+            <mat-list-item (click)="goToOrder(orderEntry.orderId)">
+              <b>{{ dishEntry.dish.name }}</b>
+              from
+              <b>{{ dishEntry.restaurantName }}</b>
+              (STATUS: {{ orderEntry.orderState }})
+            </mat-list-item>
           </ng-container>
         </ng-container>
-      </div>
+      </mat-action-list>
 
       <div *ngIf="todayOrders.currentOrderEntries.length == 0">
         <div>
@@ -24,55 +24,26 @@
 
       <hr class="my-5"/>
 
-      <h1 class="text-2xl">Orders:</h1>
+      <h2>Orders created today:</h2>
 
-      <!--              <errors-component/>-->
+      <div class="pb-5">
+        <mat-action-list *ngIf="todayOrders.ordersList.length > 0">
+          <mat-list-item *ngFor="let element of todayOrders.ordersList" (click)="goToOrder(element.id)">
+              <span matListItemTitle class="flex-row">
+                <span>
+                  <b>{{ element.restaurantName }}</b>
+                </span>
 
-      <div class="py-5">
-        <ng-container *ngIf="todayOrders.ordersList.length > 0">
+                <span class="ml-auto">
+                  (STATUS: {{ element.orderState }})
+                </span>
+              </span>
 
-          <table mat-table [dataSource]="todayOrders.ordersList" class="clickable-table">
-            <ng-container matColumnDef="orderData">
-              <td mat-cell *matCellDef="let element">
-                <b>{{ element.restaurantName }}</b> (created by {{ element.orderCreatorUsername }})
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="created">
-              <td mat-cell *matCellDef="let element">
-                <div class="orderState" [ngClass]="{matchingState: element.orderState === 'CREATED'}">
-                  CREATED
-                </div>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="ordering">
-              <td mat-cell *matCellDef="let element">
-                <div class="orderState" [ngClass]="{matchingState: element.orderState === 'ORDERING'}">
-                  ORDERING RIGHT NOW
-                </div>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="ordered">
-              <td mat-cell *matCellDef="let element">
-                <div class="orderState" [ngClass]="{matchingState: element.orderState === 'ORDERED'}">
-                  ORDERED
-                </div>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="delivered">
-              <td mat-cell *matCellDef="let element">
-                <div class="orderState" [ngClass]="{matchingState: element.orderState === 'DELIVERED'}">
-                  DELIVERED
-                </div>
-              </td>
-            </ng-container>
-
-            <tr mat-row *matRowDef="let row; columns: ['orderData', 'created', 'ordering', 'ordered', 'delivered' ];" [routerLink]="['/orders', row.id, 'show']"></tr>
-          </table>
-        </ng-container>
+              <span matListItemLine>
+                (created by {{ element.orderCreatorUsername }})
+              </span>
+          </mat-list-item>
+        </mat-action-list>
 
         <div *ngIf="todayOrders.ordersList.length === 0">
           <div>No orders yet</div>

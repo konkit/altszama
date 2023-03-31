@@ -40,17 +40,17 @@
 
         <div class="grid grid-cols-3">
           <div>
-            <h2 class="text-2xl">Order details</h2>
+            <h2>Order details</h2>
             <app-order-data-summary [order]="orderResponse.order"></app-order-data-summary>
           </div>
 
           <div>
-            <h2 class="text-2xl">Price summary</h2>
+            <h2>Price summary</h2>
             <app-price-summary [priceSummaryInput]="viewState.priceSummaryInput"></app-price-summary>
           </div>
 
           <div>
-            <h2 class="text-2xl">Payment options</h2>
+            <h2>Payment options</h2>
             <app-payment-options-summary [paymentData]="orderResponse.order.paymentData"
                                          [showOrderResponse]="orderResponse"
                                          [viewState]="viewState"></app-payment-options-summary>
