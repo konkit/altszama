@@ -32,7 +32,7 @@
                         </mat-list-item>
 
                         <ng-container *ngIf="j < eatingPersonEntry.sideDishes.length - 1">
-                          <hr class="custom-margin-divider" />
+                          <mat-divider></mat-divider>
                         </ng-container>
                       </ng-container>
                     </ng-container>
@@ -42,13 +42,13 @@
             </mat-list-item>
 
             <ng-container *ngIf="i < entry.eatingPeopleEntries.length - 1">
-              <hr class="custom-margin-divider" />
+              <mat-divider></mat-divider>
             </ng-container>
           </ng-container>
         </mat-list>
 
         <ng-container *ngIf="entryIndex < groupedEntries.length - 1">
-          <hr class="custom-margin-divider" />
+          <mat-divider></mat-divider>
         </ng-container>
 
       </ng-container>

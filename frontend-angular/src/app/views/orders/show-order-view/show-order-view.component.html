@@ -2,7 +2,7 @@
   <ng-container *ngIf="showOrderViewState$ | async as viewState">
     <ng-container *ngIf="modifyOrderEntryState$ | async as modifyOrderEntryState">
       <app-view-wrapper
-        [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + '(' + orderResponse.order.orderDate + ')'">
+        [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + ' (' + orderResponse.order.orderDate + ')'">
 
         <div *ngIf="shouldShowOrderLockedWarning()">
           <div>TODO order locked warning</div>
@@ -11,28 +11,26 @@
         <div class="flex flex-row py-3" *ngIf="viewState.isOrderOwner">
           <div class="flex">
             <ng-container *ngIf="viewState.canShowPlaceOrderButton && viewState.isPlaceOrderButtonDisabled">
-              <app-button [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
+              <app-button class="mr-3" [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
                 Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
               </app-button>
             </ng-container>
 
             <ng-container *ngIf="viewState.canShowPlaceOrderButton && !viewState.isPlaceOrderButtonDisabled">
-              <app-button color="primary" (click)="placeOrder()">
+              <app-button class="mr-3" color="primary" (click)="placeOrder()">
                 Place order <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
               </app-button>
             </ng-container>
 
-            <app-button color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()">
+            <app-button class="mr-3" color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()">
               Mark as delivered <i class="pl-2 fa fa-arrow-right" aria-hidden="true"></i>
             </app-button>
-          </div>
 
-          <div class="flex ml-auto">
-            <app-button (click)="goToEditOrder()" [icon]="faCog">
+            <app-button class="mr-3" (click)="goToEditOrder()" [icon]="faPencil">
               Edit order
             </app-button>
 
-            <app-button color="warn" (click)="deleteOrder()" [icon]="faTimes">
+            <app-button class="mr-3" color="warn" (click)="deleteOrder()" [icon]="faTimes">
               Delete order <i class="pl-2 fa fa-cog" aria-hidden="true"></i>
             </app-button>
           </div>
@@ -60,7 +58,7 @@
         <div>
           <div class="flex flex-row flex-wrap">
             <div class="mr-4 py-5">
-              <b class="mr-2">See menu at &nbsp;</b>
+              <b class="mr-2">See the menu at:</b>
               <a class="text-indigo-500" *ngIf="orderResponse.order.restaurantUrl" target="_blank"
                  [href]="orderResponse.order.restaurantUrl">{{ orderResponse.order.restaurantUrl }}</a>
               <i *ngIf="!orderResponse.order.restaurantUrl">Sorry, no menu url specified</i>

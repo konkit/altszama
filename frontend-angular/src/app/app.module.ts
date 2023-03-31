@@ -79,6 +79,8 @@ import { SideDishesInputComponent } from './views/orders/show-order-view/compone
 import {
   OrderStateButtonsComponent
 } from "./views/orders/edit-order-view/components/order-state-buttons/order-state-buttons.component";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @NgModule({
   declarations: [
@@ -156,6 +158,8 @@ import {
     MatTooltipModule,
     NgxQRCodeModule,
     MatAutocompleteModule,
+    MatToolbarModule,
+    MatSidenavModule,
   ],
   providers: [
     {

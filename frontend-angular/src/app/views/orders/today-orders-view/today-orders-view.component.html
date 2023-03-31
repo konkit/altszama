@@ -1,7 +1,7 @@
 <app-view-wrapper title="Today's Orders">
-  <div *ngIf="todaysOrders$ | async as todayOrders" class="mt-10">
-    <div>
-      <h2 class="mb-4">You ordered:</h2>
+  <div *ngIf="todaysOrders$ | async as todayOrders" class="mt-5">
+    <div class="pb-5">
+      <h2>You ordered:</h2>
 
       <mat-action-list *ngIf="todayOrders.currentOrderEntries.length > 0">
         <ng-container *ngFor="let orderEntry of todayOrders.currentOrderEntries">
@@ -16,19 +16,18 @@
         </ng-container>
       </mat-action-list>
 
-      <div *ngIf="todayOrders.currentOrderEntries.length == 0">
-        <div>
+      <mat-list *ngIf="todayOrders.currentOrderEntries.length == 0">
+        <mat-list-item>
           You haven't ordered anything today yet.
-        </div>
-      </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
 
-      <hr class="my-5"/>
+    <h2 class="">Orders created today:</h2>
 
-      <h2>Orders created today:</h2>
-
-      <div class="pb-5">
-        <mat-action-list *ngIf="todayOrders.ordersList.length > 0">
-          <mat-list-item *ngFor="let element of todayOrders.ordersList" (click)="goToOrder(element.id)">
+    <div class="pb-5">
+      <mat-action-list *ngIf="todayOrders.ordersList.length > 0">
+        <mat-list-item *ngFor="let element of todayOrders.ordersList" (click)="goToOrder(element.id)">
               <span matListItemTitle class="flex-row">
                 <span>
                   <b>{{ element.restaurantName }}</b>
@@ -39,20 +38,19 @@
                 </span>
               </span>
 
-              <span matListItemLine>
+          <span matListItemLine>
                 (created by {{ element.orderCreatorUsername }})
               </span>
-          </mat-list-item>
-        </mat-action-list>
+        </mat-list-item>
+      </mat-action-list>
 
-        <div *ngIf="todayOrders.ordersList.length === 0">
-          <div>No orders yet</div>
-        </div>
+      <div *ngIf="todayOrders.ordersList.length === 0">
+        <div>No orders yet</div>
       </div>
-
-      <app-button [icon]="faAdd" color="primary" (click)="goToCreateOrder()">
-        Add new order
-      </app-button>
     </div>
+
+    <app-button [icon]="faAdd" color="primary" (click)="goToCreateOrder()">
+      Add new order
+    </app-button>
   </div>
 </app-view-wrapper>
