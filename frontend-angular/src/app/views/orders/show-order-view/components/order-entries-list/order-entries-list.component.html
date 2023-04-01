@@ -15,7 +15,7 @@
 </div>
 
 <div *ngFor="let orderEntry of viewState.yourAndOtherUsersOrderEntries">
-  <div class="border-b my-3">
+  <div class="my-3">
     <app-title-with-payment-status
       [title]="orderEntry.username"
       [priceForUser]="orderEntry.finalPrice"
@@ -54,7 +54,7 @@
 
     <div *ngIf="canAddNewEntry(orderEntry)">
       <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
-        <app-button color="primary" class="ml-4" (click)="createEntry()" [icon]="faPlus">
+        <app-button color="primary" (click)="createEntry()" [icon]="faPlus">
           Add entry
         </app-button>
       </div>

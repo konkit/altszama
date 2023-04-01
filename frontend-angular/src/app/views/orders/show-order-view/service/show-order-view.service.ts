@@ -29,6 +29,7 @@ export interface ShowOrderViewState {
   otherUsersOrderEntries: ParticipantsOrderEntry[],
   yourAndOtherUsersOrderEntries: ParticipantsOrderEntry[],
   priceSummaryInput: PriceSummaryInput;
+  shouldShowOrderLockedWarning: boolean;
 }
 
 export interface ModifyOrderEntryState {
@@ -127,6 +128,8 @@ export class ShowOrderViewService {
           allEatingPeopleCount: r.orderEntries.flatMap(e => e.dishEntries).length,
         }
 
+        let shouldShowOrderLockedWarning = isOrderOwner && [OrderStateEnum.ORDERING].includes(order.orderState);
+
         let obj: ShowOrderViewState = {
           canShowPlaceOrderButton: canShowPlaceOrderButton,
           isPlaceOrderButtonDisabled: isPlaceOrderButtonDisabled,
@@ -141,6 +144,7 @@ export class ShowOrderViewService {
           otherUsersOrderEntries: otherUsersOrderEntries,
           yourAndOtherUsersOrderEntries: [...yourOrderEntries, ...otherUsersOrderEntries],
           priceSummaryInput: priceSummaryInput,
+          shouldShowOrderLockedWarning: shouldShowOrderLockedWarning,
         }
         return obj
       })

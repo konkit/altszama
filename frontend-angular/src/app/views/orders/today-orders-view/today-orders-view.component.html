@@ -45,7 +45,11 @@
       </mat-action-list>
 
       <div *ngIf="todayOrders.ordersList.length === 0">
-        <div>No orders yet</div>
+        <mat-list>
+          <mat-list-item>
+            <div>No orders yet</div>
+          </mat-list-item>
+        </mat-list>
       </div>
     </div>
 

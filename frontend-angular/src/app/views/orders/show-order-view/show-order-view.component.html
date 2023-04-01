@@ -4,8 +4,27 @@
       <app-view-wrapper
         [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + ' (' + orderResponse.order.orderDate + ')'">
 
-        <div *ngIf="shouldShowOrderLockedWarning()">
-          <div>TODO order locked warning</div>
+        <div *ngIf="viewState.shouldShowOrderLockedWarning">
+          <!-- TODO: Change to material banner -->
+
+          <mat-card class="my-5">
+            <mat-card-header><strong>The order is locked!</strong></mat-card-header>
+
+            <mat-card-content>
+              The order is locked in ordering state and the order entries are
+              freezed.<br/>
+              If you are not ordering yet, click button to go back to created state.
+            </mat-card-content>
+
+            <mat-card-actions>
+              <app-button color="primary" (click)="unlockOrder()" [icon]="faUnlock" class="ml-2">
+                Unlock
+              </app-button>
+              <app-button color="primary" (click)="placeOrder()" [icon]="faArrowRight" class="ml-2">
+                Place order<span class="fa fa-arrow-right"></span>
+              </app-button>
+            </mat-card-actions>
+          </mat-card>
         </div>
 
         <div class="flex flex-row py-3" *ngIf="viewState.isOrderOwner">

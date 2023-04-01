@@ -81,6 +81,7 @@ import {
 } from "./views/orders/edit-order-view/components/order-state-buttons/order-state-buttons.component";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -160,6 +161,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
     MatAutocompleteModule,
     MatToolbarModule,
     MatSidenavModule,
+    MatCardModule,
   ],
   providers: [
     {
