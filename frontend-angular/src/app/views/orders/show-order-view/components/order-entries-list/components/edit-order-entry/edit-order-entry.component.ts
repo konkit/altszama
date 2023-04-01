@@ -18,6 +18,7 @@ import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-fo
 })
 export class EditOrderEntryComponent implements OnInit {
 
+  @Input() dishIndex!: number;
   @Input() orderResponse!: ShowOrderResponse
   @Input() modifyOrderEntryState!: ModifyOrderEntryState
   @Input() orderEntry!: ParticipantsOrderEntry

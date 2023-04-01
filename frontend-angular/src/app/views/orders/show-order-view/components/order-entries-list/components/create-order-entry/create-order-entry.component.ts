@@ -12,6 +12,7 @@ import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-fo
 })
 export class CreateOrderEntryComponent implements OnInit {
 
+  @Input() dishIndex: number = 0;
   @Input() orderResponse!: ShowOrderResponse
 
   dishes!: DishDto[]

@@ -1,32 +1,31 @@
-<div>
-  <div class="flex">
-    <div class="line">
-      <span>{{ dishEntry.dishName }}</span>
-      <span class="ml-2">({{dishEntry.price | price}})</span>
-    </div>
-
-    <div class="ml-2" *ngIf="canEditOrderEntry()">
-      <button mat-icon-button color="primary" (click)="editDishEntry()">
-        <mat-icon fontIcon="edit"></mat-icon>
-      </button>
-
-      <button mat-icon-button color="warn" (click)="deleteDishEntry()">
-        <mat-icon fontIcon="delete"></mat-icon>
-      </button>
-    </div>
+<div class="flex">
+  <div class="line">
+    <span>{{ index }}. </span>
+    <span>{{ dishEntry.dishName }}</span>
+    <span class="ml-2">({{dishEntry.price | price}})</span>
   </div>
 
-  <div *ngFor="let sideDish of dishEntry.sideDishes" class="pl-3">
-    <div class="line">
-      <span class="mr-2">+</span>
-      <span>{{ sideDish.name }}</span>
-      <span class="ml-2">({{sideDish.price | price}})</span>
-    </div>
-  </div>
+  <div class="ml-2" *ngIf="canEditOrderEntry()">
+    <button mat-icon-button color="primary" (click)="editDishEntry()">
+      <mat-icon fontIcon="edit"></mat-icon>
+    </button>
 
-  <div *ngIf="dishEntry.comments.length > 0" class="py-2">
-    <div class="line">
-      Additional comments: {{ dishEntry.comments }}
-    </div>
+    <button mat-icon-button color="warn" (click)="deleteDishEntry()">
+      <mat-icon fontIcon="delete"></mat-icon>
+    </button>
+  </div>
+</div>
+
+<div *ngFor="let sideDish of dishEntry.sideDishes" class="pl-8">
+  <div class="line">
+    <span class="mr-2">+</span>
+    <span>{{ sideDish.name }}</span>
+    <span class="ml-2">({{sideDish.price | price}})</span>
+  </div>
+</div>
+
+<div *ngIf="dishEntry.comments.length > 0" class="pl-8">
+  <div class="line">
+    Additional comments: {{ dishEntry.comments }}
   </div>
 </div>

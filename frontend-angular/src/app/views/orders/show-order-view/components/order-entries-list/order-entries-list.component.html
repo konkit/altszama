@@ -4,7 +4,8 @@
   <div>
     <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === false">
       <button mat-raised-button color="primary" class="mt-3" (click)="createEntry()">
-        Add entry <mat-icon fontIcon="add"></mat-icon>
+        Add entry
+        <mat-icon fontIcon="add"></mat-icon>
       </button>
     </ng-container>
 
@@ -25,41 +26,52 @@
       [costForUser]="orderEntry.finalPrice"
     ></app-title-with-payment-status>
 
-    <div *ngFor="let dishEntry of orderEntry.dishEntries; let dishEntryIndex = index;">
-      <div *ngIf="modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id">
+    <div class="pl-6" *ngFor="let dishEntry of orderEntry.dishEntries; let dishEntryIndex = index;">
+      <ng-container
+        *ngIf="modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id">
         <app-edit-order-entry
+          [dishIndex]="dishEntryIndex + 1"
           [orderResponse]="showOrderResponse"
           [modifyOrderEntryState]="modifyOrderEntryState"
           [orderEntry]="orderEntry"
           [dishEntry]="dishEntry"
         >
         </app-edit-order-entry>
-      </div>
+      </ng-container>
 
-      <div *ngIf="!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)">
+      <ng-container
+        *ngIf="!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)">
         <app-show-order-entry
+          [index]="dishEntryIndex + 1"
           [order]="showOrderResponse.order"
           [orderEntry]="orderEntry"
           [dishEntry]="dishEntry"
           [currentUserId]="showOrderResponse.currentUserId"
-          [index]="dishEntryIndex + 1"
         >
         </app-show-order-entry>
-      </div>
+      </ng-container>
 
       <div *ngIf="dishEntryIndex < orderEntry.dishEntries.length - 1">
         <mat-divider></mat-divider>
       </div>
     </div>
 
-    <div *ngIf="canAddNewEntry(orderEntry)">
+    <div class="pl-6" *ngIf="canAddNewEntry(orderEntry)">
+      <div class="pb-5" *ngIf="orderEntry.dishEntries.length > 0">
+        <mat-divider></mat-divider>
+      </div>
+
       <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
-        <app-button color="primary" (click)="createEntry()" icon="add">
-          Add entry
-        </app-button>
+        <span class="mr-3 font-size-16px line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
+
+        <button mat-raised-button color="primary" (click)="createEntry()">
+          Add entry <mat-icon fontIcon="add"></mat-icon>
+        </button>
       </div>
       <div *ngIf="modifyOrderEntryState.isEntryCreating === true">
-        <app-create-order-entry [orderResponse]="showOrderResponse"></app-create-order-entry>
+        <app-create-order-entry [orderResponse]="showOrderResponse"
+                                [dishIndex]="orderEntry.dishEntries.length + 1">
+        </app-create-order-entry>
       </div>
     </div>
   </div>

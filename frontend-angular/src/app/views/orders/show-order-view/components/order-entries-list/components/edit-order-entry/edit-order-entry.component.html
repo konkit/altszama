@@ -1,5 +1,6 @@
-<div>
+<div class="py-5">
   <app-order-entry-form
+    [dishIndex]="dishIndex"
     [dishes]="orderResponse.allDishesInRestaurant"
     [initialValue]="initialValue"
     (onSubmit)="onSubmit($event)"

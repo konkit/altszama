@@ -1,13 +1,14 @@
 <form [formGroup]="formGroup">
-  <mat-error>{{formGroup.errors}}</mat-error>
-
   <div>
-    <div class="d-flex fix-top-margin">
-      <mat-form-field class="w-full">
-        <mat-label>Dish</mat-label>
-        <input matInput [formControl]="formGroup.controls.dish" [matAutocomplete]="auto" />
+    <div class="flex">
+      <span class="mr-3 font-size-16px line-height-3rem">{{dishIndex}}. </span>
 
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onDishSelected($event.option.value)' [displayWith]="displayFn">
+      <mat-form-field class="w-full mr-3">
+        <mat-label>Dish</mat-label>
+        <input matInput [formControl]="formGroup.controls.dish" [matAutocomplete]="auto"/>
+
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onDishSelected($event.option.value)'
+                          [displayWith]="displayFn">
           <mat-option *ngFor="let dish of filteredDishes | async" [value]="dish">
             <div>{{dish.name}}</div>
             <div class="subtitle">
@@ -23,21 +24,23 @@
       </mat-form-field>
     </div>
 
-    <div>Side dishes:</div>
+    <div class="pl-6">Side dishes:</div>
 
+    <div class="py-5 pl-8 pb-6">
       <app-side-dishes-input
         [availableSideDishes]="availableSideDishes$ | async"
         [chosenSideDishes]="formGroup.controls.chosenSideDishes">
       </app-side-dishes-input>
+    </div>
 
-    <mat-form-field>
+    <mat-form-field class="w-full pl-6">
       <mat-label>Additional Comments</mat-label>
       <textarea matInput [formControl]="formGroup.controls.additionalComments"></textarea>
     </mat-form-field>
   </div>
 
-  <mat-divider></mat-divider>
+  <mat-error>{{formGroup.errors}}</mat-error>
 
-  <app-button color="primary" (click)="submitForm()">Submit</app-button>
   <app-button (click)="cancelEdit()">Cancel</app-button>
+  <app-button color="primary" (click)="submitForm()">Submit</app-button>
 </form>

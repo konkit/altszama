@@ -54,6 +54,8 @@ export interface ExistingOrderEntryFormValue {
 export class OrderEntryFormComponent implements OnInit {
   // @Input() formGroup!: FormGroup<OrderEntryFormType>
 
+  @Input() dishIndex: number = 0;
+
   @Input() dishes!: DishDto[]
   @Input() initialValue!: InitialOrderEntryFormValue
 

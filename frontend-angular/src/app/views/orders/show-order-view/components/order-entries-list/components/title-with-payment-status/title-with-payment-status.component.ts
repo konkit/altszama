@@ -9,6 +9,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
   styleUrls: ['./title-with-payment-status.component.scss']
 })
 export class TitleWithPaymentStatusComponent {
+  @Input() index!: number;
   @Input() title!: string;
   @Input() priceForUser!: number;
   @Input() order!: ShowOrderDto;

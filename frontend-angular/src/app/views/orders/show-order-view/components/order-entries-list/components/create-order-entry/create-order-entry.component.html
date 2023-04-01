@@ -1,5 +1,6 @@
 <div>
   <app-order-entry-form
+    [dishIndex]="dishIndex"
     [dishes]="orderResponse.allDishesInRestaurant"
     [initialValue]="initialValue"
     (onSubmit)="onSubmit($event)"
