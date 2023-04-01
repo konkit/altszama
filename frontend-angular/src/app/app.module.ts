@@ -84,6 +84,7 @@ import {MatCardModule} from "@angular/material/card";
 import { PaymentDataFormComponent } from './views/orders/components/payment-data-form/payment-data-form.component';
 import { DeliveryDataFormComponent } from './views/orders/components/delivery-data-form/delivery-data-form.component';
 import { OrderTimeFormComponent } from './views/orders/components/order-time-form/order-time-form.component';
+import {MatChipsModule} from "@angular/material/chips";
 
 @NgModule({
   declarations: [
@@ -166,6 +167,7 @@ import { OrderTimeFormComponent } from './views/orders/components/order-time-for
     MatToolbarModule,
     MatSidenavModule,
     MatCardModule,
+    MatChipsModule,
   ],
   providers: [
     {

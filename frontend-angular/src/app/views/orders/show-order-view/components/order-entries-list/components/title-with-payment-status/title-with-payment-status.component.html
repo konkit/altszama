@@ -1,17 +1,17 @@
-<div class="flex flex-row">
-  <div>
-    <h3 class="title-text">{{ title }} ({{orderEntry.finalPrice | price}})</h3>
+<div class="flex flex-row line">
+  <div class="title-and-price">
+    <span>{{ title }} ({{orderEntry.finalPrice | price}})</span>
   </div>
 
   <div *ngIf="isOrderEntryOwner() || isOrderOwner()" class="flex flex-row">
-    <div *ngIf="shouldShowPaymentStatus()">
-      <div class="chip mx-2" *ngIf="isUnpaid()">
+    <div *ngIf="shouldShowPaymentStatus()" class="flex flex-wrap content-center">
+      <mat-chip class="mx-2" *ngIf="isUnpaid()">
         Unpaid
-      </div>
+      </mat-chip>
 
-      <div class="chip mx-2" *ngIf="isConfirmedAsPaid()">
+      <mat-chip class="mx-2" *ngIf="isConfirmedAsPaid()">
         Payment confirmed
-      </div>
+      </mat-chip>
     </div>
 
     <div *ngIf="shouldShowConfirmAsPaidButton()">
