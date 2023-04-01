@@ -72,6 +72,6 @@ export class ShowOrderViewComponent {
   }
 
   unlockOrder() {
-
+    this.showOrderViewService.unlockOrderAndReload(this.getOrderId())
   }
 }

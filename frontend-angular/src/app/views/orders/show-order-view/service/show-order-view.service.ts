@@ -247,6 +247,14 @@ export class ShowOrderViewService {
   deleteOrder(orderId: string): Observable<string> {
     return this.orderControllerService._delete(orderId)
   }
+
+  unlockOrderAndReload(orderId: string) {
+    this.orderControllerService.setAsCreated(orderId)
+      .pipe(
+        switchMap(() => this.reloadOrderResponse())
+      )
+      .subscribe()
+  }
 }
 
 function isNonNullGuard<T>(value: T): value is NonNullable<T> {

@@ -39,35 +39,14 @@ export class MakeAnOrderViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    // let orderId = this.route.snapshot.paramMap.get('id')!;
-    //
-    //   this.orderControllerService.orderViewJson(orderId).subscribe(response => {
-    //
-    //   })
-    //     .then(responseObj => {
-    //       this.orderState = responseObj.orderState.toString();
-    //       this.orderDecreaseInPercent =
-    //         responseObj.orderDeliveryData.decreaseInPercent;
-    //       this.orderDeliveryCostPerEverybody =
-    //         responseObj.orderDeliveryData.deliveryCostPerEverybody;
-    //       this.orderDeliveryCostPerDish =
-    //         responseObj.orderDeliveryData.deliveryCostPerDish;
-    //       this.restaurantName = responseObj.restaurantName;
-    //       this.restaurantTelephone = responseObj.restaurantTelephone;
-    //       this.groupedEntries = responseObj.groupedEntries;
-    //       this.allEatingPeopleCount = responseObj.allEatingPeopleCount;
-    //       this.basePriceSum = responseObj.basePriceSum;
-    //       this.totalPrice = responseObj.totalPrice;
-    //
-    //       this.$store.commit("setLoadingFalse");
-    //       this.$store.commit("setTitle", `Ordering from ${this.restaurantName}`)
-    //     })
-    //     .catch(errResponse => ErrorHandler.handleError(errResponse));
-    // }
   }
 
   unlockOrder() {
-
+    this.orderControllerService.setAsCreated(this.getOrderId())
+      .subscribe({
+        next: () => this.goBack(),
+        error: e => this.formGroup.setErrors(e)
+      })
   }
 
   submitForm() {
