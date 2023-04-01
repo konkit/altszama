@@ -40,81 +40,9 @@
         <ng-template matStepLabel>Fill details</ng-template>
 
         <div class="flex flex-row py-4">
-          <div [formGroup]="orderForm" class="mr-20">
-            <h3>Order time</h3>
-
-            <mat-form-field>
-              <input matInput
-                     [formControl]="orderForm.controls.timeOfOrder"
-                     placeholder="16:00"
-                     label="Order time"
-              />
-              <mat-icon matSuffix>
-                watch_later
-              </mat-icon>
-            </mat-form-field>
-          </div>
-
-          <div class="mr-20">
-            <h3>Price modifiers</h3>
-            <div>
-              <mat-form-field>
-                <mat-label>Price decrease (in percent)</mat-label>
-                <input matInput [formControl]="orderForm.controls.deliveryData.controls.decreaseInPercent"/>
-              </mat-form-field>
-            </div>
-
-            <div>
-              <mat-form-field>
-                <mat-label>Delivery cost (total)</mat-label>
-                <input matInput [formControl]="orderForm.controls.deliveryData.controls.deliveryCostPerEverybody"/>
-              </mat-form-field>
-            </div>
-
-            <div>
-              <mat-form-field>
-                <mat-label>Delivery cost (per dish)</mat-label>
-                <input matInput [formControl]="orderForm.controls.deliveryData.controls.deliveryCostPerDish"/>
-              </mat-form-field>
-            </div>
-          </div>
-
-          <div>
-            <h3>Payment</h3>
-
-            <div class="pb-8">
-              <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByCash">
-                Payment by cash
-              </mat-slide-toggle>
-            </div>
-
-            <div class="pb-4">
-              <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByBankTransfer">
-                Payment by bank transfer
-              </mat-slide-toggle>
-            </div>
-
-            <div class="pb-4">
-              <mat-form-field>
-                <mat-label>Bank transfer number</mat-label>
-                <input matInput [formControl]="orderForm.controls.paymentData.controls.bankTransferNumber"/>
-              </mat-form-field>
-            </div>
-
-            <div class="pb-4">
-              <mat-slide-toggle [formControl]="orderForm.controls.paymentData.controls.paymentByBlik">
-                Payment by BLIK
-              </mat-slide-toggle>
-            </div>
-
-            <div>
-              <mat-form-field>
-                <mat-label>BLIK phone number</mat-label>
-                <input matInput [formControl]="orderForm.controls.paymentData.controls.blikPhoneNumber"/>
-              </mat-form-field>
-            </div>
-          </div>
-
+          <app-order-time-form class="mr-20" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
+          <app-delivery-data-form [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
+          <app-payment-data-form [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
         </div>
 
         <button mat-raised-button matStepperPrevious>Back</button>

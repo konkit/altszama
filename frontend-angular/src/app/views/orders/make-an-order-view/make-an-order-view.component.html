@@ -2,22 +2,20 @@
 <!--  [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + '(' + orderResponse.order.orderDate + ')'">-->
 <ng-container *ngIf="response$ | async as response">
   <ng-container *ngIf="priceSummaryInput$ | async as priceSummaryInput">
-    <app-view-wrapper title="Making an order">
+    <app-view-wrapper title="Call the place and make an order!">
 
       <ng-container *ngIf="response.orderState === 'ORDERING'">
-        <div>
-          <fa-icon [icon]="faLock"></fa-icon>
+        <mat-card class="my-5">
+          <mat-card-header><strong>The order is locked!</strong></mat-card-header>
 
-          <p><strong>The order is locked!</strong></p>
+          <mat-card-content>Order is now locked, so no one should order anything else now.</mat-card-content>
 
-          <p>Order is now locked, so no one should order anything else now.</p>
-
-          <p>
-            <app-button color="primary" (click)="unlockOrder()">
+          <mat-card-actions>
+            <app-button color="primary" (click)="unlockOrder()" [icon]="faUnlock">
               Unlock
             </app-button>
-          </p>
-        </div>
+          </mat-card-actions>
+        </mat-card>
 
 
         <div>

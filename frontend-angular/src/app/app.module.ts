@@ -82,6 +82,9 @@ import {
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatCardModule} from "@angular/material/card";
+import { PaymentDataFormComponent } from './views/orders/components/payment-data-form/payment-data-form.component';
+import { DeliveryDataFormComponent } from './views/orders/components/delivery-data-form/delivery-data-form.component';
+import { OrderTimeFormComponent } from './views/orders/components/order-time-form/order-time-form.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +133,9 @@ import {MatCardModule} from "@angular/material/card";
     OrderEntryFormComponent,
     SideDishesInputComponent,
     OrderStateButtonsComponent,
+    PaymentDataFormComponent,
+    DeliveryDataFormComponent,
+    OrderTimeFormComponent,
   ],
   imports: [
     BrowserModule,
