@@ -1,8 +1,8 @@
 <div class="flex">
-  <div class="line">
-    <span>{{ index }}. </span>
-    <span>{{ dishEntry.dishName }}</span>
-    <span class="ml-2">({{dishEntry.price | price}})</span>
+  <div>
+    <span class="text-body1 line-height-3rem">{{ index }}. </span>
+    <span class="text-body1 line-height-3rem">{{ dishEntry.dishName }}</span>
+    <span class="text-body1 line-height-3rem ml-2">({{dishEntry.price | price}})</span>
   </div>
 
   <div class="ml-2" *ngIf="canEditOrderEntry()">
@@ -18,14 +18,14 @@
 
 <div *ngFor="let sideDish of dishEntry.sideDishes" class="pl-8">
   <div class="line">
-    <span class="mr-2">+</span>
-    <span>{{ sideDish.name }}</span>
-    <span class="ml-2">({{sideDish.price | price}})</span>
+    <span class="text-body1 line-height-3rem mr-2">+</span>
+    <span class="text-body1 line-height-3rem">{{ sideDish.name }}</span>
+    <span class="text-body1 line-height-3rem ml-2">({{sideDish.price | price}})</span>
   </div>
 </div>
 
 <div *ngIf="dishEntry.comments.length > 0" class="pl-8">
-  <div class="line">
+  <span class="text-body1 line-height-3rem">
     Additional comments: {{ dishEntry.comments }}
-  </div>
+  </span>
 </div>

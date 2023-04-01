@@ -1,33 +1,43 @@
 <div>
-  <div class="payment-entry py-2">
+  <div class="py-2">
     <div *ngIf="paymentData.paymentByCash === true">
-      Payment by cash <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+      Payment by cash
+      <mat-icon fontIcon="check" class="ml-2"></mat-icon>
     </div>
     <div *ngIf="paymentData.paymentByCash === false">
-      Payment by cash <mat-icon fontIcon="close" class="ml-2"></mat-icon>
-    </div>
-  </div>
-  <div class="payment-entry py-2">
-    <div *ngIf="paymentData.paymentByBankTransfer === true">
-      Payment by bank transfer <mat-icon fontIcon="check" class="ml-2"></mat-icon>
-    </div>
-    <div *ngIf="paymentData.paymentByBankTransfer === false">
-      Payment by bank transfer <mat-icon fontIcon="close" class="ml-2"></mat-icon>
-    </div>
-    <div class="px-3 user-selectable flex" *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
-      {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
-        <mat-icon *ngIf="shouldShowQRCodeButton" (click)="showQrModal()" fontIcon="qr_code" class="cursor-pointer ml-2" matTooltip="Show QR code"></mat-icon>
+      Payment by cash
+      <mat-icon fontIcon="close" class="ml-2"></mat-icon>
     </div>
   </div>
 
-  <div class="payment-entry py-2">
+  <div class="py-2">
+    <div *ngIf="paymentData.paymentByBankTransfer === true">
+      Payment by bank transfer
+      <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+    </div>
+    <div *ngIf="paymentData.paymentByBankTransfer === false">
+      Payment by bank transfer
+      <mat-icon fontIcon="close" class="ml-2"></mat-icon>
+    </div>
+    <div class="px-3 user-selectable flex"
+         *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
+      {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
+      <mat-icon *ngIf="shouldShowQRCodeButton" (click)="showQrModal()" fontIcon="qr_code" class="cursor-pointer ml-2"
+                matTooltip="Show QR code"></mat-icon>
+    </div>
+  </div>
+
+  <div class="py-2">
     <div *ngIf="paymentData.paymentByBlik === true">
-      Payment by BLIK <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+      Payment by BLIK
+      <mat-icon fontIcon="check" class="ml-2"></mat-icon>
     </div>
     <div *ngIf="paymentData.paymentByBlik === false">
-      Payment by BLIK <mat-icon fontIcon="close" class="ml-2"></mat-icon>
+      Payment by BLIK
+      <mat-icon fontIcon="close" class="ml-2"></mat-icon>
     </div>
-    <div *ngIf="paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
+    <div
+      *ngIf="paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
       <div class="px-3 user-selectable">
         {{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}
       </div>

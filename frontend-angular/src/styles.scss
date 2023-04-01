@@ -35,10 +35,12 @@ app-root {
   height: 100%;
 }
 
-.font-size-16px {
-  font-size: 16px;
+.line-height-3rem {
+  line-height: 3rem !important;
 }
 
-.line-height-3rem {
-  line-height: 3rem;
+.text-body1 {
+  $my-typography: mat.define-typography-config();
+  @include mat.typography-level($my-typography, 'body-1');
 }
+

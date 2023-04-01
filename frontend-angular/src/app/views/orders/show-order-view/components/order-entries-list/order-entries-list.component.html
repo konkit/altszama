@@ -62,7 +62,7 @@
       </div>
 
       <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
-        <span class="mr-3 font-size-16px line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
+        <span class="mr-3 text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
 
         <button mat-raised-button color="primary" (click)="createEntry()">
           Add entry <mat-icon fontIcon="add"></mat-icon>

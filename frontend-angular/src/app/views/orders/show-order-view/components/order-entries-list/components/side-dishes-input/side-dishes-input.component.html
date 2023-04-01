@@ -2,7 +2,7 @@
   <div>
     <div *ngIf="chosenSideDishes.value.length > 0">
       <div class="w-full flex" *ngFor="let sideDishForm of chosenSideDishes.controls; let sdIndex = index;">
-        <span class="mr-3 line-height-3rem font-size-16px">{{sdIndex + 1}}. </span>
+        <span class="mr-3 line-height-3rem text-body1">{{sdIndex + 1}}. </span>
 
         <mat-form-field class="w-full mr-3">
           <mat-label>Name</mat-label>
@@ -30,7 +30,7 @@
     </div>
 
     <div>
-      <span class="line-height-3rem font-size-16px mr-3">{{chosenSideDishes.controls.length + 1}}. </span>
+      <span class="line-height-3rem text-body1 mr-3">{{chosenSideDishes.controls.length + 1}}. </span>
 
       <app-button (click)="addSideDishEntry()">
         Add side dish
