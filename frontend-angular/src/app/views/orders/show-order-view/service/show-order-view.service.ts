@@ -255,6 +255,22 @@ export class ShowOrderViewService {
       )
       .subscribe()
   }
+
+  confirmAsPaid(orderEntryId: string) {
+    this.orderEntryControllerService.setAsConfirmedAsPaid(orderEntryId)
+      .pipe(
+        switchMap(() => this.reloadOrderResponse())
+      )
+      .subscribe()
+  }
+
+  revertToUnpaid(orderEntryId: string) {
+    this.orderEntryControllerService.revertToUnpaid(orderEntryId)
+      .pipe(
+        switchMap(() => this.reloadOrderResponse())
+      )
+      .subscribe()
+  }
 }
 
 function isNonNullGuard<T>(value: T): value is NonNullable<T> {

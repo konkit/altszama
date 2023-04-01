@@ -27,7 +27,6 @@ import { OrderDataSummaryComponent } from './views/orders/show-order-view/compon
 import { PriceSummaryComponent } from './views/orders/show-order-view/components/price-summary/price-summary.component';
 import { PaymentOptionsSummaryComponent } from './views/orders/show-order-view/components/payment-options-summary/payment-options-summary.component';
 import {PricePipe} from "./components/pipes/price.pipe";
-import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import { OrderEntriesListComponent } from './views/orders/show-order-view/components/order-entries-list/order-entries-list.component';
 import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/components/order-entries-list/components/title-with-payment-status/title-with-payment-status.component';
 import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/show-order-entry/show-order-entry.component';
@@ -142,7 +141,6 @@ import { OrderTimeFormComponent } from './views/orders/components/order-time-for
     AppRoutingModule,
     ApiModule,
     HttpClientModule,
-    FontAwesomeModule,
     BrowserAnimationsModule,
     FormsModule,
     MatButtonModule,

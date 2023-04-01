@@ -3,7 +3,6 @@ import {ShowOrderResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EMPTY, Observable, switchMap, tap} from "rxjs";
 import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "./service/show-order-view.service";
-import {faPencil, faTimes, faArrowRight, faUnlock} from "@fortawesome/free-solid-svg-icons";
 import {DialogService} from "../../../service/dialog.service";
 
 @Component({
@@ -16,10 +15,6 @@ export class ShowOrderViewComponent {
   orderResponse$: Observable<ShowOrderResponse>
   showOrderViewState$: Observable<ShowOrderViewState>
   modifyOrderEntryState$: Observable<ModifyOrderEntryState>;
-  faPencil = faPencil;
-  faTimes = faTimes;
-  faArrowRight = faArrowRight;
-  faUnlock = faUnlock;
 
 
   constructor(private route: ActivatedRoute,

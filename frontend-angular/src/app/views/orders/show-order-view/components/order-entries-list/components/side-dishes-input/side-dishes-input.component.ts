@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {faRemove} from "@fortawesome/free-solid-svg-icons";
 import {SideDishForm} from "../order-entry-form/order-entry-form.component";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {SideDish} from "../../../../../../../../frontend-client";
@@ -12,8 +11,6 @@ import {SideDish} from "../../../../../../../../frontend-client";
 export class SideDishesInputComponent {
   @Input() availableSideDishes!: SideDish[] | null
   @Input() chosenSideDishes!: FormArray<FormGroup<SideDishForm>>
-
-  faRemove = faRemove
 
   constructor(private fb: FormBuilder) {
   }

@@ -1,7 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../frontend-client";
 import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "../../service/show-order-view.service";
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -14,8 +13,6 @@ export class OrderEntriesListComponent {
   @Input() showOrderResponse!: ShowOrderResponse
   @Input() viewState!: ShowOrderViewState
   @Input() modifyOrderEntryState!: ModifyOrderEntryState
-
-  faPlus = faPlus;
 
   constructor(private showOrderViewService: ShowOrderViewService) {
   }

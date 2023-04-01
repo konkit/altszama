@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ParticipantsOrderEntry, PaymentData, ShowOrderResponse} from "../../../../../../frontend-client";
-import {faCheck, faQrcode, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {PaymentData, ShowOrderResponse} from "../../../../../../frontend-client";
 import {MatDialog} from "@angular/material/dialog";
 import {
   BankTransferQrcodeModal,
@@ -20,10 +19,6 @@ export class PaymentOptionsSummaryComponent implements OnInit {
   @Input() viewState!: ShowOrderViewState
 
   shouldShowQRCodeButton: any;
-
-  faCheck = faCheck
-  faTimes = faTimes
-  faQrcode = faQrcode
 
   constructor(private dialog: MatDialog) {
   }

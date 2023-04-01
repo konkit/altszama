@@ -6,13 +6,13 @@
         <div class="flex flex-row p-3">
           <app-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
                       [disabled]="restaurantEditorState.name != 'IDLE'"
-                      class="mr-3" [icon]="faPencil">
+                      class="mr-3" icon="edit">
             Edit restaurant
           </app-button>
 
           <app-button color="warn" (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
                       [disabled]="restaurantEditorState.name != 'IDLE'"
-                      [icon]="faTimes">
+                      icon="delete">
             Delete restaurant
           </app-button>
         </div>
@@ -33,7 +33,7 @@
                         [disabled]="restaurantEditorState.name != 'IDLE'"
                         color="primary"
                         (click)="createDish()"
-                        class="mr-3" [icon]="faAdd">
+                        class="mr-3" icon="add">
               Create new dish
             </app-button>
           </div>

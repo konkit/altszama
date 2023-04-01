@@ -1,29 +1,29 @@
-<div class="d-flex flex-wrap">
+<div class="flex flex-row">
   <div>
     <h3 class="title-text">{{ title }} ({{orderEntry.finalPrice | price}})</h3>
   </div>
 
-  <div *ngIf="isOrderEntryOwner() || isOrderOwner()">
+  <div *ngIf="isOrderEntryOwner() || isOrderOwner()" class="flex flex-row">
     <div *ngIf="shouldShowPaymentStatus()">
-      <div class="chip mx-2" *ngIf="isUnpaid()" color="red" text-color="white">
+      <div class="chip mx-2" *ngIf="isUnpaid()">
         Unpaid
       </div>
 
-      <div class="chip mx-2" *ngIf="isConfirmedAsPaid()" color="green" text-color="white">
+      <div class="chip mx-2" *ngIf="isConfirmedAsPaid()">
         Payment confirmed
       </div>
     </div>
 
     <div *ngIf="shouldShowConfirmAsPaidButton()">
-      <app-button (click)="confirmAsPaid(orderEntry.id)" [icon]="faCheck">
-        Confirm payment
-      </app-button>
+      <button mat-icon-button (click)="confirmAsPaid(orderEntry.id)" matTooltip="Confirm payment">
+        <mat-icon fontIcon="check" ></mat-icon>
+      </button>
     </div>
 
     <div *ngIf="shouldShowRevertToUnpaid()">
-      <app-button (click)="revertToUnpaid(orderEntry.id)" [icon]="faUndo">
-        Revert to "unpaid"
-      </app-button>
+      <button mat-icon-button (click)="revertToUnpaid(orderEntry.id)" matTooltip="Revert to 'unpaid'">
+        <mat-icon fontIcon="undo" ></mat-icon>
+      </button>
     </div>
   </div>
 </div>

@@ -52,8 +52,8 @@
               </mat-form-field>
             </div>
             <div class="delete-button">
-              <button mat-button (click)="deleteSideDish(i)" color="warn">
-                <fa-icon [icon]="faTimes" aria-hidden="true"></fa-icon>
+              <button mat-icon-button (click)="deleteSideDish(i)" color="warn">
+                <mat-icon fontIcon="delete"></mat-icon>
               </button>
             </div>
           </div>
@@ -61,7 +61,9 @@
       </div>
 
       <div>
-        <app-button (click)="addSideDish()" type="button" [icon]="faAdd">Add SideDish</app-button>
+        <button mat-raised-button (click)="addSideDish()" type="button">
+          Add SideDish <mat-icon fontIcon="add"></mat-icon>
+        </button>
       </div>
 
     </div>

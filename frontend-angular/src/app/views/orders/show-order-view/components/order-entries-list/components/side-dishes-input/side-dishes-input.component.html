@@ -24,8 +24,9 @@
                 <app-money-input [formControl]="sideDishForm.controls.price"></app-money-input>
               </mat-form-field>
 
-              <app-button [icon]="faRemove" (click)="removeSideDish(sdIndex)">
-              </app-button>
+              <button mat-icon-button (click)="removeSideDish(sdIndex)">
+                <mat-icon fontIcon="delete"></mat-icon>
+              </button>
             </div>
           </div>
         </div>

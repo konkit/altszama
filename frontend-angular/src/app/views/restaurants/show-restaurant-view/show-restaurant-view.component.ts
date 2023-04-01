@@ -1,11 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {RestaurantControllerService, ShowRestaurantResponse} from "../../../../frontend-client";
-import {Router} from "@angular/router";
+import {Component} from '@angular/core';
+import {ShowRestaurantResponse} from "../../../../frontend-client";
 import {filter, Observable} from "rxjs";
-import {faAdd, faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {RestaurantFormService} from "./service/restaurant-form.service";
 import {isNotNull} from "../../../lib/utils";
-import {DialogService} from "../../../service/dialog.service";
 import {RestaurantEditorState} from "./service/restaurant-editor-state";
 
 
@@ -19,10 +16,6 @@ export class ShowRestaurantViewComponent {
   restaurant$: Observable<ShowRestaurantResponse>
 
   restaurantState$: Observable<RestaurantEditorState>
-
-  faPencil = faPencil;
-  faTimes = faTimes;
-  faAdd = faAdd;
 
 
   constructor(private restaurantFormService: RestaurantFormService) {

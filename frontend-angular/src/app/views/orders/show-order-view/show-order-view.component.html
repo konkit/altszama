@@ -17,12 +17,12 @@
             </mat-card-content>
 
             <mat-card-actions>
-              <app-button color="primary" (click)="unlockOrder()" [icon]="faUnlock" class="ml-2">
-                Unlock
-              </app-button>
-              <app-button color="primary" (click)="placeOrder()" [icon]="faArrowRight" class="ml-2">
-                Place order<span class="fa fa-arrow-right"></span>
-              </app-button>
+              <button mat-raised-button color="primary" (click)="unlockOrder()" class="ml-2">
+                Unlock <mat-icon fontIcon="lock_open"></mat-icon>
+              </button>
+              <button mat-raised-button color="primary" (click)="placeOrder()" class="ml-2">
+                Place order <mat-icon fontIcon="check"></mat-icon>
+              </button>
             </mat-card-actions>
           </mat-card>
         </div>
@@ -30,28 +30,28 @@
         <div class="flex flex-row py-3" *ngIf="viewState.isOrderOwner">
           <div class="flex">
             <ng-container *ngIf="viewState.canShowPlaceOrderButton && viewState.isPlaceOrderButtonDisabled">
-              <app-button class="mr-3" [disabled]="true" [icon]="faArrowRight" matTooltip="You cannot place an empty order. Choose a dish first.">
-                Place order
+              <app-button class="mr-3" [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
+                Place order <mat-icon fontIcon="check"></mat-icon>
               </app-button>
             </ng-container>
 
             <ng-container *ngIf="viewState.canShowPlaceOrderButton && !viewState.isPlaceOrderButtonDisabled">
-              <app-button class="mr-3" color="primary" (click)="placeOrder()" [icon]="faArrowRight">
-                Place order
-              </app-button>
+              <button mat-raised-button class="mr-3" color="primary" (click)="placeOrder()">
+                Place order <mat-icon fontIcon="check"></mat-icon>
+              </button>
             </ng-container>
 
-            <app-button class="mr-3" color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()" [icon]="faArrowRight">
-              Mark as delivered
-            </app-button>
+            <button mat-raised-button class="mr-3" color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()">
+              Mark as delivered <mat-icon fontIcon="check"></mat-icon>
+            </button>
 
-            <app-button class="mr-3" (click)="goToEditOrder()" [icon]="faPencil">
-              Edit order
-            </app-button>
+            <button mat-raised-button class="mr-3" (click)="goToEditOrder()">
+              Edit order <mat-icon fontIcon="edit"></mat-icon>
+            </button>
 
-            <app-button class="mr-3" color="warn" (click)="deleteOrder()" [icon]="faTimes">
-              Delete order <i class="pl-2 fa fa-cog" aria-hidden="true"></i>
-            </app-button>
+            <button mat-raised-button class="mr-3" color="warn" (click)="deleteOrder()" icon="delete">
+              Delete order <mat-icon fontIcon="delete"></mat-icon>
+            </button>
           </div>
         </div>
 

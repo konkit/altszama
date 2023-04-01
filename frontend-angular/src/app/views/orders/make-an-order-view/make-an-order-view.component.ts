@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {faArrowLeft, faLock, faArrowRight, faUnlock} from "@fortawesome/free-solid-svg-icons";
 import {OrderControllerService} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder} from "@angular/forms";
@@ -12,10 +11,6 @@ import {PriceSummaryInput} from "../show-order-view/components/price-summary/pri
   styleUrls: ['./make-an-order-view.component.scss']
 })
 export class MakeAnOrderViewComponent implements OnInit {
-  faLock = faLock;
-  faArrowBack = faArrowLeft;
-  faArrowRight = faArrowRight;
-  faUnlock = faUnlock;
 
   response$ = this.orderControllerService.orderViewJson(this.getOrderId())
   priceSummaryInput$ = this.response$.pipe(map(r => {

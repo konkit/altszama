@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
-import {faPencil, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
@@ -15,9 +14,6 @@ export class ShowOrderEntryComponent {
   @Input() orderEntry!: ParticipantsOrderEntry;
   @Input() dishEntry!: ParticipantsDishEntry;
   @Input() currentUserId!: string;
-
-  faPencil = faPencil;
-  faTimes = faTimes;
 
   constructor(private showOrderViewService: ShowOrderViewService) {
   }

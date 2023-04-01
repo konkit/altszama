@@ -3,9 +3,9 @@
 
   <div>
     <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === false">
-      <app-button color="primary" class="mt-3" (click)="createEntry()" [icon]="faPlus">
-        Add entry
-      </app-button>
+      <button mat-raised-button color="primary" class="mt-3" (click)="createEntry()">
+        Add entry <mat-icon fontIcon="add"></mat-icon>
+      </button>
     </ng-container>
 
     <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === true">
@@ -54,7 +54,7 @@
 
     <div *ngIf="canAddNewEntry(orderEntry)">
       <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
-        <app-button color="primary" (click)="createEntry()" [icon]="faPlus">
+        <app-button color="primary" (click)="createEntry()" icon="add">
           Add entry
         </app-button>
       </div>

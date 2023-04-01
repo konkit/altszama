@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SideDish} from "../../../../../../frontend-client";
 import {FormArray, FormControl, FormGroup, NonNullableFormBuilder} from "@angular/forms";
-import {faAdd, faTimes} from "@fortawesome/free-solid-svg-icons";
 
 export interface DishForm {
   name: FormControl<string>
@@ -35,8 +34,6 @@ export class DishFormComponent implements OnInit {
 
   @Output() onCancel = new EventEmitter<void>()
   @Output() onSubmit = new EventEmitter<void>()
-  faAdd = faAdd
-  faTimes = faTimes;
 
   constructor(private fb: NonNullableFormBuilder) {}
 

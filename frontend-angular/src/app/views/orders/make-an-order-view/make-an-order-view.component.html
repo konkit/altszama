@@ -11,9 +11,9 @@
           <mat-card-content>Order is now locked, so no one should order anything else now.</mat-card-content>
 
           <mat-card-actions>
-            <app-button color="primary" (click)="unlockOrder()" [icon]="faUnlock">
-              Unlock
-            </app-button>
+            <button mat-raised-button color="primary" (click)="unlockOrder()">
+              Unlock <mat-icon fontIcon="lock_open"></mat-icon>
+            </button>
           </mat-card-actions>
         </mat-card>
 
@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="align-center align-self-center">
-                  <app-button color="primary" (click)="submitForm()" [icon]="faArrowRight">
+                  <app-button color="primary" (click)="submitForm()" icon="arrow_right">
                     Order placed!
                   </app-button>
                 </div>
@@ -90,9 +90,9 @@
                   <h1>Ordering from {{ response.restaurantName }}</h1>
                   <h4>Sorry, the order is empty</h4>
                   <p>
-                    <app-button (click)="goBack()" class="hidden-xs-only">
-                      <fa-icon [icon]="faArrowBack"></fa-icon>
-                    </app-button>
+                    <button mat-icon-button (click)="goBack()" class="hidden-xs-only">
+                      <mat-icon fontIcon="arrow_back"></mat-icon>
+                    </button>
                   </p>
                 </div>
               </div>

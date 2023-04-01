@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
+import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
-import {faUndo, faCheck} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-title-with-payment-status',
@@ -15,8 +15,9 @@ export class TitleWithPaymentStatusComponent {
   @Input() orderEntry!: ParticipantsOrderEntry;
   @Input() currentUserId!: string;
   @Input() costForUser!: number;
-  faUndo = faUndo;
-  faCheck = faCheck;
+
+  constructor(private showOrderViewService: ShowOrderViewService) {
+  }
 
   isOrderOwner() {
     return this.order.orderCreatorId === this.currentUserId;
@@ -45,23 +46,11 @@ export class TitleWithPaymentStatusComponent {
   }
 
   confirmAsPaid(orderEntryId: string) {
-    // this.ordersConnector
-    //   .confirmOrderEntryAsPaid(orderEntryId)
-    //   .then(() => {
-    //     this.$store.commit("setLoadingTrue");
-    //     this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-    //   })
-    //   .catch(errResponse => ErrorHandler.handleError(errResponse));
+    this.showOrderViewService.confirmAsPaid(orderEntryId)
   }
 
   revertToUnpaid(orderEntryId: string) {
-    // this.ordersConnector
-    //   .revertToUnpaid(orderEntryId)
-    //   .then(() => {
-    //     this.$store.commit("setLoadingTrue");
-    //     this.$store.dispatch(`showOrder/fetchOrderDataAction`, this.$store.state.showOrder.order.id);
-    //   })
-    //   .catch(errResponse => ErrorHandler.handleError(errResponse));
+    this.showOrderViewService.revertToUnpaid(orderEntryId)
   }
 
   isUnpaid() {
