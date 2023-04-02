@@ -14,8 +14,9 @@
   <div class="px-3 user-selectable flex"
        *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
     {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
-    <mat-icon *ngIf="shouldShowQRCodeButton" (click)="showQrModal()" fontIcon="qr_code" class="cursor-pointer ml-2"
-              matTooltip="Show QR code"></mat-icon>
+    <mat-icon (click)="showQrModal()" class="cursor-pointer ml-2 material-icons-outlined"
+              matTooltip="Show QR code">qr_code
+    </mat-icon>
   </div>
 
   <div class="py-2 flex items-center">

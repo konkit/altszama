@@ -32,9 +32,10 @@
     <div>
       <span class="line-height-3rem text-body1 mr-3">{{chosenSideDishes.controls.length + 1}}. </span>
 
-      <app-button (click)="addSideDishEntry()">
+      <button mat-button (click)="addSideDishEntry()" color="primary">
+        <mat-icon>add</mat-icon>
         Add side dish
-      </app-button>
+      </button>
     </div>
   </div>
 </div>

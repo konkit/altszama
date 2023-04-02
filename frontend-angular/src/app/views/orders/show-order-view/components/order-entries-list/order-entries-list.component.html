@@ -16,15 +16,19 @@
 </div>
 
 <div *ngFor="let orderEntry of viewState.yourAndOtherUsersOrderEntries">
-  <div class="my-3">
-    <app-title-with-payment-status
-      [title]="orderEntry.username"
-      [priceForUser]="orderEntry.finalPrice"
-      [order]="showOrderResponse.order"
-      [orderEntry]="orderEntry"
-      [currentUserId]="showOrderResponse.currentUserId"
-      [costForUser]="orderEntry.finalPrice"
-    ></app-title-with-payment-status>
+  <mat-card class="mb-10 pb-5 px-5">
+    <mat-card-header>
+      <mat-card-title>
+        <app-title-with-payment-status
+          [title]="orderEntry.username"
+          [priceForUser]="orderEntry.finalPrice"
+          [order]="showOrderResponse.order"
+          [orderEntry]="orderEntry"
+          [currentUserId]="showOrderResponse.currentUserId"
+          [costForUser]="orderEntry.finalPrice"
+        ></app-title-with-payment-status>
+      </mat-card-title>
+    </mat-card-header>
 
     <div class="pl-6" *ngFor="let dishEntry of orderEntry.dishEntries; let dishEntryIndex = index;">
       <ng-container
@@ -64,8 +68,9 @@
       <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
         <span class="mr-3 text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
 
-        <button mat-raised-button color="primary" (click)="createEntry()">
-          Add entry <mat-icon fontIcon="add"></mat-icon>
+        <button mat-button color="primary" (click)="createEntry()">
+          Add entry
+          <mat-icon fontIcon="add"></mat-icon>
         </button>
       </div>
       <div *ngIf="modifyOrderEntryState.isEntryCreating === true">
@@ -74,6 +79,6 @@
         </app-create-order-entry>
       </div>
     </div>
-  </div>
+  </mat-card>
 
 </div>
