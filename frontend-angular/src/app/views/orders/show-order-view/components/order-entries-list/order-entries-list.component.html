@@ -10,7 +10,7 @@
     </ng-container>
 
     <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === true">
-      <app-create-order-entry [orderResponse]="showOrderResponse"></app-create-order-entry>
+      <app-create-order-entry [dishIndex]="1" [orderResponse]="showOrderResponse"></app-create-order-entry>
     </ng-container>
   </div>
 </div>

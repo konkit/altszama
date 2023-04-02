@@ -33,8 +33,6 @@ export class EditOrderViewComponent {
     })
   })
 
-  displayedColumns = [];
-
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
               private router: Router) {
@@ -57,12 +55,12 @@ export class EditOrderViewComponent {
       paymentData: response.order.paymentData,
     })
 
-    if (response.order.paymentData.bankTransferNumber) {
+    if (response.order.paymentData.paymentByBankTransfer) {
       this.orderForm.controls.paymentData.controls.paymentByBankTransfer.setValue(true);
       this.orderForm.controls.paymentData.controls.bankTransferNumber.setValue(response.order.paymentData.bankTransferNumber);
     }
 
-    if (response.order.paymentData.blikPhoneNumber) {
+    if (response.order.paymentData.paymentByBlik) {
       this.orderForm.controls.paymentData.controls.paymentByBlik.setValue(true);
       this.orderForm.controls.paymentData.controls.blikPhoneNumber.setValue(response.order.paymentData.blikPhoneNumber);
     }
