@@ -13,8 +13,6 @@ import {ShowOrderViewComponent} from './views/orders/show-order-view/show-order-
 import {TodayOrdersViewComponent} from './views/orders/today-orders-view/today-orders-view.component';
 import {RestaurantsListViewComponent} from './views/restaurants/restaurants-list-view/restaurants-list-view.component';
 import {ShowRestaurantViewComponent} from './views/restaurants/show-restaurant-view/show-restaurant-view.component';
-import {SidebarComponent} from './components/sidebar/sidebar.component';
-import {LayoutOneComponent} from './components/layout-one/layout-one.component';
 import {ApiModule, BASE_PATH} from "../frontend-client";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthenticatedLayoutComponent} from './components/authenticated-layout/authenticated-layout.component';
@@ -99,8 +97,6 @@ import {MatChipsModule} from "@angular/material/chips";
     TodayOrdersViewComponent,
     RestaurantsListViewComponent,
     ShowRestaurantViewComponent,
-    SidebarComponent,
-    LayoutOneComponent,
     AuthenticatedLayoutComponent,
     GoogleLoginButtonComponent,
     OrderDataSummaryComponent,

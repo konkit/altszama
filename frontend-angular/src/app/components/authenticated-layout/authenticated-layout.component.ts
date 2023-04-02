@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {MediaMatcher} from "@angular/cdk/layout";
 import {AuthService} from "../../service/auth.service";
 import {Router} from "@angular/router";
@@ -8,10 +8,13 @@ import {Router} from "@angular/router";
   templateUrl: './authenticated-layout.component.html',
   styleUrls: ['./authenticated-layout.component.scss']
 })
-export class AuthenticatedLayoutComponent {
+export class AuthenticatedLayoutComponent implements OnInit, OnDestroy {
+
   mobileQuery: MediaQueryList;
 
   private _mobileQueryListener: () => void;
+
+  username: string = ""
 
   constructor(changeDetectorRef: ChangeDetectorRef,
               media: MediaMatcher,
@@ -19,6 +22,10 @@ export class AuthenticatedLayoutComponent {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+  }
+
+  ngOnInit() {
+    this.username = this.authService.getLoggedUser()?.username || ""
   }
 
   ngOnDestroy(): void {
