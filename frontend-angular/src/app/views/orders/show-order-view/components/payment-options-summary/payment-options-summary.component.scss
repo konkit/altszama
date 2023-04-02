@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 .user-selectable {
   user-select: text;
 }
@@ -14,7 +16,10 @@
   line-height: 16px; // DO NOT FORGET IT !
 }
 
+.text-body1 {
+  color: rgba(0, 0, 0, 0.87);
+}
 
-
-
-
+.text-body2 {
+  color: rgba(0, 0, 0, 0.54);
+}

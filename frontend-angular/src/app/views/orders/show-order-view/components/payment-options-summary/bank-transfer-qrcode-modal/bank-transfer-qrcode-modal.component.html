@@ -1,8 +1,13 @@
 <h2 mat-dialog-title>Bank transfer QR Code</h2>
 <mat-dialog-content>
-  <p>Scan this QR code with your bank application to autofill the bank transfer data.</p>
-  <ngx-qrcode [elementType]="qrElementType" [value]="generateCodeValue()">
-  </ngx-qrcode>
+  <p class="py-2">Some banking mobile applications are able to scan bank transfer data (recipient name, account
+    number, title) from a QR code.</p>
+  <p class="py-2">This is such QR code.</p>
+
+  <div class="flex justify-center">
+    <ngx-qrcode [elementType]="qrElementType" [value]="generateCodeValue()">
+    </ngx-qrcode>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <app-button color="primary" (click)="closeModal()">Done</app-button>

@@ -1,18 +1,22 @@
-<div>
-  <div class="py-2">
-    <div>Who will order?</div>
-    <div class="text-no-wrap">
+<mat-list>
+  <mat-list-item>
+    <div matListItemTitle>Who will order?</div>
+    <div matListItemLine class="text-no-wrap">
       {{ this.order.orderCreatorUsername }}
     </div>
-  </div>
+  </mat-list-item>
 
-  <div class="py-2">
-    <div>When?</div>
-    <div>{{ this.order.timeOfOrder }}</div>
-  </div>
+  <mat-list-item>
+    <div matListItemTitle>When?</div>
+    <div matListItemLine class="text-no-wrap">
+      {{ this.order.timeOfOrder }}
+    </div>
+  </mat-list-item>
 
-  <div class="py-2">
-    <div>When it'll arrive?</div>
-    <div>{{ this.timeOfDeliveryOrNA() }}</div>
-  </div>
-</div>
+  <mat-list-item>
+    <div matListItemTitle>When it'll arrive?</div>
+    <div matListItemLine class="text-no-wrap">
+      {{ this.timeOfDeliveryOrNA() }}
+    </div>
+  </mat-list-item>
+</mat-list>

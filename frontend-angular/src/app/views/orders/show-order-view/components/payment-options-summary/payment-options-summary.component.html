@@ -1,4 +1,4 @@
-<div>
+<div class="-mt-1.5">
   <div class="py-2 flex items-center">
     <span class="text-body1">Payment by cash</span>
     <mat-icon *ngIf="paymentData.paymentByCash === true" fontIcon="check" class="ml-2"></mat-icon>
@@ -9,14 +9,17 @@
     <span class="text-body1">Payment by bank transfer</span>
     <mat-icon *ngIf="paymentData.paymentByBankTransfer === true" fontIcon="check" class="ml-2"></mat-icon>
     <mat-icon *ngIf="paymentData.paymentByBankTransfer === false" fontIcon="close" class="ml-2"></mat-icon>
+
+    <mat-icon
+      *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0"
+      (click)="showQrModal()" class="cursor-pointer ml-2 material-icons-outlined"
+      matTooltip="Show QR code for bank transfer">qr_code
+    </mat-icon>
   </div>
 
   <div class="px-3 user-selectable flex"
        *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
-    {{ formatBankAccountNr(paymentData.bankTransferNumber) }}
-    <mat-icon (click)="showQrModal()" class="cursor-pointer ml-2 material-icons-outlined"
-              matTooltip="Show QR code">qr_code
-    </mat-icon>
+    <span class="text-body2">{{ formatBankAccountNr(paymentData.bankTransferNumber) }}</span>
   </div>
 
   <div class="py-2 flex items-center">
@@ -27,6 +30,6 @@
 
   <div class="px-3 user-selectable"
        *ngIf="paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
-    {{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}
+    <span class="text-body2">{{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}</span>
   </div>
 </div>
