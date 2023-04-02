@@ -1,9 +1,15 @@
-<h1 class="pb-5 text-align-center">Test Login</h1>
+<div class="mat-typography">
+  <mat-toolbar color="primary" class="toolbar">
+    <span>Alt Szama</span>
+  </mat-toolbar>
 
-<div *ngFor="let user of usersList">
-  <app-button (click)="loginAsUser(user)">{{ user.username }} ({{ user.email }})</app-button>
+  <div class="container flex flex-col items-center justify-center pt-24">
+    <h1>Test Login</h1>
+    <div *ngFor="let user of usersList">
+      <app-button (click)="loginAsUser(user)">{{ user.username }} ({{ user.email }})</app-button>
+    </div>
+  </div>
 </div>
-
 
 
 

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule, Type} from '@angular/core';
+import {ResolveData, Route, RouterModule, Routes, RunGuardsAndResolvers} from '@angular/router';
 import {LandingPageViewComponent} from "./views/landing/landing-page-view/landing-page-view.component";
 import {LoginViewComponent} from "./views/login/login-view/login-view.component";
 import {TestLoginViewComponent} from "./views/login/test-login-view/test-login-view.component";
@@ -22,6 +22,7 @@ import {
 } from "./views/restaurants/create-restaurant-view/create-restaurant-view.component";
 import {EditOrderViewComponent} from "./views/orders/edit-order-view/edit-order-view.component";
 import {EditOrderResolver} from "./views/orders/edit-order-view/edit-order.resolver";
+import {AuthenticatedLayoutComponent} from "./components/authenticated-layout/authenticated-layout.component";
 
 
 export const notAuthenticatedRoutes: Routes = [
@@ -44,65 +45,65 @@ export const notAuthenticatedRoutes: Routes = [
 
 
 export const authenticatedRoutes: Routes = [
-  {
+  authenticatedRoute({
     path: "orders/today",
     title: "TodayOrders",
     component: TodayOrdersViewComponent,
     resolve: {
       response: TodayOrdersResolver
     }
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "orders/create",
     title: "CreateOrder",
     component: CreateOrderViewComponent,
     resolve: {
       response: CreateOrderResolver
     }
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "orders/:id/make_an_order",
     title: "MakeAnOrderView",
     component: MakeAnOrderViewComponent,
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "orders/:id/show",
     title: "ShowOrder",
     component: ShowOrderViewComponent,
     resolve: {
       response: ShowOrderResolver
     }
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "orders/:id/edit",
     title: "EditOrderView",
     component: EditOrderViewComponent,
     resolve: {
       response: EditOrderResolver
     }
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "orders/all",
     title: "AllOrders",
     component: AllOrdersViewComponent,
     resolve: {
       response: AllOrdersResolver
     }
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "restaurants",
     title: "RestaurantIndex",
     component: RestaurantsListViewComponent,
     resolve: {
       response: RestaurantsListResolver
     }
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "restaurants/create",
     title: "CreateRestaurant",
     component: CreateRestaurantViewComponent,
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "restaurants/:id",
     title: "ShowRestaurant",
     component: ShowRestaurantViewComponent,
@@ -110,12 +111,12 @@ export const authenticatedRoutes: Routes = [
     resolve: {
       response: ShowRestaurantResolver
     }
-  },
-  {
+  }),
+  authenticatedRoute({
     path: "balance",
     title: "Balance",
     component: BalanceViewComponent,
-  },
+  }),
 ]
 
 @NgModule({
@@ -123,3 +124,23 @@ export const authenticatedRoutes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+function authenticatedRoute(param: {path: string, title: string, component: Type<any>, resolve?: ResolveData, runGuardsAndResolvers?: RunGuardsAndResolvers}): Route {
+  let route: Route = {
+    path: param.path,
+    title: param.title,
+    component: AuthenticatedLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: param.component,
+      }
+    ],
+  }
+
+  if (param.resolve != null) {
+    route.resolve = param.resolve
+  }
+
+  return route;
+}

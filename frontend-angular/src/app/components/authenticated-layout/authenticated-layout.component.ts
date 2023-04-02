@@ -18,7 +18,8 @@ export class AuthenticatedLayoutComponent implements OnInit, OnDestroy {
 
   constructor(changeDetectorRef: ChangeDetectorRef,
               media: MediaMatcher,
-              private authService: AuthService, private router: Router) {
+              private authService: AuthService,
+              private router: Router) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
