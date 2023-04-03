@@ -84,6 +84,7 @@ import { DeliveryDataFormComponent } from './views/orders/components/delivery-da
 import { OrderTimeFormComponent } from './views/orders/components/order-time-form/order-time-form.component';
 import {MatChipsModule} from "@angular/material/chips";
 import { TimePickerComponent } from './components/time-picker/time-picker.component';
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -166,6 +167,7 @@ import { TimePickerComponent } from './components/time-picker/time-picker.compon
     MatSidenavModule,
     MatCardModule,
     MatChipsModule,
+    MatExpansionModule,
   ],
   providers: [
     {

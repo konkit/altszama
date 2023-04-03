@@ -1,56 +1,40 @@
-  <div>
-    <mat-list dense>
-      <ng-container *ngFor="let entry of groupedEntries; let entryIndex = index">
+<div class="example-action-buttons">
+  <button mat-button (click)="accordion.openAll()">Expand All</button>
+  <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+</div>
+
+<mat-accordion multi>
+  <mat-expansion-panel *ngFor="let entry of groupedEntries; let entryIndex = index"
+                       [expanded]="accordionStates[entryIndex]"
+                       (opened)="accordionStates[entryIndex] = true"
+                       (closed)="accordionStates[entryIndex] = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span><b>{{ entry.eatingPeopleCount }}x</b> {{ entry.dishName }}</span>
+      </mat-panel-title>
+      <mat-panel-description *ngIf="accordionStates[entryIndex] == false">
+        Expand to see side dishes and comments
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list *ngIf="entry.eatingPeopleEntries.length > 0" dense>
+      <div *ngFor="let eatingPersonEntry of entry.eatingPeopleEntries; let i = index">
         <mat-list-item>
-          <span><b>{{ entry.eatingPeopleCount }}x</b> {{ entry.dishName }}</span>
+          {{ i + 1 }}. {{ eatingPersonEntry.username }}
         </mat-list-item>
 
-        <mat-list *ngIf="entry.eatingPeopleEntries.length > 0">
-          <ng-container *ngFor="let eatingPersonEntry of entry.eatingPeopleEntries; let i = index">
-            <mat-list-item>
-              <div class="user-row">
-                <div class="username">
-                  {{ i + 1 }}. {{ eatingPersonEntry.username }}
-                </div>
+        <div class="pl-5">
+          <mat-list-item *ngIf="eatingPersonEntry.comments.length > 0">
+            Additional comments: {{ eatingPersonEntry.comments }}
+          </mat-list-item>
 
-                <div class="sidedishes mx-4">
-                  <mat-list>
-                    <ng-container *ngIf="eatingPersonEntry.comments.length > 0">
-                      <div>Additional comments:</div>
-
-                      <mat-list-item>
-                        {{ eatingPersonEntry.comments }}
-                      </mat-list-item>
-                    </ng-container>
-
-                    <ng-container *ngIf="eatingPersonEntry.sideDishes.length > 0">
-                      <div>Side dishes:</div>
-
-                      <ng-container *ngFor="let sd of eatingPersonEntry.sideDishes; let j = index">
-                        <mat-list-item :key="'entry-' + i + '-side-dish-' + j">
-                            {{ sd.name }}
-                        </mat-list-item>
-
-                        <ng-container *ngIf="j < eatingPersonEntry.sideDishes.length - 1">
-                          <mat-divider></mat-divider>
-                        </ng-container>
-                      </ng-container>
-                    </ng-container>
-                  </mat-list>
-                </div>
-              </div>
+          <ng-container *ngIf="eatingPersonEntry.sideDishes.length > 0">
+            <mat-list-item *ngFor="let sd of eatingPersonEntry.sideDishes; let j = index">
+              + {{ sd.name }}
             </mat-list-item>
-
-            <ng-container *ngIf="i < entry.eatingPeopleEntries.length - 1">
-              <mat-divider></mat-divider>
-            </ng-container>
           </ng-container>
-        </mat-list>
-
-        <ng-container *ngIf="entryIndex < groupedEntries.length - 1">
-          <mat-divider></mat-divider>
-        </ng-container>
-
-      </ng-container>
+        </div>
+      </div>
     </mat-list>
-  </div>
+  </mat-expansion-panel>
+</mat-accordion>
