@@ -39,7 +39,7 @@
       <mat-step>
         <ng-template matStepLabel>Fill details</ng-template>
 
-        <div class="flex flex-row py-4">
+        <div class="flex flex-row py-4 pr-10">
           <app-order-time-form class="mr-20" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
           <app-delivery-data-form [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
           <app-payment-data-form [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>

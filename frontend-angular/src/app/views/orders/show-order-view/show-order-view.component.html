@@ -32,9 +32,9 @@
         <div class="flex flex-row py-3" *ngIf="viewState.isOrderOwner">
           <div class="flex">
             <ng-container *ngIf="viewState.canShowPlaceOrderButton && viewState.isPlaceOrderButtonDisabled">
-              <app-button class="mr-3" [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
+              <button mat-raised-button class="mr-3" [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
                 Place order <mat-icon fontIcon="check"></mat-icon>
-              </app-button>
+              </button>
             </ng-container>
 
             <ng-container *ngIf="viewState.canShowPlaceOrderButton && !viewState.isPlaceOrderButtonDisabled">

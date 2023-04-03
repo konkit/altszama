@@ -14,15 +14,16 @@
 
           <mat-card-actions>
             <button mat-button color="primary" (click)="unlockOrder()">
-              Unlock <mat-icon fontIcon="lock_open"></mat-icon>
+              Unlock
+              <mat-icon fontIcon="lock_open"></mat-icon>
             </button>
           </mat-card-actions>
         </mat-card>
 
 
         <div>
-          <div>
-            <div cols="8">
+          <div class="grid grid-cols-3">
+            <div class="col-span-2 py-10 mr-10">
               <h1>Call the place!</h1>
 
               <div>
@@ -32,21 +33,24 @@
                 </p>
               </div>
 
-              <div>
-                <div *ngIf="response.restaurantTelephone.length > 0; else notelephone" class="align-center">
-                  <b>tel. {{ response.restaurantTelephone }}</b>
-                </div>
-
-                <ng-template #notelephone>
-                  <div class="align-center">
-                    <b>Telephone number not specified, sorry :/</b>
+              <div class="py-5">
+                <div>
+                  <div *ngIf="response.restaurantTelephone.length > 0; else notelephone" class="justify-center">
+                    <b>tel. {{ response.restaurantTelephone }}</b>
                   </div>
-                </ng-template>
+
+                  <ng-template #notelephone>
+                    <div class="align-center">
+                      <b>Telephone number not specified, sorry :/</b>
+                    </div>
+                  </ng-template>
+                </div>
               </div>
 
               <div class="justify-space-around">
                 <div class="align-center align-self-center">
                   <div class=" delivery-time-wrapper">
+
                     <!--                  <TimePicker-->
                     <!--                    :value="approxTimeOfDelivery"-->
                     <!--                    @input="updateApproxTimeOfDelivery($event)"-->
@@ -55,7 +59,7 @@
                   </div>
                 </div>
 
-                <div class="align-center align-self-center">
+                <div class="">
                   <app-button color="primary" (click)="submitForm()" icon="arrow_right">
                     Order placed!
                   </app-button>
@@ -63,7 +67,7 @@
               </div>
             </div>
 
-            <div cols="4">
+            <div class="col-span-1 py-10" cols="4">
               <h1>Cost summary</h1>
 
               <app-price-summary [priceSummaryInput]="priceSummaryInput">

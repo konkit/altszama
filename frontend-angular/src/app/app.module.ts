@@ -83,6 +83,7 @@ import { PaymentDataFormComponent } from './views/orders/components/payment-data
 import { DeliveryDataFormComponent } from './views/orders/components/delivery-data-form/delivery-data-form.component';
 import { OrderTimeFormComponent } from './views/orders/components/order-time-form/order-time-form.component';
 import {MatChipsModule} from "@angular/material/chips";
+import { TimePickerComponent } from './components/time-picker/time-picker.component';
 
 @NgModule({
   declarations: [
@@ -132,6 +133,7 @@ import {MatChipsModule} from "@angular/material/chips";
     PaymentDataFormComponent,
     DeliveryDataFormComponent,
     OrderTimeFormComponent,
+    TimePickerComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,18 +1,27 @@
 <div *ngIf="viewState.shouldDisplayNewOrderEntryCard">
-  <h3>{{ viewState.username }}</h3>
+  <mat-card class="mb-10 pb-5 px-5">
+    <mat-card-header>
+      <mat-card-title>
+        <div class="mat-body-1">{{ viewState.username }}</div>
+      </mat-card-title>
+    </mat-card-header>
 
-  <div>
-    <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === false">
-      <button mat-raised-button color="primary" class="mt-3" (click)="createEntry()">
-        Add entry
-        <mat-icon fontIcon="add"></mat-icon>
-      </button>
-    </ng-container>
+      <mat-card-content>
+        <div>
+          <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === false">
+            <button mat-raised-button color="primary" class="mt-3" (click)="createEntry()">
+              Add entry
+              <mat-icon fontIcon="add"></mat-icon>
+            </button>
+          </ng-container>
 
-    <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === true">
-      <app-create-order-entry [dishIndex]="1" [orderResponse]="showOrderResponse"></app-create-order-entry>
-    </ng-container>
-  </div>
+          <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === true">
+            <app-create-order-entry [dishIndex]="1" [orderResponse]="showOrderResponse"></app-create-order-entry>
+          </ng-container>
+        </div>
+      </mat-card-content>
+
+  </mat-card>
 </div>
 
 <div *ngFor="let orderEntry of viewState.yourAndOtherUsersOrderEntries">
