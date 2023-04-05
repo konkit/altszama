@@ -52,4 +52,8 @@ export class AuthService {
     localStorage.removeItem("loggedUserData");
     this.router.navigate([this.defaultLogoutPath]);
   }
+
+  getToken() {
+
+  }
 }

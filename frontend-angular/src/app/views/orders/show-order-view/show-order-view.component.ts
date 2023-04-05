@@ -1,16 +1,18 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ShowOrderResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EMPTY, Observable, switchMap, tap} from "rxjs";
 import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "./service/show-order-view.service";
 import {DialogService} from "../../../service/dialog.service";
+import {EventSourcePolyfill} from "event-source-polyfill";
+import {AuthService} from "../../../service/auth.service";
 
 @Component({
   selector: 'app-show-order-view',
   templateUrl: './show-order-view.component.html',
   styleUrls: ['./show-order-view.component.scss']
 })
-export class ShowOrderViewComponent {
+export class ShowOrderViewComponent implements OnInit {
 
   orderResponse$: Observable<ShowOrderResponse>
   showOrderViewState$: Observable<ShowOrderViewState>
@@ -20,14 +22,15 @@ export class ShowOrderViewComponent {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private showOrderViewService: ShowOrderViewService,
+              private authService: AuthService,
               private dialogService: DialogService) {
     this.orderResponse$ = this.showOrderViewService.orderResponseAsObservable()
     this.showOrderViewState$ = this.showOrderViewService.getShowOrderViewState();
     this.modifyOrderEntryState$ = this.showOrderViewService.modifyOrderEntryStateAsObservable()
   }
 
-  shouldShowOrderLockedWarning() {
-    return false;
+  ngOnInit() {
+    this.showOrderViewService.handleOrderChangeSSE()
   }
 
   placeOrder() {

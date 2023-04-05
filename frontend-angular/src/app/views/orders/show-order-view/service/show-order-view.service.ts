@@ -11,9 +11,9 @@ import {
 } from "../../../../../frontend-client";
 import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
 import {AuthService} from "../../../../service/auth.service";
-import OrderStateEnum = ShowOrderDto.OrderStateEnum;
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ErrorSnackBarService} from "../../../../service/error-snack-bar.service";
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {EventSourcePolyfill} from "event-source-polyfill";
 
 //TODO: Clear state on entry
 
@@ -281,6 +281,26 @@ export class ShowOrderViewService {
         switchMap(() => this.reloadOrderResponse())
       )
       .subscribe()
+  }
+
+  handleOrderChangeSSE() {
+    this.orderResponse.pipe(
+      take(1),
+      map(r => r!.order.id)
+    ).subscribe(orderId => {
+      let token = this.authService.getLoggedUser()?.token
+      let es = new EventSourcePolyfill('/api/orders/sse', {headers: {Authorization: "Bearer " + token}});
+
+      const eventListener = (event: any) => {
+        const data = JSON.parse(event.data)
+        if (data.orderId === orderId) {
+          console.log("Reloading order response")
+          this.reloadOrderResponse().subscribe()
+        }
+      };
+
+      es.addEventListener("message", eventListener);
+    })
   }
 }
 
