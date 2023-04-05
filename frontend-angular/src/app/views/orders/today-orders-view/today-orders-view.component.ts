@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {map, Observable} from "rxjs";
-import {OrderControllerService, TodayOrdersResponse} from "../../../../frontend-client";
+import {TodayOrdersResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -12,7 +12,7 @@ export class TodayOrdersViewComponent {
 
   todaysOrders$: Observable<TodayOrdersResponse>;
 
-  constructor(private api: OrderControllerService, private route: ActivatedRoute, private router: Router) {
+  constructor(private route: ActivatedRoute, private router: Router) {
     this.todaysOrders$ = this.route.data.pipe(map(x => x['response']))
   }
 

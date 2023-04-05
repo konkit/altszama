@@ -1,9 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {of} from "rxjs";
 import {DishDto, OrderEntrySaveRequest, ShowOrderResponse} from "../../../../../../../../frontend-client";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
-import {FormBuilder} from "@angular/forms";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-form/order-entry-form.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-create-order-entry',
@@ -26,7 +25,7 @@ export class CreateOrderEntryComponent implements OnInit {
 
 
   constructor(private showOrderViewService: ShowOrderViewService,
-              private fb: FormBuilder) {
+              private matSnackBar: MatSnackBar) {
     this.showOrderViewService.setEntryLoading(true)
   }
 
@@ -60,14 +59,7 @@ export class CreateOrderEntryComponent implements OnInit {
     }
 
     this.showOrderViewService.doSaveOrderEntry(orderEntryToSave)
-      .subscribe({
-        next: () => {
-        },
-        error: error => {
-          // this.formGroup.setErrors(error) TODO - set an error somewhere
-          return of("")
-        }
-      })
+      .subscribe()
   }
 
   onCancel() {

@@ -16,6 +16,6 @@ export class RestaurantsListResolver implements Resolve<IndexResponse> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IndexResponse> {
-    return this.restaurantControllerService.indexRestaurants();
+    return this.restaurantControllerService.indexRestaurants()
   }
 }

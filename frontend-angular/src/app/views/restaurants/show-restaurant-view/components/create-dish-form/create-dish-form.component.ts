@@ -4,6 +4,7 @@ import {catchError, Observable, of, switchMap} from "rxjs";
 import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {SideDishForm} from "../dish-form/dish-form.component";
+import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
 
 @Component({
   selector: 'app-create-dish-form',
@@ -25,6 +26,7 @@ export class CreateDishFormComponent implements OnInit {
 
   constructor(private fb: NonNullableFormBuilder,
               private dishControllerService: DishControllerService,
+              private errorSnackBar: ErrorSnackBarService,
               private restaurantFormService: RestaurantFormService) {
   }
 
@@ -38,9 +40,9 @@ export class CreateDishFormComponent implements OnInit {
       this.dishControllerService.saveDish(body, this.restaurantId)
         .pipe(
           switchMap(() => this.restaurantFormService.refreshRestaurantData()),
-          catchError(e => {
-            this.dishForm.setErrors(e)
-            return of("")
+          catchError(err => {
+            this.errorSnackBar.displayError(err)
+            throw err
           })
         )
         .subscribe()

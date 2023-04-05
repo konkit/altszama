@@ -4,6 +4,7 @@ import {DishControllerService, EditDishResponse} from "../../../../../../fronten
 import {FormGroup, NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {DishForm, SideDishForm} from "../dish-form/dish-form.component";
+import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
 
 @Component({
   selector: 'app-edit-dish-form',
@@ -25,14 +26,16 @@ export class EditDishFormComponent implements OnInit {
 
   constructor(private fb: NonNullableFormBuilder,
               private dishControllerService: DishControllerService,
+              private errorSnackBar: ErrorSnackBarService,
               private restaurantFormService: RestaurantFormService) {
   }
 
   ngOnInit() {
-    this.modifyDishData$ = this.dishControllerService.editDish(this.restaurantId, this.dishId).pipe(shareReplay())
-    this.modifyDishData$.pipe(take(1)).subscribe(response => {
-
-      console.log("response: ", response)
+    this.modifyDishData$ = this.dishControllerService.editDish(this.restaurantId, this.dishId)
+      .pipe(shareReplay())
+    this.modifyDishData$
+      .pipe(take(1))
+      .subscribe(response => {
 
       let initialFormData = {
         name: response.dish.name,
@@ -60,9 +63,9 @@ export class EditDishFormComponent implements OnInit {
       this.dishControllerService.updateDish(body, this.restaurantId)
         .pipe(
           switchMap(() => this.restaurantFormService.refreshRestaurantData()),
-          catchError(e => {
-            this.dishForm.setErrors(e)
-            return of("")
+          catchError(err => {
+            this.errorSnackBar.displayError(err)
+            throw err
           })
         )
         .subscribe()

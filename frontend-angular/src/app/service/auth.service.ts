@@ -30,7 +30,7 @@ export class AuthService {
 
             this.router.navigate([this.defaultLoginPath])
           }
-        })
+        }),
       )
   }
 

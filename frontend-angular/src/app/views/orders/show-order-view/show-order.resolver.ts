@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {EMPTY, Observable} from 'rxjs';
-import {OrderControllerService, ShowOrderResponse} from "../../../../frontend-client";
+import {Observable} from 'rxjs';
+import {ShowOrderResponse} from "../../../../frontend-client";
 import {ShowOrderViewService} from "./service/show-order-view.service";
 
 @Injectable({

@@ -6,9 +6,8 @@ import {
   ShowOrderResponse
 } from "../../../../../../../../frontend-client";
 import {ModifyOrderEntryState, ShowOrderViewService} from "../../../../service/show-order-view.service";
-import {FormBuilder} from "@angular/forms";
-import {of} from "rxjs";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-form/order-entry-form.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -26,8 +25,8 @@ export class EditOrderEntryComponent implements OnInit {
 
   initialValue!: InitialOrderEntryFormValue
 
-  constructor(private fb: FormBuilder,
-              private showOrderViewService: ShowOrderViewService) {
+  constructor(private showOrderViewService: ShowOrderViewService,
+              private matSnackBar: MatSnackBar) {
     this.showOrderViewService.setEntryLoading(true)
   }
 
@@ -71,14 +70,7 @@ export class EditOrderEntryComponent implements OnInit {
     }
 
     this.showOrderViewService.doUpdateOrderEntry(orderEntryToUpdate)
-      .subscribe({
-        next: () => {
-        },
-        error: error => {
-          // this.formGroup.setErrors(error) TODO - set an error somewhere
-          return of("")
-        }
-      })
+      .subscribe()
   }
 
   onCancel() {

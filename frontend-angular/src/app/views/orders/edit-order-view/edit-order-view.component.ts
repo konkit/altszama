@@ -3,6 +3,7 @@ import {EditOrderInitialData, OrderControllerService, OrderUpdateRequest} from "
 import {map, Observable, take} from "rxjs";
 import {FormBuilder} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 
 @Component({
   selector: 'app-edit-order-view',
@@ -35,6 +36,7 @@ export class EditOrderViewComponent {
 
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
+              private errorSnackBar: ErrorSnackBarService,
               private router: Router) {
     this.editOrderInitialData$ = this.route.data.pipe(map(x => x['response']))
     this.orderId = this.route.snapshot.paramMap.get("id")!
@@ -89,7 +91,7 @@ export class EditOrderViewComponent {
 
     this.orderControllerService.update(order).subscribe({
       next: r => this.router.navigate(["/orders", this.orderId, 'show']),
-      error: err => console.log(err)
+      error: err => this.errorSnackBar.displayError(err)
     })
 
     return false;

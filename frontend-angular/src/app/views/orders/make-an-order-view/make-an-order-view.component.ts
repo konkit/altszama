@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder} from "@angular/forms";
 import {map} from "rxjs";
 import {PriceSummaryInput} from "../show-order-view/components/price-summary/price-summary.component";
+import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 
 @Component({
   selector: 'app-make-an-order-view',
@@ -28,6 +29,7 @@ export class MakeAnOrderViewComponent implements OnInit {
   })
 
   constructor(private orderControllerService: OrderControllerService,
+              private errorSnackBar: ErrorSnackBarService,
               private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder) {
@@ -40,7 +42,7 @@ export class MakeAnOrderViewComponent implements OnInit {
     this.orderControllerService.setAsCreated(this.getOrderId())
       .subscribe({
         next: () => this.goBack(),
-        error: e => this.formGroup.setErrors(e)
+        error: e => this.errorSnackBar.displayError(e)
       })
   }
 
@@ -49,7 +51,7 @@ export class MakeAnOrderViewComponent implements OnInit {
     this.orderControllerService.setAsOrdered(setAsOrderedResponse, this.getOrderId())
       .subscribe({
         next: () => this.goBack(),
-        error: e => this.formGroup.setErrors(e)
+        error: e => this.errorSnackBar.displayError(e)
       })
   }
 

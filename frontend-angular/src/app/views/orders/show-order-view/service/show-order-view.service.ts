@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
+import {BehaviorSubject, catchError, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
 import {
   OrderControllerService,
   OrderEntryControllerService,
@@ -12,6 +12,8 @@ import {
 import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
 import {AuthService} from "../../../../service/auth.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {ErrorSnackBarService} from "../../../../service/error-snack-bar.service";
 
 //TODO: Clear state on entry
 
@@ -65,6 +67,7 @@ export class ShowOrderViewService {
   showOrderViewState$: Observable<ShowOrderViewState> = this.createShowOrderViewStateObservable()
 
   constructor(private orderControllerService: OrderControllerService,
+              private errorSnackBarService: ErrorSnackBarService,
               private orderEntryControllerService: OrderEntryControllerService,
               private authService: AuthService) {
   }
@@ -223,6 +226,10 @@ export class ShowOrderViewService {
         tap(() => this.setEntryLoading(true)),
         tap(() => this.cancelDishEntryModification()),
         switchMap(() => this.reloadOrderResponse()),
+        catchError(error => {
+          this.errorSnackBarService.displayError(error)
+          throw error
+        })
       )
   }
 
@@ -233,6 +240,10 @@ export class ShowOrderViewService {
         tap(() => this.setEntryLoading(true)),
         tap(() => this.cancelDishEntryModification()),
         switchMap(() => this.reloadOrderResponse()),
+        catchError(error => {
+          this.errorSnackBarService.displayError(error)
+          throw error
+        })
       )
   }
 

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, EMPTY, Observable, ReplaySubject, switchMap, take, tap, throwError} from "rxjs";
+import {BehaviorSubject, catchError, EMPTY, Observable, ReplaySubject, switchMap, take, tap, throwError} from "rxjs";
 import {
   DishControllerService,
   RestaurantControllerService,
@@ -8,6 +8,7 @@ import {
 import {RestaurantEditorState} from "./restaurant-editor-state";
 import {DialogService} from "../../../../service/dialog.service";
 import {Router} from "@angular/router";
+import {ErrorSnackBarService} from "../../../../service/error-snack-bar.service";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class RestaurantFormService {
   loadedRestaurantData = new ReplaySubject<ShowRestaurantResponse>(1)
 
   constructor(private restaurantControllerService: RestaurantControllerService,
+              private errorSnackBar: ErrorSnackBarService,
               private dialogService: DialogService,
               private router: Router,
               private dishControllerService: DishControllerService) {
@@ -28,7 +30,11 @@ export class RestaurantFormService {
     if (restaurantId != null) {
       return this.restaurantControllerService.showRestaurant(restaurantId)
         .pipe(
-          tap(response => this.loadedRestaurantData.next(response))
+          tap(response => this.loadedRestaurantData.next(response)),
+          catchError(err => {
+            this.errorSnackBar.displayError(err)
+            throw err
+          })
         )
     } else {
       return throwError(() => new Error(`Missing restaurant ID`));
@@ -65,6 +71,12 @@ export class RestaurantFormService {
         switchMap(confirmed => {
           if (confirmed) {
             return this.dishControllerService.deleteDish(dishId)
+              .pipe(
+                catchError(err => {
+                  this.errorSnackBar.displayError(err)
+                  throw err
+                })
+              )
           } else {
             return EMPTY
           }
@@ -81,9 +93,15 @@ export class RestaurantFormService {
         switchMap(confirmed => {
           if (confirmed) {
             return this.restaurantControllerService.deleteRestaurant(restaurantId)
-              .pipe(tap(() => {
-                this.router.navigate(['/restaurants/'], {onSameUrlNavigation: "reload"})
-              }))
+              .pipe(
+                tap(() => {
+                  this.router.navigate(['/restaurants/'], {onSameUrlNavigation: "reload"})
+                }),
+                catchError(err => {
+                  this.errorSnackBar.displayError(err)
+                  throw err
+                })
+              )
           } else {
             return EMPTY;
           }

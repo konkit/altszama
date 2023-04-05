@@ -20,8 +20,7 @@ export class RestaurantsListViewComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private restaurantControllerService: RestaurantControllerService,
-              private frontendConfigService: FrontendConfigService,
+  constructor(private frontendConfigService: FrontendConfigService,
               private route: ActivatedRoute) {
     this.indexResponse$ = this.route.data.pipe(
       map(r => r['response'])

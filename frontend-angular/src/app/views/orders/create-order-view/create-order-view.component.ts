@@ -10,6 +10,7 @@ import {
 import {FormBuilder} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
+import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 
 //TODO - display error when the tiem format is invalid
 
@@ -49,10 +50,10 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
 
   restaurantsTableDataSource = new MatTableDataSource();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  displayedColumns = [];
 
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
+              private errorSnackBar: ErrorSnackBarService,
               private router: Router) {
     this.createOrderInitialData$ = this.route.data.pipe(map(x => x['response']))
   }
@@ -158,16 +159,11 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
 
     this.orderControllerService.save(order).subscribe({
       next: r => this.router.navigate(["/orders", r.orderId, 'show']),
-      error: err => console.log(err)
+      error: err => this.errorSnackBar.displayError(err)
     })
 
     return false;
   }
-
-  cancelEdit() {
-    // this.$store.commit("modifyOrderEntry/cancelDishEntryModification",{});
-  }
-
 
   backToTodayOrders() {
     this.router.navigate(["/orders/today"])

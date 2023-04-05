@@ -2,7 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
-import {switchMap} from "rxjs";
+import {catchError, switchMap} from "rxjs";
+import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
 
 interface RestaurantDetails {
   name: string,
@@ -33,12 +34,19 @@ export class EditRestaurantFormComponent implements OnInit {
 
   constructor(private fb: NonNullableFormBuilder,
               private restaurantControllerService: RestaurantControllerService,
+              private errorSnackBar: ErrorSnackBarService,
               private restaurantFormService: RestaurantFormService,
   ) {
   }
 
   ngOnInit() {
     this.restaurantControllerService.editRestaurant(this.restaurantId)
+      .pipe(
+        catchError(err => {
+          this.errorSnackBar.displayError(err)
+          throw err
+        })
+      )
       .subscribe(({id, ...value}) => this.restaurantEditFormGroup.setValue(value))
   }
 
@@ -52,7 +60,11 @@ export class EditRestaurantFormComponent implements OnInit {
 
       this.restaurantControllerService.updateRestaurant({id: this.restaurantId, ...formValue})
         .pipe(
-          switchMap(() => this.restaurantFormService.refreshRestaurantData())
+          switchMap(() => this.restaurantFormService.refreshRestaurantData()),
+          catchError(err => {
+            this.errorSnackBar.displayError(err)
+            throw err
+          })
         )
         .subscribe()
     }

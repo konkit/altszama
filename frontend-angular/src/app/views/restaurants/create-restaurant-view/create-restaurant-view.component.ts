@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
-import {tap} from "rxjs";
+import {catchError, tap} from "rxjs";
 import {RestaurantControllerService} from "../../../../frontend-client";
+import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 
 @Component({
   selector: 'app-create-restaurant-view',
@@ -17,7 +18,10 @@ export class CreateRestaurantViewComponent {
     telephone: "",
   })
 
-  constructor(private fb: FormBuilder, private router: Router, private restaurantControllerService: RestaurantControllerService) {
+  constructor(private fb: FormBuilder,
+              private router: Router,
+              private restaurantControllerService: RestaurantControllerService,
+              private errorSnackBar: ErrorSnackBarService) {
   }
 
   submit() {
@@ -31,9 +35,15 @@ export class CreateRestaurantViewComponent {
     };
 
     return this.restaurantControllerService.saveRestaurant(body)
-      .pipe(tap(restaurant => {
-        this.router.navigate(['/restaurants/', restaurant.id], {onSameUrlNavigation: "reload"})
-      })).subscribe()
+      .pipe(
+        tap(restaurant => {
+          this.router.navigate(['/restaurants/', restaurant.id], {onSameUrlNavigation: "reload"})
+        }),
+        catchError(err => {
+          this.errorSnackBar.displayError(err)
+          throw err
+        })
+      ).subscribe()
   }
 
   cancel() {

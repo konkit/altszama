@@ -1,9 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {AllOrdersOrderDto, OrderControllerService} from "../../../../frontend-client";
+import {AllOrdersOrderDto} from "../../../../frontend-client";
 import {map, Observable} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {MatPaginator} from "@angular/material/paginator";
-import {DataSource} from "@angular/cdk/collections";
 import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
@@ -20,7 +19,7 @@ export class AllOrdersViewComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private api: OrderControllerService, private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute) {
     this.allOrders$ = this.route.data.pipe(map(r => r['response'].allOrdersList))
   }
 

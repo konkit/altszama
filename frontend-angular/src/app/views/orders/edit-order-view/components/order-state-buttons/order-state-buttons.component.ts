@@ -2,8 +2,9 @@ import {Component, Input} from '@angular/core';
 import {OrderControllerService, ShowOrderDto} from "../../../../../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {Router} from "@angular/router";
-import {EMPTY, switchMap, tap} from "rxjs";
+import {catchError, EMPTY, switchMap, tap} from "rxjs";
 import {DialogService} from "../../../../../service/dialog.service";
+import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
 
 @Component({
   selector: 'app-order-state-buttons',
@@ -17,6 +18,7 @@ export class OrderStateButtonsComponent {
 
   constructor(private router: Router,
               private orderControllerService: OrderControllerService,
+              private errorSnackBar: ErrorSnackBarService,
               private dialogService: DialogService) {
   }
 
@@ -24,7 +26,7 @@ export class OrderStateButtonsComponent {
     this.orderControllerService.setAsCreated(this.orderId)
       .subscribe({
         next: r => this.router.navigate(["/orders", this.orderId, 'show']),
-        error: err => console.log(err)
+        error: err => this.errorSnackBar.displayError(err)
       })
   }
 
@@ -32,7 +34,7 @@ export class OrderStateButtonsComponent {
     this.orderControllerService.setBackAsOrdered(this.orderId)
       .subscribe({
         next: r => this.router.navigate(["/orders", this.orderId, 'show']),
-        error: err => console.log(err)
+        error: err => this.errorSnackBar.displayError(err)
       })
   }
 
@@ -40,7 +42,7 @@ export class OrderStateButtonsComponent {
     this.orderControllerService.setAsRejected(this.orderId)
       .subscribe({
         next: r => this.router.navigate(["/orders", this.orderId, 'show']),
-        error: err => console.log(err)
+        error: err => this.errorSnackBar.displayError(err)
       })
   }
 
@@ -59,7 +61,11 @@ export class OrderStateButtonsComponent {
           } else {
             return EMPTY;
           }
-        })
+        }),
+        catchError(err => {
+          this.errorSnackBar.displayError(err)
+          throw err
+        }),
       )
       .subscribe()
   }

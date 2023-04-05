@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus
 sealed class AltszamaErrorException(override val message: String,
                                     val responseStatus: HttpStatus = HttpStatus.BAD_REQUEST) : RuntimeException(message)
 
-class RestaurantInUseException() : AltszamaErrorException("Dalete failed - delete all orders from this restaurant first")
+class RestaurantInUseException() : AltszamaErrorException("Delete failed - delete all orders from this restaurant first")
 class NoAccessToRestaurant() : AltszamaErrorException("You have no access to this restaurant")
 class RestaurantDoesNotExist() : AltszamaErrorException("Restaurant does not exist")
 data class RestaurantDataInvalid(override val message: String) : AltszamaErrorException(message)
