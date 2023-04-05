@@ -283,6 +283,8 @@ export class ShowOrderViewService {
       .subscribe()
   }
 
+
+  //TODO: do not let changes of others interrupt your edits
   handleOrderChangeSSE() {
     this.orderResponse.pipe(
       take(1),

@@ -70,19 +70,19 @@
     </div>
 
     <div class="pl-6" *ngIf="canAddNewEntry(orderEntry)">
-      <div class="pb-5" *ngIf="orderEntry.dishEntries.length > 0">
+      <div class="" *ngIf="orderEntry.dishEntries.length > 0">
         <mat-divider></mat-divider>
       </div>
 
       <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
-        <span class="mr-3 text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
+        <span class="text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
 
         <button mat-button color="primary" (click)="createEntry()">
           Add entry
           <mat-icon fontIcon="add"></mat-icon>
         </button>
       </div>
-      <div *ngIf="modifyOrderEntryState.isEntryCreating === true">
+      <div class="pt-5" *ngIf="modifyOrderEntryState.isEntryCreating === true">
         <app-create-order-entry [orderResponse]="showOrderResponse"
                                 [dishIndex]="orderEntry.dishEntries.length + 1">
         </app-create-order-entry>

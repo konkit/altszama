@@ -52,8 +52,6 @@ export interface ExistingOrderEntryFormValue {
   styleUrls: ['./order-entry-form.component.scss']
 })
 export class OrderEntryFormComponent implements OnInit {
-  // @Input() formGroup!: FormGroup<OrderEntryFormType>
-
   @Input() dishIndex: number = 0;
 
   @Input() dishes!: DishDto[]

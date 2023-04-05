@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DishDto, OrderEntrySaveRequest, ShowOrderResponse} from "../../../../../../../../frontend-client";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-form/order-entry-form.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-create-order-entry',
@@ -24,8 +23,7 @@ export class CreateOrderEntryComponent implements OnInit {
   }
 
 
-  constructor(private showOrderViewService: ShowOrderViewService,
-              private matSnackBar: MatSnackBar) {
+  constructor(private showOrderViewService: ShowOrderViewService) {
     this.showOrderViewService.setEntryLoading(true)
   }
 

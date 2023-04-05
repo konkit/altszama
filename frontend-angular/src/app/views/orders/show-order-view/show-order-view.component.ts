@@ -1,11 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ShowOrderResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
-import {EMPTY, Observable, switchMap, tap} from "rxjs";
+import {Observable} from "rxjs";
 import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "./service/show-order-view.service";
-import {DialogService} from "../../../service/dialog.service";
-import {EventSourcePolyfill} from "event-source-polyfill";
-import {AuthService} from "../../../service/auth.service";
 
 @Component({
   selector: 'app-show-order-view',
@@ -21,9 +18,7 @@ export class ShowOrderViewComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private showOrderViewService: ShowOrderViewService,
-              private authService: AuthService,
-              private dialogService: DialogService) {
+              private showOrderViewService: ShowOrderViewService) {
     this.orderResponse$ = this.showOrderViewService.orderResponseAsObservable()
     this.showOrderViewState$ = this.showOrderViewService.getShowOrderViewState();
     this.modifyOrderEntryState$ = this.showOrderViewService.modifyOrderEntryStateAsObservable()
@@ -47,26 +42,6 @@ export class ShowOrderViewComponent implements OnInit {
 
   getOrderId(): string {
     return this.route.snapshot.paramMap.get('id')!
-  }
-
-  deleteOrder() {
-    this.dialogService.displayDeleteDialog("Delete order?", "Are you sure you want to delete this order?")
-      .afterClosed()
-      .pipe(
-        switchMap(confirmed => {
-          if (confirmed) {
-            return this.showOrderViewService.deleteOrder(this.getOrderId())
-              .pipe(
-                tap(() => {
-                  this.router.navigate(['/orders/all'], {onSameUrlNavigation: "reload"})
-                })
-              )
-          } else {
-            return EMPTY;
-          }
-        })
-      )
-      .subscribe()
   }
 
   unlockOrder() {
