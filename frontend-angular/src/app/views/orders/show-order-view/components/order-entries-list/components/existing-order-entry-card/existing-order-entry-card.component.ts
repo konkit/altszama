@@ -1,17 +1,20 @@
 import {Component, Input} from '@angular/core';
-import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../frontend-client";
-import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "../../service/show-order-view.service";
+import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../../../frontend-client";
+import {
+  ModifyOrderEntryState,
+  ShowOrderViewService,
+  ShowOrderViewState
+} from "../../../../service/show-order-view.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
-  selector: 'app-order-entries-list',
-  templateUrl: './order-entries-list.component.html',
-  styleUrls: ['./order-entries-list.component.scss']
+  selector: 'app-existing-order-entry-card',
+  templateUrl: './existing-order-entry-card.component.html',
+  styleUrls: ['./existing-order-entry-card.component.scss']
 })
-export class OrderEntriesListComponent {
-
+export class ExistingOrderEntryCardComponent {
+  @Input() orderEntry!: ParticipantsOrderEntry
   @Input() showOrderResponse!: ShowOrderResponse
-  @Input() otherUserOrderEntries!: Array<ParticipantsOrderEntry>
   @Input() viewState!: ShowOrderViewState
   @Input() modifyOrderEntryState!: ModifyOrderEntryState
 
@@ -27,4 +30,5 @@ export class OrderEntriesListComponent {
       && orderEntry.userId === this.showOrderResponse.currentUserId
       && !this.modifyOrderEntryState.isEntryEdited
   }
+
 }

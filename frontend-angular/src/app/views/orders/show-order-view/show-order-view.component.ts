@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ShowOrderResponse} from "../../../../frontend-client";
+import {ParticipantsOrderEntry, ShowOrderResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "./service/show-order-view.service";
@@ -12,6 +12,7 @@ import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from ".
 export class ShowOrderViewComponent implements OnInit {
 
   orderResponse$: Observable<ShowOrderResponse>
+  otherUserOrderEntries$: Observable<Array<ParticipantsOrderEntry>>
   showOrderViewState$: Observable<ShowOrderViewState>
   modifyOrderEntryState$: Observable<ModifyOrderEntryState>;
 
@@ -20,6 +21,7 @@ export class ShowOrderViewComponent implements OnInit {
               private router: Router,
               private showOrderViewService: ShowOrderViewService) {
     this.orderResponse$ = this.showOrderViewService.orderResponseAsObservable()
+    this.otherUserOrderEntries$ = this.showOrderViewService.otherUserOrderEntriesAsObservable()
     this.showOrderViewState$ = this.showOrderViewService.getShowOrderViewState();
     this.modifyOrderEntryState$ = this.showOrderViewService.modifyOrderEntryStateAsObservable()
   }

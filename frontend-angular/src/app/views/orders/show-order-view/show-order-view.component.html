@@ -1,5 +1,6 @@
 <ng-container *ngIf="orderResponse$ | async as orderResponse">
   <ng-container *ngIf="showOrderViewState$ | async as viewState">
+  <ng-container *ngIf="otherUserOrderEntries$ | async as otherUserOrderEntries">
     <ng-container *ngIf="modifyOrderEntryState$ | async as modifyOrderEntryState">
       <app-view-wrapper
         [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + ' (' + orderResponse.order.orderDate + ')'">
@@ -85,9 +86,11 @@
 
         <app-order-entries-list [showOrderResponse]="orderResponse"
                                 [viewState]="viewState"
-                                [modifyOrderEntryState]="modifyOrderEntryState">
+                                [modifyOrderEntryState]="modifyOrderEntryState"
+                                [otherUserOrderEntries]="otherUserOrderEntries">
         </app-order-entries-list>
       </app-view-wrapper>
     </ng-container>
+  </ng-container>
   </ng-container>
 </ng-container>

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, catchError, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
+import {BehaviorSubject, catchError, EMPTY, filter, map, Observable, of, switchMap, take, tap} from "rxjs";
 import {
   OrderControllerService,
   OrderEntryControllerService,
@@ -28,8 +28,6 @@ export interface ShowOrderViewState {
   numberOfCurrentUserEntries: number,
   username: string,
   yourOrderEntries: ParticipantsOrderEntry[],
-  otherUsersOrderEntries: ParticipantsOrderEntry[],
-  yourAndOtherUsersOrderEntries: ParticipantsOrderEntry[],
   priceSummaryInput: PriceSummaryInput;
   shouldShowOrderLockedWarning: boolean;
 }
@@ -62,6 +60,8 @@ export class ShowOrderViewService {
 
   orderResponse = new BehaviorSubject<ShowOrderResponse | null>(null)
 
+  otherUserOrderEntries = new BehaviorSubject<Array<ParticipantsOrderEntry>>([])
+
   modifyOrderEntryState = new BehaviorSubject<ModifyOrderEntryState>(initialModifyOrderEntryState)
 
   showOrderViewState$: Observable<ShowOrderViewState> = this.createShowOrderViewStateObservable()
@@ -76,11 +76,45 @@ export class ShowOrderViewService {
     if (id != null) {
       return this.orderControllerService.show(id)
         .pipe(
-          tap(response => this.orderResponse.next(response))
+          tap(response => this.orderResponse.next(response)),
+          tap(response => {
+            let otherEntries = response.orderEntries.filter(e => e.userId != response.currentUserId)
+            this.otherUserOrderEntries.next(otherEntries)
+          })
         )
     } else {
       return EMPTY;
     }
+  }
+
+  reloadOrderResponse(): Observable<void> {
+    return this.orderResponse.pipe(
+      take(1),
+      map(r => r!.order.id),
+      switchMap(orderId => {
+        return this.loadOrderResponse(orderId)
+      }),
+      map(() => void 0)
+    )
+  }
+
+  reloadOtherUserOrderEntries(): Observable<void> {
+    return this.orderResponse.pipe(
+      take(1),
+      map(r => r!.order.id),
+      switchMap(orderId => {
+        if (orderId != null) {
+          return this.orderControllerService.show(orderId)
+        } else {
+          return EMPTY;
+        }
+      }),
+      tap(response => {
+        let otherEntries = response.orderEntries.filter(e => e.userId != response.currentUserId)
+        this.otherUserOrderEntries.next(otherEntries)
+      }),
+      map(() => void 0)
+    )
   }
 
   orderResponseAsObservable(): Observable<ShowOrderResponse> {
@@ -88,6 +122,10 @@ export class ShowOrderViewService {
       filter(x => x != null),
       map(x => x!)
     )
+  }
+
+  otherUserOrderEntriesAsObservable() {
+    return this.otherUserOrderEntries.asObservable()
   }
 
   modifyOrderEntryStateAsObservable() {
@@ -114,7 +152,6 @@ export class ShowOrderViewService {
 
         let username = this.authService.getLoggedUser()!.username;
         let yourOrderEntries = orderEntries.filter(e => e.userId === currentUserId);
-        let otherUsersOrderEntries = orderEntries.filter(e => e.userId !== currentUserId);
 
         let allEatingPeopleCount = orderEntries.flatMap(e => e.dishEntries).length;
         let numberOfCurrentUserEntries = yourOrderEntries.length;
@@ -144,8 +181,6 @@ export class ShowOrderViewService {
           numberOfCurrentUserEntries: numberOfCurrentUserEntries,
           username: username,
           yourOrderEntries: yourOrderEntries,
-          otherUsersOrderEntries: otherUsersOrderEntries,
-          yourAndOtherUsersOrderEntries: [...yourOrderEntries, ...otherUsersOrderEntries],
           priceSummaryInput: priceSummaryInput,
           shouldShowOrderLockedWarning: shouldShowOrderLockedWarning,
         }
@@ -208,17 +243,6 @@ export class ShowOrderViewService {
       )
   }
 
-  reloadOrderResponse(): Observable<void> {
-    return this.orderResponse.pipe(
-      take(1),
-      map(r => r!.order.id),
-      switchMap(orderId => {
-        return this.loadOrderResponse(orderId)
-      }),
-      map(() => void 0)
-    )
-  }
-
   doSaveOrderEntry(orderEntryToSave: OrderEntrySaveRequest) {
     return this.orderEntryControllerService
       .save1(orderEntryToSave)
@@ -255,10 +279,6 @@ export class ShowOrderViewService {
       .subscribe()
   }
 
-  deleteOrder(orderId: string): Observable<string> {
-    return this.orderControllerService._delete(orderId)
-  }
-
   unlockOrderAndReload(orderId: string) {
     this.orderControllerService.setAsCreated(orderId)
       .pipe(
@@ -283,8 +303,6 @@ export class ShowOrderViewService {
       .subscribe()
   }
 
-
-  //TODO: do not let changes of others interrupt your edits
   handleOrderChangeSSE() {
     this.orderResponse.pipe(
       take(1),
@@ -297,7 +315,7 @@ export class ShowOrderViewService {
         const data = JSON.parse(event.data)
         if (data.orderId === orderId) {
           console.log("Reloading order response")
-          this.reloadOrderResponse().subscribe()
+          this.reloadOtherUserOrderEntries().subscribe()
         }
       };
 

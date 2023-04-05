@@ -1,0 +1,64 @@
+<mat-card class="mb-10 pb-5 px-5">
+  <mat-card-header>
+    <mat-card-title>
+      <app-title-with-payment-status
+        [title]="orderEntry.username"
+        [priceForUser]="orderEntry.finalPrice"
+        [order]="showOrderResponse.order"
+        [orderEntry]="orderEntry"
+        [currentUserId]="showOrderResponse.currentUserId"
+        [costForUser]="orderEntry.finalPrice"
+      ></app-title-with-payment-status>
+    </mat-card-title>
+  </mat-card-header>
+
+  <div class="pl-6" *ngFor="let dishEntry of orderEntry.dishEntries; let dishEntryIndex = index;">
+    <ng-container
+      *ngIf="modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id">
+      <app-edit-order-entry
+        [dishIndex]="dishEntryIndex + 1"
+        [orderResponse]="showOrderResponse"
+        [modifyOrderEntryState]="modifyOrderEntryState"
+        [orderEntry]="orderEntry"
+        [dishEntry]="dishEntry"
+      >
+      </app-edit-order-entry>
+    </ng-container>
+
+    <ng-container
+      *ngIf="!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)">
+      <app-show-order-entry
+        [index]="dishEntryIndex + 1"
+        [order]="showOrderResponse.order"
+        [orderEntry]="orderEntry"
+        [dishEntry]="dishEntry"
+        [currentUserId]="showOrderResponse.currentUserId"
+      >
+      </app-show-order-entry>
+    </ng-container>
+
+    <div *ngIf="dishEntryIndex < orderEntry.dishEntries.length - 1">
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+
+  <div class="pl-6" *ngIf="canAddNewEntry(orderEntry)">
+    <div class="" *ngIf="orderEntry.dishEntries.length > 0">
+      <mat-divider></mat-divider>
+    </div>
+
+    <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
+      <span class="text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
+
+      <button mat-button color="primary" (click)="createEntry()">
+        Add entry
+        <mat-icon fontIcon="add"></mat-icon>
+      </button>
+    </div>
+    <div class="pt-5" *ngIf="modifyOrderEntryState.isEntryCreating === true">
+      <app-create-order-entry [orderResponse]="showOrderResponse"
+                              [dishIndex]="orderEntry.dishEntries.length + 1">
+      </app-create-order-entry>
+    </div>
+  </div>
+</mat-card>
