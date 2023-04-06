@@ -4,6 +4,7 @@ import {map, Observable, take} from "rxjs";
 import {FormBuilder} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-edit-order-view',
@@ -37,6 +38,7 @@ export class EditOrderViewComponent {
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
               private errorSnackBar: ErrorSnackBarService,
+              private title: Title,
               private router: Router) {
     this.editOrderInitialData$ = this.route.data.pipe(map(x => x['response']))
     this.orderId = this.route.snapshot.paramMap.get("id")!
@@ -46,6 +48,7 @@ export class EditOrderViewComponent {
     this.editOrderInitialData$.pipe(take(1)).subscribe(response => {
       // this.restaurantsTableDataSource.data = this.fullRestaurantsList;
       this.setOrderFormInitialValue(response);
+      this.title.setTitle(`Edit order from ${response.order.restaurantName} | AltSzama`)
     })
   }
 

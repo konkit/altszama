@@ -28,17 +28,17 @@ import {AuthenticatedLayoutComponent} from "./components/authenticated-layout/au
 export const notAuthenticatedRoutes: Routes = [
   {
     path: '',
-    title: "LandingPage",
+    title: "AltSzama",
     component: LandingPageViewComponent,
   },
   {
     path: "login",
-    title: "Login",
+    title: "Login | AltSzama",
     component: LoginViewComponent,
   },
   {
     path: "login/test",
-    title: "TestLogin",
+    title: "TestLogin | AltSzama",
     component: TestLoginViewComponent,
   }
 ]
@@ -47,7 +47,7 @@ export const notAuthenticatedRoutes: Routes = [
 export const authenticatedRoutes: Routes = [
   authenticatedRoute({
     path: "orders/today",
-    title: "TodayOrders",
+    title: "Today's orders",
     component: TodayOrdersViewComponent,
     resolve: {
       response: TodayOrdersResolver
@@ -55,7 +55,7 @@ export const authenticatedRoutes: Routes = [
   }),
   authenticatedRoute({
     path: "orders/create",
-    title: "CreateOrder",
+    title: "Create new order | AltSzama",
     component: CreateOrderViewComponent,
     resolve: {
       response: CreateOrderResolver
@@ -63,12 +63,12 @@ export const authenticatedRoutes: Routes = [
   }),
   authenticatedRoute({
     path: "orders/:id/make_an_order",
-    title: "MakeAnOrderView",
+    title: "Make an order | AltSzama",
     component: MakeAnOrderViewComponent,
   }),
   authenticatedRoute({
     path: "orders/:id/show",
-    title: "ShowOrder",
+    title: "Show Order | AltSzama",
     component: ShowOrderViewComponent,
     resolve: {
       response: ShowOrderResolver
@@ -76,7 +76,7 @@ export const authenticatedRoutes: Routes = [
   }),
   authenticatedRoute({
     path: "orders/:id/edit",
-    title: "EditOrderView",
+    title: "Edit Order | AltSzama",
     component: EditOrderViewComponent,
     resolve: {
       response: EditOrderResolver
@@ -84,7 +84,7 @@ export const authenticatedRoutes: Routes = [
   }),
   authenticatedRoute({
     path: "orders/all",
-    title: "AllOrders",
+    title: "All orders | AltSzama",
     component: AllOrdersViewComponent,
     resolve: {
       response: AllOrdersResolver
@@ -92,7 +92,7 @@ export const authenticatedRoutes: Routes = [
   }),
   authenticatedRoute({
     path: "restaurants",
-    title: "RestaurantIndex",
+    title: "Restaurants | AltSzama",
     component: RestaurantsListViewComponent,
     resolve: {
       response: RestaurantsListResolver
@@ -100,12 +100,12 @@ export const authenticatedRoutes: Routes = [
   }),
   authenticatedRoute({
     path: "restaurants/create",
-    title: "CreateRestaurant",
+    title: "Create restaurant | AltSzama",
     component: CreateRestaurantViewComponent,
   }),
   authenticatedRoute({
     path: "restaurants/:id",
-    title: "ShowRestaurant",
+    title: "Show restaurant | AltSzama",
     component: ShowRestaurantViewComponent,
     runGuardsAndResolvers: "always",
     resolve: {
@@ -114,7 +114,7 @@ export const authenticatedRoutes: Routes = [
   }),
   authenticatedRoute({
     path: "balance",
-    title: "Balance",
+    title: "Your order history | AltSzama",
     component: BalanceViewComponent,
   }),
 ]

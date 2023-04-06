@@ -72,7 +72,7 @@ export class ShowOrderViewService {
               private authService: AuthService) {
   }
 
-  loadOrderResponse(id: string | null): Observable<ShowOrderResponse> {
+  loadOrderResponseToAllSubjects(id: string | null): Observable<ShowOrderResponse> {
     if (id != null) {
       return this.orderControllerService.show(id)
         .pipe(
@@ -87,28 +87,24 @@ export class ShowOrderViewService {
     }
   }
 
-  reloadOrderResponse(): Observable<void> {
+  private getOrderIdObservableFromOrderResponse(): Observable<string> {
     return this.orderResponse.pipe(
       take(1),
       map(r => r!.order.id),
-      switchMap(orderId => {
-        return this.loadOrderResponse(orderId)
-      }),
+      filter(isNonNullGuard),
+    )
+  }
+
+  reloadOrderResponse(): Observable<void> {
+    return this.getOrderIdObservableFromOrderResponse().pipe(
+      switchMap(orderId => this.loadOrderResponseToAllSubjects(orderId)),
       map(() => void 0)
     )
   }
 
-  reloadOtherUserOrderEntries(): Observable<void> {
-    return this.orderResponse.pipe(
-      take(1),
-      map(r => r!.order.id),
-      switchMap(orderId => {
-        if (orderId != null) {
-          return this.orderControllerService.show(orderId)
-        } else {
-          return EMPTY;
-        }
-      }),
+  reloadJustOtherUserOrderEntries(): Observable<void> {
+    return this.getOrderIdObservableFromOrderResponse().pipe(
+      switchMap(orderId => this.orderControllerService.show(orderId)),
       tap(response => {
         let otherEntries = response.orderEntries.filter(e => e.userId != response.currentUserId)
         this.otherUserOrderEntries.next(otherEntries)
@@ -118,10 +114,8 @@ export class ShowOrderViewService {
   }
 
   orderResponseAsObservable(): Observable<ShowOrderResponse> {
-    return this.orderResponse.asObservable().pipe(
-      filter(x => x != null),
-      map(x => x!)
-    )
+    return this.orderResponse.asObservable()
+      .pipe(filter(isNonNullGuard))
   }
 
   otherUserOrderEntriesAsObservable() {
@@ -315,7 +309,7 @@ export class ShowOrderViewService {
         const data = JSON.parse(event.data)
         if (data.orderId === orderId) {
           console.log("Reloading order response")
-          this.reloadOtherUserOrderEntries().subscribe()
+          this.reloadJustOtherUserOrderEntries().subscribe()
         }
       };
 

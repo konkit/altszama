@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable} from "rxjs";
+import {Observable, take} from "rxjs";
 import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "./service/show-order-view.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-show-order-view',
@@ -19,6 +20,7 @@ export class ShowOrderViewComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
+              private readonly title: Title,
               private showOrderViewService: ShowOrderViewService) {
     this.orderResponse$ = this.showOrderViewService.orderResponseAsObservable()
     this.otherUserOrderEntries$ = this.showOrderViewService.otherUserOrderEntriesAsObservable()
@@ -28,6 +30,11 @@ export class ShowOrderViewComponent implements OnInit {
 
   ngOnInit() {
     this.showOrderViewService.handleOrderChangeSSE()
+
+    this.orderResponse$.pipe(take(1)).subscribe(orderResponse => {
+      let order = orderResponse.order;
+      this.title.setTitle(`[${order.orderState}] Order from ${order.restaurantName} (${order.orderDate}) | AltSzama`)
+    })
   }
 
   placeOrder() {

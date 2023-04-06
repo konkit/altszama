@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {OrderControllerService} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder} from "@angular/forms";
-import {map} from "rxjs";
+import {map, take} from "rxjs";
 import {PriceSummaryInput} from "../show-order-view/components/price-summary/price-summary.component";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-make-an-order-view',
@@ -32,10 +33,14 @@ export class MakeAnOrderViewComponent implements OnInit {
               private errorSnackBar: ErrorSnackBarService,
               private route: ActivatedRoute,
               private router: Router,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private title: Title) {
   }
 
   ngOnInit() {
+    this.response$.pipe(take(1)).subscribe(response => {
+      this.title.setTitle(`Ordering from ${response.restaurantName} | AltSzama`)
+    })
   }
 
   unlockOrder() {

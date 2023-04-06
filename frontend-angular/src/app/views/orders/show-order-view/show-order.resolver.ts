@@ -13,6 +13,6 @@ export class ShowOrderResolver implements Resolve<ShowOrderResponse> {
   }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ShowOrderResponse> {
     let id = route.paramMap.get('id');
-    return this.showOrderViewService.loadOrderResponse(id)
+    return this.showOrderViewService.loadOrderResponseToAllSubjects(id)
   }
 }
