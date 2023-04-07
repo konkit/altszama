@@ -14,16 +14,16 @@
             </mat-card-header>
 
             <mat-card-content>
-              The order is locked in ordering state and the order entries are
-              freezed.<br/>
-              If you are not ordering yet, click button to go back to created state.
+              <p>Ordering is not allowed anymore, so nobody modifies their orders while you call the restaurant.</p>
+              <p>After all, we don't want anybody left hungry.</p>
+              <p>If you are not ordering yet, click the "unlock" button to let others modify their orders.</p>
             </mat-card-content>
 
             <mat-card-actions>
-              <button mat-raised-button color="primary" (click)="unlockOrder()" class="ml-2">
+              <button mat-button color="primary" (click)="unlockOrder()" class="ml-2">
                 Unlock <mat-icon fontIcon="lock_open"></mat-icon>
               </button>
-              <button mat-raised-button color="primary" (click)="placeOrder()" class="ml-2">
+              <button mat-button color="primary" (click)="placeOrder()" class="ml-2">
                 Place order <mat-icon fontIcon="check"></mat-icon>
               </button>
             </mat-card-actions>

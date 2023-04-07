@@ -1,12 +1,12 @@
 <div class="-mt-1.5">
   <div class="py-2 flex items-center">
     <span class="text-body1">Payment by cash</span>
-    <app-payment-chip [allowed]="paymentData.paymentByCash === true" class="ml-2"></app-payment-chip>
+    <app-payment-type-chip [allowed]="paymentData.paymentByCash === true" class="ml-2"></app-payment-type-chip>
   </div>
 
   <div class="py-2 flex items-center">
     <span class="text-body1">Payment by bank transfer</span>
-    <app-payment-chip [allowed]="paymentData.paymentByBankTransfer === true" class="ml-2"></app-payment-chip>
+    <app-payment-type-chip [allowed]="paymentData.paymentByBankTransfer === true" class="ml-2"></app-payment-type-chip>
 
     <mat-icon
       *ngIf="shouldShowQRCodeButton"
@@ -23,7 +23,7 @@
   <div class="py-2 flex items-center">
     <span class="text-body1">Payment by BLIK</span>
 
-    <app-payment-chip [allowed]="paymentData.paymentByBlik === true" class="ml-2"></app-payment-chip>
+    <app-payment-type-chip [allowed]="paymentData.paymentByBlik === true" class="ml-2"></app-payment-type-chip>
   </div>
 
   <div class="px-3 user-selectable"

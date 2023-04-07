@@ -5,13 +5,15 @@
 
   <div *ngIf="isOrderEntryOwner() || isOrderOwner()" class="flex flex-row">
     <div *ngIf="shouldShowPaymentStatus()" class="flex flex-wrap content-center">
-      <mat-chip class="mx-2" *ngIf="isUnpaid()">
-        Unpaid
-      </mat-chip>
+            <app-payment-status-chip [isPaid]="isConfirmedAsPaid()"></app-payment-status-chip>
 
-      <mat-chip class="mx-2" *ngIf="isConfirmedAsPaid()">
-        Payment confirmed
-      </mat-chip>
+<!--      <mat-chip class="mx-2" *ngIf="isUnpaid()">-->
+      <!--        Unpaid-->
+      <!--      </mat-chip>-->
+
+      <!--      <mat-chip class="mx-2" *ngIf="isConfirmedAsPaid()">-->
+      <!--        Payment confirmed-->
+      <!--      </mat-chip>-->
     </div>
 
     <div *ngIf="shouldShowConfirmAsPaidButton()">

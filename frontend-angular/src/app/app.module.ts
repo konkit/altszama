@@ -21,16 +21,26 @@ import {
 } from './views/login/login-view/components/google-login-button/google-login-button.component';
 import {AuthInterceptor} from "./interceptor/auth.interceptor";
 import {FrontendConfigService} from "./service/frontend-config.service";
-import { OrderDataSummaryComponent } from './views/orders/show-order-view/components/order-data-summary/order-data-summary.component';
-import { PriceSummaryComponent } from './views/orders/show-order-view/components/price-summary/price-summary.component';
-import { PaymentOptionsSummaryComponent } from './views/orders/show-order-view/components/payment-options-summary/payment-options-summary.component';
+import {
+  OrderDataSummaryComponent
+} from './views/orders/show-order-view/components/order-data-summary/order-data-summary.component';
+import {PriceSummaryComponent} from './views/orders/show-order-view/components/price-summary/price-summary.component';
+import {
+  PaymentOptionsSummaryComponent
+} from './views/orders/show-order-view/components/payment-options-summary/payment-options-summary.component';
 import {PricePipe} from "./components/pipes/price.pipe";
-import { OrderEntriesListComponent } from './views/orders/show-order-view/components/order-entries-list/order-entries-list.component';
-import { TitleWithPaymentStatusComponent } from './views/orders/show-order-view/components/order-entries-list/components/title-with-payment-status/title-with-payment-status.component';
-import { ShowOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/show-order-entry/show-order-entry.component';
-import { ViewWrapperComponent } from './components/view-wrapper/view-wrapper.component';
-import { CreateOrderViewComponent } from './views/orders/create-order-view/create-order-view.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  OrderEntriesListComponent
+} from './views/orders/show-order-view/components/order-entries-list/order-entries-list.component';
+import {
+  TitleWithPaymentStatusComponent
+} from './views/orders/show-order-view/components/order-entries-list/components/title-with-payment-status/title-with-payment-status.component';
+import {
+  ShowOrderEntryComponent
+} from './views/orders/show-order-view/components/order-entries-list/components/show-order-entry/show-order-entry.component';
+import {ViewWrapperComponent} from './components/view-wrapper/view-wrapper.component';
+import {CreateOrderViewComponent} from './views/orders/create-order-view/create-order-view.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -44,50 +54,78 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatListModule} from "@angular/material/list";
-import { CreateRestaurantViewComponent } from './views/restaurants/create-restaurant-view/create-restaurant-view.component';
-import { ButtonComponent } from './components/button/button.component';
+import {
+  CreateRestaurantViewComponent
+} from './views/restaurants/create-restaurant-view/create-restaurant-view.component';
+import {ButtonComponent} from './components/button/button.component';
 import {MatSelectModule} from "@angular/material/select";
-import { CreateDishFormComponent } from './views/restaurants/show-restaurant-view/components/create-dish-form/create-dish-form.component';
-import { MoneyInputComponent } from './components/money-input/money-input.component';
-import { EditDishFormComponent } from './views/restaurants/show-restaurant-view/components/edit-dish-form/edit-dish-form.component';
+import {
+  CreateDishFormComponent
+} from './views/restaurants/show-restaurant-view/components/create-dish-form/create-dish-form.component';
+import {MoneyInputComponent} from './components/money-input/money-input.component';
+import {
+  EditDishFormComponent
+} from './views/restaurants/show-restaurant-view/components/edit-dish-form/edit-dish-form.component';
 import {MatDialogModule} from "@angular/material/dialog";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
-import { DeleteConfirmationModalComponent } from './components/delete-confirmation-modal/delete-confirmation-modal.component';
-import { RelativeDatePipe } from './components/pipes/date-to-rel.pipe';
-import { RestaurantDetailsComponent } from './views/restaurants/show-restaurant-view/components/restaurant-details/restaurant-details.component';
-import { EditRestaurantFormComponent } from './views/restaurants/show-restaurant-view/components/edit-restaurant-form/edit-restaurant-form.component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {
+  DeleteConfirmationModalComponent
+} from './components/delete-confirmation-modal/delete-confirmation-modal.component';
+import {RelativeDatePipe} from './components/pipes/date-to-rel.pipe';
+import {
+  RestaurantDetailsComponent
+} from './views/restaurants/show-restaurant-view/components/restaurant-details/restaurant-details.component';
+import {
+  EditRestaurantFormComponent
+} from './views/restaurants/show-restaurant-view/components/edit-restaurant-form/edit-restaurant-form.component';
 import {DishEntryComponent} from "./views/restaurants/show-restaurant-view/components/dish-entry/dish-entry.component";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import { DishFormComponent } from './views/restaurants/show-restaurant-view/components/dish-form/dish-form.component';
-import { DishFormPlaceholderComponent } from './views/restaurants/show-restaurant-view/components/dish-form-placeholder/dish-form-placeholder.component';
+import {DishFormComponent} from './views/restaurants/show-restaurant-view/components/dish-form/dish-form.component';
+import {
+  DishFormPlaceholderComponent
+} from './views/restaurants/show-restaurant-view/components/dish-form-placeholder/dish-form-placeholder.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
-import { CreateOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/create-order-entry/create-order-entry.component';
-import { EditOrderEntryComponent } from './views/orders/show-order-view/components/order-entries-list/components/edit-order-entry/edit-order-entry.component';
-import { UserOrdersComponent } from './views/orders/make-an-order-view/components/user-orders/user-orders.component';
+import {
+  CreateOrderEntryComponent
+} from './views/orders/show-order-view/components/order-entries-list/components/create-order-entry/create-order-entry.component';
+import {
+  EditOrderEntryComponent
+} from './views/orders/show-order-view/components/order-entries-list/components/edit-order-entry/edit-order-entry.component';
+import {UserOrdersComponent} from './views/orders/make-an-order-view/components/user-orders/user-orders.component';
 import {
   BankTransferQrcodeModal
 } from "./views/orders/show-order-view/components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
-import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
-import { EditOrderViewComponent } from './views/orders/edit-order-view/edit-order-view.component';
-import { BalanceEntryComponent } from './views/balance/balance-view/components/balance-entry/balance-entry.component';
+import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
+import {EditOrderViewComponent} from './views/orders/edit-order-view/edit-order-view.component';
+import {BalanceEntryComponent} from './views/balance/balance-view/components/balance-entry/balance-entry.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import { OrderEntryFormComponent } from './views/orders/show-order-view/components/order-entries-list/components/order-entry-form/order-entry-form.component';
-import { SideDishesInputComponent } from './views/orders/show-order-view/components/order-entries-list/components/side-dishes-input/side-dishes-input.component';
+import {
+  OrderEntryFormComponent
+} from './views/orders/show-order-view/components/order-entries-list/components/order-entry-form/order-entry-form.component';
+import {
+  SideDishesInputComponent
+} from './views/orders/show-order-view/components/order-entries-list/components/side-dishes-input/side-dishes-input.component';
 import {
   OrderStateButtonsComponent
 } from "./views/orders/edit-order-view/components/order-state-buttons/order-state-buttons.component";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatCardModule} from "@angular/material/card";
-import { PaymentDataFormComponent } from './views/orders/components/payment-data-form/payment-data-form.component';
-import { DeliveryDataFormComponent } from './views/orders/components/delivery-data-form/delivery-data-form.component';
-import { OrderTimeFormComponent } from './views/orders/components/order-time-form/order-time-form.component';
-import {MatChipsModule} from "@angular/material/chips";
-import { TimePickerComponent } from './components/time-picker/time-picker.component';
+import {PaymentDataFormComponent} from './views/orders/components/payment-data-form/payment-data-form.component';
+import {DeliveryDataFormComponent} from './views/orders/components/delivery-data-form/delivery-data-form.component';
+import {OrderTimeFormComponent} from './views/orders/components/order-time-form/order-time-form.component';
+import {TimePickerComponent} from './components/time-picker/time-picker.component';
 import {MatExpansionModule} from "@angular/material/expansion";
-import { ErrorSnackBarComponent } from './components/error-snack-bar/error-snack-bar.component';
-import { ExistingOrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/components/existing-order-entry-card/existing-order-entry-card.component';
-import { PaymentChipComponent } from './views/orders/show-order-view/components/payment-options-summary/payment-chip/payment-chip.component';
+import {ErrorSnackBarComponent} from './components/error-snack-bar/error-snack-bar.component';
+import {
+  ExistingOrderEntryCardComponent
+} from './views/orders/show-order-view/components/order-entries-list/components/existing-order-entry-card/existing-order-entry-card.component';
+import {
+  PaymentTypeChipComponent
+} from "./views/orders/show-order-view/components/payment-options-summary/payment-type-chip/payment-type-chip.component";
+import {
+  PaymentStatusChipComponent
+} from "./views/orders/show-order-view/components/order-entries-list/components/title-with-payment-status/payment-status-chip/payment-status-chip.component";
 
 @NgModule({
   declarations: [
@@ -140,7 +178,8 @@ import { PaymentChipComponent } from './views/orders/show-order-view/components/
     TimePickerComponent,
     ErrorSnackBarComponent,
     ExistingOrderEntryCardComponent,
-    PaymentChipComponent,
+    PaymentTypeChipComponent,
+    PaymentStatusChipComponent,
   ],
   imports: [
     BrowserModule,
@@ -172,7 +211,6 @@ import { PaymentChipComponent } from './views/orders/show-order-view/components/
     MatToolbarModule,
     MatSidenavModule,
     MatCardModule,
-    MatChipsModule,
     MatExpansionModule,
   ],
   providers: [
