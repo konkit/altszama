@@ -68,6 +68,6 @@ export class PaymentOptionsSummaryComponent implements OnInit {
       orderCreatorUsername: this.showOrderResponse.order.orderCreatorUsername,
       orderDate: this.showOrderResponse.order.orderDate
     }
-    this.dialog.open(BankTransferQrcodeModal, { width: '400px', data: data })
+    this.dialog.open(BankTransferQrcodeModal, { width: '300px', data: data })
   }
 }
