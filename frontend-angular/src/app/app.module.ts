@@ -126,6 +126,7 @@ import {
 import {
   PaymentStatusChipComponent
 } from "./views/orders/show-order-view/components/order-entries-list/components/title-with-payment-status/payment-status-chip/payment-status-chip.component";
+import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, ScrollingModule} from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
@@ -212,6 +213,7 @@ import {
     MatSidenavModule,
     MatCardModule,
     MatExpansionModule,
+    ScrollingModule,
   ],
   providers: [
     {

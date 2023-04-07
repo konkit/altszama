@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup">
   <div>
-    <div class="flex">
+    <div class="flex flex-col md:flex-row">
       <span class="mr-3 text-body1 line-height-3rem">{{dishIndex}}. </span>
 
       <mat-form-field class="w-full mr-3">
@@ -11,7 +11,7 @@
                           [displayWith]="displayFn">
           <mat-option *ngFor="let dish of filteredDishes | async" [value]="dish">
             <div>{{dish.name}}</div>
-            <div class="subtitle">
+            <div class="mat-subtitle-2 text-gray-400">
               Price: {{dish.price | price}}, auto-updated {{ dish.lastCrawled | relativeDate }}
             </div>
           </mat-option>

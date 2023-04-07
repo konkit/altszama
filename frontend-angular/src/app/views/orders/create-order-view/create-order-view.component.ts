@@ -51,6 +51,8 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
   restaurantsTableDataSource = new MatTableDataSource();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  restaurantsData: RestaurantDto[] = []
+
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
               private errorSnackBar: ErrorSnackBarService,
@@ -64,11 +66,13 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
       this.filteredRestaurantsList$.next(this.fullRestaurantsList);
 
       this.restaurantsTableDataSource.data = this.fullRestaurantsList;
+      this.restaurantsData = this.fullRestaurantsList;
       this.setOrderFormInitialValue(response);
     })
 
     const sub = this.filteredRestaurantsList$.subscribe(neeRestaurants => {
       this.restaurantsTableDataSource.data = neeRestaurants
+      this.restaurantsData = neeRestaurants
     })
     this.subscriptions.add(sub);
   }

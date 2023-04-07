@@ -4,7 +4,7 @@
   </div>
 
   <div *ngIf="fullRestaurantsList.length > 0">
-    <mat-vertical-stepper [linear]="true" #stepper>
+    <mat-vertical-stepper [linear]="true">
       <mat-step [stepControl]="this.orderForm.controls.restaurantId">
         <ng-template matStepLabel>Select restaurant</ng-template>
 
@@ -15,21 +15,15 @@
                    placeholder="Filter restaurants by name"/>
           </mat-form-field>
 
-          <table mat-table [dataSource]="restaurantsTableDataSource" class="clickable-table">
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>Restaurant Name</th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-
-            <tr mat-row *matRowDef="let row; columns: ['name'];"
-                [ngClass]="{'selected': this.orderForm.controls.restaurantId.value === row.id}"
-                (click)="this.orderForm.controls.restaurantId.setValue(row.id)"></tr>
-          </table>
-
-          <mat-paginator [pageSize]="5"
-                         showFirstLastButtons
-                         aria-label="Select page">
-          </mat-paginator>
+          <mat-selection-list [multiple]="false">
+          <cdk-virtual-scroll-viewport itemSize="5">
+            <div *cdkVirtualFor="let item of restaurantsTableDataSource.data">
+              <mat-list-option (click)="this.orderForm.controls.restaurantId.setValue(item.id)" [selected]="this.orderForm.controls.restaurantId.value === item.id">
+                {{item.name}}
+              </mat-list-option>
+            </div>
+          </cdk-virtual-scroll-viewport>
+          </mat-selection-list>
 
           <button mat-raised-button matStepperPrevious (click)="backToTodayOrders()">Back</button>
           <button mat-raised-button color="primary" matStepperNext>Next</button>
@@ -40,10 +34,10 @@
       <mat-step>
         <ng-template matStepLabel>Fill details</ng-template>
 
-        <div class="flex flex-row py-4 pr-10">
-          <app-order-time-form class="mr-20" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
-          <app-delivery-data-form [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
-          <app-payment-data-form [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
+        <div class="grid grid-cols-1 md:grid-cols-3 py-4 pr-10">
+          <app-order-time-form class="mr-20 mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
+          <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
+          <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
         </div>
 
         <button mat-raised-button matStepperPrevious>Back</button>

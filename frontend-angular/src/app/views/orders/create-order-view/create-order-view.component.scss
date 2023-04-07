@@ -1,2 +1,8 @@
+:host {
+  width: 100%;
+}
 
-
+cdk-virtual-scroll-viewport {
+  height: 200px;
+  width: 100%;
+}

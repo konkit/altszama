@@ -1,30 +1,22 @@
-<div class="flex flex-row line">
+<div class="flex flex-col md:flex-row line">
   <div class="line-height-3rem text-body1">
     <span>{{ title }} ({{orderEntry.finalPrice | price}})</span>
   </div>
 
-  <div *ngIf="isOrderEntryOwner() || isOrderOwner()" class="flex flex-row">
+  <div *ngIf="isOrderEntryOwner() || isOrderOwner()" class="flex flex-row -mt-4 md:mt-0">
     <div *ngIf="shouldShowPaymentStatus()" class="flex flex-wrap content-center">
-            <app-payment-status-chip [isPaid]="isConfirmedAsPaid()"></app-payment-status-chip>
-
-<!--      <mat-chip class="mx-2" *ngIf="isUnpaid()">-->
-      <!--        Unpaid-->
-      <!--      </mat-chip>-->
-
-      <!--      <mat-chip class="mx-2" *ngIf="isConfirmedAsPaid()">-->
-      <!--        Payment confirmed-->
-      <!--      </mat-chip>-->
+      <app-payment-status-chip [isPaid]="isConfirmedAsPaid()"></app-payment-status-chip>
     </div>
 
     <div *ngIf="shouldShowConfirmAsPaidButton()">
       <button mat-icon-button (click)="confirmAsPaid(orderEntry.id)" matTooltip="Confirm payment">
-        <mat-icon fontIcon="check" ></mat-icon>
+        <mat-icon fontIcon="check"></mat-icon>
       </button>
     </div>
 
     <div *ngIf="shouldShowRevertToUnpaid()">
       <button mat-icon-button (click)="revertToUnpaid(orderEntry.id)" matTooltip="Revert to 'unpaid'">
-        <mat-icon fontIcon="undo" ></mat-icon>
+        <mat-icon fontIcon="undo"></mat-icon>
       </button>
     </div>
   </div>

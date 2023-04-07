@@ -1,96 +1,132 @@
 <ng-container *ngIf="orderResponse$ | async as orderResponse">
   <ng-container *ngIf="showOrderViewState$ | async as viewState">
-  <ng-container *ngIf="otherUserOrderEntries$ | async as otherUserOrderEntries">
-    <ng-container *ngIf="modifyOrderEntryState$ | async as modifyOrderEntryState">
-      <app-view-wrapper
-        [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + ' (' + orderResponse.order.orderDate + ')'">
+    <ng-container *ngIf="otherUserOrderEntries$ | async as otherUserOrderEntries">
+      <ng-container *ngIf="modifyOrderEntryState$ | async as modifyOrderEntryState">
+        <app-view-wrapper
+          [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + ' (' + orderResponse.order.orderDate + ')'">
 
-        <div *ngIf="viewState.shouldShowOrderLockedWarning">
-          <!-- TODO: Change to material banner -->
+          <div *ngIf="viewState.shouldShowOrderLockedWarning">
+            <!-- TODO: Change to material banner -->
 
-          <mat-card class="my-5">
-            <mat-card-header>
-              <mat-card-title>The order is locked</mat-card-title>
-            </mat-card-header>
+            <mat-card class="my-5">
+              <mat-card-header>
+                <mat-card-title>The order is locked</mat-card-title>
+              </mat-card-header>
 
-            <mat-card-content>
-              <p>Ordering is not allowed anymore, so nobody modifies their orders while you call the restaurant.</p>
-              <p>After all, we don't want anybody left hungry.</p>
-              <p>If you are not ordering yet, click the "unlock" button to let others modify their orders.</p>
-            </mat-card-content>
+              <mat-card-content>
+                <p>Ordering is not allowed anymore, so nobody modifies their orders while you call the restaurant.</p>
+                <p>After all, we don't want anybody left hungry.</p>
+                <p>If you are not ordering yet, click the "unlock" button to let others modify their orders.</p>
+              </mat-card-content>
 
-            <mat-card-actions>
-              <button mat-button color="primary" (click)="unlockOrder()" class="ml-2">
-                Unlock <mat-icon fontIcon="lock_open"></mat-icon>
-              </button>
-              <button mat-button color="primary" (click)="placeOrder()" class="ml-2">
-                Place order <mat-icon fontIcon="check"></mat-icon>
-              </button>
-            </mat-card-actions>
-          </mat-card>
-        </div>
-
-        <div class="flex flex-row py-3" *ngIf="viewState.isOrderOwner">
-          <div class="flex">
-            <ng-container *ngIf="viewState.canShowPlaceOrderButton && viewState.isPlaceOrderButtonDisabled">
-              <button mat-raised-button class="mr-3" [disabled]="true" matTooltip="You cannot place an empty order. Choose a dish first.">
-                Place order <mat-icon fontIcon="check"></mat-icon>
-              </button>
-            </ng-container>
-
-            <ng-container *ngIf="viewState.canShowPlaceOrderButton && !viewState.isPlaceOrderButtonDisabled">
-              <button mat-raised-button class="mr-3" color="primary" (click)="placeOrder()">
-                Place order <mat-icon fontIcon="check"></mat-icon>
-              </button>
-            </ng-container>
-
-            <button mat-raised-button class="mr-3" color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton" (click)="setAsDelivered()">
-              Mark as delivered <mat-icon fontIcon="check"></mat-icon>
-            </button>
-
-            <button mat-raised-button class="mr-3" (click)="goToEditOrder()">
-              Manage order <mat-icon fontIcon="settings"></mat-icon>
-            </button>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-3 w-fit">
-          <div>
-            <h2>Order details</h2>
-            <app-order-data-summary [order]="orderResponse.order"></app-order-data-summary>
+              <mat-card-actions>
+                <button mat-button color="primary" (click)="unlockOrder()" class="ml-2">
+                  Unlock
+                  <mat-icon fontIcon="lock_open"></mat-icon>
+                </button>
+                <button mat-button color="primary" (click)="placeOrder()" class="ml-2">
+                  Place order
+                  <mat-icon fontIcon="check"></mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
           </div>
 
-          <div>
-            <h2>Price summary</h2>
-            <app-price-summary [priceSummaryInput]="viewState.priceSummaryInput"></app-price-summary>
-          </div>
+          <div class="flex flex-row py-3" *ngIf="viewState.isOrderOwner">
+            <div class="flex">
+              <ng-container *ngIf="viewState.canShowPlaceOrderButton && viewState.isPlaceOrderButtonDisabled">
+                <button mat-raised-button class="mr-3" [disabled]="true"
+                        matTooltip="You cannot place an empty order. Choose a dish first.">
+                  Place order
+                  <mat-icon fontIcon="check"></mat-icon>
+                </button>
+              </ng-container>
 
-          <div>
-            <h2>Payment options</h2>
-            <app-payment-options-summary [paymentData]="orderResponse.order.paymentData"
-                                         [showOrderResponse]="orderResponse"
-                                         [viewState]="viewState"></app-payment-options-summary>
-          </div>
-        </div>
+              <ng-container *ngIf="viewState.canShowPlaceOrderButton && !viewState.isPlaceOrderButtonDisabled">
+                <button mat-raised-button class="mr-3" color="primary" (click)="placeOrder()">
+                  Place order
+                  <mat-icon fontIcon="check"></mat-icon>
+                </button>
+              </ng-container>
 
-        <div>
-          <div class="flex flex-row flex-wrap">
-            <div class="mr-4 py-5">
-              <b class="mr-2">See the menu at:</b>
-              <a class="text-indigo-500" *ngIf="orderResponse.order.restaurantUrl" target="_blank"
-                 [href]="orderResponse.order.restaurantUrl">{{ orderResponse.order.restaurantUrl }}</a>
-              <i *ngIf="!orderResponse.order.restaurantUrl">Sorry, no menu url specified</i>
+              <button mat-raised-button class="mr-3" color="primary" *ngIf="viewState.canShowMarkAsDeliveredButton"
+                      (click)="setAsDelivered()">
+                Mark as delivered
+                <mat-icon fontIcon="check"></mat-icon>
+              </button>
+
+              <button mat-raised-button class="mr-3" (click)="goToEditOrder()">
+                Manage order
+                <mat-icon fontIcon="settings"></mat-icon>
+              </button>
             </div>
           </div>
-        </div>
 
-        <app-order-entries-list [showOrderResponse]="orderResponse"
-                                [viewState]="viewState"
-                                [modifyOrderEntryState]="modifyOrderEntryState"
-                                [otherUserOrderEntries]="otherUserOrderEntries">
-        </app-order-entries-list>
-      </app-view-wrapper>
+          <div class="hidden md:block md:grid md:grid-cols-3 w-fit">
+            <div>
+              <h2>Order details</h2>
+              <app-order-data-summary [order]="orderResponse.order"></app-order-data-summary>
+            </div>
+
+            <div>
+              <h2>Price summary</h2>
+              <app-price-summary [priceSummaryInput]="viewState.priceSummaryInput"></app-price-summary>
+            </div>
+
+            <div>
+              <h2>Payment options</h2>
+              <app-payment-options-summary [paymentData]="orderResponse.order.paymentData"
+                                           [showOrderResponse]="orderResponse"
+                                           [viewState]="viewState"></app-payment-options-summary>
+            </div>
+          </div>
+
+          <div class="block md:hidden">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                Order details
+              </mat-expansion-panel-header>
+
+              <app-order-data-summary [order]="orderResponse.order"></app-order-data-summary>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                Price summary
+              </mat-expansion-panel-header>
+
+              <app-price-summary [priceSummaryInput]="viewState.priceSummaryInput"></app-price-summary>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                Payment options
+              </mat-expansion-panel-header>
+
+              <app-payment-options-summary [paymentData]="orderResponse.order.paymentData"
+                                           [showOrderResponse]="orderResponse"
+                                           [viewState]="viewState"></app-payment-options-summary>
+            </mat-expansion-panel>
+          </div>
+
+          <div>
+            <div class="flex flex-row flex-wrap">
+              <div class="mr-4 py-5">
+                <b class="mr-2">See the menu at:</b>
+                <a class="text-indigo-500" *ngIf="orderResponse.order.restaurantUrl" target="_blank"
+                   [href]="orderResponse.order.restaurantUrl">{{ orderResponse.order.restaurantUrl }}</a>
+                <i *ngIf="!orderResponse.order.restaurantUrl">Sorry, no menu url specified</i>
+              </div>
+            </div>
+          </div>
+
+          <app-order-entries-list [showOrderResponse]="orderResponse"
+                                  [viewState]="viewState"
+                                  [modifyOrderEntryState]="modifyOrderEntryState"
+                                  [otherUserOrderEntries]="otherUserOrderEntries">
+          </app-order-entries-list>
+        </app-view-wrapper>
+      </ng-container>
     </ng-container>
-  </ng-container>
   </ng-container>
 </ng-container>
