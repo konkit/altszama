@@ -1,17 +1,15 @@
 <div class="-mt-1.5">
   <div class="py-2 flex items-center">
     <span class="text-body1">Payment by cash</span>
-    <mat-icon *ngIf="paymentData.paymentByCash === true" fontIcon="check" class="ml-2"></mat-icon>
-    <mat-icon *ngIf="paymentData.paymentByCash === false" fontIcon="close" class="ml-2"></mat-icon>
+    <app-payment-chip [allowed]="paymentData.paymentByCash === true" class="ml-2"></app-payment-chip>
   </div>
 
   <div class="py-2 flex items-center">
     <span class="text-body1">Payment by bank transfer</span>
-    <mat-icon *ngIf="paymentData.paymentByBankTransfer === true" fontIcon="check" class="ml-2"></mat-icon>
-    <mat-icon *ngIf="paymentData.paymentByBankTransfer === false" fontIcon="close" class="ml-2"></mat-icon>
+    <app-payment-chip [allowed]="paymentData.paymentByBankTransfer === true" class="ml-2"></app-payment-chip>
 
     <mat-icon
-      *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0"
+      *ngIf="shouldShowQRCodeButton"
       (click)="showQrModal()" class="cursor-pointer ml-2 material-icons-outlined"
       matTooltip="Show QR code for bank transfer">qr_code
     </mat-icon>
@@ -24,8 +22,8 @@
 
   <div class="py-2 flex items-center">
     <span class="text-body1">Payment by BLIK</span>
-    <mat-icon *ngIf="paymentData.paymentByBlik === true" fontIcon="check" class="ml-2"></mat-icon>
-    <mat-icon *ngIf="paymentData.paymentByBlik === false" fontIcon="close" class="ml-2"></mat-icon>
+
+    <app-payment-chip [allowed]="paymentData.paymentByBlik === true" class="ml-2"></app-payment-chip>
   </div>
 
   <div class="px-3 user-selectable"

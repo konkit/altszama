@@ -87,6 +87,7 @@ import { TimePickerComponent } from './components/time-picker/time-picker.compon
 import {MatExpansionModule} from "@angular/material/expansion";
 import { ErrorSnackBarComponent } from './components/error-snack-bar/error-snack-bar.component';
 import { ExistingOrderEntryCardComponent } from './views/orders/show-order-view/components/order-entries-list/components/existing-order-entry-card/existing-order-entry-card.component';
+import { PaymentChipComponent } from './views/orders/show-order-view/components/payment-options-summary/payment-chip/payment-chip.component';
 
 @NgModule({
   declarations: [
@@ -139,6 +140,7 @@ import { ExistingOrderEntryCardComponent } from './views/orders/show-order-view/
     TimePickerComponent,
     ErrorSnackBarComponent,
     ExistingOrderEntryCardComponent,
+    PaymentChipComponent,
   ],
   imports: [
     BrowserModule,

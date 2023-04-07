@@ -1,10 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {
-  ParticipantsOrderEntry,
-  PaymentData,
-  ShowOrderDto,
-  ShowOrderResponse
-} from "../../../../../../../frontend-client";
+import {ParticipantsOrderEntry, PaymentData} from "../../../../../../../frontend-client";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {NgxQrcodeElementTypes} from "@techiediaries/ngx-qrcode";
 

@@ -1,9 +1,8 @@
 <!--<ng-container *ngIf="orderResponse$ | async as orderResponse">-->
-<app-view-wrapper title="Balance">
+<app-view-wrapper title="Your Balance">
   <div *ngIf="isLoading == false; else spinner">
     <div>
       <div>
-        <h1 class="mb-4">Your balance:</h1>
         <div *ngIf="owedMoneyEntries.length === 0">
           <p>No pending entries - all settled up.</p>
         </div>
