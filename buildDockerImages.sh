@@ -18,6 +18,11 @@ docker build -t konkit/altszama-frontend:${TAG} .
 docker push konkit/altszama-frontend:${TAG}
 cd ../
 
+cd ./frontend-angular || return 1
+docker build -t konkit/altszama-frontend:${TAG}-angular .
+docker push konkit/altszama-frontend:${TAG}-angular
+cd ../
+
 cd ./reverse-proxy || return 1
 docker build -t konkit/altszama-reverse-proxy:${TAG} .
 docker push konkit/altszama-reverse-proxy:${TAG}
