@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DishDto, OrderEntrySaveRequest, ShowOrderResponse} from "../../../../../../../../frontend-client";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
-import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-form/order-entry-form.component";
+import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
 
 @Component({
   selector: 'app-create-order-entry',

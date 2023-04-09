@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, take} from "rxjs";
-import {ModifyOrderEntryState, ShowOrderViewService, ShowOrderViewState} from "./service/show-order-view.service";
+import {ShowOrderViewService} from "./service/show-order-view.service";
 import {Title} from "@angular/platform-browser";
+import {ModifyOrderEntryState, ShowOrderViewState} from "./lib/model";
 
 @Component({
   selector: 'app-show-order-view',

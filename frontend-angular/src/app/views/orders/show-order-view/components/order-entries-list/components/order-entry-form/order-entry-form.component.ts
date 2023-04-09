@@ -3,47 +3,13 @@ import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {DishDto, SideDish, SideDishData} from "../../../../../../../../frontend-client";
 import {filter, map, Observable, startWith} from "rxjs";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
-
-export interface OrderEntryFormType {
-  dish: FormControl<DishDto | string>
-  price: FormControl<number>
-  additionalComments: FormControl<string>
-  chosenSideDishes: FormArray<FormGroup<SideDishForm>>
-}
-
-export interface InitialOrderEntryFormValue {
-  dish: DishDto | string
-  price: number
-  additionalComments: string,
-  chosenSideDishes: SideDish[]
-}
-
-export interface SideDishForm {
-  sideDish: FormControl<string | SideDish>
-  price: FormControl<number>
-}
-
-export interface SideDishValue {
-  sideDish: string | SideDish
-  price: number
-}
-
-
-export type OrderEntryFormValue = NewOrderEntryFormValue | ExistingOrderEntryFormValue
-export interface NewOrderEntryFormValue {
-  kind: "New"
-  dishName: string
-  price: number
-  additionalComments: string,
-  chosenSideDishes: SideDishData[]
-}
-
-export interface ExistingOrderEntryFormValue {
-  kind: "Existing"
-  dish: DishDto
-  additionalComments: string,
-  chosenSideDishes: SideDishData[]
-}
+import {
+  InitialOrderEntryFormValue,
+  OrderEntryFormType,
+  OrderEntryFormValue,
+  SideDishForm,
+  SideDishValue
+} from "../../lib/formvalues";
 
 
 @Component({
@@ -132,21 +98,30 @@ export class OrderEntryFormComponent implements OnInit {
   }
 
   submitForm() {
-    //TODO: Handle if someone selected existing dish, but changed the price,
-    // effectively making it a new dish
-
     let obj: OrderEntryFormValue
     if (typeof this.formGroup.controls.dish.value === "object") {
-      obj = {
-        kind: "Existing",
-        dish: this.formGroup.controls.dish.value,
-        additionalComments: this.formGroup.controls.additionalComments.value,
-        chosenSideDishes: this.asSideDishDataArray(this.formGroup.controls.chosenSideDishes.value)
+      let dishObj: DishDto = this.formGroup.controls.dish.value
+      if (this.formGroup.controls.price.value == dishObj.price) {
+        obj = {
+          kind: "Existing",
+          dish: this.formGroup.controls.dish.value,
+          additionalComments: this.formGroup.controls.additionalComments.value,
+          chosenSideDishes: this.asSideDishDataArray(this.formGroup.controls.chosenSideDishes.value)
+        }
+      } else {
+        obj = {
+          kind: "New",
+          dishName: dishObj.name,
+          price: this.formGroup.controls.price.value,
+          additionalComments: this.formGroup.controls.additionalComments.value,
+          chosenSideDishes: this.asSideDishDataArray(this.formGroup.controls.chosenSideDishes.value),
+        }
       }
     } else {
+      let dishName: string = this.formGroup.controls.dish.value
       obj = {
         kind: "New",
-        dishName: this.formGroup.controls.dish.value,
+        dishName: dishName,
         price: this.formGroup.controls.price.value,
         additionalComments: this.formGroup.controls.additionalComments.value,
         chosenSideDishes: this.asSideDishDataArray(this.formGroup.controls.chosenSideDishes.value),

@@ -6,8 +6,6 @@
           [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + ' (' + orderResponse.order.orderDate + ')'">
 
           <div *ngIf="viewState.shouldShowOrderLockedWarning">
-            <!-- TODO: Change to material banner -->
-
             <mat-card class="my-5">
               <mat-card-header>
                 <mat-card-title>The order is locked</mat-card-title>

@@ -1,10 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../../../frontend-client";
-import {
-  ModifyOrderEntryState,
-  ShowOrderViewService,
-  ShowOrderViewState
-} from "../../../../service/show-order-view.service";
+import {ShowOrderViewService,} from "../../../../service/show-order-view.service";
+import {ModifyOrderEntryState, ShowOrderViewState} from "../../../../lib/model";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({

@@ -14,34 +14,9 @@ import {AuthService} from "../../../../service/auth.service";
 import {ErrorSnackBarService} from "../../../../service/error-snack-bar.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {EventSourcePolyfill} from "event-source-polyfill";
+import {ModifyOrderEntryState, ShowOrderViewState} from "../lib/model";
 
 //TODO: Clear state on entry
-
-export interface ShowOrderViewState {
-  canShowPlaceOrderButton: boolean
-  isPlaceOrderButtonDisabled: boolean
-  canShowMarkAsDeliveredButton: boolean
-  shouldDisplayNewOrderEntryCard: boolean
-  shouldShowQRCodeButton: boolean,
-  isOrderOwner: boolean,
-  allEatingPeopleCount: number,
-  numberOfCurrentUserEntries: number,
-  username: string,
-  yourOrderEntries: ParticipantsOrderEntry[],
-  priceSummaryInput: PriceSummaryInput;
-  shouldShowOrderLockedWarning: boolean;
-}
-
-export interface ModifyOrderEntryState {
-  loadingEntry: boolean;
-
-  orderEntryId: string;
-  dishEntryId: string;
-
-  isEntryCreating: boolean;
-  isEntryEdited: boolean;
-}
-
 const initialModifyOrderEntryState: ModifyOrderEntryState = {
   loadingEntry: false,
 
@@ -51,7 +26,6 @@ const initialModifyOrderEntryState: ModifyOrderEntryState = {
   isEntryCreating: false,
   isEntryEdited: false,
 };
-
 
 @Injectable({
   providedIn: 'root'

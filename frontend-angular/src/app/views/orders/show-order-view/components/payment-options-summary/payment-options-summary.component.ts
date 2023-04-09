@@ -5,7 +5,7 @@ import {
   BankTransferQrcodeModal,
   QrcodeModalInput
 } from "./bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
-import {ShowOrderViewState} from "../../service/show-order-view.service";
+import {ShowOrderViewState} from "../../lib/model";
 
 @Component({
   selector: 'app-payment-options-summary',

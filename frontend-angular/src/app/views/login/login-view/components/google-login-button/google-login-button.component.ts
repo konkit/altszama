@@ -3,6 +3,8 @@ import {AuthControllerService, GooglePayload} from "../../../../../../frontend-c
 import {FrontendConfigService} from "../../../../../service/frontend-config.service";
 import {from, map, Observable, switchMap} from "rxjs";
 import {AuthService} from "../../../../../service/auth.service";
+import {ActivatedRoute} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 const gsiClientSrc = "https://accounts.google.com/gsi/client";
 
@@ -21,8 +23,10 @@ export class GoogleLoginButtonComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private route: ActivatedRoute,
     private authControllerService: AuthControllerService,
-    private frontendConfigService: FrontendConfigService
+    private frontendConfigService: FrontendConfigService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
@@ -38,18 +42,14 @@ export class GoogleLoginButtonComponent implements OnInit {
     this.loginPending = true;
 
     let returnPath = "";
-    //TODO: fix returnpath
-    // if (this.$route.query.returnPath) {
-    //   returnPath = this.$route.query.returnPath as string;
-    // }
+    if (this.route.snapshot.queryParamMap.get("returnPath") != null) {
+      returnPath = this.route.snapshot.queryParamMap.get("returnPath")!;
+    }
 
     this.authService.loginWithGoogle(payload, returnPath)
       .subscribe({
         error: e => {
-          // if (e) {
-          //   this.$store.commit("replaceError", e);
-          // }
-
+          this.snackBar.open(`Error: ${e}`, "", {duration: 5 * 1000})
           this.loginPending = false;
         }
       });

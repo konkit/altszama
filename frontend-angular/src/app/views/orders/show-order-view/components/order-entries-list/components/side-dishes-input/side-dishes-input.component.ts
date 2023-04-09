@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {SideDishForm} from "../order-entry-form/order-entry-form.component";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {SideDish} from "../../../../../../../../frontend-client";
+import {SideDishForm} from "../../lib/formvalues";
 
 @Component({
   selector: 'app-side-dishes-input',

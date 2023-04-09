@@ -5,9 +5,10 @@ import {
   ParticipantsOrderEntry,
   ShowOrderResponse
 } from "../../../../../../../../frontend-client";
-import {ModifyOrderEntryState, ShowOrderViewService} from "../../../../service/show-order-view.service";
-import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../order-entry-form/order-entry-form.component";
+import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
+import {ModifyOrderEntryState} from "../../../../lib/model";
 
 
 @Component({
@@ -40,8 +41,6 @@ export class EditOrderEntryComponent implements OnInit {
   }
 
   onSubmit(orderEntry: OrderEntryFormValue) {
-    //TODO(konkit): Refactor
-
     let orderEntryToUpdate: OrderEntryUpdateRequest
     if (orderEntry.kind === "Existing") {
       orderEntryToUpdate = {

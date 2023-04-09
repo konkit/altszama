@@ -12,8 +12,6 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 
-//TODO - display error when the tiem format is invalid
-
 @Component({
   selector: 'app-create-order-view',
   templateUrl: './create-order-view.component.html',
