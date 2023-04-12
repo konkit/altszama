@@ -45,7 +45,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
-import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
 import {MatIconModule} from "@angular/material/icon";
 import {MatStepperModule} from "@angular/material/stepper";
@@ -192,7 +191,6 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
     MatButtonModule,
     MatDatepickerModule,
     MatInputModule,
-    MatMomentDateModule,
     NgxMatTimepickerModule,
     MatIconModule,
     MatStepperModule,

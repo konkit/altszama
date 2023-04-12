@@ -1,1 +1,1 @@
-http-server dist
+http-server dist/frontend-angular
