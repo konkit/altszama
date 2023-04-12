@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
-import {ShowOrderViewService} from "../../../../service/show-order-view.service";
+import {OrderActionsService} from "../../../../service/order-actions.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -17,7 +17,7 @@ export class TitleWithPaymentStatusComponent {
   @Input() currentUserId!: string;
   @Input() costForUser!: number;
 
-  constructor(private showOrderViewService: ShowOrderViewService) {
+  constructor(private orderActionsService: OrderActionsService) {
   }
 
   isOrderOwner() {
@@ -47,11 +47,11 @@ export class TitleWithPaymentStatusComponent {
   }
 
   confirmAsPaid(orderEntryId: string) {
-    this.showOrderViewService.confirmAsPaid(orderEntryId)
+    this.orderActionsService.confirmAsPaid(orderEntryId)
   }
 
   revertToUnpaid(orderEntryId: string) {
-    this.showOrderViewService.revertToUnpaid(orderEntryId)
+    this.orderActionsService.revertToUnpaid(orderEntryId)
   }
 
   isUnpaid() {

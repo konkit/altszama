@@ -5,10 +5,9 @@ import {
   ParticipantsOrderEntry,
   ShowOrderResponse
 } from "../../../../../../../../frontend-client";
-import {ShowOrderViewService} from "../../../../service/show-order-view.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
 import {ModifyOrderEntryState} from "../../../../lib/model";
+import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.service";
 
 
 @Component({
@@ -26,9 +25,8 @@ export class EditOrderEntryComponent implements OnInit {
 
   initialValue!: InitialOrderEntryFormValue
 
-  constructor(private showOrderViewService: ShowOrderViewService,
-              private matSnackBar: MatSnackBar) {
-    this.showOrderViewService.setEntryLoading(true)
+  constructor(private modifyOrderEntryService: ModifyOrderEntryService) {
+    this.modifyOrderEntryService.setEntryLoading(true)
   }
 
   ngOnInit() {
@@ -68,11 +66,11 @@ export class EditOrderEntryComponent implements OnInit {
       };
     }
 
-    this.showOrderViewService.doUpdateOrderEntry(orderEntryToUpdate)
+    this.modifyOrderEntryService.doUpdateOrderEntry(orderEntryToUpdate)
       .subscribe()
   }
 
   onCancel() {
-    this.showOrderViewService.cancelDishEntryModification()
+    this.modifyOrderEntryService.cancelDishEntryModification()
   }
 }

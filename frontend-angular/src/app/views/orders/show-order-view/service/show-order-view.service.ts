@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, catchError, EMPTY, filter, map, Observable, of, switchMap, take, tap} from "rxjs";
+import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
 import {
   OrderControllerService,
   OrderEntryControllerService,
-  OrderEntrySaveRequest,
-  OrderEntryUpdateRequest,
   ParticipantsOrderEntry,
   ShowOrderDto,
   ShowOrderResponse
@@ -12,20 +10,12 @@ import {
 import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
 import {AuthService} from "../../../../service/auth.service";
 import {ErrorSnackBarService} from "../../../../service/error-snack-bar.service";
-import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {EventSourcePolyfill} from "event-source-polyfill";
-import {ModifyOrderEntryState, ShowOrderViewState} from "../lib/model";
+import {ShowOrderViewState} from "../lib/model";
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 //TODO: Clear state on entry
-const initialModifyOrderEntryState: ModifyOrderEntryState = {
-  loadingEntry: false,
 
-  orderEntryId: "",
-  dishEntryId: "",
-
-  isEntryCreating: false,
-  isEntryEdited: false,
-};
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +25,6 @@ export class ShowOrderViewService {
   orderResponse = new BehaviorSubject<ShowOrderResponse | null>(null)
 
   otherUserOrderEntries = new BehaviorSubject<Array<ParticipantsOrderEntry>>([])
-
-  modifyOrderEntryState = new BehaviorSubject<ModifyOrderEntryState>(initialModifyOrderEntryState)
 
   showOrderViewState$: Observable<ShowOrderViewState> = this.createShowOrderViewStateObservable()
 
@@ -69,7 +57,7 @@ export class ShowOrderViewService {
     )
   }
 
-  reloadOrderResponse(): Observable<void> {
+  reloadWholeOrderResponse(): Observable<void> {
     return this.getOrderIdObservableFromOrderResponse().pipe(
       switchMap(orderId => this.loadOrderResponseToAllSubjects(orderId)),
       map(() => void 0)
@@ -94,10 +82,6 @@ export class ShowOrderViewService {
 
   otherUserOrderEntriesAsObservable() {
     return this.otherUserOrderEntries.asObservable()
-  }
-
-  modifyOrderEntryStateAsObservable() {
-    return this.modifyOrderEntryState.asObservable()
   }
 
   getShowOrderViewState(): Observable<ShowOrderViewState> {
@@ -155,120 +139,6 @@ export class ShowOrderViewService {
         return obj
       })
     );
-  }
-
-  setEntryLoading(newValue: boolean) {
-    this.modifyOrderEntryState.next(
-      {
-        ...this.modifyOrderEntryState.value,
-        loadingEntry: newValue,
-      }
-    )
-  }
-
-  setDishEntryCreating() {
-    this.modifyOrderEntryState.next(
-      {
-        ...this.modifyOrderEntryState.value,
-        isEntryCreating: true,
-        isEntryEdited: false,
-        orderEntryId: "",
-        dishEntryId: ""
-      }
-    )
-  }
-
-  setDishEntryEditing(payload: { orderEntryId: string, dishEntryId: string }) {
-    this.modifyOrderEntryState.next(
-      {
-        ...this.modifyOrderEntryState.value,
-        isEntryCreating: false,
-        isEntryEdited: true,
-        orderEntryId: payload.orderEntryId,
-        dishEntryId: payload.dishEntryId,
-      }
-    )
-  }
-
-  cancelDishEntryModification() {
-    this.modifyOrderEntryState.next(
-      {
-        ...this.modifyOrderEntryState.value,
-        isEntryCreating: false,
-        isEntryEdited: false,
-        orderEntryId: "",
-        dishEntryId: "",
-      }
-    )
-  }
-
-  deleteDishEntry(params: { orderEntryId: string; dishEntryId: string }): Observable<void> {
-    return this.orderEntryControllerService.delete1(params.orderEntryId, params.dishEntryId)
-      .pipe(
-        switchMap(() => {
-          return this.reloadOrderResponse()
-        }),
-      )
-  }
-
-  doSaveOrderEntry(orderEntryToSave: OrderEntrySaveRequest) {
-    return this.orderEntryControllerService
-      .save1(orderEntryToSave)
-      .pipe(
-        tap(() => this.setEntryLoading(true)),
-        tap(() => this.cancelDishEntryModification()),
-        switchMap(() => this.reloadOrderResponse()),
-        catchError(error => {
-          this.errorSnackBarService.displayError(error)
-          throw error
-        })
-      )
-  }
-
-  doUpdateOrderEntry(orderEntryToUpdate: OrderEntryUpdateRequest): Observable<void> {
-    return this.orderEntryControllerService
-      .update1(orderEntryToUpdate)
-      .pipe(
-        tap(() => this.setEntryLoading(true)),
-        tap(() => this.cancelDishEntryModification()),
-        switchMap(() => this.reloadOrderResponse()),
-        catchError(error => {
-          this.errorSnackBarService.displayError(error)
-          throw error
-        })
-      )
-  }
-
-  setAsDelivered(orderId: string) {
-    this.orderControllerService.setAsDelivered(orderId)
-      .pipe(
-        switchMap(() => this.reloadOrderResponse())
-      )
-      .subscribe()
-  }
-
-  unlockOrderAndReload(orderId: string) {
-    this.orderControllerService.setAsCreated(orderId)
-      .pipe(
-        switchMap(() => this.reloadOrderResponse())
-      )
-      .subscribe()
-  }
-
-  confirmAsPaid(orderEntryId: string) {
-    this.orderEntryControllerService.setAsConfirmedAsPaid(orderEntryId)
-      .pipe(
-        switchMap(() => this.reloadOrderResponse())
-      )
-      .subscribe()
-  }
-
-  revertToUnpaid(orderEntryId: string) {
-    this.orderEntryControllerService.revertToUnpaid(orderEntryId)
-      .pipe(
-        switchMap(() => this.reloadOrderResponse())
-      )
-      .subscribe()
   }
 
   handleOrderChangeSSE() {

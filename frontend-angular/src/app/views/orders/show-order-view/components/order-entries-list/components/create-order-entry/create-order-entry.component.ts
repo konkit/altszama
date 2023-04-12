@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DishDto, OrderEntrySaveRequest, ShowOrderResponse} from "../../../../../../../../frontend-client";
-import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
+import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.service";
 
 @Component({
   selector: 'app-create-order-entry',
@@ -23,13 +23,13 @@ export class CreateOrderEntryComponent implements OnInit {
   }
 
 
-  constructor(private showOrderViewService: ShowOrderViewService) {
-    this.showOrderViewService.setEntryLoading(true)
+  constructor(private modifyOrderEntryService: ModifyOrderEntryService) {
+    this.modifyOrderEntryService.setEntryLoading(true)
   }
 
   ngOnInit() {
     this.dishes = this.orderResponse.allDishesInRestaurant
-    this.showOrderViewService.setEntryLoading(false)
+    this.modifyOrderEntryService.setEntryLoading(false)
   }
 
   onSubmit(orderEntry: OrderEntryFormValue) {
@@ -56,11 +56,11 @@ export class CreateOrderEntryComponent implements OnInit {
       };
     }
 
-    this.showOrderViewService.doSaveOrderEntry(orderEntryToSave)
+    this.modifyOrderEntryService.doSaveOrderEntry(orderEntryToSave)
       .subscribe()
   }
 
   onCancel() {
-    this.showOrderViewService.cancelDishEntryModification()
+    this.modifyOrderEntryService.cancelDishEntryModification()
   }
 }

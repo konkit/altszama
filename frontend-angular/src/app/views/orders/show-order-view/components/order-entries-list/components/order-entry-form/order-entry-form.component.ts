@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {DishDto, SideDish, SideDishData} from "../../../../../../../../frontend-client";
 import {filter, map, Observable, startWith} from "rxjs";
-import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import {
   InitialOrderEntryFormValue,
   OrderEntryFormType,
@@ -10,6 +9,7 @@ import {
   SideDishForm,
   SideDishValue
 } from "../../lib/formvalues";
+import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.service";
 
 
 @Component({
@@ -37,12 +37,12 @@ export class OrderEntryFormComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder,
-              private showOrderViewService: ShowOrderViewService) {
-    this.showOrderViewService.setEntryLoading(true)
+              private modifyOrderEntryService: ModifyOrderEntryService) {
+    this.modifyOrderEntryService.setEntryLoading(true)
   }
 
   ngOnInit() {
-    this.showOrderViewService.setEntryLoading(false)
+    this.modifyOrderEntryService.setEntryLoading(false)
 
     this.formGroup.setValue({
       dish: this.initialValue.dish,

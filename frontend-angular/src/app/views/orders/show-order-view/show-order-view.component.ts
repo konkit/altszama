@@ -5,6 +5,8 @@ import {Observable, take} from "rxjs";
 import {ShowOrderViewService} from "./service/show-order-view.service";
 import {Title} from "@angular/platform-browser";
 import {ModifyOrderEntryState, ShowOrderViewState} from "./lib/model";
+import {OrderActionsService} from "./service/order-actions.service";
+import {ModifyOrderEntryService} from "./service/modify-order-entry.service";
 
 @Component({
   selector: 'app-show-order-view',
@@ -22,11 +24,13 @@ export class ShowOrderViewComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private readonly title: Title,
-              private showOrderViewService: ShowOrderViewService) {
+              private showOrderViewService: ShowOrderViewService,
+              private orderActionsService: OrderActionsService,
+              private modifyOrderEntryService: ModifyOrderEntryService) {
     this.orderResponse$ = this.showOrderViewService.orderResponseAsObservable()
     this.otherUserOrderEntries$ = this.showOrderViewService.otherUserOrderEntriesAsObservable()
     this.showOrderViewState$ = this.showOrderViewService.getShowOrderViewState();
-    this.modifyOrderEntryState$ = this.showOrderViewService.modifyOrderEntryStateAsObservable()
+    this.modifyOrderEntryState$ = this.modifyOrderEntryService.modifyOrderEntryStateAsObservable()
   }
 
   ngOnInit() {
@@ -47,7 +51,7 @@ export class ShowOrderViewComponent implements OnInit {
   }
 
   setAsDelivered() {
-    this.showOrderViewService.setAsDelivered(this.getOrderId())
+    this.orderActionsService.setAsDelivered(this.getOrderId())
   }
 
   getOrderId(): string {
@@ -55,6 +59,6 @@ export class ShowOrderViewComponent implements OnInit {
   }
 
   unlockOrder() {
-    this.showOrderViewService.unlockOrderAndReload(this.getOrderId())
+    this.orderActionsService.unlockOrderAndReload(this.getOrderId())
   }
 }

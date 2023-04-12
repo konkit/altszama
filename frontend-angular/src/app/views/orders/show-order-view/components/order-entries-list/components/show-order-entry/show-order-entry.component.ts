@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
-import {ShowOrderViewService} from "../../../../service/show-order-view.service";
+import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -15,7 +15,7 @@ export class ShowOrderEntryComponent {
   @Input() dishEntry!: ParticipantsDishEntry;
   @Input() currentUserId!: string;
 
-  constructor(private showOrderViewService: ShowOrderViewService) {
+  constructor(private modifyOrderEntryService: ModifyOrderEntryService) {
   }
 
   canEditOrderEntry() {
@@ -26,11 +26,11 @@ export class ShowOrderEntryComponent {
 
   editDishEntry() {
     let params = {orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id};
-    this.showOrderViewService.setDishEntryEditing(params)
+    this.modifyOrderEntryService.setDishEntryEditing(params)
   }
 
   deleteDishEntry() {
     let params = {orderEntryId: this.orderEntry.id, dishEntryId: this.dishEntry.id};
-    this.showOrderViewService.deleteDishEntry(params).subscribe()
+    this.modifyOrderEntryService.deleteDishEntry(params).subscribe()
   }
 }
