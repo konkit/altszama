@@ -5,17 +5,20 @@ import {Pipe, PipeTransform} from '@angular/core';
 })
 export class RelativeDatePipe implements PipeTransform {
 
-  transform(date?: Date): string {
+  transform(date?: Date | string): string {
     if (date) {
-      return this.timeSince(date);
+      if (typeof date === "string") {
+        return this.timeSince(Date.parse(date))
+      } else {
+        return this.timeSince(date.getDate());
+      }
     } else {
       return "";
     }
   }
 
-  timeSince(date: Date): string {
-    const secondsSince = Math.floor((Date.now() - date.getDate()) / 1000);
-
+  timeSince(dateInMilis: number): string {
+    const secondsSince = Math.floor((Date.now() - dateInMilis) / 1000);
     const numberOfYears = Math.floor(secondsSince / (365 * 24 * 60 * 60));
     if (numberOfYears > 1) {
       return `${numberOfYears} years ago`;
