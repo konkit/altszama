@@ -2,16 +2,18 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
 import {
   OrderControllerService,
-  OrderEntryControllerService,
   ParticipantsOrderEntry,
   ShowOrderDto,
   ShowOrderResponse
 } from "../../../../../frontend-client";
-import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
 import {AuthService} from "../../../../service/auth.service";
-import {ErrorSnackBarService} from "../../../../service/error-snack-bar.service";
 import {EventSourcePolyfill} from "event-source-polyfill";
-import {ShowOrderViewState} from "../lib/model";
+import {PaymentOptionsData, PriceSummaryData, ShowOrderViewState} from "../lib/model";
+import {
+  BankTransferQrcodeModal,
+  QrcodeModalInput
+} from "../components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
+import {MatDialog} from "@angular/material/dialog";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 //TODO: Clear state on entry
@@ -29,8 +31,7 @@ export class ShowOrderViewService {
   showOrderViewState$: Observable<ShowOrderViewState> = this.createShowOrderViewStateObservable()
 
   constructor(private orderControllerService: OrderControllerService,
-              private errorSnackBarService: ErrorSnackBarService,
-              private orderEntryControllerService: OrderEntryControllerService,
+              private matDialog: MatDialog,
               private authService: AuthService) {
   }
 
@@ -113,11 +114,15 @@ export class ShowOrderViewService {
         let isOrderedOrDelivered = [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(order.orderState);
         let shouldShowQRCodeButton = isAnyOrderEntryOwner && isOrderedOrDelivered && order.paymentData.paymentByBankTransfer;
 
-        let priceSummaryInput: PriceSummaryInput = {
+        let priceSummaryData: PriceSummaryData = {
           deliveryData: r.order.deliveryData,
           basePriceSum: r.baseOrderPrice,
           totalPrice: r.totalOrderPrice,
           allEatingPeopleCount: r.orderEntries.flatMap(e => e.dishEntries).length,
+        }
+
+        let paymentOptionsData: PaymentOptionsData = {
+          shouldShowQRCodeButton: shouldShowQRCodeButton
         }
 
         let shouldShowOrderLockedWarning = isOrderOwner && [OrderStateEnum.ORDERING].includes(order.orderState);
@@ -127,13 +132,13 @@ export class ShowOrderViewService {
           isPlaceOrderButtonDisabled: isPlaceOrderButtonDisabled,
           canShowMarkAsDeliveredButton: canShowMarkAsDeliveredButton,
           shouldDisplayNewOrderEntryCard: shouldDisplayNewOrderEntryCard,
-          shouldShowQRCodeButton: shouldShowQRCodeButton,
           isOrderOwner: isOrderOwner,
           allEatingPeopleCount: allEatingPeopleCount,
           numberOfCurrentUserEntries: numberOfCurrentUserEntries,
           username: username,
           yourOrderEntries: yourOrderEntries,
-          priceSummaryInput: priceSummaryInput,
+          priceSummaryData: priceSummaryData,
+          paymentOptionsData: paymentOptionsData,
           shouldShowOrderLockedWarning: shouldShowOrderLockedWarning,
         }
         return obj
@@ -158,6 +163,23 @@ export class ShowOrderViewService {
       };
 
       es.addEventListener("message", eventListener);
+    })
+  }
+
+  showQrModal() {
+    this.orderResponse.asObservable().pipe(take(1), filter(isNonNullGuard)).subscribe(showOrderResponse => {
+      let orderEntries = showOrderResponse.orderEntries
+      let currentUserId = showOrderResponse.currentUserId
+      let yourOrderEntries = orderEntries.filter(e => e.userId === currentUserId);
+
+
+      let data: QrcodeModalInput = {
+        paymentData: showOrderResponse.order.paymentData,
+        yourOrderEntries: yourOrderEntries,
+        orderCreatorUsername: showOrderResponse.order.orderCreatorUsername,
+        orderDate: showOrderResponse.order.orderDate
+      }
+      this.matDialog.open(BankTransferQrcodeModal, { width: '300px', data: data })
     })
   }
 }

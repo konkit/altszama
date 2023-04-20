@@ -1,11 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {PaymentData, ShowOrderResponse} from "../../../../../../frontend-client";
-import {MatDialog} from "@angular/material/dialog";
-import {
-  BankTransferQrcodeModal,
-  QrcodeModalInput
-} from "./bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
-import {ShowOrderViewState} from "../../lib/model";
+import {ParticipantsOrderEntry, PaymentData, ShowOrderResponse} from "../../../../../../frontend-client";
+import {PaymentOptionsData} from "../../lib/model";
+import {ShowOrderViewService} from "../../service/show-order-view.service";
 
 @Component({
   selector: 'app-payment-options-summary',
@@ -16,15 +12,16 @@ export class PaymentOptionsSummaryComponent implements OnInit {
 
   @Input() showOrderResponse!: ShowOrderResponse
   @Input() paymentData!: PaymentData
-  @Input() viewState!: ShowOrderViewState
+  @Input() yourOrderEntries!: ParticipantsOrderEntry[]
+  @Input() paymentOptionsData!: PaymentOptionsData
 
   shouldShowQRCodeButton: any;
 
-  constructor(private dialog: MatDialog) {
+  constructor(private showOrderViewService: ShowOrderViewService) {
   }
 
   ngOnInit() {
-    this.shouldShowQRCodeButton = this.viewState.shouldShowQRCodeButton
+    this.shouldShowQRCodeButton = this.paymentOptionsData.shouldShowQRCodeButton
   }
 
 
@@ -62,12 +59,6 @@ export class PaymentOptionsSummaryComponent implements OnInit {
   }
 
   showQrModal() {
-    let data: QrcodeModalInput = {
-      paymentData: this.showOrderResponse.order.paymentData,
-      yourOrderEntries: this.viewState.yourOrderEntries,
-      orderCreatorUsername: this.showOrderResponse.order.orderCreatorUsername,
-      orderDate: this.showOrderResponse.order.orderDate
-    }
-    this.dialog.open(BankTransferQrcodeModal, { width: '300px', data: data })
+    this.showOrderViewService.showQrModal()
   }
 }

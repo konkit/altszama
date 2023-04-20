@@ -1,12 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {DeliveryData, ShowOrderResponse} from "../../../../../../frontend-client";
-
-export interface PriceSummaryInput {
-  deliveryData: DeliveryData,
-  basePriceSum: number,
-  totalPrice: number,
-  allEatingPeopleCount: number,
-}
+import {PriceSummaryData} from "../../lib/model";
 
 @Component({
   selector: 'app-price-summary',
@@ -14,5 +7,5 @@ export interface PriceSummaryInput {
   styleUrls: ['./price-summary.component.scss']
 })
 export class PriceSummaryComponent {
-  @Input() priceSummaryInput!: PriceSummaryInput
+  @Input() priceSummaryData!: PriceSummaryData
 }

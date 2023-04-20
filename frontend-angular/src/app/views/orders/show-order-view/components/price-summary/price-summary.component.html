@@ -1,32 +1,32 @@
 <mat-list>
   <mat-list-item>
     <div matListItemTitle>Base price:</div>
-    <div matListItemLine>{{priceSummaryInput.basePriceSum | price}}</div>
+    <div matListItemLine>{{priceSummaryData.basePriceSum | price}}</div>
   </mat-list-item>
 
   <mat-list-item
-    *ngIf="priceSummaryInput.deliveryData.decreaseInPercent === 0 && priceSummaryInput.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryInput.deliveryData.deliveryCostPerDish === 0">
+    *ngIf="priceSummaryData.deliveryData.decreaseInPercent === 0 && priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0">
     <div matListItemLine>No price modifiers</div>
   </mat-list-item>
 
-  <mat-list-item *ngIf="priceSummaryInput.deliveryData.decreaseInPercent !== 0">
+  <mat-list-item *ngIf="priceSummaryData.deliveryData.decreaseInPercent !== 0">
     <div matListItemTitle>Price decrease:</div>
-    <div matListItemLine>- {{ priceSummaryInput.deliveryData.decreaseInPercent }} %</div>
+    <div matListItemLine>- {{ priceSummaryData.deliveryData.decreaseInPercent }} %</div>
   </mat-list-item>
 
-  <mat-list-item *ngIf="priceSummaryInput.deliveryData.deliveryCostPerEverybody !== 0">
+  <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody !== 0">
     <div matListItemTitle>Delivery:</div>
     <div matListItemLine>
-      <span class="unbreakable">+ {{ priceSummaryInput.deliveryData.deliveryCostPerEverybody | price }}</span>
+      <span class="unbreakable">+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</span>
     </div>
   </mat-list-item>
 
-  <mat-list-item *ngIf="priceSummaryInput.deliveryData.deliveryCostPerDish !== 0">
+  <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerDish !== 0">
     <div matListItemTitle>Delivery per dish:</div>
     <div matListItemLine>
         <span class="unbreakable">
-          + {{priceSummaryInput.deliveryData.deliveryCostPerDish | price}}
-          * {{ priceSummaryInput.allEatingPeopleCount || 0 }}
+          + {{priceSummaryData.deliveryData.deliveryCostPerDish | price}}
+          * {{ priceSummaryData.allEatingPeopleCount || 0 }}
         </span>
     </div>
   </mat-list-item>
@@ -34,7 +34,7 @@
   <mat-list-item>
     <div matListItemTitle>Total:</div>
     <div matListItemLine>
-      {{priceSummaryInput.totalPrice | price}}
+      {{priceSummaryData.totalPrice | price}}
     </div>
   </mat-list-item>
 </mat-list>

@@ -1,18 +1,17 @@
-import {ParticipantsOrderEntry} from "../../../../../frontend-client";
-import {PriceSummaryInput} from "../components/price-summary/price-summary.component";
+import {DeliveryData, ParticipantsOrderEntry} from "../../../../../frontend-client";
 
 export interface ShowOrderViewState {
   canShowPlaceOrderButton: boolean
   isPlaceOrderButtonDisabled: boolean
   canShowMarkAsDeliveredButton: boolean
   shouldDisplayNewOrderEntryCard: boolean
-  shouldShowQRCodeButton: boolean,
   isOrderOwner: boolean,
   allEatingPeopleCount: number,
   numberOfCurrentUserEntries: number,
   username: string,
   yourOrderEntries: ParticipantsOrderEntry[],
-  priceSummaryInput: PriceSummaryInput;
+  priceSummaryData: PriceSummaryData;
+  paymentOptionsData: PaymentOptionsData;
   shouldShowOrderLockedWarning: boolean;
 }
 
@@ -24,4 +23,15 @@ export interface ModifyOrderEntryState {
 
   isEntryCreating: boolean;
   isEntryEdited: boolean;
+}
+
+export interface PriceSummaryData {
+  deliveryData: DeliveryData,
+  basePriceSum: number,
+  totalPrice: number,
+  allEatingPeopleCount: number,
+}
+
+export interface PaymentOptionsData {
+  shouldShowQRCodeButton: boolean,
 }

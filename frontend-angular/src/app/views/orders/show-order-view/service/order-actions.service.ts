@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {switchMap} from "rxjs";
 import {ShowOrderViewService} from "./show-order-view.service";
 import {OrderControllerService, OrderEntryControllerService} from "../../../../../frontend-client";
+import {MatDialog} from "@angular/material/dialog";
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class OrderActionsService {
 
   constructor(private orderControllerService: OrderControllerService,
               private orderEntryControllerService: OrderEntryControllerService,
+              private dialog: MatDialog,
               private showOrderViewService: ShowOrderViewService) { }
 
   setAsDelivered(orderId: string) {

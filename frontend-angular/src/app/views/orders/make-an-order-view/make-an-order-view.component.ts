@@ -3,9 +3,9 @@ import {OrderControllerService} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder} from "@angular/forms";
 import {map, take} from "rxjs";
-import {PriceSummaryInput} from "../show-order-view/components/price-summary/price-summary.component";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
+import {PriceSummaryData} from "../show-order-view/lib/model";
 
 @Component({
   selector: 'app-make-an-order-view',
@@ -16,7 +16,7 @@ export class MakeAnOrderViewComponent implements OnInit {
 
   response$ = this.orderControllerService.orderViewJson(this.getOrderId())
   priceSummaryInput$ = this.response$.pipe(map(r => {
-    let priceSummaryInput: PriceSummaryInput = {
+    let priceSummaryInput: PriceSummaryData = {
       totalPrice: r.totalPrice,
       basePriceSum: r.basePriceSum,
       allEatingPeopleCount: r.allEatingPeopleCount,
