@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {
+  DishDto,
   OrderEntryUpdateRequest,
   ParticipantsDishEntry,
-  ParticipantsOrderEntry,
-  ShowOrderResponse
+  ParticipantsOrderEntry
 } from "../../../../../../../../frontend-client";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
 import {ModifyOrderEntryState} from "../../../../lib/model";
@@ -18,8 +18,9 @@ import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.se
 export class EditOrderEntryComponent implements OnInit {
 
   @Input() dishIndex!: number;
-  @Input() orderResponse!: ShowOrderResponse
   @Input() modifyOrderEntryState!: ModifyOrderEntryState
+  @Input() allDishesInRestaurant!: DishDto[]
+  @Input() orderId!: string;
   @Input() orderEntry!: ParticipantsOrderEntry
   @Input() dishEntry!: ParticipantsDishEntry
 
@@ -31,7 +32,7 @@ export class EditOrderEntryComponent implements OnInit {
 
   ngOnInit() {
     this.initialValue = {
-      dish: this.orderResponse.allDishesInRestaurant.find(x => x.id == this.dishEntry.dishId) || "",
+      dish: this.allDishesInRestaurant.find(x => x.id == this.dishEntry.dishId) || "",
       price: this.dishEntry.price,
       additionalComments: this.dishEntry.comments,
       chosenSideDishes: this.dishEntry.sideDishes,
@@ -43,7 +44,7 @@ export class EditOrderEntryComponent implements OnInit {
     if (orderEntry.kind === "Existing") {
       orderEntryToUpdate = {
         id: this.orderEntry.id,
-        orderId: this.orderResponse.order.id,
+        orderId: this.orderId,
         dishEntryId: this.dishEntry.id,
         newDish: false,
         dishId: orderEntry.dish.id,
@@ -55,7 +56,7 @@ export class EditOrderEntryComponent implements OnInit {
     } else {
       orderEntryToUpdate = {
         id: this.orderEntry.id,
-        orderId: this.orderResponse.order.id,
+        orderId: this.orderId,
         dishEntryId: this.dishEntry.id,
         newDish: true,
         dishId: "",

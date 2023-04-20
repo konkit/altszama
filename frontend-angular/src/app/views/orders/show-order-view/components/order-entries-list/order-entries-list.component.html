@@ -1,8 +1,8 @@
-<div *ngIf="viewState.shouldDisplayNewOrderEntryCard">
+<div *ngIf="shouldDisplayNewOrderEntryCard">
   <mat-card class="mb-10 pb-5 md:px-5">
     <mat-card-header>
       <mat-card-title>
-        <div class="mat-body-1">{{ viewState.username }}</div>
+        <div class="mat-body-1">{{ username }}</div>
       </mat-card-title>
     </mat-card-header>
 
@@ -16,7 +16,10 @@
           </ng-container>
 
           <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === true">
-            <app-create-order-entry [dishIndex]="1" [orderResponse]="showOrderResponse"></app-create-order-entry>
+            <app-create-order-entry [dishIndex]="1"
+                                    [orderId]="showOrderResponse.order.id"
+                                    [allDishesInRestaurant]="showOrderResponse.allDishesInRestaurant">
+            </app-create-order-entry>
           </ng-container>
         </div>
       </mat-card-content>
@@ -24,11 +27,10 @@
   </mat-card>
 </div>
 
-<div *ngFor="let orderEntry of viewState.yourOrderEntries">
+<div *ngFor="let orderEntry of yourOrderEntries">
   <app-existing-order-entry-card [orderEntry]="orderEntry"
                                  [modifyOrderEntryState]="modifyOrderEntryState"
                                  [showOrderResponse]="showOrderResponse"
-                                 [viewState]="viewState"
   >
   </app-existing-order-entry-card>
 </div>
@@ -37,7 +39,6 @@
     <app-existing-order-entry-card [orderEntry]="orderEntry"
                                    [modifyOrderEntryState]="modifyOrderEntryState"
                                    [showOrderResponse]="showOrderResponse"
-                                   [viewState]="viewState"
     >
     </app-existing-order-entry-card>
 </div>

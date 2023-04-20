@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../../../frontend-client";
-import {ModifyOrderEntryState, ShowOrderViewState} from "../../../../lib/model";
+import {ModifyOrderEntryState} from "../../../../lib/model";
 import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
@@ -12,7 +12,6 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 export class ExistingOrderEntryCardComponent {
   @Input() orderEntry!: ParticipantsOrderEntry
   @Input() showOrderResponse!: ShowOrderResponse
-  @Input() viewState!: ShowOrderViewState
   @Input() modifyOrderEntryState!: ModifyOrderEntryState
 
   constructor(private modifyOrderEntryService: ModifyOrderEntryService) {

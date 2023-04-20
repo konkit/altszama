@@ -125,8 +125,10 @@
           </div>
 
           <app-order-entries-list [showOrderResponse]="orderResponse"
-                                  [viewState]="viewState"
+                                  [username]="viewState.username"
                                   [modifyOrderEntryState]="modifyOrderEntryState"
+                                  [yourOrderEntries]="viewState.yourOrderEntries"
+                                  [shouldDisplayNewOrderEntryCard]="viewState.shouldDisplayNewOrderEntryCard"
                                   [otherUserOrderEntries]="otherUserOrderEntries">
           </app-order-entries-list>
         </app-view-wrapper>
