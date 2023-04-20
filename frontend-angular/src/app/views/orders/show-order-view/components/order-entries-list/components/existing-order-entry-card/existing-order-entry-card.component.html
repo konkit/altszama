@@ -4,9 +4,9 @@
       <app-title-with-payment-status
         [title]="orderEntry.username"
         [priceForUser]="orderEntry.finalPrice"
-        [order]="showOrderResponse.order"
+        [order]="order"
         [orderEntry]="orderEntry"
-        [currentUserId]="showOrderResponse.currentUserId"
+        [currentUserId]="currentUserId"
         [costForUser]="orderEntry.finalPrice"
       ></app-title-with-payment-status>
     </mat-card-title>
@@ -17,8 +17,8 @@
       *ngIf="modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id">
       <app-edit-order-entry
         [dishIndex]="dishEntryIndex + 1"
-        [orderId]="showOrderResponse.order.id"
-        [allDishesInRestaurant]="showOrderResponse.allDishesInRestaurant"
+        [orderId]="order.id"
+        [allDishesInRestaurant]="allDishesInRestaurant"
         [modifyOrderEntryState]="modifyOrderEntryState"
         [orderEntry]="orderEntry"
         [dishEntry]="dishEntry"
@@ -30,10 +30,10 @@
       *ngIf="!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)">
       <app-show-order-entry
         [index]="dishEntryIndex + 1"
-        [order]="showOrderResponse.order"
+        [order]="order"
         [orderEntry]="orderEntry"
         [dishEntry]="dishEntry"
-        [currentUserId]="showOrderResponse.currentUserId"
+        [currentUserId]="currentUserId"
       >
       </app-show-order-entry>
     </ng-container>
@@ -57,8 +57,8 @@
       </button>
     </div>
     <div class="pt-5" *ngIf="modifyOrderEntryState.isEntryCreating === true">
-      <app-create-order-entry [orderId]="showOrderResponse.order.id"
-                              [allDishesInRestaurant]="showOrderResponse.allDishesInRestaurant"
+      <app-create-order-entry [orderId]="order.id"
+                              [allDishesInRestaurant]="allDishesInRestaurant"
                               [dishIndex]="orderEntry.dishEntries.length + 1">
       </app-create-order-entry>
     </div>

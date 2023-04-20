@@ -1,18 +1,23 @@
-import {DeliveryData, ParticipantsOrderEntry} from "../../../../../frontend-client";
+import {DeliveryData, DishDto, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../frontend-client";
 
 export interface ShowOrderViewState {
+  order: ShowOrderDto,
+  flags: ShowOrderViewStateFlags
+  allDishesInRestaurant: DishDto[]
+  allEatingPeopleCount: number
+  currentUserId: string
+  username: string
+  yourOrderEntries: ParticipantsOrderEntry[]
+  priceSummaryData: PriceSummaryData
+  paymentOptionsData: PaymentOptionsData
+}
+
+export interface ShowOrderViewStateFlags {
   canShowPlaceOrderButton: boolean
   isPlaceOrderButtonDisabled: boolean
   canShowMarkAsDeliveredButton: boolean
-  shouldDisplayNewOrderEntryCard: boolean
-  isOrderOwner: boolean,
-  allEatingPeopleCount: number,
-  numberOfCurrentUserEntries: number,
-  username: string,
-  yourOrderEntries: ParticipantsOrderEntry[],
-  priceSummaryData: PriceSummaryData;
-  paymentOptionsData: PaymentOptionsData;
-  shouldShowOrderLockedWarning: boolean;
+  isOrderOwner: boolean
+  shouldShowOrderLockedWarning: boolean
 }
 
 export interface ModifyOrderEntryState {

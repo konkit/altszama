@@ -8,7 +8,7 @@ import {
 } from "../../../../../frontend-client";
 import {AuthService} from "../../../../service/auth.service";
 import {EventSourcePolyfill} from "event-source-polyfill";
-import {PaymentOptionsData, PriceSummaryData, ShowOrderViewState} from "../lib/model";
+import {PaymentOptionsData, PriceSummaryData, ShowOrderViewState, ShowOrderViewStateFlags} from "../lib/model";
 import {
   BankTransferQrcodeModal,
   QrcodeModalInput
@@ -18,13 +18,12 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 //TODO: Clear state on entry
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class ShowOrderViewService {
 
-  orderResponse = new BehaviorSubject<ShowOrderResponse | null>(null)
+  private orderResponse = new BehaviorSubject<ShowOrderResponse | null>(null)
 
   otherUserOrderEntries = new BehaviorSubject<Array<ParticipantsOrderEntry>>([])
 
@@ -41,7 +40,8 @@ export class ShowOrderViewService {
         .pipe(
           tap(response => this.orderResponse.next(response)),
           tap(response => {
-            let otherEntries = response.orderEntries.filter(e => e.userId != response.currentUserId)
+            let otherEntries = response.orderEntries
+              .filter(e => e.userId != response.currentUserId)
             this.otherUserOrderEntries.next(otherEntries)
           })
         )
@@ -50,23 +50,23 @@ export class ShowOrderViewService {
     }
   }
 
-  private getOrderIdObservableFromOrderResponse(): Observable<string> {
-    return this.orderResponse.pipe(
+  private getOrderId$(): Observable<string> {
+    return this.showOrderViewState$.pipe(
       take(1),
-      map(r => r!.order.id),
+      map(s => s!.order.id),
       filter(isNonNullGuard),
     )
   }
 
   reloadWholeOrderResponse(): Observable<void> {
-    return this.getOrderIdObservableFromOrderResponse().pipe(
+    return this.getOrderId$().pipe(
       switchMap(orderId => this.loadOrderResponseToAllSubjects(orderId)),
       map(() => void 0)
     )
   }
 
   reloadJustOtherUserOrderEntries(): Observable<void> {
-    return this.getOrderIdObservableFromOrderResponse().pipe(
+    return this.getOrderId$().pipe(
       switchMap(orderId => this.orderControllerService.show(orderId)),
       tap(response => {
         let otherEntries = response.orderEntries.filter(e => e.userId != response.currentUserId)
@@ -74,11 +74,6 @@ export class ShowOrderViewService {
       }),
       map(() => void 0)
     )
-  }
-
-  orderResponseAsObservable(): Observable<ShowOrderResponse> {
-    return this.orderResponse.asObservable()
-      .pipe(filter(isNonNullGuard))
   }
 
   otherUserOrderEntriesAsObservable() {
@@ -93,26 +88,17 @@ export class ShowOrderViewService {
     return this.orderResponse.pipe(
       filter(isNonNullGuard),
       map(r => {
-        let order = r.order
-        let orderState = r.order.orderState
-        let orderEntries = r.orderEntries
-        let currentUserId = r.currentUserId
-
-        let isOrderOwner = order.orderCreatorId === currentUserId;
-        let canShowPlaceOrderButton = isOrderOwner && [OrderStateEnum.CREATED, OrderStateEnum.ORDERING].includes(order.orderState)
-        let canShowMarkAsDeliveredButton = isOrderOwner && orderState === OrderStateEnum.ORDERED;
-        let isPlaceOrderButtonDisabled = orderEntries.length === 0;
+        let flags = this.getViewStateFlags(r);
 
         let username = this.authService.getLoggedUser()!.username;
-        let yourOrderEntries = orderEntries.filter(e => e.userId === currentUserId);
+        let yourOrderEntries = r.orderEntries.filter(e => e.userId === r.currentUserId);
 
-        let allEatingPeopleCount = orderEntries.flatMap(e => e.dishEntries).length;
-        let numberOfCurrentUserEntries = yourOrderEntries.length;
-        let shouldDisplayNewOrderEntryCard = order.orderState == OrderStateEnum.CREATED && numberOfCurrentUserEntries === 0
+        let allEatingPeopleCount = r.orderEntries.flatMap(e => e.dishEntries).length;
+        let allDishesInRestaurant = r.allDishesInRestaurant
 
-        let isAnyOrderEntryOwner = numberOfCurrentUserEntries > 0
-        let isOrderedOrDelivered = [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(order.orderState);
-        let shouldShowQRCodeButton = isAnyOrderEntryOwner && isOrderedOrDelivered && order.paymentData.paymentByBankTransfer;
+        let isAnyOrderEntryOwner = yourOrderEntries.length > 0
+        let isOrderedOrDelivered = [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(r.order.orderState);
+        let shouldShowQRCodeButton = isAnyOrderEntryOwner && isOrderedOrDelivered && r.order.paymentData.paymentByBankTransfer;
 
         let priceSummaryData: PriceSummaryData = {
           deliveryData: r.order.deliveryData,
@@ -125,32 +111,40 @@ export class ShowOrderViewService {
           shouldShowQRCodeButton: shouldShowQRCodeButton
         }
 
-        let shouldShowOrderLockedWarning = isOrderOwner && [OrderStateEnum.ORDERING].includes(order.orderState);
-
         let obj: ShowOrderViewState = {
-          canShowPlaceOrderButton: canShowPlaceOrderButton,
-          isPlaceOrderButtonDisabled: isPlaceOrderButtonDisabled,
-          canShowMarkAsDeliveredButton: canShowMarkAsDeliveredButton,
-          shouldDisplayNewOrderEntryCard: shouldDisplayNewOrderEntryCard,
-          isOrderOwner: isOrderOwner,
+          order: r.order,
+          flags: flags,
+          allDishesInRestaurant: allDishesInRestaurant,
           allEatingPeopleCount: allEatingPeopleCount,
-          numberOfCurrentUserEntries: numberOfCurrentUserEntries,
+          currentUserId: r.currentUserId,
           username: username,
           yourOrderEntries: yourOrderEntries,
           priceSummaryData: priceSummaryData,
           paymentOptionsData: paymentOptionsData,
-          shouldShowOrderLockedWarning: shouldShowOrderLockedWarning,
         }
         return obj
       })
     );
   }
 
+  private getViewStateFlags(r: ShowOrderResponse): ShowOrderViewStateFlags {
+    let isOrderOwner = r.order.orderCreatorId === r.currentUserId;
+    let canShowPlaceOrderButton = isOrderOwner && [OrderStateEnum.CREATED, OrderStateEnum.ORDERING].includes(r.order.orderState)
+    let canShowMarkAsDeliveredButton = isOrderOwner && r.order.orderState === OrderStateEnum.ORDERED;
+    let isPlaceOrderButtonDisabled = r.orderEntries.length === 0;
+    let shouldShowOrderLockedWarning = isOrderOwner && [OrderStateEnum.ORDERING].includes(r.order.orderState);
+
+    return {
+      canShowPlaceOrderButton: canShowPlaceOrderButton,
+      isPlaceOrderButtonDisabled: isPlaceOrderButtonDisabled,
+      canShowMarkAsDeliveredButton: canShowMarkAsDeliveredButton,
+      shouldShowOrderLockedWarning: shouldShowOrderLockedWarning,
+      isOrderOwner: isOrderOwner,
+    };
+  }
+
   handleOrderChangeSSE() {
-    this.orderResponse.pipe(
-      take(1),
-      map(r => r!.order.id)
-    ).subscribe(orderId => {
+    this.getOrderId$().subscribe(orderId => {
       let token = this.authService.getLoggedUser()?.token
       let es = new EventSourcePolyfill('/api/orders/sse', {headers: {Authorization: "Bearer " + token}});
 
@@ -167,20 +161,20 @@ export class ShowOrderViewService {
   }
 
   showQrModal() {
-    this.orderResponse.asObservable().pipe(take(1), filter(isNonNullGuard)).subscribe(showOrderResponse => {
-      let orderEntries = showOrderResponse.orderEntries
-      let currentUserId = showOrderResponse.currentUserId
-      let yourOrderEntries = orderEntries.filter(e => e.userId === currentUserId);
-
-
-      let data: QrcodeModalInput = {
-        paymentData: showOrderResponse.order.paymentData,
-        yourOrderEntries: yourOrderEntries,
-        orderCreatorUsername: showOrderResponse.order.orderCreatorUsername,
-        orderDate: showOrderResponse.order.orderDate
-      }
-      this.matDialog.open(BankTransferQrcodeModal, { width: '300px', data: data })
-    })
+    this.showOrderViewState$
+      .pipe(
+        take(1),
+        filter(isNonNullGuard)
+      )
+      .subscribe(viewState => {
+        let data: QrcodeModalInput = {
+          paymentData: viewState.order.paymentData,
+          yourOrderEntries: viewState.yourOrderEntries,
+          orderCreatorUsername: viewState.order.orderCreatorUsername,
+          orderDate: viewState.order.orderDate
+        }
+        this.matDialog.open(BankTransferQrcodeModal, {width: '300px', data: data})
+      })
   }
 }
 

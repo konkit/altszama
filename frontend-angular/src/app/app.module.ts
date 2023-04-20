@@ -126,6 +126,13 @@ import {
   PaymentStatusChipComponent
 } from "./views/orders/show-order-view/components/order-entries-list/components/title-with-payment-status/payment-status-chip/payment-status-chip.component";
 import {ScrollingModule} from "@angular/cdk/scrolling";
+import {
+  OrderOwnerButtonsComponent
+} from './views/orders/show-order-view/components/order-owner-buttons/order-owner-buttons.component';
+import {
+  OrderLockedWarningBannerComponent
+} from './views/orders/show-order-view/components/order-locked-warning-banner/order-locked-warning-banner.component';
+import {OrderDetailsComponent} from './views/orders/show-order-view/components/order-details/order-details.component';
 
 @NgModule({
   declarations: [
@@ -180,6 +187,9 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
     ExistingOrderEntryCardComponent,
     PaymentTypeChipComponent,
     PaymentStatusChipComponent,
+    OrderOwnerButtonsComponent,
+    OrderLockedWarningBannerComponent,
+    OrderDetailsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,12 @@
-<div *ngIf="shouldDisplayNewOrderEntryCard">
-  <mat-card class="mb-10 pb-5 md:px-5">
-    <mat-card-header>
-      <mat-card-title>
-        <div class="mat-body-1">{{ username }}</div>
-      </mat-card-title>
-    </mat-card-header>
+<ng-container *ngIf="modifyOrderEntryState$ | async as modifyOrderEntryState">
+
+  <div *ngIf="order.orderState == OrderStateEnum.CREATED && yourOrderEntries.length === 0">
+    <mat-card class="mb-10 pb-5 md:px-5">
+      <mat-card-header>
+        <mat-card-title>
+          <div class="mat-body-1">{{ username }}</div>
+        </mat-card-title>
+      </mat-card-header>
 
       <mat-card-content>
         <div>
@@ -17,28 +19,34 @@
 
           <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === true">
             <app-create-order-entry [dishIndex]="1"
-                                    [orderId]="showOrderResponse.order.id"
-                                    [allDishesInRestaurant]="showOrderResponse.allDishesInRestaurant">
+                                    [orderId]="order.id"
+                                    [allDishesInRestaurant]="allDishesInRestaurant">
             </app-create-order-entry>
           </ng-container>
         </div>
       </mat-card-content>
 
-  </mat-card>
-</div>
+    </mat-card>
+  </div>
 
-<div *ngFor="let orderEntry of yourOrderEntries">
-  <app-existing-order-entry-card [orderEntry]="orderEntry"
-                                 [modifyOrderEntryState]="modifyOrderEntryState"
-                                 [showOrderResponse]="showOrderResponse"
-  >
-  </app-existing-order-entry-card>
-</div>
-
-<div *ngFor="let orderEntry of otherUserOrderEntries">
+  <div *ngFor="let orderEntry of yourOrderEntries">
     <app-existing-order-entry-card [orderEntry]="orderEntry"
+                                   [allDishesInRestaurant]="allDishesInRestaurant"
+                                   [currentUserId]="currentUserId"
+                                   [order]="order"
                                    [modifyOrderEntryState]="modifyOrderEntryState"
-                                   [showOrderResponse]="showOrderResponse"
     >
     </app-existing-order-entry-card>
-</div>
+  </div>
+
+  <div *ngFor="let orderEntry of otherUserOrderEntries$ | async">
+    <app-existing-order-entry-card [orderEntry]="orderEntry"
+                                   [allDishesInRestaurant]="allDishesInRestaurant"
+                                   [currentUserId]="currentUserId"
+                                   [order]="order"
+                                   [modifyOrderEntryState]="modifyOrderEntryState"
+    >
+    </app-existing-order-entry-card>
+  </div>
+
+</ng-container>

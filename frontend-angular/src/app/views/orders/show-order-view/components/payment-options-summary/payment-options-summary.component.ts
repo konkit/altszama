@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ParticipantsOrderEntry, PaymentData, ShowOrderResponse} from "../../../../../../frontend-client";
+import {ParticipantsOrderEntry, PaymentData} from "../../../../../../frontend-client";
 import {PaymentOptionsData} from "../../lib/model";
 import {ShowOrderViewService} from "../../service/show-order-view.service";
 
@@ -10,7 +10,6 @@ import {ShowOrderViewService} from "../../service/show-order-view.service";
 })
 export class PaymentOptionsSummaryComponent implements OnInit {
 
-  @Input() showOrderResponse!: ShowOrderResponse
   @Input() paymentData!: PaymentData
   @Input() yourOrderEntries!: ParticipantsOrderEntry[]
   @Input() paymentOptionsData!: PaymentOptionsData
