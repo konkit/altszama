@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, catchError, Observable, switchMap, tap} from "rxjs";
-import {ModifyOrderEntryState} from "../lib/model";
+import {ModifyOrderEntryState} from "../../../lib/model";
 import {
   OrderEntryControllerService,
   OrderEntrySaveRequest,
   OrderEntryUpdateRequest
-} from "../../../../../frontend-client";
-import {ErrorSnackBarService} from "../../../../service/error-snack-bar.service";
-import {ShowOrderViewService} from "./show-order-view.service";
+} from "../../../../../../../frontend-client";
+import {ErrorSnackBarService} from "../../../../../../service/error-snack-bar.service";
+import {ShowOrderViewService} from "../../../service/show-order-view.service";
 
 
 const initialModifyOrderEntryState: ModifyOrderEntryState = {

@@ -9,7 +9,7 @@ import {
   SideDishForm,
   SideDishValue
 } from "../../lib/formvalues";
-import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.service";
+import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
 
 
 @Component({

@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {DishDto, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import {ModifyOrderEntryState} from "../../../../lib/model";
-import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.service";
+import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({

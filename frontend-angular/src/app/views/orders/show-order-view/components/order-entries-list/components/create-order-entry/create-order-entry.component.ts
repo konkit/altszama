@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DishDto, OrderEntrySaveRequest} from "../../../../../../../../frontend-client";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
-import {ModifyOrderEntryService} from "../../../../service/modify-order-entry.service";
+import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
 
 @Component({
   selector: 'app-create-order-entry',
