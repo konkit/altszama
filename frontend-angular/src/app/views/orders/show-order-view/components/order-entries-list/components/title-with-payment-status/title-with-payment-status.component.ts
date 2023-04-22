@@ -42,6 +42,10 @@ export class TitleWithPaymentStatusComponent {
       && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
   }
 
+  isConfirmedAsPaid() {
+    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED
+  }
+
   private isOrderedOrDelivered() {
     return [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(this.order.orderState);
   }
@@ -52,13 +56,5 @@ export class TitleWithPaymentStatusComponent {
 
   revertToUnpaid(orderEntryId: string) {
     this.orderActionsService.revertToUnpaid(orderEntryId)
-  }
-
-  isUnpaid() {
-    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.UNPAID
-  }
-
-  isConfirmedAsPaid() {
-    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED
   }
 }
