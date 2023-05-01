@@ -35,15 +35,6 @@ export class ModifyOrderEntryService {
     return this.modifyOrderEntryState.asObservable()
   }
 
-  setEntryLoading(newValue: boolean) {
-    this.modifyOrderEntryState.next(
-      {
-        ...this.modifyOrderEntryState.value,
-        loadingEntry: newValue,
-      }
-    )
-  }
-
   setDishEntryCreating() {
     this.modifyOrderEntryState.next(
       {
@@ -69,6 +60,7 @@ export class ModifyOrderEntryService {
   }
 
   cancelDishEntryModification() {
+    console.log("cancelDishEntryModification", new Date())
     this.modifyOrderEntryState.next(
       {
         ...this.modifyOrderEntryState.value,
@@ -84,9 +76,8 @@ export class ModifyOrderEntryService {
     return this.orderEntryControllerService
       .save1(orderEntryToSave)
       .pipe(
-        tap(() => this.setEntryLoading(true)),
+        switchMap(() => this.showOrderViewService.loadOrderResponseToAllSubjects(orderEntryToSave.orderId)),
         tap(() => this.cancelDishEntryModification()),
-        switchMap(() => this.showOrderViewService.reloadWholeOrderResponse()),
         catchError(error => {
           this.errorSnackBarService.displayError(error)
           throw error
@@ -98,9 +89,8 @@ export class ModifyOrderEntryService {
     return this.orderEntryControllerService
       .update1(orderEntryToUpdate)
       .pipe(
-        tap(() => this.setEntryLoading(true)),
-        tap(() => this.cancelDishEntryModification()),
         switchMap(() => this.showOrderViewService.reloadWholeOrderResponse()),
+        tap(() => this.cancelDishEntryModification()),
         catchError(error => {
           this.errorSnackBarService.displayError(error)
           throw error

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, EMPTY, filter, map, Observable, switchMap, take, tap} from "rxjs";
+import {BehaviorSubject, EMPTY, filter, map, Observable, of, switchMap, take, tap} from "rxjs";
 import {
   OrderControllerService,
   ParticipantsOrderEntry,
@@ -35,15 +35,19 @@ export class ShowOrderViewService {
   }
 
   loadOrderResponseToAllSubjects(id: string | null): Observable<ShowOrderResponse> {
+    console.log("loadOrderResponseToAllSubjects", new Date())
     if (id != null) {
       return this.orderControllerService.show(id)
         .pipe(
-          tap(response => this.orderResponse.next(response)),
-          tap(response => {
+          switchMap(response => {
             let otherEntries = response.orderEntries
               .filter(e => e.userId != response.currentUserId)
+            console.log("this.otherUserOrderEntries.next(otherEntries)", new Date())
             this.otherUserOrderEntries.next(otherEntries)
-          })
+            console.log("this.orderResponse.next(response)", new Date())
+            this.orderResponse.next(response)
+            return of(response)
+          }),
         )
     } else {
       return EMPTY;
@@ -59,6 +63,7 @@ export class ShowOrderViewService {
   }
 
   reloadWholeOrderResponse(): Observable<void> {
+    console.log("reloadWholeOrderResponse", new Date())
     return this.getOrderId$().pipe(
       switchMap(orderId => this.loadOrderResponseToAllSubjects(orderId)),
       map(() => void 0)

@@ -27,7 +27,6 @@ export class EditOrderEntryComponent implements OnInit {
   initialValue!: InitialOrderEntryFormValue
 
   constructor(private modifyOrderEntryService: ModifyOrderEntryService) {
-    this.modifyOrderEntryService.setEntryLoading(true)
   }
 
   ngOnInit() {

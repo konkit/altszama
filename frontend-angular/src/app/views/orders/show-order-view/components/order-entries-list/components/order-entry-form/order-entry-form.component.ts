@@ -38,12 +38,9 @@ export class OrderEntryFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private modifyOrderEntryService: ModifyOrderEntryService) {
-    this.modifyOrderEntryService.setEntryLoading(true)
   }
 
   ngOnInit() {
-    this.modifyOrderEntryService.setEntryLoading(false)
-
     this.formGroup.setValue({
       dish: this.initialValue.dish,
       price: this.initialValue.price,

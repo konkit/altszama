@@ -22,11 +22,9 @@ export class CreateOrderEntryComponent implements OnInit {
   }
 
   constructor(private modifyOrderEntryService: ModifyOrderEntryService) {
-    this.modifyOrderEntryService.setEntryLoading(true)
   }
 
   ngOnInit() {
-    this.modifyOrderEntryService.setEntryLoading(false)
   }
 
   onSubmit(orderEntry: OrderEntryFormValue) {
