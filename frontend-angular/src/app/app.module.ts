@@ -133,6 +133,8 @@ import {
   OrderLockedWarningBannerComponent
 } from './views/orders/show-order-view/components/order-locked-warning-banner/order-locked-warning-banner.component';
 import {OrderDetailsComponent} from './views/orders/show-order-view/components/order-details/order-details.component';
+import {MatChipsModule} from "@angular/material/chips";
+import {ChipComponent} from './components/chip/chip.component';
 
 @NgModule({
   declarations: [
@@ -190,6 +192,7 @@ import {OrderDetailsComponent} from './views/orders/show-order-view/components/o
     OrderOwnerButtonsComponent,
     OrderLockedWarningBannerComponent,
     OrderDetailsComponent,
+    ChipComponent,
   ],
   imports: [
     BrowserModule,
@@ -222,6 +225,7 @@ import {OrderDetailsComponent} from './views/orders/show-order-view/components/o
     MatCardModule,
     MatExpansionModule,
     ScrollingModule,
+    MatChipsModule,
   ],
   providers: [
     {

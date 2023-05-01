@@ -1,4 +1,6 @@
-<app-view-wrapper title="Today's Orders">
+<app-view-wrapper>
+  <h1 class="font-bold text-gray-700">Today's Orders</h1>
+
   <div *ngIf="todaysOrders$ | async as todayOrders" class="mt-5">
     <div class="pb-5">
       <h2>You ordered:</h2>

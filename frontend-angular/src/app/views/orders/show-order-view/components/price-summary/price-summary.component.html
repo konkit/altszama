@@ -15,7 +15,7 @@
   </mat-list-item>
 
   <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody !== 0">
-    <div matListItemTitle>Delivery:</div>
+    <div matListItemTitle>Delivery (once):</div>
     <div matListItemLine>
       <span class="unbreakable">+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</span>
     </div>

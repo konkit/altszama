@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-view-wrapper',
@@ -6,7 +6,4 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./view-wrapper.component.scss']
 })
 export class ViewWrapperComponent {
-
-  @Input() title!: string
-
 }
