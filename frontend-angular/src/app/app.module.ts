@@ -120,9 +120,6 @@ import {
   ExistingOrderEntryCardComponent
 } from './views/orders/show-order-view/components/order-entries-list/components/existing-order-entry-card/existing-order-entry-card.component';
 import {
-  PaymentTypeChipComponent
-} from "./views/orders/show-order-view/components/payment-options-summary/payment-type-chip/payment-type-chip.component";
-import {
   PaymentStatusChipComponent
 } from "./views/orders/show-order-view/components/order-entries-list/components/title-with-payment-status/payment-status-chip/payment-status-chip.component";
 import {ScrollingModule} from "@angular/cdk/scrolling";
@@ -187,7 +184,6 @@ import {ChipComponent} from './components/chip/chip.component';
     TimePickerComponent,
     ErrorSnackBarComponent,
     ExistingOrderEntryCardComponent,
-    PaymentTypeChipComponent,
     PaymentStatusChipComponent,
     OrderOwnerButtonsComponent,
     OrderLockedWarningBannerComponent,

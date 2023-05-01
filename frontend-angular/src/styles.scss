@@ -1,9 +1,25 @@
+// Angular setup
+
 @use '@angular/material' as mat;
 
-/* You can add global styles to this file, and also import other style files */
+@import "@angular/material/theming";
+@import "themes";
+
+@include mat-typography-hierarchy($altszama-typography);
+
+@include mat-core();
+
+
+
+// Tailwind setup
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// App-wide styles
+
+@include angular-material-theme($altszama-theme);
 
 //html, body { height: 100%; }
 //body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -20,11 +36,11 @@ table.clickable-table {
   }
 
   tr.mat-mdc-row:hover {
-    background-color: mat.get-color-from-palette(mat.$deep-purple-palette, 50);
+    background-color: mat.get-color-from-palette($altszama-theme, 50);
   }
 
   tr.selected, tr.selected:hover {
-    background-color: mat.get-color-from-palette(mat.$deep-purple-palette, 100);
+    background-color: mat.get-color-from-palette($altszama-theme, 100);
   }
 }
 
@@ -40,7 +56,7 @@ app-root {
 }
 
 .text-body1 {
-  $my-typography: mat.define-typography-config();
-  @include mat.typography-level($my-typography, 'body-1');
+  $typography-config: mat.get-typography-config($altszama-theme);
+  @include mat.typography-level($typography-config, 'body-1');
 }
 

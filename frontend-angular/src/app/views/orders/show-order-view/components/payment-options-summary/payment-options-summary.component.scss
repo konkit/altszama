@@ -1,4 +1,7 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
+
+@import "../../../../../../themes.scss";
 
 .user-selectable {
   user-select: text;
@@ -22,4 +25,19 @@
 
 .text-body2 {
   color: rgba(0, 0, 0, 0.54);
+}
+
+.method-allowed {
+  $color-config:    mat.get-color-config($altszama-theme);
+  $primary-palette: map.get($color-config, 'primary');
+
+  color: mat.get-color-from-palette($primary-palette, 500);
+  font-weight: 700;
+}
+
+.method-not-allowed {
+  $color-config:    mat.get-color-config($altszama-theme);
+  $foreground-palette: map.get($color-config, foreground);
+
+  color: mat.get-color-from-palette($foreground-palette, disabled);
 }

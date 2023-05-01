@@ -1,12 +1,30 @@
 <div class="-mt-1.5">
   <div class="py-2 flex items-center">
-    <span class="text-body1">Payment by cash</span>
-    <app-payment-type-chip [allowed]="paymentData.paymentByCash === true" class="ml-2"></app-payment-type-chip>
+    <span class="mat-subtitle-2 method-allowed" *ngIf="paymentData.paymentByCash === true">
+      <span class="flex items-center">
+        Payment by cash <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+      </span>
+    </span>
+
+    <span class="mat-text-body1 method-not-allowed" *ngIf="paymentData.paymentByCash === false">
+      <span class="flex items-center">
+        Payment by cash <mat-icon fontIcon="close" class="ml-2"></mat-icon>
+      </span>
+    </span>
   </div>
 
   <div class="py-2 flex items-center">
-    <span class="text-body1">Payment by bank transfer</span>
-    <app-payment-type-chip [allowed]="paymentData.paymentByBankTransfer === true" class="ml-2"></app-payment-type-chip>
+    <span class="mat-subtitle-2 method-allowed" *ngIf="paymentData.paymentByBankTransfer === true">
+      <span class="flex items-center">
+        Payment by bank transfer <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+      </span>
+    </span>
+
+    <span class="mat-text-body1 method-not-allowed" *ngIf="paymentData.paymentByBankTransfer === false">
+      <span class="flex items-center">
+        Payment by bank transfer <mat-icon fontIcon="close" class="ml-2"></mat-icon>
+      </span>
+    </span>
 
     <mat-icon
       *ngIf="shouldShowQRCodeButton"
@@ -21,9 +39,17 @@
   </div>
 
   <div class="py-2 flex items-center">
-    <span class="text-body1">Payment by BLIK</span>
+    <span class="mat-subtitle-2 method-allowed" *ngIf="paymentData.paymentByBlik === true">
+      <span class="flex items-center">
+        Payment by BLIK <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+      </span>
+    </span>
 
-    <app-payment-type-chip [allowed]="paymentData.paymentByBlik === true" class="ml-2"></app-payment-type-chip>
+    <span class="mat-text-body1 method-not-allowed" *ngIf="paymentData.paymentByBlik === false">
+      <span class="flex items-center">
+        Payment by BLIK <mat-icon fontIcon="close" class="ml-2"></mat-icon>
+      </span>
+    </span>
   </div>
 
   <div class="px-3 user-selectable"
