@@ -18,13 +18,14 @@
           </mat-form-field>
 
           <mat-selection-list [multiple]="false">
-          <cdk-virtual-scroll-viewport itemSize="5">
-            <div *cdkVirtualFor="let item of restaurantsTableDataSource.data">
-              <mat-list-option (click)="this.orderForm.controls.restaurantId.setValue(item.id)" [selected]="this.orderForm.controls.restaurantId.value === item.id">
-                {{item.name}}
-              </mat-list-option>
-            </div>
-          </cdk-virtual-scroll-viewport>
+            <cdk-virtual-scroll-viewport itemSize="5">
+              <div *cdkVirtualFor="let item of restaurantsTableDataSource.data">
+                <mat-list-option (click)="this.orderForm.controls.restaurantId.setValue(item.id)"
+                                 [selected]="this.orderForm.controls.restaurantId.value === item.id">
+                  {{item.name}}
+                </mat-list-option>
+              </div>
+            </cdk-virtual-scroll-viewport>
           </mat-selection-list>
 
           <button mat-raised-button matStepperPrevious (click)="backToTodayOrders()">Back</button>
@@ -33,18 +34,46 @@
       </mat-step>
 
 
-      <mat-step>
+      <mat-step *ngIf="!showNarrowLayout">
         <ng-template matStepLabel>Fill details</ng-template>
 
         <div class="grid grid-cols-1 md:grid-cols-3 py-4 pr-10">
-          <app-order-time-form class="mr-20 mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
-          <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
-          <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
+          <app-order-time-form class="mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
+          <app-delivery-data-form class="mb-5"
+                                  [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
+          <app-payment-data-form class="mb-5"
+                                 [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
         </div>
 
         <button mat-raised-button matStepperPrevious>Back</button>
         <button mat-raised-button color="primary" (click)="submitForm($event)">Create</button>
       </mat-step>
+
+      <ng-container *ngIf="showNarrowLayout">
+        <mat-step>
+          <ng-template matStepLabel>Order time</ng-template>
+          <app-order-time-form class="mr-20 mb-5"
+                               [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
+          <button mat-raised-button matStepperPrevious>Back</button>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Price modifiers</ng-template>
+          <app-delivery-data-form class="mb-5"
+                                  [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
+          <button mat-raised-button matStepperPrevious>Back</button>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Payment</ng-template>
+          <app-payment-data-form class="mb-5"
+                                 [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
+          <button mat-raised-button matStepperPrevious>Back</button>
+          <button mat-raised-button color="primary" (click)="submitForm($event)">Create</button>
+        </mat-step>
+      </ng-container>
     </mat-vertical-stepper>
   </div>
 </app-view-wrapper>

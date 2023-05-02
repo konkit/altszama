@@ -1,17 +1,18 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EditOrderInitialData, OrderControllerService, OrderUpdateRequest} from "../../../../frontend-client";
-import {map, Observable, take} from "rxjs";
+import {map, Observable, Subscription, take} from "rxjs";
 import {FormBuilder} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-edit-order-view',
   templateUrl: './edit-order-view.component.html',
   styleUrls: ['./edit-order-view.component.scss']
 })
-export class EditOrderViewComponent {
+export class EditOrderViewComponent implements OnInit, OnDestroy {
 
   orderId: string
 
@@ -35,10 +36,15 @@ export class EditOrderViewComponent {
     })
   })
 
+  showNarrowLayout = false
+
+  subscriptions = new Subscription();
+
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
               private errorSnackBar: ErrorSnackBarService,
               private title: Title,
+              private responsive: BreakpointObserver,
               private router: Router) {
     this.editOrderInitialData$ = this.route.data.pipe(map(x => x['response']))
     this.orderId = this.route.snapshot.paramMap.get("id")!
@@ -46,10 +52,29 @@ export class EditOrderViewComponent {
 
   ngOnInit() {
     this.editOrderInitialData$.pipe(take(1)).subscribe(response => {
-      // this.restaurantsTableDataSource.data = this.fullRestaurantsList;
       this.setOrderFormInitialValue(response);
       this.title.setTitle(`Edit order from ${response.order.restaurantName} | AltSzama`)
     })
+
+    const breakpoints = [
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge,
+    ]
+    const sub2 = this.responsive.observe(breakpoints)
+      .subscribe(result => {
+        this.showNarrowLayout = true;
+
+        if (result.matches) {
+          this.showNarrowLayout = false;
+        }
+
+      });
+    this.subscriptions.add(sub2)
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe()
   }
 
   private setOrderFormInitialValue(response: EditOrderInitialData) {

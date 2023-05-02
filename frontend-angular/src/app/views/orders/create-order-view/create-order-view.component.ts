@@ -11,6 +11,7 @@ import {FormBuilder} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-create-order-view',
@@ -51,9 +52,14 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
 
   restaurantsData: RestaurantDto[] = []
 
+  showNarrowLayout = false
+
+  itemSize = 5;
+
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
               private errorSnackBar: ErrorSnackBarService,
+              private responsive: BreakpointObserver,
               private router: Router) {
     this.createOrderInitialData$ = this.route.data.pipe(map(x => x['response']))
   }
@@ -73,6 +79,22 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
       this.restaurantsData = neeRestaurants
     })
     this.subscriptions.add(sub);
+
+    const breakpoints = [
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge,
+    ]
+    const sub2 = this.responsive.observe(breakpoints)
+      .subscribe(result => {
+        this.showNarrowLayout = true;
+
+        if (result.matches) {
+          this.showNarrowLayout = false;
+        }
+
+      });
+    this.subscriptions.add(sub2)
   }
 
   private setOrderFormInitialValue(response: CreateOrderInitialData) {
