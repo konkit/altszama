@@ -1,6 +1,8 @@
 <ng-container *ngIf="restaurant$ | async as restaurantResponse">
   <ng-container *ngIf="restaurantState$ | async as restaurantEditorState">
-    <app-view-wrapper [title]="'Restaurant ' + restaurantResponse.restaurant.name">
+    <app-view-wrapper>
+      <h1 class="font-bold text-gray-700">Restaurant {{restaurantResponse.restaurant.name}}</h1>
+
       <div class="flex flex-col flex-grow bg-white rounded py-5 md:px-5">
 
         <div class="flex flex-row p-3">

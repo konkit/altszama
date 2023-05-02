@@ -7,14 +7,14 @@
       <div class="flex-grow">
         <mat-form-field class="w-full">
           <mat-label>Name</mat-label>
-          <input matInput [formControl]="dishForm.controls.name"/>
+          <input matInput [formControl]="dishForm.controls.name" data-cy="dish-name-input" />
         </mat-form-field>
       </div>
 
       <div>
         <mat-form-field>
           <mat-label>Price</mat-label>
-          <app-money-input [formControl]="dishForm.controls.price"></app-money-input>
+          <app-money-input [formControl]="dishForm.controls.price" data-cy="dish-price-input"></app-money-input>
         </mat-form-field>
       </div>
     </div>

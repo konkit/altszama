@@ -5,7 +5,7 @@
 
       <mat-form-field class="w-full mr-3">
         <mat-label>Dish</mat-label>
-        <input matInput [formControl]="formGroup.controls.dish" [matAutocomplete]="auto"/>
+        <input matInput [formControl]="formGroup.controls.dish" [matAutocomplete]="auto" data-cy="dish-input" />
 
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onDishSelected($event.option.value)'
                           [displayWith]="displayFn">
@@ -20,7 +20,7 @@
 
       <mat-form-field>
         <mat-label>Price</mat-label>
-        <app-money-input [formControl]="formGroup.controls.price"></app-money-input>
+        <app-money-input [formControl]="formGroup.controls.price" data-cy="price-input"></app-money-input>
       </mat-form-field>
     </div>
 

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
-import {catchError, Observable, of, switchMap} from "rxjs";
+import {catchError, Observable, switchMap} from "rxjs";
 import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {SideDishForm} from "../dish-form/dish-form.component";
@@ -17,7 +17,7 @@ export class CreateDishFormComponent implements OnInit {
 
   dishForm = this.fb.group({
     name: ["", Validators.required],
-    price: 0,
+    price: [0, [Validators.required, Validators.min(0)]],
     category: "",
     sideDishes: this.fb.array<FormGroup<SideDishForm>>([])
   })
