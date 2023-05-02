@@ -5,8 +5,25 @@
 
 .chip {
   $color-config:    mat.get-color-config($altszama-theme);
-  $primary-palette: map.get($color-config, 'primary');
 
-  color: mat.get-color-from-palette($primary-palette, default-contrast);
-  background: mat.get-color-from-palette($primary-palette, 500);
+  &.primary {
+    $primary-palette: map.get($color-config, 'primary');
+
+    color: mat.get-color-from-palette($primary-palette, default-contrast);
+    background: mat.get-color-from-palette($primary-palette, 500);
+  }
+
+  &.accent {
+    $accent-palette: map.get($color-config, 'primary');
+
+    color: mat.get-color-from-palette($accent-palette, default-contrast);
+    background: mat.get-color-from-palette($accent-palette, 500);
+  }
+
+  &.warn {
+    $warn-palette: map.get($color-config, 'primary');
+
+    color: mat.get-color-from-palette($warn-palette, default-contrast);
+    background: mat.get-color-from-palette($warn-palette, 500);
+  }
 }

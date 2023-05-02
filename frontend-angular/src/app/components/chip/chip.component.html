@@ -1,4 +1,4 @@
-<span class="rounded-full px-3 py-1 inline-flex chip">
+<span class="rounded-full px-3 py-1 inline-flex chip" [ngClass]="{'primary': color == 'primary','accent': color == 'accent',warn: color == 'warn'}">
   <span class="flex items-center">
     <ng-content></ng-content>
   </span>

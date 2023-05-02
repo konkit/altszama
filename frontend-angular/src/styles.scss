@@ -9,6 +9,7 @@
 
 @include mat-core();
 
+@include angular-material-theme($altszama-theme);
 
 
 // Tailwind setup
@@ -18,12 +19,6 @@
 @tailwind utilities;
 
 // App-wide styles
-
-@include angular-material-theme($altszama-theme);
-
-//html, body { height: 100%; }
-//body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
 
 html, body {
   width: 100%;
