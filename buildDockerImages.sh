@@ -10,7 +10,7 @@ set -o errexit
 set -o pipefail
 
 
-PUSH_IMAGES=false
+PUSH_IMAGES=true
 TAG="latest-${CURRENT_BRANCH-master}"
 
 cd ./vue-app || return 1
