@@ -1,0 +1,72 @@
+<mat-list>
+  <mat-list-item>
+    <div matListItemTitle>Base price:</div>
+    <div matListItemLine>{{priceSummaryData.basePriceSum | price}}</div>
+  </mat-list-item>
+
+  <mat-list-item
+    *ngIf="priceSummaryData.deliveryData.decreaseInPercent === 0 && priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0">
+    <div matListItemLine>No price modifiers</div>
+  </mat-list-item>
+
+  <mat-list-item *ngIf="priceSummaryData.deliveryData.decreaseInPercent !== 0">
+    <div matListItemTitle>Price decrease:</div>
+    <div matListItemLine>- {{ priceSummaryData.deliveryData.decreaseInPercent }} %</div>
+  </mat-list-item>
+
+  <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody !== 0">
+    <div matListItemTitle>Delivery (once):</div>
+    <div matListItemLine>
+      <span class="unbreakable">+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</span>
+    </div>
+  </mat-list-item>
+
+  <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerDish !== 0">
+    <div matListItemTitle>Delivery per dish:</div>
+    <div matListItemLine>
+        <span class="unbreakable">
+          + {{priceSummaryData.deliveryData.deliveryCostPerDish | price}}
+          * {{ priceSummaryData.allEatingPeopleCount || 0 }}
+        </span>
+    </div>
+  </mat-list-item>
+
+  <mat-list-item>
+    <div matListItemTitle>Total:</div>
+    <div matListItemLine>
+      {{priceSummaryData.totalPrice | price}}
+    </div>
+  </mat-list-item>
+</mat-list>
+
+
+<!--  <div class="py-2">-->
+<!--  <div>Base price :</div>-->
+<!--  <div>{{priceSummaryInput.basePriceSum | price}}</div>-->
+<!--  </div>-->
+
+<!--  <div class="py-2" *ngIf="priceSummaryInput.deliveryData.decreaseInPercent === 0 && priceSummaryInput.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryInput.deliveryData.deliveryCostPerDish === 0">-->
+<!--    <div></div>-->
+<!--    <div><span class="unbreakable"><i>No price modifiers</i></span></div>-->
+<!--  </div>-->
+
+<!--  <div class="py-2" *ngIf="priceSummaryInput.deliveryData.decreaseInPercent !== 0">-->
+<!--    <div>Price decrease :</div>-->
+<!--    <span class="unbreakable">- {{ priceSummaryInput.deliveryData.decreaseInPercent }} %</span>-->
+<!--  </div>-->
+
+<!--  <div class="py-2" *ngIf="priceSummaryInput.deliveryData.deliveryCostPerEverybody !== 0">-->
+<!--    <div>Delivery :</div>-->
+<!--    <div><span class="unbreakable" >+ {{ priceSummaryInput.deliveryData.deliveryCostPerEverybody | price }}</span></div>-->
+<!--  </div>-->
+
+
+<!--  <div class="py-2" *ngIf="priceSummaryInput.deliveryData.deliveryCostPerDish !== 0">-->
+<!--    <div>Delivery per dish:</div>-->
+<!--    <div><span class="unbreakable">+ {{priceSummaryInput.deliveryData.deliveryCostPerDish | price}} * {{ priceSummaryInput.allEatingPeopleCount || 0 }}</span></div>-->
+<!--  </div>-->
+
+<!--  <div class="py-2">-->
+<!--    <div>Total:</div>-->
+<!--    <div>{{priceSummaryInput.totalPrice | price}}</div>-->
+<!--  </div>-->

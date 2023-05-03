@@ -1,0 +1,15 @@
+<ng-container *ngIf="isPaid === true">
+  <span class="ml-2 rounded-full text-gray-800 px-3 py-1 inline-flex bg-green-300">
+      <span class="flex items-center mat-body-2">
+      Payment confirmed
+    </span>
+  </span>
+</ng-container>
+
+<ng-container *ngIf="isPaid === false">
+  <span class="ml-2 rounded-full text-gray-800 px-3 py-1 inline-flex bg-red-300">
+      <span class="flex items-center mat-body-2">
+      Unpaid
+    </span>
+  </span>
+</ng-container>

@@ -1,0 +1,36 @@
+<div>
+  <form [formGroup]="restaurantEditFormGroup" (ngSubmit)="submit()">
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Name:</mat-label>
+        <input matInput [formControl]="restaurantEditFormGroup.controls.name" data-cy="restaurant-name-input"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Address:</mat-label>
+        <input matInput [formControl]="restaurantEditFormGroup.controls.address" data-cy="restaurant-address-input"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Url:</mat-label>
+        <input matInput [formControl]="restaurantEditFormGroup.controls.url" data-cy="restaurant-url-input"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Telephone:</mat-label>
+        <input matInput [formControl]="restaurantEditFormGroup.controls.telephone" data-cy="restaurant-phone-input"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <app-button color="primary" type="submit">Update</app-button>
+      <app-button (click)="cancel()" type="button">Cancel</app-button>
+    </div>
+  </form>
+</div>

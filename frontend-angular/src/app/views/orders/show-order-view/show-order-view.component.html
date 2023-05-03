@@ -1,0 +1,37 @@
+<ng-container *ngIf="showOrderViewState$ | async as viewState">
+
+  <app-view-wrapper>
+    <div class="title-wrapper">
+      <h1 class="font-bold text-gray-700 mb-0">Order from {{viewState.order.restaurantName}}</h1>
+      <span>
+        <app-chip color="primary" class="mr-2" data-cy="order-status-chip">{{viewState.order.orderState}}</app-chip>
+        <span class="mat-subtitle-2">Created {{viewState.order.orderDate}}</span>
+      </span>
+    </div>
+
+
+    <app-order-locked-warning-banner *ngIf="viewState.flags.shouldShowOrderLockedWarning"
+                                     [orderId]="viewState.order.id">
+    </app-order-locked-warning-banner>
+
+    <app-order-owner-buttons *ngIf="viewState.flags.isOrderOwner"
+                             [orderId]="viewState.order.id"
+                             [canShowMarkAsDeliveredButton]="viewState.flags.canShowMarkAsDeliveredButton"
+                             [isPlaceOrderButtonDisabled]="viewState.flags.isPlaceOrderButtonDisabled"
+                             [canShowPlaceOrderButton]="viewState.flags.canShowPlaceOrderButton"
+    >
+    </app-order-owner-buttons>
+
+
+    <app-order-details [order]="viewState.order" [viewState]="viewState">
+    </app-order-details>
+
+    <app-order-entries-list [currentUserId]="viewState.currentUserId"
+                            [username]="viewState.username"
+                            [allDishesInRestaurant]="viewState.allDishesInRestaurant"
+                            [order]="viewState.order"
+                            [yourOrderEntries]="viewState.yourOrderEntries">
+    </app-order-entries-list>
+
+  </app-view-wrapper>
+</ng-container>

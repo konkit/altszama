@@ -1,0 +1,62 @@
+<app-view-wrapper>
+  <h1 class="font-bold text-gray-700">Today's Orders</h1>
+
+  <div *ngIf="todaysOrders$ | async as todayOrders" class="mt-5">
+    <div class="pb-5">
+      <h2>You ordered:</h2>
+
+      <mat-action-list *ngIf="todayOrders.currentOrderEntries.length > 0">
+        <ng-container *ngFor="let orderEntry of todayOrders.currentOrderEntries">
+          <ng-container *ngFor="let dishEntry of orderEntry.dishEntries">
+            <mat-list-item (click)="goToOrder(orderEntry.orderId)">
+              <b>{{ dishEntry.dish.name }}</b>
+              from
+              <b>{{ dishEntry.restaurantName }}</b>
+              (STATUS: {{ orderEntry.orderState }})
+            </mat-list-item>
+          </ng-container>
+        </ng-container>
+      </mat-action-list>
+
+      <mat-list *ngIf="todayOrders.currentOrderEntries.length == 0">
+        <mat-list-item>
+          You haven't ordered anything today yet.
+        </mat-list-item>
+      </mat-list>
+    </div>
+
+    <h2 class="">Orders created today:</h2>
+
+    <div class="pb-5">
+      <mat-action-list *ngIf="todayOrders.ordersList.length > 0">
+        <mat-list-item *ngFor="let element of todayOrders.ordersList" (click)="goToOrder(element.id)">
+              <span matListItemTitle class="flex-row">
+                <span>
+                  <b>{{ element.restaurantName }}</b>
+                </span>
+
+                <span class="ml-auto">
+                  (STATUS: {{ element.orderState }})
+                </span>
+              </span>
+
+          <span matListItemLine>
+                (created by {{ element.orderCreatorUsername }})
+              </span>
+        </mat-list-item>
+      </mat-action-list>
+
+      <div *ngIf="todayOrders.ordersList.length === 0">
+        <mat-list>
+          <mat-list-item>
+            <div>No orders yet</div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="goToCreateOrder()">
+      Add new order <mat-icon fontIcon="add"></mat-icon>
+    </button>
+  </div>
+</app-view-wrapper>

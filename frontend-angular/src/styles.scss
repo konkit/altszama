@@ -1,0 +1,57 @@
+// Angular setup
+
+@use '@angular/material' as mat;
+
+@import "@angular/material/theming";
+@import "themes";
+
+@include mat-typography-hierarchy($altszama-typography);
+
+@include mat-core();
+
+@include angular-material-theme($altszama-theme);
+
+
+// Tailwind setup
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// App-wide styles
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+table.clickable-table {
+  tr {
+    cursor: pointer;
+  }
+
+  tr.mat-mdc-row:hover {
+    background-color: mat.get-color-from-palette($altszama-theme, 50);
+  }
+
+  tr.selected, tr.selected:hover {
+    background-color: mat.get-color-from-palette($altszama-theme, 100);
+  }
+}
+
+
+app-root {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.line-height-3rem {
+  line-height: 3rem !important;
+}
+
+.text-body1 {
+  $typography-config: mat.get-typography-config($altszama-theme);
+  @include mat.typography-level($typography-config, 'body-1');
+}
+

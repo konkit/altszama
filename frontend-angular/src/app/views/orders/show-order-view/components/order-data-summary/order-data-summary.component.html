@@ -1,0 +1,22 @@
+<mat-list>
+  <mat-list-item>
+    <div matListItemTitle>Who will order?</div>
+    <div matListItemLine class="text-no-wrap">
+      {{ this.order.orderCreatorUsername }}
+    </div>
+  </mat-list-item>
+
+  <mat-list-item>
+    <div matListItemTitle>When?</div>
+    <div matListItemLine class="text-no-wrap">
+      {{ this.order.timeOfOrder }}
+    </div>
+  </mat-list-item>
+
+  <mat-list-item>
+    <div matListItemTitle>When it'll arrive?</div>
+    <div matListItemLine class="text-no-wrap">
+      {{ this.timeOfDeliveryOrNA() }}
+    </div>
+  </mat-list-item>
+</mat-list>

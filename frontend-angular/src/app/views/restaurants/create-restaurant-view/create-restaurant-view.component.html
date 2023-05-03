@@ -1,0 +1,39 @@
+<app-view-wrapper>
+  <h1 class="font-bold text-gray-700">Create Restaurant</h1>
+  <div>
+    <form [formGroup]="restaurantFormGroup">
+      <div>
+        <mat-form-field class="w-full">
+          <mat-label>Name:</mat-label>
+          <input matInput [formControl]="restaurantFormGroup.controls.name" data-cy="restaurant-name-input" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="w-full">
+          <mat-label>Address:</mat-label>
+          <input matInput [formControl]="restaurantFormGroup.controls.address" data-cy="restaurant-address-input" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="w-full">
+          <mat-label>Url:</mat-label>
+          <input matInput [formControl]="restaurantFormGroup.controls.url" data-cy="restaurant-url-input" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="w-full">
+          <mat-label>Telephone:</mat-label>
+          <input matInput [formControl]="restaurantFormGroup.controls.telephone" data-cy="restaurant-phone-input" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <app-button (click)="cancel()">Cancel</app-button>
+        <app-button (click)="submit()" color="primary">Submit</app-button>
+      </div>
+    </form>
+  </div>
+</app-view-wrapper>

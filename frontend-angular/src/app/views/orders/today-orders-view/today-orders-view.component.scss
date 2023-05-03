@@ -1,0 +1,32 @@
+.orderState.matchingState {
+  @apply font-bold text-gray-900;
+}
+
+.orderState {
+  @apply text-gray-400;
+}
+
+.wide-order-status {
+  display: flex;
+  flex-direction: row;
+}
+
+.order-state-wrapper {
+  @apply ml-10;
+}
+
+.mat-column-created {
+  width: 5rem;
+}
+
+.mat-column-ordering {
+  width: 11.5rem;
+}
+
+.mat-column-ordered {
+  width: 1rem;
+}
+
+.mat-column-delivered {
+  width: 5rem;
+}

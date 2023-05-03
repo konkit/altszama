@@ -1,0 +1,76 @@
+<mat-error>{{dishForm.errors}}</mat-error>
+
+<div class="flex flex-row w-full">
+
+  <form [formGroup]="dishForm" (ngSubmit)="submitForm()" class="w-full">
+    <div class="flex flex-col">
+      <div class="flex-grow">
+        <mat-form-field class="w-full">
+          <mat-label>Name</mat-label>
+          <input matInput [formControl]="dishForm.controls.name" data-cy="dish-name-input" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Price</mat-label>
+          <app-money-input [formControl]="dishForm.controls.price" data-cy="dish-price-input"></app-money-input>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="w-full">
+      <mat-form-field class="w-full">
+        <mat-label>Category</mat-label>
+        <mat-select [formControl]="dishForm.controls.category">
+          <mat-option *ngFor="let category of categories" [value]="category">
+            {{category}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+    <div class="pb-10">
+      <h3>Side dishes:</h3>
+
+      <div *ngIf="dishForm.controls.sideDishes.length > 0">
+        <div *ngFor="let sdControl of dishForm.controls.sideDishes.controls; let i = index">
+          <div class="flex flex-row">
+            <div class="index-number">{{i+1}}.</div>
+            <div class="flex-grow">
+              <mat-form-field class="w-full">
+                <mat-label>Name</mat-label>
+                <input matInput [formControl]="sdControl.controls.name"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field>
+                <mat-label>Price</mat-label>
+                <app-money-input [formControl]="sdControl.controls.price"></app-money-input>
+              </mat-form-field>
+            </div>
+            <div class="delete-button">
+              <button mat-icon-button (click)="deleteSideDish(i)" color="warn">
+                <mat-icon fontIcon="delete"></mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button mat-raised-button (click)="addSideDish()" type="button">
+          Add SideDish <mat-icon fontIcon="add"></mat-icon>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="mb-4">
+      <app-button color="primary" type="submit">Submit</app-button>
+      <app-button (click)="cancel()" type="button">Cancel</app-button>
+    </div>
+  </form>
+</div>

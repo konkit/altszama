@@ -1,0 +1,23 @@
+<div>
+  <button mat-raised-button class="mr-2" color="primary"
+          *ngIf="this.orderState === 'ORDERED' || this.orderState === 'ORDERING'" (click)="setAsCreated()">
+    Mark back as un-ordered
+    <mat-icon fontIcon="undo"></mat-icon>
+  </button>
+
+  <button mat-raised-button class="mr-2" color="primary"
+          *ngIf="this.orderState === 'DELIVERED' || this.orderState === 'REJECTED'" (click)="setAsOrdered()">
+    Back to ordered
+    <mat-icon fontIcon="undo"></mat-icon>
+  </button>
+
+  <button mat-raised-button class="mr-2" color="warn" (click)="setAsRejected()">
+    Mark as rejected
+    <mat-icon fontIcon="do_not_disturb_on"></mat-icon>
+  </button>
+
+  <button mat-raised-button class="mr-2" color="warn" (click)="deleteOrder()">
+    Delete
+    <mat-icon fontIcon="delete"></mat-icon>
+  </button>
+</div>

@@ -1,0 +1,23 @@
+<div class="mr-20">
+  <h3>Price modifiers</h3>
+  <div>
+    <mat-form-field>
+      <mat-label>Price decrease (in percent)</mat-label>
+      <input matInput [formControl]="deliveryDataForm.controls.decreaseInPercent"/>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Delivery cost (total)</mat-label>
+      <app-money-input [formControl]="deliveryDataForm.controls.deliveryCostPerEverybody"></app-money-input>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Delivery cost (per dish)</mat-label>
+      <app-money-input [formControl]="deliveryDataForm.controls.deliveryCostPerDish"></app-money-input>
+    </mat-form-field>
+  </div>
+</div>

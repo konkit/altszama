@@ -1,0 +1,41 @@
+<div>
+  <div>
+    <div *ngIf="chosenSideDishes.value.length > 0">
+      <div class="w-full flex" *ngFor="let sideDishForm of chosenSideDishes.controls; let sdIndex = index;">
+        <span class="mr-3 line-height-3rem text-body1">{{sdIndex + 1}}. </span>
+
+        <mat-form-field class="w-full mr-3">
+          <mat-label>Name</mat-label>
+          <input matInput [formControl]="sideDishForm.controls.sideDish" [matAutocomplete]="auto" />
+
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onSideDishSelected($event.option.value, sdIndex)' [displayWith]="displayFn">
+            <mat-option *ngFor="let sideDish of availableSideDishes" [value]="sideDish">
+              <div>{{sideDish.name}}</div>
+              <div class="subtitle">
+                Price: {{sideDish.price | price}}
+              </div>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Price</mat-label>
+          <app-money-input [formControl]="sideDishForm.controls.price"></app-money-input>
+        </mat-form-field>
+
+        <button mat-icon-button (click)="removeSideDish(sdIndex)">
+          <mat-icon fontIcon="delete"></mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <span class="line-height-3rem text-body1 mr-3">{{chosenSideDishes.controls.length + 1}}. </span>
+
+      <button mat-button (click)="addSideDishEntry()" color="primary">
+        <mat-icon>add</mat-icon>
+        Add side dish
+      </button>
+    </div>
+  </div>
+</div>

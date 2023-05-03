@@ -1,0 +1,12 @@
+<ng-container *ngIf="modifyDishData$ | async as modifyDishData; else spinner">
+  <app-dish-form [categories]="modifyDishData.categories"
+                 [dishForm]="dishForm"
+                 (onCancel)="cancel()"
+                 (onSubmit)="submitForm()"
+  ></app-dish-form>
+</ng-container>
+
+<ng-template #spinner>
+  <app-dish-form-placeholder></app-dish-form-placeholder>
+</ng-template>
+

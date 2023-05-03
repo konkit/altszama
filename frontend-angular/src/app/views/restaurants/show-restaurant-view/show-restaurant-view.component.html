@@ -1,0 +1,71 @@
+<ng-container *ngIf="restaurant$ | async as restaurantResponse">
+  <ng-container *ngIf="restaurantState$ | async as restaurantEditorState">
+    <app-view-wrapper>
+      <h1 class="font-bold text-gray-700">Restaurant {{restaurantResponse.restaurant.name}}</h1>
+
+      <div class="flex flex-col flex-grow bg-white rounded py-5 md:px-5">
+
+        <div class="flex flex-row p-3">
+          <app-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
+                      [disabled]="restaurantEditorState.name != 'IDLE'"
+                      class="mr-3" icon="edit">
+            Edit restaurant
+          </app-button>
+
+          <app-button color="warn" (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
+                      [disabled]="restaurantEditorState.name != 'IDLE'"
+                      icon="delete">
+            Delete restaurant
+          </app-button>
+        </div>
+
+        <ng-container *ngIf="restaurantEditorState.name != 'EDITING_RESTAURANT'">
+          <app-restaurant-details [restaurant]="restaurantResponse.restaurant"></app-restaurant-details>
+        </ng-container>
+
+        <div *ngIf="restaurantEditorState.name == 'EDITING_RESTAURANT'" class="py-5">
+          <app-edit-restaurant-form [restaurantId]="restaurantResponse.restaurant.id"></app-edit-restaurant-form>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div>
+          <div class="p-3 pt-5">
+            <app-button *ngIf="restaurantEditorState.name != 'CREATING_DISH'; else createDishForm"
+                        [disabled]="restaurantEditorState.name != 'IDLE'"
+                        color="primary"
+                        (click)="createDish()"
+                        class="mr-3" icon="add">
+              Create new dish
+            </app-button>
+          </div>
+
+          <ng-template #createDishForm>
+            <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id">
+            </app-create-dish-form>
+          </ng-template>
+        </div>
+
+        <div *ngFor="let categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue"
+             class="dish-entry-container">
+          <span class="text-gray-400"> Category: {{ categoryAndDishes.key || "No Category" }} </span>
+
+          <div *ngFor="let dish of categoryAndDishes.value" class="border-t-2">
+            <div *ngIf="restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id; else dishEntry"
+                 class="w-full">
+              <app-edit-dish-form [restaurantId]="restaurantResponse.restaurant.id" [dishId]="dish.id">
+              </app-edit-dish-form>
+            </div>
+
+            <ng-template #dishEntry>
+              <app-dish-entry [restaurant]="restaurantResponse.restaurant"
+                              [dish]="dish"
+                              [restaurantEditorState]="restaurantEditorState">
+              </app-dish-entry>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </app-view-wrapper>
+  </ng-container>
+</ng-container>

@@ -1,0 +1,6 @@
+<input matInput
+       (input)="onInput($event)"
+       (blur)="onBlur()"
+       (click)="onTouched()"
+       [value]="stringValue$ | async"
+/>
