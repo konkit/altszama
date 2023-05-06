@@ -12,7 +12,7 @@ set -o pipefail
 
 PUSH_IMAGES=true
 DEFAULT_TAG="latest-${CURRENT_BRANCH-master}"
-TAG="${1:-$DEFAULT_TAG}"
+TAG="${TAG:-$DEFAULT_TAG}"
 
 cd ./vue-app || return 1
 docker build -t "konkit/altszama-frontend:${TAG}" .
