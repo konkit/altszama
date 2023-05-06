@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Images
-        run: CURRENT_BRANCH=${GITHUB_HEAD_REF-${GITHUB_REF##*/}} TAG=${{ steps.newTagStep.outputs.new_tag }}" ./buildDockerImages.sh
+        run: CURRENT_BRANCH=${GITHUB_HEAD_REF-${GITHUB_REF##*/}} TAG=${{ steps.newTagStep.outputs.new_tag }} ./buildDockerImages.sh
   deploy:
     name: Deploy to server
     needs: build
