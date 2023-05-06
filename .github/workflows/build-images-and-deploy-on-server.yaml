@@ -7,6 +7,8 @@ on:
 
 jobs:
   build:
+    name: Build Docker images
+    environment: production
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +34,7 @@ jobs:
         run: CURRENT_BRANCH=${GITHUB_HEAD_REF-${GITHUB_REF##*/}} ./buildDockerImages.sh
   deploy:
     name: Deploy
+    needs: build
     runs-on: ubuntu-latest
     environment: production
 
