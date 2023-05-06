@@ -4,11 +4,11 @@ import altszama.app.auth.UserService
 import altszama.app.orderEntry.dto.OrderEntrySaveRequest
 import altszama.app.orderEntry.dto.OrderEntryUpdateRequest
 import altszama.app.utils.CurrentUserService
+import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api")

@@ -1,9 +1,9 @@
 package altszama.app.dish.dto
 
 import altszama.app.dish.SideDish
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.PositiveOrZero
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.PositiveOrZero
+import jakarta.validation.constraints.Size
 
 data class DishCreateRequest(
   @field:NotNull

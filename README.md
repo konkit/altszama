@@ -21,6 +21,5 @@ App written in Spring Boot + Vue.js + MongoDB + Google Login.
 | VAPID_SUBJECT          | VAPID subject key,  `mailto:youremailaddress@mail.com` |
 | ORIGIN_URL             | URL to backend                                         |
 | SENTRY_URL             | URL to Sentry API for catching front-end errors        |
-| JWT_SIGNING_KEY        | used for signing JWT tokens                            |
 | spring_profiles_active | set to  `development` when running locally             |
 

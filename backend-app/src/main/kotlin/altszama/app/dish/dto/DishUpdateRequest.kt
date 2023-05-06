@@ -1,11 +1,11 @@
 package altszama.app.dish.dto
 
 import altszama.app.dish.SideDish
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.PositiveOrZero
+import jakarta.validation.constraints.Size
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.PositiveOrZero
-import javax.validation.constraints.Size
 
 
 data class DishUpdateRequest(

@@ -10,8 +10,8 @@ import altszama.app.orderEntry.OrderEntry
 import altszama.app.restaurant.Restaurant
 import altszama.app.team.Team
 import org.bson.types.ObjectId
-import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 internal class OrderViewResponseTest {

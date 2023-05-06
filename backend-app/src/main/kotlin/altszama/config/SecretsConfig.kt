@@ -22,9 +22,6 @@ open class SecretsConfig {
     @Value("#{environment.GOOGLE_CLIENT_SECRET}")
     lateinit var googleClientSecret: String
 
-    @Value("#{environment.JWT_SIGNING_KEY}")
-    lateinit var jwtSigningKey: String
-
     @Value("#{environment.ORIGIN_URL}")
     lateinit var backendUrl: String
 

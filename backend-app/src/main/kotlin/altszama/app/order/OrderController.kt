@@ -3,14 +3,12 @@ package altszama.app.order
 import altszama.app.auth.UserService
 import altszama.app.order.dto.*
 import altszama.app.utils.CurrentUserService
+import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
-import java.time.LocalDateTime
-import java.util.concurrent.Executors
-import javax.validation.Valid
 
 
 @RestController

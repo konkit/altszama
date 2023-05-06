@@ -2,6 +2,7 @@ package altszama.app.sentry
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestTemplate
 import java.net.URI
 import java.net.URISyntaxException
-import javax.servlet.http.HttpServletRequest
 
 // https://docs.sentry.io/platforms/javascript/troubleshooting/#dealing-with-ad-blockers
 @RestController

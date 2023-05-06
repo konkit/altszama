@@ -1,4 +1,5 @@
 package altszama.app.notification
+import jakarta.validation.constraints.NotNull
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.jce.spec.ECPublicKeySpec
@@ -9,7 +10,6 @@ import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.Security
 import java.util.*
-import javax.validation.constraints.NotNull
 
 @Document
 data class PushNotifSubscription(

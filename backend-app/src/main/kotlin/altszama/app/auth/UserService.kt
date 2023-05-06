@@ -1,9 +1,9 @@
 package altszama.app.auth
 
-import altszama.config.SecretsConfig
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -14,9 +14,9 @@ data class AuthUserInfo(val token: String, val userId: String, val username: Str
 
 
 @Service
-class UserService(envVarConfig: SecretsConfig) {
+class UserService() {
 
-  private val jwtSigningKey: String = envVarConfig.jwtSigningKey
+  private val jwtSigningKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
   @Autowired
   private lateinit var userRepository: UserRepository
@@ -61,7 +61,7 @@ class UserService(envVarConfig: SecretsConfig) {
     return Jwts.builder()
         .setSubject(userId)
         .setExpiration(Date(System.currentTimeMillis() + 864_000_000))
-        .signWith(SignatureAlgorithm.HS512, jwtSigningKey)
+        .signWith(jwtSigningKey)
         .compact()
   }
 }

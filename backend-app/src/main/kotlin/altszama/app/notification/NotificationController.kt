@@ -1,10 +1,10 @@
 package altszama.app.notification;
 
-import altszama.app.auth.UserService;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import javax.validation.constraints.NotNull
+import altszama.app.auth.UserService
+import jakarta.validation.constraints.NotNull
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.*
 
 data class PushNotifSubscriptionData(
     @NotNull

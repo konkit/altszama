@@ -6,11 +6,11 @@ import altszama.app.order.Order
 import altszama.app.orderEntry.OrderEntry
 import altszama.app.restaurant.Restaurant
 import altszama.app.team.Team
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.index.IndexResolver
-import javax.annotation.PostConstruct
 
 
 @Configuration

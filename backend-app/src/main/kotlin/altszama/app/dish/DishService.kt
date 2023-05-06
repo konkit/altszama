@@ -7,13 +7,13 @@ import altszama.app.restaurant.RestaurantService
 import altszama.app.team.Team
 import altszama.app.validation.*
 import arrow.core.extensions.list.foldable.exists
+import jakarta.validation.Validation
+import jakarta.validation.Validator
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.*
-import javax.validation.Validation
-import javax.validation.Validator
 
 
 @Service

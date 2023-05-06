@@ -9,14 +9,14 @@ import altszama.app.validation.NoAccessToRestaurant
 import altszama.app.validation.RestaurantDataInvalid
 import altszama.app.validation.RestaurantDoesNotExist
 import altszama.app.validation.RestaurantInUseException
+import jakarta.validation.Validation
+import jakarta.validation.Validator
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.*
-import javax.validation.Validation
-import javax.validation.Validator
 
 @Service
 class RestaurantService {

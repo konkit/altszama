@@ -2,8 +2,8 @@ package altszama.app.orderEntry
 
 import altszama.app.dish.Dish
 import altszama.app.dish.SideDish
+import jakarta.validation.constraints.NotNull
 import org.bson.types.ObjectId
-import javax.validation.constraints.NotNull
 
 data class DishEntry(
     var dish: DishEntryDishData,
