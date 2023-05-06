@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Bump version and push tag
+        id: newTagStep
         uses: anothrNick/github-tag-action@1.61.0 # Don't use @master unless you're happy to test the latest version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,7 +39,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Images
-        run: CURRENT_BRANCH=${GITHUB_HEAD_REF-${GITHUB_REF##*/}} ./buildDockerImages.sh
+        run: CURRENT_BRANCH=${GITHUB_HEAD_REF-${GITHUB_REF##*/}} TAG=${{ steps.newTagStep.outputs.new_tag }}" ./buildDockerImages.sh
   deploy:
     name: Deploy to server
     needs: build
@@ -67,4 +68,5 @@ jobs:
           SITE_SSH_KEY: ${{ secrets.SITE_SSH_KEY }}
 
       - name: Run updated version on the server
-        run: ssh prod "cd /var/app/altszama && sh update.sh"
+        run: ssh prod "cd /var/app/altszama && sh update.sh ${{ steps.newTagStep.outputs.new_tag }}"
+
