@@ -58,3 +58,4 @@ jobs:
 
       - name: Stop the server
         run: ssh prod "cd /var/app/altszama && sh update.sh"
+
