@@ -68,5 +68,5 @@ jobs:
           SITE_SSH_KEY: ${{ secrets.SITE_SSH_KEY }}
 
       - name: Run updated version on the server
-        run: ssh prod "cd /var/app/altszama && sh update.sh ${{ steps.newTagStep.outputs.new_tag }}"
+        run: ssh prod "cd /var/app/altszama && sh update.sh ${{ needs.build.steps.newTagStep.outputs.new_tag }}"
 
