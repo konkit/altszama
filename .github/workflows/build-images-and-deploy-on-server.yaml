@@ -10,7 +10,8 @@ jobs:
     name: Build Docker images
     environment: production
     runs-on: ubuntu-latest
-
+    outputs:
+      new_tag: ${{ steps.newTagStep.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v2
 
@@ -68,5 +69,5 @@ jobs:
           SITE_SSH_KEY: ${{ secrets.SITE_SSH_KEY }}
 
       - name: Run updated version on the server
-        run: ssh prod "cd /var/app/altszama && sh update.sh ${{ needs.build.steps.newTagStep.outputs.new_tag }}"
+        run: ssh prod "cd /var/app/altszama && sh update.sh ${{ needs.build.outputs.new_tag }}"
 
