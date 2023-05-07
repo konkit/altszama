@@ -26,6 +26,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-validation")
+  implementation("org.springframework.boot:spring-boot-starter-actuator")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
 
   // Web push notifications
@@ -58,6 +59,10 @@ dependencies {
 
   // SpringDoc
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+
+  // Metrics
+  implementation("io.micrometer:micrometer-registry-prometheus:1.10.6")
+
 
   // Test
   testImplementation("org.springframework.boot:spring-boot-starter-test")

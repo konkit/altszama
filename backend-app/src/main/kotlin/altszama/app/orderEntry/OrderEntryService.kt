@@ -4,6 +4,7 @@ import altszama.app.auth.User
 import altszama.app.dish.Dish
 import altszama.app.dish.DishRepository
 import altszama.app.dish.SideDish
+import altszama.app.observability.MetricCountersService
 import altszama.app.order.OrderEmitterService
 import altszama.app.order.OrderRepository
 import altszama.app.order.OrderState
@@ -33,6 +34,9 @@ class OrderEntryService {
 
   @Autowired
   private lateinit var orderEmitterService: OrderEmitterService
+
+  @Autowired
+  private lateinit var metricCountersService: MetricCountersService
 
 
   fun saveEntry(currentUser: User, currentUserTeam: Team, orderEntrySaveRequest: OrderEntrySaveRequest): OrderEntry {
@@ -98,6 +102,7 @@ class OrderEntryService {
     }
 
     orderEmitterService.emitOrderEntryChanged(order.id)
+    metricCountersService.createdOrderEntryCounter.increment()
     return orderEntryRepository.save(savedEntry)
   }
 

@@ -2,6 +2,7 @@ package altszama.app.order
 
 import altszama.app.auth.User
 import altszama.app.notification.NotificationService
+import altszama.app.observability.MetricCountersService
 import altszama.app.order.dto.OrderSaveRequest
 import altszama.app.order.dto.OrderUpdateRequest
 import altszama.app.orderEntry.OrderEntryRepository
@@ -33,6 +34,8 @@ class OrderService {
   @Autowired
   private lateinit var restaurantRepository: RestaurantRepository
 
+  @Autowired
+  private lateinit var metricCountersService: MetricCountersService
 
   fun saveOrder(orderSaveRequest: OrderSaveRequest, currentUser: User, currentUserTeam: Team): Order {
     val restaurant = Optional.ofNullable(orderSaveRequest.restaurantId)
@@ -69,7 +72,9 @@ class OrderService {
         blikPhoneNumber = orderSaveRequest.paymentData.blikPhoneNumber
     )
 
-    return orderRepository.save(order)
+    val result = orderRepository.save(order)
+    metricCountersService.createdOrdersCounter.increment()
+    return result
   }
 
   fun updateOrder(orderUpdateRequest: OrderUpdateRequest, currentUser: User, currentUserTeam: Team) {
