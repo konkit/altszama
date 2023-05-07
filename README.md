@@ -1,5 +1,5 @@
 # AltSzama
-<img src="https://circleci.com/gh/konkit/altszama.svg?style=shield"></img>
+<img src="https://github.com/konkit/altszama/actions/workflows/build-images-and-deploy-on-server.yaml/badge.svg"></img>
 
 https://altszama.club
 

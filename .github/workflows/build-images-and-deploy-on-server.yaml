@@ -1,4 +1,4 @@
-name: Deploy on server
+name: Build and Deploy
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
       - name: Build Docker Images
         run: CURRENT_BRANCH=${GITHUB_HEAD_REF-${GITHUB_REF##*/}} TAG=${{ steps.newTagStep.outputs.new_tag }} ./buildDockerImages.sh
   deploy:
-    name: Deploy to server
+    name: Deploy on prod
     needs: build
     runs-on: ubuntu-latest
     environment: production
