@@ -229,11 +229,14 @@ class OrderService {
     val orders = orderRepository.findByOrderStateNotInAndOrderDateBefore(terminalOrderStates, today)
 
     orders.forEach { order: Order ->
-      if (listOf(OrderState.CREATED, OrderState.ORDERING).contains(order.orderState)) {
-        order.orderState = OrderState.REJECTED
-      } else {
+      val orderEntriesCount = orderEntryRepository.countByOrderId(order.id)
+
+      if (orderEntriesCount > 0) {
         order.orderState = OrderState.DELIVERED
+      } else {
+        order.orderState = OrderState.REJECTED
       }
+
       orderRepository.save(order)
     }
   }

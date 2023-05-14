@@ -39,11 +39,13 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
   private lateinit var testFactoriesService: TestFactoriesService
 
   @Test
-  fun itShouldMarkEmptyOrderAsRejectedIfItJustInCreatedState() {
+  fun itShouldMarkEmptyOrderAsRejected() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val order = createOrderInThePast(user1, team1)
+    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
+    val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
+    val order = createOrderInThePast(user1, team1, restaurant.id)
 
     orderService.closePastOrders()
 
@@ -53,29 +55,50 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
   }
 
   @Test
-  fun itShouldMarkEmptyOrderAsRejectedIfItJustInOrderingState() {
+  fun itShouldMarkOrderAsDeliveredIfSomeOrderEntriesWereCreated() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val order = createOrderInThePast(user1, team1)
+    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
+    val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
+    val order = createOrderInThePast(user1, team1, restaurant.id)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
+    orderService.closePastOrders()
+
+    val updatedOrder = orderRepository.findById(order.id).get()
+
+    assertThat(updatedOrder.orderState).isEqualTo(OrderState.DELIVERED)
+  }
+
+  @Test
+  fun itShouldMarkOrderAsDeliveredIfInOrderingStateAndSomeOrderEntriesWereCreated() {
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
+
+    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
+    val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
+    val order = createOrderInThePast(user1, team1, restaurant.id)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
     orderService.setAsOrdering(order.id, user1)
 
     orderService.closePastOrders()
 
     val updatedOrder = orderRepository.findById(order.id).get()
 
-    assertThat(updatedOrder.orderState).isEqualTo(OrderState.REJECTED)
+    assertThat(updatedOrder.orderState).isEqualTo(OrderState.DELIVERED)
   }
 
   @Test
-  fun itShouldMarkEmptyOrderAsDeliveredIfItWasOrdered() {
+  fun itShouldMarkOrderAsDeliveredIfInOrderedStateAndSomeOrderEntriesWereCreated() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val order = createOrderInThePast(user1, team1)
-
-    orderService.setAsOrdered(order.id, "", user1)
+    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
+    val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
+    val order = createOrderInThePast(user1, team1, restaurant.id)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
+    orderService.setAsOrdered(order.id, "14:00", user1)
 
     orderService.closePastOrders()
 
@@ -89,7 +112,10 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
 
-    val order = createOrderInThePast(user1, team1)
+    val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
+    val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
+    val order = createOrderInThePast(user1, team1, restaurant.id)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
     orderService.setAsDelivered(order.id, user1)
 
@@ -100,20 +126,34 @@ class OrderServiceCloseOrdersTest : AbstractIntegrationTest() {
     assertThat(updatedOrder.orderState).isEqualTo(OrderState.DELIVERED)
   }
 
-  private fun createOrderInThePast(user1: User,team1: Team): Order {
+  @Test
+  fun itShouldNotChangeOrderIfItWasRejected() {
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
+
     val restaurant = restaurantService.createRestaurant(team1, RestaurantSaveRequest("Restaurant 1"))
     val dish1 = dishService.saveDish(team1, restaurant.id, DishCreateRequest("Dish 1", 100, category = "Category 1"))
+    val order = createOrderInThePast(user1, team1, restaurant.id)
+    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
 
+    orderService.setAsRejected(order.id, user1)
+
+    orderService.closePastOrders()
+
+    val updatedOrder = orderRepository.findById(order.id).get()
+
+    assertThat(updatedOrder.orderState).isEqualTo(OrderState.REJECTED)
+  }
+
+  private fun createOrderInThePast(user1: User,team1: Team, restaurantId: String): Order {
     val orderSaveRequest = OrderSaveRequest(
-      restaurantId = restaurant.id,
+      restaurantId = restaurantId,
       orderDate = LocalDate.now().minusDays(1),
       timeOfOrder = LocalTime.of(14, 0),
       deliveryData = DeliveryData(),
       paymentData = PaymentData()
     )
     val order = orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
-    testFactoriesService.createOrderEntry(order, dish1, user1, team1)
-
     return order
   }
 
