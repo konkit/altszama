@@ -69,7 +69,7 @@ jobs:
           SITE_SSH_KEY: ${{ secrets.SITE_SSH_KEY }}
 
       - name: Update the docker-compose file
-        run: scp ./docker-compose.yaml prod:/var/app/altszama/altszama/
+        run: scp docker-compose.yml prod:/var/app/altszama/altszama/
 
       - name: Run updated version on the server
         run: ssh prod "cd /var/app/altszama && sh update.sh ${{ needs.build.outputs.new_tag }}"
