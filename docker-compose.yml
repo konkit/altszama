@@ -3,7 +3,7 @@ version: '3.3'
 services:
   db:
     networks:
-      - altszama_default
+      default:
     image: mongo:4.2.3
     volumes:
       - altszama-mongodb-volume:/data/db
@@ -11,8 +11,10 @@ services:
 
   backend:
     networks:
-      - altszama_default
-      - monitoring_default
+      default:
+      monitoring_default:
+        aliases:
+        - altszamabackend
     depends_on:
       - db
     image: "konkit/altszama-backend:${DOCKER_TAG:-latest-master}"
@@ -33,7 +35,7 @@ services:
 
   frontend:
     networks:
-      - altszama_default
+      default:
     depends_on:
       - backend
     image: "konkit/altszama-frontend:${DOCKER_TAG:-latest-master}"
@@ -41,7 +43,7 @@ services:
 
   frontend-angular:
     networks:
-      - altszama_default
+      default:
     depends_on:
       - backend
     image: "konkit/altszama-frontend:${DOCKER_TAG:-latest-master}-angular"
@@ -49,7 +51,7 @@ services:
 
   reverse-proxy:
     networks:
-      - altszama_default
+      default:
     depends_on:
       - backend
       - frontend
@@ -62,6 +64,6 @@ volumes:
   altszama-mongodb-volume:
 
 networks:
-  altszama_default:
+  default:
   monitoring_default:
     external: true
