@@ -2,12 +2,17 @@ version: '3.3'
 
 services:
   db:
+    networks:
+      - altszama_default
     image: mongo:4.2.3
     volumes:
       - altszama-mongodb-volume:/data/db
     restart: always
 
   backend:
+    networks:
+      - altszama_default
+      - monitoring_default
     depends_on:
       - db
     image: "konkit/altszama-backend:${DOCKER_TAG:-latest-master}"
@@ -27,18 +32,24 @@ services:
       spring_profiles_active: $spring_profiles_active
 
   frontend:
+    networks:
+      - altszama_default
     depends_on:
       - backend
     image: "konkit/altszama-frontend:${DOCKER_TAG:-latest-master}"
     restart: always
 
   frontend-angular:
+    networks:
+      - altszama_default
     depends_on:
       - backend
     image: "konkit/altszama-frontend:${DOCKER_TAG:-latest-master}-angular"
     restart: always
 
   reverse-proxy:
+    networks:
+      - altszama_default
     depends_on:
       - backend
       - frontend
@@ -49,3 +60,8 @@ services:
 
 volumes:
   altszama-mongodb-volume:
+
+networks:
+  altszama_default:
+  monitoring_default:
+    external: true
