@@ -28,10 +28,10 @@ class BalanceServiceTest : AbstractIntegrationTest() {
     val team1 = testFactoriesService.createTeam1()
     val user = testFactoriesService.createUser1(team1)
 
-    val result = balanceService.getOrderHistory(user)
+    val orderHistory = balanceService.getOrderHistory(user)
 
-    assertThat(result.entries).isEmpty()
-    assertThat(result.owedMoney).isEmpty()
+    assertThat(orderHistory.entries).isEmpty()
+    assertThat(orderHistory.owedMoney).isEmpty()
   }
 
   @Test()
@@ -48,7 +48,7 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
     orderService.setAsOrdered(order.id, "", user)
 
-    val result = balanceService.getOrderHistory(user)
+    val orderHistory = balanceService.getOrderHistory(user)
 
     val expectedCreatedEntry = OrderHistoryCreatedEntry(
       orderId = order.id,
@@ -58,8 +58,8 @@ class BalanceServiceTest : AbstractIntegrationTest() {
       confirmedPaymentsTotalAmount = dishes[0].price,
       totalAmount = dishes[0].price * 2
     )
-    assertThat(result.entries).isEqualTo(listOf(expectedCreatedEntry))
-    assertThat(result.owedMoney).isEqualTo(mapOf(user2.username to dishes[0].price))
+    assertThat(orderHistory.entries).isEqualTo(listOf(expectedCreatedEntry))
+    assertThat(orderHistory.owedMoney).isEqualTo(mapOf(user2.username to dishes[0].price))
   }
 
   @Test()
@@ -75,7 +75,7 @@ class BalanceServiceTest : AbstractIntegrationTest() {
 
     orderService.setAsOrdered(order.id, "", user1)
 
-    val result = balanceService.getOrderHistory(user2)
+    val orderHistory = balanceService.getOrderHistory(user2)
 
     val expectedParticipatedEntry = OrderHistoryParticipatedEntry(
       orderId = orderEntry.order.id,
@@ -85,9 +85,9 @@ class BalanceServiceTest : AbstractIntegrationTest() {
       orderEntryAmount = dishes[0].price,
       status = OrderEntryPaymentStatus.UNPAID
     )
-    assertThat(result.entries).isEqualTo(listOf(expectedParticipatedEntry))
+    assertThat(orderHistory.entries).isEqualTo(listOf(expectedParticipatedEntry))
 
-    assertThat(result.owedMoney).isEqualTo(mapOf(user1.username to -dishes[0].price))
+    assertThat(orderHistory.owedMoney).isEqualTo(mapOf(user1.username to -dishes[0].price))
   }
 
   @Test()

@@ -38,10 +38,17 @@ class BalanceService {
     orderEntriesUserParticipatedIn: List<OrderEntry>
   ): List<OrderHistoryEntry> {
     val orderHistoryCreatedEntries = ordersUserCreated
-      .map { order -> createOrderHistoryCreatedEntry(order) }
+      .map { order ->
+        val orderEntries = orderEntryRepository.findByOrder(order)
+        val userCount = orderEntryRepository.countByOrder(order)
+        createOrderHistoryCreatedEntry(order, userCount, orderEntries)
+      }
 
     val orderHistoryParticipatedEntries = orderEntriesUserParticipatedIn
-      .map { orderEntry -> createParticipatedEntry(orderEntry) }
+      .map { orderEntry ->
+        val countOfEntriesInOrder = orderEntryRepository.countByOrder(orderEntry.order)
+        createParticipatedEntry(orderEntry, countOfEntriesInOrder)
+      }
 
     return (orderHistoryCreatedEntries + orderHistoryParticipatedEntries)
       .sortedByDescending { it.orderDate }
@@ -53,8 +60,8 @@ class BalanceService {
   ): Map<String, Int> {
     val tuples = ordersUserCreated
       .flatMap { order ->
-        val userCount = orderEntryRepository.findByOrderId(order.id).size
-        val orderEntries = orderEntryRepository.findByOrderId(order.id)
+        val userCount = orderEntryRepository.countByOrder(order)
+        val orderEntries = orderEntryRepository.findByOrder(order)
 
         orderEntries
           .filter { orderEntry -> orderEntry.paymentStatus == OrderEntryPaymentStatus.UNPAID }
@@ -87,24 +94,18 @@ class BalanceService {
   private fun orderNotCreatedByMe(orderEntry: OrderEntry, currentUser: User): Boolean =
     orderEntry.order.orderCreator.id != currentUser.id
 
-  private fun createParticipatedEntry(orderEntry: OrderEntry): OrderHistoryParticipatedEntry {
-    val userCount = orderEntryRepository.findByOrderId(orderEntry.order.id).size
-
+  private fun createParticipatedEntry(orderEntry: OrderEntry, countOfEntriesInOrder: Int): OrderHistoryParticipatedEntry {
     return OrderHistoryParticipatedEntry(
       orderEntry.order.id,
       orderEntry.order.orderDate,
       orderEntry.order.orderCreator.username,
       orderEntry.order.restaurant.name,
-      orderEntry.getFinalPrice(userCount),
+      orderEntry.getFinalPrice(countOfEntriesInOrder),
       orderEntry.paymentStatus
     )
   }
 
-  private fun createOrderHistoryCreatedEntry(order: Order): OrderHistoryCreatedEntry {
-    val userCount = orderEntryRepository.findByOrderId(order.id).size
-
-    val orderEntries = orderEntryRepository.findByOrderId(order.id)
-
+  private fun createOrderHistoryCreatedEntry(order: Order, userCount: Int, orderEntries: List<OrderEntry>): OrderHistoryCreatedEntry {
     val confirmedPaymentsTotalAmount = orderEntries
       .filter { orderEntry -> orderEntry.paymentStatus == OrderEntryPaymentStatus.CONFIRMED }
       .sumBy { orderEntry -> orderEntry.getFinalPrice(userCount) }

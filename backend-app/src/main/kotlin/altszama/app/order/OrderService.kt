@@ -229,7 +229,7 @@ class OrderService {
     val orders = orderRepository.findByOrderStateNotInAndOrderDateBefore(terminalOrderStates, today)
 
     orders.forEach { order: Order ->
-      val orderEntriesCount = orderEntryRepository.countByOrderId(order.id)
+      val orderEntriesCount = orderEntryRepository.countByOrder(order)
 
       if (orderEntriesCount > 0) {
         order.orderState = OrderState.DELIVERED
