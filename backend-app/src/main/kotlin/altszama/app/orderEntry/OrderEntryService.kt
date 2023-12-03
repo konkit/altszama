@@ -17,6 +17,7 @@ import altszama.app.validation.*
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.Instant
 import java.util.*
 
 
@@ -107,7 +108,12 @@ class OrderEntryService {
   }
 
   private fun createNewDish(restaurant: Restaurant, dishName: String?, dishPrice: Int?): Dish {
-    val dish = Dish(restaurant = restaurant, name = dishName ?: "", price = dishPrice ?: 0)
+    val dish = Dish(
+      restaurant = restaurant,
+      name = dishName ?: "",
+      price = dishPrice ?: 0,
+      lastEdited = Instant.now()
+    )
 
     dishRepository.save(dish)
 
