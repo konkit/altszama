@@ -1,16 +1,12 @@
-import { Injectable } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
-import { Observable, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {Observable} from 'rxjs';
 import {IndexResponse, RestaurantControllerService} from "../../../../frontend-client";
 
 @Injectable({
   providedIn: 'root'
 })
-export class RestaurantsListResolver implements Resolve<IndexResponse> {
+export class RestaurantsListResolver  {
 
   constructor(private restaurantControllerService: RestaurantControllerService) {
   }

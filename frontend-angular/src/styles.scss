@@ -2,14 +2,13 @@
 
 @use '@angular/material' as mat;
 
-@import "@angular/material/theming";
 @import "themes";
 
-@include mat-typography-hierarchy($altszama-typography);
+@include mat.typography-hierarchy($altszama-typography);
 
-@include mat-core();
+@include mat.core();
 
-@include angular-material-theme($altszama-theme);
+@include mat.all-component-themes($altszama-theme);
 
 
 // Tailwind setup

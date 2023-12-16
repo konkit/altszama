@@ -1,7 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {ParticipantsOrderEntry, PaymentData} from "../../../../../../../frontend-client";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {NgxQrcodeElementTypes} from "@techiediaries/ngx-qrcode";
 
 export interface QrcodeModalInput {
   paymentData: PaymentData,
@@ -21,8 +20,6 @@ export class BankTransferQrcodeModal {
   yourOrderEntries: ParticipantsOrderEntry[];
   orderCreatorUsername: string;
   orderDate: string
-
-  qrElementType = NgxQrcodeElementTypes.IMG;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: QrcodeModalInput,

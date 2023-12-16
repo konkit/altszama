@@ -94,7 +94,6 @@ import {UserOrdersComponent} from './views/orders/make-an-order-view/components/
 import {
   BankTransferQrcodeModal
 } from "./views/orders/show-order-view/components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
-import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
 import {EditOrderViewComponent} from './views/orders/edit-order-view/edit-order-view.component';
 import {BalanceEntryComponent} from './views/balance/balance-view/components/balance-entry/balance-entry.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
@@ -132,6 +131,7 @@ import {
 import {OrderDetailsComponent} from './views/orders/show-order-view/components/order-details/order-details.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {ChipComponent} from './components/chip/chip.component';
+import {QRCodeModule} from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -214,7 +214,7 @@ import {ChipComponent} from './components/chip/chip.component';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    NgxQRCodeModule,
+    QRCodeModule,
     MatAutocompleteModule,
     MatToolbarModule,
     MatSidenavModule,

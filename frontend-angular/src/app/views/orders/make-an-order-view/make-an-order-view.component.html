@@ -6,7 +6,7 @@
       <h1 class="font-bold text-gray-700">Call the place and make an order!</h1>
 
       <ng-container *ngIf="response.orderState !== 'ORDERING'">
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-header>
             <mat-card-title>
               <h1>Ordering from {{ response.restaurantName }}</h1>
@@ -25,7 +25,7 @@
       </ng-container>
 
       <ng-container *ngIf="response.orderState === 'ORDERING'">
-        <mat-card class="my-5">
+        <mat-card appearance="outlined" class="my-5">
           <mat-card-header>
             <mat-card-title>The order is locked!</mat-card-title>
           </mat-card-header>

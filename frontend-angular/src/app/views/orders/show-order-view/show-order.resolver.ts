@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {ShowOrderResponse} from "../../../../frontend-client";
 import {ShowOrderViewService} from "./service/show-order-view.service";
@@ -7,7 +7,7 @@ import {ShowOrderViewService} from "./service/show-order-view.service";
 @Injectable({
   providedIn: 'root'
 })
-export class ShowOrderResolver implements Resolve<ShowOrderResponse> {
+export class ShowOrderResolver  {
 
   constructor(private showOrderViewService: ShowOrderViewService) {
   }

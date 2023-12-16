@@ -1,16 +1,12 @@
-import { Injectable } from '@angular/core';
-import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
-import { Observable, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {Observable} from 'rxjs';
 import {CreateOrderInitialData, OrderControllerService} from "../../../../frontend-client";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CreateOrderResolver implements Resolve<CreateOrderInitialData> {
+export class CreateOrderResolver  {
 
   constructor(private orderControllerService: OrderControllerService) {
   }

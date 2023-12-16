@@ -6,8 +6,7 @@
   </p>
 
   <div class="flex justify-start">
-    <ngx-qrcode [elementType]="qrElementType" [value]="generateCodeValue()">
-    </ngx-qrcode>
+    <qrcode [qrdata]="generateCodeValue()" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
   </div>
 </mat-dialog-content>
 

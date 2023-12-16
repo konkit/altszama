@@ -1,10 +1,10 @@
 <ng-container *ngIf="modifyOrderEntryState$ | async as modifyOrderEntryState">
 
   <div *ngIf="order.orderState == OrderStateEnum.CREATED && yourOrderEntries.length === 0">
-    <mat-card class="mb-10 pb-5 md:px-5">
+    <mat-card appearance="outlined" class="mb-10 pb-5 md:px-5">
       <mat-card-header>
         <mat-card-title>
-          <div class="mat-body-1">{{ username }}</div>
+          <div class="mat-body-2">{{ username }}</div>
         </mat-card-title>
       </mat-card-header>
 

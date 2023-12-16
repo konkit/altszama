@@ -1,11 +1,10 @@
 @use '@angular/material' as mat; //declare above imports
-@import "@angular/material/theming";
 
-$altszama-theme-primary: mat.define-palette($mat-deep-purple, 500, 200, 800);
-$altszama-theme-accent: mat.define-palette($mat-deep-purple);
-$altszama-theme-warn: mat.define-palette($mat-red);
+$altszama-theme-primary: mat.define-palette(mat.$deep-purple-palette, 500, 200, 800);
+$altszama-theme-accent: mat.define-palette(mat.$deep-purple-palette);
+$altszama-theme-warn: mat.define-palette(mat.$red-palette);
 
-$altszama-typography: mat-typography-config($font-family: '"Roboto", sans-serif;');
+$altszama-typography: mat.define-typography-config($font-family: '"Roboto", sans-serif;');
 
 
 $altszama-theme: mat.define-light-theme((

@@ -178,7 +178,7 @@ export class ShowOrderViewService {
           orderCreatorUsername: viewState.order.orderCreatorUsername,
           orderDate: viewState.order.orderDate
         }
-        this.matDialog.open(BankTransferQrcodeModal, {width: '300px', data: data})
+        this.matDialog.open(BankTransferQrcodeModal, {width: '330px', data: data})
       })
   }
 }
