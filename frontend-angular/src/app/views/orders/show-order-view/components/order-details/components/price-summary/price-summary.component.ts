@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {PriceSummaryData} from "../../lib/model";
+import {PriceSummaryData} from "../../../../lib/model";
 
 @Component({
   selector: 'app-price-summary',

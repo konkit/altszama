@@ -1,16 +1,11 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-@import "../../../../../../themes.scss";
+@import "../../../../../../../../themes.scss";
 
 .user-selectable {
   user-select: text;
 }
-
-//.mdc-icon-button {
-//  font-size: 16px;
-//}
-
 
 .mdc-icon-button {
   height: 16px;

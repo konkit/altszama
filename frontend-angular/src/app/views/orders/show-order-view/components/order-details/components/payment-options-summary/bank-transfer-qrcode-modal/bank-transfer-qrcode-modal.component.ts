@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {ParticipantsOrderEntry, PaymentData} from "../../../../../../../frontend-client";
+import {ParticipantsOrderEntry, PaymentData} from "../../../../../../../../../frontend-client";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 export interface QrcodeModalInput {

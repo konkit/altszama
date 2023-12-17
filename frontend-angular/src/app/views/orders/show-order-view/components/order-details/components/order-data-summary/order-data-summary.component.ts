@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {OrderEntryDto, ShowOrderDto} from "../../../../../../frontend-client";
+import {ShowOrderDto} from "../../../../../../../../frontend-client";
 
 @Component({
   selector: 'app-order-data-summary',

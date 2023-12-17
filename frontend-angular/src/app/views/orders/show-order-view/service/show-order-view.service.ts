@@ -12,7 +12,7 @@ import {PaymentOptionsData, PriceSummaryData, ShowOrderViewState, ShowOrderViewS
 import {
   BankTransferQrcodeModal,
   QrcodeModalInput
-} from "../components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
+} from "../components/order-details/components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
 import {MatDialog} from "@angular/material/dialog";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 

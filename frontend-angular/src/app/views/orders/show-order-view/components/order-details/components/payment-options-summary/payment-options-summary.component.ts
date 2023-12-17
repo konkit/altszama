@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ParticipantsOrderEntry, PaymentData} from "../../../../../../frontend-client";
-import {PaymentOptionsData} from "../../lib/model";
-import {ShowOrderViewService} from "../../service/show-order-view.service";
+import {ParticipantsOrderEntry, PaymentData} from "../../../../../../../../frontend-client";
+import {PaymentOptionsData} from "../../../../lib/model";
+import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 
 @Component({
   selector: 'app-payment-options-summary',
