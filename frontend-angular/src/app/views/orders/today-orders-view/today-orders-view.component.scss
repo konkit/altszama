@@ -1,3 +1,7 @@
+:host {
+  width: 100%;
+}
+
 .orderState.matchingState {
   @apply font-bold text-gray-900;
 }
