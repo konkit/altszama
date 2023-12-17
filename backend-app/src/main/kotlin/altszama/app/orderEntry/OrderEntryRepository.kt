@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.repository.Query
 interface OrderEntryRepository : MongoRepository<OrderEntry, String> {
   fun findByOrderId(orderId: String): List<OrderEntry>
 
+  fun findByOrderAndPaymentStatus(order: Order, paymentStatus: OrderEntryPaymentStatus): List<OrderEntry>
+
   fun findByOrder(order: Order): List<OrderEntry>
 
   fun countByOrder(order: Order): Int

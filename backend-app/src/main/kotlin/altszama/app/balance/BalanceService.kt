@@ -61,10 +61,9 @@ class BalanceService {
     val tuples = ordersUserCreated
       .flatMap { order ->
         val userCount = orderEntryRepository.countByOrder(order)
-        val orderEntries = orderEntryRepository.findByOrder(order)
+        val orderEntries = orderEntryRepository.findByOrderAndPaymentStatus(order, OrderEntryPaymentStatus.UNPAID)
 
         orderEntries
-          .filter { orderEntry -> orderEntry.paymentStatus == OrderEntryPaymentStatus.UNPAID }
           .map { orderEntry -> Pair(orderEntry.user, orderEntry.getFinalPrice(userCount)) }
       }
       .groupBy { pair -> pair.first }
