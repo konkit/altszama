@@ -30,28 +30,6 @@
         </mat-list>
       </div>
     </div>
-
-    <div class="pb-5">
-      <h2>Your order history:</h2>
-
-      <div *ngIf="orderHistoryEntries.length > 0">
-        <mat-list>
-          <mat-list-item matListItemLine *ngFor="let historyEntry of orderHistoryEntries">
-            <div>
-              <app-balance-entry [historyEntry]="historyEntry"></app-balance-entry>
-            </div>
-          </mat-list-item>
-        </mat-list>
-      </div>
-
-      <div *ngIf="orderHistoryEntries.length === 0">
-        <mat-list>
-          <mat-list-item>
-            Your order history is empty.
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </div>
   </div>
 
   <ng-template #spinner>
