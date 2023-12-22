@@ -46,9 +46,9 @@ class AuthController() {
     return runBlocking {
       when(val result = googleLoginService.verifyUser(googlePayload.credential)) {
         is Either.Left ->
-          ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.a);
+          ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.value);
         is Either.Right ->
-          ResponseEntity.ok(result.b);
+          ResponseEntity.ok(result.value);
       }
     }
   }

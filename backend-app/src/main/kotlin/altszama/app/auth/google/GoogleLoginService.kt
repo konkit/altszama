@@ -55,9 +55,9 @@ class GoogleLoginService() {
     val teamOpt = teamService.findByEmail(email)
 
     return if (teamOpt.isPresent) {
-      Either.right(teamOpt.get())
+      Either.Right(teamOpt.get())
     } else {
-      Either.left(GoogleAuthError("Your account does not belong to any team. Make sure that you use your company email."))
+      Either.Left(GoogleAuthError("Your account does not belong to any team. Make sure that you use your company email."))
     }
   }
 }

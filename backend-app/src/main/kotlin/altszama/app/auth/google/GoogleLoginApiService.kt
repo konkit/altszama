@@ -30,13 +30,13 @@ class GoogleLoginApiService(envVarConfig: SecretsConfig) {
       val idToken = verifier.verify(idTokenString)
 
       return if (idToken == null) {
-        Either.left(GoogleAuthError("Couldn't verify Google Sign-in token"))
+        Either.Left(GoogleAuthError("Couldn't verify Google Sign-in token"))
       } else {
-        Either.right(idToken)
+        Either.Right(idToken)
       }
     } catch (e: Exception) {
       logger.error("Couldn't verify Google Sign-in token", e)
-      return Either.left(GoogleAuthError("Couldn't verify Google Sign-in token"))
+      return Either.Left(GoogleAuthError("Couldn't verify Google Sign-in token"))
     }
   }
 }

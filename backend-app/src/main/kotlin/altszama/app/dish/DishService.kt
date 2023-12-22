@@ -6,7 +6,6 @@ import altszama.app.orderEntry.OrderEntryRepository
 import altszama.app.restaurant.RestaurantService
 import altszama.app.team.Team
 import altszama.app.validation.*
-import arrow.core.extensions.list.foldable.exists
 import jakarta.validation.Validation
 import jakarta.validation.Validator
 import org.bson.types.ObjectId
@@ -118,8 +117,8 @@ class DishService {
 
     val orderEntries = orderEntryRepository.findByDishIdQuery(ObjectId(dishId))
     val sideDishInUse = orderEntries
-        .exists { orderEntry ->
-          orderEntry.dishEntries.exists { dishEntry ->
+        .any { orderEntry ->
+          orderEntry.dishEntries.any { dishEntry ->
             dishEntry.chosenSideDishes.map { sd -> sd.id }.contains(sideDishId)
           }
         }
@@ -128,7 +127,7 @@ class DishService {
       throw SideDishInUse()
     }
 
-    if (dish.sideDishes.exists { sd -> sd.id == sideDishId }) {
+    if (dish.sideDishes.any { sd -> sd.id == sideDishId }) {
       dish.sideDishes = dish.sideDishes.filter { sd -> sd.id != sideDishId }
       dishRepository.save(dish)
     } else {
