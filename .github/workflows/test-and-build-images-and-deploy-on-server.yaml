@@ -36,6 +36,7 @@ jobs:
         working-directory: ./backend-app
   build:
     name: Build Docker images
+    needs: test-backend
     environment: production
     runs-on: ubuntu-latest
     outputs:
