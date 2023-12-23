@@ -6,26 +6,34 @@ on:
       - master
 
 jobs:
-#  test-backend:
-#    name: Run Backend tests
-#    environment: production
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v2
-#        with:
-#          java-version: '17'
-#          distribution: 'adopt'
-#          cache: gradle
-#
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x ./backend-app/gradlew
-#
-#      - name: Run tests
-#        run: ./gradlew test
-#        working-directory: ./backend-app
+  test-backend:
+    name: Run Backend tests
+    environment: production
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mongodb-version: [ '4.2', '4.4', '5.0', '6.0' ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.10.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./backend-app/gradlew
+
+      - name: Run tests
+        run: ./gradlew test
+        working-directory: ./backend-app
   build:
     name: Build Docker images
     environment: production
