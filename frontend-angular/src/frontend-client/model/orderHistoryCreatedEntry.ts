@@ -9,10 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { OrderHistoryCreatedEntry } from './orderHistoryCreatedEntry';
-import { OrderHistoryParticipatedEntry } from './orderHistoryParticipatedEntry';
+import { OrderHistoryEntry } from './orderHistoryEntry';
 
-export interface OrderHistory { 
-    entries: Array<OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry>;
-    owedMoney: { [key: string]: number; };
+export interface OrderHistoryCreatedEntry extends OrderHistoryEntry { 
+    confirmedPaymentsTotalAmount: number;
+    totalAmount: number;
 }

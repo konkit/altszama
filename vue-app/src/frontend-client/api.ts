@@ -14,7 +14,7 @@
 
 import * as url from "url";
 import * as isomorphicFetch from "isomorphic-fetch";
-import {Configuration} from "./configuration";
+import { Configuration } from "./configuration";
 
 const BASE_PATH = "http://localhost:8080/".replace(/\/+$/, "");
 
@@ -933,6 +933,12 @@ export interface OrderEntryUpdateRequest {
  * @interface OrderHistory
  */
 export interface OrderHistory {
+    /**
+     * 
+     * @type {Array<OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry>}
+     * @memberof OrderHistory
+     */
+    entries: Array<OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry>;
     /**
      * 
      * @type {{ [key: string]: number; }}

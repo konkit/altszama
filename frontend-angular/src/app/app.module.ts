@@ -85,6 +85,7 @@ import {
 } from './views/orders/show-order-view/components/order-entries-list/components/edit-order-entry/edit-order-entry.component';
 import {UserOrdersComponent} from './views/orders/make-an-order-view/components/user-orders/user-orders.component';
 import {EditOrderViewComponent} from './views/orders/edit-order-view/edit-order-view.component';
+import {BalanceEntryComponent} from './views/balance/balance-view/components/balance-entry/balance-entry.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {
   OrderEntryFormComponent
@@ -175,6 +176,7 @@ import {
     EditOrderEntryComponent,
     UserOrdersComponent,
     EditOrderViewComponent,
+    BalanceEntryComponent,
     OrderEntryFormComponent,
     SideDishesInputComponent,
     OrderStateButtonsComponent,
