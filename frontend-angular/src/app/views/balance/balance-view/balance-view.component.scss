@@ -1,0 +1,11 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import "../../../../themes.scss";
+
+.paid h3, .paid p{
+  $color-config:    mat.get-color-config($altszama-theme);
+  $foreground-palette: map.get($color-config, foreground);
+
+  color: mat.get-color-from-palette($foreground-palette, disabled);
+}

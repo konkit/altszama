@@ -4,6 +4,7 @@ import {
   OrderHistoryCreatedEntry,
   OrderHistoryParticipatedEntry
 } from "../../../../frontend-client";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-balance-view',
@@ -15,7 +16,8 @@ export class BalanceViewComponent implements OnInit {
   orderHistoryEntries: (OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry)[] = []
   owedMoneyEntries: [string, number][] = []
 
-  constructor(private balanceControllerService: BalanceControllerService) {
+  constructor(private balanceControllerService: BalanceControllerService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -33,5 +35,17 @@ export class BalanceViewComponent implements OnInit {
 
   isParticipatedEntry(entry: OrderHistoryCreatedEntry | OrderHistoryParticipatedEntry): entry is OrderHistoryParticipatedEntry {
     return entry.kind == "participatedEntry"
+  }
+
+  goToOrder(orderId: string) {
+    this.router.navigate(["/orders", orderId, "show"])
+  }
+
+  isCreatedEntryPaid(entry: OrderHistoryCreatedEntry) {
+    return entry.confirmedPaymentsTotalAmount >= entry.totalAmount
+  }
+
+  isParticipatedEntryPaid(entry: OrderHistoryParticipatedEntry) {
+    return entry.status === OrderHistoryParticipatedEntry.StatusEnum.CONFIRMED
   }
 }
