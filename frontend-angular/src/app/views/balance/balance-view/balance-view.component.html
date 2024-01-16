@@ -40,7 +40,7 @@
             <ng-container *ngIf="isCreatedEntry(historyEntry)">
               <mat-list-item (click)="goToOrder(historyEntry.orderId)" [ngClass]="{paid: isCreatedEntryPaid(historyEntry)}" class="cursor-pointer">
                 <h3 matListItemTitle >
-                  ({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}
+                  <b>({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}</b>
                 </h3>
 
                 <p matListItemLine>
@@ -57,9 +57,11 @@
             <ng-container *ngIf="isParticipatedEntry(historyEntry)">
               <mat-list-item (click)="goToOrder(historyEntry.orderId)" [ngClass]="{paid: isParticipatedEntryPaid(historyEntry)}" class="cursor-pointer">
                 <h3 matListItemTitle >
-                  ({{ historyEntry.orderDate }}) {{ historyEntry.orderCreator }} ordered from {{
-                    historyEntry.restaurantName
-                  }}
+                  <b>
+                    ({{ historyEntry.orderDate }})
+                    {{ historyEntry.orderCreator }} ordered from
+                    {{ historyEntry.restaurantName }}
+                  </b>
                 </h3>
 
                 <p matListItemLine>

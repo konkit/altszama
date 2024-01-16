@@ -83,6 +83,7 @@ class BalanceService {
     return (tuples + tuples2)
       .groupBy { it.key }
       .map { entry -> Pair(entry.key.username, entry.value.sumOf { it.value }) }
+      .filter { it.second != 0 }
       .toMap()
   }
 
