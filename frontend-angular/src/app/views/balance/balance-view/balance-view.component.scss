@@ -3,6 +3,11 @@
 
 @import "../../../../themes.scss";
 
+:host {
+  width: 100%;
+  height: 100%;
+}
+
 .paid h3, .paid p{
   $color-config:    mat.get-color-config($altszama-theme);
   $foreground-palette: map.get($color-config, foreground);
