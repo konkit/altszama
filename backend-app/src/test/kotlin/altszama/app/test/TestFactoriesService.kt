@@ -76,7 +76,7 @@ class TestFactoriesService {
   }
 
   fun createUser3(team: Team): User {
-    return createUser3WithToken(team).second
+    return createUserAndGetToken("Jimmy", "jimmy@${team.domain}").second
   }
 
   protected fun createUserAndGetToken(username: String, email: String): Pair<String, User> {
@@ -110,12 +110,12 @@ class TestFactoriesService {
     return Pair(restaurant, listOf(dish1, dish2))
   }
 
-  fun createOrder(restaurant: Restaurant, user1: User, team1: Team): Order {
+  fun createOrder(restaurant: Restaurant, user1: User, team1: Team, deliveryData: DeliveryData = DeliveryData()): Order {
     val orderSaveRequest = OrderSaveRequest(
       restaurantId = restaurant.id,
       orderDate = LocalDate.now(),
       timeOfOrder = LocalTime.of(14, 0),
-      deliveryData = DeliveryData(),
+      deliveryData = deliveryData,
       paymentData = PaymentData()
     )
     return orderService.saveOrder(orderSaveRequest, currentUser = user1, currentUserTeam = team1)
@@ -131,6 +131,16 @@ class TestFactoriesService {
       sideDishes = emptyList()
     )
     return orderEntryService.saveEntry(user, team, orderEntrySaveRequest)
+  }
+
+  fun createDish(restaurant: Restaurant, name: String, price: Int, team: Team): Dish {
+    val req1 = DishCreateRequest(
+      name,
+      price,
+      category = "Category 1",
+      sideDishes = emptyList()
+    )
+    return dishService.saveDish(team, restaurant.id, req1)
   }
 
 }

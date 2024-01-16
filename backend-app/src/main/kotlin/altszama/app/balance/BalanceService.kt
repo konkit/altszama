@@ -40,8 +40,7 @@ class BalanceService {
     val orderHistoryCreatedEntries = ordersUserCreated
       .map { order ->
         val orderEntries = orderEntryRepository.findByOrder(order)
-        val userCount = orderEntryRepository.countByOrder(order)
-        createOrderHistoryCreatedEntry(order, userCount, orderEntries)
+        createOrderHistoryCreatedEntry(order, orderEntries)
       }
 
     val orderHistoryParticipatedEntries = orderEntriesUserParticipatedIn
@@ -67,7 +66,7 @@ class BalanceService {
           .map { orderEntry -> Pair(orderEntry.user, orderEntry.getFinalPrice(userCount)) }
       }
       .groupBy { pair -> pair.first }
-      .mapValues { entry -> entry.value.sumBy { pair -> pair.second } }
+      .mapValues { entry -> entry.value.sumOf { pair -> pair.second } }
       .entries
 
     val tuples2 = orderEntriesUserParticipatedIn
@@ -83,7 +82,7 @@ class BalanceService {
 
     return (tuples + tuples2)
       .groupBy { it.key }
-      .map { entry -> Pair(entry.key.username, entry.value.sumBy { it.value }) }
+      .map { entry -> Pair(entry.key.username, entry.value.sumOf { it.value }) }
       .toMap()
   }
 
@@ -104,12 +103,12 @@ class BalanceService {
     )
   }
 
-  private fun createOrderHistoryCreatedEntry(order: Order, userCount: Int, orderEntries: List<OrderEntry>): OrderHistoryCreatedEntry {
+  private fun createOrderHistoryCreatedEntry(order: Order, orderEntries: List<OrderEntry>): OrderHistoryCreatedEntry {
     val confirmedPaymentsTotalAmount = orderEntries
       .filter { orderEntry -> orderEntry.paymentStatus == OrderEntryPaymentStatus.CONFIRMED }
-      .sumBy { orderEntry -> orderEntry.getFinalPrice(userCount) }
+      .sumOf { orderEntry -> orderEntry.getFinalPrice(orderEntries.size) }
 
-    val totalAmount = Order.getTotalPrice(order, orderEntries)
+    val totalAmount = Order.getTotalPrice(orderEntries)
 
     return OrderHistoryCreatedEntry(
       orderId = order.id,

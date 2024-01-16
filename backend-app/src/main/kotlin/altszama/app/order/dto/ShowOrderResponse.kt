@@ -109,7 +109,7 @@ data class ShowOrderResponse(
                     .toMap()
 
             val baseOrderPrice = Order.getBasePrice(entries)
-            val totalOrderPrice = Order.getTotalPrice(order, entries)
+            val totalOrderPrice = Order.getTotalPrice(entries)
 
             return ShowOrderResponse(
                     fromOrder(order),
@@ -124,9 +124,9 @@ data class ShowOrderResponse(
         }
 
         private fun createParticipantOrderEntry(orderEntry: OrderEntry, order: Order, usersCount: Int): ParticipantsOrderEntry {
-            val basePrice = orderEntry.dishEntries.sumBy { dishEntry -> dishEntry.priceWithSidedishes() }
+            val basePrice = orderEntry.dishEntries.sumOf { dishEntry -> dishEntry.priceWithSidedishes() }
 
-            val decreaseAmount = (basePrice * (order.decreaseInPercent / 100.0)).toInt()
+          val decreaseAmount = (basePrice * (order.decreaseInPercent / 100.0)).toInt()
             val deliveryCostPerOrder = (order.deliveryCostPerEverybody / usersCount)
             val deliveryCostPerEntry = order.deliveryCostPerDish * orderEntry.dishEntries.size
 

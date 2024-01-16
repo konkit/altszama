@@ -34,9 +34,9 @@ data class OrderEntry(
     var created: LocalDate = LocalDate.now()
 ) {
     fun getFinalPrice(usersCount: Int): Int {
-        val basePrice = dishEntries.sumBy { dishEntry -> dishEntry.priceWithSidedishes() }
+        val basePrice = dishEntries.sumOf { dishEntry -> dishEntry.priceWithSidedishes() }
 
-        val decreaseAmount = (basePrice * (order.decreaseInPercent / 100.0)).toInt()
+        val decreaseAmount = (basePrice * order.decreaseInPercent / 100.0).toInt()
         val deliveryCostPerOrder = (order.deliveryCostPerEverybody / usersCount)
         val deliveryCostPerEntry = order.deliveryCostPerDish * dishEntries.size
 

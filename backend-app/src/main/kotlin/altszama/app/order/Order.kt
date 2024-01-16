@@ -61,19 +61,11 @@ data class Order(
 ) {
   companion object {
     fun getBasePrice(entries: List<OrderEntry>): Int {
-      return entries
-        .map { it.dishEntries.sumBy(DishEntry::priceWithSidedishes) }
-        .sum()
+      return entries.sumOf { it.dishEntries.sumOf(DishEntry::priceWithSidedishes) }
     }
 
-    fun getTotalPrice(order: Order, entries: List<OrderEntry>): Int {
-      val basePriceSum = getBasePrice(entries)
-
-      val decrease = (basePriceSum * order.decreaseInPercent / 100.0).toInt()
-      val deliveryCostPerDishes = entries.flatMap { it.dishEntries }.size * order.deliveryCostPerDish
-      val priceModifiers = -decrease + order.deliveryCostPerEverybody + deliveryCostPerDishes
-
-      return basePriceSum + priceModifiers
+    fun getTotalPrice(entries: List<OrderEntry>): Int {
+      return entries.sumOf { orderEntry -> orderEntry.getFinalPrice(entries.size) }
     }
   }
 }

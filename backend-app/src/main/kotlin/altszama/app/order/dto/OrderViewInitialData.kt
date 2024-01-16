@@ -38,7 +38,7 @@ data class OrderViewInitialData(
         fun create(order: Order, entries: List<OrderEntry>): OrderViewInitialData {
             val groupedUserEntries = createGroupedUserEntries(entries)
             val basePriceSum = Order.getBasePrice(entries)
-            val orderTotalPrice = Order.getTotalPrice(order, entries)
+            val orderTotalPrice = Order.getTotalPrice(entries)
 
             return OrderViewInitialData(
                     order.orderState,
@@ -79,12 +79,11 @@ data class OrderViewInitialData(
                                     .map { dishEntry -> EatingPersonEntry(orderEntry.user.username, dishEntry.additionalComments, dishEntry.chosenSideDishes) }
                         }
 
-                        val priceSumForDish = entriesForDish
-                                .map { orderEntry ->
-                                    dishEntriesWithCurrentDish(orderEntry).sumBy { entry -> entry.priceWithSidedishes() }
-                                }.sum()
+                        val priceSumForDish = entriesForDish.sumOf { orderEntry ->
+                          dishEntriesWithCurrentDish(orderEntry).sumOf { entry -> entry.priceWithSidedishes() }
+                        }
 
-                        val dishName = dishIdToDishNameMap[dishId]!!
+                      val dishName = dishIdToDishNameMap[dishId]!!
                         GroupedOrderEntry(dishName, priceSumForDish, mapEntry.value.size, eatingPersonEntries)
                     }
         }

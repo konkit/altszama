@@ -1,6 +1,7 @@
 package altszama.app.balance
 
 import altszama.app.order.OrderService
+import altszama.app.order.dto.DeliveryData
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
@@ -228,6 +229,36 @@ class BalanceServiceTest : AbstractIntegrationTest() {
     val result = balanceService.getOrderHistory(user2)
 
     assertThat(result.owedMoney).isEqualTo(emptyMap<String, Int>())
+  }
+
+  @Test()
+  fun testIfCalculatesFine() {
+    val team1 = testFactoriesService.createTeam1()
+
+    val user1 = testFactoriesService.createUser1(team1)
+    val user2 = testFactoriesService.createUser2(team1)
+    val user3 = testFactoriesService.createUser3(team1)
+
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val dish1 = testFactoriesService.createDish(restaurant, "Custom Dish 1", 2799, team1)
+
+    val order = testFactoriesService.createOrder(restaurant, user1, team1, deliveryData = DeliveryData(decreaseInPercent = 10))
+
+    val orderEntry1 = testFactoriesService.createOrderEntry(order, dish1, user1, team1)
+    val orderEntry2 = testFactoriesService.createOrderEntry(order, dish1, user2, team1)
+    val orderEntry3 = testFactoriesService.createOrderEntry(order, dish1, user3, team1)
+
+    orderService.setAsOrdered(order.id, "", user1)
+
+    orderEntryService.setAsConfirmedAsPaid(orderEntry1.id)
+    orderEntryService.setAsConfirmedAsPaid(orderEntry2.id)
+    orderEntryService.setAsConfirmedAsPaid(orderEntry3.id)
+
+    val result = balanceService.getOrderHistory(user1)
+
+    val entry = result.entries[0] as OrderHistoryCreatedEntry
+    assertThat(entry.totalAmount).isEqualTo(7560)
+    assertThat(entry.confirmedPaymentsTotalAmount).isEqualTo(7560)
   }
 
 }
