@@ -1,59 +1,44 @@
-<div class="-mt-1.5">
-  <div class="py-2 flex items-center">
-    <span class="mat-subtitle-2 method-allowed" *ngIf="paymentData.paymentByCash === true">
-      <span class="flex items-center">
-        Payment by cash <mat-icon fontIcon="check" class="ml-2"></mat-icon>
-      </span>
-    </span>
+<mat-list>
+  <mat-list-item *ngIf="paymentData.paymentByCash === true">
+    <div matListItemTitle>Payment by cash</div>
+    <div matListItemLine>Allowed</div>
+  </mat-list-item>
 
-    <span class="mat-text-body1 method-not-allowed" *ngIf="paymentData.paymentByCash === false">
-      <span class="flex items-center">
-        Payment by cash <mat-icon fontIcon="close" class="ml-2"></mat-icon>
-      </span>
-    </span>
-  </div>
+  <mat-list-item *ngIf="paymentData.paymentByCash === false">
+    <div matListItemTitle class="flex items-center">Payment by cash</div>
+    <div matListItemLine>Not allowed</div>
+  </mat-list-item>
 
-  <div class="py-2 flex items-center">
-    <span class="mat-subtitle-2 method-allowed" *ngIf="paymentData.paymentByBankTransfer === true">
-      <span class="flex items-center">
-        Payment by bank transfer <mat-icon fontIcon="check" class="ml-2"></mat-icon>
-      </span>
-    </span>
+  <mat-list-item *ngIf="paymentData.paymentByBankTransfer === true">
+    <div matListItemTitle>Payment by bank transfer</div>
+    <div matListItemLine class="user-selectable"
+           *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
+        <span class="text-body2">{{ formatBankAccountNr(paymentData.bankTransferNumber) }}</span>
 
-    <span class="mat-text-body1 method-not-allowed" *ngIf="paymentData.paymentByBankTransfer === false">
-      <span class="flex items-center">
-        Payment by bank transfer <mat-icon fontIcon="close" class="ml-2"></mat-icon>
-      </span>
-    </span>
+      <mat-icon
+        *ngIf="shouldShowQRCodeButton"
+        (click)="showQrModal()" class="cursor-pointer ml-2 material-icons-outlined"
+        matTooltip="Show QR code for bank transfer">qr_code
+      </mat-icon>
+    </div>
+  </mat-list-item>
 
-    <mat-icon
-      *ngIf="shouldShowQRCodeButton"
-      (click)="showQrModal()" class="cursor-pointer ml-2 material-icons-outlined"
-      matTooltip="Show QR code for bank transfer">qr_code
-    </mat-icon>
-  </div>
+  <mat-list-item *ngIf="paymentData.paymentByBankTransfer === false">
+    <div matListItemTitle>Payment by bank transfer</div>
+    <div matListItemLine>Not allowed</div>
+  </mat-list-item>
 
-  <div class="px-3 user-selectable flex"
-       *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
-    <span class="text-body2">{{ formatBankAccountNr(paymentData.bankTransferNumber) }}</span>
-  </div>
+  <mat-list-item *ngIf="paymentData.paymentByBlik === true">
+    <div matListItemTitle>Payment by BLIK</div>
+    <div matListItemLine class="user-selectable"
+         *ngIf="paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
+      <span class="text-body2">{{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}</span>
+    </div>
+  </mat-list-item>
 
-  <div class="py-2 flex items-center">
-    <span class="mat-subtitle-2 method-allowed" *ngIf="paymentData.paymentByBlik === true">
-      <span class="flex items-center">
-        Payment by BLIK <mat-icon fontIcon="check" class="ml-2"></mat-icon>
-      </span>
-    </span>
+  <mat-list-item *ngIf="paymentData.paymentByBlik === false">
+    <div matListItemTitle>Payment by BLIK</div>
+    <div matListItemLine>Not allowed</div>
+  </mat-list-item>
 
-    <span class="mat-text-body1 method-not-allowed" *ngIf="paymentData.paymentByBlik === false">
-      <span class="flex items-center">
-        Payment by BLIK <mat-icon fontIcon="close" class="ml-2"></mat-icon>
-      </span>
-    </span>
-  </div>
-
-  <div class="px-3 user-selectable"
-       *ngIf="paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
-    <span class="text-body2">{{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}</span>
-  </div>
-</div>
+</mat-list>

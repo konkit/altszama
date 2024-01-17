@@ -9,6 +9,8 @@ import {ShowOrderDto} from "../../../../../../../../frontend-client";
 export class OrderDataSummaryComponent {
   @Input() order!: ShowOrderDto
 
+  protected readonly ShowOrderDto = ShowOrderDto;
+
   timeOfDeliveryOrNA() {
     if (this.order.timeOfDelivery != null) {
       return this.order.timeOfDelivery;

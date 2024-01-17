@@ -1,0 +1,29 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import "../../../../../../../../themes.scss";
+
+.user-selectable {
+  user-select: text;
+}
+
+.mdc-icon-button {
+  height: 16px;
+  width: 16px;
+  font-size: 16px;
+  line-height: 16px; // DO NOT FORGET IT !
+}
+
+.text-body1 {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.text-body2 {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.payments-grid {
+  display: grid;
+  grid-template-columns: 1fr 19rem 1fr;
+  grid-gap: 0.75rem;
+}

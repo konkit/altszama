@@ -133,6 +133,12 @@ import {
 import {
   BankTransferQrcodeModal
 } from "./views/orders/show-order-view/components/order-details/components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
+import {
+  PriceSummaryCardsComponent
+} from './views/orders/show-order-view/components/order-details/components/price-summary-cards/price-summary-cards.component';
+import {
+  PaymentOptionsSummaryCardsComponent
+} from './views/orders/show-order-view/components/order-details/components/payment-options-summary-cards/payment-options-summary-cards.component';
 
 @NgModule({
   declarations: [
@@ -189,6 +195,8 @@ import {
     OrderLockedWarningBannerComponent,
     OrderDetailsComponent,
     ChipComponent,
+    PriceSummaryCardsComponent,
+    PaymentOptionsSummaryCardsComponent,
   ],
   imports: [
     BrowserModule,

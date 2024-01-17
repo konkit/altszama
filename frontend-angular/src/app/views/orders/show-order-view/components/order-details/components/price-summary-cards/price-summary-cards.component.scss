@@ -1,0 +1,10 @@
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 0.75rem;
+}
+
+.counter {
+  padding-top: 0.5rem;
+  font-size: 24px;
+}

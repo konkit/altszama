@@ -1,26 +1,24 @@
-<div class="hidden md:grid md:grid-cols-3 w-fit">
-  <div>
-    <h2>Order details</h2>
-    <app-order-data-summary [order]="order">
-    </app-order-data-summary>
-  </div>
+<div class="hidden lg:block">
+  <p>Current status: </p>
+  <mat-card>
+    <mat-card-content>
+      <app-order-data-summary [order]="order">
+      </app-order-data-summary>
+    </mat-card-content>
+  </mat-card>
 
-  <div>
-    <h2>Price summary</h2>
-    <app-price-summary [priceSummaryData]="viewState.priceSummaryData">
-    </app-price-summary>
-  </div>
+  <p class="pt-3">Price details: </p>
+  <app-price-summary-cards [priceSummaryData]="viewState.priceSummaryData">
+  </app-price-summary-cards>
 
-  <div>
-    <h2>Payment options</h2>
-    <app-payment-options-summary [paymentData]="order.paymentData"
-                                 [paymentOptionsData]="viewState.paymentOptionsData"
-                                 [yourOrderEntries]="viewState.yourOrderEntries">
-    </app-payment-options-summary>
-  </div>
+  <p class="pt-3">Payment options: </p>
+  <app-payment-options-summary-cards [paymentData]="order.paymentData"
+                                 [yourOrderEntries]="viewState.yourOrderEntries"
+                                 [paymentOptionsData]="viewState.paymentOptionsData">
+  </app-payment-options-summary-cards>
 </div>
 
-<div class="block md:hidden">
+<div class="block lg:hidden">
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       Order details
