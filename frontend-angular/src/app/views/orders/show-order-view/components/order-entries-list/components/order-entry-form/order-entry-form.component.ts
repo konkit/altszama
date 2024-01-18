@@ -9,7 +9,6 @@ import {
   SideDishForm,
   SideDishValue
 } from "../../lib/formvalues";
-import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
 
 
 @Component({
@@ -36,8 +35,7 @@ export class OrderEntryFormComponent implements OnInit {
     chosenSideDishes: this.fb.nonNullable.array<FormGroup<SideDishForm>>([])
   });
 
-  constructor(private fb: FormBuilder,
-              private modifyOrderEntryService: ModifyOrderEntryService) {
+  constructor(private fb: FormBuilder) {
   }
 
   ngOnInit() {
@@ -85,8 +83,12 @@ export class OrderEntryFormComponent implements OnInit {
     this.formGroup.controls.price.setValue(dish.price)
   }
 
-  displayFn(dish: DishDto): string {
-    return dish && dish.name ? dish.name : '';
+  displayFn(dish: DishDto | string): string {
+    if (typeof dish === "object") {
+      return dish && dish.name ? dish.name : '';
+    } else {
+      return dish;
+    }
   }
 
   private _filter(value: string): DishDto[] {

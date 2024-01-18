@@ -31,7 +31,7 @@ export class EditOrderEntryComponent implements OnInit {
 
   ngOnInit() {
     this.initialValue = {
-      dish: this.allDishesInRestaurant.find(x => x.id == this.dishEntry.dishId) || "",
+      dish: this.allDishesInRestaurant.find(x => x.id == this.dishEntry.dishId) || this.dishEntry.dishName,
       price: this.dishEntry.price,
       additionalComments: this.dishEntry.comments,
       chosenSideDishes: this.dishEntry.sideDishes,
