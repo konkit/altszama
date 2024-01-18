@@ -2,7 +2,7 @@
   <mat-card>
     <mat-card-content *ngIf="paymentData.paymentByCash === true">
       <div matListItemTitle class="flex items-center ">
-        Payment by cash <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+        Payment by cash
       </div>
 
       <div matListItemLine class="text-no-wrap">Allowed</div>
@@ -10,7 +10,7 @@
 
     <mat-card-content  *ngIf="paymentData.paymentByCash === false">
       <div matListItemTitle class="flex items-center ">
-        Payment by cash <mat-icon fontIcon="close" class="ml-2"></mat-icon>
+        Payment by cash
       </div>
 
       <div matListItemLine class="text-no-wrap">Not allowed</div>
@@ -20,7 +20,7 @@
   <mat-card>
     <mat-card-content *ngIf="paymentData.paymentByBankTransfer === true">
       <div matListItemTitle class="flex items-center ">
-        Payment by bank transfer <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+        Payment by bank transfer
       </div>
 
       <div matListItemLine class="user-selectable flex"
@@ -37,7 +37,7 @@
 
     <mat-card-content *ngIf="paymentData.paymentByBankTransfer === false">
       <span matListItemTitle class="flex items-center ">
-        Payment by bank transfer <mat-icon fontIcon="close" class="ml-2"></mat-icon>
+        Payment by bank transfer
       </span>
 
       <div matListItemLine class="text-no-wrap">Not allowed</div>
@@ -47,7 +47,7 @@
   <mat-card>
     <mat-card-content *ngIf="paymentData.paymentByBlik === true">
       <div matListItemTitle class="flex items-center ">
-        Payment by BLIK <mat-icon fontIcon="check" class="ml-2"></mat-icon>
+        Payment by BLIK
       </div>
 
       <div matListItemLine class="user-selectable"
@@ -58,7 +58,7 @@
 
     <mat-card-content *ngIf="paymentData.paymentByBlik === false">
       <div matListItemTitle class="flex items-center ">
-        Payment by BLIK <mat-icon fontIcon="close" class="ml-2"></mat-icon>
+        Payment by BLIK
       </div>
 
       <div matListItemLine class="text-no-wrap">Not allowed</div>

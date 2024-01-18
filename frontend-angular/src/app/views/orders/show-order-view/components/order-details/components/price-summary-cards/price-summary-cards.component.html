@@ -2,7 +2,7 @@
   <mat-card>
     <mat-card-content>
       <div matListItemTitle>Base price:</div>
-      <div matListItemLine class="counter">{{priceSummaryData.basePriceSum | price}}</div>
+      <div matListItemLine class="counter">{{ priceSummaryData.basePriceSum | price }}</div>
     </mat-card-content>
   </mat-card>
 
@@ -20,19 +20,23 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card >
+  <mat-card>
     <mat-card-content>
       <div matListItemTitle>Delivery:</div>
       <div matListItemLine *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody !== 0">
         <span class="unbreakable"><b>+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</b>
         per whole order
-      </span>
+        </span>
       </div>
 
       <div matListItemLine *ngIf="priceSummaryData.deliveryData.deliveryCostPerDish !== 0">
-        <span class="unbreakable"><b>+ {{priceSummaryData.deliveryData.deliveryCostPerDish | price}}</b>
+        <span class="unbreakable"><b>+ {{ priceSummaryData.deliveryData.deliveryCostPerDish | price }}</b>
           * <b>{{ priceSummaryData.allEatingPeopleCount || 0 }}</b> dish
-      </span>
+        </span>
+      </div>
+
+      <div matListItemLine *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0">
+        <span class="unbreakable">None</span>
       </div>
     </mat-card-content>
   </mat-card>
@@ -41,7 +45,7 @@
     <mat-card-content>
       <div matListItemTitle>Total:</div>
       <div matListItemLine class="counter">
-        {{priceSummaryData.totalPrice | price}}
+        {{ priceSummaryData.totalPrice | price }}
       </div>
     </mat-card-content>
   </mat-card>
