@@ -3,7 +3,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, take} from "rxjs";
 import {ShowOrderViewService} from "./service/show-order-view.service";
 import {Title} from "@angular/platform-browser";
-import {ShowOrderViewState} from "./lib/model";
+import {ShowOrderViewState} from "../lib/model";
+import {ShowOrderDto} from "../../../../frontend-client";
+import {orderStateToCaption} from "../lib/orderState";
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
   selector: 'app-show-order-view',
@@ -31,5 +34,9 @@ export class ShowOrderViewComponent implements OnInit {
         let order = viewState.order;
         this.title.setTitle(`[${order.orderState}] Order from ${order.restaurantName} (${order.orderDate}) | AltSzama`)
       })
+  }
+
+  getOrderStateString(orderState: OrderStateEnum): string {
+    return orderStateToCaption(orderState)
   }
 }

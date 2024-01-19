@@ -5,7 +5,7 @@ import {FormBuilder} from "@angular/forms";
 import {map, take} from "rxjs";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
-import {PriceSummaryData} from "../show-order-view/lib/model";
+import {PriceSummaryData} from "../lib/model";
 
 @Component({
   selector: 'app-make-an-order-view',

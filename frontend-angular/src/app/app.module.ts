@@ -125,9 +125,6 @@ import {
   OrderDataSummaryComponent
 } from "./views/orders/show-order-view/components/order-details/components/order-data-summary/order-data-summary.component";
 import {
-  PriceSummaryComponent
-} from "./views/orders/show-order-view/components/order-details/components/price-summary/price-summary.component";
-import {
   PaymentOptionsSummaryComponent
 } from "./views/orders/show-order-view/components/order-details/components/payment-options-summary/payment-options-summary.component";
 import {
@@ -139,6 +136,8 @@ import {
 import {
   PaymentOptionsSummaryCardsComponent
 } from './views/orders/show-order-view/components/order-details/components/payment-options-summary-cards/payment-options-summary-cards.component';
+import {CdkAccordionModule} from "@angular/cdk/accordion";
+import {PriceSummaryComponent} from "./views/orders/components/price-summary/price-summary.component";
 
 @NgModule({
   declarations: [
@@ -230,6 +229,7 @@ import {
     MatExpansionModule,
     ScrollingModule,
     MatChipsModule,
+    CdkAccordionModule,
   ],
   providers: [
     {

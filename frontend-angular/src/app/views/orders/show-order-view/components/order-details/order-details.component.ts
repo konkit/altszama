@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ShowOrderDto} from "../../../../../../frontend-client";
-import {ShowOrderViewState} from "../../lib/model";
+import {ShowOrderViewState} from "../../../lib/model";
 
 @Component({
   selector: 'app-order-details',

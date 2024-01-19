@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {map, Observable} from "rxjs";
-import {TodayOrdersResponse} from "../../../../frontend-client";
+import {TodayOrderDto, TodayOrdersResponse} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
+import {orderStateToCaption} from "../lib/orderState"
+import OrderStateEnum = TodayOrderDto.OrderStateEnum;
 
 @Component({
   selector: 'app-today-orders-view',
@@ -23,6 +25,10 @@ export class TodayOrdersViewComponent {
 
   goToCreateOrder() {
     return this.router.navigate(["/orders/create"])
+  }
+
+  getOrderStateString(orderState: OrderStateEnum): string {
+    return orderStateToCaption(orderState)
   }
 
 }

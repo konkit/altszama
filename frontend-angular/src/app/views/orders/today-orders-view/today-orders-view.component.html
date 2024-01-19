@@ -12,7 +12,7 @@
               <b>{{ dishEntry.dish.name }}</b>
               from
               <b>{{ dishEntry.restaurantName }}</b>
-              (STATUS: {{ orderEntry.orderState }})
+              (STATUS: {{ getOrderStateString(orderEntry.orderState) }})
             </mat-list-item>
           </ng-container>
         </ng-container>
@@ -36,7 +36,7 @@
                 </span>
 
                 <span class="ml-auto">
-                  (STATUS: {{ element.orderState }})
+                  (STATUS: {{ getOrderStateString(element.orderState) }})
                 </span>
               </span>
 

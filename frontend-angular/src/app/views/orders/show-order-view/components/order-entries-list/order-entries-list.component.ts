@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {DishDto, ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../frontend-client";
-import {ModifyOrderEntryState} from "../../lib/model";
+import {ModifyOrderEntryState} from "../../../lib/model";
 import {Observable} from "rxjs";
 import {ShowOrderViewService} from "../../service/show-order-view.service";
 import {ModifyOrderEntryService} from "./service/modify-order-entry.service";

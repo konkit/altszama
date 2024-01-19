@@ -4,25 +4,29 @@
     <div matListItemLine>{{priceSummaryData.basePriceSum | price}}</div>
   </mat-list-item>
 
-  <mat-list-item
-    *ngIf="priceSummaryData.deliveryData.decreaseInPercent === 0 && priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0">
-    <div matListItemLine>No price modifiers</div>
+  <mat-list-item *ngIf="priceSummaryData.deliveryData.decreaseInPercent === 0">
+    <div matListItemLine>No discount</div>
   </mat-list-item>
 
   <mat-list-item *ngIf="priceSummaryData.deliveryData.decreaseInPercent !== 0">
-    <div matListItemTitle>Price decrease:</div>
+    <div matListItemTitle>Discount:</div>
     <div matListItemLine>- {{ priceSummaryData.deliveryData.decreaseInPercent }} %</div>
   </mat-list-item>
 
+  <mat-list-item
+    *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0">
+    <div matListItemLine>No delivery fees</div>
+  </mat-list-item>
+
   <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody !== 0">
-    <div matListItemTitle>Delivery (once):</div>
+    <div matListItemTitle>Delivery (per whole order):</div>
     <div matListItemLine>
       <span class="unbreakable">+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</span>
     </div>
   </mat-list-item>
 
   <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerDish !== 0">
-    <div matListItemTitle>Delivery per dish:</div>
+    <div matListItemTitle>Delivery (per dish):</div>
     <div matListItemLine>
         <span class="unbreakable">
           + {{priceSummaryData.deliveryData.deliveryCostPerDish | price}}

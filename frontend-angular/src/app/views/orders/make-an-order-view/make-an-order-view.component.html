@@ -1,9 +1,7 @@
-<!--<app-view-wrapper-->
-<!--  [title]="'[' + orderResponse.order.orderState + '] Order from ' + orderResponse.order.restaurantName + '(' + orderResponse.order.orderDate + ')'">-->
 <ng-container *ngIf="response$ | async as response">
   <ng-container *ngIf="priceSummaryInput$ | async as priceSummaryInput">
     <app-view-wrapper>
-      <h1 class="font-bold text-gray-700">Call the place and make an order!</h1>
+      <h1 class="font-bold text-gray-700">Now call {{ response.restaurantName }} and order the food!</h1>
 
       <ng-container *ngIf="response.orderState !== 'ORDERING'">
         <mat-card appearance="outlined">
@@ -16,7 +14,8 @@
           <mat-card-content>
             <h4>Sorry, the order is empty</h4>
             <p>
-              <button mat-icon-button (click)="goBack()" class="hidden-xs-only">
+              <button mat-raised-button (click)="goBack()" class="hidden-xs-only">
+                Go back
                 <mat-icon fontIcon="arrow_back"></mat-icon>
               </button>
             </p>
@@ -25,12 +24,16 @@
       </ng-container>
 
       <ng-container *ngIf="response.orderState === 'ORDERING'">
-        <mat-card appearance="outlined" class="my-5">
+        <mat-card appearance="outlined" class="mb-5">
           <mat-card-header>
             <mat-card-title>The order is locked!</mat-card-title>
           </mat-card-header>
 
-          <mat-card-content>Order is now locked, so no one should order anything else now.</mat-card-content>
+          <mat-card-content>
+            <div>
+              Order is now locked, so no one should order anything else now.
+            </div>
+          </mat-card-content>
 
           <mat-card-actions>
             <button mat-button color="primary" (click)="unlockOrder()">
@@ -40,63 +43,51 @@
           </mat-card-actions>
         </mat-card>
 
+        <div class="grid grid-cols-2 gap-3 w-full mb-5">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                <h1>Call the place!</h1>
+              </mat-card-title>
+            </mat-card-header>
 
-        <div>
-          <div class="grid grid-cols-3">
-            <div class="col-span-2 py-10 mr-10">
-              <h1>Call the place!</h1>
+            <mat-card-content class="h-full">
+              <div class="flex flex-col items-center">
+              <div *ngIf="response.restaurantTelephone.length > 0; else notelephone" class="justify-center py-6">
+                Call {{response.restaurantName}}: <b>tel. {{ response.restaurantTelephone }}</b>
+              </div>
+              <ng-template #notelephone>
+                <b>{{response.restaurantName}}: Telephone number not specified, sorry :/</b>
+              </ng-template>
 
               <div>
-                <p>
-                  Now please call the restaurant, make an order and then
-                  enter approximate delivery time and click "Order placed"
-                </p>
-              </div>
-
-              <div class="py-8">
-                <div>
-                  <div *ngIf="response.restaurantTelephone.length > 0; else notelephone" class="justify-center">
-                    <b>tel. {{ response.restaurantTelephone }}</b>
-                  </div>
-
-                  <ng-template #notelephone>
-                    <b>Telephone number not specified, sorry :/</b>
-                  </ng-template>
-                </div>
+                <mat-label>and fill the approximate time of delivery:</mat-label>
               </div>
 
               <div>
-                <div>
-                  <div>
-                    <mat-label>Approximate time of delivery:</mat-label>
-                  </div>
-                  <div>
-                    <app-time-picker [timeFormControl]="formGroup.controls.approxTimeOfDelivery"></app-time-picker>
-                  </div>
-                </div>
-
-                <div class="">
-                  <app-button color="primary" (click)="submitForm()" icon="arrow_right">
-                    Order placed!
-                  </app-button>
-                </div>
+                <app-time-picker [timeFormControl]="formGroup.controls.approxTimeOfDelivery"></app-time-picker>
               </div>
-            </div>
 
-            <div class="col-span-1 py-10" cols="4">
-              <h1>Cost summary</h1>
+              <button mat-raised-button color="primary" (click)="submitForm()">
+                Order placed!
+              </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
 
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title><h1>Cost summary</h1></mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
               <app-price-summary [priceSummaryData]="priceSummaryInput">
               </app-price-summary>
-            </div>
-          </div>
+            </mat-card-content>
+          </mat-card>
         </div>
 
-        <div>
-          <h1>Dishes:</h1>
-
-          <app-user-orders [groupedEntries]="response.groupedEntries"></app-user-orders>
-        </div>
+        <app-user-orders [groupedEntries]="response.groupedEntries"></app-user-orders>
       </ng-container>
 
     </app-view-wrapper>

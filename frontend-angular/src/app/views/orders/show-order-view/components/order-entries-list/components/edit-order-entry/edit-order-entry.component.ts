@@ -6,7 +6,7 @@ import {
   ParticipantsOrderEntry
 } from "../../../../../../../../frontend-client";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
-import {ModifyOrderEntryState} from "../../../../lib/model";
+import {ModifyOrderEntryState} from "../../../../../lib/model";
 import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
 
 

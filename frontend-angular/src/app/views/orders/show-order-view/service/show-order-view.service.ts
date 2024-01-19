@@ -8,7 +8,7 @@ import {
 } from "../../../../../frontend-client";
 import {AuthService} from "../../../../service/auth.service";
 import {EventSourcePolyfill} from "event-source-polyfill";
-import {PaymentOptionsData, PriceSummaryData, ShowOrderViewState, ShowOrderViewStateFlags} from "../lib/model";
+import {PaymentOptionsData, PriceSummaryData, ShowOrderViewState, ShowOrderViewStateFlags} from "../../lib/model";
 import {
   BankTransferQrcodeModal,
   QrcodeModalInput

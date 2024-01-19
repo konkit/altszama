@@ -1,4 +1,4 @@
-import {DeliveryData, DishDto, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../frontend-client";
+import {DeliveryData, DishDto, ParticipantsOrderEntry, ShowOrderDto} from "../../../../frontend-client";
 
 export interface ShowOrderViewState {
   order: ShowOrderDto,

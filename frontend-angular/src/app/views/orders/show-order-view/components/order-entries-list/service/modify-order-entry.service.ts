@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, catchError, Observable, switchMap, tap} from "rxjs";
-import {ModifyOrderEntryState} from "../../../lib/model";
+import {ModifyOrderEntryState} from "../../../../lib/model";
 import {
   OrderEntryControllerService,
   OrderEntrySaveRequest,
