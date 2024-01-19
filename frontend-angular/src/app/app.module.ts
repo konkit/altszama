@@ -101,7 +101,6 @@ import {MatCardModule} from "@angular/material/card";
 import {PaymentDataFormComponent} from './views/orders/components/payment-data-form/payment-data-form.component';
 import {DeliveryDataFormComponent} from './views/orders/components/delivery-data-form/delivery-data-form.component';
 import {OrderTimeFormComponent} from './views/orders/components/order-time-form/order-time-form.component';
-import {TimePickerComponent} from './components/time-picker/time-picker.component';
 import {MatExpansionModule} from "@angular/material/expansion";
 import {ErrorSnackBarComponent} from './components/error-snack-bar/error-snack-bar.component';
 import {
@@ -138,6 +137,7 @@ import {
 } from './views/orders/show-order-view/components/order-details/components/payment-options-summary-cards/payment-options-summary-cards.component';
 import {CdkAccordionModule} from "@angular/cdk/accordion";
 import {PriceSummaryComponent} from "./views/orders/components/price-summary/price-summary.component";
+
 
 @NgModule({
   declarations: [
@@ -186,7 +186,6 @@ import {PriceSummaryComponent} from "./views/orders/components/price-summary/pri
     PaymentDataFormComponent,
     DeliveryDataFormComponent,
     OrderTimeFormComponent,
-    TimePickerComponent,
     ErrorSnackBarComponent,
     ExistingOrderEntryCardComponent,
     PaymentStatusChipComponent,

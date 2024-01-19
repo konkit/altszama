@@ -8,7 +8,10 @@
     <ng-template matStepLabel>Fill details</ng-template>
 
     <div class="grid grid-cols-1 md:grid-cols-3 py-4 pr-10">
-      <app-order-time-form class="mr-20 mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
+      <app-order-time-form class="mr-20 mb-5"
+                           [timeOfOrderControl]="orderForm.controls.timeOfOrder"
+                           [timeOfDeliveryControl]="orderForm.controls.timeOfDelivery"
+      ></app-order-time-form>
       <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
       <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
     </div>

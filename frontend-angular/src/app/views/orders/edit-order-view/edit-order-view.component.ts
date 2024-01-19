@@ -21,7 +21,8 @@ export class EditOrderViewComponent implements OnInit, OnDestroy {
   fb = new FormBuilder()
   orderForm = this.fb.nonNullable.group({
     orderDate: this.fb.nonNullable.control(""),
-    timeOfOrder: this.fb.control("14:00"),
+    timeOfOrder: this.fb.control("12:00"),
+    timeOfDelivery: this.fb.control("14:00"),
     deliveryData: this.fb.nonNullable.group({
       decreaseInPercent: this.fb.nonNullable.control(0),
       deliveryCostPerEverybody: this.fb.nonNullable.control(0),
@@ -81,6 +82,7 @@ export class EditOrderViewComponent implements OnInit, OnDestroy {
     this.orderForm.setValue({
       orderDate: response.order.orderDate,
       timeOfOrder: response.order.timeOfOrder || null,
+      timeOfDelivery: response.order.timeOfDelivery || null,
       deliveryData: response.order.deliveryData,
       paymentData: response.order.paymentData,
     })
@@ -103,6 +105,7 @@ export class EditOrderViewComponent implements OnInit, OnDestroy {
       orderId: this.orderId,
       orderDate: this.orderForm.controls.orderDate.value,
       timeOfOrder: this.toStringOrUndefined(this.orderForm.controls.timeOfOrder.value),
+      timeOfDelivery: this.toStringOrUndefined(this.orderForm.controls.timeOfDelivery.value),
       deliveryData: {
         decreaseInPercent: this.orderForm.controls.deliveryData.controls.decreaseInPercent.value,
         deliveryCostPerEverybody: this.orderForm.controls.deliveryData.controls.deliveryCostPerEverybody.value,

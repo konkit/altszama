@@ -7,7 +7,7 @@
 </div>
 
 <div *ngIf="order.orderState == ShowOrderDto.OrderStateEnum.ORDERED">
-  <b>{{ this.order.orderCreatorUsername }}</b> has already ordered! Waiting for delivery ... ETA:
+  <b>{{ this.order.orderCreatorUsername }}</b> has made an order at {{ this.order.timeOfOrder }}! Waiting for delivery, ETA:
   <b>{{ this.timeOfDeliveryOrNA() }}</b>
 </div>
 

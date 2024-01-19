@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-order-time-form',
@@ -8,4 +8,5 @@ import {FormControl, FormGroup} from "@angular/forms";
 })
 export class OrderTimeFormComponent {
   @Input() timeOfOrderControl!: FormControl<string | null>
+  @Input() timeOfDeliveryControl!: FormControl<string | null>
 }
