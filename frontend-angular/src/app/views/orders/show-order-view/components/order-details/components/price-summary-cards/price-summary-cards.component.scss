@@ -1,3 +1,8 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import "../../../../../../../../themes.scss";
+
 .summary-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -7,4 +12,11 @@
 .counter {
   padding-top: 0.5rem;
   font-size: 24px;
+}
+
+.not-enabled {
+  $color-config:    mat.get-color-config($altszama-theme);
+  $foreground-palette: map.get($color-config, foreground);
+
+  color: mat.get-color-from-palette($foreground-palette, disabled);
 }

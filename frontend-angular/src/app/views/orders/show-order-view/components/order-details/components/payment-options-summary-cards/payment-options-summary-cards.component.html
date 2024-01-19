@@ -9,11 +9,11 @@
     </mat-card-content>
 
     <mat-card-content  *ngIf="paymentData.paymentByCash === false">
-      <div matListItemTitle class="flex items-center ">
+      <div matListItemTitle class="flex items-center not-allowed">
         Payment by cash
       </div>
 
-      <div matListItemLine class="text-no-wrap">Not allowed</div>
+      <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
     </mat-card-content>
   </mat-card>
 
@@ -36,11 +36,11 @@
     </mat-card-content>
 
     <mat-card-content *ngIf="paymentData.paymentByBankTransfer === false">
-      <span matListItemTitle class="flex items-center ">
+      <span matListItemTitle class="flex items-center not-allowed">
         Payment by bank transfer
       </span>
 
-      <div matListItemLine class="text-no-wrap">Not allowed</div>
+      <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
     </mat-card-content>
   </mat-card>
 
@@ -57,11 +57,11 @@
     </mat-card-content>
 
     <mat-card-content *ngIf="paymentData.paymentByBlik === false">
-      <div matListItemTitle class="flex items-center ">
+      <div matListItemTitle class="flex items-center not-allowed">
         Payment by BLIK
       </div>
 
-      <div matListItemLine class="text-no-wrap">Not allowed</div>
+      <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
     </mat-card-content>
   </mat-card>
 </div>

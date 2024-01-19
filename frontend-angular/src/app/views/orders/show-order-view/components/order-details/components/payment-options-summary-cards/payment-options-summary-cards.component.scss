@@ -24,6 +24,13 @@
 
 .payments-grid {
   display: grid;
-  grid-template-columns: 1fr 19rem 1fr;
+  grid-template-columns: 1fr minmax(19rem, 1fr) 1fr;
   grid-gap: 0.75rem;
+}
+
+.not-allowed {
+  $color-config:    mat.get-color-config($altszama-theme);
+  $foreground-palette: map.get($color-config, foreground);
+
+  color: mat.get-color-from-palette($foreground-palette, disabled);
 }
