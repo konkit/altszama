@@ -1,104 +1,102 @@
-<ng-container *ngIf="response$ | async as response">
-  <ng-container *ngIf="priceSummaryInput$ | async as priceSummaryInput">
-    <app-view-wrapper>
-      <h1 class="font-bold text-gray-700">Now call {{ response.restaurantName }} and order the food!</h1>
+@if (data$ | async; as data) {
+  <app-view-wrapper>
+    <h1 class="font-bold text-gray-700">Now call {{ data.initData.restaurantName }} and order the food!</h1>
 
-      <ng-container *ngIf="response.orderState !== 'ORDERING'">
-        <mat-card appearance="outlined">
+    <ng-container *ngIf="data.initData.orderState !== 'ORDERING'">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>
+            <h1>Ordering from {{ data.initData.restaurantName }}</h1>
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <h4>Sorry, the order is empty</h4>
+          <p>
+            <button mat-raised-button (click)="goBack()" class="hidden-xs-only">
+              Go back
+              <mat-icon fontIcon="arrow_back"></mat-icon>
+            </button>
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+
+    <ng-container *ngIf="data.initData.orderState === 'ORDERING'">
+      <mat-card appearance="outlined" class="mb-5">
+        <mat-card-header>
+          <mat-card-title>The order is locked!</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div>
+            Order is now locked, so no one should order anything else now.
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="unlockOrder()">
+            Unlock
+            <mat-icon fontIcon="lock_open"></mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <div class="grid grid-cols-2 gap-3 w-full mb-5">
+        <mat-card>
           <mat-card-header>
             <mat-card-title>
-              <h1>Ordering from {{ response.restaurantName }}</h1>
+              <h1>Call the place!</h1>
             </mat-card-title>
           </mat-card-header>
 
-          <mat-card-content>
-            <h4>Sorry, the order is empty</h4>
-            <p>
-              <button mat-raised-button (click)="goBack()" class="hidden-xs-only">
-                Go back
-                <mat-icon fontIcon="arrow_back"></mat-icon>
-              </button>
-            </p>
+          <mat-card-content class="h-full">
+            <div class="flex flex-col items-center">
+              <div class="justify-center py-3">
+                @if (data.initData.restaurantTelephone.length > 0) {
+                  Call <b>{{ data.initData.restaurantName }}</b>, tel. <b>{{ data.initData.restaurantTelephone }}</b>
+                } @else {
+                  Call <b>{{ data.initData.restaurantName }}</b> (Telephone number not specified, sorry :/)
+                }
+              </div>
+
+              <div class="mb-3">
+                <mat-label>make an order and fill the approximate time of delivery:</mat-label>
+              </div>
+
+              <div>
+                <mat-form-field class="time-form-field">
+                  <input matInput [ngxMatTimepicker]="picker" [format]="24"
+                         [formControl]="formGroup.controls.approxTimeOfDelivery">
+                  <mat-icon matSuffix (click)="picker.open()">watch_later</mat-icon>
+                </mat-form-field>
+                <ngx-mat-timepicker #picker></ngx-mat-timepicker>
+
+                <button mat-raised-button color="primary" (click)="submitForm()" class="ml-3">
+                  Order placed!
+                </button>
+              </div>
+            </div>
           </mat-card-content>
         </mat-card>
-      </ng-container>
 
-      <ng-container *ngIf="response.orderState === 'ORDERING'">
-        <mat-card appearance="outlined" class="mb-5">
+        <mat-card>
           <mat-card-header>
-            <mat-card-title>The order is locked!</mat-card-title>
+            <mat-card-title><h1>Cost summary</h1></mat-card-title>
           </mat-card-header>
 
           <mat-card-content>
-            <div>
-              Order is now locked, so no one should order anything else now.
-            </div>
+            <app-price-summary [priceSummaryData]="data.priceSummaryData">
+            </app-price-summary>
           </mat-card-content>
-
-          <mat-card-actions>
-            <button mat-button color="primary" (click)="unlockOrder()">
-              Unlock
-              <mat-icon fontIcon="lock_open"></mat-icon>
-            </button>
-          </mat-card-actions>
         </mat-card>
+      </div>
 
-        <div class="grid grid-cols-2 gap-3 w-full mb-5">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>
-                <h1>Call the place!</h1>
-              </mat-card-title>
-            </mat-card-header>
+      <app-user-orders [groupedEntries]="data.initData.groupedEntries"></app-user-orders>
+    </ng-container>
 
-            <mat-card-content class="h-full">
-              <div class="flex flex-col items-center">
-                <div *ngIf="response.restaurantTelephone.length > 0; else notelephone" class="justify-center py-3">
-                  Call <b>{{response.restaurantName}}</b>, tel. <b>{{ response.restaurantTelephone }}</b>
-                </div>
-                <ng-template #notelephone>
-                  <div class="justify-center py-3">
-                    Call <b>{{response.restaurantName}}</b> (Telephone number not specified, sorry :/)
-                  </div>
-                </ng-template>
-
-                <div class="mb-3">
-                  <mat-label>make an order and fill the approximate time of delivery:</mat-label>
-                </div>
-
-                <div>
-                  <mat-form-field class="time-form-field">
-                    <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="formGroup.controls.approxTimeOfDelivery">
-                    <mat-icon matSuffix (click)="picker.open()">watch_later</mat-icon>
-                  </mat-form-field>
-                  <ngx-mat-timepicker #picker></ngx-mat-timepicker>
-
-                  <button mat-raised-button color="primary" (click)="submitForm()" class="ml-3">
-                    Order placed!
-                  </button>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title><h1>Cost summary</h1></mat-card-title>
-            </mat-card-header>
-
-            <mat-card-content>
-              <app-price-summary [priceSummaryData]="priceSummaryInput">
-              </app-price-summary>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
-        <app-user-orders [groupedEntries]="response.groupedEntries"></app-user-orders>
-      </ng-container>
-
-    </app-view-wrapper>
-  </ng-container>
-</ng-container>
+  </app-view-wrapper>
+}
 
 
 

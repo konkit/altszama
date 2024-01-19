@@ -1,11 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {OrderControllerService} from "../../../../frontend-client";
+import {OrderControllerService, OrderViewInitialData} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder} from "@angular/forms";
-import {map, take} from "rxjs";
+import {combineLatest, map, Observable, take} from "rxjs";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
 import {PriceSummaryData} from "../lib/model";
+
+interface PageData {
+  initData: OrderViewInitialData
+  priceSummaryData: PriceSummaryData
+}
 
 @Component({
   selector: 'app-make-an-order-view',
@@ -29,6 +34,8 @@ export class MakeAnOrderViewComponent implements OnInit {
     approxTimeOfDelivery: ""
   })
 
+  data$!: Observable<PageData>;
+
   constructor(private orderControllerService: OrderControllerService,
               private errorSnackBar: ErrorSnackBarService,
               private route: ActivatedRoute,
@@ -41,6 +48,12 @@ export class MakeAnOrderViewComponent implements OnInit {
     this.response$.pipe(take(1)).subscribe(response => {
       this.title.setTitle(`Ordering from ${response.restaurantName} | AltSzama`)
     })
+
+    this.data$ = combineLatest([this.response$, this.priceSummaryInput$]).pipe(
+      map(([orderViewData, priceSummaryData]) => {
+        return {initData: orderViewData, priceSummaryData}
+      })
+    )
   }
 
   unlockOrder() {
