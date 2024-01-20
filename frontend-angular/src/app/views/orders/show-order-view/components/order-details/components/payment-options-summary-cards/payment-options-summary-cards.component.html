@@ -1,67 +1,77 @@
 <div class="payments-grid">
   <mat-card>
-    <mat-card-content *ngIf="paymentData.paymentByCash === true">
-      <div matListItemTitle class="flex items-center ">
-        Payment by cash
-      </div>
+    @if (paymentData.paymentByCash === true) {
+      <mat-card-content>
+        <div matListItemTitle class="flex items-center ">
+          Payment by cash
+        </div>
+        <div matListItemLine class="text-no-wrap">Allowed</div>
+      </mat-card-content>
+    }
 
-      <div matListItemLine class="text-no-wrap">Allowed</div>
-    </mat-card-content>
-
-    <mat-card-content  *ngIf="paymentData.paymentByCash === false">
-      <div matListItemTitle class="flex items-center not-allowed">
-        Payment by cash
-      </div>
-
-      <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
-    </mat-card-content>
+    @if (paymentData.paymentByCash === false) {
+      <mat-card-content >
+        <div matListItemTitle class="flex items-center not-allowed">
+          Payment by cash
+        </div>
+        <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
+      </mat-card-content>
+    }
   </mat-card>
 
   <mat-card>
-    <mat-card-content *ngIf="paymentData.paymentByBankTransfer === true">
-      <div matListItemTitle class="flex items-center ">
-        Payment by bank transfer
-      </div>
+    @if (paymentData.paymentByBankTransfer === true) {
+      <mat-card-content>
+        <div matListItemTitle class="flex items-center ">
+          Payment by bank transfer
+        </div>
+        @if (paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0) {
+          <div matListItemLine class="user-selectable flex"
+            >
+            <span>{{ formatBankAccountNr(paymentData.bankTransferNumber) }}</span>
+            @if (shouldShowQRCodeButton) {
+              <mat-icon
+                (click)="showQrModal()" class="cursor-pointer -mb-2 ml-2 material-icons-outlined"
+                matTooltip="Show QR code for bank transfer">qr_code
+              </mat-icon>
+            }
+          </div>
+        }
+      </mat-card-content>
+    }
 
-      <div matListItemLine class="user-selectable flex"
-           *ngIf="paymentData.paymentByBankTransfer && paymentData.bankTransferNumber != null && paymentData.bankTransferNumber.trim().length > 0">
-        <span>{{ formatBankAccountNr(paymentData.bankTransferNumber) }}</span>
-
-        <mat-icon
-          *ngIf="shouldShowQRCodeButton"
-          (click)="showQrModal()" class="cursor-pointer -mb-2 ml-2 material-icons-outlined"
-          matTooltip="Show QR code for bank transfer">qr_code
-        </mat-icon>
-      </div>
-    </mat-card-content>
-
-    <mat-card-content *ngIf="paymentData.paymentByBankTransfer === false">
-      <span matListItemTitle class="flex items-center not-allowed">
-        Payment by bank transfer
-      </span>
-
-      <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
-    </mat-card-content>
+    @if (paymentData.paymentByBankTransfer === false) {
+      <mat-card-content>
+        <span matListItemTitle class="flex items-center not-allowed">
+          Payment by bank transfer
+        </span>
+        <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
+      </mat-card-content>
+    }
   </mat-card>
 
   <mat-card>
-    <mat-card-content *ngIf="paymentData.paymentByBlik === true">
-      <div matListItemTitle class="flex items-center ">
-        Payment by BLIK
-      </div>
+    @if (paymentData.paymentByBlik === true) {
+      <mat-card-content>
+        <div matListItemTitle class="flex items-center ">
+          Payment by BLIK
+        </div>
+        @if (paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0) {
+          <div matListItemLine class="user-selectable"
+            >
+            {{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}
+          </div>
+        }
+      </mat-card-content>
+    }
 
-      <div matListItemLine class="user-selectable"
-           *ngIf="paymentData.paymentByBlik && paymentData.blikPhoneNumber != null && paymentData.blikPhoneNumber.trim().length > 0">
-        {{ formatBlikPhoneNumber(paymentData.blikPhoneNumber) }}
-      </div>
-    </mat-card-content>
-
-    <mat-card-content *ngIf="paymentData.paymentByBlik === false">
-      <div matListItemTitle class="flex items-center not-allowed">
-        Payment by BLIK
-      </div>
-
-      <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
-    </mat-card-content>
+    @if (paymentData.paymentByBlik === false) {
+      <mat-card-content>
+        <div matListItemTitle class="flex items-center not-allowed">
+          Payment by BLIK
+        </div>
+        <div matListItemLine class="text-no-wrap not-allowed">Not allowed</div>
+      </mat-card-content>
+    }
   </mat-card>
 </div>

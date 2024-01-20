@@ -14,7 +14,7 @@ import {
 import {OrderOwnerButtonsComponent} from './components/order-owner-buttons/order-owner-buttons.component';
 import {ChipComponent} from '../../../components/chip/chip.component';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
-import {AsyncPipe, NgIf} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -22,7 +22,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './show-order-view.component.html',
     styleUrls: ['./show-order-view.component.scss'],
     standalone: true,
-    imports: [NgIf, ViewWrapperComponent, ChipComponent, OrderOwnerButtonsComponent, OrderLockedWarningBannerComponent, OrderDetailsComponent, OrderEntriesListComponent, AsyncPipe]
+    imports: [ViewWrapperComponent, ChipComponent, OrderOwnerButtonsComponent, OrderLockedWarningBannerComponent, OrderDetailsComponent, OrderEntriesListComponent, AsyncPipe]
 })
 export class ShowOrderViewComponent implements OnInit {
 

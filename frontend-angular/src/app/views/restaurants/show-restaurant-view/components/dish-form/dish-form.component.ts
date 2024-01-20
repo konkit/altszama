@@ -12,7 +12,7 @@ import {ButtonComponent} from '../../../../../components/button/button.component
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatOptionModule} from '@angular/material/core';
-import {NgFor, NgIf} from '@angular/common';
+
 import {MatSelectModule} from '@angular/material/select';
 import {MoneyInputComponent} from '../../../../../components/money-input/money-input.component';
 import {MatInputModule} from '@angular/material/input';
@@ -42,7 +42,7 @@ export interface DishFormData {
     templateUrl: './dish-form.component.html',
     styleUrls: ['./dish-form.component.scss'],
     standalone: true,
-    imports: [MatFormFieldModule, FormsModule, ReactiveFormsModule, MatInputModule, MoneyInputComponent, MatSelectModule, NgFor, MatOptionModule, NgIf, MatButtonModule, MatIconModule, ButtonComponent]
+    imports: [MatFormFieldModule, FormsModule, ReactiveFormsModule, MatInputModule, MoneyInputComponent, MatSelectModule, MatOptionModule, MatButtonModule, MatIconModule, ButtonComponent]
 })
 export class DishFormComponent implements OnInit {
 

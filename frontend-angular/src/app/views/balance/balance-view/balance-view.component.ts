@@ -8,7 +8,7 @@ import {Router} from "@angular/router";
 import {PricePipe} from '../../../components/pipes/price.pipe';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatListModule} from '@angular/material/list';
-import {NgClass, NgFor, NgIf} from '@angular/common';
+import {NgClass} from '@angular/common';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 @Component({
@@ -16,7 +16,7 @@ import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrappe
     templateUrl: './balance-view.component.html',
     styleUrls: ['./balance-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, NgIf, MatListModule, NgFor, NgClass, MatProgressSpinnerModule, PricePipe]
+    imports: [ViewWrapperComponent, MatListModule, NgClass, MatProgressSpinnerModule, PricePipe]
 })
 export class BalanceViewComponent implements OnInit {
   isLoading = true

@@ -5,9 +5,11 @@
 
   <div class="container flex flex-col items-center justify-center pt-24">
     <h1>Test Login</h1>
-    <div *ngFor="let user of usersList">
-      <app-button (click)="loginAsUser(user)">{{ user.username }} ({{ user.email }})</app-button>
-    </div>
+    @for (user of usersList; track user) {
+      <div>
+        <app-button (click)="loginAsUser(user)">{{ user.username }} ({{ user.email }})</app-button>
+      </div>
+    }
   </div>
 </div>
 

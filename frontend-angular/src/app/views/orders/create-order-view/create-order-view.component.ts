@@ -23,7 +23,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
-import {NgIf} from '@angular/common';
+
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 @Component({
@@ -31,7 +31,7 @@ import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrappe
     templateUrl: './create-order-view.component.html',
     styleUrls: ['./create-order-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, NgIf, MatCardModule, MatIconModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatListModule, CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf, MatButtonModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent]
+    imports: [ViewWrapperComponent, MatCardModule, MatIconModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatListModule, CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf, MatButtonModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent]
 })
 export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestroy {
 

@@ -23,9 +23,11 @@
       <mat-form-field class="w-full">
         <mat-label>Category</mat-label>
         <mat-select [formControl]="dishForm.controls.category">
-          <mat-option *ngFor="let category of categories" [value]="category">
-            {{category}}
-          </mat-option>
+          @for (category of categories; track category) {
+            <mat-option [value]="category">
+              {{category}}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </div>
@@ -34,31 +36,34 @@
     <div class="pb-10">
       <h3>Side dishes:</h3>
 
-      <div *ngIf="dishForm.controls.sideDishes.length > 0">
-        <div *ngFor="let sdControl of dishForm.controls.sideDishes.controls; let i = index">
-          <div class="flex flex-row">
-            <div class="index-number">{{i+1}}.</div>
-            <div class="flex-grow">
-              <mat-form-field class="w-full">
-                <mat-label>Name</mat-label>
-                <input matInput [formControl]="sdControl.controls.name"/>
-              </mat-form-field>
-            </div>
-
+      @if (dishForm.controls.sideDishes.length > 0) {
+        <div>
+          @for (sdControl of dishForm.controls.sideDishes.controls; track sdControl; let i = $index) {
             <div>
-              <mat-form-field>
-                <mat-label>Price</mat-label>
-                <app-money-input [formControl]="sdControl.controls.price"></app-money-input>
-              </mat-form-field>
+              <div class="flex flex-row">
+                <div class="index-number">{{i+1}}.</div>
+                <div class="flex-grow">
+                  <mat-form-field class="w-full">
+                    <mat-label>Name</mat-label>
+                    <input matInput [formControl]="sdControl.controls.name"/>
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field>
+                    <mat-label>Price</mat-label>
+                    <app-money-input [formControl]="sdControl.controls.price"></app-money-input>
+                  </mat-form-field>
+                </div>
+                <div class="delete-button">
+                  <button mat-icon-button (click)="deleteSideDish(i)" color="warn">
+                    <mat-icon fontIcon="delete"></mat-icon>
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="delete-button">
-              <button mat-icon-button (click)="deleteSideDish(i)" color="warn">
-                <mat-icon fontIcon="delete"></mat-icon>
-              </button>
-            </div>
-          </div>
+          }
         </div>
-      </div>
+      }
 
       <div>
         <button mat-raised-button (click)="addSideDish()" type="button">

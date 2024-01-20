@@ -1,13 +1,13 @@
 import {Component, Input} from '@angular/core';
 import {ShowOrderDto} from "../../../../../../../../frontend-client";
-import {NgIf} from '@angular/common';
+
 
 @Component({
     selector: 'app-order-data-summary',
     templateUrl: './order-data-summary.component.html',
     styleUrls: ['./order-data-summary.component.scss'],
     standalone: true,
-    imports: [NgIf]
+    imports: []
 })
 export class OrderDataSummaryComponent {
   @Input() order!: ShowOrderDto

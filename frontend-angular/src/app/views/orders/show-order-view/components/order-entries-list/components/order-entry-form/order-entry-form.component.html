@@ -8,13 +8,15 @@
         <input matInput [formControl]="formGroup.controls.dish" [matAutocomplete]="auto" data-cy="dish-input" />
 
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onDishSelected($event.option.value)'
-                          [displayWith]="displayFn">
-          <mat-option *ngFor="let dish of filteredDishes | async" [value]="dish">
-            <div>{{dish.name}}</div>
-            <div class="mat-subtitle-2 text-gray-400">
-              Price: {{dish.price | price}}, auto-updated {{ dish.lastCrawled | relativeDate }}
-            </div>
-          </mat-option>
+          [displayWith]="displayFn">
+          @for (dish of filteredDishes | async; track dish) {
+            <mat-option [value]="dish">
+              <div>{{dish.name}}</div>
+              <div class="mat-subtitle-2 text-gray-400">
+                Price: {{dish.price | price}}, auto-updated {{ dish.lastCrawled | relativeDate }}
+              </div>
+            </mat-option>
+          }
         </mat-autocomplete>
       </mat-form-field>
 

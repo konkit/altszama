@@ -4,14 +4,14 @@ import {OrderActionsService} from "../../service/order-actions.service";
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
-import {NgIf} from '@angular/common';
+
 
 @Component({
     selector: 'app-order-owner-buttons',
     templateUrl: './order-owner-buttons.component.html',
     styleUrls: ['./order-owner-buttons.component.scss'],
     standalone: true,
-    imports: [NgIf, MatButtonModule, MatTooltipModule, MatIconModule]
+    imports: [MatButtonModule, MatTooltipModule, MatIconModule]
 })
 export class OrderOwnerButtonsComponent {
 

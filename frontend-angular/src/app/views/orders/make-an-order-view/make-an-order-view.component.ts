@@ -14,7 +14,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import {AsyncPipe, NgIf} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 interface PageData {
@@ -27,7 +27,7 @@ interface PageData {
     templateUrl: './make-an-order-view.component.html',
     styleUrls: ['./make-an-order-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, NgIf, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, FormsModule, NgxMatTimepickerDirective, ReactiveFormsModule, NgxMatTimepickerComponent, PriceSummaryComponent, UserOrdersComponent, AsyncPipe]
+    imports: [ViewWrapperComponent, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, FormsModule, NgxMatTimepickerDirective, ReactiveFormsModule, NgxMatTimepickerComponent, PriceSummaryComponent, UserOrdersComponent, AsyncPipe]
 })
 export class MakeAnOrderViewComponent implements OnInit {
 

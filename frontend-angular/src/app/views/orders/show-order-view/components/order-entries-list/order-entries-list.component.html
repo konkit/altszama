@@ -1,52 +1,51 @@
-<ng-container *ngIf="modifyOrderEntryState$ | async as modifyOrderEntryState">
-
-  <div *ngIf="order.orderState == OrderStateEnum.CREATED && yourOrderEntries.length === 0">
-    <mat-card appearance="outlined" class="mb-10 pb-5 md:px-5">
-      <mat-card-header>
-        <mat-card-title>
-          <div class="line-height-3rem text-body1">
-            <span>{{username}}</span>
+@if (modifyOrderEntryState$ | async; as modifyOrderEntryState) {
+  @if (order.orderState == OrderStateEnum.CREATED && yourOrderEntries.length === 0) {
+    <div>
+      <mat-card appearance="outlined" class="mb-10 pb-5 md:px-5">
+        <mat-card-header>
+          <mat-card-title>
+            <div class="line-height-3rem text-body1">
+              <span>{{username}}</span>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div>
+            @if (modifyOrderEntryState.isEntryCreating === false) {
+              <button mat-raised-button color="primary" class="mt-3" (click)="createEntry()">
+                Add entry
+                <mat-icon fontIcon="add"></mat-icon>
+              </button>
+            }
+            @if (modifyOrderEntryState.isEntryCreating === true) {
+              <app-create-order-entry [dishIndex]="1"
+                [orderId]="order.id"
+                [allDishesInRestaurant]="allDishesInRestaurant">
+              </app-create-order-entry>
+            }
           </div>
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div>
-          <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === false">
-            <button mat-raised-button color="primary" class="mt-3" (click)="createEntry()">
-              Add entry
-              <mat-icon fontIcon="add"></mat-icon>
-            </button>
-          </ng-container>
-
-          <ng-container *ngIf="modifyOrderEntryState.isEntryCreating === true">
-            <app-create-order-entry [dishIndex]="1"
-                                    [orderId]="order.id"
-                                    [allDishesInRestaurant]="allDishesInRestaurant">
-            </app-create-order-entry>
-          </ng-container>
-        </div>
-      </mat-card-content>
-
-    </mat-card>
-  </div>
-
-  <div *ngFor="let orderEntry of yourOrderEntries">
-    <app-existing-order-entry-card [orderEntry]="orderEntry"
-                                   [allDishesInRestaurant]="allDishesInRestaurant"
-                                   [currentUserId]="currentUserId"
-                                   [order]="order"
-                                   [modifyOrderEntryState]="modifyOrderEntryState">
-    </app-existing-order-entry-card>
-  </div>
-
-  <div *ngFor="let orderEntry of otherUserOrderEntries$ | async">
-    <app-existing-order-entry-card [orderEntry]="orderEntry"
-                                   [allDishesInRestaurant]="allDishesInRestaurant"
-                                   [currentUserId]="currentUserId"
-                                   [order]="order"
-                                   [modifyOrderEntryState]="modifyOrderEntryState">
-    </app-existing-order-entry-card>
-  </div>
-
-</ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+  @for (orderEntry of yourOrderEntries; track orderEntry) {
+    <div>
+      <app-existing-order-entry-card [orderEntry]="orderEntry"
+        [allDishesInRestaurant]="allDishesInRestaurant"
+        [currentUserId]="currentUserId"
+        [order]="order"
+        [modifyOrderEntryState]="modifyOrderEntryState">
+      </app-existing-order-entry-card>
+    </div>
+  }
+  @for (orderEntry of otherUserOrderEntries$ | async; track orderEntry) {
+    <div>
+      <app-existing-order-entry-card [orderEntry]="orderEntry"
+        [allDishesInRestaurant]="allDishesInRestaurant"
+        [currentUserId]="currentUserId"
+        [order]="order"
+        [modifyOrderEntryState]="modifyOrderEntryState">
+      </app-existing-order-entry-card>
+    </div>
+  }
+}

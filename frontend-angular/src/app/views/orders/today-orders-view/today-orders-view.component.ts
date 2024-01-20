@@ -6,7 +6,7 @@ import {orderStateToCaption} from "../lib/orderState"
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatListModule} from '@angular/material/list';
-import {AsyncPipe, NgFor, NgIf} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 import OrderStateEnum = TodayOrderDto.OrderStateEnum;
 
@@ -15,7 +15,7 @@ import OrderStateEnum = TodayOrderDto.OrderStateEnum;
     templateUrl: './today-orders-view.component.html',
     styleUrls: ['./today-orders-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, NgIf, MatListModule, NgFor, MatButtonModule, MatIconModule, AsyncPipe]
+    imports: [ViewWrapperComponent, MatListModule, MatButtonModule, MatIconModule, AsyncPipe]
 })
 export class TodayOrdersViewComponent {
 

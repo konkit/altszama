@@ -15,7 +15,7 @@ import {ButtonComponent} from '../../../../../../../components/button/button.com
 import {SideDishesInputComponent} from '../side-dishes-input/side-dishes-input.component';
 import {MoneyInputComponent} from '../../../../../../../components/money-input/money-input.component';
 import {MatOptionModule} from '@angular/material/core';
-import {AsyncPipe, NgFor} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -26,7 +26,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     templateUrl: './order-entry-form.component.html',
     styleUrls: ['./order-entry-form.component.scss'],
     standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, NgFor, MatOptionModule, MoneyInputComponent, SideDishesInputComponent, ButtonComponent, AsyncPipe, PricePipe, RelativeDatePipe]
+    imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, MatOptionModule, MoneyInputComponent, SideDishesInputComponent, ButtonComponent, AsyncPipe, PricePipe, RelativeDatePipe]
 })
 export class OrderEntryFormComponent implements OnInit {
   @Input() dishIndex: number = 0;

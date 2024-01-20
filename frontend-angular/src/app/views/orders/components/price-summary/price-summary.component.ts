@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {PriceSummaryData} from "../../lib/model";
 import {PricePipe} from '../../../../components/pipes/price.pipe';
 import {MatDividerModule} from '@angular/material/divider';
-import {NgIf} from '@angular/common';
+
 import {MatListModule} from '@angular/material/list';
 
 @Component({
@@ -10,7 +10,7 @@ import {MatListModule} from '@angular/material/list';
     templateUrl: './price-summary.component.html',
     styleUrls: ['./price-summary.component.scss'],
     standalone: true,
-    imports: [MatListModule, NgIf, MatDividerModule, PricePipe]
+    imports: [MatListModule, MatDividerModule, PricePipe]
 })
 export class PriceSummaryComponent {
   @Input() priceSummaryData!: PriceSummaryData

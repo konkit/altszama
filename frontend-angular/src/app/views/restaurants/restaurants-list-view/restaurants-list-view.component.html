@@ -1,57 +1,50 @@
 <app-view-wrapper>
   <h1 class="font-bold text-gray-700">Restaurants</h1>
-  <div *ngIf="indexResponse$ | async as payload">
-    <div class="pb-5">
-      <button mat-raised-button color="primary" routerLink="/restaurants/create">
-        Create new restaurant
-        <mat-icon fontIcon="add" class="ml-3"></mat-icon>
-      </button>
+  @if (indexResponse$ | async; as payload) {
+    <div>
+      <div class="pb-5">
+        <button mat-raised-button color="primary" routerLink="/restaurants/create">
+          Create new restaurant
+          <mat-icon fontIcon="add" class="ml-3"></mat-icon>
+        </button>
+      </div>
+      <table mat-table [dataSource]="dataSource" class="clickable-table">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dishCount">
+          <th mat-header-cell *matHeaderCellDef> Dish Count </th>
+          <td mat-cell *matCellDef="let element"> {{element.dishCount}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastCrawled">
+          <th mat-header-cell *matHeaderCellDef> Last Crawled </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastCrawled | relativeDate}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastEdited">
+          <th mat-header-cell *matHeaderCellDef> Last Edited </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastEdited | relativeDate}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/restaurants/', row.id]"></tr>
+      </table>
+      <mat-paginator [pageSize]="10"
+        showFirstLastButtons
+        aria-label="Select page">
+      </mat-paginator>
+      <div class="px-3 py-3">
+        <h2 class="py-3">Import API</h2>
+        <p>To use the Restaurant Import API, please use the following credentials: </p>
+        <p><b>Import API Key:</b> {{payload.importCredentials.apiKey}}</p>
+        @if (getSwaggerUrl() | async; as swaggerUrl) {
+          <a [href]="swaggerUrl">
+            <button mat-raised-button color="primary">
+              See Import API specification
+              <mat-icon fontIcon="upload"></mat-icon>
+            </button>
+          </a>
+        }
+      </div>
     </div>
-
-    <table mat-table [dataSource]="dataSource" class="clickable-table">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="dishCount">
-        <th mat-header-cell *matHeaderCellDef> Dish Count </th>
-        <td mat-cell *matCellDef="let element"> {{element.dishCount}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="lastCrawled">
-        <th mat-header-cell *matHeaderCellDef> Last Crawled </th>
-        <td mat-cell *matCellDef="let element"> {{element.lastCrawled | relativeDate}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="lastEdited">
-        <th mat-header-cell *matHeaderCellDef> Last Edited </th>
-        <td mat-cell *matCellDef="let element"> {{element.lastEdited | relativeDate}} </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/restaurants/', row.id]"></tr>
-    </table>
-
-    <mat-paginator [pageSize]="10"
-                   showFirstLastButtons
-                   aria-label="Select page">
-    </mat-paginator>
-
-    <div class="px-3 py-3">
-      <h2 class="py-3">Import API</h2>
-
-      <p>To use the Restaurant Import API, please use the following credentials: </p>
-      <p><b>Import API Key:</b> {{payload.importCredentials.apiKey}}</p>
-
-      <ng-container *ngIf="getSwaggerUrl() | async as swaggerUrl">
-        <a [href]="swaggerUrl">
-          <button mat-raised-button color="primary">
-            See Import API specification
-            <mat-icon fontIcon="upload"></mat-icon>
-          </button>
-        </a>
-      </ng-container>
-    </div>
-  </div>
+  }
 </app-view-wrapper>

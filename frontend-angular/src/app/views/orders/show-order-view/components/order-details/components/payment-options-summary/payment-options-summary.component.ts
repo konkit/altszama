@@ -4,7 +4,7 @@ import {PaymentOptionsData} from "../../../../../lib/model";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
-import {NgIf} from '@angular/common';
+
 import {MatListModule} from '@angular/material/list';
 
 @Component({
@@ -12,7 +12,7 @@ import {MatListModule} from '@angular/material/list';
     templateUrl: './payment-options-summary.component.html',
     styleUrls: ['./payment-options-summary.component.scss'],
     standalone: true,
-    imports: [MatListModule, NgIf, MatIconModule, MatTooltipModule]
+    imports: [MatListModule, MatIconModule, MatTooltipModule]
 })
 export class PaymentOptionsSummaryComponent implements OnInit {
 

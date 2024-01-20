@@ -11,7 +11,7 @@ import {PaymentDataFormComponent} from '../components/payment-data-form/payment-
 import {DeliveryDataFormComponent} from '../components/delivery-data-form/delivery-data-form.component';
 import {OrderTimeFormComponent} from '../components/order-time-form/order-time-form.component';
 import {MatStepperModule} from '@angular/material/stepper';
-import {AsyncPipe, NgIf} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {OrderStateButtonsComponent} from './components/order-state-buttons/order-state-buttons.component';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
@@ -20,7 +20,7 @@ import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrappe
     templateUrl: './edit-order-view.component.html',
     styleUrls: ['./edit-order-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, OrderStateButtonsComponent, NgIf, MatStepperModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe]
+    imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatStepperModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe]
 })
 export class EditOrderViewComponent implements OnInit, OnDestroy {
 

@@ -12,55 +12,61 @@
     </mat-card-title>
   </mat-card-header>
 
-  <div class="pl-6" *ngFor="let dishEntry of orderEntry.dishEntries; let dishEntryIndex = index;">
-    <ng-container
-      *ngIf="modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id">
-      <app-edit-order-entry
-        [dishIndex]="dishEntryIndex + 1"
-        [orderId]="order.id"
-        [allDishesInRestaurant]="allDishesInRestaurant"
-        [modifyOrderEntryState]="modifyOrderEntryState"
-        [orderEntry]="orderEntry"
-        [dishEntry]="dishEntry"
-      >
-      </app-edit-order-entry>
-    </ng-container>
-
-    <ng-container
-      *ngIf="!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)">
-      <app-show-order-entry
-        [index]="dishEntryIndex + 1"
-        [order]="order"
-        [orderEntry]="orderEntry"
-        [dishEntry]="dishEntry"
-        [currentUserId]="currentUserId"
-      >
-      </app-show-order-entry>
-    </ng-container>
-
-    <div *ngIf="dishEntryIndex < orderEntry.dishEntries.length - 1">
-      <mat-divider></mat-divider>
+  @for (dishEntry of orderEntry.dishEntries; track dishEntry; let dishEntryIndex = $index) {
+    <div class="pl-6">
+      @if (modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id) {
+        <app-edit-order-entry
+          [dishIndex]="dishEntryIndex + 1"
+          [orderId]="order.id"
+          [allDishesInRestaurant]="allDishesInRestaurant"
+          [modifyOrderEntryState]="modifyOrderEntryState"
+          [orderEntry]="orderEntry"
+          [dishEntry]="dishEntry"
+          >
+        </app-edit-order-entry>
+      }
+      @if (!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)) {
+        <app-show-order-entry
+          [index]="dishEntryIndex + 1"
+          [order]="order"
+          [orderEntry]="orderEntry"
+          [dishEntry]="dishEntry"
+          [currentUserId]="currentUserId"
+          >
+        </app-show-order-entry>
+      }
+      @if (dishEntryIndex < orderEntry.dishEntries.length - 1) {
+        <div>
+          <mat-divider></mat-divider>
+        </div>
+      }
     </div>
-  </div>
+  }
 
-  <div class="pl-6" *ngIf="canAddNewEntry(orderEntry)">
-    <div class="" *ngIf="orderEntry.dishEntries.length > 0">
-      <mat-divider></mat-divider>
+  @if (canAddNewEntry(orderEntry)) {
+    <div class="pl-6">
+      @if (orderEntry.dishEntries.length > 0) {
+        <div class="">
+          <mat-divider></mat-divider>
+        </div>
+      }
+      @if (modifyOrderEntryState.isEntryCreating === false) {
+        <div>
+          <span class="text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
+          <button mat-button color="primary" (click)="createEntry()">
+            Add entry
+            <mat-icon fontIcon="add"></mat-icon>
+          </button>
+        </div>
+      }
+      @if (modifyOrderEntryState.isEntryCreating === true) {
+        <div class="pt-5">
+          <app-create-order-entry [orderId]="order.id"
+            [allDishesInRestaurant]="allDishesInRestaurant"
+            [dishIndex]="orderEntry.dishEntries.length + 1">
+          </app-create-order-entry>
+        </div>
+      }
     </div>
-
-    <div *ngIf="modifyOrderEntryState.isEntryCreating === false">
-      <span class="text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
-
-      <button mat-button color="primary" (click)="createEntry()">
-        Add entry
-        <mat-icon fontIcon="add"></mat-icon>
-      </button>
-    </div>
-    <div class="pt-5" *ngIf="modifyOrderEntryState.isEntryCreating === true">
-      <app-create-order-entry [orderId]="order.id"
-                              [allDishesInRestaurant]="allDishesInRestaurant"
-                              [dishIndex]="orderEntry.dishEntries.length + 1">
-      </app-create-order-entry>
-    </div>
-  </div>
+  }
 </mat-card>

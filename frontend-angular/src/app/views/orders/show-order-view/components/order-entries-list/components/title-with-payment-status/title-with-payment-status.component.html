@@ -3,21 +3,27 @@
     <span>{{ title }} ({{orderEntry.finalPrice | price}})</span>
   </div>
 
-  <div *ngIf="isOrderEntryOwner() || isOrderOwner()" class="flex flex-row -mt-4 md:mt-0">
-    <div *ngIf="shouldShowPaymentStatus()" class="flex flex-wrap content-center">
-      <app-payment-status-chip [isPaid]="isConfirmedAsPaid()"></app-payment-status-chip>
+  @if (isOrderEntryOwner() || isOrderOwner()) {
+    <div class="flex flex-row -mt-4 md:mt-0">
+      @if (shouldShowPaymentStatus()) {
+        <div class="flex flex-wrap content-center">
+          <app-payment-status-chip [isPaid]="isConfirmedAsPaid()"></app-payment-status-chip>
+        </div>
+      }
+      @if (shouldShowConfirmAsPaidButton()) {
+        <div>
+          <button mat-icon-button (click)="confirmAsPaid(orderEntry.id)" matTooltip="Confirm payment">
+            <mat-icon fontIcon="check"></mat-icon>
+          </button>
+        </div>
+      }
+      @if (shouldShowRevertToUnpaid()) {
+        <div>
+          <button mat-icon-button (click)="revertToUnpaid(orderEntry.id)" matTooltip="Revert to 'unpaid'">
+            <mat-icon fontIcon="undo"></mat-icon>
+          </button>
+        </div>
+      }
     </div>
-
-    <div *ngIf="shouldShowConfirmAsPaidButton()">
-      <button mat-icon-button (click)="confirmAsPaid(orderEntry.id)" matTooltip="Confirm payment">
-        <mat-icon fontIcon="check"></mat-icon>
-      </button>
-    </div>
-
-    <div *ngIf="shouldShowRevertToUnpaid()">
-      <button mat-icon-button (click)="revertToUnpaid(orderEntry.id)" matTooltip="Revert to 'unpaid'">
-        <mat-icon fontIcon="undo"></mat-icon>
-      </button>
-    </div>
-  </div>
+  }
 </div>

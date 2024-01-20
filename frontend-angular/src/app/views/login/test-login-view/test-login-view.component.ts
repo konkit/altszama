@@ -5,7 +5,7 @@ import {AuthService} from "../../../service/auth.service";
 import {TestAuthControllerService, TestUserLoginPayload, User} from "../../../../frontend-client";
 import {Router} from "@angular/router";
 import {ButtonComponent} from '../../../components/button/button.component';
-import {NgFor} from '@angular/common';
+
 import {MatToolbarModule} from '@angular/material/toolbar';
 
 @Component({
@@ -13,7 +13,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     templateUrl: './test-login-view.component.html',
     styleUrls: ['./test-login-view.component.scss'],
     standalone: true,
-    imports: [MatToolbarModule, NgFor, ButtonComponent]
+    imports: [MatToolbarModule, ButtonComponent]
 })
 export class TestLoginViewComponent implements OnInit {
 

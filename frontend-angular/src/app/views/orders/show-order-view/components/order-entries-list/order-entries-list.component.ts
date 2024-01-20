@@ -11,7 +11,7 @@ import {CreateOrderEntryComponent} from './components/create-order-entry/create-
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import {AsyncPipe, NgFor, NgIf} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 
@@ -20,7 +20,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './order-entries-list.component.html',
     styleUrls: ['./order-entries-list.component.scss'],
     standalone: true,
-    imports: [NgIf, MatCardModule, MatButtonModule, MatIconModule, CreateOrderEntryComponent, NgFor, ExistingOrderEntryCardComponent, AsyncPipe]
+    imports: [MatCardModule, MatButtonModule, MatIconModule, CreateOrderEntryComponent, ExistingOrderEntryCardComponent, AsyncPipe]
 })
 export class OrderEntriesListComponent {
 

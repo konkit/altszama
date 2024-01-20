@@ -4,47 +4,44 @@
     <app-order-state-buttons [orderId]="orderId" [orderState]="(editOrderInitialData$ | async)!.order.orderState"></app-order-state-buttons>
   </div>
 
-  <div *ngIf="!showNarrowLayout">
-    <ng-template matStepLabel>Fill details</ng-template>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 py-4 pr-10">
-      <app-order-time-form class="mr-20 mb-5"
-                           [timeOfOrderControl]="orderForm.controls.timeOfOrder"
-                           [timeOfDeliveryControl]="orderForm.controls.timeOfDelivery"
-      ></app-order-time-form>
-      <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
-      <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
+  @if (showNarrowLayout) {
+    <mat-vertical-stepper [linear]="true">
+      <mat-step>
+        <ng-template matStepLabel>Order time</ng-template>
+        <app-order-time-form class="mr-20 mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Discounts and delivery fees</ng-template>
+        <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Payment</ng-template>
+        <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" (click)="submitForm($event)">Update</button>
+      </mat-step>
+    </mat-vertical-stepper>
+  } @else {
+    <div>
+      <ng-template matStepLabel>Fill details</ng-template>
+      <div class="grid grid-cols-1 md:grid-cols-3 py-4 pr-10">
+        <app-order-time-form class="mr-20 mb-5"
+                             [timeOfOrderControl]="orderForm.controls.timeOfOrder"
+                             [timeOfDeliveryControl]="orderForm.controls.timeOfDelivery"
+        ></app-order-time-form>
+        <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
+        <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
+      </div>
+      <button mat-raised-button type="button" (click)="cancelEdit()">
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" (click)="submitForm($event)">
+        Update
+      </button>
     </div>
-
-    <button mat-raised-button type="button" (click)="cancelEdit()">
-      Cancel
-    </button>
-    <button mat-raised-button color="primary" (click)="submitForm($event)">
-      Update
-    </button>
-  </div>
-
-
-  <mat-vertical-stepper [linear]="true" *ngIf="showNarrowLayout">
-    <mat-step>
-      <ng-template matStepLabel>Order time</ng-template>
-      <app-order-time-form class="mr-20 mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
-      <button mat-raised-button matStepperPrevious>Back</button>
-      <button mat-raised-button color="primary" matStepperNext>Next</button>
-    </mat-step>
-
-    <mat-step>
-      <ng-template matStepLabel>Discounts and delivery fees</ng-template>
-      <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
-      <button mat-raised-button matStepperPrevious>Back</button>
-      <button mat-raised-button color="primary" matStepperNext>Next</button>
-    </mat-step>
-
-    <mat-step>
-      <ng-template matStepLabel>Payment</ng-template>
-      <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
-      <button mat-raised-button matStepperPrevious>Back</button>
-      <button mat-raised-button color="primary" (click)="submitForm($event)">Update</button>
-    </mat-step>
-  </mat-vertical-stepper>
+  }
 </app-view-wrapper>

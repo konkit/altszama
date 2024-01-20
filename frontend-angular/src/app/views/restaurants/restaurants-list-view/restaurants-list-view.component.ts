@@ -8,7 +8,7 @@ import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {RelativeDatePipe} from '../../../components/pipes/date-to-rel.pipe';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import {AsyncPipe, NgIf} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 @Component({
@@ -16,7 +16,7 @@ import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrappe
     templateUrl: './restaurants-list-view.component.html',
     styleUrls: ['./restaurants-list-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, NgIf, MatButtonModule, RouterLink, MatIconModule, MatTableModule, MatPaginatorModule, AsyncPipe, RelativeDatePipe]
+    imports: [ViewWrapperComponent, MatButtonModule, RouterLink, MatIconModule, MatTableModule, MatPaginatorModule, AsyncPipe, RelativeDatePipe]
 })
 export class RestaurantsListViewComponent implements OnInit, AfterViewInit {
   indexResponse$: Observable<IndexResponse>;

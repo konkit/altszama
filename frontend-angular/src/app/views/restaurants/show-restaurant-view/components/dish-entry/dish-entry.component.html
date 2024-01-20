@@ -4,22 +4,27 @@
   </div>
 
   <div class="subtitle text-gray-400">
-      <span *ngIf="dish.lastCrawled != null">
+    @if (dish.lastCrawled != null) {
+      <span>
         auto-updated {{ dish.lastCrawled | relativeDate }}
       </span>
+    }
 
-    <span *ngIf="dish.lastCrawled == null">
+    @if (dish.lastCrawled == null) {
+      <span>
         updated manually
       </span>
+    }
   </div>
 </div>
 
-<div class="edit-buttons" *ngIf="restaurantEditorState.name != 'EDITING_DISH' || restaurantEditorState.dishId != dish.id">
-  <button mat-icon-button color="primary" (click)="editDish()" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="edit-dish-button">
-    <mat-icon fontIcon="edit"></mat-icon>
-  </button>
-
-  <button mat-icon-button (click)="deleteDish()" color="warn" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="delete-dish-button">
-    <mat-icon fontIcon="delete"></mat-icon>
-  </button>
-</div>
+@if (restaurantEditorState.name != 'EDITING_DISH' || restaurantEditorState.dishId != dish.id) {
+  <div class="edit-buttons">
+    <button mat-icon-button color="primary" (click)="editDish()" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="edit-dish-button">
+      <mat-icon fontIcon="edit"></mat-icon>
+    </button>
+    <button mat-icon-button (click)="deleteDish()" color="warn" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="delete-dish-button">
+      <mat-icon fontIcon="delete"></mat-icon>
+    </button>
+  </div>
+}

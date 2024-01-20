@@ -1,25 +1,27 @@
 <div class="flex flex-row py-3">
   <div class="flex">
-    <ng-container *ngIf="canShowPlaceOrderButton && isPlaceOrderButtonDisabled">
+    @if (canShowPlaceOrderButton && isPlaceOrderButtonDisabled) {
       <button mat-raised-button class="mr-3" [disabled]="true"
-              matTooltip="You cannot place an empty order. Choose a dish first.">
+        matTooltip="You cannot place an empty order. Choose a dish first.">
         Place order
         <mat-icon fontIcon="check"></mat-icon>
       </button>
-    </ng-container>
+    }
 
-    <ng-container *ngIf="canShowPlaceOrderButton && !isPlaceOrderButtonDisabled">
+    @if (canShowPlaceOrderButton && !isPlaceOrderButtonDisabled) {
       <button mat-raised-button class="mr-3" color="primary" (click)="placeOrder()">
         Place order
         <mat-icon fontIcon="check"></mat-icon>
       </button>
-    </ng-container>
+    }
 
-    <button mat-raised-button class="mr-3" color="primary" *ngIf="canShowMarkAsDeliveredButton"
-            (click)="setAsDelivered()">
-      Mark as delivered
-      <mat-icon fontIcon="check"></mat-icon>
-    </button>
+    @if (canShowMarkAsDeliveredButton) {
+      <button mat-raised-button class="mr-3" color="primary"
+        (click)="setAsDelivered()">
+        Mark as delivered
+        <mat-icon fontIcon="check"></mat-icon>
+      </button>
+    }
 
     <button mat-raised-button class="mr-3" (click)="goToEditOrder()">
       Edit order

@@ -6,14 +6,14 @@ import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {DishForm, DishFormComponent, SideDishForm} from "../dish-form/dish-form.component";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
 import {DishFormPlaceholderComponent} from '../dish-form-placeholder/dish-form-placeholder.component';
-import {AsyncPipe, NgIf} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
     selector: 'app-edit-dish-form',
     templateUrl: './edit-dish-form.component.html',
     styleUrls: ['./edit-dish-form.component.scss'],
     standalone: true,
-    imports: [NgIf, DishFormComponent, DishFormPlaceholderComponent, AsyncPipe]
+    imports: [DishFormComponent, DishFormPlaceholderComponent, AsyncPipe]
 })
 export class EditDishFormComponent implements OnInit {
   @Input() restaurantId!: string

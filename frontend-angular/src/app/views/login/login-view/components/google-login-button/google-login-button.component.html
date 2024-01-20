@@ -1,8 +1,10 @@
-  <div>
-    <div *ngIf="loginPending === true">Loggin in ... please wait.</div>
+<div>
+  @if (loginPending === true) {
+    <div>Loggin in ... please wait.</div>
+  }
 
-    <div>
-      <div #googleSignInButtonDiv></div>
-    </div>
+  <div>
+    <div #googleSignInButtonDiv></div>
   </div>
+</div>
 

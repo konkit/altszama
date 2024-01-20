@@ -5,27 +5,32 @@
     <span class="text-body1 line-height-3rem ml-2">({{dishEntry.price | price}})</span>
   </div>
 
-  <div class="ml-2" *ngIf="canEditOrderEntry()">
-    <button mat-icon-button color="primary" (click)="editDishEntry()">
-      <mat-icon fontIcon="edit"></mat-icon>
-    </button>
+  @if (canEditOrderEntry()) {
+    <div class="ml-2">
+      <button mat-icon-button color="primary" (click)="editDishEntry()">
+        <mat-icon fontIcon="edit"></mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteDishEntry()">
+        <mat-icon fontIcon="delete"></mat-icon>
+      </button>
+    </div>
+  }
+</div>
 
-    <button mat-icon-button color="warn" (click)="deleteDishEntry()">
-      <mat-icon fontIcon="delete"></mat-icon>
-    </button>
+@for (sideDish of dishEntry.sideDishes; track sideDish) {
+  <div class="pl-8">
+    <div class="line">
+      <span class="text-body1 line-height-3rem mr-2">+</span>
+      <span class="text-body1 line-height-3rem">{{ sideDish.name }}</span>
+      <span class="text-body1 line-height-3rem ml-2">({{sideDish.price | price}})</span>
+    </div>
   </div>
-</div>
+}
 
-<div *ngFor="let sideDish of dishEntry.sideDishes" class="pl-8">
-  <div class="line">
-    <span class="text-body1 line-height-3rem mr-2">+</span>
-    <span class="text-body1 line-height-3rem">{{ sideDish.name }}</span>
-    <span class="text-body1 line-height-3rem ml-2">({{sideDish.price | price}})</span>
+@if (dishEntry.comments.length > 0) {
+  <div class="pl-8">
+    <span class="text-body1 line-height-3rem">
+      Additional comments: {{ dishEntry.comments }}
+    </span>
   </div>
-</div>
-
-<div *ngIf="dishEntry.comments.length > 0" class="pl-8">
-  <span class="text-body1 line-height-3rem">
-    Additional comments: {{ dishEntry.comments }}
-  </span>
-</div>
+}

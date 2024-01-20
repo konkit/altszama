@@ -1,20 +1,30 @@
-<div *ngIf="order.orderState == ShowOrderDto.OrderStateEnum.CREATED">
-  <b>{{ this.order.orderCreatorUsername }}</b> will order at <b>{{ this.order.timeOfOrder }}</b>
-</div>
+@if (order.orderState == ShowOrderDto.OrderStateEnum.CREATED) {
+  <div>
+    <b>{{ this.order.orderCreatorUsername }}</b> will order at <b>{{ this.order.timeOfOrder }}</b>
+  </div>
+}
 
-<div *ngIf="order.orderState == ShowOrderDto.OrderStateEnum.ORDERING">
-  <b>{{ this.order.orderCreatorUsername }} is ordering now!</b>
-</div>
+@if (order.orderState == ShowOrderDto.OrderStateEnum.ORDERING) {
+  <div>
+    <b>{{ this.order.orderCreatorUsername }} is ordering now!</b>
+  </div>
+}
 
-<div *ngIf="order.orderState == ShowOrderDto.OrderStateEnum.ORDERED">
-  <b>{{ this.order.orderCreatorUsername }}</b> has made an order at {{ this.order.timeOfOrder }}! Waiting for delivery, ETA:
-  <b>{{ this.timeOfDeliveryOrNA() }}</b>
-</div>
+@if (order.orderState == ShowOrderDto.OrderStateEnum.ORDERED) {
+  <div>
+    <b>{{ this.order.orderCreatorUsername }}</b> has made an order at {{ this.order.timeOfOrder }}! Waiting for delivery, ETA:
+    <b>{{ this.timeOfDeliveryOrNA() }}</b>
+  </div>
+}
 
-<div *ngIf="order.orderState == ShowOrderDto.OrderStateEnum.DELIVERED">
-  Food delivered! Send payments to {{ this.order.orderCreatorUsername }}
-</div>
+@if (order.orderState == ShowOrderDto.OrderStateEnum.DELIVERED) {
+  <div>
+    Food delivered! Send payments to {{ this.order.orderCreatorUsername }}
+  </div>
+}
 
-<div *ngIf="order.orderState == ShowOrderDto.OrderStateEnum.REJECTED">
-  <b>Order rejected!</b>
-</div>
+@if (order.orderState == ShowOrderDto.OrderStateEnum.REJECTED) {
+  <div>
+    <b>Order rejected!</b>
+  </div>
+}

@@ -10,33 +10,39 @@
 <mat-accordion multi="true">
   @for (entry of groupedEntries; track entry; let entryIndex = $index) {
     <mat-expansion-panel [expanded]="accordionStates[entryIndex]"
-                         (opened)="accordionStates[entryIndex] = true"
-                         (closed)="accordionStates[entryIndex] = false">
+      (opened)="accordionStates[entryIndex] = true"
+      (closed)="accordionStates[entryIndex] = false">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <div><b>{{ entry.eatingPeopleCount }}x</b> {{ entry.dishName }}</div>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <mat-list *ngIf="entry.eatingPeopleEntries.length > 0">
-        <div *ngFor="let eatingPersonEntry of entry.eatingPeopleEntries; let i = index">
-          <mat-list-item>
-            {{ i + 1 }}. {{ eatingPersonEntry.username }}
-          </mat-list-item>
-
-          <div class="pl-5">
-            <mat-list-item *ngIf="eatingPersonEntry.comments.length > 0">
-              Additional comments: {{ eatingPersonEntry.comments }}
-            </mat-list-item>
-
-            <ng-container *ngIf="eatingPersonEntry.sideDishes.length > 0">
-              <mat-list-item *ngFor="let sd of eatingPersonEntry.sideDishes; let j = index">
-                + {{ sd.name }}
+      @if (entry.eatingPeopleEntries.length > 0) {
+        <mat-list>
+          @for (eatingPersonEntry of entry.eatingPeopleEntries; track eatingPersonEntry; let i = $index) {
+            <div>
+              <mat-list-item>
+                {{ i + 1 }}. {{ eatingPersonEntry.username }}
               </mat-list-item>
-            </ng-container>
-          </div>
-        </div>
-      </mat-list>
+              <div class="pl-5">
+                @if (eatingPersonEntry.comments.length > 0) {
+                  <mat-list-item>
+                    Additional comments: {{ eatingPersonEntry.comments }}
+                  </mat-list-item>
+                }
+                @if (eatingPersonEntry.sideDishes.length > 0) {
+                  @for (sd of eatingPersonEntry.sideDishes; track sd; let j = $index) {
+                    <mat-list-item>
+                      + {{ sd.name }}
+                    </mat-list-item>
+                  }
+                }
+              </div>
+            </div>
+          }
+        </mat-list>
+      }
     </mat-expansion-panel>
   }
 </mat-accordion>

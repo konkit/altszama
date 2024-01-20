@@ -13,8 +13,8 @@
 
   <p class="pt-3">Payment options: </p>
   <app-payment-options-summary-cards [paymentData]="order.paymentData"
-                                 [yourOrderEntries]="viewState.yourOrderEntries"
-                                 [paymentOptionsData]="viewState.paymentOptionsData">
+    [yourOrderEntries]="viewState.yourOrderEntries"
+    [paymentOptionsData]="viewState.paymentOptionsData">
   </app-payment-options-summary-cards>
 </div>
 
@@ -41,8 +41,8 @@
     </mat-expansion-panel-header>
 
     <app-payment-options-summary [paymentData]="order.paymentData"
-                                 [yourOrderEntries]="viewState.yourOrderEntries"
-                                 [paymentOptionsData]="viewState.paymentOptionsData">
+      [yourOrderEntries]="viewState.yourOrderEntries"
+      [paymentOptionsData]="viewState.paymentOptionsData">
     </app-payment-options-summary>
   </mat-expansion-panel>
 </div>
@@ -51,9 +51,13 @@
   <div class="flex flex-row flex-wrap">
     <div class="mr-4 pt-10 pb-5">
       <b class="mr-2">See the menu at:</b>
-      <a class="text-indigo-500" *ngIf="order.restaurantUrl" target="_blank"
-         [href]="order.restaurantUrl">{{ order.restaurantUrl }}</a>
-      <i *ngIf="!order.restaurantUrl">Sorry, no menu url specified</i>
+      @if (order.restaurantUrl) {
+        <a class="text-indigo-500" target="_blank"
+        [href]="order.restaurantUrl">{{ order.restaurantUrl }}</a>
+      }
+      @if (!order.restaurantUrl) {
+        <i>Sorry, no menu url specified</i>
+      }
     </div>
   </div>
 </div>

@@ -5,7 +5,7 @@ import {ShowOrderViewService} from "../../../../service/show-order-view.service"
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
-import {NgIf} from '@angular/common';
+
 import {MatCardModule} from '@angular/material/card';
 
 @Component({
@@ -13,7 +13,7 @@ import {MatCardModule} from '@angular/material/card';
     templateUrl: './payment-options-summary-cards.component.html',
     styleUrl: './payment-options-summary-cards.component.scss',
     standalone: true,
-    imports: [MatCardModule, NgIf, MatListModule, MatIconModule, MatTooltipModule]
+    imports: [MatCardModule, MatListModule, MatIconModule, MatTooltipModule]
 })
 export class PaymentOptionsSummaryCardsComponent {
   @Input() paymentData!: PaymentData
