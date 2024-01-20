@@ -4,14 +4,18 @@ import {MatFormFieldControl} from "@angular/material/form-field";
 import {BehaviorSubject, Subject, take} from 'rxjs';
 import {coerceBooleanProperty} from "@angular/cdk/coercion";
 import {FocusMonitor} from "@angular/cdk/a11y";
+import {AsyncPipe} from '@angular/common';
+import {MatInputModule} from '@angular/material/input';
 
 @Component({
-  selector: 'app-money-input',
-  templateUrl: './money-input.component.html',
-  styleUrls: ['./money-input.component.scss'],
-  providers: [
-    {provide: MatFormFieldControl, useExisting: MoneyInputComponent},
-  ]
+    selector: 'app-money-input',
+    templateUrl: './money-input.component.html',
+    styleUrls: ['./money-input.component.scss'],
+    providers: [
+        { provide: MatFormFieldControl, useExisting: MoneyInputComponent },
+    ],
+    standalone: true,
+    imports: [MatInputModule, AsyncPipe]
 })
 export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldControl<number> {
 

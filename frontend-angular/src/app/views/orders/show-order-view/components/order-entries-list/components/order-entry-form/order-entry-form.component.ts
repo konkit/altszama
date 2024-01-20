@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DishDto, SideDish, SideDishData} from "../../../../../../../../frontend-client";
 import {filter, map, Observable, startWith} from "rxjs";
 import {
@@ -9,12 +9,24 @@ import {
   SideDishForm,
   SideDishValue
 } from "../../lib/formvalues";
+import {RelativeDatePipe} from '../../../../../../../components/pipes/date-to-rel.pipe';
+import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
+import {ButtonComponent} from '../../../../../../../components/button/button.component';
+import {SideDishesInputComponent} from '../side-dishes-input/side-dishes-input.component';
+import {MoneyInputComponent} from '../../../../../../../components/money-input/money-input.component';
+import {MatOptionModule} from '@angular/material/core';
+import {AsyncPipe, NgFor} from '@angular/common';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 @Component({
-  selector: 'app-order-entry-form',
-  templateUrl: './order-entry-form.component.html',
-  styleUrls: ['./order-entry-form.component.scss']
+    selector: 'app-order-entry-form',
+    templateUrl: './order-entry-form.component.html',
+    styleUrls: ['./order-entry-form.component.scss'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, NgFor, MatOptionModule, MoneyInputComponent, SideDishesInputComponent, ButtonComponent, AsyncPipe, PricePipe, RelativeDatePipe]
 })
 export class OrderEntryFormComponent implements OnInit {
   @Input() dishIndex: number = 0;

@@ -1,14 +1,17 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {AllOrdersOrderDto} from "../../../../frontend-client";
 import {map, Observable} from "rxjs";
-import {ActivatedRoute} from "@angular/router";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
+import {ActivatedRoute, RouterLink} from "@angular/router";
+import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
+import {MatTableDataSource, MatTableModule} from "@angular/material/table";
+import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 @Component({
-  selector: 'app-all-orders-view',
-  templateUrl: './all-orders-view.component.html',
-  styleUrls: ['./all-orders-view.component.scss']
+    selector: 'app-all-orders-view',
+    templateUrl: './all-orders-view.component.html',
+    styleUrls: ['./all-orders-view.component.scss'],
+    standalone: true,
+    imports: [ViewWrapperComponent, MatTableModule, RouterLink, MatPaginatorModule]
 })
 export class AllOrdersViewComponent implements OnInit, AfterViewInit {
 

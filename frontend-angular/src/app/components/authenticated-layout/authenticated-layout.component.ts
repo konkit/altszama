@@ -1,12 +1,20 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {MediaMatcher} from "@angular/cdk/layout";
 import {AuthService} from "../../service/auth.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink, RouterOutlet} from "@angular/router";
+import {MatDividerModule} from '@angular/material/divider';
+import {MatListModule} from '@angular/material/list';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @Component({
-  selector: 'app-authenticated-layout',
-  templateUrl: './authenticated-layout.component.html',
-  styleUrls: ['./authenticated-layout.component.scss']
+    selector: 'app-authenticated-layout',
+    templateUrl: './authenticated-layout.component.html',
+    styleUrls: ['./authenticated-layout.component.scss'],
+    standalone: true,
+    imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, MatDividerModule, RouterOutlet]
 })
 export class AuthenticatedLayoutComponent implements OnInit, OnDestroy {
 

@@ -2,11 +2,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DishDto, OrderEntrySaveRequest} from "../../../../../../../../frontend-client";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
 import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
+import {OrderEntryFormComponent} from '../order-entry-form/order-entry-form.component';
 
 @Component({
-  selector: 'app-create-order-entry',
-  templateUrl: './create-order-entry.component.html',
-  styleUrls: ['./create-order-entry.component.scss']
+    selector: 'app-create-order-entry',
+    templateUrl: './create-order-entry.component.html',
+    styleUrls: ['./create-order-entry.component.scss'],
+    standalone: true,
+    imports: [OrderEntryFormComponent]
 })
 export class CreateOrderEntryComponent implements OnInit {
 

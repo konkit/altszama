@@ -1,12 +1,20 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import {OrderActionsService} from "../../../../service/order-actions.service";
+import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatButtonModule} from '@angular/material/button';
+import {PaymentStatusChipComponent} from './payment-status-chip/payment-status-chip.component';
+import {NgIf} from '@angular/common';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
-  selector: 'app-title-with-payment-status',
-  templateUrl: './title-with-payment-status.component.html',
-  styleUrls: ['./title-with-payment-status.component.scss']
+    selector: 'app-title-with-payment-status',
+    templateUrl: './title-with-payment-status.component.html',
+    styleUrls: ['./title-with-payment-status.component.scss'],
+    standalone: true,
+    imports: [NgIf, PaymentStatusChipComponent, MatButtonModule, MatTooltipModule, MatIconModule, PricePipe]
 })
 export class TitleWithPaymentStatusComponent {
   @Input() index!: number;

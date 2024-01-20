@@ -4,12 +4,23 @@ import {filter, Observable} from "rxjs";
 import {RestaurantFormService} from "./service/restaurant-form.service";
 import {isNotNull} from "../../../lib/utils";
 import {RestaurantEditorState} from "./service/restaurant-editor-state";
+import {DishEntryComponent} from './components/dish-entry/dish-entry.component';
+import {EditDishFormComponent} from './components/edit-dish-form/edit-dish-form.component';
+import {CreateDishFormComponent} from './components/create-dish-form/create-dish-form.component';
+import {MatDividerModule} from '@angular/material/divider';
+import {EditRestaurantFormComponent} from './components/edit-restaurant-form/edit-restaurant-form.component';
+import {RestaurantDetailsComponent} from './components/restaurant-details/restaurant-details.component';
+import {ButtonComponent} from '../../../components/button/button.component';
+import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
+import {AsyncPipe, KeyValuePipe, NgFor, NgIf} from '@angular/common';
 
 
 @Component({
-  selector: 'app-show-restaurant-view',
-  templateUrl: './show-restaurant-view.component.html',
-  styleUrls: ['./show-restaurant-view.component.scss']
+    selector: 'app-show-restaurant-view',
+    templateUrl: './show-restaurant-view.component.html',
+    styleUrls: ['./show-restaurant-view.component.scss'],
+    standalone: true,
+    imports: [NgIf, ViewWrapperComponent, ButtonComponent, RestaurantDetailsComponent, EditRestaurantFormComponent, MatDividerModule, CreateDishFormComponent, NgFor, EditDishFormComponent, DishEntryComponent, AsyncPipe, KeyValuePipe]
 })
 export class ShowRestaurantViewComponent {
 

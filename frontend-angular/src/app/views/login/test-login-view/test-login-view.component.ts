@@ -1,15 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {FrontendConfigService} from "../../../service/frontend-config.service";
 import {HttpClient} from "@angular/common/http";
-import {map, switchMap} from "rxjs";
 import {AuthService} from "../../../service/auth.service";
-import {AuthUserInfo, TestAuthControllerService, TestUserLoginPayload, User} from "../../../../frontend-client";
+import {TestAuthControllerService, TestUserLoginPayload, User} from "../../../../frontend-client";
 import {Router} from "@angular/router";
+import {ButtonComponent} from '../../../components/button/button.component';
+import {NgFor} from '@angular/common';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @Component({
-  selector: 'app-test-login-view',
-  templateUrl: './test-login-view.component.html',
-  styleUrls: ['./test-login-view.component.scss']
+    selector: 'app-test-login-view',
+    templateUrl: './test-login-view.component.html',
+    styleUrls: ['./test-login-view.component.scss'],
+    standalone: true,
+    imports: [MatToolbarModule, NgFor, ButtonComponent]
 })
 export class TestLoginViewComponent implements OnInit {
 

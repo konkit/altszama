@@ -1,14 +1,20 @@
 import {Component} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {catchError, tap} from "rxjs";
 import {RestaurantControllerService} from "../../../../frontend-client";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
+import {ButtonComponent} from '../../../components/button/button.component';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 @Component({
-  selector: 'app-create-restaurant-view',
-  templateUrl: './create-restaurant-view.component.html',
-  styleUrls: ['./create-restaurant-view.component.scss']
+    selector: 'app-create-restaurant-view',
+    templateUrl: './create-restaurant-view.component.html',
+    styleUrls: ['./create-restaurant-view.component.scss'],
+    standalone: true,
+    imports: [ViewWrapperComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, ButtonComponent]
 })
 export class CreateRestaurantViewComponent {
   restaurantFormGroup = this.fb.group({

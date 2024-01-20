@@ -1,12 +1,18 @@
 import {Component, Input} from '@angular/core';
 import {ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
+import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {NgFor, NgIf} from '@angular/common';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
-  selector: 'app-show-order-entry',
-  templateUrl: './show-order-entry.component.html',
-  styleUrls: ['./show-order-entry.component.scss']
+    selector: 'app-show-order-entry',
+    templateUrl: './show-order-entry.component.html',
+    styleUrls: ['./show-order-entry.component.scss'],
+    standalone: true,
+    imports: [NgIf, MatButtonModule, MatIconModule, NgFor, PricePipe]
 })
 export class ShowOrderEntryComponent {
   @Input() index!: number;

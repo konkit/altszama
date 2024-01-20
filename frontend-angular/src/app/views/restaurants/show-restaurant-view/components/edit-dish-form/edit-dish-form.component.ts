@@ -1,15 +1,19 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {catchError, Observable, of, shareReplay, switchMap, take} from "rxjs";
+import {catchError, Observable, shareReplay, switchMap, take} from "rxjs";
 import {DishControllerService, EditDishResponse} from "../../../../../../frontend-client";
 import {FormGroup, NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
-import {DishForm, SideDishForm} from "../dish-form/dish-form.component";
+import {DishForm, DishFormComponent, SideDishForm} from "../dish-form/dish-form.component";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
+import {DishFormPlaceholderComponent} from '../dish-form-placeholder/dish-form-placeholder.component';
+import {AsyncPipe, NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-edit-dish-form',
-  templateUrl: './edit-dish-form.component.html',
-  styleUrls: ['./edit-dish-form.component.scss']
+    selector: 'app-edit-dish-form',
+    templateUrl: './edit-dish-form.component.html',
+    styleUrls: ['./edit-dish-form.component.scss'],
+    standalone: true,
+    imports: [NgIf, DishFormComponent, DishFormPlaceholderComponent, AsyncPipe]
 })
 export class EditDishFormComponent implements OnInit {
   @Input() restaurantId!: string

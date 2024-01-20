@@ -3,13 +3,17 @@ import {FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
 import {catchError, Observable, switchMap} from "rxjs";
 import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
-import {SideDishForm} from "../dish-form/dish-form.component";
+import {DishFormComponent, SideDishForm} from "../dish-form/dish-form.component";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
+import {DishFormPlaceholderComponent} from '../dish-form-placeholder/dish-form-placeholder.component';
+import {AsyncPipe, NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-create-dish-form',
-  templateUrl: './create-dish-form.component.html',
-  styleUrls: ['./create-dish-form.component.scss']
+    selector: 'app-create-dish-form',
+    templateUrl: './create-dish-form.component.html',
+    styleUrls: ['./create-dish-form.component.scss'],
+    standalone: true,
+    imports: [NgIf, DishFormComponent, DishFormPlaceholderComponent, AsyncPipe]
 })
 export class CreateDishFormComponent implements OnInit {
 

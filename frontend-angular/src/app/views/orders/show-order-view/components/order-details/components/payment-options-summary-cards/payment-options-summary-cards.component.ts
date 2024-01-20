@@ -2,11 +2,18 @@ import {Component, Input} from '@angular/core';
 import {ParticipantsOrderEntry, PaymentData} from "../../../../../../../../frontend-client";
 import {PaymentOptionsData} from "../../../../../lib/model";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatIconModule} from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
+import {NgIf} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
 
 @Component({
-  selector: 'app-payment-options-summary-cards',
-  templateUrl: './payment-options-summary-cards.component.html',
-  styleUrl: './payment-options-summary-cards.component.scss'
+    selector: 'app-payment-options-summary-cards',
+    templateUrl: './payment-options-summary-cards.component.html',
+    styleUrl: './payment-options-summary-cards.component.scss',
+    standalone: true,
+    imports: [MatCardModule, NgIf, MatListModule, MatIconModule, MatTooltipModule]
 })
 export class PaymentOptionsSummaryCardsComponent {
   @Input() paymentData!: PaymentData

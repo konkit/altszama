@@ -4,13 +4,23 @@ import {ModifyOrderEntryState} from "../../../lib/model";
 import {Observable} from "rxjs";
 import {ShowOrderViewService} from "../../service/show-order-view.service";
 import {ModifyOrderEntryService} from "./service/modify-order-entry.service";
+import {
+  ExistingOrderEntryCardComponent
+} from './components/existing-order-entry-card/existing-order-entry-card.component';
+import {CreateOrderEntryComponent} from './components/create-order-entry/create-order-entry.component';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {AsyncPipe, NgFor, NgIf} from '@angular/common';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 
 @Component({
-  selector: 'app-order-entries-list',
-  templateUrl: './order-entries-list.component.html',
-  styleUrls: ['./order-entries-list.component.scss']
+    selector: 'app-order-entries-list',
+    templateUrl: './order-entries-list.component.html',
+    styleUrls: ['./order-entries-list.component.scss'],
+    standalone: true,
+    imports: [NgIf, MatCardModule, MatButtonModule, MatIconModule, CreateOrderEntryComponent, NgFor, ExistingOrderEntryCardComponent, AsyncPipe]
 })
 export class OrderEntriesListComponent {
 

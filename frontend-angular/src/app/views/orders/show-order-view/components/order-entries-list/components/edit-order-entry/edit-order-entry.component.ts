@@ -8,12 +8,15 @@ import {
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
 import {ModifyOrderEntryState} from "../../../../../lib/model";
 import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
+import {OrderEntryFormComponent} from '../order-entry-form/order-entry-form.component';
 
 
 @Component({
-  selector: 'app-edit-order-entry',
-  templateUrl: './edit-order-entry.component.html',
-  styleUrls: ['./edit-order-entry.component.scss']
+    selector: 'app-edit-order-entry',
+    templateUrl: './edit-order-entry.component.html',
+    styleUrls: ['./edit-order-entry.component.scss'],
+    standalone: true,
+    imports: [OrderEntryFormComponent]
 })
 export class EditOrderEntryComponent implements OnInit {
 

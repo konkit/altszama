@@ -5,13 +5,16 @@ import {from, map, Observable, switchMap} from "rxjs";
 import {AuthService} from "../../../../../service/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {NgIf} from '@angular/common';
 
 const gsiClientSrc = "https://accounts.google.com/gsi/client";
 
 @Component({
-  selector: 'app-google-login-button',
-  templateUrl: './google-login-button.component.html',
-  styleUrls: ['./google-login-button.component.scss']
+    selector: 'app-google-login-button',
+    templateUrl: './google-login-button.component.html',
+    styleUrls: ['./google-login-button.component.scss'],
+    standalone: true,
+    imports: [NgIf]
 })
 export class GoogleLoginButtonComponent implements OnInit {
 

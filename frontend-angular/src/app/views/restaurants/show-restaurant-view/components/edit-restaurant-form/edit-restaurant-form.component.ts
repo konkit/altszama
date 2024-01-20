@@ -1,9 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NonNullableFormBuilder} from "@angular/forms";
+import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {RestaurantControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {catchError, switchMap} from "rxjs";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
+import {ButtonComponent} from '../../../../../components/button/button.component';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 interface RestaurantDetails {
   name: string,
@@ -13,9 +16,11 @@ interface RestaurantDetails {
 }
 
 @Component({
-  selector: 'app-edit-restaurant-form',
-  templateUrl: './edit-restaurant-form.component.html',
-  styleUrls: ['./edit-restaurant-form.component.scss']
+    selector: 'app-edit-restaurant-form',
+    templateUrl: './edit-restaurant-form.component.html',
+    styleUrls: ['./edit-restaurant-form.component.scss'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, ButtonComponent]
 })
 export class EditRestaurantFormComponent implements OnInit {
 

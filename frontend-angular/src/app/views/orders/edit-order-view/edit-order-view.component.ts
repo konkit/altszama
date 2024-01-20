@@ -6,11 +6,21 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import {MatButtonModule} from '@angular/material/button';
+import {PaymentDataFormComponent} from '../components/payment-data-form/payment-data-form.component';
+import {DeliveryDataFormComponent} from '../components/delivery-data-form/delivery-data-form.component';
+import {OrderTimeFormComponent} from '../components/order-time-form/order-time-form.component';
+import {MatStepperModule} from '@angular/material/stepper';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {OrderStateButtonsComponent} from './components/order-state-buttons/order-state-buttons.component';
+import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 @Component({
-  selector: 'app-edit-order-view',
-  templateUrl: './edit-order-view.component.html',
-  styleUrls: ['./edit-order-view.component.scss']
+    selector: 'app-edit-order-view',
+    templateUrl: './edit-order-view.component.html',
+    styleUrls: ['./edit-order-view.component.scss'],
+    standalone: true,
+    imports: [ViewWrapperComponent, OrderStateButtonsComponent, NgIf, MatStepperModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe]
 })
 export class EditOrderViewComponent implements OnInit, OnDestroy {
 

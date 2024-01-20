@@ -1,11 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {OrderControllerService, OrderViewInitialData} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {combineLatest, map, Observable, take} from "rxjs";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
 import {PriceSummaryData} from "../lib/model";
+import {UserOrdersComponent} from './components/user-orders/user-orders.component';
+import {PriceSummaryComponent} from '../components/price-summary/price-summary.component';
+import {NgxMatTimepickerComponent, NgxMatTimepickerDirective} from 'ngx-mat-timepicker';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 interface PageData {
   initData: OrderViewInitialData
@@ -13,9 +23,11 @@ interface PageData {
 }
 
 @Component({
-  selector: 'app-make-an-order-view',
-  templateUrl: './make-an-order-view.component.html',
-  styleUrls: ['./make-an-order-view.component.scss']
+    selector: 'app-make-an-order-view',
+    templateUrl: './make-an-order-view.component.html',
+    styleUrls: ['./make-an-order-view.component.scss'],
+    standalone: true,
+    imports: [ViewWrapperComponent, NgIf, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, FormsModule, NgxMatTimepickerDirective, ReactiveFormsModule, NgxMatTimepickerComponent, PriceSummaryComponent, UserOrdersComponent, AsyncPipe]
 })
 export class MakeAnOrderViewComponent implements OnInit {
 

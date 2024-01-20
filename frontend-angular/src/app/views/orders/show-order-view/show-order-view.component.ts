@@ -6,12 +6,23 @@ import {Title} from "@angular/platform-browser";
 import {ShowOrderViewState} from "../lib/model";
 import {ShowOrderDto} from "../../../../frontend-client";
 import {orderStateToCaption} from "../lib/orderState";
+import {OrderEntriesListComponent} from './components/order-entries-list/order-entries-list.component';
+import {OrderDetailsComponent} from './components/order-details/order-details.component';
+import {
+  OrderLockedWarningBannerComponent
+} from './components/order-locked-warning-banner/order-locked-warning-banner.component';
+import {OrderOwnerButtonsComponent} from './components/order-owner-buttons/order-owner-buttons.component';
+import {ChipComponent} from '../../../components/chip/chip.component';
+import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
+import {AsyncPipe, NgIf} from '@angular/common';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
-  selector: 'app-show-order-view',
-  templateUrl: './show-order-view.component.html',
-  styleUrls: ['./show-order-view.component.scss']
+    selector: 'app-show-order-view',
+    templateUrl: './show-order-view.component.html',
+    styleUrls: ['./show-order-view.component.scss'],
+    standalone: true,
+    imports: [NgIf, ViewWrapperComponent, ChipComponent, OrderOwnerButtonsComponent, OrderLockedWarningBannerComponent, OrderDetailsComponent, OrderEntriesListComponent, AsyncPipe]
 })
 export class ShowOrderViewComponent implements OnInit {
 

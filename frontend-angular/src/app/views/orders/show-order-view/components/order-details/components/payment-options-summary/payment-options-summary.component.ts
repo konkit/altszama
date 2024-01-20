@@ -2,11 +2,17 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ParticipantsOrderEntry, PaymentData} from "../../../../../../../../frontend-client";
 import {PaymentOptionsData} from "../../../../../lib/model";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatIconModule} from '@angular/material/icon';
+import {NgIf} from '@angular/common';
+import {MatListModule} from '@angular/material/list';
 
 @Component({
-  selector: 'app-payment-options-summary',
-  templateUrl: './payment-options-summary.component.html',
-  styleUrls: ['./payment-options-summary.component.scss']
+    selector: 'app-payment-options-summary',
+    templateUrl: './payment-options-summary.component.html',
+    styleUrls: ['./payment-options-summary.component.scss'],
+    standalone: true,
+    imports: [MatListModule, NgIf, MatIconModule, MatTooltipModule]
 })
 export class PaymentOptionsSummaryComponent implements OnInit {
 

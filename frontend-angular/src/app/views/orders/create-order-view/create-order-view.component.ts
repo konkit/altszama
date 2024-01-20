@@ -12,11 +12,26 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import {PaymentDataFormComponent} from '../components/payment-data-form/payment-data-form.component';
+import {DeliveryDataFormComponent} from '../components/delivery-data-form/delivery-data-form.component';
+import {OrderTimeFormComponent} from '../components/order-time-form/order-time-form.component';
+import {MatButtonModule} from '@angular/material/button';
+import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
+import {MatListModule} from '@angular/material/list';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {NgIf} from '@angular/common';
+import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 @Component({
-  selector: 'app-create-order-view',
-  templateUrl: './create-order-view.component.html',
-  styleUrls: ['./create-order-view.component.scss']
+    selector: 'app-create-order-view',
+    templateUrl: './create-order-view.component.html',
+    styleUrls: ['./create-order-view.component.scss'],
+    standalone: true,
+    imports: [ViewWrapperComponent, NgIf, MatCardModule, MatIconModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatListModule, CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf, MatButtonModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent]
 })
 export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestroy {
 

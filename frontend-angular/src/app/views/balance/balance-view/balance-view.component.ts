@@ -5,11 +5,18 @@ import {
   OrderHistoryParticipatedEntry
 } from "../../../../frontend-client";
 import {Router} from "@angular/router";
+import {PricePipe} from '../../../components/pipes/price.pipe';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatListModule} from '@angular/material/list';
+import {NgClass, NgFor, NgIf} from '@angular/common';
+import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 
 @Component({
-  selector: 'app-balance-view',
-  templateUrl: './balance-view.component.html',
-  styleUrls: ['./balance-view.component.scss']
+    selector: 'app-balance-view',
+    templateUrl: './balance-view.component.html',
+    styleUrls: ['./balance-view.component.scss'],
+    standalone: true,
+    imports: [ViewWrapperComponent, NgIf, MatListModule, NgFor, NgClass, MatProgressSpinnerModule, PricePipe]
 })
 export class BalanceViewComponent implements OnInit {
   isLoading = true

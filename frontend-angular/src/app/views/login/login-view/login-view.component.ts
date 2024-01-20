@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {GoogleLoginButtonComponent} from './components/google-login-button/google-login-button.component';
+import {MatCardModule} from '@angular/material/card';
 
 @Component({
-  selector: 'app-login-view',
-  templateUrl: './login-view.component.html',
-  styleUrls: ['./login-view.component.scss']
+    selector: 'app-login-view',
+    templateUrl: './login-view.component.html',
+    styleUrls: ['./login-view.component.scss'],
+    standalone: true,
+    imports: [MatCardModule, GoogleLoginButtonComponent]
 })
 export class LoginViewComponent {
 

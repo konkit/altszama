@@ -1,12 +1,23 @@
 import {Component, Input} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SideDish} from "../../../../../../../../frontend-client";
 import {SideDishForm} from "../../lib/formvalues";
+import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MoneyInputComponent} from '../../../../../../../components/money-input/money-input.component';
+import {MatOptionModule} from '@angular/material/core';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {NgFor, NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-side-dishes-input',
-  templateUrl: './side-dishes-input.component.html',
-  styleUrls: ['./side-dishes-input.component.scss']
+    selector: 'app-side-dishes-input',
+    templateUrl: './side-dishes-input.component.html',
+    styleUrls: ['./side-dishes-input.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgFor, MatFormFieldModule, MatInputModule, FormsModule, MatAutocompleteModule, ReactiveFormsModule, MatOptionModule, MoneyInputComponent, MatButtonModule, MatIconModule, PricePipe]
 })
 export class SideDishesInputComponent {
   @Input() availableSideDishes!: SideDish[] | null

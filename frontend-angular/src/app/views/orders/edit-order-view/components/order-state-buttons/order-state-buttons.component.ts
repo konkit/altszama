@@ -1,15 +1,20 @@
 import {Component, Input} from '@angular/core';
 import {OrderControllerService, ShowOrderDto} from "../../../../../../frontend-client";
-import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 import {Router} from "@angular/router";
 import {catchError, EMPTY, switchMap, tap} from "rxjs";
 import {DialogService} from "../../../../../service/dialog.service";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {NgIf} from '@angular/common';
+import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
-  selector: 'app-order-state-buttons',
-  templateUrl: './order-state-buttons.component.html',
-  styleUrls: ['./order-state-buttons.component.scss']
+    selector: 'app-order-state-buttons',
+    templateUrl: './order-state-buttons.component.html',
+    styleUrls: ['./order-state-buttons.component.scss'],
+    standalone: true,
+    imports: [NgIf, MatButtonModule, MatIconModule]
 })
 export class OrderStateButtonsComponent {
 
