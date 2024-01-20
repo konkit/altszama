@@ -19,14 +19,14 @@
   </mat-list-item>
 
   <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody !== 0">
-    <div matListItemTitle>Delivery (per whole order):</div>
+    <div matListItemTitle>Delivery fee (per whole order):</div>
     <div matListItemLine>
       <span class="unbreakable">+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</span>
     </div>
   </mat-list-item>
 
   <mat-list-item *ngIf="priceSummaryData.deliveryData.deliveryCostPerDish !== 0">
-    <div matListItemTitle>Delivery (per dish):</div>
+    <div matListItemTitle>Delivery fee (per dish):</div>
     <div matListItemLine>
         <span class="unbreakable">
           + {{priceSummaryData.deliveryData.deliveryCostPerDish | price}}
