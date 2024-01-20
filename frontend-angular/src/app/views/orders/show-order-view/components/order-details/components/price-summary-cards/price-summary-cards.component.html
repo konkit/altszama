@@ -8,9 +8,11 @@
 
   <mat-card>
     <mat-card-content>
-      <div matListItemTitle class="not-enabled">Discount:</div>
+      <div matListItemTitle [ngClass]="{'not-enabled': priceSummaryData.deliveryData.decreaseInPercent === 0}">
+        <span>Discount:</span>
+      </div>
 
-      <div matListItemLine *ngIf="priceSummaryData.deliveryData.decreaseInPercent === 0 && priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0">
+      <div matListItemLine *ngIf="priceSummaryData.deliveryData.decreaseInPercent === 0">
         <span class="not-enabled">No discounts</span>
       </div>
 
@@ -25,6 +27,7 @@
       <div matListItemTitle [ngClass]="{'not-enabled': priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0}">
         <span>Delivery fee:</span>
       </div>
+
       <div matListItemLine *ngIf="priceSummaryData.deliveryData.deliveryCostPerEverybody !== 0">
         <span class="unbreakable"><b>+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</b>
         per whole order
@@ -33,7 +36,7 @@
 
       <div matListItemLine *ngIf="priceSummaryData.deliveryData.deliveryCostPerDish !== 0">
         <span class="unbreakable"><b>+ {{ priceSummaryData.deliveryData.deliveryCostPerDish | price }}</b>
-          * <b>{{ priceSummaryData.allEatingPeopleCount || 0 }}</b> dish
+          * <b>{{ priceSummaryData.allEatingPeopleCount || 0 }}</b>
         </span>
       </div>
 
