@@ -29,7 +29,7 @@ import {provideAnimations} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app/app-routing.module';
 import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
 import {AuthInterceptor} from './app/interceptor/auth.interceptor';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {ApiModule, BASE_PATH} from './frontend-client';
 import {FrontendConfigService} from './app/service/frontend-config.service';
 import {APP_INITIALIZER, importProvidersFrom} from '@angular/core';

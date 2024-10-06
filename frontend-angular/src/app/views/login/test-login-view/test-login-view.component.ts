@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FrontendConfigService} from "../../../service/frontend-config.service";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {AuthService} from "../../../service/auth.service";
 import {TestAuthControllerService, TestUserLoginPayload, User} from "../../../../frontend-client";
 import {Router} from "@angular/router";

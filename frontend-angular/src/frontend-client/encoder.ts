@@ -1,4 +1,4 @@
-import {HttpUrlEncodingCodec} from '@angular/common/http';
+import { HttpUrlEncodingCodec } from '@angular/common/http';
 
 /**
  * CustomHttpUrlEncodingCodec
