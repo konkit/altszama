@@ -30,11 +30,11 @@ table.clickable-table {
   }
 
   tr.mat-mdc-row:hover {
-    background-color: mat.get-color-from-palette($altszama-theme, 50);
+    background-color: mat.m2-get-color-from-palette($altszama-theme, 50);
   }
 
   tr.selected, tr.selected:hover {
-    background-color: mat.get-color-from-palette($altszama-theme, 100);
+    background-color: mat.m2-get-color-from-palette($altszama-theme, 100);
   }
 }
 
@@ -50,7 +50,7 @@ app-root {
 }
 
 .text-body1 {
-  $typography-config: mat.get-typography-config($altszama-theme);
-  @include mat.typography-level($typography-config, 'body-1');
+  $typography-config: mat.m2-get-typography-config($altszama-theme);
+  @include mat.m2-typography-level($typography-config, 'body-1');
 }
 

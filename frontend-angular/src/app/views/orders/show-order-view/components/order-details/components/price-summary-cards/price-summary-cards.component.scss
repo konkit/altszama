@@ -15,8 +15,8 @@
 }
 
 .not-enabled {
-  $color-config:    mat.get-color-config($altszama-theme);
+  $color-config:    mat.m2-get-color-config($altszama-theme);
   $foreground-palette: map.get($color-config, foreground);
 
-  color: mat.get-color-from-palette($foreground-palette, disabled);
+  color: mat.m2-get-color-from-palette($foreground-palette, disabled);
 }

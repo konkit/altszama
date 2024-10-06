@@ -1,7 +1,7 @@
 @use '@angular/material' as mat;
 
 .allowed {
-  background-color: mat.get-color-from-palette(mat.$deep-purple-palette, 200) !important;
+  background-color: mat.m2-get-color-from-palette(mat.$m2-deep-purple-palette, 200) !important;
 
   //     background-color: mat.get-color-from-palette(mat.$deep-purple-palette, 50);
 }
