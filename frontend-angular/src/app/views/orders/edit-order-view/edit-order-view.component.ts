@@ -1,11 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EditOrderInitialData, OrderControllerService, OrderUpdateRequest} from "../../../../frontend-client";
-import {map, Observable, Subscription, take} from "rxjs";
+import {map, Observable, take} from "rxjs";
 import {FormBuilder} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {MatButtonModule} from '@angular/material/button';
 import {PaymentDataFormComponent} from '../components/payment-data-form/payment-data-form.component';
 import {DeliveryDataFormComponent} from '../components/delivery-data-form/delivery-data-form.component';
@@ -22,7 +21,7 @@ import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrappe
     standalone: true,
     imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatStepperModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe]
 })
-export class EditOrderViewComponent implements OnInit, OnDestroy {
+export class EditOrderViewComponent implements OnInit {
 
   orderId: string
 
@@ -47,15 +46,10 @@ export class EditOrderViewComponent implements OnInit, OnDestroy {
     })
   })
 
-  showNarrowLayout = false
-
-  subscriptions = new Subscription();
-
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
               private errorSnackBar: ErrorSnackBarService,
               private title: Title,
-              private responsive: BreakpointObserver,
               private router: Router) {
     this.editOrderInitialData$ = this.route.data.pipe(map(x => x['response']))
     this.orderId = this.route.snapshot.paramMap.get("id")!
@@ -66,26 +60,6 @@ export class EditOrderViewComponent implements OnInit, OnDestroy {
       this.setOrderFormInitialValue(response);
       this.title.setTitle(`Edit order from ${response.order.restaurantName} | AltSzama`)
     })
-
-    const breakpoints = [
-      Breakpoints.Medium,
-      Breakpoints.Large,
-      Breakpoints.XLarge,
-    ]
-    const sub2 = this.responsive.observe(breakpoints)
-      .subscribe(result => {
-        this.showNarrowLayout = true;
-
-        if (result.matches) {
-          this.showNarrowLayout = false;
-        }
-
-      });
-    this.subscriptions.add(sub2)
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe()
   }
 
   private setOrderFormInitialValue(response: EditOrderInitialData) {

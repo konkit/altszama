@@ -1,22 +1,24 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {catchError, tap} from "rxjs";
 import {RestaurantControllerService} from "../../../../frontend-client";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
-import {ButtonComponent} from '../../../components/button/button.component';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
+import {MatButton} from '@angular/material/button';
 
 @Component({
     selector: 'app-create-restaurant-view',
     templateUrl: './create-restaurant-view.component.html',
     styleUrls: ['./create-restaurant-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, ButtonComponent]
+  imports: [ViewWrapperComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButton]
 })
 export class CreateRestaurantViewComponent {
+
+  fb = inject(FormBuilder)
   restaurantFormGroup = this.fb.group({
     name: "",
     address: "",
@@ -24,8 +26,7 @@ export class CreateRestaurantViewComponent {
     telephone: "",
   })
 
-  constructor(private fb: FormBuilder,
-              private router: Router,
+  constructor(private router: Router,
               private restaurantControllerService: RestaurantControllerService,
               private errorSnackBar: ErrorSnackBarService) {
   }

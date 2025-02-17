@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {AuthControllerService, AuthUserInfo, GooglePayload} from "../../frontend-client";
 import {FrontendConfigService} from "./frontend-config.service";
 import {tap} from "rxjs";
@@ -13,8 +13,9 @@ export class AuthService {
   private defaultLoginPath = "/orders/today";
   private defaultLogoutPath = "/login";
 
-  constructor(private authControllerService: AuthControllerService,
-              private frontendConfigService: FrontendConfigService,
+  private authControllerService = inject(AuthControllerService);
+
+  constructor(private frontendConfigService: FrontendConfigService,
               private router: Router) {
   }
 

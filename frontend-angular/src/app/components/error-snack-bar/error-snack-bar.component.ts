@@ -1,16 +1,17 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_SNACK_BAR_DATA} from "@angular/material/snack-bar";
-import {MatIconModule} from '@angular/material/icon';
+import {MAT_SNACK_BAR_DATA} from '@angular/material/snack-bar';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
-    selector: 'app-error-snack-bar',
-    templateUrl: './error-snack-bar.component.html',
-    styleUrls: ['./error-snack-bar.component.scss'],
-    standalone: true,
-    imports: [MatIconModule]
+  selector: 'app-error-snack-bar',
+  imports: [
+    MatIcon
+  ],
+  standalone: true,
+  templateUrl: './error-snack-bar.component.html',
+  styleUrl: './error-snack-bar.component.scss'
 })
 export class ErrorSnackBarComponent {
-
   error: string = ""
 
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data: { error: string }) {

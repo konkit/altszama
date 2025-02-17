@@ -27,7 +27,7 @@ export class ShowOrderEntryComponent {
   canEditOrderEntry() {
     let isOrderOwner = this.order.orderCreatorId === this.currentUserId;
     let isOrderEntryOwner = this.orderEntry.userId === this.currentUserId;
-    return isOrderOwner || (isOrderEntryOwner && this.order.orderState === OrderStateEnum.CREATED)
+    return isOrderOwner || (isOrderEntryOwner && this.order.orderState === OrderStateEnum.Created)
   }
 
   editDishEntry() {

@@ -4,9 +4,9 @@
       <div>
         @for (sideDishForm of chosenSideDishes.controls; track sideDishForm; let sdIndex = $index) {
           <div class="w-full flex">
-            <span class="mr-3 line-height-3rem text-body1">{{sdIndex + 1}}. </span>
+<!--            <span class="mr-3 line-height-3rem text-body1">{{sdIndex + 1}}. </span>-->
             <mat-form-field class="w-full mr-3">
-              <mat-label>Name</mat-label>
+              <mat-label>Side dish #{{sdIndex + 1}}</mat-label>
               <input matInput [formControl]="sideDishForm.controls.sideDish" [matAutocomplete]="auto" />
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onSideDishSelected($event.option.value, sdIndex)' [displayWith]="displayFn">
                 @for (sideDish of availableSideDishes; track sideDish) {
@@ -32,9 +32,9 @@
     }
 
     <div>
-      <span class="line-height-3rem text-body1 mr-3">{{chosenSideDishes.controls.length + 1}}. </span>
+<!--      <span class="line-height-3rem text-body1 mr-3">{{chosenSideDishes.controls.length + 1}}. </span>-->
 
-      <button mat-button (click)="addSideDishEntry()" color="primary">
+      <button mat-button (click)="addSideDishEntry()">
         <mat-icon>add</mat-icon>
         Add side dish
       </button>

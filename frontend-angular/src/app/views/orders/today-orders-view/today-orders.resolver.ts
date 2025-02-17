@@ -1,17 +1,8 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {OrderControllerService, TodayOrdersResponse} from "../../../../frontend-client";
+import {ResolveFn} from '@angular/router';
+import {inject} from '@angular/core';
+import {OrderControllerService, TodayOrdersResponse} from '../../../../frontend-client';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class TodayOrdersResolver  {
-
-  constructor(private orderControllerService: OrderControllerService) {
-  }
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TodayOrdersResponse> {
-    return this.orderControllerService.todayOrders()
-  }
-}
+export const todayOrdersResolver: ResolveFn<TodayOrdersResponse> = (route, state) => {
+  let orderControllerService = inject(OrderControllerService)
+  return orderControllerService.todayOrders()
+};

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {OrderControllerService, OrderViewInitialData} from "../../../../frontend-client";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -30,6 +30,11 @@ interface PageData {
     imports: [ViewWrapperComponent, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, FormsModule, NgxMatTimepickerDirective, ReactiveFormsModule, NgxMatTimepickerComponent, PriceSummaryComponent, UserOrdersComponent, AsyncPipe]
 })
 export class MakeAnOrderViewComponent implements OnInit {
+  orderControllerService = inject(OrderControllerService)
+  errorSnackBar = inject(ErrorSnackBarService)
+  route = inject(ActivatedRoute)
+  router = inject(Router)
+  title = inject(Title)
 
   response$ = this.orderControllerService.orderViewJson(this.getOrderId())
   priceSummaryInput$ = this.response$.pipe(map(r => {
@@ -42,19 +47,12 @@ export class MakeAnOrderViewComponent implements OnInit {
     return priceSummaryInput
   }))
 
+  fb = inject(FormBuilder)
   formGroup = this.fb.nonNullable.group({
     approxTimeOfDelivery: ""
   })
 
   data$!: Observable<PageData>;
-
-  constructor(private orderControllerService: OrderControllerService,
-              private errorSnackBar: ErrorSnackBarService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private fb: FormBuilder,
-              private title: Title) {
-  }
 
   ngOnInit() {
     this.response$.pipe(take(1)).subscribe(response => {
@@ -78,7 +76,7 @@ export class MakeAnOrderViewComponent implements OnInit {
 
   submitForm() {
     let setAsOrderedResponse = {approxTimeOfDelivery: this.formGroup.controls.approxTimeOfDelivery.value};
-    this.orderControllerService.setAsOrdered(setAsOrderedResponse, this.getOrderId())
+    this.orderControllerService.setAsOrdered(this.getOrderId(), setAsOrderedResponse)
       .subscribe({
         next: () => this.goBack(),
         error: e => this.errorSnackBar.displayError(e)

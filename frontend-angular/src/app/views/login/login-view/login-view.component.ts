@@ -3,14 +3,12 @@ import {GoogleLoginButtonComponent} from './components/google-login-button/googl
 import {MatCardModule} from '@angular/material/card';
 
 @Component({
-    selector: 'app-login-view',
-    templateUrl: './login-view.component.html',
-    styleUrls: ['./login-view.component.scss'],
-    standalone: true,
-    imports: [MatCardModule, GoogleLoginButtonComponent]
+  selector: 'app-login-view',
+  templateUrl: './login-view.component.html',
+  styleUrl: './login-view.component.scss',
+  standalone: true,
+  imports: [MatCardModule, GoogleLoginButtonComponent]
 })
 export class LoginViewComponent {
 
-  constructor() {
-  }
 }

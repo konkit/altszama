@@ -1,3 +1,6 @@
+@use "../../../../../../assets/utils_breakpoints.scss";
+
+
 .index-number {
   line-height: 3.5rem;
   @apply ml-1 mr-4;
@@ -5,4 +8,10 @@
 
 .delete-button {
   line-height: 3.5rem;
+}
+
+@media (min-width: utils_breakpoints.$md) {
+  .md-flex-row {
+    flex-direction: row;
+  }
 }

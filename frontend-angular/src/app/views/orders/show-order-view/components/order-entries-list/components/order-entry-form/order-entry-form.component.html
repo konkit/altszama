@@ -1,19 +1,17 @@
 <form [formGroup]="formGroup">
   <div>
-    <div class="flex flex-col md:flex-row">
-      <span class="mr-3 text-body1 line-height-3rem">{{dishIndex}}. </span>
-
+    <div class="flex flex-col md-flex-row">
       <mat-form-field class="w-full mr-3">
         <mat-label>Dish</mat-label>
-        <input matInput [formControl]="formGroup.controls.dish" [matAutocomplete]="auto" data-cy="dish-input" />
+        <input matInput [formControl]="formGroup.controls.dish" [matAutocomplete]="auto" data-cy="dish-input"/>
 
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onDishSelected($event.option.value)'
-          [displayWith]="displayFn">
+                          [displayWith]="displayFn">
           @for (dish of filteredDishes | async; track dish) {
             <mat-option [value]="dish">
-              <div>{{dish.name}}</div>
+              <div>{{ dish.name }}</div>
               <div class="mat-subtitle-2 text-gray-400">
-                Price: {{dish.price | price}}, auto-updated {{ dish.lastCrawled | relativeDate }}
+                Price: {{ dish.price | price }}, auto-updated {{ dish.lastCrawled | relativeDate }}
               </div>
             </mat-option>
           }
@@ -26,23 +24,25 @@
       </mat-form-field>
     </div>
 
-    <div class="pl-6">Side dishes:</div>
+    <div>Side dishes:</div>
 
-    <div class="py-5 pl-8 pb-6">
+    <div class="py-5 pb-6">
       <app-side-dishes-input
         [availableSideDishes]="availableSideDishes$ | async"
         [chosenSideDishes]="formGroup.controls.chosenSideDishes">
       </app-side-dishes-input>
     </div>
 
-    <mat-form-field class="w-full pl-6">
+    <mat-form-field class="w-full">
       <mat-label>Additional Comments</mat-label>
       <textarea matInput [formControl]="formGroup.controls.additionalComments"></textarea>
     </mat-form-field>
   </div>
 
-  <mat-error>{{formGroup.errors}}</mat-error>
+  <mat-error>{{ formGroup.errors }}</mat-error>
 
-  <app-button (click)="cancelEdit()">Cancel</app-button>
-  <app-button color="primary" (click)="submitForm()">Submit</app-button>
+  <div>
+    <button mat-flat-button (click)="submitForm()">Submit</button>
+    <button mat-button (click)="cancelEdit()">Cancel</button>
+  </div>
 </form>

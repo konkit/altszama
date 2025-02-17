@@ -102,7 +102,7 @@ export class ShowOrderViewService {
         let allDishesInRestaurant = r.allDishesInRestaurant
 
         let isAnyOrderEntryOwner = yourOrderEntries.length > 0
-        let isOrderedOrDelivered = [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(r.order.orderState);
+        let isOrderedOrDelivered = [OrderStateEnum.Ordered, OrderStateEnum.Delivered].includes(r.order.orderState);
         let shouldShowQRCodeButton = isAnyOrderEntryOwner && isOrderedOrDelivered && r.order.paymentData.paymentByBankTransfer;
 
         let priceSummaryData: PriceSummaryData = {
@@ -134,10 +134,10 @@ export class ShowOrderViewService {
 
   private getViewStateFlags(r: ShowOrderResponse): ShowOrderViewStateFlags {
     let isOrderOwner = r.order.orderCreatorId === r.currentUserId;
-    let canShowPlaceOrderButton = isOrderOwner && [OrderStateEnum.CREATED, OrderStateEnum.ORDERING].includes(r.order.orderState)
-    let canShowMarkAsDeliveredButton = isOrderOwner && r.order.orderState === OrderStateEnum.ORDERED;
+    let canShowPlaceOrderButton = isOrderOwner && [OrderStateEnum.Created, OrderStateEnum.Ordering].includes(r.order.orderState)
+    let canShowMarkAsDeliveredButton = isOrderOwner && r.order.orderState === OrderStateEnum.Ordered;
     let isPlaceOrderButtonDisabled = r.orderEntries.length === 0;
-    let shouldShowOrderLockedWarning = isOrderOwner && [OrderStateEnum.ORDERING].includes(r.order.orderState);
+    let shouldShowOrderLockedWarning = isOrderOwner && [OrderStateEnum.Ordering].includes(r.order.orderState);
 
     return {
       canShowPlaceOrderButton: canShowPlaceOrderButton,

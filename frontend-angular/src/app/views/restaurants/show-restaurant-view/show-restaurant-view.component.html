@@ -1,20 +1,31 @@
 @if (restaurant$ | async; as restaurantResponse) {
   @if (restaurantState$ | async; as restaurantEditorState) {
     <app-view-wrapper>
-      <h1 class="font-bold text-gray-700">Restaurant {{restaurantResponse.restaurant.name}}</h1>
-      <div class="flex flex-col flex-grow bg-white rounded py-5 md:px-5">
-        <div class="flex flex-row p-3">
-          <app-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
-            [disabled]="restaurantEditorState.name != 'IDLE'"
-            class="mr-3" icon="edit">
-            Edit restaurant
-          </app-button>
-          <app-button color="warn" (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
-            [disabled]="restaurantEditorState.name != 'IDLE'"
-            icon="delete">
-            Delete restaurant
-          </app-button>
+      <div>
+        <button mat-button [routerLink]="['/restaurants']">
+          <mat-icon>arrow_back</mat-icon>
+          Back
+        </button>
+      </div>
+
+      <div class="flex flex-col flex-grow bg-white rounded md-px-5">
+        <div class="flex flex-row">
+          <h1 class="font-bold text-gray-700">Restaurant {{ restaurantResponse.restaurant.name }}</h1>
+          <div class="flex flex-row my-5 ml-auto">
+            <button mat-raised-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
+                    [disabled]="restaurantEditorState.name != 'IDLE'"
+                    class="mr-3">
+              Edit restaurant details
+              <mat-icon fontIcon="edit"></mat-icon>
+            </button>
+            <button mat-raised-button (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
+                    [disabled]="restaurantEditorState.name != 'IDLE'">
+              Delete restaurant
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </div>
+
         @if (restaurantEditorState.name != 'EDITING_RESTAURANT') {
           <app-restaurant-details [restaurant]="restaurantResponse.restaurant"></app-restaurant-details>
         }
@@ -23,27 +34,29 @@
             <app-edit-restaurant-form [restaurantId]="restaurantResponse.restaurant.id"></app-edit-restaurant-form>
           </div>
         }
+
         <mat-divider></mat-divider>
+
         <div>
           <div class="p-3 pt-5">
             @if (restaurantEditorState.name != 'CREATING_DISH') {
-              <app-button
+              <button mat-button
                 [disabled]="restaurantEditorState.name != 'IDLE'"
-                color="primary"
                 (click)="createDish()"
-                class="mr-3" icon="add">
-                Create new dish
-              </app-button>
+                class="mr-3">
+                <mat-icon>add</mat-icon>Create new dish
+              </button>
             } @else {
               <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id">
               </app-create-dish-form>
             }
           </div>
         </div>
+
         @for (categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue; track categoryAndDishes) {
           <div
-            class="dish-entry-container">
-            <span class="text-gray-400"> Category: {{ categoryAndDishes.key || "No Category" }} </span>
+            class="p-3">
+            <div class="mb-4"> Category: {{ categoryAndDishes.key || "No Category" }} </div>
             @for (dish of categoryAndDishes.value; track dish) {
               <div class="border-t-2">
                 @if (restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id) {
@@ -54,8 +67,8 @@
                   </div>
                 } @else {
                   <app-dish-entry [restaurant]="restaurantResponse.restaurant"
-                    [dish]="dish"
-                    [restaurantEditorState]="restaurantEditorState">
+                                  [dish]="dish"
+                                  [restaurantEditorState]="restaurantEditorState">
                   </app-dish-entry>
                 }
               </div>

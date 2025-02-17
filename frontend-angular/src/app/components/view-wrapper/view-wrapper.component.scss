@@ -1,5 +1,27 @@
 :host {
   display: block;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
+  justify-self: center;
+  padding: 0 1rem;
+  margin: 0 auto;
 }
+
+//:host {
+//  //  width: 100%;
+//  //  display: block;
+//  //  max-width: 1000px;
+//  //  margin: 0 auto;
+//  //  padding: 0 1rem;
+//  //}
+
+div {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  //padding: 1.5rem 1rem;
+
+  width: 100%;
+  height: 100%;
+}
+

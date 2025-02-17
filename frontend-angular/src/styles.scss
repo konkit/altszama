@@ -1,28 +1,10 @@
-// Angular setup
+@use "assets/utils";
 
-@use '@angular/material' as mat;
+/* You can add global styles to this file, and also import other style files */
 
-@import "themes";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@include mat.typography-hierarchy($altszama-typography);
-
-@include mat.core();
-
-@include mat.all-component-themes($altszama-theme);
-
-
-// Tailwind setup
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-// App-wide styles
-
-html, body {
-  width: 100%;
-  height: 100%;
-}
 
 table.clickable-table {
   tr {
@@ -30,27 +12,10 @@ table.clickable-table {
   }
 
   tr.mat-mdc-row:hover {
-    background-color: mat.m2-get-color-from-palette($altszama-theme, 50);
+    background-color: var(--mat-sys-surface-container-high)
   }
 
-  tr.selected, tr.selected:hover {
-    background-color: mat.m2-get-color-from-palette($altszama-theme, 100);
-  }
+  //tr.selected, tr.selected:hover {
+  //  //background-color: mat.m2-get-color-from-palette($altszama-theme, 100);
+  //}
 }
-
-
-app-root {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.line-height-3rem {
-  line-height: 3rem !important;
-}
-
-.text-body1 {
-  $typography-config: mat.m2-get-typography-config($altszama-theme);
-  @include mat.m2-typography-level($typography-config, 'body-1');
-}
-

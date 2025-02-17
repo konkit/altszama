@@ -33,6 +33,8 @@ open class SwaggerConfig {
 
     val guiApiSecurityScheme = SecurityScheme()
       .type(SecurityScheme.Type.APIKEY)
+      .`in`(SecurityScheme.In.HEADER)
+      .name("Authorization")
       .scheme("bearer")
       .bearerFormat("JWT")
 
@@ -48,8 +50,8 @@ open class SwaggerConfig {
     return OpenAPI()
         .addServersItem(Server().url(secretsConfig.backendUrl))
         .components(components)
-        .info(Info().title("Restaurant Import API").description(description))
-        .addSecurityItem(SecurityRequirement().addList("bearerAuth", listOf()));
+        .info(Info().title("Restaurant Import API").description(description).version("0.0.1"))
+        .addSecurityItem(SecurityRequirement().addList("bearerAuth", listOf()))
   }
 
   @Bean

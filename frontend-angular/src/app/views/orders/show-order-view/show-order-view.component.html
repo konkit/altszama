@@ -1,48 +1,56 @@
 @if (showOrderViewState$ | async; as viewState) {
   <app-view-wrapper>
+    <div>
+      <button mat-button [routerLink]="['/orders/today']">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </button>
+    </div>
+
     <div class="title-wrapper flex flex-row">
-      <div class="flex flex-col">
-        <div class="flex flex-row items-center">
-          <h1 class="font-bold text-gray-700 mb-0">Order from {{ viewState.order.restaurantName }}</h1>
-          <app-chip color="primary" class="ml-2" data-cy="order-status-chip">
-            Status: {{ getOrderStateString(viewState.order.orderState) }}
-          </app-chip>
-        </div>
-        <span class="mat-subtitle-2">Created by {{ viewState.order.orderCreatorUsername }}
-          at {{ viewState.order.orderDate }}
-        </span>
+      <div class="flex flex-row items-center">
+        <h1 class="font-bold text-gray-700 mb-0 mt-0">Order from {{ viewState.order.restaurantName }}</h1>
+        <app-chip color="primary" class="ml-2" data-cy="order-status-chip">
+          Status: {{ getOrderStateString(viewState.order.orderState) }}
+        </app-chip>
       </div>
+
       @if (viewState.flags.isOrderOwner) {
-        <app-order-owner-buttons class="ml-auto hidden xl:block"
-          [orderId]="viewState.order.id"
-          [canShowMarkAsDeliveredButton]="viewState.flags.canShowMarkAsDeliveredButton"
-          [isPlaceOrderButtonDisabled]="viewState.flags.isPlaceOrderButtonDisabled"
-          [canShowPlaceOrderButton]="viewState.flags.canShowPlaceOrderButton"
-          >
+        <app-order-owner-buttons class="ml-auto hidden xl-block"
+                                 [orderId]="viewState.order.id"
+                                 [canShowMarkAsDeliveredButton]="viewState.flags.canShowMarkAsDeliveredButton"
+                                 [isPlaceOrderButtonDisabled]="viewState.flags.isPlaceOrderButtonDisabled"
+                                 [canShowPlaceOrderButton]="viewState.flags.canShowPlaceOrderButton"
+        >
         </app-order-owner-buttons>
       }
     </div>
+
+    <div class="subtitle -mt-4 mb-4">
+      Created by {{ viewState.order.orderCreatorUsername }} on {{ viewState.order.orderDate }}
+    </div>
+
     @if (viewState.flags.shouldShowOrderLockedWarning) {
       <app-order-locked-warning-banner
         [orderId]="viewState.order.id">
       </app-order-locked-warning-banner>
     }
     @if (viewState.flags.isOrderOwner) {
-      <app-order-owner-buttons class="xl:hidden"
-        [orderId]="viewState.order.id"
-        [canShowMarkAsDeliveredButton]="viewState.flags.canShowMarkAsDeliveredButton"
-        [isPlaceOrderButtonDisabled]="viewState.flags.isPlaceOrderButtonDisabled"
-        [canShowPlaceOrderButton]="viewState.flags.canShowPlaceOrderButton"
-        >
+      <app-order-owner-buttons class="xl-hidden"
+                               [orderId]="viewState.order.id"
+                               [canShowMarkAsDeliveredButton]="viewState.flags.canShowMarkAsDeliveredButton"
+                               [isPlaceOrderButtonDisabled]="viewState.flags.isPlaceOrderButtonDisabled"
+                               [canShowPlaceOrderButton]="viewState.flags.canShowPlaceOrderButton"
+      >
       </app-order-owner-buttons>
     }
     <app-order-details [order]="viewState.order" [viewState]="viewState">
     </app-order-details>
     <app-order-entries-list [currentUserId]="viewState.currentUserId"
-      [username]="viewState.username"
-      [allDishesInRestaurant]="viewState.allDishesInRestaurant"
-      [order]="viewState.order"
-      [yourOrderEntries]="viewState.yourOrderEntries">
+                            [username]="viewState.username"
+                            [allDishesInRestaurant]="viewState.allDishesInRestaurant"
+                            [order]="viewState.order"
+                            [yourOrderEntries]="viewState.yourOrderEntries">
     </app-order-entries-list>
   </app-view-wrapper>
 }

@@ -6,8 +6,8 @@ import {
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle
-} from "@angular/material/dialog";
-import {MatButtonModule} from '@angular/material/button';
+} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
 
 export interface DeleteConfirmationInput {
   title: string
@@ -15,14 +15,19 @@ export interface DeleteConfirmationInput {
 }
 
 @Component({
-    selector: 'app-delete-confirmation-modal',
-    templateUrl: './delete-confirmation-modal.component.html',
-    styleUrls: ['./delete-confirmation-modal.component.scss'],
-    standalone: true,
-    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButtonModule, MatDialogClose]
+  selector: 'app-delete-confirmation-modal',
+  imports: [
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogTitle
+  ],
+  standalone: true,
+  templateUrl: './delete-confirmation-modal.component.html',
+  styleUrl: './delete-confirmation-modal.component.scss'
 })
 export class DeleteConfirmationModalComponent {
-
   title: string = "Confirm delete";
   content: string = "Are you sure you want to delete?";
 

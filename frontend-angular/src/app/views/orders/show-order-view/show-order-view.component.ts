@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Observable, take} from "rxjs";
 import {ShowOrderViewService} from "./service/show-order-view.service";
 import {Title} from "@angular/platform-browser";
@@ -15,6 +15,8 @@ import {OrderOwnerButtonsComponent} from './components/order-owner-buttons/order
 import {ChipComponent} from '../../../components/chip/chip.component';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 import {AsyncPipe} from '@angular/common';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
 @Component({
@@ -22,7 +24,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './show-order-view.component.html',
     styleUrls: ['./show-order-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, ChipComponent, OrderOwnerButtonsComponent, OrderLockedWarningBannerComponent, OrderDetailsComponent, OrderEntriesListComponent, AsyncPipe]
+  imports: [ViewWrapperComponent, ChipComponent, OrderOwnerButtonsComponent, OrderLockedWarningBannerComponent, OrderDetailsComponent, OrderEntriesListComponent, AsyncPipe, MatButton, MatIcon, RouterLink]
 })
 export class ShowOrderViewComponent implements OnInit {
 

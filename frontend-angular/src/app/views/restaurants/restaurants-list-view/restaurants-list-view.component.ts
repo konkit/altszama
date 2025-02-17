@@ -1,22 +1,22 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {map, Observable} from "rxjs";
-import {IndexResponse, RestaurantInfo} from "../../../../frontend-client";
-import {FrontendConfigService} from "../../../service/frontend-config.service";
+import {map, Observable, tap} from "rxjs";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {RelativeDatePipe} from '../../../components/pipes/date-to-rel.pipe';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {AsyncPipe} from '@angular/common';
+import {RelativeDatePipe} from '../../../components/pipes/date-to-rel.pipe';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
+import {IndexResponse, RestaurantInfo} from '../../../../frontend-client';
+import {FrontendConfigService} from '../../../service/frontend-config.service';
 
 @Component({
-    selector: 'app-restaurants-list-view',
-    templateUrl: './restaurants-list-view.component.html',
-    styleUrls: ['./restaurants-list-view.component.scss'],
-    standalone: true,
-    imports: [ViewWrapperComponent, MatButtonModule, RouterLink, MatIconModule, MatTableModule, MatPaginatorModule, AsyncPipe, RelativeDatePipe]
+  selector: 'app-restaurants-list-view',
+  templateUrl: './restaurants-list-view.component.html',
+  styleUrls: ['./restaurants-list-view.component.scss'],
+  standalone: true,
+  imports: [ViewWrapperComponent, MatButtonModule, RouterLink, MatIconModule, MatTableModule, MatPaginatorModule, AsyncPipe, RelativeDatePipe]
 })
 export class RestaurantsListViewComponent implements OnInit, AfterViewInit {
   indexResponse$: Observable<IndexResponse>;
@@ -29,9 +29,11 @@ export class RestaurantsListViewComponent implements OnInit, AfterViewInit {
 
   constructor(private frontendConfigService: FrontendConfigService,
               private route: ActivatedRoute) {
-    this.indexResponse$ = this.route.data.pipe(
-      map(r => r['response'])
-    )
+    this.indexResponse$ = this.route.data
+      .pipe(
+        map(r => r['response']),
+        tap((r) => console.log("Response: ", r))
+      )
   }
 
   ngOnInit() {

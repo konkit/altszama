@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
 import {catchError, Observable, switchMap} from "rxjs";
 import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
@@ -19,6 +19,8 @@ export class CreateDishFormComponent implements OnInit {
 
   @Input() restaurantId!: string
 
+  fb = inject(NonNullableFormBuilder);
+
   dishForm = this.fb.group({
     name: ["", Validators.required],
     price: [0, [Validators.required, Validators.min(0)]],
@@ -28,8 +30,7 @@ export class CreateDishFormComponent implements OnInit {
 
   modifyDishData$: Observable<CreateDishResponse> | null = null
 
-  constructor(private fb: NonNullableFormBuilder,
-              private dishControllerService: DishControllerService,
+  constructor(private dishControllerService: DishControllerService,
               private errorSnackBar: ErrorSnackBarService,
               private restaurantFormService: RestaurantFormService) {
   }
@@ -41,7 +42,7 @@ export class CreateDishFormComponent implements OnInit {
   submitForm() {
     if (this.dishForm.valid) {
       let body = this.dishForm.getRawValue()
-      this.dishControllerService.saveDish(body, this.restaurantId)
+      this.dishControllerService.saveDish(this.restaurantId, body)
         .pipe(
           switchMap(() => this.restaurantFormService.refreshRestaurantData()),
           catchError(err => {

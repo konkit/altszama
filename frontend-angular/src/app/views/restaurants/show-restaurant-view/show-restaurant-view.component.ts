@@ -10,9 +10,11 @@ import {CreateDishFormComponent} from './components/create-dish-form/create-dish
 import {MatDividerModule} from '@angular/material/divider';
 import {EditRestaurantFormComponent} from './components/edit-restaurant-form/edit-restaurant-form.component';
 import {RestaurantDetailsComponent} from './components/restaurant-details/restaurant-details.component';
-import {ButtonComponent} from '../../../components/button/button.component';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 import {AsyncPipe, KeyValuePipe} from '@angular/common';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {RouterLink} from '@angular/router';
 
 
 @Component({
@@ -20,7 +22,7 @@ import {AsyncPipe, KeyValuePipe} from '@angular/common';
     templateUrl: './show-restaurant-view.component.html',
     styleUrls: ['./show-restaurant-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, ButtonComponent, RestaurantDetailsComponent, EditRestaurantFormComponent, MatDividerModule, CreateDishFormComponent, EditDishFormComponent, DishEntryComponent, AsyncPipe, KeyValuePipe]
+  imports: [ViewWrapperComponent, RestaurantDetailsComponent, EditRestaurantFormComponent, MatDividerModule, CreateDishFormComponent, EditDishFormComponent, DishEntryComponent, AsyncPipe, KeyValuePipe, MatButton, MatIcon, RouterLink]
 })
 export class ShowRestaurantViewComponent {
 

@@ -1,6 +1,6 @@
 @if (data$ | async; as data) {
   <app-view-wrapper>
-    <h1 class="font-bold text-gray-700">Now call {{ data.initData.restaurantName }} and order the food!</h1>
+    <h1>Make an order from {{ data.initData.restaurantName }}</h1>
 
     @if (data.initData.orderState !== 'ORDERING') {
       <mat-card appearance="outlined">
@@ -27,44 +27,40 @@
           <mat-card-title>The order is locked!</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div>
-            Order is now locked, so no one should order anything else now.
-          </div>
+          <p>Order is now locked, so no one should order anything else now.</p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button color="primary" (click)="unlockOrder()">
-            Unlock
+          <button mat-button (click)="unlockOrder()">
+            Unlock and go back
             <mat-icon fontIcon="lock_open"></mat-icon>
           </button>
         </mat-card-actions>
       </mat-card>
-      <div class="grid grid-cols-2 gap-3 w-full mb-5">
+
+      <div class="grid grid-cols-2 gap-8 w-full mb-5">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>
-              <h1>Call the place!</h1>
-            </mat-card-title>
+            <mat-card-title>Call the place!</mat-card-title>
           </mat-card-header>
           <mat-card-content class="h-full">
-            <div class="flex flex-col items-center">
-              <div class="justify-center py-3">
+            <div class="flex flex-col">
+              <div class="justify-center">
                 @if (data.initData.restaurantTelephone.length > 0) {
-                  Call <b>{{ data.initData.restaurantName }}</b>, tel. <b>{{ data.initData.restaurantTelephone }}</b>
+                  <p>Call <b>{{ data.initData.restaurantName }}</b>, tel. <b>{{ data.initData.restaurantTelephone }}</b> and make an order.</p>
                 } @else {
-                  Call <b>{{ data.initData.restaurantName }}</b> (Telephone number not specified, sorry :/)
+                  <p>Call <b>{{ data.initData.restaurantName }}</b> (<i>phone number not specified, sorry</i> :/) and make an order.</p>
                 }
               </div>
-              <div class="mb-3">
-                <mat-label>make an order and fill the approximate time of delivery:</mat-label>
+              <div>
+                <p>Afterwards, please fill the approximate time of delivery:</p>
               </div>
               <div>
                 <mat-form-field class="time-form-field">
-                  <input matInput [ngxMatTimepicker]="picker" [format]="24"
-                    [formControl]="formGroup.controls.approxTimeOfDelivery">
+                  <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="formGroup.controls.approxTimeOfDelivery" placeholder="Time">
                   <mat-icon matSuffix (click)="picker.open()">watch_later</mat-icon>
                 </mat-form-field>
                 <ngx-mat-timepicker #picker></ngx-mat-timepicker>
-                <button mat-raised-button color="primary" (click)="submitForm()" class="ml-3">
+                <button mat-flat-button color="primary" (click)="submitForm()" class="ml-3">
                   Order placed!
                 </button>
               </div>
@@ -73,7 +69,7 @@
         </mat-card>
         <mat-card>
           <mat-card-header>
-            <mat-card-title><h1>Cost summary</h1></mat-card-title>
+            <mat-card-title>Cost summary</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <app-price-summary [priceSummaryData]="data.priceSummaryData">

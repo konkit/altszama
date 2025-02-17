@@ -1,12 +1,12 @@
-<div class="flex flex-col md:flex-row">
+<div class="title-bar">
   <div>
-    <span class="text-body1 line-height-3rem">{{ index }}. </span>
-    <span class="text-body1 line-height-3rem">{{ dishEntry.dishName }}</span>
-    <span class="text-body1 line-height-3rem ml-2">({{dishEntry.price | price}})</span>
+    <span class="line-height-3rem">{{ index }}. </span>
+    <span class="line-height-3rem pl-4">{{ dishEntry.dishName }}</span>
+    <span class="line-height-3rem ml-2">({{dishEntry.price | price}})</span>
   </div>
 
   @if (canEditOrderEntry()) {
-    <div class="ml-2">
+    <div class="ml-auto mr-0">
       <button mat-icon-button color="primary" (click)="editDishEntry()">
         <mat-icon fontIcon="edit"></mat-icon>
       </button>
@@ -20,16 +20,16 @@
 @for (sideDish of dishEntry.sideDishes; track sideDish) {
   <div class="pl-8">
     <div class="line">
-      <span class="text-body1 line-height-3rem mr-2">+</span>
-      <span class="text-body1 line-height-3rem">{{ sideDish.name }}</span>
-      <span class="text-body1 line-height-3rem ml-2">({{sideDish.price | price}})</span>
+      <span class="line-height-3rem mr-2">+</span>
+      <span class="line-height-3rem">{{ sideDish.name }}</span>
+      <span class="line-height-3rem ml-2">({{sideDish.price | price}})</span>
     </div>
   </div>
 }
 
 @if (dishEntry.comments.length > 0) {
   <div class="pl-8">
-    <span class="text-body1 line-height-3rem">
+    <span class="line-height-3rem">
       Additional comments: {{ dishEntry.comments }}
     </span>
   </div>

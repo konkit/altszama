@@ -1,7 +1,7 @@
 <div class="flex flex-row py-3">
   <div class="flex">
     @if (canShowPlaceOrderButton && isPlaceOrderButtonDisabled) {
-      <button mat-raised-button class="mr-3" [disabled]="true"
+      <button mat-flat-button class="mr-3" [disabled]="true"
         matTooltip="You cannot place an empty order. Choose a dish first.">
         Place order
         <mat-icon fontIcon="check"></mat-icon>
@@ -9,14 +9,14 @@
     }
 
     @if (canShowPlaceOrderButton && !isPlaceOrderButtonDisabled) {
-      <button mat-raised-button class="mr-3" color="primary" (click)="placeOrder()">
+      <button mat-flat-button class="mr-3" color="primary" (click)="placeOrder()">
         Place order
         <mat-icon fontIcon="check"></mat-icon>
       </button>
     }
 
     @if (canShowMarkAsDeliveredButton) {
-      <button mat-raised-button class="mr-3" color="primary"
+      <button mat-flat-button class="mr-3" color="primary"
         (click)="setAsDelivered()">
         Mark as delivered
         <mat-icon fontIcon="check"></mat-icon>

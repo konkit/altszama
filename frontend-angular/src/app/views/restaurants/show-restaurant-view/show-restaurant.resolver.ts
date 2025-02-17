@@ -1,21 +1,9 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {RestaurantControllerService} from "../../../../frontend-client";
+import {inject} from '@angular/core';
+import {ResolveFn} from '@angular/router';
 import {RestaurantFormService} from "./service/restaurant-form.service";
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ShowRestaurantResolver  {
-
-  constructor(private restaurantControllerService: RestaurantControllerService,
-              private restaurantFormService: RestaurantFormService) {
-
-  }
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string> {
-    let id = route.paramMap.get('id');
-    return this.restaurantFormService.loadRestaurantData(id!)
-  }
-}
+export const showRestaurantResolver: ResolveFn<string> = (route, state) => {
+  const restaurantFormService = inject(RestaurantFormService);
+  let id = route.paramMap.get('id');
+  return restaurantFormService.loadRestaurantData(id!)
+};

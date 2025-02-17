@@ -1,4 +1,31 @@
+@use "../../../../../../../../assets/utils_breakpoints";
+
 .title-and-price {
   font-size: 16px;
+  line-height: 3rem;
+}
+
+.icon-bar {
+  display: flex;
+  flex-direction: row;
+  margin-top: -1rem;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: utils_breakpoints.$md) {
+  .icon-bar {
+    margin-top: 0;
+  }
+
+  :host {
+    flex-direction: row;
+  }
+}
+
+.line-height-3rem {
   line-height: 3rem;
 }

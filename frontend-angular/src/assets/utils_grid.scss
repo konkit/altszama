@@ -1,0 +1,15 @@
+.grid {
+  display: grid;
+}
+
+@for $i from 0 through 20 {
+  .grid-cols-#{$i} {
+    grid-template-columns: repeat($i, minmax(0, 1fr));
+  }
+}
+
+@for $i from 0 through 20 {
+  .gap-#{$i} {
+    gap: ($i * 0.25rem);
+  }
+}

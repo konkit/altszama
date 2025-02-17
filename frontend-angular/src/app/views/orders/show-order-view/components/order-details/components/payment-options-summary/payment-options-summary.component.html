@@ -2,14 +2,14 @@
   @if (paymentData.paymentByCash === true) {
     <mat-list-item>
       <div matListItemTitle>Payment by cash</div>
-      <div matListItemLine>Allowed</div>
+      <div matListItemLine>Allowed ✅</div>
     </mat-list-item>
   }
 
   @if (paymentData.paymentByCash === false) {
     <mat-list-item>
       <div matListItemTitle class="flex items-center">Payment by cash</div>
-      <div matListItemLine>Not allowed</div>
+      <div matListItemLine>Not allowed ❌</div>
     </mat-list-item>
   }
 
@@ -34,7 +34,7 @@
   @if (paymentData.paymentByBankTransfer === false) {
     <mat-list-item>
       <div matListItemTitle>Payment by bank transfer</div>
-      <div matListItemLine>Not allowed</div>
+      <div matListItemLine>Not allowed ❌</div>
     </mat-list-item>
   }
 
@@ -53,7 +53,7 @@
   @if (paymentData.paymentByBlik === false) {
     <mat-list-item>
       <div matListItemTitle>Payment by BLIK</div>
-      <div matListItemLine>Not allowed</div>
+      <div matListItemLine>Not allowed ❌</div>
     </mat-list-item>
   }
 

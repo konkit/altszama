@@ -21,17 +21,9 @@
               @for (owedUsernameAndAmount of owedMoneyEntries; track owedUsernameAndAmount) {
                 <mat-list-item>
                   @if (owedUsernameAndAmount[1] > 0) {
-                    <div>
-                      <p>You are owed <b>
-                        {{ owedUsernameAndAmount[1] | price }}
-                      </b> by <b>{{ owedUsernameAndAmount[0] }}</b></p>
-                    </div>
+                      <p>You are owed <b>{{ owedUsernameAndAmount[1] | price }}</b> by <b>{{ owedUsernameAndAmount[0] }}</b></p>
                   } @else if (owedUsernameAndAmount[1] < 0) {
-                    <div>
-                      <p>You owe <b>
-                        {{ -owedUsernameAndAmount[1] | price }}
-                      </b> to <b>{{ owedUsernameAndAmount[0] }}</b></p>
-                    </div>
+                      <p>You owe <b>{{ -owedUsernameAndAmount[1] | price }}</b> to <b>{{ owedUsernameAndAmount[0] }}</b></p>
                   }
                 </mat-list-item>
               }
@@ -56,33 +48,29 @@
                 @if (isCreatedEntry(historyEntry)) {
                   <mat-list-item (click)="goToOrder(historyEntry.orderId)"
                                  [ngClass]="{paid: isCreatedEntryPaid(historyEntry)}" class="cursor-pointer">
-                    <h3 matListItemTitle>
-                      <b>({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}</b>
-                    </h3>
-                    <p matListItemLine>
+                    <div matListItemTitle>
+                      ({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}
+                    </div>
+                    <div matListItemLine>
                       Payments confirmed:
-                      <b>
-                        {{ historyEntry.confirmedPaymentsTotalAmount | price }}
-                        /
-                        {{ historyEntry.totalAmount | price }}
-                      </b>
-                    </p>
+                      {{ historyEntry.confirmedPaymentsTotalAmount | price }}
+                      /
+                      {{ historyEntry.totalAmount | price }}
+                    </div>
                   </mat-list-item>
                 } @else if (isParticipatedEntry(historyEntry)) {
                   <mat-list-item (click)="goToOrder(historyEntry.orderId)"
                                  [ngClass]="{paid: isParticipatedEntryPaid(historyEntry)}" class="cursor-pointer">
-                    <h3 matListItemTitle>
-                      <b>
-                        ({{ historyEntry.orderDate }})
-                        {{ historyEntry.orderCreator }} ordered from
-                        {{ historyEntry.restaurantName }}
-                      </b>
-                    </h3>
-                    <p matListItemLine>
+                    <div matListItemTitle>
+                      ({{ historyEntry.orderDate }})
+                      {{ historyEntry.orderCreator }} ordered from
+                      {{ historyEntry.restaurantName }}
+                    </div>
+                    <div matListItemLine>
                       Amount:
                       {{ historyEntry.orderEntryAmount | price }}
                       ({{ historyEntry.status }})
-                    </p>
+                    </div>
                   </mat-list-item>
                 }
               }

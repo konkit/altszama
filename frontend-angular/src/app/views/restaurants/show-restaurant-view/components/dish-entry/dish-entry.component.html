@@ -20,10 +20,10 @@
 
 @if (restaurantEditorState.name != 'EDITING_DISH' || restaurantEditorState.dishId != dish.id) {
   <div class="edit-buttons">
-    <button mat-icon-button color="primary" (click)="editDish()" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="edit-dish-button">
+    <button mat-icon-button (click)="editDish()" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="edit-dish-button">
       <mat-icon fontIcon="edit"></mat-icon>
     </button>
-    <button mat-icon-button (click)="deleteDish()" color="warn" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="delete-dish-button">
+    <button mat-icon-button (click)="deleteDish()" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="delete-dish-button">
       <mat-icon fontIcon="delete"></mat-icon>
     </button>
   </div>

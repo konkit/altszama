@@ -1,0 +1,43 @@
+@use "./utils_breakpoints.scss";
+
+.container {
+  width: 100%;
+}
+
+@media (min-width: utils_breakpoints.$sm) {
+  .container {
+    max-width: utils_breakpoints.$sm;
+  }
+}
+
+@media (min-width: utils_breakpoints.$md) {
+  .container {
+    max-width: utils_breakpoints.$md;
+  }
+}
+
+@media (min-width: utils_breakpoints.$lg) {
+  .container {
+    max-width: utils_breakpoints.$lg;
+  }
+}
+
+@media (min-width: utils_breakpoints.$xl) {
+  .container {
+    max-width: utils_breakpoints.$xl;
+  }
+}
+
+@media (min-width: utils_breakpoints.$xxl) {
+  .container {
+    max-width: utils_breakpoints.$xxl;
+  }
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+

@@ -1,22 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SideDish} from "../../../../../../frontend-client";
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  FormsModule,
-  NonNullableFormBuilder,
-  ReactiveFormsModule
-} from "@angular/forms";
-import {ButtonComponent} from '../../../../../components/button/button.component';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatOptionModule} from '@angular/material/core';
+import {FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {MatIcon} from '@angular/material/icon';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatOption} from '@angular/material/core';
 
-import {MatSelectModule} from '@angular/material/select';
+import {MatLabel, MatSelect} from '@angular/material/select';
+import {MatInput} from '@angular/material/input';
+import {MatError, MatFormField} from '@angular/material/form-field';
 import {MoneyInputComponent} from '../../../../../components/money-input/money-input.component';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
 
 export interface DishForm {
   name: FormControl<string>
@@ -42,7 +34,19 @@ export interface DishFormData {
     templateUrl: './dish-form.component.html',
     styleUrls: ['./dish-form.component.scss'],
     standalone: true,
-    imports: [MatFormFieldModule, FormsModule, ReactiveFormsModule, MatInputModule, MoneyInputComponent, MatSelectModule, MatOptionModule, MatButtonModule, MatIconModule, ButtonComponent]
+  imports: [
+    MatError,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatIcon,
+    MatIconButton,
+    MatButton,
+    MoneyInputComponent
+  ]
 })
 export class DishFormComponent implements OnInit {
 

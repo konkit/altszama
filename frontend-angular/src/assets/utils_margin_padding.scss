@@ -1,0 +1,191 @@
+@for $i from 0 through 20 {
+  .m-#{$i} {
+    margin: ($i * 0.25rem);
+  }
+  .mt-#{$i} {
+    margin-top: ($i * 0.25rem);
+  }
+  .mr-#{$i} {
+    margin-right: ($i * 0.25rem);
+  }
+  .mb-#{$i} {
+    margin-bottom: ($i * 0.25rem);
+  }
+  .ml-#{$i} {
+    margin-left: ($i * 0.25rem);
+  }
+  .mx-#{$i} {
+    margin-left: ($i * 0.25rem);
+    margin-right: ($i * 0.25rem);
+  }
+  .my-#{$i} {
+    margin-top: ($i * 0.25rem);
+    margin-bottom: ($i * 0.25rem);
+  }
+}
+
+// Add some special cases like auto and negative values, if needed.
+
+.m-auto {
+  margin: auto;
+}
+.mt-auto {
+  margin-top: auto;
+}
+.mr-auto {
+  margin-right: auto;
+}
+.mb-auto {
+  margin-bottom: auto;
+}
+.ml-auto {
+  margin-left: auto;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+// Negative values (e.g., -mr-1)
+@for $i from 1 through 20 {
+  .-m-#{$i} {
+    margin: (-$i * 0.25rem);
+  }
+  .-mt-#{$i} {
+    margin-top: (-$i * 0.25rem);
+  }
+  .-mr-#{$i} {
+    margin-right: (-$i * 0.25rem);
+  }
+  .-mb-#{$i} {
+    margin-bottom: (-$i * 0.25rem);
+  }
+  .-ml-#{$i} {
+    margin-left: (-$i * 0.25rem);
+  }
+  .-mx-#{$i} {
+    margin-left: (-$i * 0.25rem);
+    margin-right: (-$i * 0.25rem);
+  }
+  .-my-#{$i} {
+    margin-top: (-$i * 0.25rem);
+    margin-bottom: (-$i * 0.25rem);
+  }
+}
+
+// Add 0 value
+.m-0 {
+  margin: 0;
+}
+.mt-0 {
+  margin-top: 0;
+}
+.mr-0 {
+  margin-right: 0;
+}
+.mb-0 {
+  margin-bottom: 0;
+}
+.ml-0 {
+  margin-left: 0;
+}
+.mx-0 {
+  margin-left: 0;
+  margin-right: 0;
+}
+.my-0 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+// Padding
+
+@for $i from 0 through 20 {
+  .p-#{$i} {
+    padding: ($i * 0.25rem);
+  }
+  .pt-#{$i} {
+    padding-top: ($i * 0.25rem);
+  }
+  .pr-#{$i} {
+    padding-right: ($i * 0.25rem);
+  }
+  .pb-#{$i} {
+    padding-bottom: ($i * 0.25rem);
+  }
+  .pl-#{$i} {
+    padding-left: ($i * 0.25rem);
+  }
+  .px-#{$i} {
+    padding-left: ($i * 0.25rem);
+    padding-right: ($i * 0.25rem);
+  }
+  .py-#{$i} {
+    padding-top: ($i * 0.25rem);
+    padding-bottom: ($i * 0.25rem);
+  }
+}
+
+// Negative values (e.g., -mr-1)
+@for $i from 1 through 20 {
+  .-m-#{$i} {
+    padding: (-$i * 0.25rem);
+  }
+  .-mt-#{$i} {
+    padding-top: (-$i * 0.25rem);
+  }
+  .-mr-#{$i} {
+    padding-right: (-$i * 0.25rem);
+  }
+  .-mb-#{$i} {
+    padding-bottom: (-$i * 0.25rem);
+  }
+  .-ml-#{$i} {
+    padding-left: (-$i * 0.25rem);
+  }
+  .-mx-#{$i} {
+    padding-left: (-$i * 0.25rem);
+    padding-right: (-$i * 0.25rem);
+  }
+  .-my-#{$i} {
+    padding-top: (-$i * 0.25rem);
+    padding-bottom: (-$i * 0.25rem);
+  }
+}
+
+// Add 0 value
+.p-0 {
+  padding: 0;
+}
+.pt-0 {
+  padding-top: 0;
+}
+.pr-0 {
+  padding-right: 0;
+}
+.pb-0 {
+  padding-bottom: 0;
+}
+.pl-0 {
+  padding-left: 0;
+}
+.px-0 {
+  padding-left: 0;
+  padding-right: 0;
+}
+.py-0 {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+
+
+
+
+
+

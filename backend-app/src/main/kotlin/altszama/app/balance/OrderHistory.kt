@@ -1,10 +1,18 @@
 package altszama.app.balance
 
 import altszama.app.orderEntry.OrderEntryPaymentStatus
+import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
+
 
 data class OrderHistory(val entries: List<OrderHistoryEntry>, val owedMoney: Map<String, Int>)
 
+@Schema(
+  oneOf = arrayOf(
+    OrderHistoryCreatedEntry::class,
+    OrderHistoryParticipatedEntry::class
+  ),
+)
 sealed class OrderHistoryEntry {
   abstract val orderId: String
   abstract val orderDate: LocalDate

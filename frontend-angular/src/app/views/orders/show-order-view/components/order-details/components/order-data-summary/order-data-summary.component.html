@@ -1,29 +1,29 @@
-@if (order.orderState == ShowOrderDto.OrderStateEnum.CREATED) {
+@if (order.orderState == ShowOrderDto.OrderStateEnum.Created) {
   <div>
     <b>{{ this.order.orderCreatorUsername }}</b> will order at <b>{{ this.order.timeOfOrder }}</b>
   </div>
 }
 
-@if (order.orderState == ShowOrderDto.OrderStateEnum.ORDERING) {
+@if (order.orderState == ShowOrderDto.OrderStateEnum.Ordering) {
   <div>
     <b>{{ this.order.orderCreatorUsername }} is ordering now!</b>
   </div>
 }
 
-@if (order.orderState == ShowOrderDto.OrderStateEnum.ORDERED) {
+@if (order.orderState == ShowOrderDto.OrderStateEnum.Ordered) {
   <div>
     <b>{{ this.order.orderCreatorUsername }}</b> has made an order at {{ this.order.timeOfOrder }}! Waiting for delivery, ETA:
     <b>{{ this.timeOfDeliveryOrNA() }}</b>
   </div>
 }
 
-@if (order.orderState == ShowOrderDto.OrderStateEnum.DELIVERED) {
+@if (order.orderState == ShowOrderDto.OrderStateEnum.Delivered) {
   <div>
     Food delivered! Send payments to {{ this.order.orderCreatorUsername }}
   </div>
 }
 
-@if (order.orderState == ShowOrderDto.OrderStateEnum.REJECTED) {
+@if (order.orderState == ShowOrderDto.OrderStateEnum.Rejected) {
   <div>
     <b>Order rejected!</b>
   </div>

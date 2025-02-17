@@ -8,7 +8,7 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatButtonModule} from '@angular/material/button';
-import {QRCodeModule} from 'angularx-qrcode';
+import {QRCodeComponent} from 'angularx-qrcode';
 
 export interface QrcodeModalInput {
   paymentData: PaymentData,
@@ -22,7 +22,7 @@ export interface QrcodeModalInput {
     templateUrl: './bank-transfer-qrcode-modal.component.html',
     styleUrls: ['./bank-transfer-qrcode-modal.component.scss'],
     standalone: true,
-    imports: [MatDialogTitle, MatDialogContent, QRCodeModule, MatDialogActions, MatButtonModule]
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButtonModule, QRCodeComponent]
 })
 export class BankTransferQrcodeModal {
 

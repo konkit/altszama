@@ -3,9 +3,16 @@
     <span>Alt Szama</span>
   </mat-toolbar>
 
-  <div class="container flex flex-col items-center justify-center pt-24">
+  <div class="container flex flex-col items-center justify-center">
     <h1>Test Login</h1>
-    @for (user of usersList; track user) {
+    <div>
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput type="text" [(ngModel)]="filterPhrase">
+      </mat-form-field>
+    </div>
+
+    @for (user of filteredUsers(); track user) {
       <div>
         <app-button (click)="loginAsUser(user)">{{ user.username }} ({{ user.email }})</app-button>
       </div>

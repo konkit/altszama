@@ -1,10 +1,10 @@
 @if (modifyOrderEntryState$ | async; as modifyOrderEntryState) {
-  @if (order.orderState == OrderStateEnum.CREATED && yourOrderEntries.length === 0) {
+  @if (order.orderState == OrderStateEnum.Created && yourOrderEntries.length === 0) {
     <div>
-      <mat-card appearance="outlined" class="mb-10 pb-5 md:px-5">
+      <mat-card appearance="outlined" class="mb-10 pb-5 md-px-5">
         <mat-card-header>
           <mat-card-title>
-            <div class="line-height-3rem text-body1">
+            <div class="line-height-3rem">
               <span>{{username}}</span>
             </div>
           </mat-card-title>
@@ -12,7 +12,7 @@
         <mat-card-content>
           <div>
             @if (modifyOrderEntryState.isEntryCreating === false) {
-              <button mat-raised-button color="primary" class="mt-3" (click)="createEntry()">
+              <button mat-button class="mt-3" (click)="createEntry()">
                 Add entry
                 <mat-icon fontIcon="add"></mat-icon>
               </button>

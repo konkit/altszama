@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-@import "../../../../../../../../themes.scss";
+//@import "../../../../../../../../themes.scss";
 
 .summary-grid {
   display: grid;
@@ -14,9 +14,9 @@
   font-size: 24px;
 }
 
-.not-enabled {
-  $color-config:    mat.m2-get-color-config($altszama-theme);
-  $foreground-palette: map.get($color-config, foreground);
-
-  color: mat.m2-get-color-from-palette($foreground-palette, disabled);
-}
+//.not-enabled {
+//  $color-config:    mat.m2-get-color-config($altszama-theme);
+//  $foreground-palette: map.get($color-config, foreground);
+//
+//  color: mat.m2-get-color-from-palette($foreground-palette, disabled);
+//}

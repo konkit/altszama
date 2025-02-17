@@ -1,0 +1,13 @@
+@use "../../../../../../assets/utils_breakpoints.scss";
+
+
+.line-height-3rem {
+  line-height: 3rem;
+}
+
+@media (min-width: utils_breakpoints.$md) {
+  .md-px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}

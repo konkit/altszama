@@ -1,7 +1,8 @@
 :host {
   width: 100%;
-  display: block;
+  height: 100%;
 }
+
 
 .title-wrapper {
   h1 {
@@ -13,4 +14,8 @@
   }
 
   margin-bottom: 1rem;
+}
+
+.subtitle {
+  font: var(--mat-sys-title-medium);
 }

@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-@import "../../../../../../../../themes.scss";
+//@import "../../../../../../../../themes.scss";
 
 .user-selectable {
   user-select: text;
@@ -29,8 +29,8 @@
 }
 
 .not-allowed {
-  $color-config:    mat.m2-get-color-config($altszama-theme);
-  $foreground-palette: map.get($color-config, foreground);
+  //$color-config:    mat.m2-get-color-config($altszama-theme);
+  //$foreground-palette: map.get($color-config, foreground);
 
-  color: mat.m2-get-color-from-palette($foreground-palette, disabled);
+  //color: mat.m2-get-color-from-palette($foreground-palette, disabled);
 }

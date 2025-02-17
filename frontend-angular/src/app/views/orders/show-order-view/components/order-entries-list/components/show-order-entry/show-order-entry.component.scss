@@ -1,5 +1,22 @@
+@use "../../../../../../../../assets/utils_breakpoints";
+
 .line {
   font-size: 1rem;
   line-height: 3rem;
   letter-spacing: .03125em;
+}
+
+.title-bar {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: utils_breakpoints.$md) {
+  .title-bar {
+    flex-direction: row;
+  }
+}
+
+.line-height-3rem {
+  line-height: 3rem;
 }

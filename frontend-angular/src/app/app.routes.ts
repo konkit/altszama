@@ -1,29 +1,28 @@
-import {NgModule, Type} from '@angular/core';
-import {ResolveData, Route, RouterModule, Routes, RunGuardsAndResolvers} from '@angular/router';
-import {LandingPageViewComponent} from "./views/landing/landing-page-view/landing-page-view.component";
-import {LoginViewComponent} from "./views/login/login-view/login-view.component";
-import {TestLoginViewComponent} from "./views/login/test-login-view/test-login-view.component";
-import {TodayOrdersViewComponent} from "./views/orders/today-orders-view/today-orders-view.component";
-import {ShowOrderViewComponent} from "./views/orders/show-order-view/show-order-view.component";
-import {AllOrdersViewComponent} from "./views/orders/all-orders-view/all-orders-view.component";
-import {RestaurantsListViewComponent} from "./views/restaurants/restaurants-list-view/restaurants-list-view.component";
-import {ShowRestaurantViewComponent} from "./views/restaurants/show-restaurant-view/show-restaurant-view.component";
-import {BalanceViewComponent} from "./views/balance/balance-view/balance-view.component";
-import {MakeAnOrderViewComponent} from "./views/orders/make-an-order-view/make-an-order-view.component";
-import {TodayOrdersResolver} from "./views/orders/today-orders-view/today-orders.resolver";
-import {ShowOrderResolver} from "./views/orders/show-order-view/show-order.resolver";
-import {AllOrdersResolver} from "./views/orders/all-orders-view/all-orders.resolver";
-import {RestaurantsListResolver} from "./views/restaurants/restaurants-list-view/restaurants-list.resolver";
-import {ShowRestaurantResolver} from "./views/restaurants/show-restaurant-view/show-restaurant.resolver";
-import {CreateOrderViewComponent} from "./views/orders/create-order-view/create-order-view.component";
-import {CreateOrderResolver} from "./views/orders/create-order-view/create-order.resolver";
+import {ResolveData, Route, Routes, RunGuardsAndResolvers} from '@angular/router';
+import {Type} from '@angular/core';
+import {AuthenticatedLayoutComponent} from './components/authenticated-layout/authenticated-layout.component';
+import {LandingPageViewComponent} from './views/landing/landing-page-view/landing-page-view.component';
+import {LoginViewComponent} from './views/login/login-view/login-view.component';
+import {TestLoginViewComponent} from './views/login/test-login-view/test-login-view.component';
+import {TodayOrdersViewComponent} from './views/orders/today-orders-view/today-orders-view.component';
+import {todayOrdersResolver} from './views/orders/today-orders-view/today-orders.resolver';
+import {AllOrdersViewComponent} from './views/orders/all-orders-view/all-orders-view.component';
+import {allOrdersResolver} from './views/orders/all-orders-view/all-orders.resolver';
+import {RestaurantsListViewComponent} from './views/restaurants/restaurants-list-view/restaurants-list-view.component';
+import {restaurantsListResolver} from './views/restaurants/restaurants-list-view/restaurants-list.resolver';
+import {BalanceViewComponent} from './views/balance/balance-view/balance-view.component';
+import {ShowRestaurantViewComponent} from './views/restaurants/show-restaurant-view/show-restaurant-view.component';
+import {showRestaurantResolver,} from './views/restaurants/show-restaurant-view/show-restaurant.resolver';
 import {
   CreateRestaurantViewComponent
-} from "./views/restaurants/create-restaurant-view/create-restaurant-view.component";
-import {EditOrderViewComponent} from "./views/orders/edit-order-view/edit-order-view.component";
-import {EditOrderResolver} from "./views/orders/edit-order-view/edit-order.resolver";
-import {AuthenticatedLayoutComponent} from "./components/authenticated-layout/authenticated-layout.component";
-
+} from './views/restaurants/create-restaurant-view/create-restaurant-view.component';
+import {CreateOrderViewComponent} from './views/orders/create-order-view/create-order-view.component';
+import {CreateOrderResolver} from './views/orders/create-order-view/create-order.resolver';
+import {MakeAnOrderViewComponent} from './views/orders/make-an-order-view/make-an-order-view.component';
+import {ShowOrderViewComponent} from './views/orders/show-order-view/show-order-view.component';
+import {ShowOrderResolver} from './views/orders/show-order-view/show-order.resolver';
+import {EditOrderViewComponent} from './views/orders/edit-order-view/edit-order-view.component';
+import {EditOrderResolver} from './views/orders/edit-order-view/edit-order.resolver';
 
 export const notAuthenticatedRoutes: Routes = [
   {
@@ -50,7 +49,7 @@ export const authenticatedRoutes: Routes = [
     title: "Today's orders",
     component: TodayOrdersViewComponent,
     resolve: {
-      response: TodayOrdersResolver
+      response: todayOrdersResolver
     }
   }),
   authenticatedRoute({
@@ -87,7 +86,7 @@ export const authenticatedRoutes: Routes = [
     title: "All orders | AltSzama",
     component: AllOrdersViewComponent,
     resolve: {
-      response: AllOrdersResolver
+      response: allOrdersResolver
     }
   }),
   authenticatedRoute({
@@ -95,7 +94,7 @@ export const authenticatedRoutes: Routes = [
     title: "Restaurants | AltSzama",
     component: RestaurantsListViewComponent,
     resolve: {
-      response: RestaurantsListResolver
+      response: restaurantsListResolver
     }
   }),
   authenticatedRoute({
@@ -109,7 +108,7 @@ export const authenticatedRoutes: Routes = [
     component: ShowRestaurantViewComponent,
     runGuardsAndResolvers: "always",
     resolve: {
-      response: ShowRestaurantResolver
+      response: showRestaurantResolver
     }
   }),
   authenticatedRoute({
@@ -119,11 +118,10 @@ export const authenticatedRoutes: Routes = [
   }),
 ]
 
-@NgModule({
-  imports: [RouterModule.forRoot([...notAuthenticatedRoutes, ...authenticatedRoutes])],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
+export const routes = [
+  ...notAuthenticatedRoutes,
+  ...authenticatedRoutes
+]
 
 function authenticatedRoute(param: {path: string, title: string, component: Type<any>, resolve?: ResolveData, runGuardsAndResolvers?: RunGuardsAndResolvers}): Route {
   let route: Route = {

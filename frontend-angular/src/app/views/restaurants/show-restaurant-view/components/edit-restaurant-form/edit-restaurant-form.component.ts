@@ -1,12 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {RestaurantControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {catchError, switchMap} from "rxjs";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
-import {ButtonComponent} from '../../../../../components/button/button.component';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButton} from '@angular/material/button';
 
 interface RestaurantDetails {
   name: string,
@@ -16,15 +16,17 @@ interface RestaurantDetails {
 }
 
 @Component({
-    selector: 'app-edit-restaurant-form',
-    templateUrl: './edit-restaurant-form.component.html',
-    styleUrls: ['./edit-restaurant-form.component.scss'],
-    standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, ButtonComponent]
+  selector: 'app-edit-restaurant-form',
+  templateUrl: './edit-restaurant-form.component.html',
+  styleUrls: ['./edit-restaurant-form.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButton]
 })
 export class EditRestaurantFormComponent implements OnInit {
 
   @Input() restaurantId!: string
+
+  fb = inject(NonNullableFormBuilder);
 
   restaurantEditFormGroup = this.fb.group<RestaurantDetails>({
     name: "",
@@ -37,8 +39,7 @@ export class EditRestaurantFormComponent implements OnInit {
   @Output() onSubmit = new EventEmitter<RestaurantDetails>()
 
 
-  constructor(private fb: NonNullableFormBuilder,
-              private restaurantControllerService: RestaurantControllerService,
+  constructor(private restaurantControllerService: RestaurantControllerService,
               private errorSnackBar: ErrorSnackBarService,
               private restaurantFormService: RestaurantFormService,
   ) {

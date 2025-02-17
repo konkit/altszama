@@ -8,7 +8,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     templateUrl: './dish-form-placeholder.component.html',
     styleUrls: ['./dish-form-placeholder.component.scss'],
     standalone: true,
-    imports: [MatFormFieldModule, MatInputModule, MoneyInputComponent]
+  imports: [MatFormFieldModule, MatInputModule, MoneyInputComponent, MoneyInputComponent]
 })
 export class DishFormPlaceholderComponent {
 

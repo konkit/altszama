@@ -1,10 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AuthControllerService, GooglePayload} from "../../../../../../frontend-client";
-import {FrontendConfigService} from "../../../../../service/frontend-config.service";
 import {from, map, Observable, switchMap} from "rxjs";
-import {AuthService} from "../../../../../service/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {AuthControllerService, GooglePayload} from '../../../../../../frontend-client';
+import {FrontendConfigService} from '../../../../../service/frontend-config.service';
+import {AuthService} from '../../../../../service/auth.service';
 
 
 const gsiClientSrc = "https://accounts.google.com/gsi/client";

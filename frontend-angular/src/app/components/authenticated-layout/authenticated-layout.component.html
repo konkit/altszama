@@ -1,34 +1,46 @@
-<div class="sidenav-outer-container mat-typography" [class.is-mobile]="mobileQuery.matches">
-  <mat-toolbar color="primary" class="toolbar">
+<div class="sidenav-outer-container" [class.is-mobile]="isMobile()">
+  <mat-toolbar>
     <button mat-icon-button (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
     <span>Alt Szama</span>
   </mat-toolbar>
 
-  <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav #snav [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
-                 fixedTopGap="56">
+  <mat-sidenav-container>
+    <mat-sidenav #snav
+                 [opened]="!isMobile()"
+                 [mode]="isMobile() ? 'over' : 'side'"
+                 [fixedInViewport]="isMobile()" fixedTopGap="56">
       <mat-nav-list>
-        <a mat-list-item routerLink="/orders/today">
-          Today's Orders
-        </a>
+        <div class="title-bar-in-menu">
+          <span>Alt Szama</span>
+        </div>
 
-        <a mat-list-item routerLink="/orders/all">
-          All Orders
-        </a>
-
-        <a mat-list-item routerLink="/restaurants">
-          Restaurants
-        </a>
+        @let links = [
+          {path: "/orders/today", text: "Today's Orders"},
+          {path: "/orders/all", text: "All Orders"},
+          {path: "/restaurants", text: "Restaurants"}
+        ] ;
+        @for (link of links; track $index) {
+          <a mat-list-item [routerLink]=link.path
+             routerLinkActive
+             #rla="routerLinkActive"
+             [activated]="rla.isActive">
+            {{ link.text }}
+          </a>
+        }
 
         <mat-divider></mat-divider>
 
         <mat-list-item>
-          <strong>Hi {{username}}</strong>
+          <strong>Hi {{ username }}</strong>
         </mat-list-item>
 
-        <a mat-list-item routerLink="/balance">
+        <a mat-list-item
+           routerLink="/balance"
+           routerLinkActive
+           #rla="routerLinkActive"
+           [activated]="rla.isActive">
           Balance
         </a>
 
@@ -39,21 +51,16 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div class="flex flex-col h-full">
-        <main class="flex flex-grow w-full">
-          <router-outlet></router-outlet>
-        </main>
-
-        <footer class="footer px-4 py-6 w-full">
-          <div class="w-full flex justify-center">
-            <p class="text-sm text-gray-600">
-              Please direct all your wishes and complaints to&nbsp;
-              <a href="mailto:lukasztenerowicz+altszama@gmail.com" class="text-indigo-500 font-medium">Łukasz
-                Tenerowicz</a>
-            </p>
-          </div>
-        </footer>
-      </div>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
+
+<footer>
+    <p>
+      Please direct all your wishes and complaints to&nbsp;
+      <a href="mailto:konkit+altszama@gmail.com">Łukasz Tenerowicz</a>
+    </p>
+</footer>

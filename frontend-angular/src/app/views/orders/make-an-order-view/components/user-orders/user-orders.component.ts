@@ -2,15 +2,14 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {GroupedOrderEntry} from "../../../../../../frontend-client";
 import {MatAccordion, MatExpansionModule} from "@angular/material/expansion";
 import {MatListModule} from '@angular/material/list';
-
-import {ButtonComponent} from '../../../../../components/button/button.component';
+import {MatButton} from '@angular/material/button';
 
 @Component({
     selector: 'app-user-orders',
     templateUrl: './user-orders.component.html',
     styleUrls: ['./user-orders.component.scss'],
     standalone: true,
-    imports: [ButtonComponent, MatExpansionModule, MatListModule]
+  imports: [MatExpansionModule, MatListModule, MatButton]
 })
 export class UserOrdersComponent implements OnInit {
   @Input() groupedEntries!: GroupedOrderEntry[]

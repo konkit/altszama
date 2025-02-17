@@ -4,14 +4,16 @@
     <div matListItemLine>{{ priceSummaryData.basePriceSum | price }}</div>
   </mat-list-item>
 
-  <mat-list-item>
-    @if (priceSummaryData.deliveryData.decreaseInPercent === 0) {
+  @if (priceSummaryData.deliveryData.decreaseInPercent === 0) {
+    <mat-list-item>
       <div matListItemLine>No discount</div>
-    } @else {
+    </mat-list-item>
+  } @else {
+    <mat-list-item>
       <div matListItemTitle>Discount:</div>
       <div matListItemLine>- {{ priceSummaryData.deliveryData.decreaseInPercent }} %</div>
-    }
-  </mat-list-item>
+    </mat-list-item>
+  }
 
   @if (priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0) {
     <mat-list-item>
@@ -45,7 +47,7 @@
   <mat-list-item>
     <div matListItemTitle><b>Total:</b></div>
     <div matListItemLine>
-      {{ priceSummaryData.totalPrice | price }}
+      <b>{{ priceSummaryData.totalPrice | price }}</b>
     </div>
   </mat-list-item>
 </mat-list>

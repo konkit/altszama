@@ -1,0 +1,11 @@
+@use "../../../../../../../../assets/utils_breakpoints.scss";
+
+@media (min-width: utils_breakpoints.$md) {
+  .md-flex-row {
+    flex-direction: row;
+  }
+}
+
+.line-height-3rem {
+  line-height: 3rem;
+}

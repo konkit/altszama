@@ -1,0 +1,60 @@
+@use "./utils_flex";
+@use "./utils_container";
+@use "./utils_breakpoints";
+@use "./utils_margin_padding";
+@use "./utils_grid";
+
+.pt-24 {
+  padding-top: 6rem; /* 96px */
+}
+
+.h-screen {
+  height: 100vh; /* Or min-height: 100vh for scrollable content */
+}
+
+.hidden {
+  display: none;
+}
+
+.block {
+  display: block;
+}
+
+@media (min-width: utils_breakpoints.$md) {
+  .md-hidden {
+    display: none;
+  }
+
+  .md-block {
+    display: block;
+  }
+}
+
+@media (min-width: utils_breakpoints.$lg) {
+  .lg-hidden {
+    display: none;
+  }
+
+  .lg-block {
+    display: block;
+  }
+}
+
+
+@media (min-width: utils_breakpoints.$xl) {
+  .xl-hidden {
+    display: none;
+  }
+
+  .xl-block {
+    display: block;
+  }
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  width: 100%;
+}

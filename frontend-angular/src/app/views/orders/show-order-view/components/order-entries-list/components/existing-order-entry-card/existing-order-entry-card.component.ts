@@ -35,7 +35,7 @@ export class ExistingOrderEntryCardComponent {
   }
 
   canAddNewEntry(orderEntry: ParticipantsOrderEntry) {
-    return this.order.orderState === OrderStateEnum.CREATED
+    return this.order.orderState === OrderStateEnum.Created
       && orderEntry.userId === this.currentUserId
       && !this.modifyOrderEntryState.isEntryEdited
   }

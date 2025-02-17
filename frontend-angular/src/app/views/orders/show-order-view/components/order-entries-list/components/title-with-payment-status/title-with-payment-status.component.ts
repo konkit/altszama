@@ -42,20 +42,20 @@ export class TitleWithPaymentStatusComponent {
 
   shouldShowConfirmAsPaidButton() {
     return this.isOrderedOrDelivered()
-      && this.orderEntry.paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
+      && this.orderEntry.paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.Confirmed;
   }
 
   shouldShowRevertToUnpaid() {
     return this.isOrderedOrDelivered()
-      && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED;
+      && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.Confirmed;
   }
 
   isConfirmedAsPaid() {
-    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.CONFIRMED
+    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.Confirmed
   }
 
   private isOrderedOrDelivered() {
-    return [OrderStateEnum.ORDERED, OrderStateEnum.DELIVERED].includes(this.order.orderState);
+    return [OrderStateEnum.Ordered, OrderStateEnum.Delivered].includes(this.order.orderState);
   }
 
   confirmAsPaid(orderEntryId: string) {

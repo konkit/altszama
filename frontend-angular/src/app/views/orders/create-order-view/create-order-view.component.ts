@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {BehaviorSubject, map, Observable, Subscription, take} from "rxjs";
 import {
   CreateOrderInitialData,
@@ -31,7 +31,7 @@ import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrappe
     templateUrl: './create-order-view.component.html',
     styleUrls: ['./create-order-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, MatCardModule, MatIconModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatListModule, CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf, MatButtonModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent]
+  imports: [ViewWrapperComponent, MatCardModule, MatIconModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatListModule, CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf, MatButtonModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, RouterLink]
 })
 export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -62,7 +62,7 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
     })
   })
 
-  restaurantsTableDataSource = new MatTableDataSource();
+  restaurantsTableDataSource = new MatTableDataSource<RestaurantDto>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   restaurantsData: RestaurantDto[] = []
@@ -107,7 +107,6 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
         if (result.matches) {
           this.showNarrowLayout = false;
         }
-
       });
     this.subscriptions.add(sub2)
   }

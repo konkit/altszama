@@ -1,36 +1,52 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {MediaMatcher} from "@angular/cdk/layout";
-import {AuthService} from "../../service/auth.service";
-import {Router, RouterLink, RouterOutlet} from "@angular/router";
-import {MatDividerModule} from '@angular/material/divider';
-import {MatListModule} from '@angular/material/list';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {AuthService} from '../../service/auth.service';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatIcon} from '@angular/material/icon';
+import {MatSidenav, MatSidenavContainer, MatSidenavModule} from '@angular/material/sidenav';
+import {MatListItem, MatNavList} from '@angular/material/list';
+import {MatDivider} from '@angular/material/divider';
+import {MatIconButton} from '@angular/material/button';
 
 @Component({
-    selector: 'app-authenticated-layout',
-    templateUrl: './authenticated-layout.component.html',
-    styleUrls: ['./authenticated-layout.component.scss'],
-    standalone: true,
-    imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, MatDividerModule, RouterOutlet]
+  selector: 'app-authenticated-layout',
+  imports: [
+    MatToolbar,
+    MatIcon,
+    MatSidenavContainer,
+    MatSidenavModule,
+    MatNavList,
+    MatListItem,
+    RouterLink,
+    MatSidenav,
+    MatDivider,
+    RouterOutlet,
+    MatIconButton,
+    RouterLinkActive
+  ],
+  standalone: true,
+  templateUrl: './authenticated-layout.component.html',
+  styleUrl: './authenticated-layout.component.scss'
 })
 export class AuthenticatedLayoutComponent implements OnInit, OnDestroy {
 
-  mobileQuery: MediaQueryList;
-
-  private _mobileQueryListener: () => void;
-
   username: string = ""
 
-  constructor(changeDetectorRef: ChangeDetectorRef,
-              media: MediaMatcher,
-              private authService: AuthService,
-              private router: Router) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+  protected readonly isMobile = signal(true);
+
+  private readonly _mobileQuery: MediaQueryList;
+  private readonly _mobileQueryListener: () => void;
+
+  private authService = inject(AuthService);
+
+  constructor() {
+    const media = inject(MediaMatcher);
+
+    this._mobileQuery = media.matchMedia('(max-width: 1024px)');
+    this.isMobile.set(this._mobileQuery.matches);
+    this._mobileQueryListener = () => this.isMobile.set(this._mobileQuery.matches);
+    this._mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
 
   ngOnInit() {
@@ -38,7 +54,7 @@ export class AuthenticatedLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
   }
 
   logout() {

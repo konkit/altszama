@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DishDto, SideDish, SideDishData} from "../../../../../../../../frontend-client";
 import {filter, map, Observable, startWith} from "rxjs";
@@ -11,7 +11,6 @@ import {
 } from "../../lib/formvalues";
 import {RelativeDatePipe} from '../../../../../../../components/pipes/date-to-rel.pipe';
 import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
-import {ButtonComponent} from '../../../../../../../components/button/button.component';
 import {SideDishesInputComponent} from '../side-dishes-input/side-dishes-input.component';
 import {MoneyInputComponent} from '../../../../../../../components/money-input/money-input.component';
 import {MatOptionModule} from '@angular/material/core';
@@ -19,6 +18,7 @@ import {AsyncPipe} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButton} from '@angular/material/button';
 
 
 @Component({
@@ -26,7 +26,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     templateUrl: './order-entry-form.component.html',
     styleUrls: ['./order-entry-form.component.scss'],
     standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, MatOptionModule, MoneyInputComponent, SideDishesInputComponent, ButtonComponent, AsyncPipe, PricePipe, RelativeDatePipe]
+  imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, MatOptionModule, MoneyInputComponent, SideDishesInputComponent, AsyncPipe, PricePipe, RelativeDatePipe, MatButton]
 })
 export class OrderEntryFormComponent implements OnInit {
   @Input() dishIndex: number = 0;
@@ -40,15 +40,14 @@ export class OrderEntryFormComponent implements OnInit {
   filteredDishes!: Observable<DishDto[]>;
   availableSideDishes$!: Observable<Array<SideDish>>;
 
+  fb = inject(FormBuilder)
+
   formGroup: FormGroup<OrderEntryFormType> = this.fb.nonNullable.group({
     dish: this.fb.nonNullable.control<DishDto | string>(''),
     price: this.fb.nonNullable.control<number>(0),
     additionalComments: this.fb.nonNullable.control<string>(''),
     chosenSideDishes: this.fb.nonNullable.array<FormGroup<SideDishForm>>([])
   });
-
-  constructor(private fb: FormBuilder) {
-  }
 
   ngOnInit() {
     this.formGroup.setValue({

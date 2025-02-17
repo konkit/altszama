@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {catchError, Observable, shareReplay, switchMap, take} from "rxjs";
 import {DishControllerService, EditDishResponse} from "../../../../../../frontend-client";
 import {FormGroup, NonNullableFormBuilder} from "@angular/forms";
@@ -19,6 +19,8 @@ export class EditDishFormComponent implements OnInit {
   @Input() restaurantId!: string
   @Input() dishId!: string
 
+  fb = inject(NonNullableFormBuilder);
+
   dishForm: FormGroup<DishForm> = this.fb.group({
     name: this.fb.control(""),
     price: this.fb.control(0),
@@ -28,8 +30,7 @@ export class EditDishFormComponent implements OnInit {
 
   modifyDishData$: Observable<EditDishResponse> | null = null
 
-  constructor(private fb: NonNullableFormBuilder,
-              private dishControllerService: DishControllerService,
+  constructor(private dishControllerService: DishControllerService,
               private errorSnackBar: ErrorSnackBarService,
               private restaurantFormService: RestaurantFormService) {
   }
@@ -64,7 +65,7 @@ export class EditDishFormComponent implements OnInit {
 
       console.log("Body: ", body)
 
-      this.dishControllerService.updateDish(body, this.restaurantId)
+      this.dishControllerService.updateDish(this.restaurantId, body)
         .pipe(
           switchMap(() => this.restaurantFormService.refreshRestaurantData()),
           catchError(err => {

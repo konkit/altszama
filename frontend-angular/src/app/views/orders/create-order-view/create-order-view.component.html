@@ -1,19 +1,15 @@
 <app-view-wrapper>
-  <h1 class="font-bold text-gray-700">Create Order</h1>
+  <h1>Create Order</h1>
 
   @if (fullRestaurantsList.length === 0) {
-    <div>
-      <mat-card appearance="outlined" class="my-5">
-        <mat-card-header>
-          <div mat-card-avatar>
-            <mat-icon fontIcon="warning"></mat-icon>
-          </div>
-          <mat-card-title>No restaurants created</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>There are no restaurants, please create one first</p>
-        </mat-card-content>
-      </mat-card>
+    <div class="flex flex-col items-center">
+      <h2>No restaurants created yet</h2>
+      <p class="mb-4">There are no restaurants available to create an order from.</p>
+      <p class="mb-8">Please create a restaurant first.</p>
+      <button mat-flat-button [routerLink]="['/restaurants/create']">
+        <mat-icon>add</mat-icon>
+        Create Restaurant
+      </button>
     </div>
   } @else {
     <div>
@@ -22,7 +18,8 @@
           <ng-template matStepLabel>Select restaurant</ng-template>
           <div class="py-4">
             <mat-form-field class="w-full">
-              <input matInput [value]="restaurantsFilter"
+              <input matInput
+                     [value]="restaurantsFilter"
                      (input)="filterChanged($event)"
                      placeholder="Filter restaurants by name"/>
             </mat-form-field>
@@ -37,7 +34,7 @@
               </cdk-virtual-scroll-viewport>
             </mat-selection-list>
             <button mat-raised-button matStepperPrevious (click)="backToTodayOrders()">Back</button>
-            <button mat-raised-button color="primary" matStepperNext>Next</button>
+            <button mat-flat-button matStepperNext>Next</button>
           </div>
         </mat-step>
 
@@ -47,26 +44,26 @@
             <app-order-time-form class="mr-20 mb-5"
                                  [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
             <button mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button color="primary" matStepperNext>Next</button>
+            <button mat-flat-button matStepperNext>Next</button>
           </mat-step>
           <mat-step>
             <ng-template matStepLabel>Discounts and delivery fees</ng-template>
             <app-delivery-data-form class="mb-5"
                                     [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
             <button mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button color="primary" matStepperNext>Next</button>
+            <button mat-flat-button matStepperNext>Next</button>
           </mat-step>
           <mat-step>
             <ng-template matStepLabel>Payment</ng-template>
             <app-payment-data-form class="mb-5"
                                    [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
             <button mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button color="primary" (click)="submitForm($event)">Create</button>
+            <button mat-flat-button (click)="submitForm($event)">Create</button>
           </mat-step>
         } @else {
           <mat-step>
             <ng-template matStepLabel>Fill details</ng-template>
-            <div class="grid grid-cols-1 md:grid-cols-3 py-4 pr-10">
+            <div class="grid grid-cols-3 py-4 pr-10">
               <app-order-time-form class="mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder">
               </app-order-time-form>
               <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData">
@@ -75,7 +72,7 @@
               </app-payment-data-form>
             </div>
             <button mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button color="primary" (click)="submitForm($event)">Create</button>
+            <button mat-flat-button (click)="submitForm($event)">Create</button>
           </mat-step>
         }
       </mat-vertical-stepper>

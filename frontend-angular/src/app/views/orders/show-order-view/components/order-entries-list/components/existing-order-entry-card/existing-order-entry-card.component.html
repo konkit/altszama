@@ -1,4 +1,4 @@
-<mat-card appearance="outlined" class="mb-10 pb-5 md:px-5" data-cy="existing-order-entry">
+<mat-card appearance="outlined" class="mb-10 pb-5 md-px-5" data-cy="existing-order-entry">
   <mat-card-header>
     <mat-card-title>
       <app-title-with-payment-status
@@ -13,7 +13,7 @@
   </mat-card-header>
 
   @for (dishEntry of orderEntry.dishEntries; track dishEntry; let dishEntryIndex = $index) {
-    <div class="pl-6">
+    <div class="px-6">
       @if (modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id) {
         <app-edit-order-entry
           [dishIndex]="dishEntryIndex + 1"
@@ -44,7 +44,7 @@
   }
 
   @if (canAddNewEntry(orderEntry)) {
-    <div class="pl-6">
+    <div class="px-6">
       @if (orderEntry.dishEntries.length > 0) {
         <div class="">
           <mat-divider></mat-divider>
@@ -53,7 +53,7 @@
       @if (modifyOrderEntryState.isEntryCreating === false) {
         <div>
           <span class="text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
-          <button mat-button color="primary" (click)="createEntry()">
+          <button mat-button (click)="createEntry()">
             Add entry
             <mat-icon fontIcon="add"></mat-icon>
           </button>

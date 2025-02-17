@@ -3,7 +3,7 @@ import TodaysOrderView from "./TodaysOrderView";
 export default class CreateOrderView {
 
   static expectNoRestaurantsAlert() {
-    cy.get("main mat-card").contains("There are no restaurants, please create one first")
+    cy.get("main div").contains("There are no restaurants available to create an order from.")
   }
 
   static createOrderWithDefaultValues(restaurantName: string) {

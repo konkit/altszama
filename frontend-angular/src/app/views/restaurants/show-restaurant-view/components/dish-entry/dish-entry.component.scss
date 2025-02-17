@@ -1,11 +1,16 @@
 .new-dish-button-container {
-  @apply p-3 mt-3
+  padding: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 :host {
-  @apply flex flex-row py-2;
+  display: flex;
+  flex-direction: row;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .edit-buttons {
-  @apply ml-auto flex-shrink-0;
+  margin-left: auto;
+  flex-shrink: 0;
 }
