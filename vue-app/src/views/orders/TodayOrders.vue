@@ -3,6 +3,25 @@
     <LoadingView>
       <v-container>
         <v-row>
+          <v-col>
+            <v-alert
+                border="top"
+                colored-border
+                type="info"
+                elevation="2"
+                dismissible
+            >
+              <h3>Check out the new version of AltSzama frontend!</h3>
+
+              <p>The current version of AltSzama frontend is difficult to maintain.</p>
+
+              <p>Check out the new version, which will replace this one in the future - <b><a href="https://beta.altszama.club">https://beta.altszama.club</a></b>. The underlying backend is the same.</p>
+
+              <p>Please report any issues <a href="https://github.com/konkit/altszama">on Github</a> or via <a href="mailto:konkit+altszama@gmail.com">email</a>.</p>
+            </v-alert>
+          </v-col>
+        </v-row>
+        <v-row>
           <v-col cols="xs12">
             <h1 class="mb-4">Your orders today:</h1>
 
