@@ -40,9 +40,9 @@ dependencies {
   implementation("com.google.api-client:google-api-client:2.7.0")
 
   // JJWT
-  implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-  runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
-  implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+  implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+  runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+  implementation("io.jsonwebtoken:jjwt-jackson:0.12.5")
 
   // Kotlin
   implementation("org.jetbrains.kotlin:kotlin-reflect")

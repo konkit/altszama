@@ -2,8 +2,6 @@ package altszama.app.auth
 
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -16,7 +14,7 @@ data class AuthUserInfo(val token: String, val userId: String, val username: Str
 @Service
 class UserService() {
 
-  private val jwtSigningKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+  private val jwtSigningKey = Jwts.SIG.HS512.key().build()
 
   @Autowired
   private lateinit var userRepository: UserRepository
@@ -33,10 +31,11 @@ class UserService() {
   @Throws(JwtException::class)
   fun getUserIdFromJwt(tokenStr: String): String {
     return Jwts.parser()
-        .setSigningKey(jwtSigningKey)
-        .parseClaimsJws(tokenStr)
-        .body
-        .subject
+      .verifyWith(jwtSigningKey)
+      .build()
+      .parseSignedClaims(tokenStr)
+      .payload
+      .subject
   }
 
   fun createJwtTokenFromUserInfo(name: String, email: String): AuthUserInfo {
@@ -59,8 +58,8 @@ class UserService() {
 
   fun createJwt(userId: String): String {
     return Jwts.builder()
-        .setSubject(userId)
-        .setExpiration(Date(System.currentTimeMillis() + 864_000_000))
+        .subject(userId)
+        .expiration(Date(System.currentTimeMillis() + 864_000_000))
         .signWith(jwtSigningKey)
         .compact()
   }
