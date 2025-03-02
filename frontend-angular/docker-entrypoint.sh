@@ -1,1 +1,1 @@
-http-server dist/frontend-angular
+http-server dist/altszama-frontend
