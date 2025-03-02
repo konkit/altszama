@@ -33,13 +33,13 @@ class TeamService {
 
   private fun findByDomain(domain: String) =
       Optional.ofNullable(domain)
-          .map { d -> d.trim().toLowerCase() }
+          .map { d -> d.trim().lowercase(Locale.getDefault()) }
           .filter { d -> d.isNotBlank() }
           .flatMap { d -> teamRepository.findByDomain(d) }
 
   private fun findByUserEmails(email: String) =
       Optional.ofNullable(email)
-          .map { d -> d.trim().toLowerCase() }
+          .map { d -> d.trim().lowercase(Locale.getDefault()) }
           .filter { d -> d.isNotBlank() }
           .flatMap { e -> teamRepository.findByUserEmails(e) }
 

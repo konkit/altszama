@@ -1,9 +1,7 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
   id("org.springframework.boot") version "3.4.3"
   id("io.spring.dependency-management") version "1.1.0"
-  kotlin("jvm") version "1.7.22"
+  kotlin("jvm") version "2.1.10"
   kotlin("plugin.spring") version "1.7.22"
 
   id("com.google.cloud.tools.jib") version "2.1.0"
@@ -42,9 +40,9 @@ dependencies {
   implementation("com.google.api-client:google-api-client:2.7.0")
 
   // JJWT
-  implementation("io.jsonwebtoken:jjwt-api:0.12.3")
-  runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
-  implementation("io.jsonwebtoken:jjwt-jackson:0.12.5")
+  implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+  runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+  implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
   // Kotlin
   implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -65,12 +63,16 @@ dependencies {
   testImplementation("org.springframework.security:spring-security-test:6.3.3")
 }
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "21"
-  }
+kotlin {
+  jvmToolchain(21)
 }
+
+//tasks.withType<KotlinCompile> {
+//  kotlinOptions {
+//    freeCompilerArgs = listOf("-Xjsr305=strict")
+//    jvmTarget = "21"
+//  }
+//}
 
 tasks.withType<Test> {
   useJUnitPlatform()
