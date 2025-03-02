@@ -3,10 +3,71 @@
   height: 100%;
 }
 
-.background-image {
-  background-image: linear-gradient(rgb(103 58 183), rgba(1, 1, 1, 0.4)), url(/assets/hamburger-unsplash2.jpeg);
+.as-bg-hero {
+  background-image: url('../../../../assets/hero-background2.jpeg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
 }
 
-.deeppurple {
-  background-color: #673ab7;
+.as-opacity {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(31, 41, 55, 0.5);
+}
+
+.as-hero-middle {
+  z-index: 10;
+}
+
+h1 {
+  color: white;
+  font-size: 3.75rem; /* 60px */
+  line-height: 1;
+  font-weight: bold;
+  margin-bottom: 1rem; /* 16px */
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+
+  @media (min-width: 768px) { /* md breakpoint */
+    font-size: 6rem; /* 96px */
+  }
+}
+
+h2 {
+  color: white;
+  font-size: 1.875rem; /* 30px */
+  line-height: 2.25rem; /* 36px */
+  font-weight: bold;
+  margin-bottom: 1.5rem; /* 24px */
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+  @media (min-width: 768px) { /* md breakpoint */
+    font-size: 3rem; /* 48px */
+    line-height: 3.5rem; /* 56px */
+  }
+}
+
+p {
+  color: white;
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.75rem; /* 28px */
+  margin-bottom: 2rem; /* 32px */
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+  @media (min-width: 768px) {
+    font-size: 1.5rem; /* 24px */
+    line-height: 2rem; /* 32px */
+  }
+}
+
+button {
+  width: 10rem;
+  height: 3rem;
 }
