@@ -1,8 +1,17 @@
 <app-view-wrapper>
-  <h1>Update Order</h1>
-  <div class="flex pt-2 pb-3">
-    <app-order-state-buttons [orderId]="orderId"
-                             [orderState]="(editOrderInitialData$ | async)!.order.orderState"></app-order-state-buttons>
+  <div>
+    <button mat-button [routerLink]="['/orders/' + orderId + '/show']">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </button>
+  </div>
+
+  <div class="flex flex-row">
+    <h1>Update Order</h1>
+    <div class="flex pt-2 pb-3 ml-auto">
+      <app-order-state-buttons [orderId]="orderId"
+                               [orderState]="(editOrderInitialData$ | async)!.order.orderState"></app-order-state-buttons>
+    </div>
   </div>
 
   <div class="block xl-hidden">

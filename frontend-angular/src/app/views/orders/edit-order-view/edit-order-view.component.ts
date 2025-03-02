@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {EditOrderInitialData, OrderControllerService, OrderUpdateRequest} from "../../../../frontend-client";
 import {map, Observable, take} from "rxjs";
 import {FormBuilder} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
 import {MatButtonModule} from '@angular/material/button';
@@ -13,13 +13,14 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {AsyncPipe} from '@angular/common';
 import {OrderStateButtonsComponent} from './components/order-state-buttons/order-state-buttons.component';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
     selector: 'app-edit-order-view',
     templateUrl: './edit-order-view.component.html',
     styleUrls: ['./edit-order-view.component.scss'],
     standalone: true,
-    imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatStepperModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe]
+  imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatStepperModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe, MatIcon, RouterLink]
 })
 export class EditOrderViewComponent implements OnInit {
 
