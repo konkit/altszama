@@ -8,13 +8,13 @@
   </mat-card>
 
   <p class="pt-3">Price details: </p>
-  <app-price-summary-cards [priceSummaryData]="viewState.priceSummaryData">
+  <app-price-summary-cards [priceSummaryData]="viewState().priceSummaryData">
   </app-price-summary-cards>
 
   <p class="pt-3">Payment options: </p>
   <app-payment-options-summary-cards [paymentData]="order.paymentData"
-    [yourOrderEntries]="viewState.yourOrderEntries"
-    [paymentOptionsData]="viewState.paymentOptionsData">
+    [yourOrderEntries]="viewState().yourOrderEntries"
+    [paymentOptionsData]="viewState().paymentOptionsData">
   </app-payment-options-summary-cards>
 </div>
 
@@ -32,7 +32,7 @@
       Price summary
     </mat-expansion-panel-header>
 
-    <app-price-summary [priceSummaryData]="viewState.priceSummaryData"></app-price-summary>
+    <app-price-summary [priceSummaryData]="viewState().priceSummaryData"></app-price-summary>
   </mat-expansion-panel>
 
   <mat-expansion-panel>
@@ -41,8 +41,8 @@
     </mat-expansion-panel-header>
 
     <app-payment-options-summary [paymentData]="order.paymentData"
-      [yourOrderEntries]="viewState.yourOrderEntries"
-      [paymentOptionsData]="viewState.paymentOptionsData">
+      [yourOrderEntries]="viewState().yourOrderEntries"
+      [paymentOptionsData]="viewState().paymentOptionsData">
     </app-payment-options-summary>
   </mat-expansion-panel>
 </div>

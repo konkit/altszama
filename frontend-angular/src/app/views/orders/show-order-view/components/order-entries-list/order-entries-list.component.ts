@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {DishDto, ParticipantsOrderEntry, ShowOrderDto, ShowOrderResponse} from "../../../../../../frontend-client";
+import {Component, input} from '@angular/core';
+import {DishDto, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../frontend-client";
 import {ModifyOrderEntryState} from "../../../lib/model";
 import {Observable} from "rxjs";
 import {ShowOrderViewService} from "../../service/show-order-view.service";
@@ -24,12 +24,11 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 })
 export class OrderEntriesListComponent {
 
-  @Input() username!: string;
-  @Input() allDishesInRestaurant!: DishDto[]
-  @Input() order!: ShowOrderDto
-  @Input() currentUserId!: string;
-  @Input() showOrderResponse!: ShowOrderResponse
-  @Input() yourOrderEntries!: Array<ParticipantsOrderEntry>
+  readonly username = input.required<string>();
+  readonly allDishesInRestaurant = input.required<DishDto[]>();
+  readonly order = input.required<ShowOrderDto>();
+  readonly currentUserId = input.required<string>();
+  readonly yourOrderEntries = input.required<Array<ParticipantsOrderEntry>>();
 
   otherUserOrderEntries$: Observable<Array<ParticipantsOrderEntry>>
   modifyOrderEntryState$: Observable<ModifyOrderEntryState>;

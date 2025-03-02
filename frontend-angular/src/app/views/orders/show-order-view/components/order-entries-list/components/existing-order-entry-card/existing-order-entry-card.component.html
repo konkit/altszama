@@ -4,9 +4,9 @@
       <app-title-with-payment-status
         [title]="orderEntry.username"
         [priceForUser]="orderEntry.finalPrice"
-        [order]="order"
+        [order]="order()"
         [orderEntry]="orderEntry"
-        [currentUserId]="currentUserId"
+        [currentUserId]="currentUserId()"
         [costForUser]="orderEntry.finalPrice"
       ></app-title-with-payment-status>
     </mat-card-title>
@@ -17,8 +17,8 @@
       @if (modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id) {
         <app-edit-order-entry
           [dishIndex]="dishEntryIndex + 1"
-          [orderId]="order.id"
-          [allDishesInRestaurant]="allDishesInRestaurant"
+          [orderId]="order().id"
+          [allDishesInRestaurant]="allDishesInRestaurant()"
           [modifyOrderEntryState]="modifyOrderEntryState"
           [orderEntry]="orderEntry"
           [dishEntry]="dishEntry"
@@ -28,10 +28,10 @@
       @if (!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)) {
         <app-show-order-entry
           [index]="dishEntryIndex + 1"
-          [order]="order"
+          [order]="order()"
           [orderEntry]="orderEntry"
           [dishEntry]="dishEntry"
-          [currentUserId]="currentUserId"
+          [currentUserId]="currentUserId()"
           >
         </app-show-order-entry>
       }
@@ -61,8 +61,8 @@
       }
       @if (modifyOrderEntryState.isEntryCreating === true) {
         <div class="pt-5">
-          <app-create-order-entry [orderId]="order.id"
-            [allDishesInRestaurant]="allDishesInRestaurant"
+          <app-create-order-entry [orderId]="order().id"
+            [allDishesInRestaurant]="allDishesInRestaurant()"
             [dishIndex]="orderEntry.dishEntries.length + 1">
           </app-create-order-entry>
         </div>

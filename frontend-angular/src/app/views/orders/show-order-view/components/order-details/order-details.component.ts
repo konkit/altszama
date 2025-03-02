@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, input} from '@angular/core';
 import {ShowOrderDto} from "../../../../../../frontend-client";
 import {ShowOrderViewState} from "../../../lib/model";
 
@@ -22,6 +22,6 @@ import {MatCardModule} from '@angular/material/card';
 export class OrderDetailsComponent {
 
   @Input() order!: ShowOrderDto
-  @Input() viewState!: ShowOrderViewState
+  readonly viewState = input.required<ShowOrderViewState>();
 
 }

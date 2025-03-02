@@ -8,7 +8,7 @@
 </div>
 
 <mat-accordion multi="true">
-  @for (entry of groupedEntries; track entry; let entryIndex = $index) {
+  @for (entry of groupedEntries(); track entry; let entryIndex = $index) {
     <mat-expansion-panel [expanded]="accordionStates[entryIndex]"
       (opened)="accordionStates[entryIndex] = true"
       (closed)="accordionStates[entryIndex] = false">

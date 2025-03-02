@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, input} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SideDish} from "../../../../../../../../frontend-client";
 import {SideDishForm} from "../../lib/formvalues";
@@ -20,7 +20,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     imports: [MatFormFieldModule, MatInputModule, FormsModule, MatAutocompleteModule, ReactiveFormsModule, MatOptionModule, MoneyInputComponent, MatButtonModule, MatIconModule, PricePipe]
 })
 export class SideDishesInputComponent {
-  @Input() availableSideDishes!: SideDish[] | null
+  readonly availableSideDishes = input.required<SideDish[] | null>();
   @Input() chosenSideDishes!: FormArray<FormGroup<SideDishForm>>
 
   constructor(private fb: FormBuilder) {

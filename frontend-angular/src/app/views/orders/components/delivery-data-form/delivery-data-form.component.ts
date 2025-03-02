@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MoneyInputComponent} from '../../../../components/money-input/money-input.component';
 import {MatInputModule} from '@angular/material/input';
@@ -20,7 +20,7 @@ export interface DeliveryDataForm {
 })
 export class DeliveryDataFormComponent {
 
-  @Input() deliveryDataForm!: FormGroup<DeliveryDataForm>
+  readonly deliveryDataForm = input.required<FormGroup<DeliveryDataForm>>();
 
 
 }

@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, input, OnInit} from '@angular/core';
 import {FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
 import {catchError, Observable, switchMap} from "rxjs";
 import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
@@ -17,7 +17,7 @@ import {AsyncPipe} from '@angular/common';
 })
 export class CreateDishFormComponent implements OnInit {
 
-  @Input() restaurantId!: string
+  readonly restaurantId = input.required<string>();
 
   fb = inject(NonNullableFormBuilder);
 
@@ -36,13 +36,13 @@ export class CreateDishFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.modifyDishData$ = this.dishControllerService.createDish(this.restaurantId)
+    this.modifyDishData$ = this.dishControllerService.createDish(this.restaurantId())
   }
 
   submitForm() {
     if (this.dishForm.valid) {
       let body = this.dishForm.getRawValue()
-      this.dishControllerService.saveDish(this.restaurantId, body)
+      this.dishControllerService.saveDish(this.restaurantId(), body)
         .pipe(
           switchMap(() => this.restaurantFormService.refreshRestaurantData()),
           catchError(err => {

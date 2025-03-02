@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, input, OnInit} from '@angular/core';
 import {
   DishDto,
   OrderEntryUpdateRequest,
@@ -20,12 +20,12 @@ import {OrderEntryFormComponent} from '../order-entry-form/order-entry-form.comp
 })
 export class EditOrderEntryComponent implements OnInit {
 
-  @Input() dishIndex!: number;
-  @Input() modifyOrderEntryState!: ModifyOrderEntryState
-  @Input() allDishesInRestaurant!: DishDto[]
-  @Input() orderId!: string;
-  @Input() orderEntry!: ParticipantsOrderEntry
-  @Input() dishEntry!: ParticipantsDishEntry
+  readonly dishIndex = input.required<number>();
+  readonly modifyOrderEntryState = input.required<ModifyOrderEntryState>();
+  readonly allDishesInRestaurant = input.required<DishDto[]>();
+  readonly orderId = input.required<string>();
+  readonly orderEntry = input.required<ParticipantsOrderEntry>();
+  readonly dishEntry = input.required<ParticipantsDishEntry>();
 
   initialValue!: InitialOrderEntryFormValue
 
@@ -34,10 +34,10 @@ export class EditOrderEntryComponent implements OnInit {
 
   ngOnInit() {
     this.initialValue = {
-      dish: this.allDishesInRestaurant.find(x => x.id == this.dishEntry.dishId) || this.dishEntry.dishName,
-      price: this.dishEntry.price,
-      additionalComments: this.dishEntry.comments,
-      chosenSideDishes: this.dishEntry.sideDishes,
+      dish: this.allDishesInRestaurant().find(x => x.id == this.dishEntry().dishId) || this.dishEntry().dishName,
+      price: this.dishEntry().price,
+      additionalComments: this.dishEntry().comments,
+      chosenSideDishes: this.dishEntry().sideDishes,
     }
   }
 
@@ -45,9 +45,9 @@ export class EditOrderEntryComponent implements OnInit {
     let orderEntryToUpdate: OrderEntryUpdateRequest
     if (orderEntry.kind === "Existing") {
       orderEntryToUpdate = {
-        id: this.orderEntry.id,
-        orderId: this.orderId,
-        dishEntryId: this.dishEntry.id,
+        id: this.orderEntry().id,
+        orderId: this.orderId(),
+        dishEntryId: this.dishEntry().id,
         newDish: false,
         dishId: orderEntry.dish.id,
         additionalComments: orderEntry.additionalComments,
@@ -57,9 +57,9 @@ export class EditOrderEntryComponent implements OnInit {
       };
     } else {
       orderEntryToUpdate = {
-        id: this.orderEntry.id,
-        orderId: this.orderId,
-        dishEntryId: this.dishEntry.id,
+        id: this.orderEntry().id,
+        orderId: this.orderId(),
+        dishEntryId: this.dishEntry().id,
         newDish: true,
         dishId: "",
         additionalComments: orderEntry.additionalComments,

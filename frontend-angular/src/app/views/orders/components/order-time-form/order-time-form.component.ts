@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, input} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIconModule} from '@angular/material/icon';
 import {NgxMatTimepickerComponent, NgxMatTimepickerDirective} from 'ngx-mat-timepicker';
@@ -13,6 +13,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     imports: [MatFormFieldModule, MatInputModule, FormsModule, NgxMatTimepickerDirective, ReactiveFormsModule, MatIconModule, NgxMatTimepickerComponent]
 })
 export class OrderTimeFormComponent {
-  @Input() timeOfOrderControl!: FormControl<string | null>
+  readonly timeOfOrderControl = input.required<FormControl<string | null>>();
   @Input() timeOfDeliveryControl!: FormControl<string | null>
 }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, input, OnInit, Output} from '@angular/core';
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {RestaurantControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
@@ -24,7 +24,7 @@ interface RestaurantDetails {
 })
 export class EditRestaurantFormComponent implements OnInit {
 
-  @Input() restaurantId!: string
+  readonly restaurantId = input.required<string>();
 
   fb = inject(NonNullableFormBuilder);
 
@@ -46,7 +46,7 @@ export class EditRestaurantFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.restaurantControllerService.editRestaurant(this.restaurantId)
+    this.restaurantControllerService.editRestaurant(this.restaurantId())
       .pipe(
         catchError(err => {
           this.errorSnackBar.displayError(err)
@@ -64,7 +64,7 @@ export class EditRestaurantFormComponent implements OnInit {
     if (this.restaurantEditFormGroup.valid) {
       const formValue = this.restaurantEditFormGroup.getRawValue();
 
-      this.restaurantControllerService.updateRestaurant({id: this.restaurantId, ...formValue})
+      this.restaurantControllerService.updateRestaurant({id: this.restaurantId(), ...formValue})
         .pipe(
           switchMap(() => this.restaurantFormService.refreshRestaurantData()),
           catchError(err => {

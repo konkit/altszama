@@ -9,7 +9,7 @@
               <mat-label>Side dish #{{sdIndex + 1}}</mat-label>
               <input matInput [formControl]="sideDishForm.controls.sideDish" [matAutocomplete]="auto" />
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onSideDishSelected($event.option.value, sdIndex)' [displayWith]="displayFn">
-                @for (sideDish of availableSideDishes; track sideDish) {
+                @for (sideDish of availableSideDishes(); track sideDish) {
                   <mat-option [value]="sideDish">
                     <div>{{sideDish.name}}</div>
                     <div class="subtitle">

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import {OrderActionsService} from "../../../../service/order-actions.service";
 import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
@@ -17,23 +17,22 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     imports: [PaymentStatusChipComponent, MatButtonModule, MatTooltipModule, MatIconModule, PricePipe]
 })
 export class TitleWithPaymentStatusComponent {
-  @Input() index!: number;
-  @Input() title!: string;
-  @Input() priceForUser!: number;
-  @Input() order!: ShowOrderDto;
-  @Input() orderEntry!: ParticipantsOrderEntry;
-  @Input() currentUserId!: string;
-  @Input() costForUser!: number;
+  readonly title = input.required<string>();
+  readonly priceForUser = input.required<number>();
+  readonly order = input.required<ShowOrderDto>();
+  readonly orderEntry = input.required<ParticipantsOrderEntry>();
+  readonly currentUserId = input.required<string>();
+  readonly costForUser = input.required<number>();
 
   constructor(private orderActionsService: OrderActionsService) {
   }
 
   isOrderOwner() {
-    return this.order.orderCreatorId === this.currentUserId;
+    return this.order().orderCreatorId === this.currentUserId();
   }
 
   isOrderEntryOwner() {
-    return this.orderEntry.userId === this.currentUserId;
+    return this.orderEntry().userId === this.currentUserId();
   }
 
   shouldShowPaymentStatus() {
@@ -42,20 +41,20 @@ export class TitleWithPaymentStatusComponent {
 
   shouldShowConfirmAsPaidButton() {
     return this.isOrderedOrDelivered()
-      && this.orderEntry.paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.Confirmed;
+      && this.orderEntry().paymentStatus !== ParticipantsOrderEntry.PaymentStatusEnum.Confirmed;
   }
 
   shouldShowRevertToUnpaid() {
     return this.isOrderedOrDelivered()
-      && this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.Confirmed;
+      && this.orderEntry().paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.Confirmed;
   }
 
   isConfirmedAsPaid() {
-    return this.orderEntry.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.Confirmed
+    return this.orderEntry().paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.Confirmed
   }
 
   private isOrderedOrDelivered() {
-    return [OrderStateEnum.Ordered, OrderStateEnum.Delivered].includes(this.order.orderState);
+    return [OrderStateEnum.Ordered, OrderStateEnum.Delivered].includes(this.order().orderState);
   }
 
   confirmAsPaid(orderEntryId: string) {

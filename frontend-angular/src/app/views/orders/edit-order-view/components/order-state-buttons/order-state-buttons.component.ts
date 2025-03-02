@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {OrderControllerService, ShowOrderDto} from "../../../../../../frontend-client";
 import {Router} from "@angular/router";
 import {catchError, EMPTY, switchMap, tap} from "rxjs";
@@ -18,8 +18,8 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 })
 export class OrderStateButtonsComponent {
 
-  @Input() orderId!: string
-  @Input() orderState!: OrderStateEnum
+  readonly orderId = input.required<string>();
+  readonly orderState = input.required<OrderStateEnum>();
 
   constructor(private router: Router,
               private orderControllerService: OrderControllerService,
@@ -28,25 +28,25 @@ export class OrderStateButtonsComponent {
   }
 
   setAsCreated() {
-    this.orderControllerService.setAsCreated(this.orderId)
+    this.orderControllerService.setAsCreated(this.orderId())
       .subscribe({
-        next: r => this.router.navigate(["/orders", this.orderId, 'show']),
+        next: r => this.router.navigate(["/orders", this.orderId(), 'show']),
         error: err => this.errorSnackBar.displayError(err)
       })
   }
 
   setAsOrdered() {
-    this.orderControllerService.setBackAsOrdered(this.orderId)
+    this.orderControllerService.setBackAsOrdered(this.orderId())
       .subscribe({
-        next: r => this.router.navigate(["/orders", this.orderId, 'show']),
+        next: r => this.router.navigate(["/orders", this.orderId(), 'show']),
         error: err => this.errorSnackBar.displayError(err)
       })
   }
 
   setAsRejected() {
-    this.orderControllerService.setAsRejected(this.orderId)
+    this.orderControllerService.setAsRejected(this.orderId())
       .subscribe({
-        next: r => this.router.navigate(["/orders", this.orderId, 'show']),
+        next: r => this.router.navigate(["/orders", this.orderId(), 'show']),
         error: err => this.errorSnackBar.displayError(err)
       })
   }
@@ -57,7 +57,7 @@ export class OrderStateButtonsComponent {
       .pipe(
         switchMap(confirmed => {
           if (confirmed) {
-            return this.orderControllerService._delete(this.orderId)
+            return this.orderControllerService._delete(this.orderId())
               .pipe(
                 tap(() => {
                   this.router.navigate(['/orders/all'], {onSameUrlNavigation: "reload"})

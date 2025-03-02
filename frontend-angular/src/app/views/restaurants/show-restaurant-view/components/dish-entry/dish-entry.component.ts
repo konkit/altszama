@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, input} from '@angular/core';
 import {DishDto, RestaurantDto} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {RestaurantEditorState} from "../../service/restaurant-editor-state";
@@ -17,7 +17,7 @@ import {MatButtonModule} from '@angular/material/button';
 })
 export class DishEntryComponent {
   @Input() restaurantEditorState!: RestaurantEditorState
-  @Input() restaurant!: RestaurantDto;
+  readonly restaurant = input.required<RestaurantDto>();
   @Input() dish!: DishDto
 
   constructor(private restaurantFormService: RestaurantFormService) {

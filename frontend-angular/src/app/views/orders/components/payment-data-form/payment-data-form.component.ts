@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -20,6 +20,6 @@ export interface PaymentDataForm {
     imports: [MatSlideToggleModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule]
 })
 export class PaymentDataFormComponent {
-  @Input() paymentDataForm!: FormGroup<PaymentDataForm>
+  readonly paymentDataForm = input.required<FormGroup<PaymentDataForm>>();
 
 }

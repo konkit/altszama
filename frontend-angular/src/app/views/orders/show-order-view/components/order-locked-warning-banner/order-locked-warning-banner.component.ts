@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {Router} from "@angular/router";
 import {OrderActionsService} from "../../service/order-actions.service";
 import {MatIconModule} from '@angular/material/icon';
@@ -14,17 +14,17 @@ import {MatCardModule} from '@angular/material/card';
 })
 export class OrderLockedWarningBannerComponent {
 
-  @Input() orderId!: string;
+  readonly orderId = input.required<string>();
 
   constructor(private router: Router,
               private orderActionsService: OrderActionsService) {
   }
 
   placeOrder() {
-    this.router.navigate(["/orders", this.orderId, "make_an_order"])
+    this.router.navigate(["/orders", this.orderId(), "make_an_order"])
   }
 
   unlockOrder() {
-    this.orderActionsService.unlockOrderAndReload(this.orderId)
+    this.orderActionsService.unlockOrderAndReload(this.orderId())
   }
 }

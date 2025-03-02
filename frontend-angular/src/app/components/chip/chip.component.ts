@@ -1,5 +1,4 @@
-import {Component, Input} from '@angular/core';
-import {NgClass} from '@angular/common';
+import {Component} from '@angular/core';
 import {MatChip} from '@angular/material/chips';
 
 @Component({
@@ -7,8 +6,7 @@ import {MatChip} from '@angular/material/chips';
     templateUrl: './chip.component.html',
     styleUrls: ['./chip.component.scss'],
     standalone: true,
-  imports: [NgClass, MatChip]
+  imports: [MatChip]
 })
 export class ChipComponent {
-  @Input() color!: string
 }

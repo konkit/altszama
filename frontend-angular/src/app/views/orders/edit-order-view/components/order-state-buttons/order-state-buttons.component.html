@@ -1,5 +1,5 @@
 <div>
-  @if (this.orderState === 'ORDERED' || this.orderState === 'ORDERING') {
+  @if (this.orderState() === 'ORDERED' || this.orderState() === 'ORDERING') {
     <button mat-raised-button class="mr-2" color="primary"
       (click)="setAsCreated()">
       Mark back as un-ordered
@@ -7,7 +7,7 @@
     </button>
   }
 
-  @if (this.orderState === 'DELIVERED' || this.orderState === 'REJECTED') {
+  @if (this.orderState() === 'DELIVERED' || this.orderState() === 'REJECTED') {
     <button mat-raised-button class="mr-2" color="primary"
       (click)="setAsOrdered()">
       Back to ordered

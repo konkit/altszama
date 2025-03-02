@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, input, OnInit} from '@angular/core';
 import {catchError, Observable, shareReplay, switchMap, take} from "rxjs";
 import {DishControllerService, EditDishResponse} from "../../../../../../frontend-client";
 import {FormGroup, NonNullableFormBuilder} from "@angular/forms";
@@ -16,8 +16,8 @@ import {AsyncPipe} from '@angular/common';
     imports: [DishFormComponent, DishFormPlaceholderComponent, AsyncPipe]
 })
 export class EditDishFormComponent implements OnInit {
-  @Input() restaurantId!: string
-  @Input() dishId!: string
+  readonly restaurantId = input.required<string>();
+  readonly dishId = input.required<string>();
 
   fb = inject(NonNullableFormBuilder);
 
@@ -36,7 +36,7 @@ export class EditDishFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.modifyDishData$ = this.dishControllerService.editDish(this.restaurantId, this.dishId)
+    this.modifyDishData$ = this.dishControllerService.editDish(this.restaurantId(), this.dishId())
       .pipe(shareReplay())
     this.modifyDishData$
       .pipe(take(1))
@@ -61,11 +61,11 @@ export class EditDishFormComponent implements OnInit {
 
   submitForm() {
     if (this.dishForm.valid) {
-      let body = {id: this.dishId, ...this.dishForm.getRawValue()}
+      let body = {id: this.dishId(), ...this.dishForm.getRawValue()}
 
       console.log("Body: ", body)
 
-      this.dishControllerService.updateDish(this.restaurantId, body)
+      this.dishControllerService.updateDish(this.restaurantId(), body)
         .pipe(
           switchMap(() => this.restaurantFormService.refreshRestaurantData()),
           catchError(err => {

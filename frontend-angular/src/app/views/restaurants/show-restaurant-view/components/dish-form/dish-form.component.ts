@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, input, OnInit, Output} from '@angular/core';
 import {SideDish} from "../../../../../../frontend-client";
 import {FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {MatIcon} from '@angular/material/icon';
@@ -50,8 +50,8 @@ export interface DishFormData {
 })
 export class DishFormComponent implements OnInit {
 
-  @Input() initialData!: DishFormData
-  @Input() categories!: string[]
+  readonly initialData = input<DishFormData>();
+  readonly categories = input.required<string[]>();
   @Input() dishForm!: FormGroup<DishForm>
 
   @Output() onCancel = new EventEmitter<void>()

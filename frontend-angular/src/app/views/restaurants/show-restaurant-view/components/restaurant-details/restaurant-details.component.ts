@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {RestaurantDto} from "../../../../../../frontend-client";
 import {RelativeDatePipe} from '../../../../../components/pipes/date-to-rel.pipe';
 import {MatListModule} from '@angular/material/list';
@@ -11,5 +11,5 @@ import {MatListModule} from '@angular/material/list';
     imports: [MatListModule, RelativeDatePipe]
 })
 export class RestaurantDetailsComponent {
-  @Input() restaurant!: RestaurantDto
+  readonly restaurant = input.required<RestaurantDto>();
 }

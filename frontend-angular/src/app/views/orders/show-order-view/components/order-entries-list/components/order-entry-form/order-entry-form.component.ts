@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DishDto, SideDish, SideDishData} from "../../../../../../../../frontend-client";
 import {filter, map, Observable, startWith} from "rxjs";
@@ -29,10 +29,10 @@ import {MatButton} from '@angular/material/button';
   imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, MatOptionModule, MoneyInputComponent, SideDishesInputComponent, AsyncPipe, PricePipe, RelativeDatePipe, MatButton]
 })
 export class OrderEntryFormComponent implements OnInit {
-  @Input() dishIndex: number = 0;
+  readonly dishIndex = input<number>(0);
 
-  @Input() dishes!: DishDto[]
-  @Input() initialValue!: InitialOrderEntryFormValue
+  readonly dishes = input.required<DishDto[]>();
+  readonly initialValue = input.required<InitialOrderEntryFormValue>();
 
   @Output() onSubmit = new EventEmitter<OrderEntryFormValue>()
   @Output() onCancel = new EventEmitter<void>()
@@ -50,13 +50,14 @@ export class OrderEntryFormComponent implements OnInit {
   });
 
   ngOnInit() {
+    const initialValue = this.initialValue();
     this.formGroup.setValue({
-      dish: this.initialValue.dish,
-      price: this.initialValue.price,
-      additionalComments: this.initialValue.additionalComments,
+      dish: initialValue.dish,
+      price: initialValue.price,
+      additionalComments: initialValue.additionalComments,
       chosenSideDishes: [],
     })
-    let sideDishControls = this.initialValue.chosenSideDishes
+    let sideDishControls = initialValue.chosenSideDishes
       .map(sd => this.fb.nonNullable.group({
         sideDish: this.fb.nonNullable.control<string | SideDish>(sd.name),
         price: this.fb.nonNullable.control(sd.price)
@@ -104,7 +105,7 @@ export class OrderEntryFormComponent implements OnInit {
 
   private _filter(value: string): DishDto[] {
     const filterValue = value.toLowerCase();
-    return this.dishes.filter(dish => dish.name.toLowerCase().includes(filterValue));
+    return this.dishes().filter(dish => dish.name.toLowerCase().includes(filterValue));
   }
 
   submitForm() {

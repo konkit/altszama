@@ -2,13 +2,13 @@
   <h3>Payment</h3>
 
   <div class="pb-8">
-    <mat-slide-toggle [formControl]="paymentDataForm.controls.paymentByCash">
+    <mat-slide-toggle [formControl]="paymentDataForm().controls.paymentByCash">
       Payment by cash
     </mat-slide-toggle>
   </div>
 
   <div class="pb-4">
-    <mat-slide-toggle [formControl]="paymentDataForm.controls.paymentByBankTransfer">
+    <mat-slide-toggle [formControl]="paymentDataForm().controls.paymentByBankTransfer">
       Payment by bank transfer
     </mat-slide-toggle>
   </div>
@@ -16,12 +16,12 @@
   <div class="pb-4">
     <mat-form-field>
       <mat-label>Bank transfer number</mat-label>
-      <input matInput [formControl]="paymentDataForm.controls.bankTransferNumber"/>
+      <input matInput [formControl]="paymentDataForm().controls.bankTransferNumber"/>
     </mat-form-field>
   </div>
 
   <div class="pb-4">
-    <mat-slide-toggle [formControl]="paymentDataForm.controls.paymentByBlik">
+    <mat-slide-toggle [formControl]="paymentDataForm().controls.paymentByBlik">
       Payment by BLIK
     </mat-slide-toggle>
   </div>
@@ -29,7 +29,7 @@
   <div>
     <mat-form-field>
       <mat-label>BLIK phone number</mat-label>
-      <input matInput [formControl]="paymentDataForm.controls.blikPhoneNumber"/>
+      <input matInput [formControl]="paymentDataForm().controls.blikPhoneNumber"/>
     </mat-form-field>
   </div>
 </div>

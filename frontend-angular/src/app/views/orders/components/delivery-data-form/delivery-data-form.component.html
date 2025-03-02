@@ -3,21 +3,21 @@
   <div>
     <mat-form-field>
       <mat-label>Discount (in percent)</mat-label>
-      <input matInput [formControl]="deliveryDataForm.controls.decreaseInPercent"/>
+      <input matInput [formControl]="deliveryDataForm().controls.decreaseInPercent"/>
     </mat-form-field>
   </div>
 
   <div>
     <mat-form-field>
       <mat-label>Delivery fee (per whole order)</mat-label>
-      <app-money-input [formControl]="deliveryDataForm.controls.deliveryCostPerEverybody"></app-money-input>
+      <app-money-input [formControl]="deliveryDataForm().controls.deliveryCostPerEverybody"></app-money-input>
     </mat-form-field>
   </div>
 
   <div>
     <mat-form-field>
       <mat-label>Delivery fee (per dish)</mat-label>
-      <app-money-input [formControl]="deliveryDataForm.controls.deliveryCostPerDish"></app-money-input>
+      <app-money-input [formControl]="deliveryDataForm().controls.deliveryCostPerDish"></app-money-input>
     </mat-form-field>
   </div>
 </div>

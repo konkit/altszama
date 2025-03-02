@@ -19,7 +19,7 @@
       <mat-form-field class="w-full">
         <mat-label>Category</mat-label>
         <mat-select [formControl]="dishForm.controls.category">
-          @for (category of categories; track category) {
+          @for (category of categories(); track category) {
             <mat-option [value]="category">
               {{category}}
             </mat-option>

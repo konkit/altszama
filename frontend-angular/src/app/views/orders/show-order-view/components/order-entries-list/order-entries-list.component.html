@@ -1,11 +1,11 @@
 @if (modifyOrderEntryState$ | async; as modifyOrderEntryState) {
-  @if (order.orderState == OrderStateEnum.Created && yourOrderEntries.length === 0) {
+  @if (order().orderState == OrderStateEnum.Created && yourOrderEntries().length === 0) {
     <div>
       <mat-card appearance="outlined" class="mb-10 pb-5 md-px-5">
         <mat-card-header>
           <mat-card-title>
             <div class="line-height-3rem">
-              <span>{{username}}</span>
+              <span>{{username()}}</span>
             </div>
           </mat-card-title>
         </mat-card-header>
@@ -19,8 +19,8 @@
             }
             @if (modifyOrderEntryState.isEntryCreating === true) {
               <app-create-order-entry [dishIndex]="1"
-                [orderId]="order.id"
-                [allDishesInRestaurant]="allDishesInRestaurant">
+                [orderId]="order().id"
+                [allDishesInRestaurant]="allDishesInRestaurant()">
               </app-create-order-entry>
             }
           </div>
@@ -28,12 +28,12 @@
       </mat-card>
     </div>
   }
-  @for (orderEntry of yourOrderEntries; track orderEntry) {
+  @for (orderEntry of yourOrderEntries(); track orderEntry) {
     <div>
       <app-existing-order-entry-card [orderEntry]="orderEntry"
-        [allDishesInRestaurant]="allDishesInRestaurant"
-        [currentUserId]="currentUserId"
-        [order]="order"
+        [allDishesInRestaurant]="allDishesInRestaurant()"
+        [currentUserId]="currentUserId()"
+        [order]="order()"
         [modifyOrderEntryState]="modifyOrderEntryState">
       </app-existing-order-entry-card>
     </div>
@@ -41,9 +41,9 @@
   @for (orderEntry of otherUserOrderEntries$ | async; track orderEntry) {
     <div>
       <app-existing-order-entry-card [orderEntry]="orderEntry"
-        [allDishesInRestaurant]="allDishesInRestaurant"
-        [currentUserId]="currentUserId"
-        [order]="order"
+        [allDishesInRestaurant]="allDishesInRestaurant()"
+        [currentUserId]="currentUserId()"
+        [order]="order()"
         [modifyOrderEntryState]="modifyOrderEntryState">
       </app-existing-order-entry-card>
     </div>

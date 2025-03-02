@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, input} from '@angular/core';
 import {ParticipantsOrderEntry, PaymentData} from "../../../../../../../../frontend-client";
 import {PaymentOptionsData} from "../../../../../lib/model";
 import {ShowOrderViewService} from "../../../../service/show-order-view.service";
@@ -17,8 +17,8 @@ import {MatCardModule} from '@angular/material/card';
 })
 export class PaymentOptionsSummaryCardsComponent {
   @Input() paymentData!: PaymentData
-  @Input() yourOrderEntries!: ParticipantsOrderEntry[]
-  @Input() paymentOptionsData!: PaymentOptionsData
+  readonly yourOrderEntries = input.required<ParticipantsOrderEntry[]>();
+  readonly paymentOptionsData = input.required<PaymentOptionsData>();
 
   shouldShowQRCodeButton: any;
 
@@ -26,7 +26,7 @@ export class PaymentOptionsSummaryCardsComponent {
   }
 
   ngOnInit() {
-    this.shouldShowQRCodeButton = this.paymentOptionsData.shouldShowQRCodeButton
+    this.shouldShowQRCodeButton = this.paymentOptionsData().shouldShowQRCodeButton
   }
 
   formatBankAccountNr(unformattedInput: string) {

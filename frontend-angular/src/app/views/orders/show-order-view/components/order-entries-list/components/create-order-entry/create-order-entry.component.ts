@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, input, OnInit} from '@angular/core';
 import {DishDto, OrderEntrySaveRequest} from "../../../../../../../../frontend-client";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
 import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
@@ -13,9 +13,9 @@ import {OrderEntryFormComponent} from '../order-entry-form/order-entry-form.comp
 })
 export class CreateOrderEntryComponent implements OnInit {
 
-  @Input() dishIndex: number = 0;
-  @Input() orderId!: string;
-  @Input() allDishesInRestaurant!: DishDto[]
+  readonly dishIndex = input<number>(0);
+  readonly orderId = input.required<string>();
+  readonly allDishesInRestaurant = input.required<DishDto[]>();
 
   initialValue: InitialOrderEntryFormValue = {
     dish: "",
@@ -35,7 +35,7 @@ export class CreateOrderEntryComponent implements OnInit {
     if (orderEntry.kind === "Existing") {
       orderEntryToSave = {
         newDish: false,
-        orderId: this.orderId,
+        orderId: this.orderId(),
         dishId: orderEntry.dish.id,
         additionalComments: orderEntry.additionalComments,
         newDishName: "",
@@ -45,7 +45,7 @@ export class CreateOrderEntryComponent implements OnInit {
     } else {
       orderEntryToSave = {
         newDish: true,
-        orderId: this.orderId,
+        orderId: this.orderId(),
         dishId: "",
         additionalComments: orderEntry.additionalComments,
         newDishName: orderEntry.dishName,

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {ThemePalette} from "@angular/material/core";
 import {MatButtonModule} from '@angular/material/button';
 
@@ -10,9 +10,9 @@ import {MatButtonModule} from '@angular/material/button';
     imports: [MatButtonModule]
 })
 export class ButtonComponent {
-  @Input() color: ThemePalette
-  @Input() disabled: boolean = false
-  @Input() type: string = ""
+  readonly color = input<ThemePalette>();
+  readonly disabled = input<boolean>(false);
+  readonly type = input<string>("");
 
 
 

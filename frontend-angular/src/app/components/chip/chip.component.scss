@@ -4,41 +4,13 @@
 
 mat-chip {
   @include mat.chips-overrides((
-    outline-color: green,
+    outline-color: var(--mat-sys-primary),
   ));
 }
 
 .outer {
-  // rounded-full px-3 py-1 inline-flex chip
   border-radius: 9999px;
   display: inline-flex;
   padding: 0.75rem;
   border: 1px solid black;
 }
-
-//@import "../../../themes.scss";
-//
-//.chip {
-//  $color-config:    mat.m2-get-color-config($altszama-theme);
-//
-//  &.primary {
-//    $primary-palette: map.get($color-config, 'primary');
-//
-//    color: mat.m2-get-color-from-palette($primary-palette, default-contrast);
-//    background: mat.m2-get-color-from-palette($primary-palette, 500);
-//  }
-//
-//  &.accent {
-//    $accent-palette: map.get($color-config, 'primary');
-//
-//    color: mat.m2-get-color-from-palette($accent-palette, default-contrast);
-//    background: mat.m2-get-color-from-palette($accent-palette, 500);
-//  }
-//
-//  &.warn {
-//    $warn-palette: map.get($color-config, 'primary');
-//
-//    color: mat.m2-get-color-from-palette($warn-palette, default-contrast);
-//    background: mat.m2-get-color-from-palette($warn-palette, 500);
-//  }
-//}

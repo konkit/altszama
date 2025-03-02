@@ -1,5 +1,5 @@
 <div class="line-height-3rem text-body1">
-  <span>{{ title }} ({{ orderEntry.finalPrice | price }})</span>
+  <span>{{ title() }} ({{ orderEntry().finalPrice | price }})</span>
 </div>
 
 @if (isOrderEntryOwner() || isOrderOwner()) {
@@ -11,14 +11,14 @@
     }
     @if (shouldShowConfirmAsPaidButton()) {
       <div>
-        <button mat-icon-button (click)="confirmAsPaid(orderEntry.id)" matTooltip="Confirm payment">
+        <button mat-icon-button (click)="confirmAsPaid(orderEntry().id)" matTooltip="Confirm payment">
           <mat-icon fontIcon="check"></mat-icon>
         </button>
       </div>
     }
     @if (shouldShowRevertToUnpaid()) {
       <div>
-        <button mat-icon-button (click)="revertToUnpaid(orderEntry.id)" matTooltip="Revert to 'unpaid'">
+        <button mat-icon-button (click)="revertToUnpaid(orderEntry().id)" matTooltip="Revert to 'unpaid'">
           <mat-icon fontIcon="undo"></mat-icon>
         </button>
       </div>

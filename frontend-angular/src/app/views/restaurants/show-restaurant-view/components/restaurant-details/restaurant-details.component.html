@@ -2,29 +2,29 @@
   <mat-list>
     <mat-list-item>
       <b>Address : </b>
-      {{ restaurant.address }}
+      {{ restaurant().address }}
     </mat-list-item>
 
     <mat-list-item>
       <b>URL : </b>
-      <a target="_blank" class="text-indigo-500" [href]="restaurant.url">
-        {{ restaurant.url }}
+      <a target="_blank" class="text-indigo-500" [href]="restaurant().url">
+        {{ restaurant().url }}
       </a>
     </mat-list-item>
 
     <mat-list-item>
       <b>Telephone number:</b>
-      {{ restaurant.telephone }}
+      {{ restaurant().telephone }}
     </mat-list-item>
 
     <mat-list-item>
       <b>Last auto-updated:</b>
-      {{ restaurant.lastCrawled | relativeDate }}
+      {{ restaurant().lastCrawled | relativeDate }}
     </mat-list-item>
 
     <mat-list-item>
       <b>Last updated manually:</b>
-      {{ restaurant.lastEdited | relativeDate }}
+      {{ restaurant().lastEdited | relativeDate }}
     </mat-list-item>
   </mat-list>
 </div>

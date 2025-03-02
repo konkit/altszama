@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 
 
 @Component({
@@ -9,5 +9,5 @@ import {Component, Input} from '@angular/core';
     imports: []
 })
 export class PaymentStatusChipComponent {
-  @Input() isPaid!: boolean
+  readonly isPaid = input.required<boolean>();
 }
