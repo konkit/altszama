@@ -19,7 +19,7 @@
           } @else {
             <mat-list>
               @for (owedUsernameAndAmount of owedMoneyEntries; track owedUsernameAndAmount) {
-                <mat-list-item>
+                <mat-list-item class="clickable-list-item">
                   @if (owedUsernameAndAmount[1] > 0) {
                       <p>You are owed <b>{{ owedUsernameAndAmount[1] | price }}</b> by <b>{{ owedUsernameAndAmount[0] }}</b></p>
                   } @else if (owedUsernameAndAmount[1] < 0) {
@@ -46,8 +46,9 @@
             <mat-list>
               @for (historyEntry of orderHistoryEntries; track historyEntry) {
                 @if (isCreatedEntry(historyEntry)) {
-                  <mat-list-item (click)="goToOrder(historyEntry.orderId)"
-                                 [ngClass]="{paid: isCreatedEntryPaid(historyEntry)}" class="cursor-pointer">
+                  <mat-list-item class="clickable-list-item"
+                                 (click)="goToOrder(historyEntry.orderId)"
+                                 [ngClass]="{paid: isCreatedEntryPaid(historyEntry)}">
                     <div matListItemTitle>
                       ({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}
                     </div>
@@ -59,8 +60,9 @@
                     </div>
                   </mat-list-item>
                 } @else if (isParticipatedEntry(historyEntry)) {
-                  <mat-list-item (click)="goToOrder(historyEntry.orderId)"
-                                 [ngClass]="{paid: isParticipatedEntryPaid(historyEntry)}" class="cursor-pointer">
+                  <mat-list-item class="clickable-list-item"
+                                 (click)="goToOrder(historyEntry.orderId)"
+                                 [ngClass]="{paid: isParticipatedEntryPaid(historyEntry)}">
                     <div matListItemTitle>
                       ({{ historyEntry.orderDate }})
                       {{ historyEntry.orderCreator }} ordered from

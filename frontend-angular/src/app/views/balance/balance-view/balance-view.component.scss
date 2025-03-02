@@ -14,3 +14,12 @@
 
   //color: mat.m2-get-color-from-palette($foreground-palette, disabled);
 }
+
+
+mat-list-item.clickable-list-item {
+  cursor: pointer;
+}
+
+mat-list-item.clickable-list-item:hover {
+  background-color: var(--mat-sys-surface-container-high)
+}
