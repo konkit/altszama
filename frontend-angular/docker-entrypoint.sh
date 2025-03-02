@@ -1,1 +1,1 @@
-http-server dist/altszama-frontend
+http-server dist/altszama-frontend/browser
