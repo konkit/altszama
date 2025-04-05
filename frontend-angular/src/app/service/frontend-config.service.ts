@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, tap} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 
+import * as Sentry from "@sentry/angular";
+
 export interface FrontendConfig {
   currentDomain: string;
   vapidPublicKey: string;
@@ -39,6 +41,10 @@ export class FrontendConfigService {
           sentryUrl: response.sentryUrl,
         };
 
+        if (response.sentryUrl) {
+          this.initSentry(response.sentryUrl)
+        }
+
         this.config.next(newConfig);
       })
     )
@@ -46,5 +52,14 @@ export class FrontendConfigService {
 
   getConfig(): Observable<FrontendConfig> {
     return this.config.asObservable();
+  }
+
+  initSentry(sentryUrl: string) {
+      Sentry.init({
+        dsn: sentryUrl,
+        integrations: [Sentry.browserTracingIntegration(),],
+        tracesSampleRate: 1.0,
+        tunnel: "/api/sentry",
+      });
   }
 }

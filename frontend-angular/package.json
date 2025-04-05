@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^19.1.0",
     "@angular/platform-browser-dynamic": "^19.1.0",
     "@angular/router": "^19.1.0",
+    "@sentry/angular": "^9.11.0",
     "angularx-qrcode": "^19.0.0",
     "event-source-polyfill": "^1.0.25",
     "ngx-mat-timepicker": "19.0.0",
