@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, tap} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
-import * as Sentry from "@sentry/angular";
+import * as Sentry from '@sentry/angular';
 
 export interface FrontendConfig {
   currentDomain: string;
@@ -61,5 +61,7 @@ export class FrontendConfigService {
         tracesSampleRate: 1.0,
         tunnel: "/api/sentry",
       });
+
+      Sentry.setTag("frontend", "angular")
   }
 }

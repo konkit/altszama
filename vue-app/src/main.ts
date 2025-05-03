@@ -14,7 +14,7 @@ import "./assets/main-styles.css";
 import "./assets/global-styles.css";
 import * as Sentry from "@sentry/vue";
 import { Integrations } from "@sentry/tracing";
-import {FrontendConfig, initConfig} from "@/lib/config";
+import { FrontendConfig, initConfig } from "@/lib/config";
 
 
 function setupApp(config: FrontendConfig) {
@@ -39,6 +39,7 @@ function setupApp(config: FrontendConfig) {
             // We recommend adjusting this value in production
             tracesSampleRate: 1.0,
         });
+        Sentry.setTag("frontend", "vue")
     }
 
 
