@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, retry, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import * as Sentry from '@sentry/angular';
@@ -46,7 +46,8 @@ export class FrontendConfigService {
         }
 
         this.config.next(newConfig);
-      })
+      }),
+      retry(2),
     )
   }
 
