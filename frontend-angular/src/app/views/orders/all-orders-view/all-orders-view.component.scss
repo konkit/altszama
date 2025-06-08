@@ -1,4 +1,12 @@
+@use '@angular/material' as mat;
+
 :host {
   width: 100%;
   height: 100%;
+}
+
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+table {
+  //@include mat.elevation(1)
 }

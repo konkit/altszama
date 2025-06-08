@@ -1,32 +1,43 @@
 <app-view-wrapper>
   <h1 class="font-bold text-gray-700">All Orders</h1>
-  <table mat-table [dataSource]="dataSource" class="clickable-table">
-    <ng-container matColumnDef="orderDate">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
-      <td mat-cell *matCellDef="let element"> {{element.orderDate}} </td>
-    </ng-container>
 
-    <ng-container matColumnDef="restaurantName">
-      <th mat-header-cell *matHeaderCellDef>Restaurant</th>
-      <td mat-cell *matCellDef="let element"> {{element.restaurantName}} </td>
-    </ng-container>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title class="pb-4">Active and past orders</mat-card-title></mat-card-header>
 
-    <ng-container matColumnDef="orderState">
-      <th mat-header-cell *matHeaderCellDef>State</th>
-      <td mat-cell *matCellDef="let element"> {{element.orderState}} </td>
-    </ng-container>
+    <mat-card-content>
 
-    <ng-container matColumnDef="orderCreatorUsername">
-      <th mat-header-cell *matHeaderCellDef>Order creator</th>
-      <td mat-cell *matCellDef="let element"> {{element.orderCreatorUsername}} </td>
-    </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/orders', row.id, 'show']"></tr>
-  </table>
+      <table mat-table [dataSource]="dataSource" class="clickable-table">
+        <ng-container matColumnDef="orderDate">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let element"> {{ element.orderDate }}</td>
+        </ng-container>
 
-  <mat-paginator [pageSize]="10"
-                 showFirstLastButtons
-                 aria-label="Select page">
-  </mat-paginator>
+        <ng-container matColumnDef="restaurantName">
+          <th mat-header-cell *matHeaderCellDef>Restaurant</th>
+          <td mat-cell *matCellDef="let element"> {{ element.restaurantName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="orderState">
+          <th mat-header-cell *matHeaderCellDef>State</th>
+          <td mat-cell *matCellDef="let element"> {{ element.orderState }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="orderCreatorUsername">
+          <th mat-header-cell *matHeaderCellDef>Order creator</th>
+          <td mat-cell *matCellDef="let element"> {{ element.orderCreatorUsername }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/orders', row.id, 'show']"></tr>
+      </table>
+
+      <mat-paginator [pageSize]="10"
+                     showFirstLastButtons
+                     aria-label="Select page">
+      </mat-paginator>
+    </mat-card-content>
+
+  </mat-card>
 </app-view-wrapper>

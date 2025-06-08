@@ -1,29 +1,30 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {map, Observable, tap} from "rxjs";
-import {ActivatedRoute, RouterLink} from "@angular/router";
-import {MatTableDataSource, MatTableModule} from "@angular/material/table";
-import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {AsyncPipe} from '@angular/common';
-import {RelativeDatePipe} from '../../../components/pipes/date-to-rel.pipe';
-import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
-import {IndexResponse, RestaurantInfo} from '../../../../frontend-client';
-import {FrontendConfigService} from '../../../service/frontend-config.service';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { map, Observable, tap } from 'rxjs';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
+import { RelativeDatePipe } from '../../../components/pipes/date-to-rel.pipe';
+import { ViewWrapperComponent } from '../../../components/view-wrapper/view-wrapper.component';
+import { IndexResponse, RestaurantInfo } from '../../../../frontend-client';
+import { FrontendConfigService } from '../../../service/frontend-config.service';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-restaurants-list-view',
   templateUrl: './restaurants-list-view.component.html',
   styleUrls: ['./restaurants-list-view.component.scss'],
   standalone: true,
-  imports: [ViewWrapperComponent, MatButtonModule, RouterLink, MatIconModule, MatTableModule, MatPaginatorModule, AsyncPipe, RelativeDatePipe]
+  imports: [ViewWrapperComponent, MatCardModule, MatButtonModule, RouterLink, MatIconModule, MatTableModule, MatPaginatorModule, AsyncPipe, RelativeDatePipe]
 })
 export class RestaurantsListViewComponent implements OnInit, AfterViewInit {
   indexResponse$: Observable<IndexResponse>;
 
   displayedColumns: string[] = ['name', 'dishCount', 'lastCrawled', 'lastEdited'];
 
-  dataSource = new MatTableDataSource<RestaurantInfo>()
+  dataSource = new MatTableDataSource<RestaurantInfo>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -32,14 +33,14 @@ export class RestaurantsListViewComponent implements OnInit, AfterViewInit {
     this.indexResponse$ = this.route.data
       .pipe(
         map(r => r['response']),
-        tap((r) => console.log("Response: ", r))
-      )
+        tap((r) => console.log('Response: ', r))
+      );
   }
 
   ngOnInit() {
     this.indexResponse$.subscribe(response => {
       this.dataSource.data = response.restaurants;
-    })
+    });
   }
 
   ngAfterViewInit() {
@@ -48,7 +49,7 @@ export class RestaurantsListViewComponent implements OnInit, AfterViewInit {
 
   getSwaggerUrl(): Observable<string> {
     return this.frontendConfigService.getConfig().pipe(map(config => {
-      return config.currentDomain + "/api/swagger-ui/index.html?configUrl=/api/swagger/swagger-config"
-    }))
+      return config.currentDomain + '/api/swagger-ui/index.html?configUrl=/api/swagger/swagger-config';
+    }));
   }
 }

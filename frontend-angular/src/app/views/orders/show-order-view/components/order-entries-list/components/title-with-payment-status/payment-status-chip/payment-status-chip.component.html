@@ -1,15 +1,5 @@
-@if (isPaid() === true) {
-  <span class="ml-2 rounded-full text-gray-800 px-3 py-1 inline-flex bg-green-300">
-    <span class="flex items-center mat-subtitle-2">
-      Payment confirmed
-    </span>
-  </span>
-}
-
-@if (isPaid() === false) {
-  <span class="ml-2 rounded-full text-gray-800 px-3 py-1 inline-flex bg-red-300">
-    <span class="flex items-center mat-subtitle-2">
-      Unpaid
-    </span>
-  </span>
+@if (isPaid()) {
+  <app-chip class="ml-2">Payment confirmed</app-chip>
+} @else {
+  <app-chip class="ml-2">Unpaid</app-chip>
 }

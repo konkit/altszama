@@ -3,7 +3,7 @@
     <h1>Make an order from {{ data.initData.restaurantName }}</h1>
 
     @if (data.initData.orderState !== 'ORDERING') {
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header>
           <mat-card-title>
             <h1>Ordering from {{ data.initData.restaurantName }}</h1>
@@ -22,7 +22,7 @@
     }
 
     @if (data.initData.orderState === 'ORDERING') {
-      <mat-card appearance="outlined" class="mb-5">
+      <mat-card appearance="raised" class="mb-5">
         <mat-card-header>
           <mat-card-title>The order is locked!</mat-card-title>
         </mat-card-header>
@@ -32,7 +32,7 @@
         <mat-card-actions>
           <button mat-button (click)="unlockOrder()">
             Unlock and go back
-            <mat-icon fontIcon="lock_open"></mat-icon>
+            <mat-icon fontIcon="undo"></mat-icon>
           </button>
         </mat-card-actions>
       </mat-card>

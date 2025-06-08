@@ -1,15 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   BalanceControllerService,
   OrderHistoryCreatedEntry,
   OrderHistoryParticipatedEntry
 } from '../../../../frontend-client';
-import {Router} from '@angular/router';
-import {MatListModule} from '@angular/material/list';
-import {PricePipe} from '../../../components/pipes/price.pipe';
-import {NgClass} from '@angular/common';
-import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
+import { MatListModule } from '@angular/material/list';
+import { PricePipe } from '../../../components/pipes/price.pipe';
+import { NgClass } from '@angular/common';
+import { ViewWrapperComponent } from '../../../components/view-wrapper/view-wrapper.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-balance-view',
@@ -18,7 +19,8 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     PricePipe,
     NgClass,
     ViewWrapperComponent,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatCardModule,
   ],
   standalone: true,
   templateUrl: './balance-view.component.html',

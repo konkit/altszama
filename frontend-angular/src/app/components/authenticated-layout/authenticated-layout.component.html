@@ -17,20 +17,21 @@
         </div>
 
         @let links = [
-          {path: "/orders/today", text: "Today's Orders"},
-          {path: "/orders/all", text: "All Orders"},
-          {path: "/restaurants", text: "Restaurants"}
+          {icon: "today", path: "/orders/today", text: "Today's Orders"},
+          {icon: "list", path: "/orders/all", text: "All Orders"},
+          {icon: "food_bank", path: "/restaurants", text: "Restaurants"}
         ] ;
         @for (link of links; track $index) {
           <a mat-list-item [routerLink]=link.path
              routerLinkActive
              #rla="routerLinkActive"
              [activated]="rla.isActive">
-            {{ link.text }}
+            <mat-icon matListItemIcon>{{ link.icon }}</mat-icon>
+            <span matListItemTitle>{{ link.text }}</span>
           </a>
         }
 
-        <mat-divider></mat-divider>
+        <mat-divider class="my-2"></mat-divider>
 
         <mat-list-item>
           <strong>Hi {{ username }}</strong>
@@ -41,11 +42,13 @@
            routerLinkActive
            #rla="routerLinkActive"
            [activated]="rla.isActive">
-          Balance
+          <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
+          <span matListItemTitle>Balance</span>
         </a>
 
         <a mat-list-item (click)="logout()">
-          Logout
+          <mat-icon matListItemIcon>logout</mat-icon>
+          <span matListItemTitle>Logout</span>
         </a>
       </mat-nav-list>
     </mat-sidenav>

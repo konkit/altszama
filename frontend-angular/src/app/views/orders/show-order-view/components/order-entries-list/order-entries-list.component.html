@@ -1,7 +1,7 @@
 @if (modifyOrderEntryState$ | async; as modifyOrderEntryState) {
   @if (order().orderState == OrderStateEnum.Created && yourOrderEntries().length === 0) {
     <div>
-      <mat-card appearance="outlined" class="mb-10 pb-5 md-px-5">
+      <mat-card class="mb-4 pb-4 md-px-5">
         <mat-card-header>
           <mat-card-title>
             <div class="line-height-3rem">

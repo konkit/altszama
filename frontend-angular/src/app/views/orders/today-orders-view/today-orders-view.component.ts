@@ -1,14 +1,15 @@
-import {Component} from '@angular/core';
-import {map, Observable} from 'rxjs';
-import {TodayOrderDto, TodayOrdersResponse} from '../../../../frontend-client';
-import {ActivatedRoute, Router} from '@angular/router';
-import {orderStateToCaption} from "../lib/orderState"
-import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
-import {MatActionList, MatList, MatListItem} from '@angular/material/list';
-import {MatIcon} from '@angular/material/icon';
-import {MatButton} from '@angular/material/button';
-import {AsyncPipe} from '@angular/common';
-import {ChipComponent} from '../../../components/chip/chip.component';
+import { Component } from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { TodayOrderDto, TodayOrdersResponse } from '../../../../frontend-client';
+import { ActivatedRoute, Router } from '@angular/router';
+import { orderStateToCaption } from '../lib/orderState';
+import { ViewWrapperComponent } from '../../../components/view-wrapper/view-wrapper.component';
+import { MatActionList, MatList, MatListItem, MatListModule } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
+import { ChipComponent } from '../../../components/chip/chip.component';
+import { MatCardModule } from '@angular/material/card';
 import OrderStateEnum = TodayOrderDto.OrderStateEnum;
 
 @Component({
@@ -21,7 +22,9 @@ import OrderStateEnum = TodayOrderDto.OrderStateEnum;
     MatIcon,
     MatButton,
     AsyncPipe,
-    ChipComponent
+    ChipComponent,
+    MatCardModule,
+    MatListModule,
   ],
   templateUrl: './today-orders-view.component.html',
   standalone: true,

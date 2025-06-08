@@ -2,63 +2,82 @@
   <h1>Today's Orders</h1>
 
   @if (todaysOrders$ | async; as todayOrders) {
-    <h2>You ordered:</h2>
 
-    @if (todayOrders.currentOrderEntries.length > 0) {
-      <mat-action-list>
-        @for (orderEntry of todayOrders.currentOrderEntries; track orderEntry) {
-          @for (dishEntry of orderEntry.dishEntries; track dishEntry) {
-            <mat-list-item (click)="goToOrder(orderEntry.orderId)">
-              <span class="flex flex-row">
-                <b>{{ dishEntry.dish.name }}</b>&nbsp;from&nbsp;<b>{{ dishEntry.restaurantName }}</b>
-                <app-chip class="ml-auto" data-cy="order-status-chip">
-                  Status: {{ getOrderStateString(orderEntry.orderState) }}
-                </app-chip>
-              </span>
+
+    <mat-card class="mb-4">
+      <mat-card-header>
+        <mat-card-title class="pb-4">You ordered:</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (todayOrders.currentOrderEntries.length > 0) {
+          <mat-action-list>
+            @for (orderEntry of todayOrders.currentOrderEntries; track orderEntry) {
+              @for (dishEntry of orderEntry.dishEntries; track dishEntry) {
+                <mat-list-item (click)="goToOrder(orderEntry.orderId)">
+                  <mat-icon matListItemIcon>restaurant</mat-icon>
+                  <div matListItemTitle>
+                    <b>{{ dishEntry.dish.name }}</b>&nbsp;from&nbsp;<b>{{ dishEntry.restaurantName }}</b>
+                  </div>
+
+                  <div matListItemMeta>
+                    <app-chip class="ml-auto" data-cy="order-status-chip">
+                      Status: {{ getOrderStateString(orderEntry.orderState) }}
+                    </app-chip>
+                  </div>
+                </mat-list-item>
+              }
+            }
+          </mat-action-list>
+        }
+
+        @if (todayOrders.currentOrderEntries.length == 0) {
+          <mat-list>
+            <mat-list-item>
+              You haven't ordered anything today yet.
             </mat-list-item>
-          }
+          </mat-list>
         }
-      </mat-action-list>
-    }
-    @if (todayOrders.currentOrderEntries.length == 0) {
-      <mat-list>
-        <mat-list-item>
-          You haven't ordered anything today yet.
-        </mat-list-item>
-      </mat-list>
-    }
+      </mat-card-content>
+    </mat-card>
 
-    <h2>Your team is ordering today from:</h2>
+    <mat-card class="mb-4">
+      <mat-card-header class="flex space-between items-center pb-4">
+        <mat-card-title>Your team is ordering today from:</mat-card-title>
+        <button mat-flat-button (click)="goToCreateOrder()">
+          <mat-icon>add</mat-icon>
+          Add new order
+        </button>
+      </mat-card-header>
 
-    @if (todayOrders.ordersList.length > 0) {
-      <mat-action-list>
-        @for (element of todayOrders.ordersList; track element) {
-          <mat-list-item (click)="goToOrder(element.id)">
-            <span matListItemTitle class="flex flex-row">
-              <b>{{ element.restaurantName }}</b>&nbsp;(created by {{ element.orderCreatorUsername }})
-              <span class="ml-auto">
-               <app-chip color="primary" class="ml-2" data-cy="order-status-chip">
-                  Status: {{ getOrderStateString(element.orderState) }}
-                </app-chip>
-              </span>
-            </span>
-          </mat-list-item>
+      <mat-card-content>
+        @if (todayOrders.ordersList.length > 0) {
+          <mat-action-list>
+            @for (element of todayOrders.ordersList; track element) {
+              <mat-list-item (click)="goToOrder(element.id)">
+                <mat-icon matListItemIcon>restaurant</mat-icon>
+                <div matListItemTitle>
+                  <span>{{ element.restaurantName }}</span>
+                  <span class="created-by ml-2">by {{ element.orderCreatorUsername }}</span>
+                </div>
+                <div matListItemMeta>
+                  <app-chip class="ml-2" data-cy="order-status-chip">
+                    Status: {{ getOrderStateString(element.orderState) }}
+                  </app-chip>
+                </div>
+              </mat-list-item>
+            }
+          </mat-action-list>
         }
-      </mat-action-list>
-    }
-    @if (todayOrders.ordersList.length === 0) {
-      <mat-list>
-        <mat-list-item>
-          <div>No orders yet</div>
-        </mat-list-item>
-      </mat-list>
-    }
 
-    <div>
-      <button mat-button (click)="goToCreateOrder()">
-        Add new order
-        <mat-icon fontIcon="add"></mat-icon>
-      </button>
-    </div>
+        @if (todayOrders.ordersList.length === 0) {
+          <mat-list>
+            <mat-list-item>
+              <div>No orders yet</div>
+            </mat-list-item>
+          </mat-list>
+        }
+      </mat-card-content>
+    </mat-card>
   }
 </app-view-wrapper>

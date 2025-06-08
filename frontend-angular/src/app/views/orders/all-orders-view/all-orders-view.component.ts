@@ -1,27 +1,22 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
-import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow,
-  MatRowDef,
-  MatTable,
-  MatTableDataSource
-} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {ActivatedRoute, RouterLink} from '@angular/router';
-import {map} from 'rxjs/operators';
-import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
-import {AllOrdersOrderDto} from '../../../../frontend-client';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { ViewWrapperComponent } from '../../../components/view-wrapper/view-wrapper.component';
+import { AllOrdersOrderDto } from '../../../../frontend-client';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-all-orders-view',
-  imports: [ViewWrapperComponent, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatHeaderRow, MatRow, MatPaginator, MatHeaderRowDef, RouterLink, MatHeaderCellDef, MatCellDef, MatRowDef],
+  imports: [
+    ViewWrapperComponent,
+    MatTableModule,
+    MatPaginatorModule,
+    RouterLink,
+    MatCardModule,
+  ],
   templateUrl: './all-orders-view.component.html',
   styleUrl: './all-orders-view.component.scss',
   standalone: true

@@ -7,80 +7,82 @@
       <mat-spinner></mat-spinner>
     </div>
   } @else {
-    <div class="mt-5">
-      <div class="pb-5">
-        <h2>Your Balance</h2>
+    <mat-card class="mb-4">
+      <mat-card-header>
+        <mat-card-title>Your Balance</mat-card-title>
+      </mat-card-header>
 
-        <div>
-          @if (owedMoneyEntries.length === 0) {
-            <mat-list>
-              <mat-list-item>No pending entries - all settled up.</mat-list-item>
-            </mat-list>
-          } @else {
-            <mat-list>
-              @for (owedUsernameAndAmount of owedMoneyEntries; track owedUsernameAndAmount) {
-                <mat-list-item class="clickable-list-item">
-                  @if (owedUsernameAndAmount[1] > 0) {
-                      <p>You are owed <b>{{ owedUsernameAndAmount[1] | price }}</b> by <b>{{ owedUsernameAndAmount[0] }}</b></p>
-                  } @else if (owedUsernameAndAmount[1] < 0) {
-                      <p>You owe <b>{{ -owedUsernameAndAmount[1] | price }}</b> to <b>{{ owedUsernameAndAmount[0] }}</b></p>
-                  }
+      <mat-card-content>
+        @if (owedMoneyEntries.length === 0) {
+          <mat-list>
+            <mat-list-item>No pending entries - all settled up.</mat-list-item>
+          </mat-list>
+        } @else {
+          <mat-list>
+            @for (owedUsernameAndAmount of owedMoneyEntries; track owedUsernameAndAmount) {
+              <mat-list-item class="clickable-list-item">
+                @if (owedUsernameAndAmount[1] > 0) {
+                  <p>You are owed <b>{{ owedUsernameAndAmount[1] | price }}</b> by <b>{{ owedUsernameAndAmount[0] }}</b></p>
+                } @else if (owedUsernameAndAmount[1] < 0) {
+                  <p>You owe <b>{{ -owedUsernameAndAmount[1] | price }}</b> to <b>{{ owedUsernameAndAmount[0] }}</b></p>
+                }
+              </mat-list-item>
+            }
+          </mat-list>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="mb-4">
+      <mat-card-header>
+        <mat-card-title>Your order history:</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (orderHistoryEntries.length == 0) {
+          <mat-list>
+            <mat-list-item>
+              Your order history is empty.
+            </mat-list-item>
+          </mat-list>
+        } @else {
+          <mat-list>
+            @for (historyEntry of orderHistoryEntries; track historyEntry) {
+              @if (isCreatedEntry(historyEntry)) {
+                <mat-list-item class="clickable-list-item"
+                               (click)="goToOrder(historyEntry.orderId)"
+                               [ngClass]="{paid: isCreatedEntryPaid(historyEntry)}">
+                  <div matListItemTitle>
+                    ({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}
+                  </div>
+                  <div matListItemLine>
+                    Payments confirmed:
+                    {{ historyEntry.confirmedPaymentsTotalAmount | price }}
+                    /
+                    {{ historyEntry.totalAmount | price }}
+                  </div>
+                </mat-list-item>
+              } @else if (isParticipatedEntry(historyEntry)) {
+                <mat-list-item class="clickable-list-item"
+                               (click)="goToOrder(historyEntry.orderId)"
+                               [ngClass]="{paid: isParticipatedEntryPaid(historyEntry)}">
+                  <div matListItemTitle>
+                    ({{ historyEntry.orderDate }})
+                    {{ historyEntry.orderCreator }} ordered from
+                    {{ historyEntry.restaurantName }}
+                  </div>
+                  <div matListItemLine>
+                    Amount:
+                    {{ historyEntry.orderEntryAmount | price }}
+                    ({{ historyEntry.status }})
+                  </div>
                 </mat-list-item>
               }
-            </mat-list>
-          }
-        </div>
-      </div>
-
-      <div class="pb-5">
-        <h2>Your order history:</h2>
-
-        <div>
-          @if (orderHistoryEntries.length == 0) {
-            <mat-list>
-              <mat-list-item>
-                Your order history is empty.
-              </mat-list-item>
-            </mat-list>
-          } @else {
-            <mat-list>
-              @for (historyEntry of orderHistoryEntries; track historyEntry) {
-                @if (isCreatedEntry(historyEntry)) {
-                  <mat-list-item class="clickable-list-item"
-                                 (click)="goToOrder(historyEntry.orderId)"
-                                 [ngClass]="{paid: isCreatedEntryPaid(historyEntry)}">
-                    <div matListItemTitle>
-                      ({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}
-                    </div>
-                    <div matListItemLine>
-                      Payments confirmed:
-                      {{ historyEntry.confirmedPaymentsTotalAmount | price }}
-                      /
-                      {{ historyEntry.totalAmount | price }}
-                    </div>
-                  </mat-list-item>
-                } @else if (isParticipatedEntry(historyEntry)) {
-                  <mat-list-item class="clickable-list-item"
-                                 (click)="goToOrder(historyEntry.orderId)"
-                                 [ngClass]="{paid: isParticipatedEntryPaid(historyEntry)}">
-                    <div matListItemTitle>
-                      ({{ historyEntry.orderDate }})
-                      {{ historyEntry.orderCreator }} ordered from
-                      {{ historyEntry.restaurantName }}
-                    </div>
-                    <div matListItemLine>
-                      Amount:
-                      {{ historyEntry.orderEntryAmount | price }}
-                      ({{ historyEntry.status }})
-                    </div>
-                  </mat-list-item>
-                }
-              }
-            </mat-list>
-          }
-        </div>
-      </div>
-    </div>
+            }
+          </mat-list>
+        }
+      </mat-card-content>
+    </mat-card>
   }
 
 </app-view-wrapper>

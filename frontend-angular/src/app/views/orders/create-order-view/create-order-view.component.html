@@ -1,4 +1,11 @@
 <app-view-wrapper>
+  <div>
+    <button mat-button [routerLink]="['/orders/today']">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </button>
+  </div>
+
   <h1>Create Order</h1>
 
   @if (fullRestaurantsList.length === 0) {

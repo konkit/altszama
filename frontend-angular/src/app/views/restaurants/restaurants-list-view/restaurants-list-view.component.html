@@ -1,16 +1,27 @@
 <app-view-wrapper>
-  <div class="flex flex-row">
-    <h1 class="font-bold text-gray-700">Restaurants</h1>
-    <div class="my-5 flex flex-row ml-auto">
-      <button mat-raised-button color="primary" routerLink="/restaurants/create">
-        Create new restaurant
-        <mat-icon fontIcon="add" class="ml-3"></mat-icon>
-      </button>
-    </div>
+  <h1 class="font-bold text-gray-700">Restaurants</h1>
 
-  </div>
+<!--  <div class="flex flex-row">-->
+<!--    <h1 class="font-bold text-gray-700">Restaurants</h1>-->
+<!--    <div class="my-5 flex flex-row ml-auto">-->
+<!--      <button mat-raised-button color="primary" routerLink="/restaurants/create">-->
+<!--        Create new restaurant-->
+<!--        <mat-icon fontIcon="add" class="ml-3"></mat-icon>-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
+
   @if (indexResponse$ | async; as payload) {
-    <div>
+    <mat-card class="mb-4">
+      <mat-card-header class="flex space-between items-center pb-4">
+        <mat-card-title>Restaurants list</mat-card-title>
+        <button mat-flat-button color="primary" routerLink="/restaurants/create">
+          Create new restaurant
+          <mat-icon fontIcon="add" class="ml-3"></mat-icon>
+        </button>
+      </mat-card-header>
+
+      <mat-card-content>
       <table mat-table [dataSource]="dataSource" class="clickable-table">
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -36,8 +47,19 @@
                      showFirstLastButtons
                      aria-label="Select page">
       </mat-paginator>
-      <div class="px-3 py-3">
-        <h2 class="py-3">Import API</h2>
+<!--      <div class="px-3 py-3">-->
+<!--        <h2 class="py-3">Import API</h2>-->
+<!--        -->
+<!--      </div>-->
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="mb-4">
+      <mat-card-header>
+        <mat-card-title>Import API</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
         <p>To use the Restaurant Import API, please use the following credentials: </p>
         <p><b>Import API Key:</b> {{payload?.importCredentials?.apiKey}}</p>
         @if (getSwaggerUrl() | async; as swaggerUrl) {
@@ -45,7 +67,7 @@
             <button mat-button>See Import API specification<mat-icon fontIcon="upload"></mat-icon></button>
           </a>
         }
-      </div>
-    </div>
+      </mat-card-content>
+    </mat-card>
   }
 </app-view-wrapper>

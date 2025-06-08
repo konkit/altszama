@@ -1,4 +1,5 @@
-import {Component, input} from '@angular/core';
+import { Component, input } from '@angular/core';
+import { ChipComponent } from '../../../../../../../../components/chip/chip.component';
 
 
 @Component({
@@ -6,7 +7,9 @@ import {Component, input} from '@angular/core';
     templateUrl: './payment-status-chip.component.html',
     styleUrls: ['./payment-status-chip.component.scss'],
     standalone: true,
-    imports: []
+  imports: [
+    ChipComponent
+  ]
 })
 export class PaymentStatusChipComponent {
   readonly isPaid = input.required<boolean>();

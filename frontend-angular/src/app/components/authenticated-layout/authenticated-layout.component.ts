@@ -1,19 +1,19 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
-import {MediaMatcher} from '@angular/cdk/layout';
-import {AuthService} from '../../service/auth.service';
-import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {MatToolbar} from '@angular/material/toolbar';
-import {MatIcon} from '@angular/material/icon';
-import {MatSidenav, MatSidenavContainer, MatSidenavModule} from '@angular/material/sidenav';
-import {MatListItem, MatNavList} from '@angular/material/list';
-import {MatDivider} from '@angular/material/divider';
-import {MatIconButton} from '@angular/material/button';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { AuthService } from '../../service/auth.service';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenav, MatSidenavContainer, MatSidenavModule } from '@angular/material/sidenav';
+import { MatListItem, MatListModule, MatNavList } from '@angular/material/list';
+import { MatDivider } from '@angular/material/divider';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-authenticated-layout',
   imports: [
     MatToolbar,
-    MatIcon,
+    MatIconModule,
     MatSidenavContainer,
     MatSidenavModule,
     MatNavList,
@@ -23,7 +23,8 @@ import {MatIconButton} from '@angular/material/button';
     MatDivider,
     RouterOutlet,
     MatIconButton,
-    RouterLinkActive
+    RouterLinkActive,
+    MatListModule
   ],
   standalone: true,
   templateUrl: './authenticated-layout.component.html',
