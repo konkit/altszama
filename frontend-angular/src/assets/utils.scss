@@ -1,8 +1,8 @@
-@use "./utils_flex";
-@use "./utils_container";
-@use "./utils_breakpoints";
-@use "./utils_margin_padding";
-@use "./utils_grid";
+@use "./utils_flex.scss";
+@use "./utils_container.scss";
+@use "./utils_breakpoints.scss";
+@use "./utils_margin_padding.scss";
+@use "./utils_grid.scss";
 
 .pt-24 {
   padding-top: 6rem; /* 96px */
