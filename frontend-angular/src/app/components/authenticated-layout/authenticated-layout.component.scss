@@ -7,6 +7,10 @@
   flex-direction: column;
 }
 
+mat-sidenav-content {
+  max-width: calc(100vw - 361px);
+}
+
 mat-toolbar {
   display: block;
 }
