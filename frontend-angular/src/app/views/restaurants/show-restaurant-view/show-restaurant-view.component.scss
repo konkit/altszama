@@ -6,9 +6,17 @@
   display: flex;
 }
 
-@media (min-width: utils_breakpoints.$md) {
-  .md-px-5 {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+.card-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(300px, 1fr);
+  grid-gap: 1rem;
+
+  @media (min-width: utils_breakpoints.$xl) {
+    grid-template-columns: 1fr 3fr;
   }
+}
+
+.category {
+  color: rgba(0, 0, 0, 0.4);
 }

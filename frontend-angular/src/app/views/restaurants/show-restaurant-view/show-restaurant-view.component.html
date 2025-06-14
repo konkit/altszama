@@ -8,73 +8,83 @@
         </button>
       </div>
 
-      <div class="flex flex-col flex-grow bg-white rounded md-px-5">
-        <div class="flex flex-row">
-          <h1 class="font-bold text-gray-700">Restaurant {{ restaurantResponse.restaurant.name }}</h1>
-          <div class="flex flex-row my-5 ml-auto">
-            <button mat-raised-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
+      <h1>Restaurant {{ restaurantResponse.restaurant.name }}</h1>
+
+      <div class="card-grid">
+        <mat-card>
+          <mat-card-header>
+            <button mat-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
                     [disabled]="restaurantEditorState.name != 'IDLE'"
                     class="mr-3">
-              Edit restaurant details
+              Edit restaurant
               <mat-icon fontIcon="edit"></mat-icon>
             </button>
-            <button mat-raised-button (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
+            <button mat-button (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
                     [disabled]="restaurantEditorState.name != 'IDLE'">
               Delete restaurant
               <mat-icon>delete</mat-icon>
             </button>
-          </div>
-        </div>
+          </mat-card-header>
 
-        @if (restaurantEditorState.name != 'EDITING_RESTAURANT') {
-          <app-restaurant-details [restaurant]="restaurantResponse.restaurant"></app-restaurant-details>
-        }
-        @if (restaurantEditorState.name == 'EDITING_RESTAURANT') {
-          <div class="py-5">
-            <app-edit-restaurant-form [restaurantId]="restaurantResponse.restaurant.id"></app-edit-restaurant-form>
-          </div>
-        }
-
-        <mat-divider></mat-divider>
-
-        <div>
-          <div class="p-3 pt-5">
-            @if (restaurantEditorState.name != 'CREATING_DISH') {
-              <button mat-button
-                [disabled]="restaurantEditorState.name != 'IDLE'"
-                (click)="createDish()"
-                class="mr-3">
-                <mat-icon>add</mat-icon>Create new dish
-              </button>
-            } @else {
-              <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id">
-              </app-create-dish-form>
+          <mat-card-content>
+            @if (restaurantEditorState.name != 'EDITING_RESTAURANT') {
+              <app-restaurant-details [restaurant]="restaurantResponse.restaurant"></app-restaurant-details>
             }
-          </div>
-        </div>
-
-        @for (categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue; track categoryAndDishes) {
-          <div
-            class="p-3">
-            <div class="mb-4"> Category: {{ categoryAndDishes.key || "No Category" }} </div>
-            @for (dish of categoryAndDishes.value; track dish) {
-              <div class="border-t-2">
-                @if (restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id) {
-                  <div
-                    class="w-full">
-                    <app-edit-dish-form [restaurantId]="restaurantResponse.restaurant.id" [dishId]="dish.id">
-                    </app-edit-dish-form>
-                  </div>
-                } @else {
-                  <app-dish-entry [restaurant]="restaurantResponse.restaurant"
-                                  [dish]="dish"
-                                  [restaurantEditorState]="restaurantEditorState">
-                  </app-dish-entry>
-                }
+            @if (restaurantEditorState.name == 'EDITING_RESTAURANT') {
+              <div class="py-5">
+                <app-edit-restaurant-form [restaurantId]="restaurantResponse.restaurant.id"></app-edit-restaurant-form>
               </div>
             }
-          </div>
-        }
+          </mat-card-content>
+
+          <mat-card-actions>
+
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header class="flex flex-row space-between">
+            <mat-card-title>Dishes</mat-card-title>
+            @if (restaurantEditorState.name != 'CREATING_DISH') {
+              <button mat-flat-button
+                      [disabled]="restaurantEditorState.name != 'IDLE'"
+                      (click)="createDish()"
+                      class="mr-3">
+                <mat-icon>add</mat-icon>
+                Create new dish
+              </button>
+            }
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="p-3">
+              @if (restaurantEditorState.name == 'CREATING_DISH') {
+                <app-create-dish-form [restaurantId]="restaurantResponse.restaurant.id">
+                </app-create-dish-form>
+              }
+            </div>
+
+            @for (categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue; track categoryAndDishes) {
+              <div class="mb-4 category"> Category: {{ categoryAndDishes.key || "No Category" }}</div>
+              @for (dish of categoryAndDishes.value; track dish) {
+                <div class="border-t-2">
+                  @if (restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id) {
+                    <div
+                      class="w-full">
+                      <app-edit-dish-form [restaurantId]="restaurantResponse.restaurant.id" [dishId]="dish.id">
+                      </app-edit-dish-form>
+                    </div>
+                  } @else {
+                    <app-dish-entry [restaurant]="restaurantResponse.restaurant"
+                                    [dish]="dish"
+                                    [restaurantEditorState]="restaurantEditorState">
+                    </app-dish-entry>
+                  }
+                </div>
+              }
+            }
+          </mat-card-content>
+        </mat-card>
       </div>
     </app-view-wrapper>
   }
