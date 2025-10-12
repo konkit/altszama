@@ -1,27 +1,22 @@
-import {Component, computed, OnInit, signal} from '@angular/core';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
-import {FrontendConfigService} from '../../../service/frontend-config.service';
-import {TestAuthControllerService, TestUserLoginPayload, User} from '../../../../frontend-client';
-import {AuthService} from '../../../service/auth.service';
-import {Router} from '@angular/router';
-import {ButtonComponent} from '../../../components/button/button.component';
-import {FormsModule} from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
+import { Component, computed, OnInit, signal } from '@angular/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { TestAuthControllerService, TestUserLoginPayload, User } from '../../../../frontend-client';
+import { AuthService } from '../../../service/auth.service';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-test-login-view',
   templateUrl: './test-login-view.component.html',
   styleUrl: './test-login-view.component.scss',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, ButtonComponent, FormsModule, MatInputModule]
+  imports: [MatToolbarModule, MatButtonModule, FormsModule, MatInputModule]
 })
 export class TestLoginViewComponent implements OnInit {
 
-  constructor(private frontendConfigService: FrontendConfigService,
-              private testAuthControllerService: TestAuthControllerService,
-              private authService: AuthService,
-              private router: Router) {
+  constructor(private testAuthControllerService: TestAuthControllerService,
+              private authService: AuthService) {
   }
 
   usersList = signal<User[]>([]);
