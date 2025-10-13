@@ -1,5 +1,11 @@
 <app-view-wrapper>
-  <h1 class="font-bold text-gray-700">Restaurants</h1>
+  <div class="flex flex-row items-center">
+    <h1 class="font-bold text-gray-700">Restaurants</h1>
+    <button mat-flat-button color="primary" routerLink="/restaurants/create" class="ml-auto">
+      Create new restaurant
+      <mat-icon fontIcon="add" class="ml-3"></mat-icon>
+    </button>
+  </div>
 
 <!--  <div class="flex flex-row">-->
 <!--    <h1 class="font-bold text-gray-700">Restaurants</h1>-->
@@ -12,16 +18,7 @@
 <!--  </div>-->
 
   @if (indexResponse$ | async; as payload) {
-    <mat-card class="mb-4">
-      <mat-card-header class="flex space-between items-center mb-4">
-        <mat-card-title>Restaurants list</mat-card-title>
-        <button mat-flat-button color="primary" routerLink="/restaurants/create">
-          Create new restaurant
-          <mat-icon fontIcon="add" class="ml-3"></mat-icon>
-        </button>
-      </mat-card-header>
-
-      <mat-card-content>
+    <div class="mb-4">
       <table mat-table [dataSource]="dataSource" class="clickable-table">
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -47,12 +44,7 @@
                      showFirstLastButtons
                      aria-label="Select page">
       </mat-paginator>
-<!--      <div class="px-3 py-3">-->
-<!--        <h2 class="py-3">Import API</h2>-->
-<!--        -->
-<!--      </div>-->
-      </mat-card-content>
-    </mat-card>
+    </div>
 
     <mat-card class="mb-4">
       <mat-card-header>
