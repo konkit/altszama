@@ -3,81 +3,96 @@
 
   @if (todaysOrders$ | async; as todayOrders) {
 
+    <h2>You ordered:</h2>
 
-    <mat-card class="mb-4">
-      <mat-card-header>
-        <mat-card-title class="mb-4">You ordered:</mat-card-title>
-      </mat-card-header>
+    @if (todayOrders.currentOrderEntries.length == 0) {
+      <mat-list>
+        <mat-list-item>
+          You haven't ordered anything today yet.
+        </mat-list-item>
+      </mat-list>
+    }
 
-      <mat-card-content>
-        @if (todayOrders.currentOrderEntries.length > 0) {
-          <mat-action-list>
-            @for (orderEntry of todayOrders.currentOrderEntries; track orderEntry) {
-              @for (dishEntry of orderEntry.dishEntries; track dishEntry) {
-                <mat-list-item (click)="goToOrder(orderEntry.orderId)">
-                  <mat-icon matListItemIcon>restaurant</mat-icon>
-                  <div matListItemTitle>
-                    <b>{{ dishEntry.dish.name }}</b>&nbsp;from&nbsp;<b>{{ dishEntry.restaurantName }}</b>
-                  </div>
+    @if (todayOrders.currentOrderEntries.length > 0) {
+      <div class="grid grid-cols-1 md-grid-cols-2 lg-grid-cols-3 gap-4 mb-4">
+      @for (orderEntry of todayOrders.currentOrderEntries; track orderEntry) {
+        @for (dishEntry of orderEntry.dishEntries; track dishEntry) {
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                {{ dishEntry.restaurantName }}
+              </mat-card-title>
+            </mat-card-header>
 
-                  <div matListItemMeta>
-                    <app-chip class="ml-auto" data-cy="order-status-chip">
-                      Status: {{ getOrderStateString(orderEntry.orderState) }}
-                    </app-chip>
-                  </div>
-                </mat-list-item>
-              }
-            }
-          </mat-action-list>
+            <mat-card-content class="grow">
+              <div>
+                <p>
+                  <b>{{ dishEntry.dish.name }}</b>
+                </p>
+              </div>
+
+              <p>
+                Order status:
+                <app-chip class="ml-2" data-cy="order-status-chip">
+                  {{ getOrderStateString(orderEntry.orderState) }}
+                </app-chip>
+              </p>
+            </mat-card-content>
+
+            <mat-card-actions>
+              <button mat-button (click)="goToOrder(orderEntry.orderId)">
+                View order
+              </button>
+            </mat-card-actions>
+          </mat-card>
         }
+      }
+      </div>
+    }
 
-        @if (todayOrders.currentOrderEntries.length == 0) {
-          <mat-list>
-            <mat-list-item>
-              You haven't ordered anything today yet.
-            </mat-list-item>
-          </mat-list>
-        }
-      </mat-card-content>
-    </mat-card>
+    <div class="flex space-between items-center mb-4">
+      <h2>Your team is ordering today from:</h2>
+      <button mat-flat-button (click)="goToCreateOrder()" class="ml-auto">
+        <mat-icon>add</mat-icon>
+        Add new order
+      </button>
+    </div>
 
-    <mat-card class="mb-4">
-      <mat-card-header class="flex space-between items-center mb-4">
-        <mat-card-title>Your team is ordering today from:</mat-card-title>
-        <button mat-flat-button (click)="goToCreateOrder()">
-          <mat-icon>add</mat-icon>
-          Add new order
-        </button>
-      </mat-card-header>
+    @if (todayOrders.ordersList.length > 0) {
+      <div class="grid grid-cols-1 md-grid-cols-2 lg-grid-cols-3 gap-4 mb-4">
+      @for (element of todayOrders.ordersList; track element) {
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              {{ element.restaurantName }}
+            </mat-card-title>
+          </mat-card-header>
 
-      <mat-card-content>
-        @if (todayOrders.ordersList.length > 0) {
-          <mat-action-list>
-            @for (element of todayOrders.ordersList; track element) {
-              <mat-list-item (click)="goToOrder(element.id)">
-                <mat-icon matListItemIcon>restaurant</mat-icon>
-                <div matListItemTitle>
-                  <span>{{ element.restaurantName }}</span>
-                  <span class="created-by ml-2">by {{ element.orderCreatorUsername }}</span>
-                </div>
-                <div matListItemMeta>
-                  <app-chip class="ml-2" data-cy="order-status-chip">
-                    Status: {{ getOrderStateString(element.orderState) }}
-                  </app-chip>
-                </div>
-              </mat-list-item>
-            }
-          </mat-action-list>
-        }
+          <mat-card-content class="grow">
+            <p>Order creator: {{ element.orderCreatorUsername }}</p>
+            <p>Order status:
+              <app-chip class="ml-2" data-cy="order-status-chip">
+                {{ getOrderStateString(element.orderState) }}
+              </app-chip>
+            </p>
+          </mat-card-content>
 
-        @if (todayOrders.ordersList.length === 0) {
-          <mat-list>
-            <mat-list-item>
-              <div>No orders yet</div>
-            </mat-list-item>
-          </mat-list>
-        }
-      </mat-card-content>
-    </mat-card>
+          <mat-card-actions>
+            <button mat-button (click)="goToOrder(element.id)">
+              View order
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+      </div>
+    }
+
+    @if (todayOrders.ordersList.length === 0) {
+      <mat-list>
+        <mat-list-item>
+          <div>No orders yet</div>
+        </mat-list-item>
+      </mat-list>
+    }
   }
 </app-view-wrapper>

@@ -1,3 +1,5 @@
+@use "../../../../assets/utils_breakpoints";
+
 :host {
   display: flex;
   width: 100%;
@@ -24,4 +26,17 @@
 
 .line-height-2rem {
   line-height: 2rem;
+}
+
+.card-grid {
+  @apply grid-cols-1 gap-4 mb-4;
+  display: grid;
+
+  @media (min-width: utils_breakpoints.$md) {
+    @apply grid-cols-2;
+  }
+
+  @media (min-width: utils_breakpoints.$lg) {
+    @apply grid-cols-3;
+  }
 }
