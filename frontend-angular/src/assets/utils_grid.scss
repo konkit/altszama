@@ -1,3 +1,5 @@
+@use './utils_breakpoints';
+
 .grid {
   display: grid;
 }
@@ -11,5 +13,33 @@
 @for $i from 0 through 20 {
   .gap-#{$i} {
     gap: ($i * 0.25rem);
+  }
+}
+
+@media (min-width: utils_breakpoints.$md) {
+  @for $i from 0 through 20 {
+    .md-grid-cols-#{$i} {
+      grid-template-columns: repeat($i, minmax(0, 1fr));
+    }
+  }
+
+  @for $i from 0 through 20 {
+    .md-gap-#{$i} {
+      gap: ($i * 0.25rem);
+    }
+  }
+}
+
+@media (min-width: utils_breakpoints.$lg) {
+  @for $i from 0 through 20 {
+    .lg-grid-cols-#{$i} {
+      grid-template-columns: repeat($i, minmax(0, 1fr));
+    }
+  }
+
+  @for $i from 0 through 20 {
+    .lg-gap-#{$i} {
+      gap: ($i * 0.25rem);
+    }
   }
 }
