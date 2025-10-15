@@ -7,16 +7,6 @@
     </button>
   </div>
 
-<!--  <div class="flex flex-row">-->
-<!--    <h1 class="font-bold text-gray-700">Restaurants</h1>-->
-<!--    <div class="my-5 flex flex-row ml-auto">-->
-<!--      <button mat-raised-button color="primary" routerLink="/restaurants/create">-->
-<!--        Create new restaurant-->
-<!--        <mat-icon fontIcon="add" class="ml-3"></mat-icon>-->
-<!--      </button>-->
-<!--    </div>-->
-<!--  </div>-->
-
   @if (indexResponse$ | async; as payload) {
     <div class="mb-4">
       <table mat-table [dataSource]="dataSource" class="clickable-table">
