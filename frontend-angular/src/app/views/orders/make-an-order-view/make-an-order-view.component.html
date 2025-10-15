@@ -52,11 +52,11 @@
                 }
               </div>
               <div>
-                <p>Afterwards, please fill the approximate time of delivery:</p>
+                <p>Afterwards, please fill the estimated time of delivery:</p>
               </div>
               <div>
                 <mat-form-field class="time-form-field">
-                  <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="formGroup.controls.approxTimeOfDelivery" placeholder="Time">
+                  <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="formGroup.controls.approxTimeOfDelivery" placeholder="ETA">
                   <mat-icon matSuffix (click)="picker.open()">watch_later</mat-icon>
                 </mat-form-field>
                 <ngx-mat-timepicker #picker></ngx-mat-timepicker>
