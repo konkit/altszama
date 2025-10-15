@@ -19,6 +19,7 @@
       </button>
     </div>
   } @else {
+    @if (showNarrowLayout) {
     <div>
       <mat-vertical-stepper [linear]="true">
         <mat-step [stepControl]="this.orderForm.controls.restaurantId">
@@ -45,7 +46,6 @@
           </div>
         </mat-step>
 
-        @if (showNarrowLayout) {
           <mat-step>
             <ng-template matStepLabel>Order time</ng-template>
             <app-order-time-form class="mr-20 mb-5"
@@ -67,22 +67,50 @@
             <button mat-raised-button matStepperPrevious>Back</button>
             <button mat-flat-button (click)="submitForm($event)">Create</button>
           </mat-step>
-        } @else {
-          <mat-step>
-            <ng-template matStepLabel>Fill details</ng-template>
-            <div class="grid grid-cols-3 py-4 pr-10">
-              <app-order-time-form class="mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder">
-              </app-order-time-form>
-              <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData">
-              </app-delivery-data-form>
-              <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData">
-              </app-payment-data-form>
-            </div>
-            <button mat-raised-button matStepperPrevious>Back</button>
-            <button mat-flat-button (click)="submitForm($event)">Create</button>
-          </mat-step>
-        }
       </mat-vertical-stepper>
     </div>
+    } @else{
+      <div>
+      <mat-stepper [linear]="true">
+        <mat-step [stepControl]="this.orderForm.controls.restaurantId">
+          <ng-template matStepLabel>Select restaurant</ng-template>
+          <div class="py-4">
+            <mat-form-field class="w-full">
+              <input matInput
+                     [value]="restaurantsFilter"
+                     (input)="filterChanged($event)"
+                     placeholder="Filter restaurants by name"/>
+            </mat-form-field>
+            <mat-selection-list [multiple]="false">
+              <cdk-virtual-scroll-viewport itemSize="5">
+                <div *cdkVirtualFor="let item of restaurantsTableDataSource.data">
+                  <mat-list-option (click)="this.orderForm.controls.restaurantId.setValue(item.id)"
+                                   [selected]="this.orderForm.controls.restaurantId.value === item.id">
+                    {{ item.name }}
+                  </mat-list-option>
+                </div>
+              </cdk-virtual-scroll-viewport>
+            </mat-selection-list>
+            <button mat-raised-button matStepperPrevious (click)="backToTodayOrders()">Back</button>
+            <button mat-flat-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Fill details</ng-template>
+          <div class="grid grid-cols-3 py-4 pr-10 gap-8">
+            <app-order-time-form class="mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder">
+            </app-order-time-form>
+            <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData">
+            </app-delivery-data-form>
+            <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData">
+            </app-payment-data-form>
+          </div>
+          <button mat-raised-button matStepperPrevious>Back</button>
+          <button mat-flat-button (click)="submitForm($event)">Create</button>
+        </mat-step>
+      </mat-stepper>
+      </div>
+    }
   }
 </app-view-wrapper>
