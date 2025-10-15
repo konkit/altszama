@@ -1,6 +1,6 @@
 <div>
   <h3>Order time</h3>
-  <mat-form-field>
+  <mat-form-field class="w-full">
     <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="timeOfOrderControl()" placeholder="16:00">
     <mat-icon matSuffix (click)="picker.open()">watch_later</mat-icon>
   </mat-form-field>
@@ -8,7 +8,7 @@
 
   @if (timeOfDeliveryControl) {
     <h3>Delivery time</h3>
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="timeOfDeliveryControl" placeholder="16:00">
       <mat-icon matSuffix (click)="picker.open()">watch_later</mat-icon>
     </mat-form-field>

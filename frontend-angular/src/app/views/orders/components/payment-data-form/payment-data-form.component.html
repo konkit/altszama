@@ -14,9 +14,9 @@
   </div>
 
   <div class="pb-4">
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>Bank transfer number</mat-label>
-      <input matInput [formControl]="paymentDataForm().controls.bankTransferNumber"/>
+      <input matInput [formControl]="paymentDataForm().controls.bankTransferNumber" />
     </mat-form-field>
   </div>
 
@@ -27,9 +27,9 @@
   </div>
 
   <div>
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>BLIK phone number</mat-label>
-      <input matInput [formControl]="paymentDataForm().controls.blikPhoneNumber"/>
+      <input matInput [formControl]="paymentDataForm().controls.blikPhoneNumber" [disabled]="paymentDataForm().controls.paymentByBlik.value === false"/>
     </mat-form-field>
   </div>
 </div>
