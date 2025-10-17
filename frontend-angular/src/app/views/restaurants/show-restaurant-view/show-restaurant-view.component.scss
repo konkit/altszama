@@ -12,9 +12,9 @@
   grid-template-columns: minmax(300px, 1fr);
   grid-gap: 1rem;
 
-  @media (min-width: utils_breakpoints.$xl) {
-    grid-template-columns: 1fr 3fr;
-  }
+  //@media (min-width: utils_breakpoints.$xl) {
+  //  grid-template-columns: 1fr 3fr;
+  //}
 }
 
 .category {
