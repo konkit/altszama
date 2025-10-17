@@ -8,24 +8,26 @@
         </button>
       </div>
 
-      <h1>Restaurant {{ restaurantResponse.restaurant.name }}</h1>
+      <div class="flex flex-row items-center">
+        <h1>Restaurant {{ restaurantResponse.restaurant.name }}</h1>
+
+        <span class="ml-auto">
+          <button mat-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
+                  [disabled]="restaurantEditorState.name != 'IDLE'"
+                  class="mr-3">
+            Edit restaurant
+            <mat-icon fontIcon="edit"></mat-icon>
+          </button>
+          <button mat-button (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
+                  [disabled]="restaurantEditorState.name != 'IDLE'">
+            Delete restaurant
+            <mat-icon>delete</mat-icon>
+          </button>
+        </span>
+      </div>
 
       <div class="card-grid">
         <mat-card>
-          <mat-card-header>
-            <button mat-button (click)="editRestaurant(restaurantResponse.restaurant.id)"
-                    [disabled]="restaurantEditorState.name != 'IDLE'"
-                    class="mr-3">
-              Edit restaurant
-              <mat-icon fontIcon="edit"></mat-icon>
-            </button>
-            <button mat-button (click)="deleteRestaurant(restaurantResponse.restaurant.id)"
-                    [disabled]="restaurantEditorState.name != 'IDLE'">
-              Delete restaurant
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-card-header>
-
           <mat-card-content>
             @if (restaurantEditorState.name != 'EDITING_RESTAURANT') {
               <app-restaurant-details [restaurant]="restaurantResponse.restaurant"></app-restaurant-details>
