@@ -52,9 +52,9 @@ class OrderControllerDataService {
   }
 
   fun getAllOrdersData(currentUserTeam: Team): AllOrdersResponse {
-    val orderList = orderRepository.findAllByTeam(currentUserTeam)
+    val orderList = orderRepository.findAllByTeamOrderByOrderDateDesc(currentUserTeam)
 
-    return AllOrdersResponse.fromOrderList(orderList.asReversed())
+    return AllOrdersResponse.fromOrderList(orderList)
   }
 
   fun getShowData(orderId: String, currentUser: User, currentUserTeam: Team): ShowOrderResponse {
