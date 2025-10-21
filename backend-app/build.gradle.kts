@@ -1,5 +1,5 @@
 plugins {
-  id("org.springframework.boot") version "3.4.3"
+  id("org.springframework.boot") version "3.5.6"
   id("io.spring.dependency-management") version "1.1.0"
   kotlin("jvm") version "2.1.10"
   kotlin("plugin.spring") version "1.7.22"
@@ -18,15 +18,15 @@ java.sourceCompatibility = JavaVersion.VERSION_21
 
 dependencies {
   // Spring Boot
-  implementation("org.springframework.boot:spring-boot-starter-data-mongodb:3.4.3")
-  implementation("org.springframework.boot:spring-boot-starter-security:3.4.3")
-  implementation("org.springframework.boot:spring-boot-starter-web:3.4.3")
-  implementation("org.springframework.boot:spring-boot-starter-validation:3.3.4")
-  implementation("org.springframework.boot:spring-boot-starter-actuator:3.3.4")
-  developmentOnly("org.springframework.boot:spring-boot-devtools:3.3.4")
+  implementation("org.springframework.boot:spring-boot-starter-data-mongodb:3.5.6")
+  implementation("org.springframework.boot:spring-boot-starter-security:3.5.6")
+  implementation("org.springframework.boot:spring-boot-starter-web:3.5.6")
+  implementation("org.springframework.boot:spring-boot-starter-validation:3.5.6")
+  implementation("org.springframework.boot:spring-boot-starter-actuator:3.5.6")
+  developmentOnly("org.springframework.boot:spring-boot-devtools:3.5.6")
 
   // Web push notifications
-  implementation("nl.martijndwars:web-push:5.1.1")
+  implementation("nl.martijndwars:web-push:5.1.2")
   implementation("org.bouncycastle:bcprov-jdk18on:1.78")
 
   // Jackson
@@ -52,7 +52,7 @@ dependencies {
   implementation("io.arrow-kt:arrow-core:1.2.4")
 
   // SpringDoc
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
 
   // Metrics
   implementation("io.micrometer:micrometer-registry-prometheus:1.13.5")
