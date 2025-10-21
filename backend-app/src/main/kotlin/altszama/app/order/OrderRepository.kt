@@ -7,7 +7,8 @@ import java.time.LocalDate
 
 interface OrderRepository : MongoRepository<Order, String> {
   fun findByTeamAndOrderDate(currentUserTeam: Team, orderDate: LocalDate): List<Order>
-  fun findAllByTeam(currentUserTeam: Team): List<Order>
+
+  fun findAllByTeamOrderByOrderDateDesc(currentUserTeam: Team): List<Order>
 
   fun findByRestaurantId(restaurantId: String): List<Order>
 
