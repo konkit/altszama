@@ -77,7 +77,8 @@ class BalanceService {
           -orderEntry.getFinalPrice(orderEntryRepository.findByOrderId(orderEntry.order.id).size)
         )
       }
-      .toMap()
+      .groupBy { pair -> pair.first }
+      .mapValues { entry -> entry.value.sumOf { pair -> pair.second } }
       .entries
 
     return (tuples + tuples2)
