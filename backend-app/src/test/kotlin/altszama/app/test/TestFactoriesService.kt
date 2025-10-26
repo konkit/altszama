@@ -110,10 +110,10 @@ class TestFactoriesService {
     return Pair(restaurant, listOf(dish1, dish2))
   }
 
-  fun createOrder(restaurant: Restaurant, user1: User, team1: Team, deliveryData: DeliveryData = DeliveryData()): Order {
+  fun createOrder(restaurant: Restaurant, user1: User, team1: Team, orderDate: LocalDate = LocalDate.now(), deliveryData: DeliveryData = DeliveryData()): Order {
     val orderSaveRequest = OrderSaveRequest(
       restaurantId = restaurant.id,
-      orderDate = LocalDate.now(),
+      orderDate = orderDate,
       timeOfOrder = LocalTime.of(14, 0),
       deliveryData = deliveryData,
       paymentData = PaymentData()
