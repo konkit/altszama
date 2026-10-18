@@ -37,15 +37,12 @@ model/googlePayload.ts
 model/groupedOrderEntry.ts
 model/importCredentials.ts
 model/indexResponse.ts
-model/localTime.ts
 model/models.ts
 model/orderEntryDto.ts
 model/orderEntrySaveRequest.ts
 model/orderEntryUpdateRequest.ts
 model/orderHistory.ts
-model/orderHistoryCreatedEntry.ts
 model/orderHistoryEntry.ts
-model/orderHistoryParticipatedEntry.ts
 model/orderSaveRequest.ts
 model/orderSaveResponse.ts
 model/orderUpdateRequest.ts

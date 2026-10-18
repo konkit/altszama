@@ -1,5 +1,5 @@
-import {HttpParameterCodec} from '@angular/common/http';
-import {Param} from './param';
+import { HttpParameterCodec } from '@angular/common/http';
+import { Param } from './param';
 
 export interface ConfigurationParameters {
     /**

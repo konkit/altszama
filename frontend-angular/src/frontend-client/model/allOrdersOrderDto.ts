@@ -15,8 +15,8 @@ export interface AllOrdersOrderDto {
     orderCreatorUsername: string;
     orderDate: string;
     orderState: AllOrdersOrderDto.OrderStateEnum;
-    createdByCurrentUser?: boolean;
-    currentUserParticipates?: boolean;
+    createdByCurrentUser: boolean;
+    currentUserParticipates: boolean;
 }
 export namespace AllOrdersOrderDto {
     export type OrderStateEnum = 'CREATED' | 'ORDERING' | 'ORDERED' | 'DELIVERED' | 'REJECTED';

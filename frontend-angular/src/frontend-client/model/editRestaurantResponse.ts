@@ -12,8 +12,8 @@
 export interface EditRestaurantResponse { 
     id: string;
     name: string;
-    address: string;
     telephone: string;
+    address: string;
     url: string;
 }
 

@@ -20,7 +20,6 @@ export * from './googlePayload';
 export * from './groupedOrderEntry';
 export * from './importCredentials';
 export * from './indexResponse';
-export * from './localTime';
 export * from './orderEntryDto';
 export * from './orderEntrySaveRequest';
 export * from './orderEntryUpdateRequest';

@@ -21,3 +21,8 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+
+# The generator (7.11) merges the fields of every oneOf member into each history subtype.
+# These two are maintained by hand to match OrderHistory.kt in the backend.
+model/orderHistoryCreatedEntry.ts
+model/orderHistoryParticipatedEntry.ts
