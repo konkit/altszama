@@ -28,9 +28,13 @@ class BalanceService {
       .filter { orderEntry -> orderNotCreatedByMe(orderEntry, currentUser) && orderAlreadyOrdered(orderEntry.order) }
 
     val orderHistoryEntries = createOrderHistoryEntries(ordersUserCreated, orderEntriesUserParticipatedIn)
-    val owedMoneyMap = createOwedMoneyMap(ordersUserCreated, orderEntriesUserParticipatedIn)
+    val owedMoneyByUser = createOwedMoneyEntries(currentUser, ordersUserCreated, orderEntriesUserParticipatedIn)
+    val owedMoneyMap = owedMoneyByUser
+      .groupBy { entry -> entry.username }
+      .mapValues { (_, entries) -> entries.sumOf { entry -> entry.amount } }
+      .filterValues { amount -> amount != 0 }
 
-    return OrderHistory(orderHistoryEntries, owedMoneyMap)
+    return OrderHistory(orderHistoryEntries, owedMoneyMap, owedMoneyByUser)
   }
 
   private fun createOrderHistoryEntries(
@@ -53,23 +57,23 @@ class BalanceService {
       .sortedByDescending { it.orderDate }
   }
 
-  private fun createOwedMoneyMap(
+  private fun createOwedMoneyEntries(
+    currentUser: User,
     ordersUserCreated: List<Order>,
     orderEntriesUserParticipatedIn: List<OrderEntry>
-  ): Map<String, Int> {
-    val tuples = ordersUserCreated
+  ): List<OwedMoneyEntry> {
+    val owedToCurrentUser = ordersUserCreated
       .flatMap { order ->
         val userCount = orderEntryRepository.countByOrder(order)
         val orderEntries = orderEntryRepository.findByOrderAndPaymentStatus(order, OrderEntryPaymentStatus.UNPAID)
 
         orderEntries
+          // Nobody owes money to themselves, even if the owner's own entry was marked as unpaid
+          .filter { orderEntry -> orderEntry.user.id != currentUser.id }
           .map { orderEntry -> Pair(orderEntry.user, orderEntry.getFinalPrice(userCount)) }
       }
-      .groupBy { pair -> pair.first }
-      .mapValues { entry -> entry.value.sumOf { pair -> pair.second } }
-      .entries
 
-    val tuples2 = orderEntriesUserParticipatedIn
+    val owedByCurrentUser = orderEntriesUserParticipatedIn
       .filter { orderEntry -> orderEntry.paymentStatus == OrderEntryPaymentStatus.UNPAID }
       .map { orderEntry ->
         Pair(
@@ -77,15 +81,16 @@ class BalanceService {
           -orderEntry.getFinalPrice(orderEntryRepository.findByOrderId(orderEntry.order.id).size)
         )
       }
-      .groupBy { pair -> pair.first }
-      .mapValues { entry -> entry.value.sumOf { pair -> pair.second } }
-      .entries
 
-    return (tuples + tuples2)
-      .groupBy { it.key }
-      .map { entry -> Pair(entry.key.username, entry.value.sumOf { it.value }) }
-      .filter { it.second != 0 }
-      .toMap()
+    // Grouped by user id, so people with the same name are kept apart
+    return (owedToCurrentUser + owedByCurrentUser)
+      .groupBy { (user, _) -> user.id }
+      .map { (_, pairs) ->
+        val user = pairs.first().first
+        OwedMoneyEntry(user.id, user.username, pairs.sumOf { (_, amount) -> amount })
+      }
+      .filter { entry -> entry.amount != 0 }
+      .sortedByDescending { entry -> entry.amount }
   }
 
   private fun orderAlreadyOrdered(order: Order): Boolean =

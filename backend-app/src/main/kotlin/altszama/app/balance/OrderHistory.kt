@@ -5,7 +5,15 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 
 
-data class OrderHistory(val entries: List<OrderHistoryEntry>, val owedMoney: Map<String, Int>)
+data class OrderHistory(
+  val entries: List<OrderHistoryEntry>,
+  // Kept for older clients. Keyed by username, so people with the same name are summed together.
+  val owedMoney: Map<String, Int>,
+  // Positive amount: the user owes you; negative: you owe them
+  val owedMoneyByUser: List<OwedMoneyEntry> = emptyList()
+)
+
+data class OwedMoneyEntry(val userId: String, val username: String, val amount: Int)
 
 @Schema(
   oneOf = arrayOf(

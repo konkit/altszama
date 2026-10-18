@@ -1,5 +1,6 @@
 package altszama.app.balance
 
+import altszama.app.auth.UserService
 import altszama.app.order.OrderService
 import altszama.app.orderEntry.OrderEntryService
 import altszama.app.test.AbstractIntegrationTest
@@ -21,6 +22,52 @@ class BalanceServiceOwedMoneyTest : AbstractIntegrationTest() {
 
   @Autowired
   private lateinit var testFactoriesService: TestFactoriesService
+
+  @Autowired
+  private lateinit var userService: UserService
+
+  @Test()
+  fun owedMoneyByUserShouldKeepPeopleWithTheSameNameApart() {
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
+    val user2 = testFactoriesService.createUser2(team1)
+    val user2Namesake = userService.createNewUser(user2.username, "james.other@${team1.domain}")
+
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
+    testFactoriesService.createOrderEntry(order, dishes[0], user2, team1)
+    testFactoriesService.createOrderEntry(order, dishes[1], user2Namesake, team1)
+    orderService.setAsOrdered(order.id, "", user1)
+
+    val orderHistory = balanceService.getOrderHistory(user1)
+
+    assertThat(orderHistory.owedMoneyByUser).containsExactlyInAnyOrder(
+      OwedMoneyEntry(user2.id, user2.username, dishes[0].price),
+      OwedMoneyEntry(user2Namesake.id, user2Namesake.username, dishes[1].price),
+    )
+    // The username-keyed map for older clients sums people with the same name
+    assertThat(orderHistory.owedMoney).isEqualTo(mapOf(user2.username to dishes[0].price + dishes[1].price))
+  }
+
+  @Test()
+  fun orderOwnerShouldNotOweMoneyToThemselves() {
+    val team1 = testFactoriesService.createTeam1()
+    val user1 = testFactoriesService.createUser1(team1)
+    val user2 = testFactoriesService.createUser2(team1)
+
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+    val order = testFactoriesService.createOrder(restaurant, user1, team1)
+    val ownerEntry = testFactoriesService.createOrderEntry(order, dishes[0], user1, team1)
+    testFactoriesService.createOrderEntry(order, dishes[1], user2, team1)
+    orderService.setAsOrdered(order.id, "", user1)
+    orderEntryService.setAsUnpaid(ownerEntry.id)
+
+    val orderHistory = balanceService.getOrderHistory(user1)
+
+    assertThat(orderHistory.owedMoneyByUser).containsExactly(OwedMoneyEntry(user2.id, user2.username, dishes[1].price))
+    assertThat(orderHistory.owedMoney).isEqualTo(mapOf(user2.username to dishes[1].price))
+  }
 
   @Test()
   fun owedMoneyShouldBeCorrectForSingleOrderedOrder() {
