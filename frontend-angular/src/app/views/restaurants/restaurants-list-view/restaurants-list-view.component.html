@@ -1,55 +1,91 @@
 <app-view-wrapper>
-  <div class="flex flex-row items-center">
+  <header class="page-header">
     <h1>Restaurants</h1>
-    <button mat-flat-button color="primary" routerLink="/restaurants/create" class="ml-auto">
-      Create new restaurant
-      <mat-icon fontIcon="add" class="ml-3"></mat-icon>
-    </button>
+    <a mat-flat-button routerLink="/restaurants/create">
+      <mat-icon>add</mat-icon>
+      New restaurant
+    </a>
+  </header>
+
+  @if (!hasAnyRestaurants) {
+    <div class="callout" data-cy="no-restaurants">
+      <mat-icon>storefront</mat-icon>
+      <div>
+        <div class="callout-title">No restaurants yet</div>
+        <div class="callout-text">Add a restaurant and its dishes, so your team can order from it.</div>
+      </div>
+    </div>
+  }
+
+  <div class="results" [class.hidden]="!hasAnyRestaurants">
+    <table mat-table [dataSource]="dataSource" class="clickable-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let restaurant">
+          <a class="row-link" [routerLink]="['/restaurants', restaurant.id]">{{ restaurant.name }}</a>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="dishCount">
+        <th mat-header-cell *matHeaderCellDef>Dishes</th>
+        <td mat-cell *matCellDef="let restaurant">{{ restaurant.dishCount }}</td>
+      </ng-container>
+      <ng-container matColumnDef="lastCrawled">
+        <th mat-header-cell *matHeaderCellDef>Menu auto-updated</th>
+        <td mat-cell *matCellDef="let restaurant">
+          @if (restaurant.lastCrawled) {
+            {{ restaurant.lastCrawled | relativeDate }}
+          } @else {
+            <span class="text-muted">Never</span>
+          }
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="lastEdited">
+        <th mat-header-cell *matHeaderCellDef>Last edited</th>
+        <td mat-cell *matCellDef="let restaurant">
+          @if (restaurant.lastEdited) {
+            {{ restaurant.lastEdited | relativeDate }}
+          } @else {
+            <span class="text-muted">Never</span>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/restaurants', row.id]"></tr>
+    </table>
+    <mat-paginator [pageSize]="10"
+                   [pageSizeOptions]="[10, 25, 50]"
+                   showFirstLastButtons
+                   aria-label="Select page">
+    </mat-paginator>
   </div>
 
-  @if (indexResponse$ | async; as payload) {
-    <div class="mb-4">
-      <table mat-table [dataSource]="dataSource" class="clickable-table">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-        <ng-container matColumnDef="dishCount">
-          <th mat-header-cell *matHeaderCellDef> Dish Count </th>
-          <td mat-cell *matCellDef="let element"> {{element.dishCount}} </td>
-        </ng-container>
-        <ng-container matColumnDef="lastCrawled">
-          <th mat-header-cell *matHeaderCellDef> Last Crawled </th>
-          <td mat-cell *matCellDef="let element"> {{element.lastCrawled | relativeDate}} </td>
-        </ng-container>
-        <ng-container matColumnDef="lastEdited">
-          <th mat-header-cell *matHeaderCellDef> Last Edited </th>
-          <td mat-cell *matCellDef="let element"> {{element.lastEdited | relativeDate}} </td>
-        </ng-container>
+  <mat-expansion-panel class="import-api" data-cy="import-api-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Import API</mat-panel-title>
+      <mat-panel-description>Add restaurants and menus automatically</mat-panel-description>
+    </mat-expansion-panel-header>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/restaurants/', row.id]"></tr>
-      </table>
-      <mat-paginator [pageSize]="10"
-                     showFirstLastButtons
-                     aria-label="Select page">
-      </mat-paginator>
+    <p>Use this key to send restaurants and dishes to AltSzama from your own scripts.</p>
+
+    <div class="api-key">
+      <span class="label">API key</span>
+      <code data-cy="import-api-key">{{ isApiKeyVisible ? apiKey : '••••••••••••••••' }}</code>
+      <button mat-icon-button type="button" (click)="toggleApiKeyVisibility()"
+              [matTooltip]="isApiKeyVisible ? 'Hide key' : 'Show key'"
+              [attr.aria-label]="isApiKeyVisible ? 'Hide API key' : 'Show API key'">
+        <mat-icon>{{ isApiKeyVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <button mat-icon-button type="button" (click)="copyApiKey()" matTooltip="Copy key" aria-label="Copy API key">
+        <mat-icon>content_copy</mat-icon>
+      </button>
     </div>
 
-    <mat-card class="mb-4">
-      <mat-card-header>
-        <mat-card-title>Import API</mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <p>To use the Restaurant Import API, please use the following credentials: </p>
-        <p><b>Import API Key:</b> {{payload?.importCredentials?.apiKey}}</p>
-        @if (getSwaggerUrl() | async; as swaggerUrl) {
-          <a [href]="swaggerUrl">
-            <button mat-button>See Import API specification<mat-icon fontIcon="upload"></mat-icon></button>
-          </a>
-        }
-      </mat-card-content>
-    </mat-card>
-  }
+    @if (swaggerUrl$ | async; as swaggerUrl) {
+      <a mat-button [href]="swaggerUrl" target="_blank" rel="noopener">
+        <mat-icon>description</mat-icon>
+        API documentation
+      </a>
+    }
+  </mat-expansion-panel>
 </app-view-wrapper>

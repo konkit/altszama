@@ -1,9 +1,9 @@
 import {Component, inject, input, OnInit} from '@angular/core';
-import {FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
+import {NonNullableFormBuilder} from "@angular/forms";
 import {catchError, Observable, switchMap} from "rxjs";
 import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
-import {DishFormComponent, SideDishForm} from "../dish-form/dish-form.component";
+import {createDishForm, DishFormComponent} from "../dish-form/dish-form.component";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
 import {DishFormPlaceholderComponent} from '../dish-form-placeholder/dish-form-placeholder.component';
 import {AsyncPipe} from '@angular/common';
@@ -21,12 +21,7 @@ export class CreateDishFormComponent implements OnInit {
 
   fb = inject(NonNullableFormBuilder);
 
-  dishForm = this.fb.group({
-    name: ["", Validators.required],
-    price: [0, [Validators.required, Validators.min(0)]],
-    category: "",
-    sideDishes: this.fb.array<FormGroup<SideDishForm>>([])
-  })
+  dishForm = createDishForm(this.fb)
 
   modifyDishData$: Observable<CreateDishResponse> | null = null
 

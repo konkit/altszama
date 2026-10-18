@@ -10,6 +10,6 @@ export default class CreateRestaurantForm {
   }
 
   static submit() {
-    cy.get("button").contains("Submit").click()
+    cy.get("button").contains("Create restaurant").click()
   }
 }

@@ -1,18 +1,44 @@
 @use "../../../../../../assets/utils_breakpoints.scss";
 
-
-.index-number {
-  line-height: 3.5rem;
-  margin-left: 0.25rem;
-  margin-right: 1rem;
+.dish-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 0;
 }
 
-.delete-button {
-  line-height: 3.5rem;
-}
+.name-and-price,
+.side-dish {
+  display: flex;
+  flex-direction: column;
+  gap: 0 0.75rem;
 
-@media (min-width: utils_breakpoints.$md) {
-  .md-flex-row {
+  @media (min-width: utils_breakpoints.$md) {
     flex-direction: row;
+    align-items: flex-start;
   }
+
+  .name {
+    flex-grow: 1;
+  }
+
+  .price {
+    flex: 0 0 10rem;
+  }
+}
+
+.side-dish > button {
+  margin-top: 0.5rem;
+}
+
+.side-dishes h3 {
+  margin: 0.5rem 0;
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }

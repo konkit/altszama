@@ -5,6 +5,7 @@ import {RestaurantEditorState} from "../../service/restaurant-editor-state";
 import {RelativeDatePipe} from '../../../../../components/pipes/date-to-rel.pipe';
 import {PricePipe} from '../../../../../components/pipes/price.pipe';
 import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 
 
@@ -13,7 +14,7 @@ import {MatButtonModule} from '@angular/material/button';
     templateUrl: './dish-entry.component.html',
     styleUrls: ['./dish-entry.component.scss'],
     standalone: true,
-    imports: [MatButtonModule, MatIconModule, PricePipe, RelativeDatePipe]
+    imports: [MatButtonModule, MatIconModule, MatTooltipModule, PricePipe, RelativeDatePipe]
 })
 export class DishEntryComponent {
   @Input() restaurantEditorState!: RestaurantEditorState

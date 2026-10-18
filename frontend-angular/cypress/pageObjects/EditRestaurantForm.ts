@@ -15,6 +15,6 @@ export default class EditRestaurantForm {
 
   static submit() {
     // await t.click(Selector("button").withText("CREATE"))
-    cy.get("button").contains("Update").click()
+    cy.get("button").contains("Save changes").click()
   }
 }

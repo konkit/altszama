@@ -3,7 +3,7 @@ import {catchError, Observable, shareReplay, switchMap, take} from "rxjs";
 import {DishControllerService, EditDishResponse} from "../../../../../../frontend-client";
 import {FormGroup, NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
-import {DishForm, DishFormComponent, SideDishForm} from "../dish-form/dish-form.component";
+import {createDishForm, DishForm, DishFormComponent} from "../dish-form/dish-form.component";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
 import {DishFormPlaceholderComponent} from '../dish-form-placeholder/dish-form-placeholder.component';
 import {AsyncPipe} from '@angular/common';
@@ -21,12 +21,7 @@ export class EditDishFormComponent implements OnInit {
 
   fb = inject(NonNullableFormBuilder);
 
-  dishForm: FormGroup<DishForm> = this.fb.group({
-    name: this.fb.control(""),
-    price: this.fb.control(0),
-    category: this.fb.control(""),
-    sideDishes: this.fb.array<FormGroup<SideDishForm>>([])
-  })
+  dishForm: FormGroup<DishForm> = createDishForm(this.fb)
 
   modifyDishData$: Observable<EditDishResponse> | null = null
 
@@ -42,28 +37,18 @@ export class EditDishFormComponent implements OnInit {
       .pipe(take(1))
       .subscribe(response => {
 
-      let initialFormData = {
+      this.dishForm = createDishForm(this.fb, response.dish.sideDishes)
+      this.dishForm.patchValue({
         name: response.dish.name,
         price: response.dish.price,
-        category: response.dish.category,
-        sideDishes: []
-      }
-      this.dishForm.setValue(initialFormData)
-
-      let sideDishControls = response.dish.sideDishes
-        .map(sd => this.fb.group({
-          name: sd.name,
-          price: sd.price
-        }));
-      this.dishForm.controls.sideDishes = this.fb.array(sideDishControls)
+        category: response.dish.category ?? "",
+      })
     })
   }
 
   submitForm() {
     if (this.dishForm.valid) {
       let body = {id: this.dishId(), ...this.dishForm.getRawValue()}
-
-      console.log("Body: ", body)
 
       this.dishControllerService.updateDish(this.restaurantId(), body)
         .pipe(

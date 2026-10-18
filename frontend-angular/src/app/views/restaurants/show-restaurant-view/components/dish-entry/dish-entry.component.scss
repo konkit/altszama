@@ -1,16 +1,25 @@
-.new-dish-button-container {
-  padding: 0.75rem;
-  margin-top: 0.75rem;
-}
-
 :host {
   display: flex;
-  flex-direction: row;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.dish {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.name {
+  font: var(--mat-sys-body-large);
+}
+
+.price {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .edit-buttons {
-  margin-left: auto;
+  display: flex;
   flex-shrink: 0;
 }

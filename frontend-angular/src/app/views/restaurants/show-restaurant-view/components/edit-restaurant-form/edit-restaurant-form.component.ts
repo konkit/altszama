@@ -1,43 +1,28 @@
-import {Component, EventEmitter, inject, input, OnInit, Output} from '@angular/core';
-import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {Component, inject, input, OnInit} from '@angular/core';
+import {NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
-import {catchError, switchMap} from "rxjs";
+import {switchMap} from "rxjs";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatButton} from '@angular/material/button';
-
-interface RestaurantDetails {
-  name: string,
-  address: string,
-  url: string,
-  telephone: string,
-}
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {RestaurantFieldsComponent} from '../../../components/restaurant-fields/restaurant-fields.component';
+import {createRestaurantForm} from '../../../lib/restaurantForm';
 
 @Component({
   selector: 'app-edit-restaurant-form',
   templateUrl: './edit-restaurant-form.component.html',
   styleUrls: ['./edit-restaurant-form.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButton]
+  imports: [RestaurantFieldsComponent, MatButtonModule, MatIconModule]
 })
 export class EditRestaurantFormComponent implements OnInit {
 
   readonly restaurantId = input.required<string>();
 
-  fb = inject(NonNullableFormBuilder);
+  restaurantEditFormGroup = createRestaurantForm(inject(NonNullableFormBuilder))
 
-  restaurantEditFormGroup = this.fb.group<RestaurantDetails>({
-    name: "",
-    address: "",
-    url: "",
-    telephone: "",
-  })
-
-  @Output() onCancel = new EventEmitter<void>()
-  @Output() onSubmit = new EventEmitter<RestaurantDetails>()
-
+  isSaving = false
 
   constructor(private restaurantControllerService: RestaurantControllerService,
               private errorSnackBar: ErrorSnackBarService,
@@ -47,32 +32,39 @@ export class EditRestaurantFormComponent implements OnInit {
 
   ngOnInit() {
     this.restaurantControllerService.editRestaurant(this.restaurantId())
-      .pipe(
-        catchError(err => {
-          this.errorSnackBar.displayError(err)
-          throw err
-        })
-      )
-      .subscribe(({id, ...value}) => this.restaurantEditFormGroup.setValue(value))
+      .subscribe({
+        next: restaurant => this.restaurantEditFormGroup.setValue({
+          name: restaurant.name ?? "",
+          address: restaurant.address ?? "",
+          url: restaurant.url ?? "",
+          telephone: restaurant.telephone ?? "",
+        }),
+        error: err => this.errorSnackBar.displayError(err)
+      })
   }
 
   cancel() {
     this.restaurantFormService.refreshRestaurantData().subscribe()
   }
 
-  submit() {
-    if (this.restaurantEditFormGroup.valid) {
-      const formValue = this.restaurantEditFormGroup.getRawValue();
+  submit(e: Event) {
+    e.preventDefault()
 
-      this.restaurantControllerService.updateRestaurant({id: this.restaurantId(), ...formValue})
-        .pipe(
-          switchMap(() => this.restaurantFormService.refreshRestaurantData()),
-          catchError(err => {
-            this.errorSnackBar.displayError(err)
-            throw err
-          })
-        )
-        .subscribe()
+    if (this.restaurantEditFormGroup.invalid) {
+      this.restaurantEditFormGroup.markAllAsTouched()
+      return
     }
+
+    const formValue = this.restaurantEditFormGroup.getRawValue();
+
+    this.isSaving = true
+    this.restaurantControllerService.updateRestaurant({id: this.restaurantId(), ...formValue})
+      .pipe(switchMap(() => this.restaurantFormService.refreshRestaurantData()))
+      .subscribe({
+        error: err => {
+          this.isSaving = false
+          this.errorSnackBar.displayError(err)
+        }
+      })
   }
 }

@@ -2,10 +2,10 @@
 export default class RestaurantsListView {
 
   static expectNoDataInRestaurantTable() {
-    cy.get("main mat-paginator").contains("0 of 0")
+    cy.get("[data-cy='no-restaurants']").should("contain", "No restaurants yet")
   }
 
   static clickCreateNewRestaurantButton() {
-    cy.get("button").contains("Create new restaurant").click()
+    cy.get("a").contains("New restaurant").click()
   }
 }

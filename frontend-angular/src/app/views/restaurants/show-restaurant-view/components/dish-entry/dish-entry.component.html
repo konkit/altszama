@@ -1,30 +1,25 @@
-<div>
-  <div>
-    {{ dish.name }} ({{dish.price | price}})
-  </div>
-
+<div class="dish">
+  <div class="name">{{ dish.name }}</div>
   <div class="text-muted text-small">
     @if (dish.lastCrawled != null) {
-      <span>
-        auto-updated {{ dish.lastCrawled | relativeDate }}
-      </span>
-    }
-
-    @if (dish.lastCrawled == null) {
-      <span>
-        updated manually
-      </span>
+      auto-updated {{ dish.lastCrawled | relativeDate }}
+    } @else {
+      updated manually
     }
   </div>
 </div>
 
+<div class="price">{{ dish.price | price }}</div>
+
 @if (restaurantEditorState.name != 'EDITING_DISH' || restaurantEditorState.dishId != dish.id) {
   <div class="edit-buttons">
-    <button mat-icon-button (click)="editDish()" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="edit-dish-button">
-      <mat-icon fontIcon="edit"></mat-icon>
+    <button mat-icon-button (click)="editDish()" [disabled]="restaurantEditorState.name != 'IDLE'"
+            matTooltip="Edit dish" aria-label="Edit dish" data-cy="edit-dish-button">
+      <mat-icon>edit</mat-icon>
     </button>
-    <button mat-icon-button (click)="deleteDish()" [disabled]="restaurantEditorState.name != 'IDLE'" data-cy="delete-dish-button">
-      <mat-icon fontIcon="delete"></mat-icon>
+    <button mat-icon-button class="danger" (click)="deleteDish()" [disabled]="restaurantEditorState.name != 'IDLE'"
+            matTooltip="Delete dish" aria-label="Delete dish" data-cy="delete-dish-button">
+      <mat-icon>delete</mat-icon>
     </button>
   </div>
 }

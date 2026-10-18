@@ -1,13 +1,13 @@
-import {Component, EventEmitter, Input, input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, input, Output} from '@angular/core';
 import {SideDish} from "../../../../../../frontend-client";
-import {FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatOption} from '@angular/material/core';
-
-import {MatLabel, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {MatError, MatFormField} from '@angular/material/form-field';
+import {MatError, MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
+import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {MatTooltip} from '@angular/material/tooltip';
 import {MoneyInputComponent} from '../../../../../components/money-input/money-input.component';
 
 export interface DishForm {
@@ -29,6 +29,23 @@ export interface DishFormData {
   sideDishes: SideDish[]
 }
 
+// The same rules for creating and editing a dish
+export function createDishForm(fb: NonNullableFormBuilder, sideDishes: SideDish[] = []): FormGroup<DishForm> {
+  return fb.group({
+    name: fb.control("", Validators.required),
+    price: fb.control(0, [Validators.required, Validators.min(0)]),
+    category: fb.control(""),
+    sideDishes: fb.array(sideDishes.map(sideDish => createSideDishForm(fb, sideDish.name, sideDish.price)))
+  })
+}
+
+function createSideDishForm(fb: NonNullableFormBuilder, name = "", price = 0): FormGroup<SideDishForm> {
+  return fb.group({
+    name: fb.control(name, Validators.required),
+    price: fb.control(price, Validators.min(0)),
+  })
+}
+
 @Component({
     selector: 'app-dish-form',
     templateUrl: './dish-form.component.html',
@@ -36,19 +53,22 @@ export interface DishFormData {
     standalone: true,
   imports: [
     MatError,
+    MatHint,
     ReactiveFormsModule,
     MatFormField,
     MatInput,
     MatLabel,
-    MatSelect,
     MatOption,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
     MatIcon,
     MatIconButton,
     MatButton,
+    MatTooltip,
     MoneyInputComponent
   ]
 })
-export class DishFormComponent implements OnInit {
+export class DishFormComponent {
 
   readonly initialData = input<DishFormData>();
   readonly categories = input.required<string[]>();
@@ -59,10 +79,21 @@ export class DishFormComponent implements OnInit {
 
   constructor(private fb: NonNullableFormBuilder) {}
 
-  ngOnInit() {
+  // Existing categories matching what's typed; any other text creates a new category
+  matchingCategories(): string[] {
+    const typed = this.dishForm.controls.category.value.trim().toLowerCase()
+    return this.categories()
+      .filter(category => category && category.toLowerCase().includes(typed))
   }
 
-  submitForm() {
+  submitForm(e: Event) {
+    e.preventDefault()
+
+    if (this.dishForm.invalid) {
+      this.dishForm.markAllAsTouched()
+      return
+    }
+    this.dishForm.controls.category.setValue(this.dishForm.controls.category.value.trim())
     this.onSubmit.emit()
   }
 
@@ -71,8 +102,7 @@ export class DishFormComponent implements OnInit {
   }
 
   addSideDish() {
-    let control = this.fb.group({name: "", price: 0})
-    this.dishForm.controls.sideDishes.push(control)
+    this.dishForm.controls.sideDishes.push(createSideDishForm(this.fb))
   }
 
   deleteSideDish(index: number) {

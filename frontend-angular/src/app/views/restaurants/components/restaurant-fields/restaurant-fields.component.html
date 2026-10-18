@@ -1,0 +1,27 @@
+@let controls = form().controls;
+
+<div class="fields">
+  <mat-form-field class="w-full">
+    <mat-label>Name</mat-label>
+    <input matInput [formControl]="controls.name" data-cy="restaurant-name-input"/>
+    <mat-error>Name is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Address</mat-label>
+    <input matInput [formControl]="controls.address" data-cy="restaurant-address-input"/>
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Menu URL</mat-label>
+    <input matInput type="url" [formControl]="controls.url" placeholder="https://" data-cy="restaurant-url-input"/>
+    <mat-hint>Where people can see the menu</mat-hint>
+    <mat-error>Enter an address starting with http:// or https://</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Phone number</mat-label>
+    <input matInput type="tel" [formControl]="controls.telephone" data-cy="restaurant-phone-input"/>
+    <mat-hint>Used for the "Call" button when placing an order</mat-hint>
+  </mat-form-field>
+</div>

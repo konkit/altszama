@@ -9,7 +9,7 @@ export default class CreateDishForm {
   }
 
   static submit() {
-    cy.get("button").contains("Submit").click()
+    cy.get("button").contains("Save dish").click()
   }
 
   static cancel() {

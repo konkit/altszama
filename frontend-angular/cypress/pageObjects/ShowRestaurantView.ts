@@ -2,11 +2,11 @@
 export default class ShowRestaurantView {
 
   static expectCorrectRestaurantName(restaurantName: string) {
-    cy.get("h1").contains(`Restaurant ${restaurantName}`)
+    cy.get("h1").contains(restaurantName)
   }
 
   static async clickCreateNewDishButton() {
-    cy.get("button").contains("Create new dish").click()
+    cy.get("button").contains("New dish").click()
   }
 
   static dishExists(dishName: string, dishPrice: string) {
@@ -27,11 +27,11 @@ export default class ShowRestaurantView {
   }
 
   static editRestaurant() {
-    cy.get("button").contains("Edit restaurant").click();
+    cy.get("[data-cy='edit-restaurant-button']").click();
   }
 
   static async deleteRestaurant() {
-    cy.get("button").contains("Delete restaurant").click();
+    cy.get("[data-cy='delete-restaurant-button']").click();
     cy.get("app-delete-confirmation-modal").find("button").contains("Delete").click()
   }
 }

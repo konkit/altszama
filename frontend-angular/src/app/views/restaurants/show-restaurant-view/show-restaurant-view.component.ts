@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ShowRestaurantResponse } from '../../../../frontend-client';
+import { DishDto, ShowRestaurantResponse } from '../../../../frontend-client';
 import { filter, Observable } from 'rxjs';
 import { RestaurantFormService } from './service/restaurant-form.service';
 import { isNotNull } from '../../../lib/utils';
@@ -7,11 +7,10 @@ import { RestaurantEditorState } from './service/restaurant-editor-state';
 import { DishEntryComponent } from './components/dish-entry/dish-entry.component';
 import { EditDishFormComponent } from './components/edit-dish-form/edit-dish-form.component';
 import { CreateDishFormComponent } from './components/create-dish-form/create-dish-form.component';
-import { MatDividerModule } from '@angular/material/divider';
 import { EditRestaurantFormComponent } from './components/edit-restaurant-form/edit-restaurant-form.component';
 import { RestaurantDetailsComponent } from './components/restaurant-details/restaurant-details.component';
 import { ViewWrapperComponent } from '../../../components/view-wrapper/view-wrapper.component';
-import { AsyncPipe, KeyValuePipe } from '@angular/common';
+import { AsyncPipe, KeyValue, KeyValuePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
@@ -23,7 +22,7 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardModule } from '@angular/
     templateUrl: './show-restaurant-view.component.html',
     styleUrls: ['./show-restaurant-view.component.scss'],
     standalone: true,
-  imports: [ViewWrapperComponent, MatCardModule, RestaurantDetailsComponent, EditRestaurantFormComponent, MatDividerModule, CreateDishFormComponent, EditDishFormComponent, DishEntryComponent, AsyncPipe, KeyValuePipe, MatButton, MatIcon, RouterLink, MatCard, MatCardContent, MatCardHeader]
+  imports: [ViewWrapperComponent, MatCardModule, RestaurantDetailsComponent, EditRestaurantFormComponent, CreateDishFormComponent, EditDishFormComponent, DishEntryComponent, AsyncPipe, KeyValuePipe, MatButton, MatIcon, RouterLink, MatCard, MatCardContent, MatCardHeader]
 })
 export class ShowRestaurantViewComponent {
 
@@ -47,5 +46,12 @@ export class ShowRestaurantViewComponent {
 
   createDish() {
     this.restaurantFormService.setDishAsCreated()
+  }
+
+  // Alphabetical, with uncategorised dishes last
+  compareCategories(a: KeyValue<string, DishDto[]>, b: KeyValue<string, DishDto[]>): number {
+    if (!a.key) return 1
+    if (!b.key) return -1
+    return a.key.localeCompare(b.key)
   }
 }

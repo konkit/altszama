@@ -1,0 +1,33 @@
+.details {
+  margin: 0;
+}
+
+.detail {
+  padding: 0.5rem 0;
+
+  & + & {
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  dt {
+    font: var(--mat-sys-label-medium);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  dd {
+    margin: 0.125rem 0 0;
+    font: var(--mat-sys-body-large);
+    overflow-wrap: anywhere;
+  }
+}
+
+.not-set {
+  color: var(--mat-sys-on-surface-variant);
+  font-style: italic;
+}
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}

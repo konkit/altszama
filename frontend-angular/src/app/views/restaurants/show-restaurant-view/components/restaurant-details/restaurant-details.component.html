@@ -1,30 +1,62 @@
-<div class="">
-  <mat-list>
-    <mat-list-item>
-      <b>Address : </b>
-      {{ restaurant().address }}
-    </mat-list-item>
+@let r = restaurant();
 
-    <mat-list-item>
-      <b>URL : </b>
-      <a target="_blank" [href]="restaurant().url">
-        {{ restaurant().url }}
-      </a>
-    </mat-list-item>
+<dl class="details" data-cy="restaurant-details">
+  <div class="detail">
+    <dt>Address</dt>
+    <dd>
+      @if (hasValue(r.address)) {
+        {{ r.address }}
+      } @else {
+        <span class="not-set">Not set</span>
+      }
+    </dd>
+  </div>
 
-    <mat-list-item>
-      <b>Telephone number:</b>
-      {{ restaurant().telephone }}
-    </mat-list-item>
+  <div class="detail">
+    <dt>Menu</dt>
+    <dd>
+      @if (hasValue(r.url)) {
+        <a [href]="r.url" target="_blank" rel="noopener" class="icon-link">
+          Open menu <mat-icon inline>open_in_new</mat-icon>
+        </a>
+      } @else {
+        <span class="not-set">Not set</span>
+      }
+    </dd>
+  </div>
 
-    <mat-list-item>
-      <b>Last auto-updated:</b>
-      {{ restaurant().lastCrawled | relativeDate }}
-    </mat-list-item>
+  <div class="detail">
+    <dt>Phone</dt>
+    <dd>
+      @if (hasValue(r.telephone)) {
+        <a [href]="telLink(r.telephone)" class="icon-link">
+          <mat-icon inline>call</mat-icon> {{ r.telephone }}
+        </a>
+      } @else {
+        <span class="not-set">Not set</span>
+      }
+    </dd>
+  </div>
 
-    <mat-list-item>
-      <b>Last updated manually:</b>
-      {{ restaurant().lastEdited | relativeDate }}
-    </mat-list-item>
-  </mat-list>
-</div>
+  <div class="detail">
+    <dt>Menu auto-updated</dt>
+    <dd>
+      @if (r.lastCrawled) {
+        {{ r.lastCrawled | relativeDate }}
+      } @else {
+        <span class="not-set">Never</span>
+      }
+    </dd>
+  </div>
+
+  <div class="detail">
+    <dt>Last edited</dt>
+    <dd>
+      @if (r.lastEdited) {
+        {{ r.lastEdited | relativeDate }}
+      } @else {
+        <span class="not-set">Never</span>
+      }
+    </dd>
+  </div>
+</dl>

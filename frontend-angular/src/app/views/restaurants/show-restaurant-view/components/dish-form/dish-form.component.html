@@ -1,77 +1,64 @@
-<mat-error>{{dishForm.errors}}</mat-error>
+<form [formGroup]="dishForm" (submit)="submitForm($event)" class="dish-form">
+  <div class="name-and-price">
+    <mat-form-field class="name">
+      <mat-label>Name</mat-label>
+      <input matInput [formControl]="dishForm.controls.name" data-cy="dish-name-input"/>
+      <mat-error>Name is required</mat-error>
+    </mat-form-field>
 
-<div class="flex flex-row w-full">
+    <mat-form-field class="price">
+      <mat-label>Price</mat-label>
+      <app-money-input [formControl]="dishForm.controls.price" data-cy="dish-price-input"></app-money-input>
+      <mat-error>Price can't be negative</mat-error>
+    </mat-form-field>
+  </div>
 
-  <form [formGroup]="dishForm" (ngSubmit)="submitForm()" class="w-full">
-    <div class="flex flex-col md-flex-row">
-        <mat-form-field class="w-full mr-3">
-          <mat-label>Name</mat-label>
-          <input matInput [formControl]="dishForm.controls.name" data-cy="dish-name-input" />
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Price</mat-label>
-          <app-money-input [formControl]="dishForm.controls.price" data-cy="dish-price-input"></app-money-input>
-        </mat-form-field>
-    </div>
-
-    <div class="w-full">
-      <mat-form-field class="w-full">
-        <mat-label>Category</mat-label>
-        <mat-select [formControl]="dishForm.controls.category">
-          @for (category of categories(); track category) {
-            <mat-option [value]="category">
-              {{category}}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-
-    <div class="pb-10">
-      <h3>Side dishes:</h3>
-
-      @if (dishForm.controls.sideDishes.length > 0) {
-        <div>
-          @for (sdControl of dishForm.controls.sideDishes.controls; track sdControl; let i = $index) {
-            <div>
-              <div class="flex flex-row">
-                <div class="index-number">{{i+1}}.</div>
-                <div class="flex-grow">
-                  <mat-form-field class="w-full">
-                    <mat-label>Name</mat-label>
-                    <input matInput [formControl]="sdControl.controls.name"/>
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field>
-                    <mat-label>Price</mat-label>
-                    <app-money-input [formControl]="sdControl.controls.price"></app-money-input>
-                  </mat-form-field>
-                </div>
-                <div class="delete-button">
-                  <button mat-icon-button (click)="deleteSideDish(i)">
-                    <mat-icon fontIcon="delete"></mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
+  <mat-form-field class="w-full">
+    <mat-label>Category</mat-label>
+    <input matInput [formControl]="dishForm.controls.category" [matAutocomplete]="categoryAutocomplete"
+           autocomplete="off" data-cy="dish-category-input"/>
+    <mat-autocomplete #categoryAutocomplete="matAutocomplete">
+      @for (category of matchingCategories(); track category) {
+        <mat-option [value]="category">{{ category }}</mat-option>
       }
+    </mat-autocomplete>
+    <mat-hint>Pick an existing category or type a new one</mat-hint>
+  </mat-form-field>
 
-      <div>
-        <button mat-button (click)="addSideDish()" type="button">
-          Add Side Dish <mat-icon fontIcon="add"></mat-icon>
+  <div class="side-dishes">
+    <h3>Side dishes</h3>
+
+    @for (sdControl of dishForm.controls.sideDishes.controls; track sdControl; let i = $index) {
+      <div class="side-dish">
+        <mat-form-field class="name">
+          <mat-label>Side dish name</mat-label>
+          <input matInput [formControl]="sdControl.controls.name"/>
+          <mat-error>Name is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="price">
+          <mat-label>Price</mat-label>
+          <app-money-input [formControl]="sdControl.controls.price"></app-money-input>
+        </mat-form-field>
+        <button mat-icon-button type="button" (click)="deleteSideDish(i)"
+                matTooltip="Remove side dish" aria-label="Remove side dish">
+          <mat-icon>delete</mat-icon>
         </button>
       </div>
+    } @empty {
+      <p class="text-muted">No side dishes.</p>
+    }
 
-    </div>
+    <button mat-button (click)="addSideDish()" type="button">
+      <mat-icon>add</mat-icon>
+      Add side dish
+    </button>
+  </div>
 
-    <div class="mb-4">
-      <button mat-flat-button type="submit">Submit</button>
-      <button mat-button (click)="cancel()" type="button">Cancel</button>
-    </div>
-  </form>
-</div>
+  <div class="form-actions">
+    <button mat-button (click)="cancel()" type="button">Cancel</button>
+    <button mat-flat-button type="submit">
+      <mat-icon>check</mat-icon>
+      Save dish
+    </button>
+  </div>
+</form>

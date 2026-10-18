@@ -11,6 +11,6 @@ export default class EditDishForm {
 
   static submit() {
     // await t.click(Selector("button").withText("CREATE"))
-    cy.get("button").contains("Submit").click()
+    cy.get("button").contains("Save dish").click()
   }
 }
