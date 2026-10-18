@@ -34,7 +34,7 @@
           <mat-form-field class="w-full">
             <mat-label>Search restaurants</mat-label>
             <mat-icon matIconPrefix>search</mat-icon>
-            <input matInput [value]="restaurantsFilter" (input)="filterChanged($event)" autocomplete="off"/>
+            <input matInput [value]="restaurantsFilter" (input)="filterChanged($event)" autocomplete="off" data-cy="restaurant-search-input"/>
             @if (restaurantsFilter) {
               <button mat-icon-button matIconSuffix type="button" (click)="clearFilter()" aria-label="Clear search">
                 <mat-icon>close</mat-icon>

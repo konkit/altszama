@@ -34,3 +34,7 @@ export function createOrderWithTwoParticipants() {
 export function entryCard(username: string) {
   return cy.get("[data-cy='existing-order-entry']").contains(username).parents("[data-cy='existing-order-entry']")
 }
+
+export function dishRow(username: string, dishName: string) {
+  return entryCard(username).find("app-show-order-entry").contains(dishName).parents("app-show-order-entry")
+}
