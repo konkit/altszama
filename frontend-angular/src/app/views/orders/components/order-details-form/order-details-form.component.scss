@@ -1,0 +1,33 @@
+@use "../../../../../assets/utils_breakpoints";
+
+:host {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "timing"
+    "delivery"
+    "payment";
+}
+
+.timing { grid-area: timing; }
+.delivery { grid-area: delivery; }
+.payment { grid-area: payment; }
+
+@media (min-width: utils_breakpoints.$md) {
+  :host {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "timing delivery"
+      "payment delivery";
+    align-items: start;
+  }
+}
+
+mat-card-content {
+  padding-top: 1rem;
+}
+
+mat-card-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+}

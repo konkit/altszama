@@ -1,0 +1,29 @@
+<mat-card appearance="outlined" class="timing">
+  <mat-card-header>
+    <mat-card-title>Timing</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-order-time-form [timeOfOrderControl]="timeOfOrderControl()"
+                         [timeOfDeliveryControl]="timeOfDeliveryControl()!">
+    </app-order-time-form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card appearance="outlined" class="delivery">
+  <mat-card-header>
+    <mat-card-title>Discounts & delivery fees</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-delivery-data-form [deliveryDataForm]="deliveryDataForm()"></app-delivery-data-form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card appearance="outlined" class="payment">
+  <mat-card-header>
+    <mat-card-title>Payment options</mat-card-title>
+    <mat-card-subtitle>{{ paymentHint() }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <app-payment-data-form [paymentDataForm]="paymentDataForm()"></app-payment-data-form>
+  </mat-card-content>
+</mat-card>

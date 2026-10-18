@@ -7,9 +7,7 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
 import {MatButtonModule} from '@angular/material/button';
-import {PaymentDataFormComponent} from '../components/payment-data-form/payment-data-form.component';
-import {DeliveryDataFormComponent} from '../components/delivery-data-form/delivery-data-form.component';
-import {OrderTimeFormComponent} from '../components/order-time-form/order-time-form.component';
+import {OrderDetailsFormComponent} from '../components/order-details-form/order-details-form.component';
 import {MatCardModule} from '@angular/material/card';
 import {AsyncPipe} from '@angular/common';
 import {OrderStateButtonsComponent} from './components/order-state-buttons/order-state-buttons.component';
@@ -23,7 +21,7 @@ import {orderStateToCaption, orderStateToTone} from '../lib/orderState';
     templateUrl: './edit-order-view.component.html',
     styleUrls: ['./edit-order-view.component.scss'],
     standalone: true,
-  imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatCardModule, ChipComponent, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe, MatIcon, RouterLink]
+  imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatCardModule, ChipComponent, OrderDetailsFormComponent, MatButtonModule, AsyncPipe, MatIcon, RouterLink]
 })
 export class EditOrderViewComponent implements OnInit {
 

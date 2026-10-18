@@ -1,52 +1,44 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {BehaviorSubject, map, Observable, Subscription, take} from "rxjs";
+import {map, Observable, take} from "rxjs";
 import {
   CreateOrderInitialData,
   OrderControllerService,
   OrderSaveRequest,
   RestaurantDto
 } from "../../../../frontend-client";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {bankTransferNumberValidators, blikPhoneNumberValidators, discountInPercentValidators} from "../lib/orderFormValidators";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {PaymentDataFormComponent} from '../components/payment-data-form/payment-data-form.component';
-import {DeliveryDataFormComponent} from '../components/delivery-data-form/delivery-data-form.component';
-import {OrderTimeFormComponent} from '../components/order-time-form/order-time-form.component';
 import {MatButtonModule} from '@angular/material/button';
-import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
-import {MatListModule} from '@angular/material/list';
+import {MatListModule, MatSelectionListChange} from '@angular/material/list';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatStepperModule} from '@angular/material/stepper';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
-
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
+import {OrderDetailsFormComponent} from '../components/order-details-form/order-details-form.component';
 
 @Component({
     selector: 'app-create-order-view',
     templateUrl: './create-order-view.component.html',
     styleUrls: ['./create-order-view.component.scss'],
     standalone: true,
-  imports: [ViewWrapperComponent, MatCardModule, MatIconModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatListModule, CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf, MatButtonModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, RouterLink]
+  imports: [ViewWrapperComponent, MatCardModule, MatIconModule, MatFormFieldModule, MatInputModule, MatListModule, MatButtonModule, OrderDetailsFormComponent, RouterLink]
 })
-export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CreateOrderViewComponent implements OnInit {
 
   fullRestaurantsList: RestaurantDto[] = [];
-  filteredRestaurantsList$ = new BehaviorSubject<RestaurantDto[]>([]);
-
-  subscriptions = new Subscription();
+  restaurantsFilter: string = "";
 
   createOrderInitialData$: Observable<CreateOrderInitialData>
-  restaurantsFilter: string = "";
+
+  isPaymentDataPrefilled = false
+  isSaving = false
 
   fb = new FormBuilder()
   orderForm = this.fb.nonNullable.group({
-    restaurantId: this.fb.nonNullable.control(""),
+    restaurantId: this.fb.nonNullable.control("", Validators.required),
     orderDate: this.fb.nonNullable.control(""),
     timeOfOrder: this.fb.nonNullable.control("14:00"),
     deliveryData: this.fb.nonNullable.group({
@@ -63,19 +55,9 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
     })
   })
 
-  restaurantsTableDataSource = new MatTableDataSource<RestaurantDto>();
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  restaurantsData: RestaurantDto[] = []
-
-  showNarrowLayout = false
-
-  itemSize = 5;
-
   constructor(private route: ActivatedRoute,
               private orderControllerService: OrderControllerService,
               private errorSnackBar: ErrorSnackBarService,
-              private responsive: BreakpointObserver,
               private router: Router) {
     this.createOrderInitialData$ = this.route.data.pipe(map(x => x['response']))
   }
@@ -83,44 +65,14 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
   ngOnInit() {
     this.createOrderInitialData$.pipe(take(1)).subscribe(response => {
       this.fullRestaurantsList = response.restaurantsList;
-      this.filteredRestaurantsList$.next(this.fullRestaurantsList);
-
-      this.restaurantsTableDataSource.data = this.fullRestaurantsList;
-      this.restaurantsData = this.fullRestaurantsList;
       this.setOrderFormInitialValue(response);
     })
-
-    const sub = this.filteredRestaurantsList$.subscribe(neeRestaurants => {
-      this.restaurantsTableDataSource.data = neeRestaurants
-      this.restaurantsData = neeRestaurants
-    })
-    this.subscriptions.add(sub);
-
-    const breakpoints = [
-      Breakpoints.Medium,
-      Breakpoints.Large,
-      Breakpoints.XLarge,
-    ]
-    const sub2 = this.responsive.observe(breakpoints)
-      .subscribe(result => {
-        this.showNarrowLayout = true;
-
-        if (result.matches) {
-          this.showNarrowLayout = false;
-        }
-      });
-    this.subscriptions.add(sub2)
   }
 
   private setOrderFormInitialValue(response: CreateOrderInitialData) {
-    const restaurantId =
-      (response.restaurantsList &&
-        response.restaurantsList[0] &&
-        response.restaurantsList[0].id) ||
-      "";
-
+    // No restaurant is preselected, so an order can't be created for the wrong one by accident
     this.orderForm.setValue({
-      restaurantId: restaurantId,
+      restaurantId: "",
       orderDate: response.orderDate,
       timeOfOrder: response.timeOfOrder,
       deliveryData: {
@@ -140,39 +92,41 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
     if (response.bankTransferNumber) {
       this.orderForm.controls.paymentData.controls.paymentByBankTransfer.setValue(true);
       this.orderForm.controls.paymentData.controls.bankTransferNumber.setValue(response.bankTransferNumber);
+      this.isPaymentDataPrefilled = true
     }
 
     if (response.blikPhoneNumber) {
       this.orderForm.controls.paymentData.controls.paymentByBlik.setValue(true);
       this.orderForm.controls.paymentData.controls.blikPhoneNumber.setValue(response.blikPhoneNumber);
+      this.isPaymentDataPrefilled = true
     }
   }
 
-  ngAfterViewInit(): void {
-    this.restaurantsTableDataSource.paginator = this.paginator;
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe()
+  filteredRestaurants(): RestaurantDto[] {
+    const filter = this.restaurantsFilter.trim().toLowerCase()
+    if (filter === "") {
+      return this.fullRestaurantsList
+    }
+    return this.fullRestaurantsList.filter(r => r.name?.toLowerCase().includes(filter))
   }
 
   filterChanged(newFilterEvent: Event) {
-    const newFilter = (newFilterEvent.target as HTMLInputElement).value
-    if (newFilter == null || newFilter == "") {
-      this.filteredRestaurantsList$.next(this.fullRestaurantsList)
-    } else {
-      this.restaurantsFilter = newFilter
+    this.restaurantsFilter = (newFilterEvent.target as HTMLInputElement).value
+  }
 
-      this.filteredRestaurantsList$.next(
-        this.fullRestaurantsList.filter(x => {
-          if (x.name == null) {
-            return false;
-          } else {
-            return x.name.toLowerCase().startsWith(this.restaurantsFilter.toLowerCase())
-          }
-        })
-      )
-    }
+  clearFilter() {
+    this.restaurantsFilter = ""
+  }
+
+  onRestaurantSelected(event: MatSelectionListChange) {
+    const restaurantId = event.options.find(o => o.selected)?.value ?? ""
+    this.orderForm.controls.restaurantId.setValue(restaurantId)
+    this.orderForm.controls.restaurantId.markAsTouched()
+  }
+
+  isRestaurantMissing() {
+    const control = this.orderForm.controls.restaurantId
+    return control.touched && control.invalid
   }
 
   submitForm(e: Event) {
@@ -201,9 +155,13 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
       }
     };
 
+    this.isSaving = true
     this.orderControllerService.save(order).subscribe({
       next: r => this.router.navigate(["/orders", r.orderId, 'show']),
-      error: err => this.errorSnackBar.displayError(err)
+      error: err => {
+        this.isSaving = false
+        this.errorSnackBar.displayError(err)
+      }
     })
 
     return false;

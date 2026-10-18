@@ -9,10 +9,9 @@ export default class CreateOrderView {
   static createOrderWithDefaultValues(restaurantName: string) {
     TodaysOrderView.clickAddNewOrderButton();
 
-    cy.contains(restaurantName).click();
-    cy.get("button").contains("Next").click();
-    cy.get("button").contains("Create").click();
-    cy.get("h1").contains(`Order from ${restaurantName}`)
+    cy.get("mat-list-option").contains(restaurantName).click();
+    cy.get("button").contains("Create order").click();
+    cy.get("h1").contains(restaurantName)
   }
 
   static goToOrder(restaurantName: string) {
