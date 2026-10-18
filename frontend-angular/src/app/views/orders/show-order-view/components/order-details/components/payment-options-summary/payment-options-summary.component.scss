@@ -1,7 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-//@import "../../../../../../../../themes.scss";
 
 .user-selectable {
   user-select: text;
@@ -15,24 +14,19 @@
 }
 
 .text-body1 {
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--mat-sys-on-surface);
 }
 
 .text-body2 {
-  color: rgba(0, 0, 0, 0.54);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .method-allowed {
-  //$color-config:    mat.m2-get-color-config($altszama-theme);
-  //$primary-palette: map.get($color-config, 'primary');
-
-  //color: mat.m2-get-color-from-palette($primary-palette, 500);
+  color: var(--mat-sys-primary);
   font-weight: 700;
 }
 
 .method-not-allowed {
-  //$color-config:    mat.m2-get-color-config($altszama-theme);
-  //$foreground-palette: map.get($color-config, foreground);
-
-  //color: mat.m2-get-color-from-palette($foreground-palette, disabled);
+  color: var(--mat-sys-on-surface-variant);
+  opacity: 0.6;
 }
