@@ -1,60 +1,69 @@
-<app-view-wrapper>
-  <div>
-    <button mat-button [routerLink]="['/orders/' + orderId + '/show']">
-      <mat-icon>arrow_back</mat-icon>
-      Back
-    </button>
-  </div>
-
-  <div class="flex flex-row">
-    <h1>Update Order</h1>
-    <div class="flex pt-2 pb-3 ml-auto">
-      <app-order-state-buttons [orderId]="orderId"
-                               [orderState]="(editOrderInitialData$ | async)!.order.orderState"></app-order-state-buttons>
+@if (editOrderInitialData$ | async; as data) {
+  <app-view-wrapper>
+    <div>
+      <button mat-button [routerLink]="['/orders', orderId, 'show']">
+        <mat-icon>arrow_back</mat-icon>
+        Back to order
+      </button>
     </div>
-  </div>
 
-  <div class="block xl-hidden">
-    <mat-vertical-stepper [linear]="true">
-      <mat-step>
-        <ng-template matStepLabel>Order time</ng-template>
-        <app-order-time-form class="mr-20 mb-5"
-                             [timeOfOrderControl]="orderForm.controls.timeOfOrder"></app-order-time-form>
-        <button mat-raised-button matStepperPrevious>Back</button>
-        <button mat-flat-button matStepperNext>Next</button>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Discounts and delivery fees</ng-template>
-        <app-delivery-data-form class="mb-5"
-                                [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
-        <button mat-raised-button matStepperPrevious>Back</button>
-        <button mat-flat-button matStepperNext>Next</button>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Payment</ng-template>
-        <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
-        <button mat-raised-button matStepperPrevious>Back</button>
-        <button mat-flat-button (click)="submitForm($event)">Update</button>
-      </mat-step>
-    </mat-vertical-stepper>
-  </div>
+    <header class="page-header">
+      <h1>Edit order</h1>
+      <div class="meta">
+        <app-chip [tone]="getOrderStateTone(data.order.orderState)">
+          {{ getOrderStateString(data.order.orderState) }}
+        </app-chip>
+        <span>{{ data.order.restaurantName }} · {{ data.order.orderDate }}</span>
+      </div>
+    </header>
 
-  <div class="hidden xl-block">
-    <ng-template matStepLabel>Fill details</ng-template>
-    <div class="grid grid-cols-3 py-4 pr-10 gap-8">
-      <app-order-time-form class="mb-5"
-                           [timeOfOrderControl]="orderForm.controls.timeOfOrder"
-                           [timeOfDeliveryControl]="orderForm.controls.timeOfDelivery"
-      ></app-order-time-form>
-      <app-delivery-data-form class="mb-5"
-                              [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
-      <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
-    </div>
-    <button mat-raised-button type="button" (click)="cancelEdit()">
-      Cancel
-    </button>
-    <button mat-flat-button (click)="submitForm($event)">
-      Update
-    </button>
-  </div>
-</app-view-wrapper>
+    <form class="sections" (submit)="submitForm($event)">
+      <mat-card appearance="outlined" class="timing">
+        <mat-card-header>
+          <mat-card-title>Timing</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-order-time-form [timeOfOrderControl]="orderForm.controls.timeOfOrder"
+                               [timeOfDeliveryControl]="orderForm.controls.timeOfDelivery">
+          </app-order-time-form>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="delivery">
+        <mat-card-header>
+          <mat-card-title>Discounts & delivery fees</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-delivery-data-form [deliveryDataForm]="orderForm.controls.deliveryData"></app-delivery-data-form>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="payment">
+        <mat-card-header>
+          <mat-card-title>Payment options</mat-card-title>
+          <mat-card-subtitle>How people can pay you back</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <app-payment-data-form [paymentDataForm]="orderForm.controls.paymentData"></app-payment-data-form>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="cancelEdit()">Cancel</button>
+        <button mat-flat-button type="submit" [disabled]="isSaving">
+          <mat-icon>check</mat-icon>
+          Save changes
+        </button>
+      </div>
+    </form>
+
+    <mat-card appearance="outlined" class="status-card">
+      <mat-card-header>
+        <mat-card-title>Order status</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-order-state-buttons [orderId]="orderId" [orderState]="data.order.orderState"></app-order-state-buttons>
+      </mat-card-content>
+    </mat-card>
+  </app-view-wrapper>
+}

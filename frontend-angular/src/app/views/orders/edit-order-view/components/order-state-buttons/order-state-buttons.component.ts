@@ -1,7 +1,7 @@
 import {Component, input} from '@angular/core';
 import {OrderControllerService, ShowOrderDto} from "../../../../../../frontend-client";
 import {Router} from "@angular/router";
-import {catchError, EMPTY, switchMap, tap} from "rxjs";
+import {catchError, EMPTY, filter, switchMap, tap} from "rxjs";
 import {DialogService} from "../../../../../service/dialog.service";
 import {ErrorSnackBarService} from "../../../../../service/error-snack-bar.service";
 import {MatIconModule} from '@angular/material/icon';
@@ -44,11 +44,28 @@ export class OrderStateButtonsComponent {
   }
 
   setAsRejected() {
-    this.orderControllerService.setAsRejected(this.orderId())
+    this.dialogService.displayConfirmDialog("Mark as rejected?", "Use this when the restaurant can't take the order. Participants will see it as rejected.", "Mark as rejected")
+      .afterClosed()
+      .pipe(
+        filter(confirmed => confirmed === true),
+        switchMap(() => this.orderControllerService.setAsRejected(this.orderId()))
+      )
       .subscribe({
         next: r => this.router.navigate(["/orders", this.orderId(), 'show']),
         error: err => this.errorSnackBar.displayError(err)
       })
+  }
+
+  canReopen() {
+    return this.orderState() === OrderStateEnum.Ordering || this.orderState() === OrderStateEnum.Ordered
+  }
+
+  canRestoreToOrdered() {
+    return this.orderState() === OrderStateEnum.Delivered || this.orderState() === OrderStateEnum.Rejected
+  }
+
+  canReject() {
+    return this.orderState() !== OrderStateEnum.Rejected
   }
 
   deleteOrder() {

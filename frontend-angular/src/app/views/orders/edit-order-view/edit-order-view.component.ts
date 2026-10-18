@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {EditOrderInitialData, OrderControllerService, OrderUpdateRequest} from "../../../../frontend-client";
+import {EditOrderInitialData, EditOrderInitialDataOrderDto, OrderControllerService, OrderUpdateRequest} from "../../../../frontend-client";
 import {map, Observable, take} from "rxjs";
 import {FormBuilder} from "@angular/forms";
+import {bankTransferNumberValidators, blikPhoneNumberValidators, discountInPercentValidators} from "../lib/orderFormValidators";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
 import {Title} from "@angular/platform-browser";
@@ -9,18 +10,20 @@ import {MatButtonModule} from '@angular/material/button';
 import {PaymentDataFormComponent} from '../components/payment-data-form/payment-data-form.component';
 import {DeliveryDataFormComponent} from '../components/delivery-data-form/delivery-data-form.component';
 import {OrderTimeFormComponent} from '../components/order-time-form/order-time-form.component';
-import {MatStepperModule} from '@angular/material/stepper';
+import {MatCardModule} from '@angular/material/card';
 import {AsyncPipe} from '@angular/common';
 import {OrderStateButtonsComponent} from './components/order-state-buttons/order-state-buttons.component';
 import {ViewWrapperComponent} from '../../../components/view-wrapper/view-wrapper.component';
 import {MatIcon} from "@angular/material/icon";
+import {ChipComponent, ChipTone} from '../../../components/chip/chip.component';
+import {orderStateToCaption, orderStateToTone} from '../lib/orderState';
 
 @Component({
     selector: 'app-edit-order-view',
     templateUrl: './edit-order-view.component.html',
     styleUrls: ['./edit-order-view.component.scss'],
     standalone: true,
-  imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatStepperModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe, MatIcon, RouterLink]
+  imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatCardModule, ChipComponent, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent, MatButtonModule, AsyncPipe, MatIcon, RouterLink]
 })
 export class EditOrderViewComponent implements OnInit {
 
@@ -28,22 +31,24 @@ export class EditOrderViewComponent implements OnInit {
 
   editOrderInitialData$: Observable<EditOrderInitialData>
 
+  isSaving = false
+
   fb = new FormBuilder()
   orderForm = this.fb.nonNullable.group({
     orderDate: this.fb.nonNullable.control(""),
     timeOfOrder: this.fb.control("12:00"),
     timeOfDelivery: this.fb.control("14:00"),
     deliveryData: this.fb.nonNullable.group({
-      decreaseInPercent: this.fb.nonNullable.control(0),
+      decreaseInPercent: this.fb.nonNullable.control(0, discountInPercentValidators),
       deliveryCostPerEverybody: this.fb.nonNullable.control(0),
       deliveryCostPerDish: this.fb.nonNullable.control(0),
     }),
     paymentData: this.fb.nonNullable.group({
       paymentByCash: true,
       paymentByBankTransfer: false,
-      bankTransferNumber: "",
+      bankTransferNumber: this.fb.nonNullable.control("", bankTransferNumberValidators),
       paymentByBlik: false,
-      blikPhoneNumber: ""
+      blikPhoneNumber: this.fb.nonNullable.control("", blikPhoneNumberValidators)
     })
   })
 
@@ -86,6 +91,11 @@ export class EditOrderViewComponent implements OnInit {
   submitForm(e: Event) {
     e.preventDefault();
 
+    if (this.orderForm.invalid) {
+      this.orderForm.markAllAsTouched()
+      return false;
+    }
+
     const order: OrderUpdateRequest = {
       orderId: this.orderId,
       orderDate: this.orderForm.controls.orderDate.value,
@@ -105,9 +115,13 @@ export class EditOrderViewComponent implements OnInit {
       }
     };
 
+    this.isSaving = true
     this.orderControllerService.update(order).subscribe({
       next: r => this.router.navigate(["/orders", this.orderId, 'show']),
-      error: err => this.errorSnackBar.displayError(err)
+      error: err => {
+        this.isSaving = false
+        this.errorSnackBar.displayError(err)
+      }
     })
 
     return false;
@@ -119,6 +133,14 @@ export class EditOrderViewComponent implements OnInit {
     } else {
       return undefined
     }
+  }
+
+  getOrderStateString(orderState: EditOrderInitialDataOrderDto.OrderStateEnum): string {
+    return orderStateToCaption(orderState)
+  }
+
+  getOrderStateTone(orderState: EditOrderInitialDataOrderDto.OrderStateEnum): ChipTone {
+    return orderStateToTone(orderState)
   }
 
   cancelEdit() {

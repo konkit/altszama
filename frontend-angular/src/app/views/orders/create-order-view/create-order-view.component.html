@@ -99,12 +99,21 @@
         <mat-step>
           <ng-template matStepLabel>Fill details</ng-template>
           <div class="grid grid-cols-3 py-4 pr-10 gap-8">
-            <app-order-time-form class="mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder">
-            </app-order-time-form>
-            <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData">
-            </app-delivery-data-form>
-            <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData">
-            </app-payment-data-form>
+            <div>
+              <h3>Order time</h3>
+              <app-order-time-form class="mb-5" [timeOfOrderControl]="orderForm.controls.timeOfOrder">
+              </app-order-time-form>
+            </div>
+            <div>
+              <h3>Discounts and delivery fees</h3>
+              <app-delivery-data-form class="mb-5" [deliveryDataForm]="orderForm.controls.deliveryData">
+              </app-delivery-data-form>
+            </div>
+            <div>
+              <h3>Payment</h3>
+              <app-payment-data-form class="mb-5" [paymentDataForm]="orderForm.controls.paymentData">
+              </app-payment-data-form>
+            </div>
           </div>
           <button mat-raised-button matStepperPrevious>Back</button>
           <button mat-flat-button (click)="submitForm($event)">Create</button>

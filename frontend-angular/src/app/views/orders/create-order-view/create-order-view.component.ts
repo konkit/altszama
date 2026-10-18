@@ -8,6 +8,7 @@ import {
   RestaurantDto
 } from "../../../../frontend-client";
 import {FormBuilder} from "@angular/forms";
+import {bankTransferNumberValidators, blikPhoneNumberValidators, discountInPercentValidators} from "../lib/orderFormValidators";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {ErrorSnackBarService} from "../../../service/error-snack-bar.service";
@@ -49,16 +50,16 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
     orderDate: this.fb.nonNullable.control(""),
     timeOfOrder: this.fb.nonNullable.control("14:00"),
     deliveryData: this.fb.nonNullable.group({
-      decreaseInPercent: this.fb.nonNullable.control(0),
+      decreaseInPercent: this.fb.nonNullable.control(0, discountInPercentValidators),
       deliveryCostPerEverybody: this.fb.nonNullable.control(0),
       deliveryCostPerDish: this.fb.nonNullable.control(0),
     }),
     paymentData: this.fb.nonNullable.group({
       paymentByCash: true,
       paymentByBankTransfer: false,
-      bankTransferNumber: "",
+      bankTransferNumber: this.fb.nonNullable.control("", bankTransferNumberValidators),
       paymentByBlik: false,
-      blikPhoneNumber: ""
+      blikPhoneNumber: this.fb.nonNullable.control("", blikPhoneNumberValidators)
     })
   })
 
@@ -176,6 +177,11 @@ export class CreateOrderViewComponent implements OnInit, AfterViewInit, OnDestro
 
   submitForm(e: Event) {
     e.preventDefault();
+
+    if (this.orderForm.invalid) {
+      this.orderForm.markAllAsTouched()
+      return false;
+    }
 
     const order: OrderSaveRequest = {
       restaurantId: this.orderForm.controls.restaurantId.value,

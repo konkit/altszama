@@ -1,27 +1,51 @@
-<div>
-  @if (this.orderState() === 'ORDERED' || this.orderState() === 'ORDERING') {
-    <button mat-raised-button class="mr-2" color="primary"
-      (click)="setAsCreated()">
-      Mark back as un-ordered
-      <mat-icon fontIcon="undo"></mat-icon>
-    </button>
+<ul class="actions">
+  @if (canReopen()) {
+    <li>
+      <div class="action-text">
+        <div class="action-title">Reopen order</div>
+        <div class="action-description">Moves the order back to "Open" so people can change their dishes again.</div>
+      </div>
+      <button mat-stroked-button (click)="setAsCreated()">
+        <mat-icon>undo</mat-icon>
+        Reopen
+      </button>
+    </li>
   }
 
-  @if (this.orderState() === 'DELIVERED' || this.orderState() === 'REJECTED') {
-    <button mat-raised-button class="mr-2" color="primary"
-      (click)="setAsOrdered()">
-      Back to ordered
-      <mat-icon fontIcon="undo"></mat-icon>
-    </button>
+  @if (canRestoreToOrdered()) {
+    <li>
+      <div class="action-text">
+        <div class="action-title">Back to "Waiting for delivery"</div>
+        <div class="action-description">Undo marking the order as delivered or rejected.</div>
+      </div>
+      <button mat-stroked-button (click)="setAsOrdered()">
+        <mat-icon>undo</mat-icon>
+        Restore
+      </button>
+    </li>
   }
 
-  <button mat-raised-button class="mr-2" color="warn" (click)="setAsRejected()">
-    Mark as rejected
-    <mat-icon fontIcon="do_not_disturb_on"></mat-icon>
-  </button>
+  @if (canReject()) {
+    <li>
+      <div class="action-text">
+        <div class="action-title">Mark as rejected</div>
+        <div class="action-description">Use this when the restaurant can't take the order.</div>
+      </div>
+      <button mat-stroked-button class="danger" (click)="setAsRejected()">
+        <mat-icon>do_not_disturb_on</mat-icon>
+        Reject
+      </button>
+    </li>
+  }
 
-  <button mat-raised-button class="mr-2" color="warn" (click)="deleteOrder()">
-    Delete
-    <mat-icon fontIcon="delete"></mat-icon>
-  </button>
-</div>
+  <li>
+    <div class="action-text">
+      <div class="action-title">Delete order</div>
+      <div class="action-description">Permanently removes the order and everyone's dishes.</div>
+    </div>
+    <button mat-flat-button class="danger" (click)="deleteOrder()">
+      <mat-icon>delete</mat-icon>
+      Delete
+    </button>
+  </li>
+</ul>

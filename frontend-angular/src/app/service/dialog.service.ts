@@ -12,6 +12,10 @@ export class DialogService {
   constructor(private dialog: MatDialog) { }
 
   displayDeleteDialog(title: string, content: string): MatDialogRef<DeleteConfirmationModalComponent, boolean | null> {
-    return this.dialog.open(DeleteConfirmationModalComponent, { width: '250px', data: { title: title, content: content } })
+    return this.displayConfirmDialog(title, content, "Delete")
+  }
+
+  displayConfirmDialog(title: string, content: string, confirmLabel: string): MatDialogRef<DeleteConfirmationModalComponent, boolean | null> {
+    return this.dialog.open(DeleteConfirmationModalComponent, { width: '360px', data: { title, content, confirmLabel } })
   }
 }

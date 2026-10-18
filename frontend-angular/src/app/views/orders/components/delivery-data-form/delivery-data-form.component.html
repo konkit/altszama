@@ -1,21 +1,22 @@
-<h3>Discounts and delivery fees</h3>
-<div>
+<div class="fields">
   <mat-form-field class="w-full">
-    <mat-label>Discount (in percent)</mat-label>
-    <input matInput [formControl]="deliveryDataForm().controls.decreaseInPercent"/>
+    <mat-label>Discount</mat-label>
+    <input matInput type="number" min="0" max="100" [formControl]="deliveryDataForm().controls.decreaseInPercent"/>
+    <span matTextSuffix>%</span>
+    @if (deliveryDataForm().controls.decreaseInPercent.invalid) {
+      <mat-error>Enter a value between 0 and 100</mat-error>
+    }
   </mat-form-field>
-</div>
 
-<div>
   <mat-form-field class="w-full">
-    <mat-label>Delivery fee (per whole order)</mat-label>
+    <mat-label>Delivery fee</mat-label>
     <app-money-input [formControl]="deliveryDataForm().controls.deliveryCostPerEverybody"></app-money-input>
+    <mat-hint>For the whole order, split between everyone</mat-hint>
   </mat-form-field>
-</div>
 
-<div>
   <mat-form-field class="w-full">
-    <mat-label>Delivery fee (per dish)</mat-label>
+    <mat-label>Fee per dish</mat-label>
     <app-money-input [formControl]="deliveryDataForm().controls.deliveryCostPerDish"></app-money-input>
+    <mat-hint>Added to the price of every dish</mat-hint>
   </mat-form-field>
 </div>

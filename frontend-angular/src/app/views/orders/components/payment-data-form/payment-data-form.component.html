@@ -1,35 +1,38 @@
-<div>
-  <h3>Payment</h3>
+@let form = paymentDataForm();
 
-  <div class="pb-8">
-    <mat-slide-toggle [formControl]="paymentDataForm().controls.paymentByCash">
-      Payment by cash
-    </mat-slide-toggle>
+<div class="methods">
+  <div class="method">
+    <mat-slide-toggle [formControl]="form.controls.paymentByCash">Cash</mat-slide-toggle>
   </div>
 
-  <div class="pb-4">
-    <mat-slide-toggle [formControl]="paymentDataForm().controls.paymentByBankTransfer">
-      Payment by bank transfer
-    </mat-slide-toggle>
+  <div class="method">
+    <mat-slide-toggle [formControl]="form.controls.paymentByBankTransfer">Bank transfer</mat-slide-toggle>
+    @if (form.controls.paymentByBankTransfer.value) {
+      <mat-form-field class="w-full">
+        <mat-label>Account number</mat-label>
+        <input matInput [formControl]="form.controls.bankTransferNumber" inputmode="numeric" autocomplete="off"/>
+        <mat-hint>26 digits</mat-hint>
+        @if (form.controls.bankTransferNumber.hasError('required')) {
+          <mat-error>Account number is required for bank transfers</mat-error>
+        } @else {
+          <mat-error>An account number has 26 digits</mat-error>
+        }
+      </mat-form-field>
+    }
   </div>
 
-  <div class="pb-4">
-    <mat-form-field class="w-full">
-      <mat-label>Bank transfer number</mat-label>
-      <input matInput [formControl]="paymentDataForm().controls.bankTransferNumber" />
-    </mat-form-field>
-  </div>
-
-  <div class="pb-4">
-    <mat-slide-toggle [formControl]="paymentDataForm().controls.paymentByBlik">
-      Payment by BLIK
-    </mat-slide-toggle>
-  </div>
-
-  <div>
-    <mat-form-field class="w-full">
-      <mat-label>BLIK phone number</mat-label>
-      <input matInput [formControl]="paymentDataForm().controls.blikPhoneNumber" [disabled]="paymentDataForm().controls.paymentByBlik.value === false"/>
-    </mat-form-field>
+  <div class="method">
+    <mat-slide-toggle [formControl]="form.controls.paymentByBlik">BLIK</mat-slide-toggle>
+    @if (form.controls.paymentByBlik.value) {
+      <mat-form-field class="w-full">
+        <mat-label>Phone number</mat-label>
+        <input matInput type="tel" [formControl]="form.controls.blikPhoneNumber" autocomplete="off"/>
+        @if (form.controls.blikPhoneNumber.hasError('required')) {
+          <mat-error>Phone number is required for BLIK</mat-error>
+        } @else {
+          <mat-error>Enter a 9-digit phone number</mat-error>
+        }
+      </mat-form-field>
+    }
   </div>
 </div>

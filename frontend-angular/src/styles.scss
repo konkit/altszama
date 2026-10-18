@@ -42,6 +42,8 @@ a:where(:not(.mat-mdc-button-base, .mat-mdc-list-item)) {
     filled-container-color: var(--mat-sys-error),
     filled-label-text-color: var(--mat-sys-on-error),
     protected-label-text-color: var(--mat-sys-error),
+    outlined-label-text-color: var(--mat-sys-error),
+    outlined-outline-color: var(--mat-sys-error),
     text-label-text-color: var(--mat-sys-error),
   ));
 
