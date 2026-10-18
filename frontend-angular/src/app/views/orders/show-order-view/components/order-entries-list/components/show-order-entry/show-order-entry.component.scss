@@ -1,22 +1,41 @@
-@use "../../../../../../../../assets/utils_breakpoints";
+:host {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lines {
+  flex-grow: 1;
+  min-width: 0;
+}
 
 .line {
-  font-size: 1rem;
-  line-height: 3rem;
-  letter-spacing: .03125em;
-}
-
-.title-bar {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.125rem 0;
+  font: var(--mat-sys-body-large);
 }
 
-@media (min-width: utils_breakpoints.$md) {
-  .title-bar {
-    flex-direction: row;
-  }
+.price {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
-.line-height-3rem {
-  line-height: 3rem;
+.side-dish {
+  padding-left: 1rem;
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.comment {
+  padding-left: 1rem;
+  font: var(--mat-sys-body-medium);
+  font-style: italic;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
 }

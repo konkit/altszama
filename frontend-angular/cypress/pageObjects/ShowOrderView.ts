@@ -6,7 +6,7 @@ export default class ShowOrderView {
 
     static async setAsDelivered() {
         cy.get("button").contains("Mark as delivered").click()
-        cy.get("[data-cy='order-status-chip']").contains("DELIVERED")
+        cy.get("[data-cy='order-status-chip']").contains("Delivered")
     }
 
     static addEntry(username: string, dishName: string, dishPrice: string) {

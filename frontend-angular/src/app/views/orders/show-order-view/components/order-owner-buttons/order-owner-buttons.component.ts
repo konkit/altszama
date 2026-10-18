@@ -26,6 +26,9 @@ export class OrderOwnerButtonsComponent {
   }
 
   placeOrder() {
+    if (this.isPlaceOrderButtonDisabled()) {
+      return
+    }
     this.router.navigate(["/orders", this.orderId(), "make_an_order"])
   }
 

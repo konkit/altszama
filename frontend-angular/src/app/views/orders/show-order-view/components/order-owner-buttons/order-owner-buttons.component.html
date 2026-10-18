@@ -1,31 +1,24 @@
-<div class="flex flex-row py-3">
-  <div class="flex">
-    @if (canShowPlaceOrderButton() && isPlaceOrderButtonDisabled()) {
-      <button mat-flat-button class="mr-3" [disabled]="true"
-        matTooltip="You cannot place an empty order. Choose a dish first.">
-        Place order
-        <mat-icon fontIcon="check"></mat-icon>
-      </button>
-    }
+<div class="flex flex-wrap gap-2">
+  <button mat-button (click)="goToEditOrder()">
+    <mat-icon>edit</mat-icon>
+    Edit order
+  </button>
 
-    @if (canShowPlaceOrderButton() && !isPlaceOrderButtonDisabled()) {
-      <button mat-flat-button class="mr-3" color="primary" (click)="placeOrder()">
-        Place order
-        <mat-icon fontIcon="arrow_right_alt"></mat-icon>
-      </button>
-    }
-
-    @if (canShowMarkAsDeliveredButton()) {
-      <button mat-flat-button class="mr-3" color="primary"
-        (click)="setAsDelivered()">
-        Mark as delivered
-        <mat-icon fontIcon="check"></mat-icon>
-      </button>
-    }
-
-    <button mat-raised-button class="mr-3" (click)="goToEditOrder()">
-      Edit order
-      <mat-icon fontIcon="settings"></mat-icon>
+  @if (canShowPlaceOrderButton()) {
+    <button mat-flat-button
+            (click)="placeOrder()"
+            [disabled]="isPlaceOrderButtonDisabled()"
+            [disabledInteractive]="true"
+            [matTooltip]="isPlaceOrderButtonDisabled() ? 'You cannot place an empty order. Choose a dish first.' : ''">
+      <mat-icon>send</mat-icon>
+      Place order
     </button>
-  </div>
+  }
+
+  @if (canShowMarkAsDeliveredButton()) {
+    <button mat-flat-button (click)="setAsDelivered()">
+      <mat-icon>done_all</mat-icon>
+      Mark as delivered
+    </button>
+  }
 </div>

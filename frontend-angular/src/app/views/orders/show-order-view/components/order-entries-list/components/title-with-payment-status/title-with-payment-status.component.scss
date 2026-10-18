@@ -1,31 +1,49 @@
-@use "../../../../../../../../assets/utils_breakpoints";
-
-.title-and-price {
-  font-size: 16px;
-  line-height: 3rem;
-}
-
-.icon-bar {
-  display: flex;
-  flex-direction: row;
-  margin-top: -1rem;
-}
-
 :host {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  min-height: 2.5rem;
 }
 
-@media (min-width: utils_breakpoints.$md) {
-  .icon-bar {
-    margin-top: 0;
-  }
-
-  :host {
-    flex-direction: row;
-  }
+.who {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
 }
 
-.line-height-3rem {
-  line-height: 3rem;
+.avatar {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font: var(--mat-sys-label-large);
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.name {
+  font: var(--mat-sys-title-medium);
+}
+
+.you {
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.total {
+  font: var(--mat-sys-title-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }

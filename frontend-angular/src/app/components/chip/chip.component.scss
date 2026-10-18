@@ -1,16 +1,35 @@
-//@use 'sass:map';
-
 @use '@angular/material' as mat;
 
-mat-chip {
+@mixin filled-tone($container, $label) {
+  @include mat.chips-overrides((
+    outline-width: 0,
+    elevated-container-color: $container,
+    label-text-color: $label,
+  ));
+}
+
+mat-chip.tone-outline {
   @include mat.chips-overrides((
     outline-color: var(--mat-sys-primary),
   ));
 }
 
-.outer {
-  border-radius: 9999px;
-  display: inline-flex;
-  padding: 0.75rem;
-  border: 1px solid black;
+mat-chip.tone-neutral {
+  @include filled-tone(var(--mat-sys-surface-container-highest), var(--mat-sys-on-surface-variant));
+}
+
+mat-chip.tone-primary {
+  @include filled-tone(var(--mat-sys-primary-container), var(--mat-sys-on-primary-container));
+}
+
+mat-chip.tone-success {
+  @include filled-tone(var(--app-success-container), var(--app-on-success-container));
+}
+
+mat-chip.tone-warning {
+  @include filled-tone(var(--app-warning-container), var(--app-on-warning-container));
+}
+
+mat-chip.tone-error {
+  @include filled-tone(var(--mat-sys-error-container), var(--mat-sys-on-error-container));
 }

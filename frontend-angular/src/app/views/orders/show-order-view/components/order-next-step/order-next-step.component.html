@@ -1,0 +1,9 @@
+@if (message(); as m) {
+  <div class="callout" [class]="'tone-' + m.tone" role="status">
+    <mat-icon>{{ m.icon }}</mat-icon>
+    <div>
+      <div class="callout-title">{{ m.title }}</div>
+      <div class="callout-text">{{ m.text }}</div>
+    </div>
+  </div>
+}

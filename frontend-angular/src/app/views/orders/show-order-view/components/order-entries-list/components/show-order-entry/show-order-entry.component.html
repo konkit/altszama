@@ -1,36 +1,28 @@
-<div class="title-bar">
-  <div>
-    <span class="line-height-3rem">{{ index() }}. </span>
-    <span class="line-height-3rem pl-4">{{ dishEntry.dishName }}</span>
-    <span class="line-height-3rem ml-2">({{dishEntry.price | price}})</span>
+<div class="lines">
+  <div class="line">
+    <span class="name">{{ dishEntry.dishName }}</span>
+    <span class="price">{{ dishEntry.price | price }}</span>
   </div>
 
-  @if (canEditOrderEntry()) {
-    <div class="ml-auto mr-0">
-      <button mat-icon-button color="primary" (click)="editDishEntry()">
-        <mat-icon fontIcon="edit"></mat-icon>
-      </button>
-      <button mat-icon-button color="warn" (click)="deleteDishEntry()">
-        <mat-icon fontIcon="delete"></mat-icon>
-      </button>
+  @for (sideDish of dishEntry.sideDishes; track sideDish) {
+    <div class="line side-dish">
+      <span class="name">+ {{ sideDish.name }}</span>
+      <span class="price">{{ sideDish.price | price }}</span>
     </div>
+  }
+
+  @if (dishEntry.comments.length > 0) {
+    <div class="comment">“{{ dishEntry.comments }}”</div>
   }
 </div>
 
-@for (sideDish of dishEntry.sideDishes; track sideDish) {
-  <div class="pl-8">
-    <div class="line">
-      <span class="line-height-3rem mr-2">+</span>
-      <span class="line-height-3rem">{{ sideDish.name }}</span>
-      <span class="line-height-3rem ml-2">({{sideDish.price | price}})</span>
-    </div>
-  </div>
-}
-
-@if (dishEntry.comments.length > 0) {
-  <div class="pl-8">
-    <span class="line-height-3rem">
-      Additional comments: {{ dishEntry.comments }}
-    </span>
+@if (canEditOrderEntry()) {
+  <div class="actions">
+    <button mat-icon-button (click)="editDishEntry()" matTooltip="Edit dish" aria-label="Edit dish">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button class="danger" (click)="deleteDishEntry()" matTooltip="Remove dish" aria-label="Remove dish">
+      <mat-icon>delete</mat-icon>
+    </button>
   </div>
 }

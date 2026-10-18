@@ -4,6 +4,12 @@
 html {
   color-scheme: light;
 
+  // M3 has no success/warning roles, so the app defines its own
+  --app-success-container: #c8efcf;
+  --app-on-success-container: #0b3a1a;
+  --app-warning-container: #ffe08f;
+  --app-on-warning-container: #3d2e00;
+
   @include mat.theme((
     color: (
       theme-type: light,
@@ -42,6 +48,51 @@ a:where(:not(.mat-mdc-button-base, .mat-mdc-list-item)) {
   @include mat.icon-button-overrides((
     icon-color: var(--mat-sys-error),
   ));
+}
+
+// Tinted message box with a leading icon, e.g. the "next step" hint on the order page
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container);
+  color: var(--mat-sys-on-surface);
+
+  > mat-icon {
+    flex-shrink: 0;
+  }
+
+  .callout-title {
+    font: var(--mat-sys-title-medium);
+  }
+
+  .callout-text {
+    font: var(--mat-sys-body-medium);
+    margin-top: 0.125rem;
+    opacity: 0.85;
+  }
+
+  &.tone-primary {
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+  }
+
+  &.tone-success {
+    background: var(--app-success-container);
+    color: var(--app-on-success-container);
+  }
+
+  &.tone-warning {
+    background: var(--app-warning-container);
+    color: var(--app-on-warning-container);
+  }
+
+  &.tone-error {
+    background: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+  }
 }
 
 table.clickable-table {

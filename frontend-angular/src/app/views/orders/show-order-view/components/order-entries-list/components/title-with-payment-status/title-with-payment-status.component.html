@@ -1,27 +1,27 @@
-<div class="line-height-3rem text-body1">
-  <span>{{ title() }} ({{ orderEntry().finalPrice | price }})</span>
+<div class="who">
+  <span class="avatar" aria-hidden="true">{{ initial() }}</span>
+  <span class="name">{{ title() }}</span>
+  @if (isOrderEntryOwner()) {
+    <span class="you">(you)</span>
+  }
 </div>
 
-@if (isOrderEntryOwner() || isOrderOwner()) {
-  <div class="icon-bar">
-    @if (shouldShowPaymentStatus()) {
-      <div class="flex flex-wrap content-center">
-        <app-payment-status-chip [isPaid]="isConfirmedAsPaid()"></app-payment-status-chip>
-      </div>
-    }
+<div class="status">
+  @if (shouldShowPaymentStatus()) {
+    <app-payment-status-chip [isPaid]="isConfirmedAsPaid()"></app-payment-status-chip>
+
     @if (shouldShowConfirmAsPaidButton()) {
-      <div>
-        <button mat-icon-button (click)="confirmAsPaid(orderEntry().id)" matTooltip="Confirm payment">
-          <mat-icon fontIcon="check"></mat-icon>
-        </button>
-      </div>
+      <button mat-button (click)="confirmAsPaid(orderEntry().id)">
+        <mat-icon>check</mat-icon>
+        {{ isOrderOwner() ? 'Confirm payment' : "I've paid" }}
+      </button>
     }
     @if (shouldShowRevertToUnpaid()) {
-      <div>
-        <button mat-icon-button (click)="revertToUnpaid(orderEntry().id)" matTooltip="Revert to 'unpaid'">
-          <mat-icon fontIcon="undo"></mat-icon>
-        </button>
-      </div>
+      <button mat-icon-button (click)="revertToUnpaid(orderEntry().id)" matTooltip="Mark as unpaid" aria-label="Mark as unpaid">
+        <mat-icon>undo</mat-icon>
+      </button>
     }
-  </div>
-}
+  }
+
+  <span class="total">{{ orderEntry().finalPrice | price }}</span>
+</div>

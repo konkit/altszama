@@ -5,7 +5,6 @@ import {ModifyOrderEntryService} from "../../service/modify-order-entry.service"
 import {CreateOrderEntryComponent} from '../create-order-entry/create-order-entry.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import {MatDividerModule} from '@angular/material/divider';
 import {ShowOrderEntryComponent} from '../show-order-entry/show-order-entry.component';
 import {EditOrderEntryComponent} from '../edit-order-entry/edit-order-entry.component';
 
@@ -18,12 +17,13 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './existing-order-entry-card.component.html',
     styleUrls: ['./existing-order-entry-card.component.scss'],
     standalone: true,
-    imports: [MatCardModule, TitleWithPaymentStatusComponent, EditOrderEntryComponent, ShowOrderEntryComponent, MatDividerModule, MatButtonModule, MatIconModule, CreateOrderEntryComponent]
+    imports: [MatCardModule, TitleWithPaymentStatusComponent, EditOrderEntryComponent, ShowOrderEntryComponent, MatButtonModule, MatIconModule, CreateOrderEntryComponent]
 })
 export class ExistingOrderEntryCardComponent {
   readonly order = input.required<ShowOrderDto>();
   readonly allDishesInRestaurant = input.required<DishDto[]>();
   readonly currentUserId = input.required<string>();
+  readonly isYours = input<boolean>(false);
   @Input() orderEntry!: ParticipantsOrderEntry
   @Input() modifyOrderEntryState!: ModifyOrderEntryState
 

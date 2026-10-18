@@ -1,72 +1,52 @@
-<mat-card class="mb-4 pb-4 md-px-5" data-cy="existing-order-entry">
-  <mat-card-header>
-    <mat-card-title>
-      <app-title-with-payment-status
-        [title]="orderEntry.username"
-        [priceForUser]="orderEntry.finalPrice"
-        [order]="order()"
-        [orderEntry]="orderEntry"
-        [currentUserId]="currentUserId()"
-        [costForUser]="orderEntry.finalPrice"
-      ></app-title-with-payment-status>
-    </mat-card-title>
-  </mat-card-header>
+<mat-card appearance="outlined" class="entry-card" [class.is-yours]="isYours()" data-cy="existing-order-entry">
+  <app-title-with-payment-status
+    [title]="orderEntry.username"
+    [priceForUser]="orderEntry.finalPrice"
+    [order]="order()"
+    [orderEntry]="orderEntry"
+    [currentUserId]="currentUserId()"
+    [costForUser]="orderEntry.finalPrice"
+  ></app-title-with-payment-status>
 
-  @for (dishEntry of orderEntry.dishEntries; track dishEntry; let dishEntryIndex = $index) {
-    <div class="px-6">
-      @if (modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id) {
-        <app-edit-order-entry
-          [dishIndex]="dishEntryIndex + 1"
-          [orderId]="order().id"
-          [allDishesInRestaurant]="allDishesInRestaurant()"
-          [modifyOrderEntryState]="modifyOrderEntryState"
-          [orderEntry]="orderEntry"
-          [dishEntry]="dishEntry"
-          >
-        </app-edit-order-entry>
-      }
-      @if (!(modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id)) {
-        <app-show-order-entry
-          [index]="dishEntryIndex + 1"
-          [order]="order()"
-          [orderEntry]="orderEntry"
-          [dishEntry]="dishEntry"
-          [currentUserId]="currentUserId()"
-          >
-        </app-show-order-entry>
-      }
-      @if (dishEntryIndex < orderEntry.dishEntries.length - 1) {
-        <div>
-          <mat-divider></mat-divider>
-        </div>
-      }
-    </div>
-  }
+  <div class="dishes">
+    @for (dishEntry of orderEntry.dishEntries; track dishEntry.id; let dishEntryIndex = $index) {
+      <div class="dish">
+        @if (modifyOrderEntryState.isEntryEdited === true && modifyOrderEntryState.dishEntryId === dishEntry.id) {
+          <app-edit-order-entry
+            [dishIndex]="dishEntryIndex + 1"
+            [orderId]="order().id"
+            [allDishesInRestaurant]="allDishesInRestaurant()"
+            [modifyOrderEntryState]="modifyOrderEntryState"
+            [orderEntry]="orderEntry"
+            [dishEntry]="dishEntry">
+          </app-edit-order-entry>
+        } @else {
+          <app-show-order-entry
+            [order]="order()"
+            [orderEntry]="orderEntry"
+            [dishEntry]="dishEntry"
+            [currentUserId]="currentUserId()">
+          </app-show-order-entry>
+        }
+      </div>
+    }
+  </div>
 
   @if (canAddNewEntry(orderEntry)) {
-    <div class="px-6">
-      @if (orderEntry.dishEntries.length > 0) {
-        <div class="">
-          <mat-divider></mat-divider>
-        </div>
-      }
-      @if (modifyOrderEntryState.isEntryCreating === false) {
-        <div>
-          <span class="text-body1 line-height-3rem">{{orderEntry.dishEntries.length + 1}}. </span>
-          <button mat-button (click)="createEntry()">
-            Add entry
-            <mat-icon fontIcon="add"></mat-icon>
-          </button>
-        </div>
-      }
-      @if (modifyOrderEntryState.isEntryCreating === true) {
-        <div class="pt-5">
-          <app-create-order-entry [orderId]="order().id"
-            [allDishesInRestaurant]="allDishesInRestaurant()"
-            [dishIndex]="orderEntry.dishEntries.length + 1">
-          </app-create-order-entry>
-        </div>
-      }
-    </div>
+    @if (modifyOrderEntryState.isEntryCreating === false) {
+      <div>
+        <button mat-button (click)="createEntry()">
+          <mat-icon>add</mat-icon>
+          Add entry
+        </button>
+      </div>
+    } @else {
+      <div class="dish">
+        <app-create-order-entry [orderId]="order().id"
+                                [allDishesInRestaurant]="allDishesInRestaurant()"
+                                [dishIndex]="orderEntry.dishEntries.length + 1">
+        </app-create-order-entry>
+      </div>
+    }
   }
 </mat-card>

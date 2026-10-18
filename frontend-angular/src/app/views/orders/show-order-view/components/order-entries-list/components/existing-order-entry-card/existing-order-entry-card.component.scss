@@ -1,12 +1,26 @@
-@use "../../../../../../../../assets/utils_breakpoints.scss";
+@use '@angular/material' as mat;
 
-@media (min-width: utils_breakpoints.$md) {
-  .md-px-5 {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
+:host {
+  display: block;
+  margin-bottom: 0.75rem;
 }
 
-.line-height-3rem {
-  line-height: 3rem;
+.entry-card {
+  padding: 0.75rem 1.25rem;
+}
+
+.entry-card.is-yours {
+  @include mat.card-overrides((
+    outlined-outline-color: var(--mat-sys-primary),
+    outlined-outline-width: 2px,
+  ));
+}
+
+.dish {
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.dishes {
+  margin-top: 0.5rem;
 }

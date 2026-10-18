@@ -4,6 +4,7 @@ import {ModifyOrderEntryService} from "../../service/modify-order-entry.service"
 import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
@@ -12,10 +13,9 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './show-order-entry.component.html',
     styleUrls: ['./show-order-entry.component.scss'],
     standalone: true,
-    imports: [MatButtonModule, MatIconModule, PricePipe]
+    imports: [MatButtonModule, MatIconModule, MatTooltipModule, PricePipe]
 })
 export class ShowOrderEntryComponent {
-  readonly index = input.required<number>();
   readonly order = input.required<ShowOrderDto>();
   readonly orderEntry = input.required<ParticipantsOrderEntry>();
   @Input() dishEntry!: ParticipantsDishEntry;

@@ -1,5 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {MatChip} from '@angular/material/chips';
+
+export type ChipTone = 'outline' | 'neutral' | 'primary' | 'success' | 'warning' | 'error'
 
 @Component({
     selector: 'app-chip',
@@ -9,4 +11,5 @@ import {MatChip} from '@angular/material/chips';
   imports: [MatChip]
 })
 export class ChipComponent {
+  readonly tone = input<ChipTone>('outline');
 }

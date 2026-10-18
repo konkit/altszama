@@ -1,6 +1,0 @@
-@use '@angular/material' as mat;
-@use "../../../../../../../../../assets/utils_flex.scss";
-
-.allowed {
-  background-color: mat.m2-get-color-from-palette(mat.$m2-deep-purple-palette, 200) !important;
-}

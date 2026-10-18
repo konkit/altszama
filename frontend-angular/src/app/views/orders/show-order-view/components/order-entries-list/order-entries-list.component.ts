@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, computed, input} from '@angular/core';
 import {DishDto, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../frontend-client";
 import {ModifyOrderEntryState} from "../../../lib/model";
 import {Observable} from "rxjs";
@@ -29,6 +29,9 @@ export class OrderEntriesListComponent {
   readonly order = input.required<ShowOrderDto>();
   readonly currentUserId = input.required<string>();
   readonly yourOrderEntries = input.required<Array<ParticipantsOrderEntry>>();
+
+  readonly canAddYourEntry = computed(() => this.order().orderState === OrderStateEnum.Created && this.yourOrderEntries().length === 0)
+  readonly showYourSection = computed(() => this.canAddYourEntry() || this.yourOrderEntries().length > 0)
 
   otherUserOrderEntries$: Observable<Array<ParticipantsOrderEntry>>
   modifyOrderEntryState$: Observable<ModifyOrderEntryState>;

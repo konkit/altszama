@@ -27,6 +27,10 @@ export class TitleWithPaymentStatusComponent {
   constructor(private orderActionsService: OrderActionsService) {
   }
 
+  initial() {
+    return this.title().trim().charAt(0).toUpperCase()
+  }
+
   isOrderOwner() {
     return this.order().orderCreatorId === this.currentUserId();
   }

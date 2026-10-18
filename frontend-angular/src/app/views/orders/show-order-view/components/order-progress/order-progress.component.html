@@ -1,0 +1,16 @@
+<ol class="progress" aria-label="Order progress">
+  @for (step of steps; track step.state; let i = $index) {
+    <li [class.done]="isDone(i)"
+        [class.current]="isCurrent(i)"
+        [attr.aria-current]="isCurrent(i) ? 'step' : null">
+      <span class="dot">
+        @if (isDone(i)) {
+          <mat-icon>check</mat-icon>
+        } @else {
+          {{ i + 1 }}
+        }
+      </span>
+      <span class="label">{{ step.label }}</span>
+    </li>
+  }
+</ol>

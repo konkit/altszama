@@ -12,7 +12,7 @@ import {PaymentOptionsData, PriceSummaryData, ShowOrderViewState, ShowOrderViewS
 import {
   BankTransferQrcodeModal,
   QrcodeModalInput
-} from "../components/order-details/components/payment-options-summary/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
+} from "../components/bank-transfer-qrcode-modal/bank-transfer-qrcode-modal.component";
 import {MatDialog} from "@angular/material/dialog";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
@@ -28,6 +28,8 @@ export class ShowOrderViewService {
   otherUserOrderEntries = new BehaviorSubject<Array<ParticipantsOrderEntry>>([])
 
   showOrderViewState$: Observable<ShowOrderViewState> = this.createShowOrderViewStateObservable()
+
+  private orderChangeEventSource: EventSourcePolyfill | null = null
 
   constructor(private orderControllerService: OrderControllerService,
               private matDialog: MatDialog,
@@ -97,6 +99,8 @@ export class ShowOrderViewService {
 
         let username = this.authService.getLoggedUser()!.username;
         let yourOrderEntries = r.orderEntries.filter(e => e.userId === r.currentUserId);
+        let yourTotalPrice = yourOrderEntries.reduce((sum, e) => sum + e.finalPrice, 0);
+        let isConfirmed = (e: ParticipantsOrderEntry) => e.paymentStatus === ParticipantsOrderEntry.PaymentStatusEnum.Confirmed;
 
         let allEatingPeopleCount = r.orderEntries.flatMap(e => e.dishEntries).length;
         let allDishesInRestaurant = r.allDishesInRestaurant
@@ -124,6 +128,10 @@ export class ShowOrderViewService {
           currentUserId: r.currentUserId,
           username: username,
           yourOrderEntries: yourOrderEntries,
+          yourTotalPrice: yourTotalPrice,
+          isYourPaymentConfirmed: yourOrderEntries.length > 0 && yourOrderEntries.every(isConfirmed),
+          entriesCount: r.orderEntries.length,
+          paidEntriesCount: r.orderEntries.filter(isConfirmed).length,
           priceSummaryData: priceSummaryData,
           paymentOptionsData: paymentOptionsData,
         }
@@ -134,7 +142,7 @@ export class ShowOrderViewService {
 
   private getViewStateFlags(r: ShowOrderResponse): ShowOrderViewStateFlags {
     let isOrderOwner = r.order.orderCreatorId === r.currentUserId;
-    let canShowPlaceOrderButton = isOrderOwner && [OrderStateEnum.Created, OrderStateEnum.Ordering].includes(r.order.orderState)
+    let canShowPlaceOrderButton = isOrderOwner && r.order.orderState === OrderStateEnum.Created
     let canShowMarkAsDeliveredButton = isOrderOwner && r.order.orderState === OrderStateEnum.Ordered;
     let isPlaceOrderButtonDisabled = r.orderEntries.length === 0;
     let shouldShowOrderLockedWarning = isOrderOwner && [OrderStateEnum.Ordering].includes(r.order.orderState);
@@ -149,9 +157,12 @@ export class ShowOrderViewService {
   }
 
   handleOrderChangeSSE() {
+    this.stopOrderChangeSSE()
+
     this.getOrderId$().subscribe(orderId => {
       let token = this.authService.getLoggedUser()?.token
       let es = new EventSourcePolyfill('/api/orders/sse', {headers: {Authorization: "Bearer " + token}});
+      this.orderChangeEventSource = es
 
       const eventListener = (event: any) => {
         const data = JSON.parse(event.data)
@@ -163,6 +174,11 @@ export class ShowOrderViewService {
 
       es.addEventListener("message", eventListener);
     })
+  }
+
+  stopOrderChangeSSE() {
+    this.orderChangeEventSource?.close()
+    this.orderChangeEventSource = null
   }
 
   showQrModal() {

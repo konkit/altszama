@@ -8,6 +8,10 @@ export interface ShowOrderViewState {
   currentUserId: string
   username: string
   yourOrderEntries: ParticipantsOrderEntry[]
+  yourTotalPrice: number
+  isYourPaymentConfirmed: boolean
+  entriesCount: number
+  paidEntriesCount: number
   priceSummaryData: PriceSummaryData
   paymentOptionsData: PaymentOptionsData
 }
