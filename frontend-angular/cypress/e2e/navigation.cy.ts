@@ -46,11 +46,6 @@ describe('Navigation', () => {
     cy.get("a").contains("All Orders").click()
     cy.get("tr.mat-mdc-row").should("have.length", 2)
     cy.get("tr.mat-mdc-row").contains("Pizzeria").parents("tr").should("contain", "you")
-
-    // James created Pizzeria and only opened Chinese spot without adding a dish, so "Mine" keeps just Pizzeria
-    cy.get("mat-button-toggle").contains("Mine").click()
-    cy.get("tr.mat-mdc-row").should("have.length", 1).and("contain", "Pizzeria")
-    cy.get("mat-button-toggle").contains("All").click()
     cy.get("tr.mat-mdc-row").contains(RESTAURANT_NAME).click()
     cy.get("h1").contains(RESTAURANT_NAME)
     cy.get("button").contains("Back").click()

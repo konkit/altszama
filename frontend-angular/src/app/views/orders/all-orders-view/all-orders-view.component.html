@@ -1,10 +1,6 @@
 <app-view-wrapper>
   <header class="page-header">
     <h1>All orders</h1>
-    <button mat-flat-button (click)="goToCreateOrder()">
-      <mat-icon>add</mat-icon>
-      New order
-    </button>
   </header>
 
   @if (!hasAnyOrders) {
@@ -16,27 +12,6 @@
       </div>
     </div>
   }
-
-  <div class="toolbar" [class.hidden]="!hasAnyOrders">
-    <mat-form-field class="search" subscriptSizing="dynamic">
-      <mat-label>Search restaurant or person</mat-label>
-      <mat-icon matIconPrefix>search</mat-icon>
-      <input matInput [value]="filter.search" (input)="searchChanged($event)" autocomplete="off" data-cy="orders-search-input"/>
-      @if (filter.search) {
-        <button mat-icon-button matIconSuffix type="button" (click)="clearSearch()" aria-label="Clear search">
-          <mat-icon>close</mat-icon>
-        </button>
-      }
-    </mat-form-field>
-
-    <mat-button-toggle-group [value]="filter.onlyMine ? 'mine' : 'all'"
-                             (change)="scopeChanged($event)"
-                             hideSingleSelectionIndicator
-                             aria-label="Which orders to show">
-      <mat-button-toggle value="all">All</mat-button-toggle>
-      <mat-button-toggle value="mine">Mine</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
 
   <div class="results" [class.hidden]="!hasAnyOrders">
     <table mat-table [dataSource]="dataSource" matSort matSortActive="orderDate" matSortDirection="desc"
@@ -67,9 +42,6 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/orders', row.id, 'show']"></tr>
-      <tr class="mat-mdc-row" *matNoDataRow>
-        <td class="mat-mdc-cell no-results" [attr.colspan]="displayedColumns.length">No orders match your search.</td>
-      </tr>
     </table>
 
     <mat-nav-list class="orders-list" aria-label="Orders">
@@ -81,8 +53,6 @@
             <app-chip [tone]="getOrderStateTone(order.orderState)">{{ getOrderStateString(order.orderState) }}</app-chip>
           </span>
         </a>
-      } @empty {
-        <p class="text-muted no-results">No orders match your search.</p>
       }
     </mat-nav-list>
 
