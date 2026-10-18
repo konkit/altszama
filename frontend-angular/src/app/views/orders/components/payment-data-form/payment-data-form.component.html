@@ -10,7 +10,7 @@
     @if (form.controls.paymentByBankTransfer.value) {
       <mat-form-field class="w-full">
         <mat-label>Account number</mat-label>
-        <input matInput [formControl]="form.controls.bankTransferNumber" inputmode="numeric" autocomplete="off"/>
+        <input matInput [formControl]="form.controls.bankTransferNumber" inputmode="numeric" autocomplete="off" data-cy="bank-transfer-number-input"/>
         <mat-hint>26 digits</mat-hint>
         @if (form.controls.bankTransferNumber.hasError('required')) {
           <mat-error>Account number is required for bank transfers</mat-error>
