@@ -1,10 +1,91 @@
+@use "../../../../assets/utils_breakpoints";
+
 :host {
   width: 100%;
   height: 100%;
   display: flex;
 }
 
+.page-header {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-headline-medium);
+  }
+}
+
+.meta {
+  margin-top: 0.75rem;
+}
+
+.callout-actions {
+  margin-top: 1rem;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 48rem;
+}
+
+.step-number {
+  display: grid;
+  place-items: center;
+  font: var(--mat-sys-title-medium);
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+}
+
+mat-card-content {
+  padding-top: 1rem;
+}
+
+.call-step {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+
+  @media (min-width: utils_breakpoints.$md) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.call-button {
+  width: 100%;
+  height: 3.5rem;
+  font: var(--mat-sys-title-medium);
+}
+
+.confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+
+  > button {
+    margin-top: 0.5rem;
+  }
+}
 
 .time-form-field {
-  width: 10rem;
+  width: 12rem;
+}
+
+.unlock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0 1rem;
+}
+
+.loading {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding-top: 6rem;
 }

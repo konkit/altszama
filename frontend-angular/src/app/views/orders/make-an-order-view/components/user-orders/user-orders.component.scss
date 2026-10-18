@@ -1,0 +1,62 @@
+:host {
+  display: block;
+}
+
+.progress {
+  font: var(--mat-sys-label-large);
+  margin-bottom: 0.5rem;
+}
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  > li {
+    padding: 0.5rem 0;
+  }
+
+  > li + li {
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  > li.done .dish,
+  > li.done .people {
+    opacity: 0.5;
+  }
+
+  > li.done .dish {
+    text-decoration: line-through;
+  }
+}
+
+.dish {
+  font: var(--mat-sys-title-medium);
+}
+
+.people {
+  list-style: none;
+  margin: 0;
+  // Align with the checkbox label
+  padding: 0 0 0 2.5rem;
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+    padding: 0.125rem 0;
+    font: var(--mat-sys-body-medium);
+  }
+}
+
+.person {
+  font-weight: 500;
+}
+
+.detail {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.comment {
+  font-style: italic;
+}

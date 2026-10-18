@@ -8,6 +8,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {ShowOrderViewState} from "../../../lib/model";
 import {ShowOrderViewService} from "../../service/show-order-view.service";
 import {PricePipe} from "../../../../../components/pipes/price.pipe";
+import {PriceSummaryComponent} from "../../../components/price-summary/price-summary.component";
 import {ShowOrderDto} from "../../../../../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
 
@@ -16,7 +17,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
   templateUrl: './order-summary-panel.component.html',
   styleUrls: ['./order-summary-panel.component.scss'],
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, MatTooltipModule, PricePipe]
+  imports: [MatCardModule, MatIconModule, MatButtonModule, MatTooltipModule, PricePipe, PriceSummaryComponent]
 })
 export class OrderSummaryPanelComponent {
   readonly viewState = input.required<ShowOrderViewState>();

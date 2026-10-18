@@ -97,6 +97,54 @@ a:where(:not(.mat-mdc-button-base, .mat-mdc-list-item)) {
   }
 }
 
+// Label/amount rows of a price breakdown (app-price-summary and rows projected into it)
+.price-rows {
+  margin: 0;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0;
+  font: var(--mat-sys-body-medium);
+
+  dt, dd {
+    margin: 0;
+  }
+
+  dd {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &.total {
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--mat-sys-outline-variant);
+    font: var(--mat-sys-title-medium);
+  }
+
+  &.highlight {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--mat-sys-corner-small);
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+    font-weight: 500;
+  }
+
+  &.highlight.tone-success {
+    background: var(--app-success-container);
+    color: var(--app-on-success-container);
+  }
+
+  &.highlight.tone-warning {
+    background: var(--app-warning-container);
+    color: var(--app-on-warning-container);
+  }
+}
+
 table.clickable-table {
   tr {
     cursor: pointer;

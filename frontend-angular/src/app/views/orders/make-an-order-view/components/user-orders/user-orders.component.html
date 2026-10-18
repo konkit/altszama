@@ -1,48 +1,27 @@
-<div class="flex flex-row items-center">
-  <h1>Dishes:</h1>
-
-  <div class="mb-3 ml-6">
-    <button mat-button (click)="accordion.openAll()">Expand All</button>
-    <button mat-button (click)="accordion.closeAll()">Collapse All</button>
-  </div>
+<div class="progress text-muted">
+  {{ doneCount() }} of {{ groupedEntries().length }} done
 </div>
 
-<mat-accordion multi="true">
-  @for (entry of groupedEntries(); track entry; let entryIndex = $index) {
-    <mat-expansion-panel [expanded]="accordionStates[entryIndex]"
-      (opened)="accordionStates[entryIndex] = true"
-      (closed)="accordionStates[entryIndex] = false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <div><b>{{ entry.eatingPeopleCount }}x</b> {{ entry.dishName }}</div>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
+<ul class="checklist">
+  @for (entry of groupedEntries(); track $index; let entryIndex = $index) {
+    <li [class.done]="isChecked(entryIndex)">
+      <mat-checkbox [checked]="isChecked(entryIndex)" (change)="toggle(entryIndex, $event.checked)">
+        <span class="dish"><b>{{ entry.eatingPeopleCount }}×</b> {{ entry.dishName }}</span>
+      </mat-checkbox>
 
-      @if (entry.eatingPeopleEntries.length > 0) {
-        <mat-list>
-          @for (eatingPersonEntry of entry.eatingPeopleEntries; track eatingPersonEntry; let i = $index) {
-            <div>
-              <mat-list-item>
-                {{ i + 1 }}. {{ eatingPersonEntry.username }}
-              </mat-list-item>
-              <div class="pl-5">
-                @if (eatingPersonEntry.comments.length > 0) {
-                  <mat-list-item>
-                    Additional comments: {{ eatingPersonEntry.comments }}
-                  </mat-list-item>
-                }
-                @if (eatingPersonEntry.sideDishes.length > 0) {
-                  @for (sd of eatingPersonEntry.sideDishes; track sd; let j = $index) {
-                    <mat-list-item>
-                      + {{ sd.name }}
-                    </mat-list-item>
-                  }
-                }
-              </div>
-            </div>
-          }
-        </mat-list>
-      }
-    </mat-expansion-panel>
+      <ul class="people">
+        @for (person of entry.eatingPeopleEntries; track $index) {
+          <li>
+            <span class="person">{{ person.username }}</span>
+            @for (sideDish of person.sideDishes; track $index) {
+              <span class="detail">+ {{ sideDish.name }}</span>
+            }
+            @if (person.comments.length > 0) {
+              <span class="detail comment">“{{ person.comments }}”</span>
+            }
+          </li>
+        }
+      </ul>
+    </li>
   }
-</mat-accordion>
+</ul>

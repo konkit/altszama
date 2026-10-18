@@ -1,6 +1,4 @@
 @let vs = viewState();
-@let price = vs.priceSummaryData;
-@let delivery = price.deliveryData;
 @let paymentData = vs.order.paymentData;
 
 <mat-card appearance="outlined">
@@ -9,59 +7,21 @@
   </mat-card-header>
 
   <mat-card-content>
-    <dl class="price-rows">
-      <div class="price-row">
-        <dt>Dishes</dt>
-        <dd>{{ price.basePriceSum | price }}</dd>
-      </div>
-
-      @if (delivery.decreaseInPercent !== 0) {
-        <div class="price-row">
-          <dt>Discount</dt>
-          <dd>−{{ delivery.decreaseInPercent }} %</dd>
-        </div>
-      }
-
-      @if (delivery.deliveryCostPerEverybody !== 0) {
-        <div class="price-row">
-          <dt>Delivery (per order)</dt>
-          <dd>+{{ delivery.deliveryCostPerEverybody | price }}</dd>
-        </div>
-      }
-
-      @if (delivery.deliveryCostPerDish !== 0) {
-        <div class="price-row">
-          <dt>Delivery (per dish)</dt>
-          <dd>+{{ delivery.deliveryCostPerDish | price }} × {{ price.allEatingPeopleCount || 0 }}</dd>
-        </div>
-      }
-
-      @if (delivery.deliveryCostPerEverybody === 0 && delivery.deliveryCostPerDish === 0) {
-        <div class="price-row text-muted">
-          <dt>Delivery</dt>
-          <dd>Free</dd>
-        </div>
-      }
-
-      <div class="price-row total">
-        <dt>Total</dt>
-        <dd>{{ price.totalPrice | price }}</dd>
-      </div>
-
+    <app-price-summary [priceSummaryData]="vs.priceSummaryData">
       @if (vs.yourOrderEntries.length > 0) {
-        <div class="price-row your-share">
+        <div class="price-row highlight">
           <dt>Your share</dt>
           <dd>{{ vs.yourTotalPrice | price }}</dd>
         </div>
       }
 
       @if (showPaidCounter()) {
-        <div class="price-row paid-counter" [class.all-paid]="vs.paidEntriesCount === vs.entriesCount">
+        <div class="price-row highlight" [class]="vs.paidEntriesCount === vs.entriesCount ? 'tone-success' : 'tone-warning'">
           <dt>Paid</dt>
           <dd>{{ vs.paidEntriesCount }} of {{ vs.entriesCount }} people</dd>
         </div>
       }
-    </dl>
+    </app-price-summary>
 
     <h3 class="section-title">
       @if (vs.flags.isOrderOwner) {

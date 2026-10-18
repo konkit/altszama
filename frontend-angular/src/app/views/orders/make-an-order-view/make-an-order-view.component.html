@@ -1,90 +1,113 @@
 @if (data$ | async; as data) {
+  @let initData = data.initData;
+
   <app-view-wrapper>
-    <h1>Make an order from {{ data.initData.restaurantName }}</h1>
+    <div>
+      <button mat-button [routerLink]="['/orders', getOrderId(), 'show']">
+        <mat-icon>arrow_back</mat-icon>
+        Back to order
+      </button>
+    </div>
 
-    @if (data.initData.orderState !== 'ORDERING') {
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>
-            <h1>Ordering from {{ data.initData.restaurantName }}</h1>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <h4>Sorry, the order is empty</h4>
-          <p>
-            <button mat-raised-button (click)="goBack()">
-              Go back
-              <mat-icon fontIcon="arrow_back"></mat-icon>
+    <header class="page-header">
+      <h1>Ordering from {{ initData.restaurantName }}</h1>
+      <div class="meta">
+        <app-chip [tone]="getOrderStateTone(initData.orderState)">
+          {{ getOrderStateString(initData.orderState) }}
+        </app-chip>
+      </div>
+    </header>
+
+    @if (initData.orderState !== OrderStateEnum.Ordering) {
+      <div class="callout tone-primary" role="status">
+        <mat-icon>info</mat-icon>
+        <div>
+          <div class="callout-title">This order isn't being placed right now</div>
+          <div class="callout-text">
+            To place it, go back to the order and click "Place order". That locks the order while you call the restaurant.
+          </div>
+          <div class="callout-actions">
+            <button mat-flat-button (click)="goBack()">
+              <mat-icon>arrow_back</mat-icon>
+              Back to order
             </button>
-          </p>
-        </mat-card-content>
-      </mat-card>
-    }
-
-    @if (data.initData.orderState === 'ORDERING') {
-      <mat-card appearance="raised" class="mb-5">
-        <mat-card-header>
-          <mat-card-title>The order is locked!</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>Order is now locked, so no one should order anything else now.</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button (click)="unlockOrder()">
-            Unlock and go back
-            <mat-icon fontIcon="undo"></mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
-
-      <div class="grid grid-cols-2 gap-8 w-full mb-5">
-        <mat-card>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="steps">
+        <mat-card appearance="outlined">
           <mat-card-header>
-            <mat-card-title>Call the place!</mat-card-title>
+            <span class="step-number" mat-card-avatar>1</span>
+            <mat-card-title>Call the restaurant</mat-card-title>
+            <mat-card-subtitle>The order is locked, so nobody can change their dishes now</mat-card-subtitle>
           </mat-card-header>
-          <mat-card-content class="h-full">
-            <div class="flex flex-col">
-              <div class="justify-center">
-                @if (data.initData.restaurantTelephone.length > 0) {
-                  <p>Call <b>{{ data.initData.restaurantName }}</b>, tel. <b>{{ data.initData.restaurantTelephone }}</b> and make an order.</p>
-                } @else {
-                  <p>Call <b>{{ data.initData.restaurantName }}</b> (<i>phone number not specified, sorry</i> :/) and make an order.</p>
-                }
-              </div>
-              <div>
-                <p>Afterwards, please fill the estimated time of delivery:</p>
-              </div>
-              <div>
-                <mat-form-field class="time-form-field">
-                  <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="formGroup.controls.approxTimeOfDelivery" placeholder="ETA">
-                  <mat-icon matSuffix (click)="picker.open()">watch_later</mat-icon>
-                </mat-form-field>
-                <ngx-mat-timepicker #picker></ngx-mat-timepicker>
-                <button mat-flat-button color="primary" (click)="submitForm()" class="ml-3">
-                  Order placed!
-                </button>
-              </div>
+          <mat-card-content class="call-step">
+            <div class="call">
+              @if (initData.restaurantTelephone.length > 0) {
+                <a mat-flat-button class="call-button" [href]="telLink(initData.restaurantTelephone)">
+                  <mat-icon>call</mat-icon>
+                  Call {{ initData.restaurantTelephone }}
+                </a>
+              } @else {
+                <p class="text-muted">
+                  There's no phone number for {{ initData.restaurantName }}. You can add it in the restaurant's details.
+                </p>
+              }
             </div>
+            <app-price-summary class="price" [priceSummaryData]="data.priceSummaryData"></app-price-summary>
           </mat-card-content>
         </mat-card>
-        <mat-card>
+
+        <mat-card appearance="outlined">
           <mat-card-header>
-            <mat-card-title>Cost summary</mat-card-title>
+            <span class="step-number" mat-card-avatar>2</span>
+            <mat-card-title>Read out the order</mat-card-title>
+            <mat-card-subtitle>Tick off each dish once you've said it</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <app-price-summary [priceSummaryData]="data.priceSummaryData">
-            </app-price-summary>
+            <app-user-orders [groupedEntries]="initData.groupedEntries"></app-user-orders>
           </mat-card-content>
         </mat-card>
+
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <span class="step-number" mat-card-avatar>3</span>
+            <mat-card-title>Confirm the order</mat-card-title>
+            <mat-card-subtitle>Let everyone know when to expect the food</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <form class="confirm" (submit)="$event.preventDefault(); submitForm()">
+              <mat-form-field class="time-form-field">
+                <mat-label>Expected delivery</mat-label>
+                <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="formGroup.controls.approxTimeOfDelivery">
+                <button mat-icon-button matIconSuffix type="button" (click)="picker.open()" aria-label="Pick delivery time">
+                  <mat-icon>schedule</mat-icon>
+                </button>
+                <mat-hint>Optional</mat-hint>
+              </mat-form-field>
+              <ngx-mat-timepicker #picker></ngx-mat-timepicker>
+
+              <button mat-flat-button type="submit" [disabled]="isSaving">
+                <mat-icon>check</mat-icon>
+                Mark as ordered
+              </button>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="unlock">
+          <span class="text-muted">Not ordering yet?</span>
+          <button mat-button (click)="unlockOrder()" [disabled]="isSaving">
+            <mat-icon>lock_open</mat-icon>
+            Unlock order
+          </button>
+        </div>
       </div>
-      <app-user-orders [groupedEntries]="data.initData.groupedEntries"></app-user-orders>
     }
-
   </app-view-wrapper>
+} @else {
+  <div class="loading">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
 }
-
-
-
-
-
-

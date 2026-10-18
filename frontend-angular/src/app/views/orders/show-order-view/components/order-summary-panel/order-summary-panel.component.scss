@@ -6,56 +6,6 @@ mat-card-content {
   padding-top: 0.5rem;
 }
 
-.price-rows {
-  margin: 0;
-}
-
-.price-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.25rem 0;
-  font: var(--mat-sys-body-medium);
-
-  dt, dd {
-    margin: 0;
-  }
-
-  dd {
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-.price-row.total {
-  margin-top: 0.5rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--mat-sys-outline-variant);
-  font: var(--mat-sys-title-medium);
-}
-
-.price-row.your-share {
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--mat-sys-corner-small);
-  background: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
-  font-weight: 500;
-}
-
-.price-row.paid-counter {
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--mat-sys-corner-small);
-  background: var(--app-warning-container);
-  color: var(--app-on-warning-container);
-
-  &.all-paid {
-    background: var(--app-success-container);
-    color: var(--app-on-success-container);
-  }
-}
-
 .section-title {
   margin: 1.5rem 0 0.5rem;
   font: var(--mat-sys-title-small);
