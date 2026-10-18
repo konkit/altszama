@@ -1,10 +1,48 @@
+@use "@angular/material" as mat;
 @use "assets/utils";
 
-/* You can add global styles to this file, and also import other style files */
+html {
+  color-scheme: light;
+
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
+
+a:where(:not(.mat-mdc-button-base, .mat-mdc-list-item)) {
+  color: var(--mat-sys-primary);
+  text-underline-offset: 2px;
+}
+
+// M3 buttons ignore color="warn", so map it (and .danger) to the error color explicitly
+.mat-mdc-button-base.mat-warn,
+.mat-mdc-button-base.danger {
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-error),
+    filled-label-text-color: var(--mat-sys-on-error),
+    protected-label-text-color: var(--mat-sys-error),
+    text-label-text-color: var(--mat-sys-error),
+  ));
+
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-error),
+  ));
+}
 
 table.clickable-table {
   tr {
@@ -14,8 +52,4 @@ table.clickable-table {
   tr.mat-mdc-row:hover {
     background-color: var(--mat-sys-surface-container-high)
   }
-
-  //tr.selected, tr.selected:hover {
-  //  //background-color: mat.m2-get-color-from-palette($altszama-theme, 100);
-  //}
 }
