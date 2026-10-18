@@ -3,6 +3,7 @@ import jakarta.validation.constraints.NotNull
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.jce.spec.ECPublicKeySpec
+import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
@@ -13,8 +14,9 @@ import java.util.*
 
 @Document
 data class PushNotifSubscription(
+  // Generated like User's id; an empty default made every new subscription overwrite the previous one
   @Id
-  var id: String = "",
+  var id: String = ObjectId.get().toHexString(),
 
   @NotNull
   var endpoint: String = "",
