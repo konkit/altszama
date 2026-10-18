@@ -1,5 +1,66 @@
+@use '@angular/material' as mat;
+@use "../../../../assets/utils_breakpoints";
+
 :host {
   display: flex;
   width: 100%;
   height: 100%;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-headline-medium);
+  }
+}
+
+.hint {
+  margin: 0 0 1rem;
+}
+
+.cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+
+  @media (min-width: utils_breakpoints.$md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: utils_breakpoints.$lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.order-card.is-yours {
+  @include mat.card-overrides((
+    outlined-outline-color: var(--mat-sys-primary),
+    outlined-outline-width: 2px,
+  ));
+}
+
+mat-card-content {
+  padding-top: 0.75rem;
+}
+
+.your-dishes {
+  margin-top: 1rem;
+
+  .label {
+    font: var(--mat-sys-label-medium);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.25rem;
+    font: var(--mat-sys-body-medium);
+  }
 }

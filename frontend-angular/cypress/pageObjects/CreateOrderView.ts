@@ -15,7 +15,7 @@ export default class CreateOrderView {
   }
 
   static goToOrder(restaurantName: string) {
-    cy.get("mat-action-list").contains(restaurantName).click()
+    cy.get("mat-card").contains(restaurantName).parents("mat-card").find("mat-card-actions button").click()
   }
 
 }

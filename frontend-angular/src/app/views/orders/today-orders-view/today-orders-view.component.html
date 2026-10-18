@@ -1,98 +1,66 @@
 <app-view-wrapper>
-  <h1>Today's Orders</h1>
+  <header class="page-header">
+    <h1>Today's orders</h1>
+    <button mat-flat-button (click)="goToCreateOrder()">
+      <mat-icon>add</mat-icon>
+      Add new order
+    </button>
+  </header>
 
-  @if (todaysOrders$ | async; as todayOrders) {
+  @if (viewData$ | async; as data) {
+    @if (data.cards.length === 0) {
+      <div class="callout">
+        <mat-icon>restaurant</mat-icon>
+        <div>
+          <div class="callout-title">No orders today yet</div>
+          <div class="callout-text">You haven't ordered anything today yet. Start a new order and your team can join in.</div>
+        </div>
+      </div>
+    } @else {
+      @if (!data.hasYourEntries) {
+        <p class="text-muted hint">You haven't ordered anything today yet. Join one of the orders below or start a new one.</p>
+      }
 
-    <h2>You ordered:</h2>
-
-    @if (todayOrders.currentOrderEntries.length == 0) {
-      <mat-list>
-        <mat-list-item>
-          You haven't ordered anything today yet.
-        </mat-list-item>
-      </mat-list>
-    }
-
-    @if (todayOrders.currentOrderEntries.length > 0) {
-      <div class="grid grid-cols-1 md-grid-cols-2 lg-grid-cols-3 gap-4 mb-4">
-      @for (orderEntry of todayOrders.currentOrderEntries; track orderEntry) {
-        @for (dishEntry of orderEntry.dishEntries; track dishEntry) {
-          <mat-card>
+      <div class="cards">
+        @for (card of data.cards; track card.order.id) {
+          <mat-card appearance="outlined" class="order-card" [class.is-yours]="card.yourDishNames.length > 0">
             <mat-card-header>
-              <mat-card-title>
-                {{ dishEntry.restaurantName }}
-              </mat-card-title>
+              <mat-card-title>{{ card.order.restaurantName }}</mat-card-title>
+              <mat-card-subtitle>
+                by {{ card.isCreatedByYou ? 'you' : card.order.orderCreatorUsername }}
+                @if (card.order.timeOfOrder) {
+                  · orders at {{ card.order.timeOfOrder }}
+                }
+              </mat-card-subtitle>
             </mat-card-header>
 
             <mat-card-content class="grow">
-              <div>
-                <p>
-                  <b>{{ dishEntry.dish.name }}</b>
-                </p>
-              </div>
+              <app-chip [tone]="getOrderStateTone(card.order.orderState)" data-cy="order-status-chip">
+                {{ getOrderStateString(card.order.orderState) }}
+              </app-chip>
 
-              <p>
-                Order status:
-                <app-chip class="ml-2" data-cy="order-status-chip">
-                  {{ getOrderStateString(orderEntry.orderState) }}
-                </app-chip>
-              </p>
+              @if (card.yourDishNames.length > 0) {
+                <div class="your-dishes">
+                  <div class="label">Your dishes</div>
+                  <ul>
+                    @for (dishName of card.yourDishNames; track $index) {
+                      <li>{{ dishName }}</li>
+                    }
+                  </ul>
+                </div>
+              } @else if (card.order.orderState === 'CREATED') {
+                <p class="text-muted">You haven't joined this order yet.</p>
+              }
             </mat-card-content>
 
-            <mat-card-actions>
-              <button mat-button (click)="goToOrder(orderEntry.orderId)">
-                View order
+            <mat-card-actions align="end">
+              <button mat-button (click)="goToOrder(card.order.id)">
+                {{ card.yourDishNames.length === 0 && card.order.orderState === 'CREATED' ? 'Join order' : 'View order' }}
               </button>
             </mat-card-actions>
           </mat-card>
         }
-      }
       </div>
-    }
-
-    <div class="flex space-between items-center mb-4">
-      <h2>Your team is ordering today from:</h2>
-      <button mat-flat-button (click)="goToCreateOrder()" class="ml-auto">
-        <mat-icon>add</mat-icon>
-        Add new order
-      </button>
-    </div>
-
-    @if (todayOrders.ordersList.length > 0) {
-      <div class="grid grid-cols-1 md-grid-cols-2 lg-grid-cols-3 gap-4 mb-4">
-      @for (element of todayOrders.ordersList; track element) {
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>
-              {{ element.restaurantName }}
-            </mat-card-title>
-          </mat-card-header>
-
-          <mat-card-content class="grow">
-            <p>Order creator: {{ element.orderCreatorUsername }}</p>
-            <p>Order status:
-              <app-chip class="ml-2" data-cy="order-status-chip">
-                {{ getOrderStateString(element.orderState) }}
-              </app-chip>
-            </p>
-          </mat-card-content>
-
-          <mat-card-actions>
-            <button mat-button (click)="goToOrder(element.id)">
-              View order
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      }
-      </div>
-    }
-
-    @if (todayOrders.ordersList.length === 0) {
-      <mat-list>
-        <mat-list-item>
-          <div>No orders yet</div>
-        </mat-list-item>
-      </mat-list>
     }
   }
 </app-view-wrapper>
