@@ -1,33 +1,95 @@
 <app-view-wrapper>
-  <h1>All Orders</h1>
+  <header class="page-header">
+    <h1>All orders</h1>
+    <button mat-flat-button (click)="goToCreateOrder()">
+      <mat-icon>add</mat-icon>
+      New order
+    </button>
+  </header>
 
-  <table mat-table [dataSource]="dataSource" class="clickable-table">
-    <ng-container matColumnDef="orderDate">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
-      <td mat-cell *matCellDef="let element"> {{ element.orderDate }}</td>
-    </ng-container>
+  @if (!hasAnyOrders) {
+    <div class="callout">
+      <mat-icon>receipt_long</mat-icon>
+      <div>
+        <div class="callout-title">No orders yet</div>
+        <div class="callout-text">Orders your team creates will show up here.</div>
+      </div>
+    </div>
+  }
 
-    <ng-container matColumnDef="restaurantName">
-      <th mat-header-cell *matHeaderCellDef>Restaurant</th>
-      <td mat-cell *matCellDef="let element"> {{ element.restaurantName }}</td>
-    </ng-container>
+  <div class="toolbar" [class.hidden]="!hasAnyOrders">
+    <mat-form-field class="search" subscriptSizing="dynamic">
+      <mat-label>Search restaurant or person</mat-label>
+      <mat-icon matIconPrefix>search</mat-icon>
+      <input matInput [value]="filter.search" (input)="searchChanged($event)" autocomplete="off" data-cy="orders-search-input"/>
+      @if (filter.search) {
+        <button mat-icon-button matIconSuffix type="button" (click)="clearSearch()" aria-label="Clear search">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
 
-    <ng-container matColumnDef="orderState">
-      <th mat-header-cell *matHeaderCellDef>State</th>
-      <td mat-cell *matCellDef="let element"> {{ element.orderState }}</td>
-    </ng-container>
+    <mat-button-toggle-group [value]="filter.onlyMine ? 'mine' : 'all'"
+                             (change)="scopeChanged($event)"
+                             hideSingleSelectionIndicator
+                             aria-label="Which orders to show">
+      <mat-button-toggle value="all">All</mat-button-toggle>
+      <mat-button-toggle value="mine">Mine</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 
-    <ng-container matColumnDef="orderCreatorUsername">
-      <th mat-header-cell *matHeaderCellDef>Order creator</th>
-      <td mat-cell *matCellDef="let element"> {{ element.orderCreatorUsername }}</td>
-    </ng-container>
+  <div class="results" [class.hidden]="!hasAnyOrders">
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="orderDate" matSortDirection="desc"
+           class="clickable-table orders-table">
+      <ng-container matColumnDef="orderDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let order" class="text-nowrap">{{ formatDate(order.orderDate) }}</td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/orders', row.id, 'show']"></tr>
-  </table>
+      <ng-container matColumnDef="restaurantName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Restaurant</th>
+        <td mat-cell *matCellDef="let order">
+          <a class="row-link" [routerLink]="['/orders', order.id, 'show']">{{ order.restaurantName }}</a>
+        </td>
+      </ng-container>
 
-  <mat-paginator [pageSize]="10"
-                 showFirstLastButtons
-                 aria-label="Select page">
-  </mat-paginator>
+      <ng-container matColumnDef="orderState">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let order">
+          <app-chip [tone]="getOrderStateTone(order.orderState)">{{ getOrderStateString(order.orderState) }}</app-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="orderCreatorUsername">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created by</th>
+        <td mat-cell *matCellDef="let order">{{ creatorLabel(order) }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/orders', row.id, 'show']"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell no-results" [attr.colspan]="displayedColumns.length">No orders match your search.</td>
+      </tr>
+    </table>
+
+    <mat-nav-list class="orders-list" aria-label="Orders">
+      @for (order of visibleRows$ | async; track order.id) {
+        <a mat-list-item [routerLink]="['/orders', order.id, 'show']">
+          <span matListItemTitle>{{ order.restaurantName }}</span>
+          <span matListItemLine>{{ formatDate(order.orderDate) }} · {{ creatorLabel(order) }}</span>
+          <span matListItemMeta>
+            <app-chip [tone]="getOrderStateTone(order.orderState)">{{ getOrderStateString(order.orderState) }}</app-chip>
+          </span>
+        </a>
+      } @empty {
+        <p class="text-muted no-results">No orders match your search.</p>
+      }
+    </mat-nav-list>
+
+    <mat-paginator [pageSize]="10"
+                   [pageSizeOptions]="[10, 25, 50]"
+                   showFirstLastButtons
+                   aria-label="Select page">
+    </mat-paginator>
+  </div>
 </app-view-wrapper>

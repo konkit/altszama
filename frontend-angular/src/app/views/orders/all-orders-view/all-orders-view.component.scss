@@ -1,13 +1,62 @@
-@use '@angular/material' as mat;
-
 :host {
   display: flex;
   width: 100%;
   height: 100%;
 }
 
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
 
-// Customize the entire app. Change :root to your selector if you want to scope the styles.
-table {
-  //@include mat.elevation(1)
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-headline-medium);
+  }
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+
+  .search {
+    flex: 1 1 16rem;
+  }
+}
+
+.row-link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
+}
+
+.no-results {
+  padding: 1rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Table on wider screens, a list on phones
+.orders-list {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .orders-table {
+    display: none;
+  }
+
+  .orders-list {
+    display: block;
+  }
 }
