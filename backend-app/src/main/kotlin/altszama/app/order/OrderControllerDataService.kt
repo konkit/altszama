@@ -51,10 +51,14 @@ class OrderControllerDataService {
     return TodayOrdersResponse(todayOrderDtos, currentOrderEntries)
   }
 
-  fun getAllOrdersData(currentUserTeam: Team): AllOrdersResponse {
+  fun getAllOrdersData(currentUserTeam: Team, currentUser: User? = null): AllOrdersResponse {
     val orderList = orderRepository.findAllByTeamOrderByOrderDateDesc(currentUserTeam)
 
-    return AllOrdersResponse.fromOrderList(orderList)
+    val participatedOrderIds = currentUser
+        ?.let { user -> orderEntryRepository.findByUser(user).map { orderEntry -> orderEntry.order.id }.toSet() }
+        ?: emptySet()
+
+    return AllOrdersResponse.fromOrderList(orderList, currentUser, participatedOrderIds)
   }
 
   fun getShowData(orderId: String, currentUser: User, currentUserTeam: Team): ShowOrderResponse {

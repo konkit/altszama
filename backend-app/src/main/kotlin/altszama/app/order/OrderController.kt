@@ -39,8 +39,9 @@ class OrderController {
 
   @GetMapping("/orders/all.json")
   fun allOrders(): AllOrdersResponse {
+    val currentUser = currentUserService.getCurrentUser()
     val currentUserTeam = currentUserService.getCurrentUserTeam()
-    return orderControllerDataService.getAllOrdersData(currentUserTeam)
+    return orderControllerDataService.getAllOrdersData(currentUserTeam, currentUser)
   }
 
   @GetMapping("/orders/{orderId}/show.json")

@@ -55,6 +55,36 @@ open class OrderControllerAllOrdersTest() : AbstractIntegrationTest() {
   }
 
   @Test
+  fun shouldFlagOrdersCreatedOrJoinedByCurrentUser() {
+    val team1 = testFactoriesService.createTeam1()
+    val (user1Token, user1) = testFactoriesService.createUser1WithToken(team1)
+    val user2 = testFactoriesService.createUser2(team1)
+    val (restaurant, dishes) = testFactoriesService.createRestaurantAndDishes(team1)
+
+    val createdByUser1 = testFactoriesService.createOrder(restaurant, user1, team1)
+    val joinedByUser1 = testFactoriesService.createOrder(restaurant, user2, team1)
+    testFactoriesService.createOrderEntry(joinedByUser1, dishes[0], user1, team1)
+    val unrelatedToUser1 = testFactoriesService.createOrder(restaurant, user2, team1)
+
+    val request = MockMvcRequestBuilders.get("/api/orders/all.json")
+        .header("Authorization", user1Token)
+
+    val responseJson = mockMvc.perform(request)
+        .andExpect(MockMvcResultMatchers.status().isOk)
+        .andReturn()
+        .response.contentAsString
+
+    val ordersById = objectMapper.readValue(responseJson, AllOrdersResponse::class.java).allOrdersList.associateBy { it.id }
+
+    assertThat(ordersById[createdByUser1.id]!!.createdByCurrentUser).isTrue()
+    assertThat(ordersById[createdByUser1.id]!!.currentUserParticipates).isFalse()
+    assertThat(ordersById[joinedByUser1.id]!!.createdByCurrentUser).isFalse()
+    assertThat(ordersById[joinedByUser1.id]!!.currentUserParticipates).isTrue()
+    assertThat(ordersById[unrelatedToUser1.id]!!.createdByCurrentUser).isFalse()
+    assertThat(ordersById[unrelatedToUser1.id]!!.currentUserParticipates).isFalse()
+  }
+
+  @Test
   fun shouldReturnOrdersIfThereAreAny() {
     val team1 = testFactoriesService.createTeam1()
     val orderCreator = testFactoriesService.createUser1(team1)
