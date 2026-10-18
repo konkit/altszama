@@ -1,88 +1,106 @@
-<!--<ng-container *ngIf="orderResponse$ | async as orderResponse">-->
-<app-view-wrapper class="w-full h-full">
-  <h1>Balance</h1>
+<app-view-wrapper>
+  <header class="page-header">
+    <h1>Balance</h1>
+  </header>
 
   @if (isLoading) {
-    <div class="w-full h-full flex justify-center items-center">
-      <mat-spinner></mat-spinner>
+    <div class="loading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (hasError) {
+    <div class="callout tone-error" role="alert">
+      <mat-icon>error</mat-icon>
+      <div>
+        <div class="callout-title">Couldn't load your balance</div>
+        <div class="callout-text">Check your connection and try again.</div>
+        <div class="callout-actions">
+          <button mat-flat-button (click)="load()">
+            <mat-icon>refresh</mat-icon>
+            Try again
+          </button>
+        </div>
+      </div>
     </div>
   } @else {
-    <mat-card class="mb-4">
-      <mat-card-header>
-        <mat-card-title>Your Balance</mat-card-title>
-      </mat-card-header>
-
+    <mat-card appearance="outlined" class="overall" data-cy="balance-overall">
       <mat-card-content>
-        @if (owedMoneyEntries.length === 0) {
-          <mat-list>
-            <mat-list-item>No pending entries - all settled up.</mat-list-item>
-          </mat-list>
-        } @else {
-          <mat-list>
-            @for (owedUsernameAndAmount of owedMoneyEntries; track owedUsernameAndAmount) {
-              <mat-list-item class="clickable-list-item">
-                @if (owedUsernameAndAmount[1] > 0) {
-                  <p>You are owed <b>{{ owedUsernameAndAmount[1] | price }}</b> by <b>{{ owedUsernameAndAmount[0] }}</b></p>
-                } @else if (owedUsernameAndAmount[1] < 0) {
-                  <p>You owe <b>{{ -owedUsernameAndAmount[1] | price }}</b> to <b>{{ owedUsernameAndAmount[0] }}</b></p>
-                }
-              </mat-list-item>
+        <div class="net"
+             [class.positive]="netAmount > 0"
+             [class.negative]="netAmount < 0">
+          @if (owedToYou.length === 0 && youOwe.length === 0) {
+            All settled up
+          } @else if (netAmount > 0) {
+            You're owed {{ netAmount | price }}
+          } @else if (netAmount < 0) {
+            You owe {{ abs(netAmount) | price }}
+          } @else {
+            You're even overall
+          }
+        </div>
+
+        @if (owedToYou.length > 0) {
+          <h2 class="group-title">Owed to you</h2>
+          <dl class="amounts">
+            @for (entry of owedToYou; track entry.userId) {
+              <div class="amount-row">
+                <dt>{{ entry.username }}</dt>
+                <dd class="positive">+{{ entry.amount | price }}</dd>
+              </div>
             }
-          </mat-list>
+          </dl>
+        }
+
+        @if (youOwe.length > 0) {
+          <h2 class="group-title">You owe</h2>
+          <dl class="amounts">
+            @for (entry of youOwe; track entry.userId) {
+              <div class="amount-row">
+                <dt>{{ entry.username }}</dt>
+                <dd class="negative">−{{ abs(entry.amount) | price }}</dd>
+              </div>
+            }
+          </dl>
         }
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="mb-4">
+    <mat-card appearance="outlined">
       <mat-card-header>
-        <mat-card-title>Your order history:</mat-card-title>
+        <mat-card-title>Order history</mat-card-title>
       </mat-card-header>
 
       <mat-card-content>
-        @if (orderHistoryEntries.length == 0) {
-          <mat-list>
-            <mat-list-item>
-              Your order history is empty.
-            </mat-list-item>
-          </mat-list>
+        @if (historyEntries.length === 0) {
+          <p class="text-muted">Orders you create or join will show up here once they're ordered.</p>
         } @else {
-          <mat-list>
-            @for (historyEntry of orderHistoryEntries; track historyEntry) {
-              @if (isCreatedEntry(historyEntry)) {
-                <mat-list-item class="clickable-list-item"
-                               (click)="goToOrder(historyEntry.orderId)"
-                               [ngClass]="{paid: isCreatedEntryPaid(historyEntry)}">
-                  <div matListItemTitle>
-                    ({{ historyEntry.orderDate }}) You ordered from {{ historyEntry.restaurantName }}
-                  </div>
-                  <div matListItemLine>
-                    Payments confirmed:
-                    {{ historyEntry.confirmedPaymentsTotalAmount | price }}
-                    /
-                    {{ historyEntry.totalAmount | price }}
-                  </div>
-                </mat-list-item>
-              } @else if (isParticipatedEntry(historyEntry)) {
-                <mat-list-item class="clickable-list-item"
-                               (click)="goToOrder(historyEntry.orderId)"
-                               [ngClass]="{paid: isParticipatedEntryPaid(historyEntry)}">
-                  <div matListItemTitle>
-                    ({{ historyEntry.orderDate }})
-                    {{ historyEntry.orderCreator }} ordered from
-                    {{ historyEntry.restaurantName }}
-                  </div>
-                  <div matListItemLine>
-                    Amount:
-                    {{ historyEntry.orderEntryAmount | price }}
-                    ({{ historyEntry.status }})
-                  </div>
-                </mat-list-item>
-              }
+          <mat-nav-list class="history" aria-label="Order history">
+            @for (entry of visibleHistoryEntries; track entry.orderId) {
+              <a mat-list-item [routerLink]="['/orders', entry.orderId, 'show']" [class.settled]="isSettled(entry)">
+                <span matListItemTitle>{{ entry.restaurantName }}</span>
+                <span matListItemLine>
+                  {{ formatDate(entry.orderDate) }} · by {{ isCreatedEntry(entry) ? 'you' : entry.orderCreator }}
+                </span>
+                <span matListItemLine>
+                  @if (isCreatedEntry(entry)) {
+                    {{ entry.confirmedPaymentsTotalAmount | price }} of {{ entry.totalAmount | price }} collected
+                  } @else if (isParticipatedEntry(entry)) {
+                    Your share {{ entry.orderEntryAmount | price }}
+                  }
+                </span>
+                <span matListItemMeta>
+                  <app-chip [tone]="statusTone(entry)">{{ statusCaption(entry) }}</app-chip>
+                </span>
+              </a>
             }
-          </mat-list>
+          </mat-nav-list>
+
+          @if (visibleHistoryCount < historyEntries.length) {
+            <div class="show-more">
+              <button mat-button (click)="showMoreHistory()">Show more</button>
+            </div>
+          }
         }
       </mat-card-content>
     </mat-card>
   }
-
 </app-view-wrapper>

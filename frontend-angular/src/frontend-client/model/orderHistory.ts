@@ -7,11 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OwedMoneyEntry } from './owedMoneyEntry';
 import { OrderHistoryEntry } from './orderHistoryEntry';
 
 
 export interface OrderHistory { 
     entries: Array<OrderHistoryEntry>;
     owedMoney: { [key: string]: number; };
+    owedMoneyByUser: Array<OwedMoneyEntry>;
 }
 

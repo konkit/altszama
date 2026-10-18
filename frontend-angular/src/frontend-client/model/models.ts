@@ -31,6 +31,7 @@ export * from './orderSaveRequest';
 export * from './orderSaveResponse';
 export * from './orderUpdateRequest';
 export * from './orderViewInitialData';
+export * from './owedMoneyEntry';
 export * from './participantsDishEntry';
 export * from './participantsOrderEntry';
 export * from './paymentData';

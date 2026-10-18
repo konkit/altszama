@@ -1,22 +1,89 @@
-@use 'sass:map';
-@use '@angular/material' as mat;
-
-
 :host {
   width: 100%;
   height: 100%;
   display: flex;
 }
 
-mat-list-item.paid {
-  opacity: 0.6;
+.page-header {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-headline-medium);
+  }
 }
 
-
-mat-list-item.clickable-list-item {
-  cursor: pointer;
+.loading {
+  display: flex;
+  justify-content: center;
+  padding-top: 6rem;
 }
 
-mat-list-item.clickable-list-item:hover {
-  background-color: var(--mat-sys-surface-container-high)
+.callout-actions {
+  margin-top: 1rem;
+}
+
+.overall {
+  margin-bottom: 1rem;
+
+  mat-card-content {
+    padding-top: 1rem;
+  }
+}
+
+.net {
+  font: var(--mat-sys-headline-small);
+}
+
+.group-title {
+  margin: 1.25rem 0 0.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.amounts {
+  margin: 0;
+}
+
+.amount-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.375rem 0;
+  font: var(--mat-sys-body-large);
+
+  dt, dd {
+    margin: 0;
+  }
+
+  dd {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+}
+
+// Same green/red as the success and error chips, darkened for text
+.positive {
+  color: var(--app-on-success-container);
+}
+
+.negative {
+  color: var(--mat-sys-error);
+}
+
+.history {
+  padding: 0;
+
+  .settled {
+    opacity: 0.7;
+  }
+}
+
+.show-more {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.5rem;
 }

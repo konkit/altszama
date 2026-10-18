@@ -47,6 +47,7 @@ model/orderSaveRequest.ts
 model/orderSaveResponse.ts
 model/orderUpdateRequest.ts
 model/orderViewInitialData.ts
+model/owedMoneyEntry.ts
 model/participantsDishEntry.ts
 model/participantsOrderEntry.ts
 model/paymentData.ts

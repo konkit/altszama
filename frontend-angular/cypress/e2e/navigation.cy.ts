@@ -45,7 +45,9 @@ describe('Navigation', () => {
 
     cy.get("a").contains("All Orders").click()
     cy.get("tr.mat-mdc-row").should("have.length", 2)
-    cy.get("tr.mat-mdc-row").contains("Pizzeria").parents("tr").should("contain", "you")
+    cy.get("tr.mat-mdc-row").contains("Pizzeria").parents("tr").should("contain", "you").and("contain", "Open")
+    // Friendly dates instead of raw yyyy-MM-dd (which day it says depends on the backend's clock)
+    cy.get("tr.mat-mdc-row").contains("Pizzeria").parents("tr").invoke("text").should("not.match", /\d{4}-\d{2}-\d{2}/)
     cy.get("tr.mat-mdc-row").contains(RESTAURANT_NAME).click()
     cy.get("h1").contains(RESTAURANT_NAME)
     cy.get("button").contains("Back").click()
