@@ -69,7 +69,7 @@
             @for (categoryAndDishes of restaurantResponse.dishesByCategory | keyvalue; track categoryAndDishes) {
               <div class="mb-4 category"> Category: {{ categoryAndDishes.key || "No Category" }}</div>
               @for (dish of categoryAndDishes.value; track dish) {
-                <div class="border-t-2">
+                <div class="border-t">
                   @if (restaurantEditorState.name == 'EDITING_DISH' && restaurantEditorState.dishId == dish.id) {
                     <div
                       class="w-full">

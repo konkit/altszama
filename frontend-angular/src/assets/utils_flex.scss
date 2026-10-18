@@ -32,6 +32,14 @@
   justify-content: space-between;
 }
 
-.grow {
+.justify-start {
+  justify-content: flex-start;
+}
+
+.self-center {
+  align-self: center;
+}
+
+.grow, .flex-grow {
   flex-grow: 1;
 }

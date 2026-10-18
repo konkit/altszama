@@ -34,7 +34,7 @@
 
       @if (priceSummaryData.deliveryData.deliveryCostPerEverybody !== 0) {
         <div matListItemLine>
-          <span class="unbreakable"><b>+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</b>
+          <span class="text-nowrap"><b>+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</b>
           per whole order
         </span>
       </div>
@@ -42,7 +42,7 @@
 
     @if (priceSummaryData.deliveryData.deliveryCostPerDish !== 0) {
       <div matListItemLine>
-        <span class="unbreakable"><b>+ {{ priceSummaryData.deliveryData.deliveryCostPerDish | price }}</b>
+        <span class="text-nowrap"><b>+ {{ priceSummaryData.deliveryData.deliveryCostPerDish | price }}</b>
         * <b>{{ priceSummaryData.allEatingPeopleCount || 0 }}</b>
       </span>
     </div>
@@ -50,7 +50,7 @@
 
   @if (priceSummaryData.deliveryData.deliveryCostPerEverybody === 0 && priceSummaryData.deliveryData.deliveryCostPerDish === 0) {
     <div matListItemLine>
-      <span class="unbreakable not-enabled">None</span>
+      <span class="text-nowrap not-enabled">None</span>
     </div>
   }
 </mat-card-content>

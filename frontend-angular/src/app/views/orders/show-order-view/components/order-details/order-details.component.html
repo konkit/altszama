@@ -52,7 +52,7 @@
     <div class="mr-4 pt-10 pb-5">
       <b class="mr-2">See the menu at:</b>
       @if (order.restaurantUrl) {
-        <a class="text-indigo-500" target="_blank"
+        <a target="_blank"
         [href]="order.restaurantUrl">{{ order.restaurantUrl }}</a>
       }
       @if (!order.restaurantUrl) {

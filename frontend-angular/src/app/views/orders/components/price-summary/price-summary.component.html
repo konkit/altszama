@@ -25,7 +25,7 @@
     <mat-list-item>
       <div matListItemTitle>Delivery fee (per whole order):</div>
       <div matListItemLine>
-        <span class="unbreakable">+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</span>
+        <span class="text-nowrap">+ {{ priceSummaryData.deliveryData.deliveryCostPerEverybody | price }}</span>
       </div>
     </mat-list-item>
   }
@@ -34,7 +34,7 @@
     <mat-list-item>
       <div matListItemTitle>Delivery fee (per dish):</div>
       <div matListItemLine>
-        <span class="unbreakable">
+        <span class="text-nowrap">
           + {{ priceSummaryData.deliveryData.deliveryCostPerDish | price }}
           * {{ priceSummaryData.allEatingPeopleCount || 0 }}
         </span>

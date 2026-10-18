@@ -10,7 +10,7 @@
           @for (dish of filteredDishes | async; track dish) {
             <mat-option [value]="dish">
               <div>{{ dish.name }}</div>
-              <div class="mat-subtitle-2 text-gray-400">
+              <div class="text-muted text-small">
                 Price: {{ dish.price | price }}, auto-updated {{ dish.lastCrawled | relativeDate }}
               </div>
             </mat-option>

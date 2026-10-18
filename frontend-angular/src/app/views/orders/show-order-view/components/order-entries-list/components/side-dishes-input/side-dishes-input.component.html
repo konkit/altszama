@@ -12,7 +12,7 @@
                 @for (sideDish of availableSideDishes(); track sideDish) {
                   <mat-option [value]="sideDish">
                     <div>{{sideDish.name}}</div>
-                    <div class="subtitle">
+                    <div class="text-muted text-small">
                       Price: {{sideDish.price | price}}
                     </div>
                   </mat-option>

@@ -58,3 +58,27 @@
 .h-full {
   width: 100%;
 }
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-muted {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.text-small {
+  font: var(--mat-sys-body-small);
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.border-t {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}

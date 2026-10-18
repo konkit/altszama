@@ -3,7 +3,7 @@
     {{ dish.name }} ({{dish.price | price}})
   </div>
 
-  <div class="subtitle text-gray-400">
+  <div class="text-muted text-small">
     @if (dish.lastCrawled != null) {
       <span>
         auto-updated {{ dish.lastCrawled | relativeDate }}
