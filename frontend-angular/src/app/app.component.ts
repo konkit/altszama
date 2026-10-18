@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
+import {NavigationHistoryService} from './service/navigation-history.service';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,8 @@ import {RouterOutlet} from '@angular/router';
 })
 export class AppComponent {
   title = 'altszama-frontend';
+
+  // Injected here so it starts tracking navigations from app start
+  constructor(navigationHistory: NavigationHistoryService) {
+  }
 }

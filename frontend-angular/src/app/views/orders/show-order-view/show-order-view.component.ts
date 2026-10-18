@@ -3,6 +3,7 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Observable, take} from "rxjs";
 import {ShowOrderViewService} from "./service/show-order-view.service";
 import {Title} from "@angular/platform-browser";
+import {NavigationHistoryService} from "../../../service/navigation-history.service";
 import {ShowOrderViewState} from "../lib/model";
 import {ShowOrderDto} from "../../../../frontend-client";
 import {orderStateToCaption, orderStateToTone} from "../lib/orderState";
@@ -42,10 +43,11 @@ export class ShowOrderViewComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private readonly title: Title,
-              private showOrderViewService: ShowOrderViewService) {
+              private showOrderViewService: ShowOrderViewService,
+              navigationHistory: NavigationHistoryService) {
     this.showOrderViewState$ = this.showOrderViewService.getShowOrderViewState();
 
-    let previousUrl = this.router.getCurrentNavigation()?.previousNavigation?.finalUrl?.toString()
+    let previousUrl = navigationHistory.getPreviousUrl()
     this.backLink = previousUrl && BACK_LINK_ORIGINS.some(origin => previousUrl.startsWith(origin))
       ? previousUrl
       : '/orders/today'
