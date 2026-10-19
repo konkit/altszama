@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, input, Output, ChangeDetectionStrategy} from '@angular/core';
 import {SideDish} from "../../../../../../frontend-client";
 import {FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatIcon} from '@angular/material/icon';
@@ -51,6 +51,7 @@ function createSideDishForm(fb: NonNullableFormBuilder, name = "", price = 0): F
     templateUrl: './dish-form.component.html',
     styleUrls: ['./dish-form.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatError,
     MatHint,

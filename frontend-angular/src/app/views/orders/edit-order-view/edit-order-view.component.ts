@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {EditOrderInitialData, EditOrderInitialDataOrderDto, OrderControllerService, OrderUpdateRequest} from "../../../../frontend-client";
 import {map, Observable, take} from "rxjs";
 import {FormBuilder} from "@angular/forms";
@@ -21,6 +21,7 @@ import {orderStateToCaption, orderStateToTone} from '../lib/orderState';
     templateUrl: './edit-order-view.component.html',
     styleUrls: ['./edit-order-view.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ViewWrapperComponent, OrderStateButtonsComponent, MatCardModule, ChipComponent, OrderDetailsFormComponent, MatButtonModule, AsyncPipe, MatIcon, RouterLink]
 })
 export class EditOrderViewComponent implements OnInit {

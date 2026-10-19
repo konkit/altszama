@@ -10,9 +10,9 @@
 
 
 export interface SideDishData { 
-    isNew?: boolean;
-    newSideDishName?: string;
-    newSideDishPrice?: number;
-    id?: string;
+    isNew?: boolean | null;
+    newSideDishName?: string | null;
+    newSideDishPrice?: number | null;
+    id?: string | null;
 }
 

@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {ParticipantsOrderEntry, PaymentData} from "../../../../../../frontend-client";
 import {
   MAT_DIALOG_DATA,
@@ -22,6 +22,7 @@ export interface QrcodeModalInput {
     templateUrl: './bank-transfer-qrcode-modal.component.html',
     styleUrls: ['./bank-transfer-qrcode-modal.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButtonModule, QRCodeComponent]
 })
 export class BankTransferQrcodeModal {

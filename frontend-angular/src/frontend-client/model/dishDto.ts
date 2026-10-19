@@ -16,6 +16,6 @@ export interface DishDto {
     price: number;
     sideDishes: Array<SideDish>;
     category: string;
-    lastCrawled?: string;
+    lastCrawled?: string | null;
 }
 

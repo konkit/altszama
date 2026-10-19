@@ -1,4 +1,4 @@
-import {Component, computed, input, signal} from '@angular/core';
+import {Component, computed, input, signal, ChangeDetectionStrategy} from '@angular/core';
 import {GroupedOrderEntry} from "../../../../../../frontend-client";
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
@@ -8,6 +8,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     templateUrl: './user-orders.component.html',
     styleUrls: ['./user-orders.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatCheckboxModule]
 })
 export class UserOrdersComponent {

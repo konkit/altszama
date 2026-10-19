@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import {Component, computed, input, ChangeDetectionStrategy} from '@angular/core';
 import {DishDto, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../frontend-client";
 import {ModifyOrderEntryState} from "../../../lib/model";
 import {Observable} from "rxjs";
@@ -20,6 +20,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './order-entries-list.component.html',
     styleUrls: ['./order-entries-list.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCardModule, MatButtonModule, MatIconModule, CreateOrderEntryComponent, ExistingOrderEntryCardComponent, AsyncPipe]
 })
 export class OrderEntriesListComponent {

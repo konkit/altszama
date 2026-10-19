@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit} from '@angular/core';
+import {Component, inject, input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NonNullableFormBuilder} from "@angular/forms";
 import {RestaurantControllerService} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
@@ -14,6 +14,7 @@ import {createRestaurantForm} from '../../../lib/restaurantForm';
   templateUrl: './edit-restaurant-form.component.html',
   styleUrls: ['./edit-restaurant-form.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RestaurantFieldsComponent, MatButtonModule, MatIconModule]
 })
 export class EditRestaurantFormComponent implements OnInit {

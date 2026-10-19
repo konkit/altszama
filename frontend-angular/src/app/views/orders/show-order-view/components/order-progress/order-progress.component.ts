@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import {Component, computed, input, ChangeDetectionStrategy} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {ShowOrderDto} from "../../../../../../frontend-client";
 import OrderStateEnum = ShowOrderDto.OrderStateEnum;
@@ -8,6 +8,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
   templateUrl: './order-progress.component.html',
   styleUrls: ['./order-progress.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatIconModule]
 })
 export class OrderProgressComponent {

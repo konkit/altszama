@@ -1,4 +1,4 @@
-import {Component, input, OnInit} from '@angular/core';
+import {Component, input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {DishDto, OrderEntrySaveRequest} from "../../../../../../../../frontend-client";
 import {InitialOrderEntryFormValue, OrderEntryFormValue} from "../../lib/formvalues";
 import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
@@ -9,6 +9,7 @@ import {OrderEntryFormComponent} from '../order-entry-form/order-entry-form.comp
     templateUrl: './create-order-entry.component.html',
     styleUrls: ['./create-order-entry.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [OrderEntryFormComponent]
 })
 export class CreateOrderEntryComponent implements OnInit {

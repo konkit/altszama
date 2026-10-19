@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import {Component, computed, input, ChangeDetectionStrategy} from '@angular/core';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatCardModule} from '@angular/material/card';
@@ -17,6 +17,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
   templateUrl: './order-summary-panel.component.html',
   styleUrls: ['./order-summary-panel.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatCardModule, MatIconModule, MatButtonModule, MatTooltipModule, PricePipe, PriceSummaryComponent]
 })
 export class OrderSummaryPanelComponent {

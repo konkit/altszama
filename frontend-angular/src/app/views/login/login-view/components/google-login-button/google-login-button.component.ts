@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {from, map, Observable, switchMap} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -14,6 +14,7 @@ const gsiClientSrc = "https://accounts.google.com/gsi/client";
     templateUrl: './google-login-button.component.html',
     styleUrls: ['./google-login-button.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: []
 })
 export class GoogleLoginButtonComponent implements OnInit {

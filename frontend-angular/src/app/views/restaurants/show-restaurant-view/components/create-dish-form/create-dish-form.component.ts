@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit} from '@angular/core';
+import {Component, inject, input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NonNullableFormBuilder} from "@angular/forms";
 import {catchError, Observable, switchMap} from "rxjs";
 import {CreateDishResponse, DishControllerService} from "../../../../../../frontend-client";
@@ -13,6 +13,7 @@ import {AsyncPipe} from '@angular/common';
     templateUrl: './create-dish-form.component.html',
     styleUrls: ['./create-dish-form.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [DishFormComponent, DishFormPlaceholderComponent, AsyncPipe]
 })
 export class CreateDishFormComponent implements OnInit {

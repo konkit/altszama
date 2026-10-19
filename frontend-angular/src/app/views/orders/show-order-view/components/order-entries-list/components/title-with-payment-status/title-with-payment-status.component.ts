@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, ChangeDetectionStrategy} from '@angular/core';
 import {ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import {OrderActionsService} from "../../../../service/order-actions.service";
 import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
@@ -14,6 +14,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './title-with-payment-status.component.html',
     styleUrls: ['./title-with-payment-status.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [PaymentStatusChipComponent, MatButtonModule, MatTooltipModule, MatIconModule, PricePipe]
 })
 export class TitleWithPaymentStatusComponent {

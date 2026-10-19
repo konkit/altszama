@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {MatCardModule} from '@angular/material/card';
 import {OrderTimeFormComponent} from '../order-time-form/order-time-form.component';
@@ -11,6 +11,7 @@ import {PaymentDataForm, PaymentDataFormComponent} from '../payment-data-form/pa
   templateUrl: './order-details-form.component.html',
   styleUrls: ['./order-details-form.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatCardModule, OrderTimeFormComponent, DeliveryDataFormComponent, PaymentDataFormComponent]
 })
 export class OrderDetailsFormComponent {

@@ -1,4 +1,4 @@
-import {Component, Input, input} from '@angular/core';
+import {Component, Input, input, ChangeDetectionStrategy} from '@angular/core';
 import {ParticipantsDishEntry, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
 import {PricePipe} from '../../../../../../../components/pipes/price.pipe';
@@ -13,6 +13,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './show-order-entry.component.html',
     styleUrls: ['./show-order-entry.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatButtonModule, MatIconModule, MatTooltipModule, PricePipe]
 })
 export class ShowOrderEntryComponent {

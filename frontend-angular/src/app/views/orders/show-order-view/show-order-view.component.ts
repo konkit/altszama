@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Observable, take} from "rxjs";
 import {ShowOrderViewService} from "./service/show-order-view.service";
@@ -30,6 +30,7 @@ const BACK_LINK_ORIGINS = ['/orders/all', '/balance']
     templateUrl: './show-order-view.component.html',
     styleUrls: ['./show-order-view.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ViewWrapperComponent, ChipComponent, OrderOwnerButtonsComponent, OrderLockedWarningBannerComponent, OrderProgressComponent, OrderNextStepComponent, OrderSummaryPanelComponent, OrderEntriesListComponent, AsyncPipe, MatButton, MatIcon, RouterLink]
 })
 export class ShowOrderViewComponent implements OnInit, OnDestroy {

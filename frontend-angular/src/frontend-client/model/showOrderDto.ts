@@ -19,8 +19,8 @@ export interface ShowOrderDto {
     orderCreatorId: string;
     orderCreatorUsername: string;
     orderDate: string;
-    timeOfOrder?: string;
-    timeOfDelivery?: string;
+    timeOfOrder?: string | null;
+    timeOfDelivery?: string | null;
     orderState: ShowOrderDto.OrderStateEnum;
     deliveryData: DeliveryData;
     paymentData: PaymentData;

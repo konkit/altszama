@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {map, Observable, take} from "rxjs";
 import {
@@ -24,6 +24,7 @@ import {OrderDetailsFormComponent} from '../components/order-details-form/order-
     templateUrl: './create-order-view.component.html',
     styleUrls: ['./create-order-view.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ViewWrapperComponent, MatCardModule, MatIconModule, MatFormFieldModule, MatInputModule, MatListModule, MatButtonModule, OrderDetailsFormComponent, RouterLink]
 })
 export class CreateOrderViewComponent implements OnInit {

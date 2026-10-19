@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {PriceSummaryData} from "../../lib/model";
 import {PricePipe} from '../../../../components/pipes/price.pipe';
 
@@ -8,6 +8,7 @@ import {PricePipe} from '../../../../components/pipes/price.pipe';
     templateUrl: './price-summary.component.html',
     styleUrls: ['./price-summary.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [PricePipe]
 })
 export class PriceSummaryComponent {

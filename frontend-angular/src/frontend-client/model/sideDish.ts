@@ -10,7 +10,7 @@
 
 
 export interface SideDish { 
-    id?: string;
+    id?: string | null;
     name: string;
     price: number;
 }

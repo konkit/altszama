@@ -10,8 +10,8 @@ import CreateDishForm from "../pageObjects/CreateDishForm";
 import EditDishForm from "../pageObjects/EditDishForm";
 import EditRestaurantForm from "../pageObjects/EditRestaurantForm";
 
-const TARGET_HOST = Cypress.env("TARGET_HOST") || "localhost";
-const TARGET_PORT = Cypress.env("TARGET_PORT") || 4200;
+const TARGET_HOST = Cypress.expose("TARGET_HOST") || "localhost";
+const TARGET_PORT = Cypress.expose("TARGET_PORT") || 4200;
 
 const PARENT_URL = `http://${TARGET_HOST}:${TARGET_PORT}`
 

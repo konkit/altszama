@@ -15,7 +15,7 @@ export interface RestaurantDto {
     telephone: string;
     address: string;
     url: string;
-    lastCrawled?: string;
-    lastEdited?: string;
+    lastCrawled?: string | null;
+    lastEdited?: string | null;
 }
 

@@ -1,5 +1,5 @@
 import {MatButtonModule} from '@angular/material/button';
-import {Component, Input, input} from '@angular/core';
+import {Component, Input, input, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIconModule} from '@angular/material/icon';
 import {NgxMatTimepickerComponent, NgxMatTimepickerDirective} from 'ngx-mat-timepicker';
@@ -11,6 +11,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     templateUrl: './order-time-form.component.html',
     styleUrls: ['./order-time-form.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule, NgxMatTimepickerDirective, ReactiveFormsModule, MatIconModule, NgxMatTimepickerComponent]
 })
 export class OrderTimeFormComponent {

@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MoneyInputComponent} from '../../../../components/money-input/money-input.component';
 import {MatInputModule} from '@angular/material/input';
@@ -16,6 +16,7 @@ export interface DeliveryDataForm {
     templateUrl: './delivery-data-form.component.html',
     styleUrls: ['./delivery-data-form.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, MoneyInputComponent]
 })
 export class DeliveryDataFormComponent {

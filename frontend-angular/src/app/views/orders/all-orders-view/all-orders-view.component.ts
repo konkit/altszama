@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -29,6 +29,7 @@ import OrderStateEnum = AllOrdersOrderDto.OrderStateEnum;
   ],
   templateUrl: './all-orders-view.component.html',
   styleUrl: './all-orders-view.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class AllOrdersViewComponent implements OnInit, AfterViewInit {

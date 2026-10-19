@@ -12,9 +12,9 @@ import { DeliveryData } from './deliveryData';
 
 
 export interface OrderSaveRequest { 
-    restaurantId?: string;
-    orderDate?: string;
-    timeOfOrder?: string;
+    restaurantId?: string | null;
+    orderDate?: string | null;
+    timeOfOrder?: string | null;
     deliveryData: DeliveryData;
     paymentData: PaymentData;
 }

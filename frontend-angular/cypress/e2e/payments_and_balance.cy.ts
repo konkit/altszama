@@ -6,8 +6,8 @@ import OrderingView from "../pageObjects/OrderingView";
 import LoginView from "../pageObjects/LoginView";
 import BalanceView from "../pageObjects/BalanceView";
 
-const TARGET_HOST = Cypress.env("TARGET_HOST") || "localhost";
-const TARGET_PORT = Cypress.env("TARGET_PORT") || 4200;
+const TARGET_HOST = Cypress.expose("TARGET_HOST") || "localhost";
+const TARGET_PORT = Cypress.expose("TARGET_PORT") || 4200;
 
 const PARENT_URL = `http://${TARGET_HOST}:${TARGET_PORT}`
 

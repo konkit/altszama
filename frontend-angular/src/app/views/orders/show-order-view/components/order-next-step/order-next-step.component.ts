@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import {Component, computed, input, ChangeDetectionStrategy} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {ShowOrderDto} from "../../../../../../frontend-client";
 import {ShowOrderViewState} from "../../../lib/model";
@@ -17,6 +17,7 @@ interface NextStepMessage {
   templateUrl: './order-next-step.component.html',
   styleUrls: ['./order-next-step.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatIconModule]
 })
 export class OrderNextStepComponent {

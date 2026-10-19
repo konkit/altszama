@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, ChangeDetectionStrategy} from '@angular/core';
 import {OrderControllerService, ShowOrderDto} from "../../../../../../frontend-client";
 import {Router} from "@angular/router";
 import {catchError, EMPTY, filter, switchMap, tap} from "rxjs";
@@ -14,6 +14,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './order-state-buttons.component.html',
     styleUrls: ['./order-state-buttons.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatButtonModule, MatIconModule]
 })
 export class OrderStateButtonsComponent {

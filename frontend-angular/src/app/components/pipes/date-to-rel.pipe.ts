@@ -6,7 +6,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 })
 export class RelativeDatePipe implements PipeTransform {
 
-  transform(date?: Date | string): string {
+  transform(date?: Date | string | null): string {
     if (date) {
       if (typeof date === "string") {
         return this.timeSince(Date.parse(date))

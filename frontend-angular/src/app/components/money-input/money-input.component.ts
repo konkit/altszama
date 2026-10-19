@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostBinding, Injector, Input, Optional, Self} from '@angular/core';
+import {Component, ElementRef, HostBinding, Injector, Input, Optional, Self, ChangeDetectionStrategy} from '@angular/core';
 import {ControlValueAccessor, NgControl} from "@angular/forms";
 import {MatFormFieldControl} from "@angular/material/form-field";
 import {BehaviorSubject, Subject, take} from 'rxjs';
@@ -15,6 +15,7 @@ import {MatInputModule} from '@angular/material/input';
         { provide: MatFormFieldControl, useExisting: MoneyInputComponent },
     ],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatInputModule, AsyncPipe]
 })
 export class MoneyInputComponent implements ControlValueAccessor, MatFormFieldControl<number> {

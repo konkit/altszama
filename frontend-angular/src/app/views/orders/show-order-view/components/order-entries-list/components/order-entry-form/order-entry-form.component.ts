@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DishDto, SideDish, SideDishData} from "../../../../../../../../frontend-client";
 import {filter, map, Observable, startWith} from "rxjs";
@@ -26,6 +26,7 @@ import {MatButton} from '@angular/material/button';
     templateUrl: './order-entry-form.component.html',
     styleUrls: ['./order-entry-form.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, MatOptionModule, MoneyInputComponent, SideDishesInputComponent, AsyncPipe, PricePipe, RelativeDatePipe, MatButton]
 })
 export class OrderEntryFormComponent implements OnInit {

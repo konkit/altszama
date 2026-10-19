@@ -12,11 +12,11 @@ import { SideDishData } from './sideDishData';
 
 export interface OrderEntrySaveRequest { 
     orderId: string;
-    dishId?: string;
+    dishId?: string | null;
     additionalComments: string;
-    newDish?: boolean;
-    newDishName?: string;
-    newDishPrice?: number;
+    newDish?: boolean | null;
+    newDishName?: string | null;
+    newDishPrice?: number | null;
     sideDishes: Array<SideDishData>;
 }
 

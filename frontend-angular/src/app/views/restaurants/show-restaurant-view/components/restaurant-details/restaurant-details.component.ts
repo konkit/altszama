@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, ChangeDetectionStrategy} from '@angular/core';
 import {RestaurantDto} from "../../../../../../frontend-client";
 import {RelativeDatePipe} from '../../../../../components/pipes/date-to-rel.pipe';
 import {MatIconModule} from '@angular/material/icon';
@@ -8,6 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
     templateUrl: './restaurant-details.component.html',
     styleUrls: ['./restaurant-details.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatIconModule, RelativeDatePipe]
 })
 export class RestaurantDetailsComponent {

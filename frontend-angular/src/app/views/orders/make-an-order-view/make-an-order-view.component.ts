@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {OrderControllerService, OrderViewInitialData} from "../../../../frontend-client";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -31,6 +31,7 @@ interface PageData {
     templateUrl: './make-an-order-view.component.html',
     styleUrls: ['./make-an-order-view.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ViewWrapperComponent, ChipComponent, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, FormsModule, NgxMatTimepickerDirective, ReactiveFormsModule, NgxMatTimepickerComponent, PriceSummaryComponent, UserOrdersComponent, AsyncPipe, RouterLink]
 })
 export class MakeAnOrderViewComponent implements OnInit {

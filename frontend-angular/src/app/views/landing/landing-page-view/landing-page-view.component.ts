@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 
@@ -7,6 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
   imports: [RouterModule, MatButtonModule],
   templateUrl: './landing-page-view.component.html',
   styleUrl: './landing-page-view.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
 })
 export class LandingPageViewComponent {

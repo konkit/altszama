@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -26,6 +26,7 @@ export interface DeleteConfirmationInput {
   ],
   standalone: true,
   templateUrl: './delete-confirmation-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './delete-confirmation-modal.component.scss'
 })
 export class DeleteConfirmationModalComponent {

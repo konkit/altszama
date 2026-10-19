@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { map, Observable, take } from 'rxjs';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -20,6 +20,7 @@ import { FrontendConfigService } from '../../../service/frontend-config.service'
   templateUrl: './restaurants-list-view.component.html',
   styleUrls: ['./restaurants-list-view.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ViewWrapperComponent, MatButtonModule, MatExpansionModule, MatTooltipModule, RouterLink, MatIconModule, MatTableModule, MatPaginatorModule, AsyncPipe, RelativeDatePipe]
 })
 export class RestaurantsListViewComponent implements OnInit, AfterViewInit {

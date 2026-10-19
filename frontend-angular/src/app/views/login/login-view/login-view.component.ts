@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {GoogleLoginButtonComponent} from './components/google-login-button/google-login-button.component';
 import {MatCardModule} from '@angular/material/card';
 
@@ -7,6 +7,7 @@ import {MatCardModule} from '@angular/material/card';
   templateUrl: './login-view.component.html',
   styleUrl: './login-view.component.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatCardModule, GoogleLoginButtonComponent]
 })
 export class LoginViewComponent {

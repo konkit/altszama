@@ -1,4 +1,4 @@
-import {Component, Input, input} from '@angular/core';
+import {Component, Input, input, ChangeDetectionStrategy} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SideDish} from "../../../../../../../../frontend-client";
 import {SideDishForm} from "../../lib/formvalues";
@@ -17,6 +17,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     templateUrl: './side-dishes-input.component.html',
     styleUrls: ['./side-dishes-input.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatFormFieldModule, MatInputModule, FormsModule, MatAutocompleteModule, ReactiveFormsModule, MatOptionModule, MoneyInputComponent, MatButtonModule, MatIconModule, PricePipe]
 })
 export class SideDishesInputComponent {

@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_SNACK_BAR_DATA} from '@angular/material/snack-bar';
 import {MatIcon} from '@angular/material/icon';
 
@@ -9,6 +9,7 @@ import {MatIcon} from '@angular/material/icon';
   ],
   standalone: true,
   templateUrl: './error-snack-bar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './error-snack-bar.component.scss'
 })
 export class ErrorSnackBarComponent {

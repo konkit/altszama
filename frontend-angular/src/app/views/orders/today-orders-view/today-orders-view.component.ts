@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { OrderEntryDto, TodayOrderDto, TodayOrdersResponse } from '../../../../frontend-client';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,6 +35,7 @@ interface TodayOrdersViewData {
   ],
   templateUrl: './today-orders-view.component.html',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './today-orders-view.component.scss'
 })
 export class TodayOrdersViewComponent {

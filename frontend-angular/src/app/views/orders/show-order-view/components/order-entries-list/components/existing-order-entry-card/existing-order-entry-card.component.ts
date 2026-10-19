@@ -1,4 +1,4 @@
-import {Component, Input, input} from '@angular/core';
+import {Component, Input, input, ChangeDetectionStrategy} from '@angular/core';
 import {DishDto, ParticipantsOrderEntry, ShowOrderDto} from "../../../../../../../../frontend-client";
 import {ModifyOrderEntryState} from "../../../../../lib/model";
 import {ModifyOrderEntryService} from "../../service/modify-order-entry.service";
@@ -17,6 +17,7 @@ import OrderStateEnum = ShowOrderDto.OrderStateEnum;
     templateUrl: './existing-order-entry-card.component.html',
     styleUrls: ['./existing-order-entry-card.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCardModule, TitleWithPaymentStatusComponent, EditOrderEntryComponent, ShowOrderEntryComponent, MatButtonModule, MatIconModule, CreateOrderEntryComponent]
 })
 export class ExistingOrderEntryCardComponent {

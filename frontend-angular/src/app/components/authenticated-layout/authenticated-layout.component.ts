@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AuthService } from '../../service/auth.service';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
@@ -28,6 +28,7 @@ import { MatIconButton } from '@angular/material/button';
   ],
   standalone: true,
   templateUrl: './authenticated-layout.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './authenticated-layout.component.scss'
 })
 export class AuthenticatedLayoutComponent implements OnInit, OnDestroy {

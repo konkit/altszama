@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { ChipComponent } from '../../../../../../../../components/chip/chip.component';
 
 
@@ -7,6 +7,7 @@ import { ChipComponent } from '../../../../../../../../components/chip/chip.comp
     templateUrl: './payment-status-chip.component.html',
     styleUrls: ['./payment-status-chip.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ChipComponent
   ]

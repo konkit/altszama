@@ -1,4 +1,4 @@
-import {Component, Input, input} from '@angular/core';
+import {Component, Input, input, ChangeDetectionStrategy} from '@angular/core';
 import {DishDto, RestaurantDto} from "../../../../../../frontend-client";
 import {RestaurantFormService} from "../../service/restaurant-form.service";
 import {RestaurantEditorState} from "../../service/restaurant-editor-state";
@@ -14,6 +14,7 @@ import {MatButtonModule} from '@angular/material/button';
     templateUrl: './dish-entry.component.html',
     styleUrls: ['./dish-entry.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatButtonModule, MatIconModule, MatTooltipModule, PricePipe, RelativeDatePipe]
 })
 export class DishEntryComponent {

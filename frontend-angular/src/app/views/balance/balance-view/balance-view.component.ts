@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {MatListModule} from '@angular/material/list';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -36,6 +36,7 @@ const HISTORY_PAGE_SIZE = 10
   ],
   standalone: true,
   templateUrl: './balance-view.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './balance-view.component.scss'
 })
 export class BalanceViewComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, input, OnDestroy, OnInit } from '@angular/core';
+import { Component, input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -18,6 +18,7 @@ export interface PaymentDataForm {
     templateUrl: './payment-data-form.component.html',
     styleUrls: ['./payment-data-form.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatSlideToggleModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule]
 })
 export class PaymentDataFormComponent implements OnInit, OnDestroy {

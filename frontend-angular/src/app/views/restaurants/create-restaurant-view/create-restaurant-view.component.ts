@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy} from '@angular/core';
 import {NonNullableFormBuilder} from "@angular/forms";
 import {Router, RouterLink} from "@angular/router";
 import {RestaurantControllerService} from "../../../../frontend-client";
@@ -15,6 +15,7 @@ import {createRestaurantForm} from '../lib/restaurantForm';
     templateUrl: './create-restaurant-view.component.html',
     styleUrls: ['./create-restaurant-view.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ViewWrapperComponent, RestaurantFieldsComponent, MatButtonModule, MatCardModule, MatIconModule, RouterLink]
 })
 export class CreateRestaurantViewComponent {

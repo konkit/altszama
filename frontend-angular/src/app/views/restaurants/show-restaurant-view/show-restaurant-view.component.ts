@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DishDto, ShowRestaurantResponse } from '../../../../frontend-client';
 import { filter, Observable } from 'rxjs';
 import { RestaurantFormService } from './service/restaurant-form.service';
@@ -22,6 +22,7 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardModule } from '@angular/
     templateUrl: './show-restaurant-view.component.html',
     styleUrls: ['./show-restaurant-view.component.scss'],
     standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ViewWrapperComponent, MatCardModule, RestaurantDetailsComponent, EditRestaurantFormComponent, CreateDishFormComponent, EditDishFormComponent, DishEntryComponent, AsyncPipe, KeyValuePipe, MatButton, MatIcon, RouterLink, MatCard, MatCardContent, MatCardHeader]
 })
 export class ShowRestaurantViewComponent {

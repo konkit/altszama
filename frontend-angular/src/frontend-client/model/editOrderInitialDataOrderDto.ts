@@ -18,8 +18,8 @@ export interface EditOrderInitialDataOrderDto {
     orderCreatorId: string;
     orderCreatorUsername: string;
     orderDate: string;
-    timeOfOrder?: string;
-    timeOfDelivery?: string;
+    timeOfOrder?: string | null;
+    timeOfDelivery?: string | null;
     orderState: EditOrderInitialDataOrderDto.OrderStateEnum;
     deliveryData: DeliveryData;
     paymentData: PaymentData;

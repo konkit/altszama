@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from "@angular/router";
 import {OrderActionsService} from "../../service/order-actions.service";
 import {MatIconModule} from '@angular/material/icon';
@@ -9,6 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
     templateUrl: './order-locked-warning-banner.component.html',
     styleUrls: ['./order-locked-warning-banner.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatButtonModule, MatIconModule]
 })
 export class OrderLockedWarningBannerComponent {

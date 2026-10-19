@@ -12,8 +12,8 @@
 export interface RestaurantInfo { 
     id: string;
     name: string;
-    lastCrawled?: string;
-    lastEdited?: string;
+    lastCrawled?: string | null;
+    lastEdited?: string | null;
     dishCount: number;
 }
 

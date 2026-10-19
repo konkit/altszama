@@ -10,6 +10,6 @@
 
 
 export interface SetAsOrderedResponse { 
-    approxTimeOfDelivery?: string;
+    approxTimeOfDelivery?: string | null;
 }
 

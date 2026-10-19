@@ -16,8 +16,8 @@ export interface TodayOrderDto {
     orderCreatorId: string;
     orderCreatorUsername: string;
     orderDate: string;
-    timeOfOrder?: string;
-    timeOfDelivery?: string;
+    timeOfOrder?: string | null;
+    timeOfDelivery?: string | null;
     orderState: TodayOrderDto.OrderStateEnum;
     decreaseInPercent: number;
     deliveryCostPerEverybody: number;

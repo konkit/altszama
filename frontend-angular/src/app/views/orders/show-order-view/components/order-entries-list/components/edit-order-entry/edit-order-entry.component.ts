@@ -1,4 +1,4 @@
-import {Component, input, OnInit} from '@angular/core';
+import {Component, input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {
   DishDto,
   OrderEntryUpdateRequest,
@@ -16,6 +16,7 @@ import {OrderEntryFormComponent} from '../order-entry-form/order-entry-form.comp
     templateUrl: './edit-order-entry.component.html',
     styleUrls: ['./edit-order-entry.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [OrderEntryFormComponent]
 })
 export class EditOrderEntryComponent implements OnInit {

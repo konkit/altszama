@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { TestAuthControllerService, TestUserLoginPayload, User } from '../../../../frontend-client';
@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
   templateUrl: './test-login-view.component.html',
   styleUrl: './test-login-view.component.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatToolbarModule, MatButtonModule, FormsModule, MatInputModule]
 })
 export class TestLoginViewComponent implements OnInit {

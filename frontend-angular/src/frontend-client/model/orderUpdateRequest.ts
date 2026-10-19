@@ -12,10 +12,10 @@ import { DeliveryData } from './deliveryData';
 
 
 export interface OrderUpdateRequest { 
-    orderId?: string;
-    orderDate?: string;
-    timeOfOrder?: string;
-    timeOfDelivery?: string;
+    orderId?: string | null;
+    orderDate?: string | null;
+    timeOfOrder?: string | null;
+    timeOfDelivery?: string | null;
     deliveryData: DeliveryData;
     paymentData: PaymentData;
 }

@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from "@angular/router";
 import {OrderActionsService} from "../../service/order-actions.service";
 import {MatIconModule} from '@angular/material/icon';
@@ -11,6 +11,7 @@ import {MatButtonModule} from '@angular/material/button';
     templateUrl: './order-owner-buttons.component.html',
     styleUrls: ['./order-owner-buttons.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatButtonModule, MatTooltipModule, MatIconModule]
 })
 export class OrderOwnerButtonsComponent {
