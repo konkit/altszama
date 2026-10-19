@@ -52,20 +52,16 @@ class WebSecurityConfig {
   fun filterChain(http: HttpSecurity): SecurityFilterChain? {
 
     http
-      .csrf().disable()
-      .cors().disable()
+      .csrf { it.disable() }
+      .cors { it.disable() }
       .authorizeHttpRequests { auth ->
         auth
           .requestMatchers(*permittedPaths).permitAll()
           .anyRequest().authenticated()
-          .and()
-          .exceptionHandling()
-          .authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-          .and()
-          .logout().permitAll()
-          .and()
-          .addFilterBefore(jwtAuthenticationTokenFilter(), BasicAuthenticationFilter::class.java)
       }
+      .exceptionHandling { it.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) }
+      .logout { it.permitAll() }
+      .addFilterBefore(jwtAuthenticationTokenFilter(), BasicAuthenticationFilter::class.java)
     return http.build()
   }
 

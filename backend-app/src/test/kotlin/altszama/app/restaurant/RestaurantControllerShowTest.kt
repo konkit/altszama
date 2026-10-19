@@ -4,7 +4,7 @@ import altszama.app.restaurant.dto.RestaurantSaveRequest
 import altszama.app.test.AbstractIntegrationTest
 import altszama.app.test.TestFactoriesService
 import altszama.app.validation.NoAccessToRestaurant
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,7 +46,7 @@ internal class RestaurantControllerShowTest : AbstractIntegrationTest() {
 
     val showResponse = objectMapper.readTree(response)
 
-    assertThat(showResponse["restaurant"]["name"].asText()).isEqualTo("Restaurant 1")
+    assertThat(showResponse["restaurant"]["name"].asString()).isEqualTo("Restaurant 1")
   }
 
   @Test

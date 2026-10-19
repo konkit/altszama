@@ -1,5 +1,5 @@
 plugins {
-  id("org.springframework.boot") version "3.5.16"
+  id("org.springframework.boot") version "4.1.1"
   id("io.spring.dependency-management") version "1.1.7"
   kotlin("jvm") version "2.4.21"
   kotlin("plugin.spring") version "2.4.21"
@@ -15,18 +15,17 @@ repositories {
 group = "altszama"
 version = "1.0.0-SNAPSHOT"
 
-// Security fixes newer than what Spring Boot 3.5.16 ships with (versions managed by its BOM)
-extra["tomcat.version"] = "10.1.61"
-extra["jackson-bom.version"] = "2.21.8"
-extra["netty.version"] = "4.1.139.Final"
-extra["log4j2.version"] = "2.25.5"
+// Security fixes newer than what Spring Boot 4.1.1 ships with (versions managed by its BOM)
+extra["tomcat.version"] = "11.0.27"
+extra["jackson-bom.version"] = "3.1.8"
+extra["jackson-2-bom.version"] = "2.21.8"
 extra["commons-lang3.version"] = "3.21.0"
 
 dependencies {
   // Spring Boot
   implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
   implementation("org.springframework.boot:spring-boot-starter-security")
-  implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-webmvc")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -36,10 +35,7 @@ dependencies {
   implementation("org.bouncycastle:bcprov-jdk18on:1.86")
 
   // Jackson
-  implementation("com.fasterxml.jackson.module:jackson-module-parameter-names")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+  implementation("tools.jackson.module:jackson-module-kotlin")
 
   // Google OAuth2
   implementation("com.google.apis:google-api-services-oauth2:v2-rev65-1.17.0-rc")
@@ -58,7 +54,9 @@ dependencies {
   implementation("io.arrow-kt:arrow-core:1.2.4")
 
   // SpringDoc
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.17")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
+  // SpringDoc still documents models with Jackson 2, and needs its Kotlin module to mark non-null fields as required
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
   // Metrics
   implementation("io.micrometer:micrometer-registry-prometheus")
@@ -66,7 +64,8 @@ dependencies {
 
   // Test
   testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("org.springframework.security:spring-security-test")
+  testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+  testImplementation("org.springframework.boot:spring-boot-starter-security-test")
 
   constraints {
     // web-push 5.1.2 (the latest release) depends on versions with known vulnerabilities

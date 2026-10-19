@@ -21,7 +21,7 @@ class UserService() {
 
   fun currentUser(): User {
     val securityContext = SecurityContextHolder.getContext()
-    val auth = securityContext.authentication
+    val auth = securityContext.authentication ?: throw UnauthorizedException()
 
     val userId = auth.principal as String
 
