@@ -6,3 +6,4 @@ vue-components.js.map
 src/main/resources/public/
 .DS_Store
 .env
+.kotlin/
